@@ -171,8 +171,17 @@
                 </div>
             </div>
 
-            <div class="row" style="margin-left: 0px !important; margin-right: 0px !important; background-color: white; padding: 15px;" id="dvActivityData">
-                <h5>Transaction Details</h5>
+            <div class="row" style="margin-left: 0px !important; margin-right: 0px !important; background-color: white; padding: 15px;" id="dvActivityData">                
+                <div class="col search-container">
+                    <h5>Transaction Details</h5>
+                </div>
+                <div class="col text-right">
+                    <div class="dropdown">
+                        <button class="btn btn-primary login-btn" onclick='SearchExportDataExcel(@Model.MobileNo);' type="button" id="btnExport">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table" id="memberSearchTable">
                         <thead>
@@ -255,17 +264,17 @@
                     </table>
                 </div>
             </div>
-        }
-        else
-        {
-            <div class="row" style="margin-left:0px !important;margin-right:0px !important;">
-                <div class="row col-md-12 mt-3" style="color:red;">
-                    This Mobile Number is not part of the Member Database. Please check the number & try again
+                }
+                else
+                {
+                <div class="row" style="margin-left:0px !important;margin-right:0px !important;">
+                    <div class="row col-md-12 mt-3" style="color:red;">
+                        This Mobile Number is not part of the Member Database. Please check the number & try again
 
+                    </div>
                 </div>
+                }
             </div>
-        }
-    </div>
 </div>
 <script>
     (function () {
@@ -325,16 +334,7 @@
             "info": true,
             "bFilter": true,
             "pageLength": 10,
-            "pagingType": "simple_numbers"//,
-            //columnDefs: [
-            //    { type: 'date-dd-mmm-yyyy', targets: 7 } //add this part
-            //],
-            //aoColumnDefs: [
-            //    {
-            //        bSortable: false,
-            //        aTargets: [-4, -5]
-            //    }
-            //]
+            "pagingType": "simple_numbers"            
         });
 
         $('#memberSearchTable_filter').hide();
@@ -353,9 +353,17 @@
             var table = $('#memberSearchTable').DataTable();
             table.draw();
         });
-
-        //$(".first.paginate_button, .last.paginate_button").hide();
     });
+
+    function SearchExportDataExcel(mobileNo) {
+        
+        var GroupId = $('#hdnGroupId').val();
+         var urlLink = "@Url.Action("MemberSearchExportToExcel", "Reports")";
+        urlLink = urlLink + "?mobileNo=" + mobileNo + "&groupId=" + GroupId + "";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
 </script>
 
 <style>

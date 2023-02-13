@@ -1426,6 +1426,66 @@ namespace WebApp.Controllers
             }
         }
 
+        public ActionResult MemberSearchExportToExcel(string mobileNo, string groupId)
+        {
+            CustomerRepository objCustRepo = new CustomerRepository();
+            MemberSearch objMemberSearch = new MemberSearch();
+            System.Data.DataTable table = new System.Data.DataTable();
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string loginId = string.Empty;
+            if (userDetails.LevelIndicator == "03" || userDetails.LevelIndicator == "04")
+            {
+                loginId = userDetails.LoginId;
+            }
+            if (!string.IsNullOrEmpty(groupId) && groupId != "undefined")
+            {
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                objMemberSearch = RR.GetMeamberSearchData(groupId, mobileNo, connStr, loginId);
+            }
+            else
+            {
+                objMemberSearch = RR.GetMeamberSearchData(userDetails.GroupId, mobileNo, userDetails.connectionString, loginId);
+            }
+
+
+            string fileName = "MemberTransactions_" + mobileNo + ".xlsx";
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(MemberSearchTxn));
+            foreach (PropertyDescriptor prop in properties)
+                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+            foreach (MemberSearchTxn item in objMemberSearch.lstMemberSearchTxn)
+            {
+                DataRow row = table.NewRow();
+                foreach (PropertyDescriptor prop in properties)
+                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                table.Rows.Add(row);
+            }
+
+            foreach (DataRow item in table.Rows)
+            {
+                if (string.IsNullOrEmpty(Convert.ToString(item["TxnUpdateDate"])))
+                {
+                    item["TxnUpdateDate"] = "";
+                }
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                table.TableName = fileName;
+                IXLWorksheet worksheet = wb.AddWorksheet(sheetName: mobileNo);
+                //worksheet.Cell(1, 1).Value = "Report Name";
+                //worksheet.Cell(1, 2).Value = mobileNo;
+                worksheet.Cell(1, 1).InsertTable(table);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                }
+            }
+        }
 
     }
 }

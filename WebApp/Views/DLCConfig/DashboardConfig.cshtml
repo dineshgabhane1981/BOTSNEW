@@ -1,4 +1,4 @@
-﻿
+﻿@model WebApp.ViewModel.DLCDashboardViewModel
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,10 +8,160 @@
 
 <div class="app-main__inner">
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
-        <div class="row">
-            <div class="col-md-12 col-xl-12" style="padding-right:7px !important; padding-left:7px !important;">
-                <h3>Dashboard</h3>
-            </div>
+
+        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
+
+            <fieldset style="border-radius: 10px;">
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Login Config</legend>
+                <div class="col-md-12 col-xl-12 mt-4 row">
+                    <div class="col-md-4 col-xl-4 row">
+                        <input type="radio" id="rbtnLoginWithOTP" name="OTPorPassword" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />
+                        <div>Always Login with OTP</div>
+                    </div>
+                    <div class="col-md-7 col-xl-7 row">
+                        <input type="radio" id="rbtnLoginWithOTPandPassword" name="OTPorPassword" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />
+                        <div>
+                            Login With OTP first time, from second time login with Password
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row ml-2 mt-3 pb-3" style="padding-right: 7px !important; padding-left: 7px !important;">
+                    <div style="padding-top:10px;padding-right:5px;">After Login redirect to page </div>
+                    <div> @Html.DropDownListFor(model => model.objDLCDashboard.RedirectToPage, new SelectList(Model.RedirectToPage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlRedirectToPage" })</div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
+
+            <fieldset style="border-radius: 10px;">
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Widget Config</legend>
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
+                    <div class="col-md-4 col-xl-4 row">
+                        <input type="checkbox" id="chkUpdateProfile" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Add personal details <input type="number" class="input10" style="margin-left: 5px; margin-right: 5px;" id="txtPersonalDetailsPoints" /> Points
+                    </div>
+                    <div class="col-md-4 col-xl-4 row">
+                        <input type="checkbox" id="chkReferFriend" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Refer a friend
+                    </div>
+                    <div class="col-md-4 col-xl-4 row">
+                        <input type="checkbox" id="chkGiftYourPoints" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Gift your point
+                    </div>
+                </div>
+                <div class="col-md-11 col-xl-11 row mt-4 pb-3" style="padding-right: 7px !important; padding-left: 7px !important;">
+                    <div class="col-md-2 col-xl-2" style="padding-top:30px;">
+                        <b>Extra Widget</b>
+                    </div>
+                    <div class="col-md-5 col-xl-5">
+                        Widget Text  <input type="text" class="input100" id="txtExtraWidgetText" />
+                    </div>
+                    <div class="col-md-4 col-xl-4">
+                        Widget Points  <input type="number" class="input50" id="txtExtraWidgetPoints" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
+            <fieldset style="border-radius: 10px;">
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Other Config</legend>
+                <div class="col-md-12 col-xl-12 row pt-3">
+                    <div class="col-md-4 col-xl-4 row">
+                        <input type="checkbox" id="chkFooterImage" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Logo to show at footer
+                    </div>
+                    <div class="col-md-8 col-xl-8 row">
+                        <div class="col-md-1 col-xl-1" style="padding-left:0px;">
+                            <input type="checkbox" id="chkCollectInfoRendomly" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />
+                        </div>
+                        <div class="col-md-11 col-xl-11" style="margin-left:-37px;">Collect Profile details randomly. (<b><i>If this facility taken, we will show randomly popup on dashboard after login and collect data of member, like DOB, next time Anniversary, next time gender, etc</i></b>)</div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
+            <fieldset style="border-radius: 10px;">
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Logo Config</legend>
+
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-6">
+                        <input type="radio" id="rbtnSmallLogo" name="Logo" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />  Small Image   @Html.TextBoxFor(model => model.objDLCDashboard.LogoFile1, new { type = "file", @id = "logoFile1" })
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <div id="imageBox1">
+                            <img id="img1" src="" width="200" style="display:none;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-6">
+                        <input type="radio" id="rbtnMediumLogo" name="Logo" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Medium Image  @Html.TextBoxFor(model => model.objDLCDashboard.LogoFile2, new { type = "file", @id = "logoFile2" })
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <div id="imageBox2">
+                            <img id="img2" src="" width="300" style="display:none;" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-6">
+                        <input type="radio" id="rbtnBigLogo" name="Logo" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />  Big Image   @Html.TextBoxFor(model => model.objDLCDashboard.LogoFile3, new { type = "file", @id = "logoFile3" })
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <div id="imageBox3">
+                            <img id="img3" src="" width="400" style="display:none;" />
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <button id="btnPublishDashboard" class="btn btn-primary pull-right" style="margin-left:10px;" type="button"><b>Publish</b></button>
+            <button id="btnSaveDashboard" class="btn btn-primary pull-right" type="button"><b>Save</b></button>
         </div>
     </div>
+
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#logoFile1').change(function (event) {
+            $("#img1").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+        });
+
+        $('#logoFile2').change(function (event) {
+            $("#img2").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+        });
+
+        $('#logoFile3').change(function (event) {
+            $("#img3").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+        });
+
+        $("#btnSaveDashboard").on("click", function () {
+            SaveDashboardConfig();
+        });
+    });
+
+    function SaveDashboardConfig() {
+        var PrimaryData = [];
+        item = {}
+        if ($("#rbtnLoginWithOTP").is(":checked")) {
+            item["LoginWithOTP"] = "OTP";
+        }
+        if ($("#rbtnLoginWithOTPandPassword").is(":checked")) {
+            item["LoginWithOTP"] = "Password";
+        }
+        item["RedirectToPage"] = $("#ddlRedirectToPage").val();
+
+
+
+
+        PrimaryData.push(item);
+    }
+    function ValidateConfig() {
+        var status = true;
+
+
+        return status;
+    }
+</script>

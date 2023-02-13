@@ -1,8 +1,10 @@
-﻿using System;
+﻿using BOTS_BL.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using WebApp.ViewModel;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -15,7 +17,10 @@ namespace WebApp.Controllers.OnBoarding
         }
         public ActionResult DashboardConfig()
         {
-            return View();
+            DLCDashboard objDLCDashboard = new DLCDashboard();
+            DLCDashboardViewModel objData = new DLCDashboardViewModel();
+            objData.objDLCDashboard = objDLCDashboard;
+            return View(objData);
         }
         public ActionResult ProfileConfig()
         {

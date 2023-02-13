@@ -272,6 +272,7 @@
     <Compile Include="Models\Dashboard\DashboardMemberSegment.cs" />
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\DiscussionReport.cs" />
+    <Compile Include="Models\DLCConfig\DLCDashboard.cs" />
     <Compile Include="Models\DLCCreation.cs" />
     <Compile Include="Models\EarnRule.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
