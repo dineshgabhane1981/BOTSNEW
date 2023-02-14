@@ -476,6 +476,12 @@
                                     Dashboard
                                 </a>
                             </li>
+                            <li class="@Html.IsSelected(controller: "DLCConfig", action: "ProfileConfig")">
+                                <a class="@Html.IsSelected(controller: "DLCConfig", action: "ProfileConfig")" href="@Url.Action("ProfileConfig", "DLCConfig")">
+                                    <i class="metismenu-icon"></i>
+                                    Profile
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
