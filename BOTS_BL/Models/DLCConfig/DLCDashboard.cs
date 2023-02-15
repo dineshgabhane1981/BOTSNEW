@@ -19,6 +19,20 @@ namespace BOTS_BL.Models
         public HttpPostedFileBase LogoFile2 { get; set; }
         [NotMapped]
         public HttpPostedFileBase LogoFile3 { get; set; }
+        public string LoginWithOTP { get; set; }
+        public bool AddPersonalDetails { get; set; }
+        public bool AddGiftPoints { get; set; }
+        public bool AddReferFriend { get; set; }
+        public int PersonalDetailsPoints { get; set; }
+        public int ReferPoints { get; set; }
+        public int GiftPoints { get; set; }
+
+        public string ExtraWidgetText { get; set; }
+        public int ExtraWidgetPoints { get; set; }
+        public bool ShowLogoToFooter { get; set; }
+        public bool CollectPErsonalDataRandomly { get; set; }
+        public string UseLogo { get; set; }
+        public string UseLogoURL { get; set; }
 
     }
 }
