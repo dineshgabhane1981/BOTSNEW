@@ -24,7 +24,10 @@ namespace WebApp.Controllers.OnBoarding
         }
         public ActionResult ProfileConfig()
         {
-            return View();
+            DLCDashboard objDLCDashboard = new DLCDashboard();
+            DLCDashboardViewModel objData = new DLCDashboardViewModel();
+            objData.objDLCDashboard = objDLCDashboard;
+            return View(objData);
         }
     }
 }

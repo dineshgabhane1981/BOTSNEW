@@ -12,6 +12,8 @@ namespace BOTS_BL.Models
     {
         public string RedirectToPage { get; set; }
         [NotMapped]
+        public string MandatoryOrNot { get; set; }
+        [NotMapped]
         public HttpPostedFileBase LogoFile1 { get; set; }
         [NotMapped]
         public HttpPostedFileBase LogoFile2 { get; set; }
