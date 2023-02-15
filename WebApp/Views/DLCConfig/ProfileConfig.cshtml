@@ -1,4 +1,4 @@
-﻿@model WebApp.ViewModel.DLCDashboardViewModel
+﻿@model WebApp.ViewModel.DLCProfileUpdateViewModel
 @{
     ViewBag.Title = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,57 +10,79 @@
             <fieldset style="border-radius: 10px;">
                 <legend style="font-size: 20px; background-color: #E5E4E2;">ProfileUpdate Config</legend>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="Name" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Customer Name
-                        @Html.DropDownListFor(model => model.objDLCDashboard.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CustMandStat" })
-                    </div>
-                    <div></div>
+                    <div class="col-md-3 col-xl-3 row">
+                        <input type="checkbox" id="Name" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Customer Name
 
-                </div>
+                    </div>
+                    <div class="col-md-3 col-xl-3 row">
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CustMandStat" })
+                    </div>
+
+               </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="Gender" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Gender
-                        @Html.DropDownListFor(model => model.objDLCDashboard.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "GenderMandStat" })
+                    <div class="col-md-3 col-xl-3 row">
+                        <input type="checkbox" id="Gender" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Gender
+
+                    </div>
+                    <div class="col-md-3 col-xl-3 row">
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "GenderMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="BirthDate" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Birth Date
-                        @Html.DropDownListFor(model => model.objDLCDashboard.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "BirthMandStat" })
+                    <div class="col-md-3 col-xl-3 row">
+                        <input type="checkbox" id="BirthDate" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Birth Date
+
+                    </div>
+                    <div class="col-md-3 col-xl-3 row">
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "BirthMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="Marrital" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Marittal Status
-                        @Html.DropDownListFor(model => model.objDLCDashboard.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "MargMandStat" })
+                    <div class="col-md-3 col-xl-3 row">
+                        <input type="checkbox" id="Marrital" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Marittal Status
+
+                    </div>
+                    <div class="col-md-3 col-xl-3 row">
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "MargMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="Area" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Area
-                        @Html.DropDownListFor(model => model.objDLCDashboard.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "AreaMandStat" })
+                    <div class="col-md-3 col-xl-3 row">
+                        <input type="checkbox" id="Area" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Area
+
+                    </div>
+                    <div class="col-md-3 col-xl-3 row">
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "AreaMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="City" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> City
-                        @Html.DropDownListFor(model => model.objDLCDashboard.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CityMandStat" })
+                    <div class="col-md-3 col-xl-3 row">
+                        <input type="checkbox" id="City" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;City
+
+                    </div>
+                    <div class="col-md-3 col-xl-3 row">
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CityMandStat"})
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="Pincode" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Pincode
-                        @Html.DropDownListFor(model => model.objDLCDashboard.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "PinMandStat" })
+                    <div class="col-md-3 col-xl-3 row">
+                        <input type="checkbox" id="Pincode" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Pincode
+
+                    </div>
+                    <div class="col-md-3 col-xl-3 row">
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "PinMandStat"})
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="Email" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Email
-                        @Html.DropDownListFor(model => model.objDLCDashboard.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "MailMandStat" })
+                    <div class="col-md-3 col-xl-3 row">
+                        <input type="checkbox" id="Email" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Email
+
+                    </div>
+                    <div class="col-md-3 col-xl-3 row">
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "MailMandStat"})
                     </div>
                 </div>
             </fieldset>
-
         </div>
     </div>
 </div>

@@ -278,6 +278,7 @@
     <Compile Include="ViewModel\DataPoint.cs" />
     <Compile Include="ViewModel\DiscussionViewModel.cs" />
     <Compile Include="ViewModel\DLCDashboardViewModel.cs" />
+    <Compile Include="ViewModel\DLCProfileUpdateViewModel.cs" />
     <Compile Include="ViewModel\FeedbackAuthorViewModel.cs" />
     <Compile Include="ViewModel\FeedbackConfigViewModel.cs" />
     <Compile Include="ViewModel\FeedbackDashboardViewModel.cs" />

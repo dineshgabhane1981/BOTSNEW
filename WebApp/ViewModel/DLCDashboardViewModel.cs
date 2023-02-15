@@ -14,9 +14,5 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Dashboard", Value = "Dashboard" }, new SelectListItem() { Text = "Update Profile", Value = "Update Profile" }, new SelectListItem() { Text = "Gift Points", Value = "Gift Points" }, new SelectListItem() { Text = "Transaction History", Value = "Transaction History" } };
         }
-        public SelectListItem[] MandatoryOrNot()
-        {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Mandatory", Value = "Mandatory" }, new SelectListItem() { Text = "Non Mandatory", Value = "Non Mandatory" } };
-        }
     }
 }
