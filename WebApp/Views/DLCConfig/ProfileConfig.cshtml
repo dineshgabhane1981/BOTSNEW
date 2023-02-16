@@ -18,7 +18,7 @@
                         @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CustMandStat" })
                     </div>
 
-               </div>
+                </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
                     <div class="col-md-3 col-xl-3 row">
                         <input type="checkbox" id="Gender" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Gender
@@ -61,7 +61,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CityMandStat"})
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CityMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
@@ -70,7 +70,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "PinMandStat"})
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "PinMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
@@ -79,10 +79,14 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "MailMandStat"})
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "MailMandStat" })
                     </div>
                 </div>
             </fieldset>
+        </div>
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <button id="btnPublishProfUpdt" class="btn btn-primary pull-right" style="margin-left:10px;" type="button"><b>Publish</b></button>
+            <button id="btnSaveProfUpdt" class="btn btn-primary pull-right" type="button"><b>Save</b></button>
         </div>
     </div>
 </div>
