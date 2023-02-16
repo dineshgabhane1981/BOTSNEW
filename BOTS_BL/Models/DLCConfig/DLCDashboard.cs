@@ -28,7 +28,7 @@ namespace BOTS_BL.Models
         public string ExtraWidgetText { get; set; }
         public int ExtraWidgetPoints { get; set; }
         public bool ShowLogoToFooter { get; set; }
-        public bool CollectPErsonalDataRandomly { get; set; }
+        public bool CollectPersonalDataRandomly { get; set; }
         public string UseLogo { get; set; }
         public string UseLogoURL { get; set; }
 

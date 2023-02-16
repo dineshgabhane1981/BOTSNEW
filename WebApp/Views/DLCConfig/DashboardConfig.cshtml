@@ -213,7 +213,7 @@
 
         if ($("#chkGiftYourPoints").is(":checked")) {
             item["AddGiftPoints"] = true;
-            item["GiftPoints"] = $("#txtGiftPoints").val();            
+            item["GiftPoints"] = $("#txtGiftPoints").val();
         }
         else {
             item["AddGiftPoints"] = false;
@@ -246,9 +246,45 @@
         if ($("#rbtnBigLogo").is(":checked")) {
             item["UseLogoSize"] = "Big";
         }
-        
-        PrimaryData.push(item);
-        console.log(PrimaryData);
+
+        PrimaryData.push(item);        
+
+        var PrimaryDataStr = JSON.stringify(PrimaryData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveDashboard", "DLCConfig")',
+                data: '{jsonData: ' + JSON.stringify(PrimaryDataStr) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "DLC Dashboard config saved successfully",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem in saving DLC Dashboard config",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    //console.log(result.responseText)
+                }
+            });
+
+
+
     }
     function ValidateConfig() {
         var status = true;

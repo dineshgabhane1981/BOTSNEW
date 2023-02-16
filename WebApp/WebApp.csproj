@@ -741,6 +741,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="DashboardReports\" />
+    <Folder Include="DLCImages\" />
     <Folder Include="Temp\" />
     <Folder Include="Views\testSinglepagews\" />
     <Folder Include="Views\Test\" />
