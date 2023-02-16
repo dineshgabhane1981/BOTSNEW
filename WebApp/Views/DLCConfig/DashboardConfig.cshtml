@@ -8,7 +8,9 @@
 
 <div class="app-main__inner">
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
-
+        <input type="hidden" id="hdnSmallBase64" />
+        <input type="hidden" id="hdnMediumBase64" />
+        <input type="hidden" id="hdnBigBase64" />
         <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
 
             <fieldset style="border-radius: 10px;">
@@ -127,14 +129,53 @@
     $(document).ready(function () {
         $('#logoFile1').change(function (event) {
             $("#img1").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+            var id = event.currentTarget.id;
+            var qId = id.substring(4, id.length);
+            var f = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    var binaryData = e.target.result;
+                    var base64String = window.btoa(binaryData);
+                    $("#hdnSmallBase64").val(base64String);
+                    //$("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+                };
+            })(f);
+            reader.readAsBinaryString(f);
         });
 
         $('#logoFile2').change(function (event) {
             $("#img2").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+            var id = event.currentTarget.id;
+            var qId = id.substring(4, id.length);
+            var f = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    var binaryData = e.target.result;
+                    var base64String = window.btoa(binaryData);
+                    $("#hdnMediumBase64").val(base64String);
+                    //$("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+                };
+            })(f);
+            reader.readAsBinaryString(f);
         });
 
         $('#logoFile3').change(function (event) {
             $("#img3").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
+            var id = event.currentTarget.id;
+            var qId = id.substring(4, id.length);
+            var f = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    var binaryData = e.target.result;
+                    var base64String = window.btoa(binaryData);
+                    $("#hdnBigBase64").val(base64String);
+                    //$("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+                };
+            })(f);
+            reader.readAsBinaryString(f);
         });
 
         $("#btnSaveDashboard").on("click", function () {
@@ -180,9 +221,34 @@
         }
         item["ExtraWidgetText"] = $("#txtExtraWidgetText").val();
         item["ExtraWidgetPoints"] = $("#txtExtraWidgetPoints").val();
-
-
+        if ($("#chkFooterImage").is(":checked")) {
+            item["ShowFooterImage"] = true;
+        }
+        else {
+            item["ShowFooterImage"] = false;
+        }
+        if ($("#chkCollectInfoRendomly").is(":checked")) {
+            item["CollectInfoRendomly"] = true;
+        }
+        else {
+            item["CollectInfoRendomly"] = false;
+        }
+        item["SmallImageBase64"] = $("#hdnSmallBase64").val();
+        item["MediumImageBase64"] = $("#hdnMediumBase64").val();
+        item["BigImageBase64"] = $("#hdnBigBase64").val();
+        item["UseLogoSize"] = "";
+        if ($("#rbtnSmallLogo").is(":checked")) {
+            item["UseLogoSize"] = "Small";
+        }
+        if ($("#rbtnMediumLogo").is(":checked")) {
+            item["UseLogoSize"] = "Medium";
+        }
+        if ($("#rbtnBigLogo").is(":checked")) {
+            item["UseLogoSize"] = "Big";
+        }
+        
         PrimaryData.push(item);
+        console.log(PrimaryData);
     }
     function ValidateConfig() {
         var status = true;

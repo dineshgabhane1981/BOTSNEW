@@ -526,9 +526,9 @@ namespace WebApp.Controllers
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat("https://bo.enotify.app/api/sendFiles?");
                 sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
-                //sbposdata.AppendFormat("&phone={0}", WAGroupCode);
+                sbposdata.AppendFormat("&phone={0}", WAGroupCode);
 
-                sbposdata.AppendFormat("&phone=91{0}", "9834545425");
+                //sbposdata.AppendFormat("&phone=91{0}", "9834545425");
                 sbposdata.AppendFormat("&link={0}", path);
                 sbposdata.AppendFormat("&text={0}", _MobileMessage);
                 string Url = sbposdata.ToString();

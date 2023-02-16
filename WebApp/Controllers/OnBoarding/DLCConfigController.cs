@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using WebApp.ViewModel;
+using System.Web.Script.Serialization;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -28,6 +29,16 @@ namespace WebApp.Controllers.OnBoarding
             DLCProfileUpdateViewModel objProfData = new DLCProfileUpdateViewModel();
             objProfData.objDLCProfUpdt = objDLCProfUpdt;
             return View(objProfData);
+        }
+        public ActionResult SaveDashboard(string jsonData)
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objDashboardData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }
