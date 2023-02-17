@@ -32,5 +32,23 @@ namespace BOTS_BL
             }
             return result;
         }
+        public tblDLCDashboardConfig GetDLCDashboardConfig(string GroupId)
+        {
+            tblDLCDashboardConfig objData = new tblDLCDashboardConfig();
+            string connStr = objCustRepo.GetCustomerConnString(GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objData = context.tblDLCDashboardConfigs.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, GroupId);
+            }
+
+            return objData;
+        }
     }
 }

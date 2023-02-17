@@ -632,16 +632,16 @@ namespace WebApp.Controllers
                     bpts += Convert.ToDecimal(dr["PointsBurned"]);
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["InvoiceAmt"])))
                     {
-                        dr["InvoiceAmtStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["InvoiceAmt"]));
+                        dr["InvoiceAmtStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["InvoiceAmt"]));
 
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsEarned"])))
                     {
-                        dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsEarned"]));
+                        dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsEarned"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsBurned"])))
                     {
-                        dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsBurned"]));
+                        dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsBurned"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TxnDatetime"])))
                     {
@@ -755,7 +755,7 @@ namespace WebApp.Controllers
                 {
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalMember"])))
                     {
-                        dr["TotalMemberStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalMember"]));
+                        dr["TotalMemberStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalMember"]));
                     }
                     else
                     {
@@ -763,7 +763,7 @@ namespace WebApp.Controllers
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalTxn"])))
                     {
-                        dr["TotalTxnStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalTxn"]));
+                        dr["TotalTxnStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalTxn"]));
                     }
                     else
                     {
@@ -771,58 +771,58 @@ namespace WebApp.Controllers
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
                     {
-                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalSpend"]));
                     }
                     else
                     {
                         dr["TotalSpendStr"] = 0;
                     }
-                    //dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                    //dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalSpend"]));
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["ATS"])))
                     {
-                        dr["ATSStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["ATS"]));
+                        dr["ATSStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["ATS"]));
                     }
                     else
                     {
                         dr["ATSStr"] = 0;
                     }
-                    //dr["ATSStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["ATS"]));
+                    //dr["ATSStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["ATS"]));
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsEarned"])))
                     {
-                        dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsEarned"]));
+                        dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsEarned"]));
                     }
                     else
                     {
                         dr["PointsEarnedStr"] = 0;
                     }
-                    //dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsEarned"]));
+                    //dr["PointsEarnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsEarned"]));
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsBurned"])))
                     {
-                        dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsBurned"]));
+                        dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsBurned"]));
                     }
                     else
                     {
                         dr["PointsBurnedStr"] = 0;
                     }
-                    //dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsBurned"]));
+                    //dr["PointsBurnedStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsBurned"]));
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsCancelled"])))
                     {
-                        dr["PointsCancelledStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsCancelled"]));
+                        dr["PointsCancelledStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsCancelled"]));
                     }
                     else
                     {
                         dr["PointsCancelledStr"] = 0;
                     }
-                    //dr["PointsCancelledStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsCancelled"]));
+                    //dr["PointsCancelledStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsCancelled"]));
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsExpired"])))
                     {
-                        dr["PointsExpiredStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpired"]));
+                        dr["PointsExpiredStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsExpired"]));
                     }
                     else
                     {
                         dr["PointsExpiredStr"] = 0;
                     }
-                    //dr["PointsExpiredStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpired"]));
+                    //dr["PointsExpiredStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsExpired"]));
 
                 }
                 table.Columns.Remove("TotalMember");
@@ -939,15 +939,15 @@ namespace WebApp.Controllers
                 {
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
                     {
-                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalSpend"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["AvlPoints"])))
                     {
-                        dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlPoints"]));
+                        dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["AvlPoints"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsExpiry"])))
                     {
-                        dr["PointsExpiryStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["PointsExpiry"]));
+                        dr["PointsExpiryStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["PointsExpiry"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
                     {
@@ -1051,11 +1051,11 @@ namespace WebApp.Controllers
                 {
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
                     {
-                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalSpend"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["AvlPoints"])))
                     {
-                        dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlPoints"]));
+                        dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["AvlPoints"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
                     {
@@ -1264,15 +1264,15 @@ namespace WebApp.Controllers
                 {
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
                     {
-                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalSpend"]));
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalSpend"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["AvlBalPoints"])))
                     {
-                        dr["AvlBalPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["AvlBalPoints"]));
+                        dr["AvlBalPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["AvlBalPoints"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalBurnPoints"])))
                     {
-                        dr["TotalBurnPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(dr["TotalBurnPoints"]));
+                        dr["TotalBurnPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalBurnPoints"]));
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
                     {

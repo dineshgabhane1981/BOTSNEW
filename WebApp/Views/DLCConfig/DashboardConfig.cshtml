@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-12 col-xl-12 row ml-2 mt-3 pb-3" style="padding-right: 7px !important; padding-left: 7px !important;">
                     <div style="padding-top:10px;padding-right:5px;">After Login redirect to page </div>
-                    <div> @Html.DropDownListFor(model => model.objDLCDashboard.RedirectToPage, new SelectList(Model.RedirectToPage(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlRedirectToPage" })</div>
+                    <div> @Html.DropDownListFor(model => model.objDLCDashboard.RedirectToPage, new SelectList(Model.RedirectToPage(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlRedirectToPage" })</div>
                 </div>
             </fieldset>
         </div>
@@ -127,6 +127,9 @@
 
 <script>
     $(document).ready(function () {
+
+        LoadDashboardConfigData();
+
         $('#logoFile1').change(function (event) {
             $("#img1").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
             var id = event.currentTarget.id;
@@ -182,7 +185,79 @@
             SaveDashboardConfig();
         });
     });
+    function LoadDashboardConfigData() {
+        $("#divLoader").show();
+        $.ajax({
+            url: '@Url.Action("GetDashboardConfigDetails", "DLCConfig")',
+            //data: '{GroupId: ' + JSON.stringify($('#hdnGroupID').val()) + ',SetId: ' + JSON.stringify($("#ddlCommunicationSet").val()) + '}',
+            type: "post",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                LoadData(result);
+                
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function LoadData(data) {
+        if (data.LoginWithOTP == "OTP") {
+            $("#rbtnLoginWithOTP").prop("checked", true);
+        }
+        if (data.LoginWithOTP == "Password") {
+            $("#rbtnLoginWithOTPandPassword").prop("checked", true);
+        }
+        $('#ddlRedirectToPage').val(data.RedirectToPage);
+        if (data.AddPersonalDetails) {
+            $("#chkUpdateProfile").prop("checked", true);
+        }
+        if (data.AddReferFriend) {
+            $("#chkReferFriend").prop("checked", true);
+        }
+        if (data.AddGiftPoints) {
+            $("#chkGiftYourPoints").prop("checked", true);
+        }
+        $("#txtPersonalDetailsPoints").val(data.PersonalDetailsPoints);
+        $("#txtReferFriendPoints").val(data.ReferPoints);
+        $("#txtGiftPoints").val(data.GiftPoints);
+        $("#txtExtraWidgetText").val(data.ExtraWidgetText);
+        $("#txtExtraWidgetPoints").val(data.ExtraWidgetPoints);
 
+        if (data.ShowLogoToFooter) {
+            $("#chkFooterImage").prop("checked", true);
+        }
+        if (data.CollectPersonalDataRandomly) {
+            $("#chkCollectInfoRendomly").prop("checked", true);
+        }
+        if (data.UseLogo == "Small") {
+            $("#rbtnSmallLogo").prop("checked", true);
+        }
+        if (data.UseLogo == "Medium") {
+            $("#rbtnMediumLogo").prop("checked", true);
+        }
+        if (data.UseLogo == "Big") {
+            $("#rbtnBigLogo").prop("checked", true);
+        }
+        if (data.LogoFile1 != "" && data.LogoFile1 != null) {
+            $("#img1").attr('src', data.LogoFile1);
+            $("#img1").show();
+        }
+        if (data.LogoFile2 != "" && data.LogoFile2 != null) {
+            $("#img2").attr('src', data.LogoFile2);
+            $("#img2").show();
+        }
+        if (data.LogoFile3 != "" && data.LogoFile3 != null) {
+            $("#img3").attr('src', data.LogoFile3);
+            $("#img3").show();
+        }
+        
+
+    }
     function SaveDashboardConfig() {
         var PrimaryData = [];
         item = {}
@@ -247,7 +322,7 @@
             item["UseLogoSize"] = "Big";
         }
 
-        PrimaryData.push(item);        
+        PrimaryData.push(item);
 
         var PrimaryDataStr = JSON.stringify(PrimaryData);
             $("#divLoader").show();

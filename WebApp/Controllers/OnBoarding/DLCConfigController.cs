@@ -114,5 +114,17 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+    
+        public ActionResult GetDashboardConfigDetails()
+        {
+            tblDLCDashboardConfig objDashboard = new tblDLCDashboardConfig();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objDashboard = DCR.GetDLCDashboardConfig(userDetails.GroupId);
+            var baseLogoPath = ConfigurationManager.AppSettings["DLCLogoBaseURL"].ToString();
+            objDashboard.LogoFile1= baseLogoPath + Convert.ToString(userDetails.GroupId + "Small.jpg");
+            objDashboard.LogoFile2 = baseLogoPath + Convert.ToString(userDetails.GroupId + "Medium.jpg");
+            objDashboard.LogoFile3 = baseLogoPath + Convert.ToString(userDetails.GroupId + "Big.jpg");
+            return new JsonResult() { Data = objDashboard, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

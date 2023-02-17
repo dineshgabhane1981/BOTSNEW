@@ -5,6 +5,7 @@ namespace BOTS_BL.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web;
 
     [Table("tblDLCDashboardConfig")]
     public partial class tblDLCDashboardConfig
@@ -50,5 +51,12 @@ namespace BOTS_BL.Models
         public string AddedBy { get; set; }
 
         public DateTime AddedDate { get; set; }
+
+        [NotMapped]
+        public string LogoFile1 { get; set; }
+        [NotMapped]
+        public string LogoFile2 { get; set; }
+        [NotMapped]
+        public string LogoFile3 { get; set; }
     }
 }
