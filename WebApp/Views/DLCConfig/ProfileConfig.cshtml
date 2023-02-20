@@ -15,7 +15,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CustMandStat" })
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "CustMandStat" })
                     </div>
 
                 </div>
@@ -25,7 +25,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "GenderMandStat" })
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "GenderMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
@@ -34,7 +34,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "BirthMandStat" })
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "BirthMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
@@ -43,7 +43,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "MargMandStat" })
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "MargMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
@@ -52,7 +52,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "AreaMandStat" })
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "AreaMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
@@ -61,7 +61,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "CityMandStat" })
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "CityMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
@@ -70,7 +70,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "PinMandStat" })
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "PinMandStat" })
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
@@ -79,7 +79,7 @@
 
                     </div>
                     <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "MailMandStat" })
+                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "MailMandStat" })
                     </div>
                 </div>
             </fieldset>
@@ -90,3 +90,145 @@
         </div>
     </div>
 </div>
+<script>
+    $("#btnSaveProfUpdt").on("click", function () {
+        ValidateProfUpdtConfig();
+    });
+    function ValidateProfUpdtConfig() {
+        var status = false;
+
+        if ($("#Name").is(":checked")) {
+            status = true;
+        }
+        if ($("#Gender").is(":checked")) {
+            status = true;
+        }
+        if ($("#BirthDate").is(":checked")) {
+            status = true;
+        }
+        if ($("#Marrital").is(":checked")) {
+            status = true;
+        }
+        if ($("#Area").is(":checked")) {
+            status = true;
+        }
+        if ($("#City").is(":checked")) {
+            status = true;
+        }
+        if ($("#Pincode").is(":checked")) {
+            status = true;
+        }
+        if ($("#Email").is(":checked")) {
+            status = true;
+        }
+        if (status == false) {
+            alert("Please select any field for ProfileUpdate");
+        }
+        else {
+            SaveProfileUpdtConfig();
+        }
+    }
+    function SaveProfileUpdtConfig() {
+        var PrimaryData = [];
+        item = {}
+        if ($("#Name").is(":checked")) {
+            item["Name"] = "True";
+             //$("#CustMandStat").change;
+            //var T = $("#CustMandStat option:selected").val();
+            //alert(T);
+            item["NameMandStat"] = $("#CustMandStat option:selected").val();
+        }
+        else {
+            item["Name"] = "False";
+            item["NameMandStat"] = "0";
+        }
+        if ($("#Gender").is(":checked")) {
+            item["Gender"] = "True";
+            item["GenderMandStat"] = $("#GenderMandStat option:selected").val();
+        }
+        else {
+            item["Gender"] = "False";
+            item["GenderMandStat"] = "0";
+        }
+        if ($("#BirthDate").is(":checked")) {
+            item["BirthDate"] = "True";
+            item["BirthMandStat"] = $("#BirthMandStat option:selected").val();
+        }
+        else {
+            item["BirthDate"] = "False";
+            item["BirthMandStat"] = "0";
+        }
+        if ($("#Marrital").is(":checked")) {
+            item["Marrital"] = "True";
+            item["MargMandStat"] = $("#MargMandStat option:selected").val();
+        }
+        else {
+            item["Marrital"] = "False";
+            item["MargMandStat"] = "0";
+        }
+        if ($("#Area").is(":checked")) {
+            item["Area"] = "True";
+            item["AreaMandStat"] = $("#AreaMandStat option:selected").val();
+        }
+        else {
+            item["Area"] = "False";
+            item["AreaMandStat"] = "0";
+        }
+        if ($("#City").is(":checked")) {
+            item["City"] = "True";
+            item["CityMandStat"] = $("#CityMandStat option:selected").val();
+        }
+        else {
+            item["City"] = "False";
+            item["CityMandStat"] = "0";
+        }
+        if ($("#Pincode").is(":checked")) {
+            item["Pincode"] = "True";
+            item["PinMandStat"] = $("#PinMandStat option:selected").val();
+        }
+        else {
+            item["Pincode"] = "False";
+            item["PinMandStat"] = "0";
+        }
+        if ($("#Email").is(":checked")) {
+            item["Email"] = "True";
+            item["MailMandStat"] = $("#MailMandStat option:selected").val();
+        }
+        else {
+            item["Email"] = "False";
+            item["MailMandStat"] = "0";
+        }
+        PrimaryData.push(item);
+        //console.log(PrimaryData);
+        var data = JSON.stringify(PrimaryData);
+        alert(data);
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SaveProfileUpdate", "DLCConfig")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    if (response == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Data Saved",
+                            message: "You have saved data",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("ProfileConfig", "DLCConfig")";
+                            window.location.href = urlLink;
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Data Not Inserted",
+                            message: "Something went wrong",
+                            buttonText: "Okay"
+                        })
+                    }
+                }
+            });
+    }
+</script>

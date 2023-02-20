@@ -13,7 +13,7 @@ namespace WebApp.ViewModel
         public DLCProfileUpdate objDLCProfUpdt { get; set; }
         public SelectListItem[] MandatoryOrNot()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Mandatory", Value = "Mandatory" }, new SelectListItem() { Text = "Non Mandatory", Value = "Non Mandatory" } };
+            return new SelectListItem[2] { new SelectListItem() { Text = "Mandatory", Value = "1" }, new SelectListItem() { Text = "Non Mandatory", Value = "0" } };
         }
     }
 }

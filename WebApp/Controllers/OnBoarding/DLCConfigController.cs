@@ -126,5 +126,39 @@ namespace WebApp.Controllers.OnBoarding
             objDashboard.LogoFile3 = baseLogoPath + Convert.ToString(userDetails.GroupId + "Big.jpg");
             return new JsonResult() { Data = objDashboard, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public ActionResult SaveProfileUpdate(string jsonData)
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objDashboardData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            foreach (Dictionary<string, object> item in objDashboardData)
+            {
+                string Name = Convert.ToString(item["Name"]);
+                string NameMandStat = Convert.ToString(item["NameMandStat"]);
+                string Gender = Convert.ToString(item["Gender"]);
+                string GenderMandStat = Convert.ToString(item["GenderMandStat"]);
+                string BirthDate = Convert.ToString(item["BirthDate"]);
+                string BirthMandStat = Convert.ToString(item["BirthMandStat"]);
+                string Marrital = Convert.ToString(item["Marrital"]);
+                string MargMandStat = Convert.ToString(item["MargMandStat"]);
+                string Area = Convert.ToString(item["Area"]);
+                string AreaMandStat = Convert.ToString(item["AreaMandStat"]);
+                string City = Convert.ToString(item["City"]);
+                string CityMandStat = Convert.ToString(item["CityMandStat"]);
+                string Pincode = Convert.ToString(item["Pincode"]);
+                string PinMandStat = Convert.ToString(item["PinMandStat"]);
+                string Email = Convert.ToString(item["Email"]);
+                string MailMandStat = Convert.ToString(item["MailMandStat"]);
+
+                status = DCR.ProfileDataInsert(userDetails.GroupId, Name, NameMandStat, Gender, GenderMandStat, BirthDate, BirthMandStat, Marrital, MargMandStat, Area, AreaMandStat, City, CityMandStat, Pincode, PinMandStat, Email, MailMandStat);
+            }
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        }
     }
 }
