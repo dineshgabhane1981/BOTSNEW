@@ -102,11 +102,23 @@ namespace WebApp.Controllers.OnBoarding
                 objDashboard.AddGiftPoints = Convert.ToBoolean(item["AddGiftPoints"]);
                 objDashboard.GiftPoints = Convert.ToInt32(item["GiftPoints"]);
 
-                objDashboard.ExtraWidgetText = Convert.ToString(item["ExtraWidgetText"]);
-                objDashboard.ExtraWidgetPoints = Convert.ToInt32(item["ExtraWidgetPoints"]);
+                objDashboard.ExtraWidgetText1 = Convert.ToString(item["ExtraWidgetText1"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints1"])))
+                    objDashboard.ExtraWidgetPoints1 = Convert.ToInt32(item["ExtraWidgetPoints1"]);
+
+                objDashboard.ExtraWidgetText2 = Convert.ToString(item["ExtraWidgetText2"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints2"])))
+                    objDashboard.ExtraWidgetPoints2 = Convert.ToInt32(item["ExtraWidgetPoints2"]);
+
+                objDashboard.ExtraWidgetText3 = Convert.ToString(item["ExtraWidgetText3"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints3"])))
+                    objDashboard.ExtraWidgetPoints3 = Convert.ToInt32(item["ExtraWidgetPoints3"]);
 
                 objDashboard.ShowLogoToFooter = Convert.ToBoolean(item["ShowFooterImage"]);
                 objDashboard.CollectPersonalDataRandomly = Convert.ToBoolean(item["CollectInfoRendomly"]);
+                objDashboard.HeaderColor = Convert.ToString(item["HeaderColor"]);
+                objDashboard.PrefferedLanguage = Convert.ToString(item["PrefferedLanguage"]);
+                objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
                 objDashboard.AddedBy = userDetails.LoginId;
                 objDashboard.AddedDate = DateTime.Now;
 
@@ -114,7 +126,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-    
+
         public ActionResult GetDashboardConfigDetails()
         {
             tblDLCDashboardConfig objDashboard = new tblDLCDashboardConfig();

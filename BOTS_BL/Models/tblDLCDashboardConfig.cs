@@ -32,9 +32,17 @@ namespace BOTS_BL.Models
         public int? GiftPoints { get; set; }
 
         [StringLength(250)]
-        public string ExtraWidgetText { get; set; }
+        public string ExtraWidgetText1 { get; set; }
 
-        public int? ExtraWidgetPoints { get; set; }
+        public int? ExtraWidgetPoints1 { get; set; }
+        [StringLength(250)]
+        public string ExtraWidgetText2 { get; set; }
+
+        public int? ExtraWidgetPoints2 { get; set; }
+        [StringLength(250)]
+        public string ExtraWidgetText3 { get; set; }
+
+        public int? ExtraWidgetPoints3 { get; set; }
 
         public bool ShowLogoToFooter { get; set; }
 
@@ -45,6 +53,8 @@ namespace BOTS_BL.Models
 
         [StringLength(250)]
         public string UseLogoURL { get; set; }
+        public string PrefferedLanguage { get; set; }
+        public string HeaderColor { get; set; }
 
         [Required]
         [StringLength(50)]
