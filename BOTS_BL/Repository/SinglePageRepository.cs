@@ -780,27 +780,33 @@ namespace BOTS_BL.Repository
                                       }).FirstOrDefault();
 
                         objItem.CSName = CSName.RMAssignedName;
-
-                        string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
-                        using (var contextdb = new BOTSDBContext(connStr))
+                        try
                         {
-                            objItem.CustCount = contextdb.CustomerDetails.Count();
+                            string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
+                            using (var contextdb = new BOTSDBContext(connStr))
+                            {
+                                objItem.CustCount = contextdb.CustomerDetails.Count();
 
-                            var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
-                            var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
-                            if (exist > 0)
-                            {
-                                objItem.BulkUploadCount = contextdb.BulkUploadCustLists.Count();
-                                objItem.Total = objItem.CustCount + contextdb.BulkUploadCustLists.Count();
+                                var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
+                                var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
+                                if (exist > 0)
+                                {
+                                    objItem.BulkUploadCount = contextdb.BulkUploadCustLists.Count();
+                                    objItem.Total = objItem.CustCount + contextdb.BulkUploadCustLists.Count();
+                                }
+                                else
+                                {
+                                    objItem.BulkUploadCount = 0;
+                                    objItem.Total = objItem.CustCount;
+                                }
                             }
-                            else
-                            {
-                                objItem.BulkUploadCount = 0;
-                                objItem.Total = objItem.CustCount;
-                            }
+
+                            ObjData.Add(objItem);
                         }
-
-                        ObjData.Add(objItem);
+                        catch (Exception ex)
+                        {
+                            newexception.AddException(ex, Convert.ToString(item.GroupId));
+                        }
                     }
                 }
             }
