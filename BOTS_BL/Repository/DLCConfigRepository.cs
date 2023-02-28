@@ -28,7 +28,7 @@ namespace BOTS_BL
                     result = true;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, GroupId);
             }
@@ -52,7 +52,6 @@ namespace BOTS_BL
 
             return objData;
         }
-
         public bool ProfileDataInsert(string Groupid, string Name, string NameMandStat, string Gender, string GenderMandStat, string BirthDate, string BirthMandStat, string Marrital, string MargMandStat, string Area, string AreaMandStat, string City, string CityMandStat, string Pincode, string PinMandStat, string Email, string MailMandStat)
         {
             bool status = false;
@@ -129,6 +128,47 @@ namespace BOTS_BL
             }
 
 
+            return status;
+        }
+
+        public bool PublishDLCDashboardConfig(CustomerLoginDetail userDetails)
+        {
+            bool status = false;
+            var connstr = objCustRepo.GetCustomerConnString(userDetails.GroupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    var configData = context.tblDLCDashboardConfigs.FirstOrDefault();
+
+                    var configPData = context.tblDLCDashboardConfig_Publish.FirstOrDefault();
+                    tblDLCDashboardConfig_Publish objData = new tblDLCDashboardConfig_Publish();
+                    if (configPData != null)
+                        objData.SlNo = configPData.SlNo;
+
+                    objData.LoginWithOTP = configData.LoginWithOTP;
+                    objData.RedirectToPage = configData.RedirectToPage;
+                    objData.AddPersonalDetails = configData.AddPersonalDetails;
+                    objData.AddGiftPoints = configData.AddGiftPoints;
+                    objData.AddReferFriend = configData.AddReferFriend;
+                    objData.ShowLogoToFooter = configData.ShowLogoToFooter;
+                    objData.CollectPersonalDataRandomly = configData.CollectPersonalDataRandomly;
+                    objData.UseLogo = configData.UseLogo;
+                    objData.UseLogoURL = configData.UseLogoURL;
+                    objData.PrefferedLanguage = configData.PrefferedLanguage;
+                    objData.HeaderColor = configData.HeaderColor;
+                    objData.AddedBy = userDetails.UserId;
+                    objData.AddedDate = DateTime.Now;
+                    context.tblDLCDashboardConfig_Publish.AddOrUpdate(objData);
+                    context.SaveChanges();
+
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, userDetails.GroupId);
+            }
             return status;
         }
     }

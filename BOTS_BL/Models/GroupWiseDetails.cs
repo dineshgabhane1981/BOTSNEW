@@ -17,5 +17,6 @@ namespace BOTS_BL.Models
         public Int64 CustCount { get; set; }
         public Int64 BulkUploadCount { get; set; }
         public Int64 Total { get; set; }
+        public string FirstTxnDate { get; set; }
     }
 }

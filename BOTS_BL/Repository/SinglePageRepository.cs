@@ -780,6 +780,7 @@ namespace BOTS_BL.Repository
                                       }).FirstOrDefault();
 
                         objItem.CSName = CSName.RMAssignedName;
+                        
                         try
                         {
                             string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
@@ -799,6 +800,11 @@ namespace BOTS_BL.Repository
                                     objItem.BulkUploadCount = 0;
                                     objItem.Total = objItem.CustCount;
                                 }
+                                var firstDate= contextdb.TransactionMasters.OrderBy(x => x.Datetime).Select(y => y.Datetime).FirstOrDefault();
+                                if (item.GroupId == 1063)
+                                    objItem.FirstTxnDate = "18-Jul-2019";
+                                else
+                                    objItem.FirstTxnDate = firstDate.Value.ToString("dd-MMM-yyyy");
                             }
 
                             ObjData.Add(objItem);

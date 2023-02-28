@@ -274,6 +274,7 @@
     <Compile Include="Models\DiscussionReport.cs" />
     <Compile Include="Models\DLCConfig\DLCDashboard.cs" />
     <Compile Include="Models\DLCConfig\DLCProfileUpdate.cs" />
+    <Compile Include="Models\DLCConfig\tblDLCDashboardConfig_Publish.cs" />
     <Compile Include="Models\DLCCreation.cs" />
     <Compile Include="Models\EarnRule.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />

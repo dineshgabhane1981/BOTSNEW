@@ -172,5 +172,14 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
+    
+        public ActionResult PublishDLCDashboardConfig()
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            status = DCR.PublishDLCDashboardConfig(userDetails);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+    
     }
 }

@@ -188,7 +188,7 @@
         //paletteCols: 12,
         //hideOnPaletteClick: true,
     };
-    function componentToHex(c) {        
+    function componentToHex(c) {
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
@@ -197,7 +197,7 @@
         $("#hdnColor").val(hexColor);
         return hexColor;
     }
-    
+
     function colorValues(color) {
         if (!color)
             return;
@@ -238,9 +238,10 @@
         var abc = colorValues(picker.toRGBAString())
         var color = rgbToHex(abc[0], abc[1], abc[2]);
         document.querySelector(selector).style.background = "linear-gradient(to bottom," + color +", #ffffff)";//picker.toRGBAString();
-        
+
     }
     jscolor.trigger('input change');
+
     $(document).ready(function () {
 
         LoadDashboardConfigData();
@@ -298,6 +299,21 @@
 
         $("#btnSaveDashboard").on("click", function () {
             SaveDashboardConfig();
+        });
+        $("#btnPublishDashboard").on("click", function () {
+
+            cuteAlert({
+                type: "question",
+                title: "Are you sure?",
+                message: "Please Save data before Publish. Only Saved data will get published. Do you want to continue?",
+                confirmText: "Okay",
+                cancelText: "Cancel"
+            }).then((e) => {
+                if (e == ("confirm")) {
+                    PublishDashboardConfig();
+                }
+            })
+            
         });
     });
 
@@ -505,4 +521,39 @@
 
         return status;
     }
+
+    function PublishDashboardConfig() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PublishDLCDashboardConfig", "DLCConfig")',                
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "DLC Dashboard config Published successfully",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem in publishing DLC Dashboard config",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    //console.log(result.responseText)
+                }
+            });
+    }
+
 </script>
