@@ -9,6 +9,11 @@ using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using System.IO;
+using System.Threading;
+using System.Data;
+using System.Web;
+using System.Net;
+
 namespace BOTS_BL.Repository
 {
 
@@ -245,9 +250,85 @@ namespace BOTS_BL.Repository
             try
             {
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_Points",
+                    if(GroupId == "1226")
+                    {
+                        if(IsSMS == "True")
+                        {
+                            IsSMS = "1";
+                        }
+                        else
+                        {
+                            IsSMS = "0";
+                        }
+                        SqlConnection _Con = new SqlConnection(connStr);
+                        DataSet DT = new DataSet();
+                        SqlCommand cmdReport = new SqlCommand("sp_EarnRW_New_ITOPS", _Con);
+                        SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                        using (cmdReport)
+                        {
+                            SqlParameter param1 = new SqlParameter("pi_MobileNo", MobileNo);
+                            SqlParameter param2 = new SqlParameter("pi_OutletId", OutletId);
+                            SqlParameter param3 = new SqlParameter("pi_TxnDate", TxnDate);
+                            SqlParameter param4 = new SqlParameter("pi_RequestDate", RequestDate);
+                            SqlParameter param5 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
+                            SqlParameter param6 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
+                            SqlParameter param7 = new SqlParameter("pi_LoginId", "");
+                            SqlParameter param8 = new SqlParameter("pi_RequestBy", objAudit.RequestedBy);
+                            SqlParameter param9 = new SqlParameter("pi_RequestedOnForum", objAudit.RequestedOnForum);
+                            SqlParameter param10 = new SqlParameter("pi_SMSFlag", IsSMS);
+                            SqlParameter param11 = new SqlParameter("pi_Points", Points);
+
+                            cmdReport.CommandType = CommandType.StoredProcedure;
+                            cmdReport.Parameters.Add(param1);
+                            cmdReport.Parameters.Add(param2);
+                            cmdReport.Parameters.Add(param3);
+                            cmdReport.Parameters.Add(param4);
+                            cmdReport.Parameters.Add(param5);
+                            cmdReport.Parameters.Add(param6);
+                            cmdReport.Parameters.Add(param7);
+                            cmdReport.Parameters.Add(param8);
+                            cmdReport.Parameters.Add(param9);
+                            cmdReport.Parameters.Add(param10);
+                            cmdReport.Parameters.Add(param11);
+
+                            daReport.Fill(DT);
+
+                            DataTable dt = DT.Tables[0];
+                            string ResCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                            result.ResponseCode = ResCode;
+
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                            {
+                                
+                                if (Convert.ToString(dt.Rows[0]["SMSFlag"]) == "1")
+                                {
+                                    string SMSStatus = Convert.ToString(dt.Rows[0]["SMSFlag"]);
+                                    string WAStatus = Convert.ToString(dt.Rows[0]["WAStatus"]); //MobileNo
+                                    string _MobileNo = Convert.ToString(dt.Rows[0]["MobileNo"]);
+                                    string _MobileMessage = Convert.ToString(dt.Rows[0]["Message"]);
+                                    string _UserName = Convert.ToString(dt.Rows[0]["UserName"]);
+                                    string _Password = Convert.ToString(dt.Rows[0]["Password"]);
+                                    string _Sender = Convert.ToString(dt.Rows[0]["SenderId"]);
+                                    string _Url = Convert.ToString(dt.Rows[0]["Url"]);
+                                    string _WAMessage = Convert.ToString(dt.Rows[0]["WAMessage"]);
+                                    string _WATokenId = Convert.ToString(dt.Rows[0]["WATokenId"]);
+
+
+                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    {
+                                        Thread _job = new Thread(() => SendSMSandWA(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _WAMessage, _WATokenId));
+                                        _job.Start();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_Points",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
@@ -259,6 +340,8 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
                               new SqlParameter("@pi_SMSFlag", IsSMS),
                               new SqlParameter("@pi_Points", Points)).FirstOrDefault<SPResponse>();
+                    }
+                    
 
 
                     //DateTime.Now.ToString("yyyy-MM-dd")
@@ -266,7 +349,13 @@ namespace BOTS_BL.Repository
 
                     //if (result.ResponseCode == "00")
                     //{
-                    //    status = true;
+                    //   // status = true;
+                    //   if(result.SMSFlag == "1")
+                    //    {
+                    //        string _MobileMessage = result.Message;
+                    //        //Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                    //        //_job.Start();
+                    //    }
                     //}
                 }
                 using (var context = new CommonDBContext())
@@ -861,6 +950,91 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public void SendSMSandWA(string _MobileNo, string _MobileMessage, string  _UserName, string  _Password, string  _Sender, string  _Url, string  _WAMessage, string _WATokenId)
+        {
+            string responseString;
+            try
+            {
+
+                _WAMessage = _WAMessage.Replace("#99", "&");
+                _WAMessage = HttpUtility.UrlEncode(_WAMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
+                sbposdata.AppendFormat("token={0}", _WATokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _WAMessage);
+                sbposdata.AppendFormat("&wacheck={0}", "true");
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+                _job.Start();
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+                _job.Start();
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+                _job.Start();
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+
+        }
+
+        public void SendSMS(string _MobileNo, string _MobileMessage, string _UserName, string _Password, string _Sender, string _Url)
+        {
+            var httpWebRequest_00004 = (HttpWebRequest)WebRequest.Create(_Url);
+            httpWebRequest_00004.ContentType = "application/json";
+            httpWebRequest_00004.Method = "POST";
+
+            using (var streamWriter_00004 = new StreamWriter(httpWebRequest_00004.GetRequestStream()))
+            {
+
+                string json_00004 = "{\"Account\":" +
+                                "{\"APIKey\":\"" + _Password + "\"," +
+                                "\"SenderId\":\"" + _Sender + "\"," +
+                                "\"Channel\":\"Trans\"," +
+                                "\"DCS\":\"8\"," +
+                                "\"SchedTime\":null," +
+                                "\"GroupId\":null}," +
+                                "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
+                                "\"Text\":\"" + _MobileMessage + "\"}]" +
+                                "}";
+                streamWriter_00004.Write(json_00004);
+            }
+
+            var httpResponse_00004 = (HttpWebResponse)httpWebRequest_00004.GetResponse();
+            using (var streamReader_00004 = new StreamReader(httpResponse_00004.GetResponseStream()))
+            {
+                var result_00004 = streamReader_00004.ReadToEnd();
+            }
+        }
 
 
     }
