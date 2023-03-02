@@ -19,10 +19,12 @@ namespace RetailerApp.Controllers
         {
             DynamicFieldInfo DynaInfo = new DynamicFieldInfo();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var UserName = userDetails.UserName;
             var obj = RWR.DynamicData(userDetails.connectionString);
             var obj1 = RWR.DynamicCustData(userDetails.connectionString);
             Session["DynamicData"] = obj;
             Session["DynamicCustData"] = obj1;
+            ViewBag.UserName = UserName;
 
             //var J1 = Session["DynamicData"];
 

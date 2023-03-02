@@ -111,7 +111,7 @@
 </style>
 <div class="app-main__inner">
     <div class="row" style="margin-top : 20px; padding-bottom : 20px" id="divSearchHeading">
-
+      <input id="UserName" value= @ViewBag.UserName hidden/>
     </div>
     <div class="col-md-12 col-sm-12 card" style="padding: 10px; margin: 5px; margin-right: 20px !important;  border-radius: 10px;" id="divSearch">
         <div class="col-sm-4">
@@ -121,9 +121,19 @@
             <div class="col-md-2 col-sm-2" style="margin-top:10px;">
                 Enter Mobile No
             </div>
-            <div class="col-md-3 col-sm-3">
-                <input id="txtMobileNo" type="text" onkeypress="phoneno()"   maxlength="10" class="input50" />
-            </div>
+            @if (ViewBag.UserName == "RetailWebDemo1")
+            {
+                <div class="col-md-3 col-sm-3">
+                    <input id="txtMobileNo" type="text" class="input50" />
+                </div>
+            }
+            else
+            {
+                <div class="col-md-3 col-sm-3">
+                    <input id="txtMobileNo" type="text" onkeypress="phoneno()" maxlength="10" class="input50" />
+                </div>
+            }
+
             <div class="col-md-2 col-sm-2">
                 <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="ValidateMobileno();" style="margin-top:10px;">Search</button>
             </div>
@@ -324,33 +334,49 @@
         var Temp = $("#txtMobileNo").val();
         const firstDigitStr = String(Temp)[0];
 
-        if ($("#txtMobileNo").val() == "") {
-            cuteAlert({
-                type: "error",
-                title: "OOPS...",
-                message: "Please enter Mobile number to search",
-                buttonText: "Okay"
-            })
-        }
-        else if ((Temp.length) < 10) {
-            cuteAlert({
-                type: "error",
-                title: "OOPS...",
-                message: "Please enter Mobile number with 10 digits",
-                buttonText: "Okay"
-            })
-        }
-        else if (firstDigitStr < 5) {
-            cuteAlert({
-                type: "error",
-                title: "OOPS...",
-                message: "Please enter Mobile number starting greater than 5",
-                buttonText: "Okay"
-            })
+        if ($("#UserName").val() == "RetailWebDemo1") {
+            if ($("#txtMobileNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile number to search",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                SearchCustomer();
+            }
         }
         else {
-            SearchCustomer();
+            if ($("#txtMobileNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile number to search",
+                    buttonText: "Okay"
+                })
+            }
+            else if ((Temp.length) < 10) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile number with 10 digits",
+                    buttonText: "Okay"
+                })
+            }
+            else if (firstDigitStr < 5) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile number starting greater than 5",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                SearchCustomer();
+            }
         }
+        
     }
     function SearchCustomer() {
         if ($("#txtMobileNo").val() == "") {
