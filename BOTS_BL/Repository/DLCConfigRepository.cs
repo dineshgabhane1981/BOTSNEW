@@ -171,5 +171,52 @@ namespace BOTS_BL
             }
             return status;
         }
+
+        public bool PublishDLCProfileUpdate(string Groupid)
+        {
+            bool status = false;
+            var connstr = objCustRepo.GetCustomerConnString(Groupid);
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    SqlConnection _Con = new SqlConnection(connstr);
+                    DataSet retVal = new DataSet();
+                    SqlCommand cmdReport = new SqlCommand("sp_DLCProfileUpdatePublish", _Con);
+                    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+
+                    using (cmdReport)
+                    {
+                        SqlParameter param1 = new SqlParameter("pi_Groupid", Groupid);
+                        
+                        cmdReport.CommandType = CommandType.StoredProcedure;
+                        cmdReport.Parameters.Add(param1);
+                        
+                        daReport.Fill(retVal);
+
+                        DataTable dt = retVal.Tables[0];
+                        if (Convert.ToString(dt.Rows[0]["Result"]) == "1")
+                        {
+                            status = true;
+                        }
+                        else
+                        {
+                            status = false;
+                        }
+                    }
+
+
+
+                }
+            }
+
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, Groupid);
+            }
+
+
+            return status;
+        }
     }
 }

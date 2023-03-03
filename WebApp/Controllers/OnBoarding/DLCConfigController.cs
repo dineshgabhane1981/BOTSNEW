@@ -9,6 +9,8 @@ using System.Web.Script.Serialization;
 using System.IO;
 using System.Configuration;
 using BOTS_BL;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -146,6 +148,7 @@ namespace WebApp.Controllers.OnBoarding
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objDashboardData = (object[])json_serializer.DeserializeObject(jsonData);
+            //DataTable table = JsonConvert.DeserializeObject<DataTable>(jsonData);
 
             foreach (Dictionary<string, object> item in objDashboardData)
             {
@@ -180,6 +183,14 @@ namespace WebApp.Controllers.OnBoarding
             status = DCR.PublishDLCDashboardConfig(userDetails);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-    
+
+        public ActionResult PublishProfileUpdate()
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            status = DCR.PublishDLCProfileUpdate(userDetails.GroupId);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }

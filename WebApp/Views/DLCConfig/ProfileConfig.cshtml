@@ -91,6 +91,21 @@
     </div>
 </div>
 <script>
+    $("#btnPublishProfUpdt").on("click", function () {
+
+        cuteAlert({
+            type: "question",
+            title: "Are you sure?",
+            message: "Please Save data before Publish. Only Saved data will get published. Do you want to continue?",
+            confirmText: "Okay",
+            cancelText: "Cancel"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                PublishProfUpdt();
+            }
+        })
+
+    });
     $("#btnSaveProfUpdt").on("click", function () {
         ValidateProfUpdtConfig();
     });
@@ -133,9 +148,6 @@
         item = {}
         if ($("#Name").is(":checked")) {
             item["Name"] = "True";
-             //$("#CustMandStat").change;
-            //var T = $("#CustMandStat option:selected").val();
-            //alert(T);
             item["NameMandStat"] = $("#CustMandStat option:selected").val();
         }
         else {
@@ -198,6 +210,7 @@
             item["Email"] = "False";
             item["MailMandStat"] = "0";
         }
+
         PrimaryData.push(item);
         //console.log(PrimaryData);
         var data = JSON.stringify(PrimaryData);
@@ -228,6 +241,39 @@
                             buttonText: "Okay"
                         })
                     }
+                }
+            });
+    }
+    function PublishProfUpdt() {
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PublishProfileUpdate", "DLCConfig")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "DLC Profile Update Data Published successfully",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem in publishing DLC Profile Update Data",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    //console.log(result.responseText)
                 }
             });
     }
