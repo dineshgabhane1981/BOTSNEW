@@ -119,6 +119,7 @@
                                                 Channel Partner
                                             </a>
                                         </li>
+                                        
                                     </ul>
                                 </li>
                             }
@@ -139,11 +140,11 @@
                                     @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
                                     {
                                         @*<li class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")">
-                                    <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
-                                        <i class="metismenu-icon"></i>
-                                        Non Transacting
-                                    </a>
-                                </li>*@
+                        <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
+                            <i class="metismenu-icon"></i>
+                            Non Transacting
+                        </a>
+                    </li>*@
                                     }
                                     <li class="@Html.IsSelected(controller: "SinglePage", action: "Communication")">
                                         <a class="@Html.IsSelected(controller: "SinglePage", action: "Communication")" href="@Url.Action("Communication", "SinglePage")">
@@ -225,6 +226,15 @@
 
                                 </a>
                             </li>
+                            @if (roleId == "1" || roleId == "6" || roleId == "7" || roleId == "9")
+                            {
+                                <li class="@Html.IsSelected(controller: "Bitly", action: "Index,UploadData")">
+                                    <a href="@Url.Action("Index", "Bitly")" class="@Html.IsSelected(controller: "Bitly", action: "Index,UploadData")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Bitly Link
+                                    </a>
+                                </li>
+                            }
 
                         </ul>
                     </li>

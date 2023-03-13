@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -72,62 +74,58 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult CreateBitly()
         {
             string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
-            string _FileName2 = (string)Session["FileName"];
+            string _FileName2 = (string)Session["FileName"];           
             string data1 = Path3 + _FileName2;
-            string responseString;
-            string _Url = "http://api.bit.ly/shorten?";
+            string responseString, result_00003;
+            string _Url = "https://api-ssl.bitly.com/v4/shorten";
             try
             {
-                StringBuilder sbposdata = new StringBuilder();
-                sbposdata.AppendFormat(_Url);
-                sbposdata.AppendFormat("format=json");
-                sbposdata.AppendFormat("&version={0}", "2.0.1");
-                sbposdata.AppendFormat("&longUrl={0}", data1);
-                sbposdata.AppendFormat("&login={0}", "o_1bla0j44vl");
-                sbposdata.AppendFormat("&apiKey={0}", "R_934b9e704bc14d50be7c22c58d5ed588");
-                string Url = sbposdata.ToString();
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
-                UTF8Encoding encoding = new UTF8Encoding();
-                byte[] data = encoding.GetBytes(sbposdata.ToString());
-                httpWReq.Method = "POST";
-                httpWReq.ContentType = "application/x-www-form-urlencoded";
-                httpWReq.ContentLength = data.Length;
-                using (Stream stream = httpWReq.GetRequestStream())
+                var httpWebRequest_00003 = (HttpWebRequest)WebRequest.Create(_Url);
+                httpWebRequest_00003.ContentType = "application/json";
+                httpWebRequest_00003.Headers.Add("Authorization", "f22c9274b5565860b85d1e4af701d4d6a4c795fa");
+           
+                httpWebRequest_00003.Method = "POST";
+
+                using (var streamWriter_00003 = new StreamWriter(httpWebRequest_00003.GetRequestStream()))
                 {
-                    stream.Write(data, 0, data.Length);
+
+                    string json_00003 = 
+                                    "{\"long_url\":\"" + data1 + "\"," +
+                                    "\"domain\":\"bit.ly\"," +
+                                    "\"group_guid\":\"\"}";
+                    streamWriter_00003.Write(json_00003);
                 }
-                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                responseString = reader.ReadToEnd();
-                JavaScriptSerializer jconvert = new JavaScriptSerializer();
-                var responseData = jconvert.DeserializeObject(responseString);
 
-
-                foreach (var item in (dynamic)responseData)
-
+                var httpResponse_00003 = (HttpWebResponse)httpWebRequest_00003.GetResponse();
+                using (var streamReader_00003 = new StreamReader(httpResponse_00003.GetResponseStream()))
                 {
-                    if (item.Key == "results")
-                    {
-                        var itemResult = item.Value;
-                        foreach (var item1 in (dynamic)itemResult)
-                        {
-                            var itemLink = item1.Value;
-                            foreach (var item2 in (dynamic)itemLink)
-                            {
-                                if (item2.Key == "shortUrl")
-                                {
-                                    string itemshortUrl = item2.Value;
-                                    ViewData["Bitly"] = itemshortUrl;
-                                }
-
-                            }
-                        }
-                    }
+                     result_00003 = streamReader_00003.ReadToEnd();
                 }
-                reader.Close();
-                response.Close();
+
+                JObject jsonObj = JObject.Parse(result_00003);
+                var Balance = JObject.Parse(result_00003)["id"];
+                string itemshortUrl = (string)Balance;
+                ViewData["Bitly"] = itemshortUrl;
+                //foreach (var item in (dynamic)result_00003)
+                //{
+                //    if (item.Key == "id")
+                //    {
+                //        var itemResult = item.Value;
+                //        foreach (var item1 in (dynamic)itemResult)
+                //        {
+                //            var itemLink = item1.Value;
+                //            foreach (var item2 in (dynamic)itemLink)
+                //            {
+                //                if (item2.Key == "shortUrl")
+                //                {
+                //                    string itemshortUrl = item2.Value;
+                //                    ViewData["Bitly"] = itemshortUrl;
+                //                }
+
+                //            }
+                //        }
+                //    }
+                //}
 
             }
             catch (ArgumentException ex)
