@@ -299,16 +299,16 @@
     function HandleChange() {
         //alert("Hello");
         var val = $("#SMSScript").val();
-       
-        var status = CheckText(val);
-
+        if (val != '') {
+            var status = CheckText(val);
+        }
         /*alert(status);*/
         console.log(status);
 
         if (document.getElementById("rdnText").checked) {
             $("#GooleLink").hide();
             if (val != '') {
-                if (status == false) {
+                if (status == 1) {
                     cuteAlert({
                         type: "error",
                         title: "Message Script Error",
@@ -321,7 +321,7 @@
         else {
             $("#GooleLink").show();
             if (val != '') {
-                if (status == true) {
+                if (status == 0 ) {
                     cuteAlert({
                         type: "error",
                         title: "Message Script Error",
@@ -410,7 +410,8 @@
         var val = $("#SMSScript").val();
         var status;
         if (val != '') {
-             status = CheckText(val);    
+            status = CheckText(val);
+            alert(status);
         }
 
         var Script = $("#SMSScript").val();
@@ -434,10 +435,12 @@
         }
 
         if (val != '') {
-            if ((ScriptType == '1') && (status == true)) {
+            alert("ScriptType" + ScriptType);
+            alert("status" + status);
+            if ((ScriptType == '1') && (status == 0)) {
                 TempCalc = 159;
             }
-            else if ((ScriptType == '2') && (status == false)) {
+            else if ((ScriptType == '2') && (status == 1)) {
                 TempCalc = 69;
             }
         }
