@@ -119,7 +119,7 @@
                                                 Channel Partner
                                             </a>
                                         </li>
-                                        
+
                                     </ul>
                                 </li>
                             }
@@ -235,6 +235,13 @@
                                     </a>
                                 </li>
                             }
+
+                            <li class="@Html.IsSelected(controller: "DocumentLibrary", action: "Index")">
+                                <a href="@Url.Action("Index", "DocumentLibrary")" class="@Html.IsSelected(controller: "DocumentLibrary", action: "Index")">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>
+                                    Document Library
+                                </a>
+                            </li>
 
                         </ul>
                     </li>

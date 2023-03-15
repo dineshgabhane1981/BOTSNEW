@@ -1,4 +1,5 @@
 using BOTS_BL.Models;
+using BOTS_BL.Models.CommonDB;
 using BOTS_BL.Models.FeedBack;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,7 +19,8 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
-        
+        public virtual DbSet<tblAWSAccessDetail> tblAWSAccessDetails { get; set; }
+        public virtual DbSet<tblDocumentsLibrary> tblDocumentsLibraries { get; set; }
         public virtual DbSet<tblDLCFrontEndPageData> tblDLCFrontEndPageDatas { get; set; }
         public virtual DbSet<tblDLCDashboardConfig_Publish> tblDLCDashboardConfig_Publish { get; set; }
         public virtual DbSet<tblDLCDashboardConfig> tblDLCDashboardConfigs { get; set; }

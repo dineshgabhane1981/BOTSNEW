@@ -241,9 +241,11 @@
     <Compile Include="Models\CommonDB\SMSGatewayMaster.cs" />
     <Compile Include="Models\CommonDB\SMSWABalanceData.cs" />
     <Compile Include="Models\CommonDB\tblAudit.cs" />
+    <Compile Include="Models\CommonDB\tblAWSAccessDetail.cs" />
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
     <Compile Include="Models\CommonDB\tblChannelPartner.cs" />
     <Compile Include="Models\CommonDB\tblCity.cs" />
+    <Compile Include="Models\CommonDB\tblDocumentsLibrary.cs" />
     <Compile Include="Models\CommonDB\tblErrorLog.cs" />
     <Compile Include="Models\CommonDB\tblFestival.cs" />
     <Compile Include="Models\CommonDB\tblGroupDetail.cs" />
@@ -396,6 +398,7 @@
     <Compile Include="Repository\DLCConfigRepository.cs" />
     <Compile Include="Repository\DLCReportingRepository.cs" />
     <Compile Include="Repository\DLCRepository.cs" />
+    <Compile Include="Repository\DocumentLibraryRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\FeedbackModuleRepository.cs" />
     <Compile Include="Repository\FeedBackRepository.cs" />
