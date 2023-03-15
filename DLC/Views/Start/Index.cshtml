@@ -1,0 +1,83 @@
+﻿@model DLC.ViewModel.DLCDashboardFrontData
+<!doctype html>
+<html lang="en">
+<head>
+    <title>DLC Login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Content/DLCMain.css" rel="stylesheet" />
+    <script src="~/Content/cute-alert-master/cute-alert.js"></script>
+    <link href="~/Content/cute-alert-master/style-alert.css" rel="stylesheet" />
+</head>
+<body>
+    <section class="ftco-section">
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="login-wrap py-5" id="dvMain">
+                        <div class="img d-flex align-items-center justify-content-center" style="background-image: url(http://localhost:57265/DLCImages/1051Small.jpg);"></div>
+                        <h3 class="text-center mb-0">Welcome</h3>
+                        <p class="text-center">
+                            Sign-up or Log-in now and start earning tons of reward points!!! <br />
+                            साईन -अप किंवा लॉगिन करा आणि भरपूर रिवॉर्ड पॉईंट्स मिळवा
+                        </p>
+                        <form action="#" class="login-form">
+                            <div class="form-group row">
+                                @Html.DropDownListFor(model => model.CountryCode, new SelectList(ViewBag.Codes, "Code", "Code", "+91"), htmlAttributes: new { @class = "input50",@style="height:30px;margin-top:12px;", @id = "ddlCountryCode" })
+                                <div class="icon d-flex align-items-end justify-content-end" style="margin-left:52px;padding-bottom:13px;"><span class="fa fa-mobile"></span></div>
+                                <input type="number" id="txtMobileNo" class="form-control" style="width:75%;" placeholder="Mobile Number" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" id="btnLogin" class="btn form-control btn-primary rounded submit px-3">Get Started</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>            
+        </div>
+    </section>
+
+    <script src="~/Content/jquery.min.js"></script>
+    <script src="~/Content/popper.js"></script>
+    <script src="~/Content/bootstrap.min.js"></script>
+    <script src="~/Content/main.js"></script>
+    <script>
+        $(document).ready(function () {
+            var color = '@Model.objDashboardConfig.HeaderColor';
+            document.querySelector("#dvMain").style.background = "linear-gradient(to bottom," + color + ", #000000)";
+
+            $("#btnLogin").on("click", function () {
+                ValidateAndLogin();
+            });
+        });
+        function ValidateAndLogin() {
+            if ($("#txtMobileNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS",
+                    message: "Please enter mobile no",
+                    buttonText: "Okay"
+                })
+            }
+            if (/^[6789]\d{9,9}$/.test($("#txtMobileNo").val())) {
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS",
+                    message: "Please enter valid mobile no",
+                    buttonText: "Okay"
+                })
+            }
+            
+        }
+    </script>
+</body>
+</html>
+
+

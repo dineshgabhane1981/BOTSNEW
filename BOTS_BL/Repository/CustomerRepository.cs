@@ -1256,9 +1256,9 @@ namespace BOTS_BL.Repository
 
             using (var context = new CommonDBContext())
             {
-                var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, 1);
-                var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month);
-                var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(1).Month, lastDay);
+                var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, lastDay);
                 lstData = context.tblFestivals.Where(x => x.Date >= FromDate && x.Date <= ToDate).ToList();
             }
             return lstData;

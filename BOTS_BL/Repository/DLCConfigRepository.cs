@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BOTS_BL
+namespace BOTS_BL.Repository
 {
     public class DLCConfigRepository
     {
@@ -217,6 +217,50 @@ namespace BOTS_BL
 
 
             return status;
+        }
+    
+        public tblDLCDashboardConfig_Publish GetPublishDLCDashboardConfig(string groupId)
+        {
+            tblDLCDashboardConfig_Publish objData = new tblDLCDashboardConfig_Publish();
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objData = context.tblDLCDashboardConfig_Publish.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
+            return objData;
+        }
+        public List<tblDLCFrontEndPageData> GetDLCFrontEndPageData(string groupId)
+        {
+            List<tblDLCFrontEndPageData> objData = new List<tblDLCFrontEndPageData>();
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objData = context.tblDLCFrontEndPageDatas.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
+            return objData;
+        }
+        public List<tblCountyCode> GetCountryCodes()
+        {
+            List<tblCountyCode> lstCodes = new List<tblCountyCode>();
+            using (var context = new CommonDBContext())
+            {
+                lstCodes = context.tblCountyCodes.ToList();
+            }
+            return lstCodes;
         }
     }
 }

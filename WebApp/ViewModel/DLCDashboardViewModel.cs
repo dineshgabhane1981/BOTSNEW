@@ -10,6 +10,7 @@ namespace WebApp.ViewModel
     public class DLCDashboardViewModel
     {
         public tblDLCDashboardConfig objDLCDashboard { get; set; }
+        
         public SelectListItem[] RedirectToPage()
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Dashboard", Value = "Dashboard" }, new SelectListItem() { Text = "Update Profile", Value = "Update Profile" }, new SelectListItem() { Text = "Gift Points", Value = "Gift Points" }, new SelectListItem() { Text = "Transaction History", Value = "Transaction History" } };
@@ -31,5 +32,6 @@ namespace WebApp.ViewModel
                 new SelectListItem() { Text = "Tamil", Value = "Tamil" },
                 new SelectListItem() { Text = "Telugu", Value = "Telugu" }};
         }
+        
     }
 }

@@ -11,12 +11,16 @@ using System.Configuration;
 using BOTS_BL;
 using System.Data;
 using Newtonsoft.Json;
+using BOTS_BL.Repository;
+using WebApp.App_Start;
 
 namespace WebApp.Controllers.OnBoarding
 {
     public class DLCConfigController : Controller
     {
         DLCConfigRepository DCR = new DLCConfigRepository();
+        CustomerRepository CR = new CustomerRepository();
+        CommonFunctions common = new CommonFunctions();
         // GET: DLCConfig
         public ActionResult Index()
         {
@@ -26,6 +30,8 @@ namespace WebApp.Controllers.OnBoarding
         {
             tblDLCDashboardConfig objDLCDashboard = new tblDLCDashboardConfig();
             DLCDashboardViewModel objData = new DLCDashboardViewModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objDLCDashboard = DCR.GetDLCDashboardConfig(userDetails.GroupId);
             objData.objDLCDashboard = objDLCDashboard;
             return View(objData);
         }
@@ -190,6 +196,21 @@ namespace WebApp.Controllers.OnBoarding
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             status = DCR.PublishDLCProfileUpdate(userDetails.GroupId);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GenerateDLCLink()
+        {
+            var BaseUrl= ConfigurationManager.AppSettings["baseDLCUrl"];
+            List<string> Urls = new List<string>(); ;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var BrandDetails = CR.GetAllBrandsByGroupId(userDetails.GroupId);
+            //ViewBag.URLs = BrandDetails;
+            foreach(var item in BrandDetails)
+            {
+                var url = BaseUrl + "?data=" + common.EncryptString("BrandId=" + item.BrandId);
+                Urls.Add(url);
+            }
+            ViewBag.URLs = Urls;
+            return View();
         }
 
     }

@@ -18,6 +18,8 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        
+        public virtual DbSet<tblDLCFrontEndPageData> tblDLCFrontEndPageDatas { get; set; }
         public virtual DbSet<tblDLCDashboardConfig_Publish> tblDLCDashboardConfig_Publish { get; set; }
         public virtual DbSet<tblDLCDashboardConfig> tblDLCDashboardConfigs { get; set; }
         public virtual DbSet<tblMedrationSubscription> tblMedrationSubscriptions { get; set; }

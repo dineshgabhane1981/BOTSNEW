@@ -483,6 +483,11 @@ namespace WebApp.Controllers
                 objData.ReportMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + "_" + DateTime.Now.AddMonths(-1).Year.ToString();
                 objData.lstMemberBaseAndTransaction = CR.GetMemberBaseAndTransactions(groupId);
 
+                var conStr = CR.GetCustomerConnString(groupId);
+                var dataMemberSegment = DR.GetDashboardMemberSegmentData(groupId, "", conStr, "", "", "");
+
+                objData.lstMemberBaseAndTransaction[1].BaseCount = Convert.ToInt32(dataMemberSegment.NoofMember_Total);
+
                 var connectionString = CR.GetCustomerConnString(groupId);
                 var dataDashboard = DR.GetDashboardData(groupId, connectionString, "", "", "");
                 TotalStats objStats = new TotalStats();
@@ -505,7 +510,7 @@ namespace WebApp.Controllers
                 var fileName = objData.CustomerName.Trim() + "_" + objData.ReportMonth + ".pdf";
                 var path = Server.MapPath("~/DashboardReports/" + fileName);
                 System.IO.File.WriteAllBytes(path, pdfBytes);
-                //var status = SendMessage(groupId, fileName);
+                var status = SendMessage(groupId, fileName);
 
             }
             catch (Exception ex)
@@ -522,15 +527,17 @@ namespace WebApp.Controllers
             try
             {
                 var path = "https://blueocktopus.in/bots/DashboardReports/" + fileName;
-                string _MobileMessage = "Dear Customer, Your LOYALTY PROGRAM SYNOPSIS is attached";
+                //var path = "http://localhost:57265/DashboardReports/" + fileName;
+                var Month = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + "_" + DateTime.Now.AddMonths(-1).Year.ToString();
+                string _MobileMessage = "Dear Customer, Your *LOYALTY PROGRAM SYNOPSIS* for "+ Month + " is attached";
                 StringBuilder sbposdata = new StringBuilder();
-                sbposdata.AppendFormat("https://bo.enotify.app/api/sendFiles?");
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendFileWithCaption?");
                 sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
-                sbposdata.AppendFormat("&phone={0}", WAGroupCode);
+                //sbposdata.AppendFormat("&phone={0}", WAGroupCode);
 
-                //sbposdata.AppendFormat("&phone=91{0}", "9834545425");
+                sbposdata.AppendFormat("&phone=91{0}", "9834545425");
                 sbposdata.AppendFormat("&link={0}", path);
-                sbposdata.AppendFormat("&text={0}", _MobileMessage);
+                sbposdata.AppendFormat("&message={0}", _MobileMessage);
                 string Url = sbposdata.ToString();
                 //this.WriteToFile(Url);
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;

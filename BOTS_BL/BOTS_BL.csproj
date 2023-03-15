@@ -274,7 +274,9 @@
     <Compile Include="Models\DiscussionReport.cs" />
     <Compile Include="Models\DLCConfig\DLCDashboard.cs" />
     <Compile Include="Models\DLCConfig\DLCProfileUpdate.cs" />
+    <Compile Include="Models\DLCConfig\tblCountyCode.cs" />
     <Compile Include="Models\DLCConfig\tblDLCDashboardConfig_Publish.cs" />
+    <Compile Include="Models\DLCConfig\tblDLCFrontEndPageData.cs" />
     <Compile Include="Models\DLCCreation.cs" />
     <Compile Include="Models\EarnRule.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
@@ -393,6 +395,7 @@
     <Compile Include="Repository\DiscussionsRepository.cs" />
     <Compile Include="Repository\DLCConfigRepository.cs" />
     <Compile Include="Repository\DLCReportingRepository.cs" />
+    <Compile Include="Repository\DLCRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\FeedbackModuleRepository.cs" />
     <Compile Include="Repository\FeedBackRepository.cs" />
