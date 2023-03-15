@@ -15,9 +15,9 @@ namespace BOTS_BL.Repository
 {
     public class DocumentLibraryRepository
     {
-        string AWSAccessKey = "AKIA44XKRIA7N3YQDZO4";
-        string AWSSecretKey = "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";
-        string AWSBucketName = "botsdocumentlibrary";
+        string AWSAccessKey = "";
+        string AWSSecretKey = "";
+        string AWSBucketName = "";
         
         public bool UploadDocumentToS3(string fileData)
         {
