@@ -42,7 +42,7 @@ namespace BOTS_BL.Repository
                 IAmazonS3 client = new AmazonS3Client(AWSAccessKey, AWSSecretKey, RegionEndpoint.APSouth1);
                 TransferUtility utility = new TransferUtility(client);
                 TransferUtilityUploadRequest request = new TransferUtilityUploadRequest();
-                string path = @"Documents";
+                string path = @"Documents/"+ GroupName;
                 S3DirectoryInfo di = new S3DirectoryInfo(client, AWSBucketName, path);
                 if (!di.Exists)
                 {
@@ -67,7 +67,7 @@ namespace BOTS_BL.Repository
                     ObjDocLib.GroupId = Convert.ToString(Groupid);
                     ObjDocLib.GroupName = Convert.ToString(GroupName);
                     ObjDocLib.DocumentType = Convert.ToString("Config");
-                    ObjDocLib.Path = Convert.ToString(path);
+                    ObjDocLib.Path = path + "/" + fileName;
                     ObjDocLib.UploadedBy = Convert.ToString(Addedby);
                     ObjDocLib.UploadDate = Convert.ToDateTime(Addeddate);
                     ObjDocLib.Comments = Convert.ToString(Comment);

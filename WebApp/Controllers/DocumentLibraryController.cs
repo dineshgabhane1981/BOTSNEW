@@ -25,7 +25,7 @@ namespace WebApp.Controllers
             bool status = false;
 
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            string Addedby = userDetails.MobileNo;
+            string Addedby = userDetails.LoginId;
             string Addeddate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
             status = DLR.UploadDocumentToS3(fileData, fileName, Groupid, GroupName, Comment, Addedby, Addeddate);

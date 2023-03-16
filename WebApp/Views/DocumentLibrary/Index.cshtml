@@ -96,17 +96,20 @@
         })(f);
         reader.readAsBinaryString(f);
     }
+
     function UploadDocuments() {
         var DocumentStr = $("#hdnuploadDocBase64").val();
         var filename = ($("#hdnFileName").val());
         var GroupId = $("#ddlGroupDetails").val();
         var GroupName = $("#ddlGroupDetails option:selected").text();
+        var Comment = $("#txtComment").val();
+        
 
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UploadDocument", "DocumentLibrary")',
-                data: '{fileData: ' + JSON.stringify(DocumentStr) + '}',
+                data: '{fileData: ' + JSON.stringify(DocumentStr) + ',filename: ' + JSON.stringify(filename) + ',GroupId: ' + JSON.stringify(GroupId) + ',GroupName: ' + JSON.stringify(GroupName) + ',Comment: ' + JSON.stringify(Comment) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
