@@ -12,7 +12,7 @@ namespace BOTS_BL.Models.CommonDB
         [Key]
         public long SlNo { get; set; }
 
-        public int? GroupId { get; set; }
+        public string GroupId { get; set; }
 
         public string GroupName { get; set; }
 
@@ -28,5 +28,7 @@ namespace BOTS_BL.Models.CommonDB
         public string UploadedBy { get; set; }
 
         public DateTime? UploadDate { get; set; }
+
+        public string Comments { get; set; }
     }
 }

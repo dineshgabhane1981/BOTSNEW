@@ -16,29 +16,20 @@ namespace WebApp.Controllers
         // GET: DocumentLibrary
         public ActionResult Index()
         {
-            //tblGroupDetail objData = new tblGroupDetail();
-            // objData = DLR.GetGroupDetails();
-            //return View(objData);
             DocumentLibraryViewModel objdata = new DocumentLibraryViewModel();
             objdata.lstGroupDetails = DLR.GetGroupDetails();
             return View(objdata);
         }
-        public bool UploadDocument(string fileData)
+        public bool UploadDocument(string fileData, string fileName, string Groupid, string GroupName, string Comment)
         {
             bool status = false;
 
-            status = DLR.UploadDocumentToS3(fileData);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string Addedby = userDetails.MobileNo;
+            string Addeddate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            status = DLR.UploadDocumentToS3(fileData, fileName, Groupid, GroupName, Comment, Addedby, Addeddate);
             return status;
         }
-
-        
-
-        //public ActionResult GroupList(string groupId)
-        //{
-        //    tblGroupDetail objData = new tblGroupDetail();
-        //    var lstGroupList = DLR.GetGroupDetails();
-
-        //    return View(objData);
-        //}
     }
 }
