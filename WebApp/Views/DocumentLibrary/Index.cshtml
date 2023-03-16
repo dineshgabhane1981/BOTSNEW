@@ -25,12 +25,28 @@
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
             </div>
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
+            @*<div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
                 <div class="col-lg-3 col-md-3 ">
                     Department
                 </div>
                 <div class="col-md-3 col-xl-3">
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                </div>
+            </div>*@
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
+                <div class="col-lg-3 col-md-3 ">
+                    Department
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDepartment" })
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
+                <div class="col-lg-3 col-md-3 ">
+                    DocumentType
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.DocType, new SelectList(Model.DocumentType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDocumentType" })
                 </div>
             </div>
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
@@ -49,7 +65,7 @@
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
                 <input type="button" id="btnUpload1" class="btn btn-primary" value="Upload" />
             </div>
-           
+
         </div>
     </div>
 </div>
