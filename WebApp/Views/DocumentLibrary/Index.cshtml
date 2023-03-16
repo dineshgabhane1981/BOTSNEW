@@ -116,10 +116,18 @@
     function UploadDocuments() {
         var DocumentStr = $("#hdnuploadDocBase64").val();
         var filename = ($("#hdnFileName").val());
-        var GroupId = $("#ddlGroupDetails").val();
-        var GroupName = $("#ddlGroupDetails option:selected").text();
+        if ($("#rdnCustomer").is(":checked")) {
+            var GroupId = $("#ddlGroupDetails").val();
+            var GroupName = $("#ddlGroupDetails option:selected").text();
+        }
+        else {
+            var GroupId = $("#ddlDepartment option:selected").text();
+            var GroupName = $("#ddlDepartment option:selected").text();
+        }
+        /*var GroupId = $("#ddlGroupDetails").val();*/
+        /*var GroupName = $("#ddlGroupDetails option:selected").text();*/
         var Comment = $("#txtComment").val();
-        
+
 
         $("#divLoader").show();
             $.ajax({
@@ -157,7 +165,11 @@
                             title: "Uploaded",
                             message: "Document Uploaded successfully",
                             buttonText: "Okay"
-                        })
+                        }).then(() => {
+                            
+                            var urlLink = "@Url.Action("Index", "DocumentLibrary")";
+                            window.location.href = urlLink;
+                        }) 
                         $("#divLoader").hide();
                     }
                     else {
@@ -171,5 +183,11 @@
                     }
                 }
             });
+    }
+
+    function Index()
+    {
+        var urlLink = "@Url.Action("Index", "DocumentLibrary")";
+        window.location.href = urlLink;
     }
 </script>
