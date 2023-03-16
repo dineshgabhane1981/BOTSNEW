@@ -134,7 +134,25 @@
                     }
                 },
                 error: function (result) {
-                    //console.log(result.responseText)
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Uploaded",
+                            message: "Document Uploaded successfully",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is a problem in Uploading Document",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                    }
                 }
             });
     }
