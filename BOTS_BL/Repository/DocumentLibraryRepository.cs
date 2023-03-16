@@ -10,6 +10,8 @@ using Amazon.S3.IO;
 using System.IO;
 using System.IO.Compression;
 using System.Configuration;
+using System.Web.Mvc;
+using BOTS_BL.Models;
 
 namespace BOTS_BL.Repository
 {
@@ -51,5 +53,31 @@ namespace BOTS_BL.Repository
 
             return status;
         }
+
+        
+
+        public List<SelectListItem> GetGroupDetails()
+        {
+            List<SelectListItem> lstGroupDetails = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                string status = "0";
+                var GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                //var GroupDetails = context.WAReports.Where(x => x.SMSStatus == status).ToList();
+
+                foreach (var item in GroupDetails)
+                {
+                    lstGroupDetails.Add(new SelectListItem
+                    {
+                        Text = item.GroupName,
+                        Value = Convert.ToString(item.GroupId)
+                    });
+                }
+            }
+            return lstGroupDetails;
+
+
+        }
     }
+
 }

@@ -1,4 +1,4 @@
-﻿
+﻿@model WebApp.ViewModel.DocumentLibraryViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,8 +9,16 @@
 <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
 <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
 
+
+<div class="col-lg-3 col-md-3" style="padding-left:30px;">
+    <b>Group Name</b>
+</div>
+<div class="col-lg-3 col-md-3">
+    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+</div>
 <div>
     <input type="hidden" id="hdnuploadDocBase64" />
+    <input type="hidden" id="hdnFileName" />
     <div>
         <div id="dvDocumentUpload">
             <table border="2" cellpadding="5" cellspacing="5" style="margin-top:50px; margin-left:30px;">
@@ -36,6 +44,9 @@
         </div>
     </div>
 </div>
+<div class="col-md-4" style="margin-top:10px;">
+    <textarea class="form-control" id="IdComment" rows="7" maxlength="10000" placeholder="Comment"></textarea>&nbsp;&nbsp;
+</div>
 <script>
     $(document).ready(function () {
         document.getElementById("uploadDoc").addEventListener('change', handleFileSelectProductWise, false);
@@ -48,19 +59,24 @@
         var id = evt.currentTarget.id;
         var qId = id.substring(4, id.length);
         var f = evt.target.files[0];
+        var Name = evt.target.files[0].name;
         var reader = new FileReader();
         reader.onload = (function (theFile) {
             return function (e) {
                 var binaryData = e.target.result;
                 var base64String = window.btoa(binaryData);
                 $("#hdnuploadDocBase64").val(base64String);
-                //$("#hdnLogo").val($("#FileUploadLogo")[0].files[0].name);
+                $("#hdnFileName").val(Name);
             };
         })(f);
         reader.readAsBinaryString(f);
     }
     function UploadDocuments() {
         var DocumentStr = $("#hdnuploadDocBase64").val();
+        var filename = ($("#hdnFileName").val());
+        var GroupId = $("#ddlGroupDetails").val();
+        var GroupName = $("#ddlGroupDetails option:selected").text();
+        
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
