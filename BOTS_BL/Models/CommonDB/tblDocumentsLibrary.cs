@@ -30,5 +30,8 @@ namespace BOTS_BL.Models.CommonDB
         public DateTime? UploadDate { get; set; }
 
         public string Comments { get; set; }
+
+        [StringLength(4000)]
+        public string FileName { get; set; }
     }
 }

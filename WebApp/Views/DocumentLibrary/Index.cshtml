@@ -4,19 +4,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
-<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+
 
 <div class="app-main__inner">
     <input type="hidden" id="hdnuploadDocBase64" />
     <input type="hidden" id="hdnFileName" />
+    <input type="hidden" id="baseURL" value="http://localhost:57265/DocLibDownload/"/>
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-4">
                 <input type="radio" id="rdnCustomer" style="width:20px;margin-right:5px;cursor:pointer;" checked name="cust_type" /> Customer
                 <input type="radio" id="rdnInternal" style="width: 20px; margin-right: 5px; margin-left: 15px; cursor: pointer; " name="cust_type" /> Internal
             </div>
+
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvCustomer">
                 <div class="col-lg-3 col-md-3 ">
                     Group Name
@@ -26,19 +26,19 @@
                 </div>
             </div>
             @*<div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
-                <div class="col-lg-3 col-md-3 ">
-                    Department
-                </div>
-                <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                </div>
-            </div>*@
+                    <div class="col-lg-3 col-md-3 ">
+                        Department
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                    </div>
+                </div>*@
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
                 <div class="col-lg-3 col-md-3 ">
                     Department
                 </div>
                 <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDepartment" })
+                    @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), " ", htmlAttributes: new { @class = "input50", @id = "ddlDepartment" })
                 </div>
             </div>
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
@@ -68,6 +68,24 @@
 
         </div>
     </div>
+    <div class="row mb-3 card" id="Doclist">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3" style="padding-top:20px; display:none;" id="Tabl">
+            <div class="table-responsive">
+                <table class="table" id="InstanceTable">
+                    <thead>
+                        <tr>
+
+                            <th scope="col" style="text-align:center;">DocType</th>
+                            <th scope="col" style="text-align:center;">Download</th>
+
+                        </tr>
+                    </thead>
+                    <tbody style="text-align:center;">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     $(document).ready(function () {
@@ -75,14 +93,93 @@
         document.getElementById("uploadDoc").addEventListener('change', handleFileSelectProductWise, false);
 
         $("#btnUpload1").click(function () {
-            UploadDocuments();
+            //UploadDocuments();
+            ValidationUpload();
         });
         $("#rdnCustomer").change(function () {
             ShowHideDDL();
+            
         });
         $("#rdnInternal").change(function () {
             ShowHideDDL();
         });
+    });
+
+    $("#ddlGroupDetails").change(function(){
+        var GroupId = $("#ddlGroupDetails").val();
+        var FilterData = [];
+        item = {};
+        item["GroupId"] = GroupId;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ListDocuments", "DocumentLibrary")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    $("#Tabl").show();
+                    tableData = [];
+                    $.map(result, function (item) {
+                        optionItem = {}
+
+                        optionItem["SlNo"] = item.SlNo;
+                        optionItem["DocumentType"] = item.DocumentType;
+                        optionItem["Path"] = item.Path;
+
+                        tableData.push(optionItem);
+                    });
+                    console.log(tableData)
+                    DrawTable();
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(111)
+                    console.log(result.responseText)
+                }
+            });
+
+    });
+
+    $("#ddlDepartment").change(function () {
+        var GroupId = $("#ddlDepartment").val();
+        var FilterData = [];
+        item = {};
+        item["GroupId"] = GroupId;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ListDocuments", "DocumentLibrary")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    $("#Tabl").show();
+                    tableData = [];
+                    $.map(result, function (item) {
+                        optionItem = {}
+
+                        optionItem["SlNo"] = item.SlNo;
+                        optionItem["DocumentType"] = item.DocumentType;
+                        optionItem["Path"] = item.Path;
+
+                        tableData.push(optionItem);
+                    });
+                    console.log(tableData)
+                    DrawTable();
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(111)
+                    console.log(result.responseText)
+                }
+            });
     });
 
     function ShowHideDDL() {
@@ -113,9 +210,71 @@
         reader.readAsBinaryString(f);
     }
 
+    function ValidationUpload() {
+        var rdbstatus1, rdbstatus2
+        var filename = $("#hdnFileName").val();
+        
+        var GroupName = $("#ddlGroupDetails option:selected").text();
+        var DepmtName = $("#ddlDepartment option:selected").text();
+        var DocumentType = $("#ddlDocumentType option:selected").text();
+        if ($("#rdnCustomer").is(":checked")) {
+            rdbstatus1 = 1;
+            rdbstatus2 = 0
+        }
+        else {
+            rdbstatus1 = 0;
+            rdbstatus2 = 1
+        }
+        if (filename == "" || filename == null) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select File",
+                buttonText: "Okay"
+            })
+            $("#divLoader").hide();
+        }
+        else if (GroupName == "Please Select" && rdbstatus1 == 1)
+        {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Choose GroupName",
+                buttonText: "Okay"
+            })
+            $("#divLoader").hide();
+            
+        }
+        else if (DepmtName == "Please Select" && rdbstatus2 == 1) {
+            
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Choose Department",
+                buttonText: "Okay"
+            })
+            $("#divLoader").hide();
+        }
+        else if (DocumentType == "Please Select" ) {
+            
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Choose Document Type",
+                buttonText: "Okay"
+            })
+            $("#divLoader").hide();
+        }
+        else {
+            UploadDocuments();
+        }
+    }
+
     function UploadDocuments() {
         var DocumentStr = $("#hdnuploadDocBase64").val();
-        var filename = ($("#hdnFileName").val());
+        var filename = $("#hdnFileName").val();
+        
+        var DocType = $("#ddlDocumentType").val();
         if ($("#rdnCustomer").is(":checked")) {
             var GroupId = $("#ddlGroupDetails").val();
             var GroupName = $("#ddlGroupDetails option:selected").text();
@@ -133,7 +292,7 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UploadDocument", "DocumentLibrary")',
-                data: '{fileData: ' + JSON.stringify(DocumentStr) + ',filename: ' + JSON.stringify(filename) + ',GroupId: ' + JSON.stringify(GroupId) + ',GroupName: ' + JSON.stringify(GroupName) + ',Comment: ' + JSON.stringify(Comment) + '}',
+                data: '{fileData: ' + JSON.stringify(DocumentStr) + ',filename: ' + JSON.stringify(filename) + ',GroupId: ' + JSON.stringify(GroupId) + ',GroupName: ' + JSON.stringify(GroupName) + ',Comment: ' + JSON.stringify(Comment) + ',DocType: ' + JSON.stringify(DocType) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -166,10 +325,10 @@
                             message: "Document Uploaded successfully",
                             buttonText: "Okay"
                         }).then(() => {
-                            
+
                             var urlLink = "@Url.Action("Index", "DocumentLibrary")";
                             window.location.href = urlLink;
-                        }) 
+                        })
                         $("#divLoader").hide();
                     }
                     else {
@@ -190,4 +349,90 @@
         var urlLink = "@Url.Action("Index", "DocumentLibrary")";
         window.location.href = urlLink;
     }
+
+        function DrawTable() {
+
+            var table1 = $('#InstanceTable').DataTable();
+            table1.destroy();
+
+            var table = $('#InstanceTable').DataTable({
+                "aaSorting": [[0, "asc"]],
+                "data": tableData,
+                "paging": true,
+                "ordering": false,
+                "info": false,
+                "bFilter": false,
+                "pageLength": 10,
+                "pagingType": "simple_numbers",
+                "columns": [
+
+                    /*{ data: "GroupName" },*/
+                    { data: "DocumentType" },
+                    /*{ data: "Path" },*/
+                    //{ data: "InvoiceAmt" },
+                    //{ data: "Points" },
+                    {
+
+                        "mData": "SlNo",
+                        "mRender": function (data, type, row) {
+                            return '<a href="#" onclick="DownLoadFile(\'' + data + '\')" class="login" title="Edit"><img src ="../Content/assets/images/Download.png" /></a>';
+                            //return '<button href="#"' + 'id="' + data + '">Edit</button>';
+                        }
+                    }
+
+
+                ],
+                aoColumnDefs: [
+                    {
+                        bSortable: false,
+                        aTargets: []
+                    }
+                ]
+
+            });
+
+            var table = $('#InstanceTable').DataTable();
+            table.draw();
+
+    }
+
+    function DownLoadFile(SLno) {
+        var FilterData = [];
+        item = {};
+        item["SLno"] = SLno;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDownloadDetails", "DocumentLibrary")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var BaseUrl = $("#baseURL").val();
+                    console.log(result)
+                    @*var docurl = "@baseURL/Temp/" + filename;*@
+                    var docurl = BaseUrl + result;
+                    //alert(docurl)
+                    //window.location.href =docurl;
+                    window.open(docurl);
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(111)
+                    console.log(result.responseText)
+                }
+            });
+    }
+
 </script>
+@*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+    <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />*@

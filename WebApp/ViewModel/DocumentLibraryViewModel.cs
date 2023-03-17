@@ -9,6 +9,7 @@ namespace WebApp.ViewModel
 {
     public class DocumentLibraryViewModel
     {
+
         public List<SelectListItem> lstGroupDetails { get; set; }
 
         public tblGroupDetail tblGroupDetails { get; set; }
