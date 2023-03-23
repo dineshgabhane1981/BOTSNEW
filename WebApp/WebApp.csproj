@@ -84,9 +84,8 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="Quartz, Version=3.6.2.0, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Quartz.3.6.2\lib\netstandard2.0\Quartz.dll</HintPath>
+    <Reference Include="Quartz">
+      <HintPath>..\packages\Quartz.3.5.0\lib\netstandard2.0\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Rotativa, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Rotativa.1.7.3\lib\net461\Rotativa.dll</HintPath>
@@ -310,6 +309,7 @@
     <Content Include="Content\assets\images\details_close.png" />
     <Content Include="Content\assets\images\details_open.png" />
     <Content Include="Content\assets\images\discussion.png" />
+    <Content Include="Content\assets\images\Download.png" />
     <Content Include="Content\assets\images\exit.png" />
     <Content Include="Content\assets\images\GoToDashboard.png" />
     <Content Include="Content\assets\images\itops.png" />
@@ -735,6 +735,7 @@
     <Folder Include="CustomerDocuments\" />
     <Folder Include="DashboardReports\" />
     <Folder Include="DLCImages\" />
+    <Folder Include="DocLibDownload\" />
     <Folder Include="Temp\" />
     <Folder Include="Views\testSinglepagews\" />
     <Folder Include="Views\Test\" />
@@ -747,6 +748,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\AWSSDK.S3.3.7.103.29\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -25,13 +25,20 @@ namespace WebApp.Controllers
 
             return View(objdata);
         }
-        public bool UploadDocument(string fileData, string fileName, string Groupid, string GroupName, string Comment, string DocType)
+        public bool UploadDocument(DocLibraryUploadFile objFileData)//string fileData, string fileName, string Groupid, string GroupName, string Comment, string DocType)
         {
             bool status = false;
 
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             string Addedby = userDetails.LoginId;
             string Addeddate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            string fileData = objFileData.fileData;
+            string fileName = objFileData.fileName;
+            string Groupid = objFileData.Groupid;
+            string GroupName = objFileData.GroupName;
+            string Comment = objFileData.Comment;
+            string DocType = objFileData.DocType;
 
             status = DLR.UploadDocumentToS3(fileData, fileName, Groupid, GroupName, Comment, DocType, Addedby, Addeddate);
             return status;

@@ -38,7 +38,7 @@
                     Department
                 </div>
                 <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), " ", htmlAttributes: new { @class = "input50", @id = "ddlDepartment" })
+                    @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDepartment" })
                 </div>
             </div>
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
@@ -98,7 +98,7 @@
         });
         $("#rdnCustomer").change(function () {
             ShowHideDDL();
-            
+
         });
         $("#rdnInternal").change(function () {
             ShowHideDDL();
@@ -187,13 +187,18 @@
             $("#dvCustomer").show();
             $("#dvInternal").hide();
         }
-        if ($("#rdnInternal").is(":checked")) {
+        else {
             $("#dvCustomer").hide();
             $("#dvInternal").show();
         }
+        //if ($("#rdnInternal").is(":checked")) {
+        //    $("#dvCustomer").hide();
+        //    $("#dvInternal").show();
+        //}
     }
 
     function handleFileSelectProductWise(evt) {
+        
         var id = evt.currentTarget.id;
         var qId = id.substring(4, id.length);
         var f = evt.target.files[0];
@@ -213,7 +218,7 @@
     function ValidationUpload() {
         var rdbstatus1, rdbstatus2
         var filename = $("#hdnFileName").val();
-        
+
         var GroupName = $("#ddlGroupDetails option:selected").text();
         var DepmtName = $("#ddlDepartment option:selected").text();
         var DocumentType = $("#ddlDocumentType option:selected").text();
@@ -243,10 +248,10 @@
                 buttonText: "Okay"
             })
             $("#divLoader").hide();
-            
+
         }
         else if (DepmtName == "Please Select" && rdbstatus2 == 1) {
-            
+
             cuteAlert({
                 type: "error",
                 title: "Oops..",
@@ -256,7 +261,7 @@
             $("#divLoader").hide();
         }
         else if (DocumentType == "Please Select" ) {
-            
+
             cuteAlert({
                 type: "error",
                 title: "Oops..",
@@ -273,8 +278,8 @@
     function UploadDocuments() {
         var DocumentStr = $("#hdnuploadDocBase64").val();
         var filename = $("#hdnFileName").val();
-        
         var DocType = $("#ddlDocumentType").val();
+
         if ($("#rdnCustomer").is(":checked")) {
             var GroupId = $("#ddlGroupDetails").val();
             var GroupName = $("#ddlGroupDetails option:selected").text();
@@ -283,26 +288,41 @@
             var GroupId = $("#ddlDepartment option:selected").text();
             var GroupName = $("#ddlDepartment option:selected").text();
         }
-        /*var GroupId = $("#ddlGroupDetails").val();*/
-        /*var GroupName = $("#ddlGroupDetails option:selected").text();*/
+        
         var Comment = $("#txtComment").val();
 
+        var fileUpload = DocumentStr;
+      
+        var fileData = new FormData();
+            fileData.append("fileData", fileUpload);
+            fileData.append("filename", filename);
+            fileData.append("GroupId", GroupId);
+            fileData.append("GroupName", GroupName);
+            fileData.append("Comment", Comment);
+            fileData.append("DocType", DocType);
 
-        $("#divLoader").show();
+            $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UploadDocument", "DocumentLibrary")',
-                data: '{fileData: ' + JSON.stringify(DocumentStr) + ',filename: ' + JSON.stringify(filename) + ',GroupId: ' + JSON.stringify(GroupId) + ',GroupName: ' + JSON.stringify(GroupName) + ',Comment: ' + JSON.stringify(Comment) + ',DocType: ' + JSON.stringify(DocType) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
+                //data: '{fileData: ' + JSON.stringify(DocumentStr) + ',filename: ' + JSON.stringify(filename) + ',GroupId: ' + JSON.stringify(GroupId) + ',GroupName: ' + JSON.stringify(GroupName) + ',Comment: ' + JSON.stringify(Comment) + ',DocType: ' + JSON.stringify(DocType) + '}',
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
                 success: function (result) {
                     console.log(result)
-                    if (result == true) {
+                    if (result == "True") {
                         cuteAlert({
                             type: "success",
                             title: "Saved",
                             message: "Earn config saved successfully",
                             buttonText: "Okay"
+                        }).then(() => {
+
+                            var urlLink = "@Url.Action("Index", "DocumentLibrary")";
+                            window.location.href = urlLink;
                         })
                         $("#divLoader").hide();
                     }
@@ -319,6 +339,7 @@
                 error: function (result) {
                     console.log(result.responseText)
                     if (result.responseText == "True") {
+
                         cuteAlert({
                             type: "success",
                             title: "Uploaded",
@@ -342,7 +363,8 @@
                     }
                 }
             });
-    }
+        }
+    //}
 
     function Index()
     {
