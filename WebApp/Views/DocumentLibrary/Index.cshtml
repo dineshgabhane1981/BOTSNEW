@@ -1,7 +1,9 @@
 ﻿@model WebApp.ViewModel.DocumentLibraryViewModel
+@using System.Configuration;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string baseURL = ConfigurationManager.AppSettings["BaseDocUrl"];
 }
 
 
@@ -9,12 +11,15 @@
 <div class="app-main__inner">
     <input type="hidden" id="hdnuploadDocBase64" />
     <input type="hidden" id="hdnFileName" />
-    <input type="hidden" id="baseURL" value="http://localhost:57265/DocLibDownload/"/>
+    @*<input type="hidden" id="baseURL" value="http://localhost:57265/DocLibDownload/" />*@
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-4">
-                <input type="radio" id="rdnCustomer" style="width:20px;margin-right:5px;cursor:pointer;" checked name="cust_type" /> Customer
-                <input type="radio" id="rdnInternal" style="width: 20px; margin-right: 5px; margin-left: 15px; cursor: pointer; " name="cust_type" /> Internal
+                <input type="radio" id="rdnCustomer" style="width:20px;margin-right:5px;cursor:pointer;" checked name="cust_type" /><span> Customer</span>
+                @if (Model.roleId != "7")
+                {
+                    <input type="radio" id="rdnInternal" style="width: 20px; margin-right: 5px; margin-left: 15px; cursor: pointer; " name="cust_type" /><span> Internal</span>
+                }
             </div>
 
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvCustomer">
@@ -76,6 +81,8 @@
                         <tr>
 
                             <th scope="col" style="text-align:center;">DocType</th>
+                            <th scope="col" style="text-align:center;">Uploaded Date</th>
+                            <th scope="col" style="text-align:center;">Comments</th>
                             <th scope="col" style="text-align:center;">Download</th>
 
                         </tr>
@@ -129,6 +136,8 @@
                         optionItem["SlNo"] = item.SlNo;
                         optionItem["DocumentType"] = item.DocumentType;
                         optionItem["Path"] = item.Path;
+                        optionItem["UploadDate"] = item.UploadDateStr;
+                        optionItem["Comments"] = item.Comments;
 
                         tableData.push(optionItem);
                     });
@@ -168,6 +177,8 @@
                         optionItem["SlNo"] = item.SlNo;
                         optionItem["DocumentType"] = item.DocumentType;
                         optionItem["Path"] = item.Path;
+                        optionItem["UploadDate"] = item.UploadDateStr;
+                        optionItem["Comments"] = item.Comments;
 
                         tableData.push(optionItem);
                     });
@@ -198,7 +209,7 @@
     }
 
     function handleFileSelectProductWise(evt) {
-        
+
         var id = evt.currentTarget.id;
         var qId = id.substring(4, id.length);
         var f = evt.target.files[0];
@@ -288,11 +299,11 @@
             var GroupId = $("#ddlDepartment option:selected").text();
             var GroupName = $("#ddlDepartment option:selected").text();
         }
-        
+
         var Comment = $("#txtComment").val();
 
         var fileUpload = DocumentStr;
-      
+
         var fileData = new FormData();
             fileData.append("fileData", fileUpload);
             fileData.append("filename", filename);
@@ -391,8 +402,8 @@
                     /*{ data: "GroupName" },*/
                     { data: "DocumentType" },
                     /*{ data: "Path" },*/
-                    //{ data: "InvoiceAmt" },
-                    //{ data: "Points" },
+                    { data: "UploadDate" },
+                    { data: "Comments" },
                     {
 
                         "mData": "SlNo",
@@ -436,7 +447,7 @@
                     var BaseUrl = $("#baseURL").val();
                     console.log(result)
                     @*var docurl = "@baseURL/Temp/" + filename;*@
-                    var docurl = BaseUrl + result;
+                    var docurl = '@baseURL' + result;
                     //alert(docurl)
                     //window.location.href =docurl;
                     window.open(docurl);

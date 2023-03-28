@@ -21,8 +21,8 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             DocumentLibraryViewModel objdata = new DocumentLibraryViewModel();
             List<tblDocumentsLibrary> ObjList = new List<tblDocumentsLibrary>();
-            objdata.lstGroupDetails = DLR.GetGroupDetails();
-
+            objdata.lstGroupDetails = DLR.GetGroupDetails(userDetails.LoginType, userDetails.LoginId);
+            objdata.roleId = userDetails.LoginType;
             return View(objdata);
         }
         public bool UploadDocument(DocLibraryUploadFile objFileData)//string fileData, string fileName, string Groupid, string GroupName, string Comment, string DocType)

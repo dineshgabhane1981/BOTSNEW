@@ -21,10 +21,11 @@ namespace WebApp.ViewModel
         }
 
         public string DocType { get; set; }
+        public string roleId { get; set; }
 
         public SelectListItem[] DocumentType()
         {
-            return new SelectListItem[3] { new SelectListItem() { Text = "ConfigurationSheet", Value = "ConfigurationSheet" }, new SelectListItem() { Text = "KnowledgeSeries", Value = "KnowledgeSeries" }, new SelectListItem() { Text = "Creatives", Value = "Creatives" } };
+            return new SelectListItem[4] { new SelectListItem() { Text = "Configuration Sheet", Value = "ConfigurationSheet" }, new SelectListItem() { Text = "Knowledge Series", Value = "KnowledgeSeries" }, new SelectListItem() { Text = "Creatives", Value = "Creatives" }, new SelectListItem() { Text = "DLT Docs", Value = "DLTDocs" } };
         }
     }
 }

@@ -33,5 +33,7 @@ namespace BOTS_BL.Models.CommonDB
 
         [StringLength(4000)]
         public string FileName { get; set; }
+        [NotMapped]
+        public string UploadDateStr { get; set; }
     }
 }

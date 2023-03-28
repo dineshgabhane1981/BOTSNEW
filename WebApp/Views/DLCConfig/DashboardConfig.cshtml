@@ -18,7 +18,7 @@
         <input type="hidden" id="hdnSmallBase64" />
         <input type="hidden" id="hdnMediumBase64" />
         <input type="hidden" id="hdnBigBase64" />
-        <input type="hidden" id="hdnColor" />
+        <input type="hidden" id="hdnColor" />        
         <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
 
             <fieldset style="border-radius: 10px;">
@@ -395,7 +395,7 @@
             $("#img3").attr('src', data.LogoFile3);
             $("#img3").show();
         }
-
+        
         $("#hdnSlNO").val(data.SlNo);
         //alert(data.HeaderColor)
         document.querySelector("#pr1").style.background = "linear-gradient(to bottom," + data.HeaderColor + ", #000000)";

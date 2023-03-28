@@ -67,6 +67,8 @@ namespace BOTS_BL.Models
         public string CustomerThrough { get; set; }
 
         public bool? IsSMS { get; set; }
+        [StringLength(100)]
+        public string Password { get; set; }
     }
 
     public class CustomerDetailwithFeedback
