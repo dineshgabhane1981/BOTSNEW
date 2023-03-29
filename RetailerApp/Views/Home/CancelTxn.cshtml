@@ -284,6 +284,14 @@
                                 SearchCustomer();
                             })
                         }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Response Code" + response.Cancelresponse.ResponseCode,
+                                message: response.Cancelresponse.ResponseMessage,
+                                buttonText: "Okay"
+                            })
+                        }
                     }
                     else {
                         cuteAlert({
