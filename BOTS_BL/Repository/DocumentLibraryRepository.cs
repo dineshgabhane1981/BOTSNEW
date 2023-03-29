@@ -21,7 +21,7 @@ namespace BOTS_BL.Repository
         string AWSAccessKey, AWSSecretKey, AWSBucketName;
         //string AWSSecretKey = "";
         //string AWSBucketName = "";
-        
+        Exceptions newexception = new Exceptions();
         public bool UploadDocumentToS3(string fileData,string fileName,string Groupid,string GroupName,string Comment,string DocType, string Addedby,string Addeddate)
         {
             List<tblAWSAccessDetail> AccessDetails = new List<tblAWSAccessDetail>();
@@ -81,19 +81,27 @@ namespace BOTS_BL.Repository
             }
             catch(Exception ex)
             {
-
+                newexception.AddException(ex, "UploadDocumentToS3");
             }
 
             return status;
         }
-        public List<SelectListItem> GetGroupDetails()
+        public List<SelectListItem> GetGroupDetails(string roleId,string loginId)
         {
             List<SelectListItem> lstGroupDetails = new List<SelectListItem>();
+            List<tblGroupDetail> GroupDetails = new List<tblGroupDetail>();
             using (var context = new CommonDBContext())
             {
-                string status = "0";
-                var GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
-                //var GroupDetails = context.WAReports.Where(x => x.SMSStatus == status).ToList();
+                if (roleId == "7")
+                {
+                    var rmAssignedId = context.tblRMAssigneds.Where(x => x.LoginId == loginId).Select(y => y.RMAssignedId).FirstOrDefault();
+                    GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true && x.RMAssigned == rmAssignedId).ToList();
+                }
+                else
+                {
+                    GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                    //var GroupDetails = context.WAReports.Where(x => x.SMSStatus == status).ToList();
+                }
 
                 foreach (var item in GroupDetails)
                 {
@@ -103,6 +111,7 @@ namespace BOTS_BL.Repository
                         Value = Convert.ToString(item.GroupId)
                     });
                 }
+                lstGroupDetails = lstGroupDetails.OrderBy(x => x.Text).ToList();
             }
             return lstGroupDetails;
         }
@@ -115,22 +124,19 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    var ObjList = (from c in context.tblDocumentsLibraries where (c.GroupId == Groupid) select c).ToList();
-               
-                    foreach (var item in ObjList)
-                    {
-                        tblDocumentsLibrary Obj = new tblDocumentsLibrary();
+                     //ObjLibList = (from c in context.tblDocumentsLibraries where (c.GroupId == Groupid) select c).ToList();
+                    ObjLibList = context.tblDocumentsLibraries.Where(x => x.GroupId == Groupid).ToList();
 
-                        Obj.SlNo = item.SlNo;
-                        Obj.GroupName = item.GroupName;
-                        Obj.DocumentType = item.DocumentType;
-                        Obj.Path = item.Path;
-                        ObjLibList.Add(Obj);
+
+                    foreach (var item in ObjLibList)
+                    {
+                        item.UploadDateStr = item.UploadDate.Value.ToString("dd-MMM-yyyy");
                     }
+                    ObjLibList = ObjLibList.OrderByDescending(x => x.UploadDate).ToList();
                 }
                 catch (Exception ex)
                 {
-
+                    newexception.AddException(ex, "GetDocLibData");
                 }
             }
           
@@ -161,7 +167,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-
+                    newexception.AddException(ex, "GetDownloadData");
                 }
                
             }
@@ -205,7 +211,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                
+                newexception.AddException(ex, "DownloadFileFromS3");
             }
 
             return returnLocation;

@@ -188,10 +188,10 @@ namespace BOTS_BL.Repository
                     using (cmdReport)
                     {
                         SqlParameter param1 = new SqlParameter("pi_Groupid", Groupid);
-                        
+
                         cmdReport.CommandType = CommandType.StoredProcedure;
                         cmdReport.Parameters.Add(param1);
-                        
+
                         daReport.Fill(retVal);
 
                         DataTable dt = retVal.Tables[0];
@@ -218,7 +218,7 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-    
+
         public tblDLCDashboardConfig_Publish GetPublishDLCDashboardConfig(string groupId)
         {
             tblDLCDashboardConfig_Publish objData = new tblDLCDashboardConfig_Publish();
@@ -262,5 +262,44 @@ namespace BOTS_BL.Repository
             }
             return lstCodes;
         }
+
+        public string CheckUserAndSendOTP(string groupId, string mobileNo, bool IsOTP)
+        {
+            string status = string.Empty;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    if (IsOTP)
+                    {
+                        //Send OTP
+                        status = "OTP";
+                    }
+                    else
+                    {
+                        //Check whether Password is present of not
+                        string Password = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).Select(y => y.Password).FirstOrDefault();
+                        if(!string.IsNullOrEmpty(Password))
+                        {
+                            status = "Password";
+                        }
+                        else
+                        {
+                            status = "OTP";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, groupId);
+            }
+
+            return status;
+        }
+
+
+
     }
 }
