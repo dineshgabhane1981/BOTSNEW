@@ -283,6 +283,11 @@ namespace BOTS_BL.Repository
 
 
                     }
+                    else
+                    {
+                        R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                        R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                    }
                 }
             }
             return R;
