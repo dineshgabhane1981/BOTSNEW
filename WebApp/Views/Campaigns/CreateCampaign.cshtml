@@ -37,7 +37,7 @@
         <div id="SMSPanel">
             <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="SMSCamppanel">
 
-                <div class="row mt-2" style="margin-top : 20px;">
+                <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
                     <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
                         SMS Balance/Service Provider
                     </div>
@@ -57,13 +57,13 @@
         </div>*@
 
 
-                <div class="row mt-2" style="margin-top : 20px;">
+                <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
                     <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
                         Campaign Name<b>*</b>
                     </div>
 
                     <div>
-                        <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" style="margin-top: 20px;" />
+                        <input type="text" id="CampName" class="input50" placeholder="Enter Campaign Name" style="margin-top: 20px; " />
                     </div>
 
                     <div>
@@ -71,7 +71,7 @@
                     </div>
                 </div>
 
-                <div class="row mt-2" style="margin-top : 20px;">
+                <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
                     <div id="divdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
                         <label>Campaign Period<b>*</b></label>
                     </div>
@@ -83,11 +83,11 @@
                     </div>
                 </div>
 
-                <div class="row" style="margin-top : 20px;">
-                    <div class="col-sm-2" style="margin-left: 18px;">
+                <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+                    <div class="col-sm-2" style="margin-left: 18px; margin-top: 20px;">
                         Base Type
                     </div>
-                    <div class="col-sm-2 dropdown" style="margin-left : 65px;">
+                    <div class="col-sm-2 dropdown" @*style="margin-left : 65px;"*@ style="margin-left: 65px; margin-top: 20px;">
                         <select id="BaseType" name="BaseType" class="input50" onchange="BaseCalc();">
                             <option value="1">All</option>
                             <option value="2">Member Base</option>
@@ -117,7 +117,7 @@
                     </div>
                 </div>
 
-                <div class="row" style="margin-top: 20px;">
+                <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
                     <div class="col-sm-2" style="margin-left: 18px;">
                         OutletData
                     </div>
@@ -194,6 +194,26 @@
                     </div>
                 </div>
 
+                <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+                    <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                        Unit SMS Cost<b>*</b>
+                    </div>
+                    <div>
+                        <select id="SMSCost" class="input50" style="margin-top : 20px;">
+                            <option value="0">Select SMS Cost</option>
+                            <option value="1">10 paise</option>
+                            <option value="2">11 paise</option>
+                            <option value="3">12 paise</option>
+                            <option value="4">13 paise</option>
+                            <option value="5">14 paise</option>
+                            <option value="6">15 paise</option>
+                            <option value="7">16 paise</option>
+                            <option value="8">17 paise</option>
+                            <option value="9">18 paise</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="row" style="margin: 20px;" id="ScriptText">
 
                     <div class="col-md-4" style="margin-top:10px;">
@@ -222,14 +242,14 @@
                     </div>
 
                     @*<div class="col-md-4" style="margin-top:10px;">
-                        <textarea class="form-control" id="txtScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
-                    </div>*@
+                <textarea class="form-control" id="txtScript" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+            </div>*@
                 </div>
 
                 @*<div id="GoogleElement" style="margin-left:130px;">
-                </div>*@
+        </div>*@
 
-                <div id="GooleLink"  style="margin-left:40px; margin-top:20px; display:none">
+                <div id="GooleLink" style="margin-left:40px; margin-top:20px; display:none">
                     <a href="https://translate.google.co.in/" target="_blank">Google Translator</a>
                 </div>
 
@@ -406,12 +426,11 @@
         day = ("0" + d.getDate()).slice(-2);
         year = d.getFullYear();
         var Date1 = year + '-' + month + '-' + day;
-
+        var SMSCostSelect = $("#SMSCost").val();
         var val = $("#SMSScript").val();
-        var status;
+        var status, SMSCost;
         if (val != '') {
             status = CheckText(val);
-            alert(status);
         }
 
         var Script = $("#SMSScript").val();
@@ -435,8 +454,6 @@
         }
 
         if (val != '') {
-            alert("ScriptType" + ScriptType);
-            alert("status" + status);
             if ((ScriptType == '1') && (status == 0)) {
                 TempCalc = 159;
             }
@@ -448,10 +465,45 @@
         var SMSBalance = parseInt($("#SMSBalance").val());
         var CharCount = parseInt($("#current").text());
         a = Math.ceil(CharCount / TempCalc);
+      
         TotalCredits = a * parseFloat(FiltCountnum.replace(/,/g, ''));
-        var BalanceCredit = SMSBalance - TotalCredits;
-        var ReqBal = TotalCredits - SMSBalance;
 
+        if (SMSCostSelect != "0") {
+           
+            if (SMSCostSelect == "1") {
+                SMSCost = "0.10";
+            }
+            else if (SMSCostSelect == "2") {
+                SMSCost = "0.11";
+            }
+            else if (SMSCostSelect == "3") {
+                SMSCost = "0.12";
+            }
+            else if (SMSCostSelect == "4") {
+                SMSCost = "0.13";
+            }
+            else if (SMSCostSelect == "5") {
+                SMSCost = "0.14";
+            }
+            else if (SMSCostSelect == "6") {
+                SMSCost = "0.15";
+            }
+            else if (SMSCostSelect == "7") {
+                SMSCost = "0.16";
+            }
+            else if (SMSCostSelect == "8") {
+                SMSCost = "0.17";
+            }
+            else if (SMSCostSelect == "9") {
+                SMSCost = "0.18";
+            }
+         
+            var TSMSCost = (TotalCredits * SMSCost).toFixed(2);
+        }
+        
+        var BalanceCredit = SMSBalance - TotalCredits;
+        var ReqBal =  SMSBalance - TotalCredits;
+        
         if (AllCount == "") {
 
             cuteAlert({
@@ -518,7 +570,15 @@
                 buttonText: "Okay"
             })
         }
-        else if ((status == false) && (ScriptType == '1')) {
+        else if (SMSCostSelect == "0") {
+            cuteAlert({
+                type: "error",
+                title: "Error",
+                message: "Please select SMS cast",
+                buttonText: "Okay"
+            })
+        }
+        else if ((status == 1) && (ScriptType == '1')) {
             cuteAlert({
                 type: "error",
                 title: "Message Script Error",
@@ -526,7 +586,7 @@
                 buttonText: "Okay"
             })
         }
-        else if ((status == true) && (ScriptType == '2')) {
+        else if ((status == 0) && (ScriptType == '2')) {
             cuteAlert({
                 type: "error",
                 title: "Message Script Error",
@@ -539,7 +599,7 @@
                 cuteAlert({
                     type: "error",
                     title: "Balance Error",
-                    message: "SMS Balance Insufficient! Total Bal: " + SMSBalance + "| Total Credits Required:" + TotalCredits + "Add a minimum of " + ReqBal +" Balance and set the Campaign",
+                    message: "SMS Balance Insufficient! Total Bal: " + SMSBalance + "<br/> Total Credits Required: " + TotalCredits + " <br/> Add a minimum of " + Math.abs(ReqBal) +" Balance and set the Campaign",
                     buttonText: "Okay"
                 })
             }
@@ -547,7 +607,7 @@
                 cuteAlert({
                     type: "question",
                     title: "Campaign Confirmation",
-                    message: "Total Credits Required: " + a + "| Per Customer Count: " + TotalCredits + "Total Balance left after campaign:" + BalanceCredit,
+                    message: "Total Count Per SMS: " + a + "<br/> Total Credits Used: " + TotalCredits + "<br/> Total Campaign Cost: " + TSMSCost +"<br/> Total Balance left after campaign: " + BalanceCredit,
                     confirmText: "Yes",
                     cancelText: "No"
                 }).then((e) => {
