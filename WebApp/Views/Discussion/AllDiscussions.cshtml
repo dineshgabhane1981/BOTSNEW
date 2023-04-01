@@ -92,8 +92,6 @@
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
                         </div>
-
-
                     </div>
 
                     <div class="row" style="margin: 0;">
@@ -108,6 +106,20 @@
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Department
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDepartment" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Members
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <select id="ddMembers" class="input100"><option value="S">Please Select</option></select>
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
@@ -138,6 +150,16 @@
                             @Html.TextAreaFor(model => model.objDiscussion.ActionItems, new { @class = "input100" })
                         </div>
                     </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Upload
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="file" id="uploadfile" />
+                        </div>
+
+                    </div>
+
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
                         <button type="button" id="btnCancel" class="btn btn-primary pull-right" style="margin-right:10px;">Cancel</button>
                         <button type="button" id="btnDiscussionSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
@@ -563,4 +585,36 @@
             })
         }
     }
+
+    $("#ddlDepartment").change(function () {
+        var Department = $("#ddlDepartment").val();
+        var FilterData = [];
+        item = {};
+        item["Department"] = Department;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDepartmentMember", "Discussion")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    
+                    $("#ddMembers").empty()
+                    $("#ddMembers").append("<option>Please Select</option>");
+                    for (item in result) {
+                        $("#ddMembers").append("<option>" + result[item].Members + "</option>");
+                    }
+                    
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                }
+            });
+    });
 </script>

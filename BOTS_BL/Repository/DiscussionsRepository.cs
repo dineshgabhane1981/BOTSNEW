@@ -305,7 +305,6 @@ namespace BOTS_BL.Repository
             }
             return lstSubCallTypes;
         }
-
         public List<SelectListItem> GetGroupDetails()
         {
             List<SelectListItem> lstgroupdetails = new List<SelectListItem>();
@@ -330,7 +329,6 @@ namespace BOTS_BL.Repository
             }
             return lstgroupdetails;
         }
-
         public SelectListItem[] CommonStatus()
         {
             return new SelectListItem[6] { new SelectListItem() { Text = "--Select--", Value = "0" }, new SelectListItem() { Text = "Completed", Value = "Completed" }, new SelectListItem() { Text = "WIP", Value = "WIP" }, new SelectListItem() { Text = "WIP>3days", Value = "WIP3" }, new SelectListItem() { Text = "WIP>7days", Value = "WIP7" }, new SelectListItem() { Text = "WIP>15days", Value = "WIP15" } };
@@ -844,7 +842,6 @@ namespace BOTS_BL.Repository
             lstdiscuss.AddRange(lstdiscussOnBoarding);
             return lstdiscuss;
         }
-
         public List<DiscussionCount> GetDiscussionCountReport()
         {
             List<DiscussionCount> lstData = new List<DiscussionCount>();
@@ -891,8 +888,24 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
+        public List<tblDepartMember> GetMemberdetails(string Department)
+        {
+            List<tblDepartMember> objtbldepart = new List<tblDepartMember>();
 
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    objtbldepart = context.tblDepartMembers.Where(x => x.Department == Department).ToList();
+                }
 
+            }
+            catch(Exception ex)
+            {
+
+            }
+                return objtbldepart;
+        }
 
     }
 }

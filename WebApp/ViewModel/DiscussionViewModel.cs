@@ -17,6 +17,8 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstCallTypes { get; set; }
         public List<SelectListItem> lstCallSubTypes { get; set; }
 
+        public string dept { get; set; }
+
         public SelectListItem[] CallMode()
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Phone", Value = "Phone" }, new SelectListItem() { Text = "Zoom", Value = "Zoom" }, new SelectListItem() { Text = "Physical", Value = "Physical" } };
@@ -25,7 +27,11 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Completed", Value = "Completed" }, new SelectListItem() { Text = "WIP", Value = "WIP" } };
         }
-       
+        public SelectListItem[] Departments()
+        {
+            return new SelectListItem[5] { new SelectListItem() { Text = "Customer Success", Value = "Customer Success" }, new SelectListItem() { Text = "Finance", Value = "Finance" }, new SelectListItem() { Text = "HR", Value = "HR" }, new SelectListItem() { Text = "Operations", Value = "Operations" }, new SelectListItem() { Text = "Technology", Value = "Technology" }};
+        }
+
         public SelectListItem[] CustomerType()
         {
             return new SelectListItem[5] 
