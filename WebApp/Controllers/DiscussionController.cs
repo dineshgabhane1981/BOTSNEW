@@ -243,6 +243,22 @@ namespace WebApp.Controllers
 
                 return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-    
+
+        public ActionResult GetReAssignMember(string jsonData)
+        {
+            List<tblDepartMember> objDepartMem = new List<tblDepartMember>();
+
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string id = Convert.ToString(item["id"]);
+                objDepartMem = DR.GetReAssignMemberdetails(id);
+            }
+
+            return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }

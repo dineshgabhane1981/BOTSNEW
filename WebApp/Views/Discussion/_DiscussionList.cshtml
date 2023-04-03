@@ -86,7 +86,7 @@
                                         @if (item.Status != "Completed")
                                         {
                                             <td style="text-align:center;">
-                                                <a href="#" onclick="OpenStatusPopup(@item.Id);">
+                                                <a href="#" onclick="OpenStatusPopup(@item.Id,'@item.AddedBy');">@*,@item.AddedBy*@
                                                     <img src="~/Content/assets/images/task.png" width="35" />
                                                 </a>
                                             </td>

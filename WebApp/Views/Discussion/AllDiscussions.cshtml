@@ -125,6 +125,7 @@
                             <select id="ddMembers" class="input100"><option value="S">Please Select</option></select>
                         </div>
                     </div>
+                          
                     <div class="row" style="margin: 0;">
                         <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Status
@@ -195,6 +196,12 @@
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 <textarea id="txtDesc" rows="5" cols="45" style="border-radius:10px;"></textarea>
             </div>
+            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                ReAssign -
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <select id="ddReassign" class="input100"><option value="S">Please Select</option></select>
+            </div>
         </div>
         <div class="row" style="margin: 0;">
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
@@ -216,7 +223,9 @@
 
             </div>
         </div>
+
         
+
         <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
 
             <button type="button" id="btnUpdateStatus" class="btn btn-primary" style="margin-right:10px;"> Update</button>
@@ -296,7 +305,7 @@
     function handleFileSelect(evt) {
 
         var id = evt.currentTarget.id;
-        
+
         var f = evt.target.files[0];
         var Name = evt.target.files[0].name;
         var reader = new FileReader();
@@ -429,12 +438,12 @@
         }
 
         if (returnStatus) {
-          
+
             var File = $("#uploadDocBase64").val();
             //console.log(File);
             //var data = $('#frmadddiscussion').serialize() + '&Member=' + Member + '&File=' + File + '&FileName=' + UploadFileName; //'&FileUpload=' + UploadFile +
 
-            var data = $('#frmadddiscussion').serialize();  
+            var data = $('#frmadddiscussion').serialize();
             var id = $("#hdnGroupID").val();
             $("#divLoader").show();
             $.ajax({
@@ -497,9 +506,45 @@
             }
         });
     }
-    function OpenStatusPopup(id) {
+    function OpenStatusPopup(id, AddedBy) {
+        
+        $("#ddReassign").append("<option>" + AddedBy + "</option>");
+
+        
+        var FilterData = [];
+        item = {};
+        item["id"] = id;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetReAssignMember", "Discussion")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+
+                    $("#ddMembers").empty()
+                    $("#ddMembers").append("<option>Please Select</option>");
+                    for (item in result) {
+                        $("#ddMembers").append("<option>" + result[item].Members + "</option>");
+                    }
+
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                }
+            });
+
+
         $("#myModal").show(1000);
         $("#hdnId").val(id);
+
+
     }
     function UpdateStatus() {
         var id = $("#hdnId").val();
@@ -632,13 +677,13 @@
                 dataType: "json",
                 success: function (result) {
                     console.log(result)
-                    
+
                     $("#ddMembers").empty()
                     $("#ddMembers").append("<option>Please Select</option>");
                     for (item in result) {
                         $("#ddMembers").append("<option>" + result[item].Members + "</option>");
                     }
-                    
+
                     $("#divLoader").hide();
                 },
                 error: function (result) {

@@ -928,5 +928,27 @@ namespace BOTS_BL.Repository
                 return objtbldepart;
         }
 
+        public List<tblDepartMember> GetReAssignMemberdetails(string id)
+        {
+            List<tblDepartMember> objtbldepart = new List<tblDepartMember>();
+            int varid = Convert.ToInt32(id);
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid).ToList();
+
+                    //objdata.
+                    //objtbldepart = = context.tblDepartMembers.Where(x => x.Department == Department).ToList();
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return objtbldepart;
+        }
+
     }
 }
