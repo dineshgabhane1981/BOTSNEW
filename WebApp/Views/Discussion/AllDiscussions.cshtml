@@ -51,11 +51,14 @@
     }
 </style>
 <div class="app-main__inner">
-
+    @*<input type="hidden" id="uploadDocBase64" /> 
+    <input type="hidden" id="uploadFileName" />*@
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             @using (Html.BeginForm("AddDiscussion", "Discussion", FormMethod.Post, new { id = "frmadddiscussion", enctype = "multipart/form-data" }))
             {
+                @Html.HiddenFor(model => model.File, new { @id = "uploadDocBase64" })
+                @Html.HiddenFor(model => model.FileName, new { @id = "uploadFileName" })
                 @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
                 <div class="card" style="margin-bottom: 20px;">
                     <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
@@ -156,6 +159,7 @@
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             <input type="file" id="uploadfile" />
+                            @*@Html.TextBoxFor(model => model.File, new { type = "file", @id = "FileUpload" })*@
                         </div>
 
                     </div>
@@ -237,6 +241,8 @@
     });
     $(document).ready(function () {
 
+        document.getElementById("uploadfile").addEventListener('change', handleFileSelect, false);
+
         $('#txtFollowupDate').attr("disabled", "disabled");
 
         $('#ddlStatus').change(function () {
@@ -286,6 +292,25 @@
         });
 
     });
+
+    function handleFileSelect(evt) {
+
+        var id = evt.currentTarget.id;
+        
+        var f = evt.target.files[0];
+        var Name = evt.target.files[0].name;
+        var reader = new FileReader();
+        reader.onload = (function (theFile) {
+            return function (e) {
+                var binaryData = e.target.result;
+                var base64String = window.btoa(binaryData);
+                $("#uploadDocBase64").val(base64String);
+                $("#uploadFileName").val(Name);
+            };
+        })(f);
+        reader.readAsBinaryString(f);
+    }
+
     function ShowAddDiscussion() {
         $("#dvAddDiscussion").show(1000);
     }
@@ -404,7 +429,12 @@
         }
 
         if (returnStatus) {
-            var data = $('#frmadddiscussion').serialize();
+          
+            var File = $("#uploadDocBase64").val();
+            //console.log(File);
+            //var data = $('#frmadddiscussion').serialize() + '&Member=' + Member + '&File=' + File + '&FileName=' + UploadFileName; //'&FileUpload=' + UploadFile +
+
+            var data = $('#frmadddiscussion').serialize();  
             var id = $("#hdnGroupID").val();
             $("#divLoader").show();
             $.ajax({

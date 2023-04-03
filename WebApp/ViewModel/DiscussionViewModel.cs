@@ -19,6 +19,14 @@ namespace WebApp.ViewModel
 
         public string dept { get; set; }
 
+        public string Member { get; set; }
+
+        //public HttpPostedFileBase File { get; set; }
+
+        public string File { get; set; }
+
+        public string FileName { get; set; }
+
         public SelectListItem[] CallMode()
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Phone", Value = "Phone" }, new SelectListItem() { Text = "Zoom", Value = "Zoom" }, new SelectListItem() { Text = "Physical", Value = "Physical" } };

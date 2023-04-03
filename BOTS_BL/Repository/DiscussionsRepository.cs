@@ -10,8 +10,11 @@ using System.Data.SqlClient;
 using System.Net;
 using System.Web;
 using System.IO;
+using System.Web;
 using BOTS_BL.Models.CommonDB;
 using System.Web.Mvc;
+using System.Configuration;
+
 
 namespace BOTS_BL.Repository
 {
@@ -118,14 +121,32 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
-        public bool AddDiscussions(BOTS_TblDiscussion objDiscussion)
+        public bool AddDiscussions(BOTS_TblDiscussion objDiscussion, string _File, string FileName)
         {
             bool status = false;
+           
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             try
             {
                 using (var context = new CommonDBContext())
                 {
+                    // Need to add Department and Member details in DB
+
+                    string _FilePath = ConfigurationManager.AppSettings["DiscussionFileUpload"];
+                    string FileLocation = _FilePath + "/" + FileName;
+
+                    if (!string.IsNullOrEmpty(_File))
+                    {
+                        byte[] imageBytes = Convert.FromBase64String(_File);
+                        MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+                        ms.Write(imageBytes, 0, imageBytes.Length);
+                        var path = HttpContext.Current.Server.MapPath("~/DiscussionFileUpload/" + FileName);
+                        FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
+                        ms.WriteTo(fileNew);
+                        fileNew.Close();
+                        ms.Close();
+                    }
+                        
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
                     if (objDiscussion.Status == "WIP")

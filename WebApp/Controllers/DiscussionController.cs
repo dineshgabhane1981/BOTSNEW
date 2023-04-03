@@ -107,7 +107,10 @@ namespace WebApp.Controllers
             objData.objDiscussion.AddedDate = DateTime.Now;
             objData.objDiscussion.UpdatedDate = DateTime.Now;
             objData.objDiscussion.AddedBy = userDetails.LoginId;
-            status = DR.AddDiscussions(objData.objDiscussion);
+            //HttpPostedFileBase File = objData.File;
+            string File = objData.File;
+            string FileName = objData.FileName;
+            status = DR.AddDiscussions(objData.objDiscussion, File, FileName);
 
             return status;
         }
@@ -223,5 +226,23 @@ namespace WebApp.Controllers
 
 
         }
+    
+        public ActionResult GetDepartmentMember(string jsonData)
+        {
+            List < tblDepartMember > objDepartMem = new List<tblDepartMember>();
+           // DiscussionViewModel ObjData = new DiscussionViewModel();
+
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string Department = Convert.ToString(item["Department"]);
+                objDepartMem = DR.GetMemberdetails(Department);
+            }
+
+                return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+    
     }
 }
