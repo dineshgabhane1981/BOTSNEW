@@ -171,13 +171,28 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate)
+        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone)
         {
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             bool status = false;
             try
             {
+                string _FilePath = ConfigurationManager.AppSettings["DiscussionFileUpload"];
+                string FileLocation = _FilePath + "/" + DoneFileName;
+
+                if (!string.IsNullOrEmpty(FileDone))
+                {
+                    byte[] imageBytes = Convert.FromBase64String(FileDone);
+                    MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
+                    ms.Write(imageBytes, 0, imageBytes.Length);
+                    var path = HttpContext.Current.Server.MapPath("~/DiscussionFileUpload/" + DoneFileName);
+                    FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
+                    ms.WriteTo(fileNew);
+                    fileNew.Close();
+                    ms.Close();
+                }
+
                 using (var context = new CommonDBContext())
                 {
                     int discussionId = Convert.ToInt32(id);

@@ -51,8 +51,8 @@
     }
 </style>
 <div class="app-main__inner">
-    @*<input type="hidden" id="uploadDocBase64" /> 
-    <input type="hidden" id="uploadFileName" />*@
+    <input type="hidden" id="DoneDocBase64" />
+    <input type="hidden" id="DoneFileName" />
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             @using (Html.BeginForm("AddDiscussion", "Discussion", FormMethod.Post, new { id = "frmadddiscussion", enctype = "multipart/form-data" }))
@@ -125,7 +125,7 @@
                             <select id="ddMembers" class="input100"><option value="S">Please Select</option></select>
                         </div>
                     </div>
-                          
+
                     <div class="row" style="margin: 0;">
                         <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Status
@@ -175,8 +175,8 @@
                             </select>
                         </div>
                         @*<div class="col-sm-4" style="float:left;margin-top:10px;">
-            @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
-        </div>*@
+                                @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
+                            </div>*@
                     </div>
 
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -227,6 +227,12 @@
                     <option value="Completed">Completed</option>
                 </select>
             </div>
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Upload File
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <input type="file" id="idFileDone" />
+            </div>
         </div>
         <div class="row" style="margin: 0;">
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
@@ -275,6 +281,7 @@
     $(document).ready(function () {
 
         document.getElementById("uploadfile").addEventListener('change', handleFileSelect, false);
+        document.getElementById("idFileDone").addEventListener('change', handleDoneFile, false);
 
         $('#txtFollowupDate').attr("disabled", "disabled");
 
@@ -339,6 +346,26 @@
                 var base64String = window.btoa(binaryData);
                 $("#uploadDocBase64").val(base64String);
                 $("#uploadFileName").val(Name);
+            };
+        })(f);
+        reader.readAsBinaryString(f);
+    }
+
+    function handleDoneFile(evt) {
+
+        var id = evt.currentTarget.id;
+
+        var f = evt.target.files[0];
+        var Name = evt.target.files[0].name;
+        var reader = new FileReader();
+        reader.onload = (function (theFile) {
+            return function (e) {
+                var binaryData = e.target.result;
+                var base64String = window.btoa(binaryData);
+                $("#DoneDocBase64").val(base64String);
+                $("#DoneFileName").val(Name);
+
+
             };
         })(f);
         reader.readAsBinaryString(f);
@@ -574,12 +601,15 @@
         var id = $("#hdnId").val();
         var Desc = $("#txtDesc").val();
         var Status = $("#ddlPopupStatus").val();
+        var Reassign = $("#ddReassign").val();
+        var FileDone = $("#DoneDocBase64").val();
+        var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew1").val();
         if (Desc != "") {
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
-                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + '}',
+                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) +'}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
