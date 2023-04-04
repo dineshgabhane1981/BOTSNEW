@@ -50,5 +50,13 @@ namespace WebApp.ViewModel
                  new SelectListItem() { Text = "Another Owner", Value = "AnotherOwner" }
             };
         }
+        public SelectListItem[] Priority()
+        {
+            return new SelectListItem[4] { new SelectListItem() { Text = "Critical", Value = "Critical" }, new SelectListItem() { Text = "High", Value = "High" }, new SelectListItem() { Text = "Medium", Value = "Medium" }, new SelectListItem() { Text = "Low", Value = "Low" } };
+        }
+        public SelectListItem[] RequestType()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Valid", Value = "Valid" }, new SelectListItem() { Text = "Invalid", Value = "Invalid" } };
+        }
     }
 }
