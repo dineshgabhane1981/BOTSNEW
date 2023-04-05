@@ -22,5 +22,13 @@ namespace BOTS_BL.Models.CommonDB
         [Column(Order = 2)]
         [StringLength(200)]
         public string Members { get; set; }
+
+        public string EmailId { get; set; }
+
+        public string Role { get; set; }
+
+        public string LoginId { get; set; }
+
+        public string status { get; set; }
     }
 }

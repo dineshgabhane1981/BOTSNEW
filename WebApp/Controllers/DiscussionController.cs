@@ -107,7 +107,10 @@ namespace WebApp.Controllers
             objData.objDiscussion.AddedDate = DateTime.Now;
             objData.objDiscussion.UpdatedDate = DateTime.Now;
             objData.objDiscussion.AddedBy = userDetails.LoginId;
-            //HttpPostedFileBase File = objData.File;
+
+            objData.objDiscussion.Department = objData.dept;
+            objData.objDiscussion.Member = objData.Member;
+            objData.objDiscussion.Priority = objData.prior;
             string File = objData.File;
             string FileName = objData.FileName;
             status = DR.AddDiscussions(objData.objDiscussion, File, FileName);

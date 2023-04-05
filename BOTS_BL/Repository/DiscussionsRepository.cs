@@ -14,7 +14,9 @@ using System.Web;
 using BOTS_BL.Models.CommonDB;
 using System.Web.Mvc;
 using System.Configuration;
-
+using System.Threading;
+using System.Net.Mail;
+using System.Net.Mime;
 
 namespace BOTS_BL.Repository
 {
@@ -123,8 +125,10 @@ namespace BOTS_BL.Repository
         }
         public bool AddDiscussions(BOTS_TblDiscussion objDiscussion, string _File, string FileName)
         {
-            bool status = false;
-           
+            bool status = false,Filestatus = false;
+            string path = string.Empty;
+
+
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             try
             {
@@ -137,16 +141,17 @@ namespace BOTS_BL.Repository
 
                     if (!string.IsNullOrEmpty(_File))
                     {
+                        Filestatus = true;
                         byte[] imageBytes = Convert.FromBase64String(_File);
                         MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
                         ms.Write(imageBytes, 0, imageBytes.Length);
-                        var path = HttpContext.Current.Server.MapPath("~/DiscussionFileUpload/" + FileName);
+                        path = HttpContext.Current.Server.MapPath("~/DiscussionFileUpload/" + FileName);
                         FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
                         ms.WriteTo(fileNew);
                         fileNew.Close();
                         ms.Close();
                     }
-                        
+
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
                     if (objDiscussion.Status == "WIP")
@@ -161,6 +166,29 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                     }
                     status = true;
+
+
+                    int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
+
+                    var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == objDiscussion.Department && x.Role == "02").FirstOrDefault();
+                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();
+                    var SendTo = context.tblDepartMembers.Where(x => x.Members == objDiscussion.Member).FirstOrDefault();
+                    var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
+                    var _CallType = context.BOTS_TblCallTypes.Where(x=> x.Id == objDiscussion.CallType).FirstOrDefault();
+
+                    string _DepartHead = DepartmentHead.EmailId;
+                    //string _Sendfrom = Sendfrom.EmailId;
+                    string _Addby = Sendfrom.Members;
+                    string _SendTo = SendTo.EmailId;
+                    string _Priority = objDiscussion.Priority;
+                    string _Member = objDiscussion.Member;
+                   string _CallTypetext  = _CallType.CallType;
+                    string _subtypetext = _SubCallType.CallSubType;
+
+                    Thread _job1 = new Thread(() => SendEmail(_DepartHead, _SendTo, Filestatus, path, _Addby, _Member, _subtypetext, _CallTypetext));
+                    _job1.Start();
+
+
                 }
             }
             catch (Exception ex)
@@ -229,7 +257,6 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-
         public List<SubDiscussionData> GetNestedDiscussionList(int Id)
         {
 
@@ -923,7 +950,6 @@ namespace BOTS_BL.Repository
 
             return lstData;
         }
-
         public List<tblDepartMember> GetMemberdetails(string Department)
         {
             List<tblDepartMember> objtbldepart = new List<tblDepartMember>();
@@ -942,7 +968,6 @@ namespace BOTS_BL.Repository
             }
                 return objtbldepart;
         }
-
         public List<tblDepartMember> GetReAssignMemberdetails(string id)
         {
             List<tblDepartMember> objtbldepart = new List<tblDepartMember>();
@@ -963,6 +988,142 @@ namespace BOTS_BL.Repository
 
             }
             return objtbldepart;
+        }
+        
+        public void SendEmail(string _DepartHead, string _SendTo, bool _Filestatus, string _path,string _Addby, string _Member,string _SubCallType, string _CallType)
+        {
+            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
+            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+
+            using (MailMessage mail = new MailMessage(from, _SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            {
+                StringBuilder str = new StringBuilder();
+                str.AppendLine("Dear "+ _Member + ",");
+                str.AppendLine();
+                str.AppendLine("You have assigned a task with sub call type - " + _SubCallType + "from "+ _Addby);
+                str.AppendLine();
+                str.AppendLine("Regards,");
+                str.AppendLine(" - BlueOcktopus Team");
+
+                mail.Subject = "Call type "+ _CallType + " SubCallType " + _SubCallType;
+                mail.SubjectEncoding = System.Text.Encoding.Default;
+                mail.CC.Add(_DepartHead);
+                mail.Body = str.ToString();
+                mail.IsBodyHtml = false;
+                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                if(!string.IsNullOrEmpty(_path))
+                {
+                    Attachment data = new Attachment(_path, MediaTypeNames.Application.Octet);
+                    mail.Attachments.Add(data);
+                }
+                
+                
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.zoho.com";
+                smtp.EnableSsl = true;
+                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = networkCredential;
+                smtp.Port = 587;
+                smtp.Send(mail);
+                //TempData["Status"] = "File Uploaded successfully";
+                //status = true;
+            }
+            // string Emailheader = string.Empty;
+            // Emailheader = "BBBanthia Monthly Report";
+            // StringBuilder str = new StringBuilder();
+            // str.Append("<table>");
+            // str.Append("<tr>");
+
+            // str.AppendLine("<td>Dear Customer,</td>");
+            // str.AppendLine("</br>");
+            // str.Append("</tr>");
+
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+
+            // str.AppendLine("<td>Please find the Weekly report attached.</td>");
+            // str.AppendLine("</br>");
+            // str.Append("</tr>");
+
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+
+            // str.Append("<tr>");
+            // str.AppendLine("<td>If you have any questions on this report, please do not reply to this email, as this email report is being sent from is an unmonitored email alias. Instead, write to support@blueocktopus.in or call us for information / clarification.</td>");
+            // str.AppendLine("</br>");
+            // str.AppendLine("</br>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+
+            // str.Append("<tr>");
+            // str.AppendLine("<td>Regards,</td>");
+            // str.AppendLine("</br>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.AppendLine("<td>Blue Ocktopus team</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.AppendLine("<td>support@blueocktopus.in</td>");
+            // str.AppendLine("</br>");
+            // str.AppendLine("</br>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.Append("<td>&nbsp;</td>");
+            // str.Append("</tr>");
+            // str.Append("<tr>");
+            // str.AppendLine("<td>Disclaimer: The information/contents of this e-mail message and any attachments are confidential and are intended solely for the addressee. Any review, re-transmission, dissemination or other use of, or taking of any action in reliance upon, this information by persons or entities other than the intended recipient is prohibited. If you have received this transmission in error, please immediately notify the sender by return e-mail and delete this message and its attachments. Any unauthorized use, copying or dissemination of this transmission is prohibited. Neither the confidentiality nor the integrity of this message can be vouched for following transmission on the internet.</td>");
+            // str.Append("</tr>");
+            // str.Append("</table>");
+
+            // MailMessage Msg = new MailMessage();
+            // Msg.From = new MailAddress(EmailId);
+            // Msg.To.Add(Email);
+            // Msg.CC.Add(CCEmail);
+            ////Msg.Bcc.Add(BCCEmail);
+
+            // Msg.Subject = Emailheader;
+            // Msg.Body = str.ToString();
+
+            // System.Net.Mail.Attachment attachment = new System.Net.Mail.Attachment(_path);
+
+            // Msg.Attachments.Add(attachment);
+
+            // Msg.IsBodyHtml = true;
+            // SmtpClient smtp = new SmtpClient(SMTP);
+            // // SmtpClient smtp = new SmtpClient("smtpout.asia.secureserver.net");
+            // //SmtpClient smtp = new SmtpClient("relay-hosting.secureserver.net");
+            // smtp.Port = Port;
+            // smtp.EnableSsl = true;
+
+            // smtp.Credentials = new System.Net.NetworkCredential(EmailId, Password);
+
+            // smtp.Send(Msg);
+            // Msg.Dispose();
+            // System.IO.File.Delete(_path);
         }
 
     }

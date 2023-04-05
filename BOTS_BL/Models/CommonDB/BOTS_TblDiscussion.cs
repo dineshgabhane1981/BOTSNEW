@@ -53,6 +53,14 @@ namespace BOTS_BL.Models.CommonDB
 
         [NotMapped]
         public string GroupName { get; set; }
+
+        [NotMapped]
+        public string Department { get; set; }
+        [NotMapped]
+        public string Member { get; set; }
+
+        [NotMapped]
+        public string Priority { get; set; }
     }
 
     public class DiscussionDetails
@@ -73,6 +81,8 @@ namespace BOTS_BL.Models.CommonDB
         public string ActionItems { get; set; }
         public string AddedBy { get; set; }
         
+
+
     }
 
 }

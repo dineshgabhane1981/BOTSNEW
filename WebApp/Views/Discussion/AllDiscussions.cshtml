@@ -57,141 +57,145 @@
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             @using (Html.BeginForm("AddDiscussion", "Discussion", FormMethod.Post, new { id = "frmadddiscussion", enctype = "multipart/form-data" }))
             {
-                @Html.HiddenFor(model => model.File, new { @id = "uploadDocBase64" })
-                @Html.HiddenFor(model => model.FileName, new { @id = "uploadFileName" })
-                @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
-                @Html.HiddenFor(model => model.objDiscussion.CallMode, new { @id = "hdnCallMode" })
-                <div class="card" style="margin-bottom: 20px;">
-                    <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
-                        Customer Name -  @Model.objDiscussion.GroupName
+            @Html.HiddenFor(model => model.File, new { @id = "uploadDocBase64" })
+            @Html.HiddenFor(model => model.FileName, new { @id = "uploadFileName" })
+            @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
+            @Html.HiddenFor(model => model.objDiscussion.CallMode, new { @id = "hdnCallMode" })
+            @Html.HiddenFor(model => model.dept, new { @id = "hdnDepartment" })
+            @Html.HiddenFor(model => model.prior, new { @id = "hdnPriority" })
+            @Html.HiddenFor(model => model.Member, new { @id = "hdnMember" })
+
+            <div class="card" style="margin-bottom: 20px;">
+                <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
+                    Customer Name -  @Model.objDiscussion.GroupName
+                </div>
+            </div>
+            <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;margin-bottom:10px;">
+                <div class="row" style="margin: 0;">
+                    <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                        Spoken To
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.objDiscussion.SpokenTo, new { @class = "input100", @id = "txtSpokenTo" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Contact No
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.objDiscussion.ContactNo, new { @class = "input100", @type = "number", @id = "txtContactNo" })
                     </div>
                 </div>
-                <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;margin-bottom:10px;">
-                    <div class="row" style="margin: 0;">
-                        <div style="float:left;text-align:right;width:100px;margin-top:10px;">
-                            Spoken To
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextBoxFor(model => model.objDiscussion.SpokenTo, new { @class = "input100", @id = "txtSpokenTo" })
-                        </div>
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                            Contact No
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextBoxFor(model => model.objDiscussion.ContactNo, new { @class = "input100", @type = "number", @id = "txtContactNo" })
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
+                <div class="row" style="margin: 0;">
 
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Customer Type
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.objDiscussion.CustomerType, new SelectList(Model.CustomerType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCustomerType" })
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Customer Type
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.objDiscussion.CustomerType, new SelectList(Model.CustomerType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCustomerType" })
 
-                        </div>
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 20px;">
-                            Call Mode
-                        </div>
-                        @*<div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
-                    </div>*@
-                        <div class="col-sm-4" style="float:left;margin-top:20px;">
-                            <input id="rbtnPhone" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Phone &nbsp;
-                            <input id="rbtnZoom" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Zoom &nbsp;
-                            <input id="rbtnPhysical" name="ProductWise" type="radio" class="rbtnClass">&nbsp; Physical &nbsp;
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 20px;">
+                        Call Mode
+                    </div>
+                    @*<div class="col-sm-4" style="float:left;margin-top:10px;">
+                    @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
+                </div>*@
+                    <div class="col-sm-4" style="float:left;margin-top:20px;">
+                        <input id="rbtnPhone" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Phone &nbsp;
+                        <input id="rbtnZoom" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Zoom &nbsp;
+                        <input id="rbtnPhysical" name="ProductWise" type="radio" class="rbtnClass">&nbsp; Physical &nbsp;
 
-                        </div>
                     </div>
-
-                    <div class="row" style="margin: 0;">
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Call Type
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.objDiscussion.CallType, new SelectList(Model.lstCallTypes, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallType" })
-                        </div>
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                            Call Sub Type
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Department
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDepartment" })
-                        </div>
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                            Members
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            <select id="ddMembers" class="input100"><option value="S">Please Select</option></select>
-                        </div>
-                    </div>
-
-                    <div class="row" style="margin: 0;">
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Status
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.objDiscussion.Status, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlStatus" })
-                        </div>
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                            FollowUp Date
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextBoxFor(model => model.objDiscussion.FollowupDate, new { @class = "input100", @id = "txtFollowupDate" })
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Description
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextAreaFor(model => model.objDiscussion.Description, new { @class = "input100", @id = "txtDescription" })
-                        </div>
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                            Action Items
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.TextAreaFor(model => model.objDiscussion.ActionItems, new { @class = "input100" })
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Upload
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            <input type="file" id="uploadfile" />
-                            @*@Html.TextBoxFor(model => model.File, new { type = "file", @id = "FileUpload" })*@
-                        </div>
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Priority
-                        </div>
-                        <div id="ddlPriority" style="float:left;margin-top:10px;margin-left:30px;">
-                            <select class="input100">
-                                <option>Select</option>
-                                <option>Critical</option>
-                                <option>High</option>
-                                <option>Medium</option>
-                                <option>Low</option>
-                            </select>
-                        </div>
-                        @*<div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
-                    </div>*@
-                    </div>
-
-                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                        <button type="button" id="btnCancel" class="btn btn-primary pull-right" style="margin-right:10px;">Cancel</button>
-                        <button type="button" id="btnDiscussionSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
-                    </div>
-
                 </div>
+
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Call Type
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.objDiscussion.CallType, new SelectList(Model.lstCallTypes, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallType" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Call Sub Type
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Department
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDepartment" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Members
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <select id="ddMembers" class="input100"><option value="S">Please Select</option></select>
+                    </div>
+                </div>
+
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Status
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.objDiscussion.Status, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlStatus" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        FollowUp Date
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.objDiscussion.FollowupDate, new { @class = "input100", @id = "txtFollowupDate" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Description
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.objDiscussion.Description, new { @class = "input100", @id = "txtDescription" })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Action Items
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.objDiscussion.ActionItems, new { @class = "input100" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Upload
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="file" id="uploadfile" />
+                        @*@Html.TextBoxFor(model => model.File, new { type = "file", @id = "FileUpload" })*@
+                    </div>
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Priority
+                    </div>
+                    <div id="ddlPriority" style="float:left;margin-top:10px;margin-left:30px;">
+                        <select class="input100">
+                            <option>Select</option>
+                            <option>Critical</option>
+                            <option>High</option>
+                            <option>Medium</option>
+                            <option>Low</option>
+                        </select>
+                    </div>
+                    @*<div class="col-sm-4" style="float:left;margin-top:10px;">
+                    @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
+                </div>*@
+                </div>
+
+                <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                    <button type="button" id="btnCancel" class="btn btn-primary pull-right" style="margin-right:10px;">Cancel</button>
+                    <button type="button" id="btnDiscussionSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
+                </div>
+
+            </div>
             }
             <div class="row">
                 <div class="col search-container">
@@ -510,10 +514,15 @@
                 CallMode = "Physical"
             }
 
-            //var CallMode = $("#hdnCallMode").val();
             $("#hdnCallMode").val(CallMode);
-            //alert($("#hdnCallMode").val())
-            //console.log(File);
+            var Department = $("#ddlDepartment").val();
+            var Priority = $("#SelectPriority").val();
+            var Member = $("#ddMembers").val();
+
+            $("#hdnPriority").val(Priority);
+            $("#hdnDepartment").val(Department);
+            $("#hdnMember").val(Member);
+
             //var data = $('#frmadddiscussion').serialize() + '&Member=' + Member + '&File=' + File + '&FileName=' + UploadFileName; //'&FileUpload=' + UploadFile +
 
             var data = $('#frmadddiscussion').serialize();

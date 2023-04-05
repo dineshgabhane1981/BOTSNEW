@@ -19,6 +19,8 @@ namespace WebApp.ViewModel
 
         public string dept { get; set; }
 
+        public string prior { get; set; }
+
         public string Member { get; set; }
 
         //public HttpPostedFileBase File { get; set; }
@@ -26,6 +28,7 @@ namespace WebApp.ViewModel
         public string File { get; set; }
 
         public string FileName { get; set; }
+
 
         public SelectListItem[] CallMode()
         {
@@ -37,7 +40,7 @@ namespace WebApp.ViewModel
         }
         public SelectListItem[] Departments()
         {
-            return new SelectListItem[5] { new SelectListItem() { Text = "Customer Success", Value = "Customer Success" }, new SelectListItem() { Text = "Finance", Value = "Finance" }, new SelectListItem() { Text = "HR", Value = "HR" }, new SelectListItem() { Text = "Operations", Value = "Operations" }, new SelectListItem() { Text = "Technology", Value = "Technology" }};
+            return new SelectListItem[4] { new SelectListItem() { Text = "Customer Success", Value = "Customer Success" }, new SelectListItem() { Text = "Finance", Value = "Finance" }, new SelectListItem() { Text = "Operations", Value = "Operations" }, new SelectListItem() { Text = "Technology", Value = "Technology" }};
         }
 
         public SelectListItem[] CustomerType()
