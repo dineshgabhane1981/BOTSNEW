@@ -60,6 +60,7 @@
                 @Html.HiddenFor(model => model.File, new { @id = "uploadDocBase64" })
                 @Html.HiddenFor(model => model.FileName, new { @id = "uploadFileName" })
                 @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
+                @Html.HiddenFor(model => model.objDiscussion.CallMode, new { @id = "hdnCallMode" })
                 <div class="card" style="margin-bottom: 20px;">
                     <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
                         Customer Name -  @Model.objDiscussion.GroupName
@@ -89,11 +90,17 @@
                             @Html.DropDownListFor(model => model.objDiscussion.CustomerType, new SelectList(Model.CustomerType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCustomerType" })
 
                         </div>
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 20px;">
                             Call Mode
                         </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
+                        @*<div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
+                    </div>*@
+                        <div class="col-sm-4" style="float:left;margin-top:20px;">
+                            <input id="rbtnPhone" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Phone &nbsp;
+                            <input id="rbtnZoom" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Zoom &nbsp;
+                            <input id="rbtnPhysical" name="ProductWise" type="radio" class="rbtnClass">&nbsp; Physical &nbsp;
+
                         </div>
                     </div>
 
@@ -165,8 +172,8 @@
                         <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Priority
                         </div>
-                        <div id="ddlPriority" class="input100" style="float:left;margin-top:10px;margin-left:30px;">
-                            <select>
+                        <div id="ddlPriority" style="float:left;margin-top:10px;margin-left:30px;">
+                            <select class="input100">
                                 <option>Select</option>
                                 <option>Critical</option>
                                 <option>High</option>
@@ -175,8 +182,8 @@
                             </select>
                         </div>
                         @*<div class="col-sm-4" style="float:left;margin-top:10px;">
-                                @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
-                            </div>*@
+                        @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
+                    </div>*@
                     </div>
 
                     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -471,7 +478,7 @@
             returnStatus = false;
 
         }
-        if ($("#ddlCallType option:selected").text() == "Issue") {
+        if ($("#ddlCallType option:selected").text() == "Please Select") {
             if ($("#ddlSubCallType option:selected").text() == "Please Select") {
                 $('#ddlSubCallType').css('border-color', 'red');
                 returnStatus = false;
@@ -490,7 +497,22 @@
 
         if (returnStatus) {
 
+            var CallMode;
             var File = $("#uploadDocBase64").val();
+
+            if (document.getElementById("rbtnPhone")) {
+                CallMode = "Phone"
+            }
+            else if (document.getElementById("rbtnZoom")) {
+                CallMode = "Zoom"
+            }
+            else {
+                CallMode = "Physical"
+            }
+
+            //var CallMode = $("#hdnCallMode").val();
+            $("#hdnCallMode").val(CallMode);
+            //alert($("#hdnCallMode").val())
             //console.log(File);
             //var data = $('#frmadddiscussion').serialize() + '&Member=' + Member + '&File=' + File + '&FileName=' + UploadFileName; //'&FileUpload=' + UploadFile +
 
