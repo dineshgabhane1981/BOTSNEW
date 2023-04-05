@@ -49,6 +49,11 @@
     input:read-only {
         background-color: lightgray;
     }
+    .chkClass{
+        width:20px;
+        height:20px;
+        cursor:pointer;
+    }
 </style>
 <div class="app-main__inner">
     <input type="hidden" id="DoneDocBase64" />
@@ -60,11 +65,6 @@
             @Html.HiddenFor(model => model.File, new { @id = "uploadDocBase64" })
             @Html.HiddenFor(model => model.FileName, new { @id = "uploadFileName" })
             @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
-            @Html.HiddenFor(model => model.objDiscussion.CallMode, new { @id = "hdnCallMode" })
-            @Html.HiddenFor(model => model.dept, new { @id = "hdnDepartment" })
-            @Html.HiddenFor(model => model.prior, new { @id = "hdnPriority" })
-            @Html.HiddenFor(model => model.Member, new { @id = "hdnMember" })
-            @Html.HiddenFor(model => model.objDiscussion.Status, new { @id = "hdnStatus" })
 
             <div class="card" style="margin-bottom: 20px;">
                 <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
@@ -101,12 +101,15 @@
                     @*<div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
             </div>*@
-                    <div class="col-sm-4" style="float:left;margin-top:20px;">
-                        <input id="rbtnPhone" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Phone &nbsp;
-                        <input id="rbtnZoom" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Zoom &nbsp;
-                        <input id="rbtnPhysical" name="ProductWise" type="radio" class="rbtnClass">&nbsp; Physical &nbsp;
+                <div class="col-sm-4" style="float:left;margin-top:20px;">
+                    @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Phone", new { @id = "rbtnPhone", @checked = "checked", @class= "chkClass" }) <span>Phone</span>
+                    @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Zoom", new { @id = "rbtnZoom", @class = "chkClass" }) Zoom
+                    @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Physical", new { @id = "rbtnPhysical", @class = "chkClass" }) Physical
+                    @*<input id="rbtnPhone" name="CallMode" type="radio" class="rbtnClass" checked> &nbsp; Phone &nbsp;
+                    <input id="rbtnZoom" name="CallMode" type="radio" class="rbtnClass"> &nbsp; Zoom &nbsp;
+                    <input id="rbtnPhysical" name="CallMode" type="radio" class="rbtnClass">&nbsp; Physical &nbsp;*@
 
-                    </div>
+                </div>
                 </div>
 
                 <div class="row" style="margin: 0;">
@@ -128,55 +131,52 @@
                         Department
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.dept, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDepartment" })
+                        @Html.DropDownListFor(model => model.objDiscussion.Department, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDepartment" })
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Members
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <select id="ddMembers" class="input100"><option value="S">Please Select</option></select>
+                        @Html.DropDownListFor(model => model.objDiscussion.AssignedMember, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddMembers" })
+                        @*<select id="ddMembers" class="input100"><option value="S">Please Select</option></select>*@
                     </div>
                 </div>
 
                 <div class="row" style="margin: 0;">
 
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Discussion Regarding
+                        Discussion Type
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @*<div style="display:flex;">*@
-                        <input id="rbtnQuery" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Query
-                        <input id="rbtnRequest" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Request
-                        <input id="rbtnComplaint" name="ProductWise" type="radio" class="rbtnClass">&nbsp; Complaint
-                        <input id="rbtnOTP" name="ProductWise" type="radio" class="rbtnClass">&nbsp; OTP
+                        @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Query", new { @id = "rbtnQuery", @checked = "checked", @class = "chkClass" }) Query
+                        @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Request", new { @id = "rbtnRequest", @class = "chkClass" }) Request
+                        @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Complaint", new { @id = "rbtnComplaint", @class = "chkClass" }) Complaint
+                        @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "OTP", new { @id = "rbtnOTP", @class = "chkClass" }) OTP
+
+                        @*<input id="rbtnQuery" name="DiscussionType" type="radio" class="rbtnClass" checked> &nbsp; Query
+                        <input id="rbtnRequest" name="DiscussionType" type="radio" class="rbtnClass"> &nbsp; Request
+                        <input id="rbtnComplaint" name="DiscussionType" type="radio" class="rbtnClass">&nbsp; Complaint
+                        <input id="rbtnOTP" name="DiscussionType" type="radio" class="rbtnClass">&nbsp; OTP*@
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         No. Of Tasks
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" id="TaskCount" name="TaskCount" class="input100">
+                        <h4><label id="TaskCount"></label></h4>
                     </div>
-
-
                 </div>
 
                 <div class="row" style="margin: 0;">
-
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         Status
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        &nbsp; <input id="rbtnWIP" name="StatusWise" type="radio" class="rbtnClass"> &nbsp; WIP &nbsp;
-                        <input id="rbtnCompleted" name="StatusWise" type="radio" class="rbtnClass"> &nbsp; Completed &nbsp;
+                        @Html.RadioButtonFor(model => model.objDiscussion.Status, "WIP", new { @id = "rbtnWIP", @checked = "checked", @class = "chkClass" }) WIP
+                        @Html.RadioButtonFor(model => model.objDiscussion.Status, "Completed", new { @id = "rbtnCompleted", @class = "chkClass" }) Completed
+                        @*&nbsp; <input id="rbtnWIP" name="StatusWise" type="radio" class="rbtnClass" checked> &nbsp; WIP &nbsp;
+                        <input id="rbtnCompleted" name="StatusWise" type="radio" class="rbtnClass"> &nbsp; Completed &nbsp;*@
                     </div>
-
-
-                    @*<div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                Status
-            </div>
-            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.DropDownListFor(model => model.objDiscussion.Status, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlStatus" })
-            </div>*@
+                   
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         FollowUp Date
                     </div>
@@ -191,11 +191,11 @@
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         @Html.TextAreaFor(model => model.objDiscussion.Description, new { @class = "input100", @id = "txtDescription" })
                     </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        Action Items
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Priority
                     </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objDiscussion.ActionItems, new { @class = "input100" })
+                    <div style="float:left;margin-top:10px;margin-left:30px;">
+                        @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Priority(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -205,22 +205,8 @@
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="file" id="uploadfile" />
                         @*@Html.TextBoxFor(model => model.File, new { type = "file", @id = "FileUpload" })*@
-                    </div>
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Priority
-                    </div>
-                    <div id="ddlPriority" style="float:left;margin-top:10px;margin-left:30px;">
-                        <select class="input100">
-                            <option>Select</option>
-                            <option>Critical</option>
-                            <option>High</option>
-                            <option>Medium</option>
-                            <option>Low</option>
-                        </select>
-                    </div>
-                    @*<div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
-            </div>*@
+                    </div>                   
+                   
                 </div>
 
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -326,9 +312,7 @@
 
         document.getElementById("uploadfile").addEventListener('change', handleFileSelect, false);
         document.getElementById("idFileDone").addEventListener('change', handleDoneFile, false);
-
-        $('#txtFollowupDate').attr("disabled", "disabled");
-
+               
         $('#ddlStatus').change(function () {
             if ($('#ddlStatus').val() == "Completed") {
                 $('#txtFollowupDate').attr("disabled", "disabled");
@@ -374,9 +358,23 @@
         $('#btnUpdateStatus').on("click", function () {
             UpdateStatus();
         });
+        $("#rbtnWIP").change(function () {
+            ShowHideFollowUpDate();
+        });
+        $("#rbtnCompleted").change(function () {
+            ShowHideFollowUpDate();
+        });
 
     });
 
+    function ShowHideFollowUpDate() {
+        if ($("#rbtnWIP").is(":checked")){
+            $('#txtFollowupDate').removeAttr("disabled");
+        }
+        if ($("#rbtnCompleted").is(":checked")) {
+            $('#txtFollowupDate').attr("disabled", "disabled");
+        }
+    }
     function handleFileSelect(evt) {
 
         var id = evt.currentTarget.id;
@@ -558,14 +556,7 @@
                 CallMode = "Physical"
             }
 
-            $("#hdnCallMode").val(CallMode);
-            var Department = $("#ddlDepartment").val();
-            var Priority = $("#SelectPriority").val();
-            var Member = $("#ddMembers").val();
-
-            $("#hdnPriority").val(Priority);
-            $("#hdnDepartment").val(Department);
-            $("#hdnMember").val(Member);
+            $("#hdnCallMode").val(CallMode);          
 
             //var data = $('#frmadddiscussion').serialize() + '&Member=' + Member + '&File=' + File + '&FileName=' + UploadFileName; //'&FileUpload=' + UploadFile +
 
@@ -807,6 +798,14 @@
                 success: function (result) {
                     console.log(result)
 
+                    $("#ddlDocumentType").empty();
+                    items = "<option value='Please Select'>Please Select</option>";
+                    $.each(result, function (i, item) {
+                        items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                    });
+                    $("#ddlDocumentType").html(items);
+
+
                     $("#ddMembers").empty()
                     $("#ddMembers").append("<option>Please Select</option>");
                     for (item in result) {
@@ -825,19 +824,17 @@
      $('#ddMembers').change(function () {
 
         if ($("#ddMembers option:selected").text() != "Please Select") {
-            var Member = $("#ddMembers option:selected").text();
+            var MemberName = $("#ddMembers").val();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetTaskCount", "Discussion")',
                 //url: "/Discussion/GetSubCallTypes",
-                data: '{callId: ' + JSON.stringify(Member) + '}',
+                data: '{MemberName: ' + JSON.stringify(MemberName) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
                     $("#TaskCount").empty();
-                    $.each(result, function () {
-                        $("#TaskCount").text(this.Text);
-                    });
+                    $("#TaskCount").text(result);
                 },
                 error: function (result) {
                     console.log(result.responseText);

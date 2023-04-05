@@ -26,7 +26,7 @@ namespace WebApp.Controllers
         DiscussionsRepository DR = new DiscussionsRepository();
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
-        
+
         // GET: Discussion
         public ActionResult Index()
         {
@@ -35,16 +35,16 @@ namespace WebApp.Controllers
 
         public ActionResult AllDiscussions(string groupId, string isOnboarding)
         {
-            
+
             CommonFunctions common = new CommonFunctions();
             groupId = common.DecryptString(groupId);
 
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.GroupId = groupId;
             userDetails.CustomerName = CR.GetCustomerName(groupId);
-            
-            string LoginType = userDetails.LoginType; 
-            
+
+            string LoginType = userDetails.LoginType;
+
             Session["buttons"] = "Discussion";
 
             DiscussionViewModel objData = new DiscussionViewModel();
@@ -87,7 +87,7 @@ namespace WebApp.Controllers
             ViewBag.lstgroupdetails = DR.GetGroupDetails();
             ViewBag.lstCallTypes = DR.GetCallTypes(LoginType);
             ViewBag.lstRMAssigned = DR.GetRaisedby();
-            ObjData.lstDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "","", LoginType, userDetails.LoginId,false);
+            ObjData.lstDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "", "", LoginType, userDetails.LoginId, false);
             ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "", "", LoginType, userDetails.LoginId, true);
             return View(ObjData);
         }
@@ -108,9 +108,9 @@ namespace WebApp.Controllers
             objData.objDiscussion.UpdatedDate = DateTime.Now;
             objData.objDiscussion.AddedBy = userDetails.LoginId;
 
-            objData.objDiscussion.Department = objData.dept;
-            objData.objDiscussion.Member = objData.Member;
-            objData.objDiscussion.Priority = objData.prior;
+            //objData.objDiscussion.Department = objData.dept;
+            //objData.objDiscussion.AssignedMember = objData.Member;
+            //objData.objDiscussion.Priority = objData.prior;
             string File = objData.File;
             string FileName = objData.FileName;
             status = DR.AddDiscussions(objData.objDiscussion, File, FileName);
@@ -135,7 +135,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public bool UpdateStatusAndDiscussion(string dId, string Desc, string Status,string FollowupDate,string Reassign,string FileName, string File)
+        public bool UpdateStatusAndDiscussion(string dId, string Desc, string Status, string FollowupDate, string Reassign, string FileName, string File)
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -169,7 +169,7 @@ namespace WebApp.Controllers
             }
             return PartialView("_CommonDiscussionList", ObjData);
         }
-        public ActionResult ExportToExcelCommonFilteredDiscussion(string fromdt, string Todt, string Groupnm, int calltype, string status, string raised,string ReportName)
+        public ActionResult ExportToExcelCommonFilteredDiscussion(string fromdt, string Todt, string Groupnm, int calltype, string status, string raised, string ReportName)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -177,9 +177,9 @@ namespace WebApp.Controllers
             try
             {
                 List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
-               // List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
-               // lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
-                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, Groupnm, fromdt, Todt, raised, LoginType, userDetails.LoginId,false);
+                // List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
+                // lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
+                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, Groupnm, fromdt, Todt, raised, LoginType, userDetails.LoginId, false);
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(DiscussionDetails));
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
@@ -216,7 +216,7 @@ namespace WebApp.Controllers
                     using (MemoryStream stream = new MemoryStream())
                     {
                         wb.SaveAs(stream);
-                        
+
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
@@ -229,11 +229,11 @@ namespace WebApp.Controllers
 
 
         }
-    
+
         public ActionResult GetDepartmentMember(string jsonData)
         {
-            List < tblDepartMember > objDepartMem = new List<tblDepartMember>();
-           // DiscussionViewModel ObjData = new DiscussionViewModel();
+            List<tblDepartMember> objDepartMem = new List<tblDepartMember>();
+            // DiscussionViewModel ObjData = new DiscussionViewModel();
 
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -244,7 +244,7 @@ namespace WebApp.Controllers
                 objDepartMem = DR.GetMemberdetails(Department);
             }
 
-                return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public ActionResult GetReAssignMember(string jsonData)
@@ -263,20 +263,10 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult GetTaskCount(string Callid)
+        public ActionResult GetTaskCount(string MemberName)
         {
-            List<BOTS_TblDiscussion> objDepartMem = new List<BOTS_TblDiscussion>();
-
-            //JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            //json_serializer.MaxJsonLength = int.MaxValue;
-            //object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            //foreach (Dictionary<string, object> item in objData)
-
-            //string id = Convert.ToString(item["id"]);
-            objDepartMem = DR.GetTaskCount(Callid);
-
-
-            return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            var TaskCount = DR.GetTaskCount(MemberName);
+            return new JsonResult() { Data = TaskCount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
     }

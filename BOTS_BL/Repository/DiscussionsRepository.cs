@@ -137,6 +137,7 @@ namespace BOTS_BL.Repository
                     // Need to add Department and Member details in DB
 
                     string _FilePath = ConfigurationManager.AppSettings["DiscussionFileUpload"];
+                    string _FileURL = ConfigurationManager.AppSettings["DiscussionDocumentURL"];
                     string FileLocation = _FilePath + "/" + FileName;
 
                     if (!string.IsNullOrEmpty(_File))
@@ -150,6 +151,7 @@ namespace BOTS_BL.Repository
                         ms.WriteTo(fileNew);
                         fileNew.Close();
                         ms.Close();
+                        objDiscussion.AttachedFile = _FileURL + FileName;
                     }
 
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
@@ -172,7 +174,7 @@ namespace BOTS_BL.Repository
 
                     var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == objDiscussion.Department && x.Role == "02").FirstOrDefault();
                     var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();
-                    var SendTo = context.tblDepartMembers.Where(x => x.Members == objDiscussion.Member).FirstOrDefault();
+                    var SendTo = context.tblDepartMembers.Where(x => x.Members == objDiscussion.AssignedMember).FirstOrDefault();
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x=> x.Id == objDiscussion.CallType).FirstOrDefault();
 
@@ -181,7 +183,7 @@ namespace BOTS_BL.Repository
                     string _Addby = Sendfrom.Members;
                     string _SendTo = SendTo.EmailId;
                     string _Priority = objDiscussion.Priority;
-                    string _Member = objDiscussion.Member;
+                    string _Member = objDiscussion.AssignedMember;
                    string _CallTypetext  = _CallType.CallType;
                     string _subtypetext = _SubCallType.CallSubType;
 
@@ -990,26 +992,21 @@ namespace BOTS_BL.Repository
             return objtbldepart;
         }
 
-        public List<BOTS_TblDiscussion> GetTaskCount(string id)
+        public int GetTaskCount(string MemberName)
         {
-            List<BOTS_TblDiscussion> objtbldepart = new List<BOTS_TblDiscussion>();
-            int varid = Convert.ToInt32(id);
+            int taskCount = 0;
             try
             {
                 using (var context = new CommonDBContext())
-
-
                 {
-                    var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid && x.Status == "WIP").Count();
+                    taskCount = context.BOTS_TblDiscussion.Where(x => x.AssignedMember == MemberName && x.Status == "WIP").Count();
                 }
-
-
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetTaskCount");
             }
-            return objtbldepart;
+            return taskCount;
         }
 
 
@@ -1053,101 +1050,7 @@ namespace BOTS_BL.Repository
                 //TempData["Status"] = "File Uploaded successfully";
                 //status = true;
             }
-            // string Emailheader = string.Empty;
-            // Emailheader = "BBBanthia Monthly Report";
-            // StringBuilder str = new StringBuilder();
-            // str.Append("<table>");
-            // str.Append("<tr>");
-
-            // str.AppendLine("<td>Dear Customer,</td>");
-            // str.AppendLine("</br>");
-            // str.Append("</tr>");
-
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-
-            // str.AppendLine("<td>Please find the Weekly report attached.</td>");
-            // str.AppendLine("</br>");
-            // str.Append("</tr>");
-
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-
-            // str.Append("<tr>");
-            // str.AppendLine("<td>If you have any questions on this report, please do not reply to this email, as this email report is being sent from is an unmonitored email alias. Instead, write to support@blueocktopus.in or call us for information / clarification.</td>");
-            // str.AppendLine("</br>");
-            // str.AppendLine("</br>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-
-            // str.Append("<tr>");
-            // str.AppendLine("<td>Regards,</td>");
-            // str.AppendLine("</br>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.AppendLine("<td>Blue Ocktopus team</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.AppendLine("<td>support@blueocktopus.in</td>");
-            // str.AppendLine("</br>");
-            // str.AppendLine("</br>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.Append("<td>&nbsp;</td>");
-            // str.Append("</tr>");
-            // str.Append("<tr>");
-            // str.AppendLine("<td>Disclaimer: The information/contents of this e-mail message and any attachments are confidential and are intended solely for the addressee. Any review, re-transmission, dissemination or other use of, or taking of any action in reliance upon, this information by persons or entities other than the intended recipient is prohibited. If you have received this transmission in error, please immediately notify the sender by return e-mail and delete this message and its attachments. Any unauthorized use, copying or dissemination of this transmission is prohibited. Neither the confidentiality nor the integrity of this message can be vouched for following transmission on the internet.</td>");
-            // str.Append("</tr>");
-            // str.Append("</table>");
-
-            // MailMessage Msg = new MailMessage();
-            // Msg.From = new MailAddress(EmailId);
-            // Msg.To.Add(Email);
-            // Msg.CC.Add(CCEmail);
-            ////Msg.Bcc.Add(BCCEmail);
-
-            // Msg.Subject = Emailheader;
-            // Msg.Body = str.ToString();
-
-            // System.Net.Mail.Attachment attachment = new System.Net.Mail.Attachment(_path);
-
-            // Msg.Attachments.Add(attachment);
-
-            // Msg.IsBodyHtml = true;
-            // SmtpClient smtp = new SmtpClient(SMTP);
-            // // SmtpClient smtp = new SmtpClient("smtpout.asia.secureserver.net");
-            // //SmtpClient smtp = new SmtpClient("relay-hosting.secureserver.net");
-            // smtp.Port = Port;
-            // smtp.EnableSsl = true;
-
-            // smtp.Credentials = new System.Net.NetworkCredential(EmailId, Password);
-
-            // smtp.Send(Msg);
-            // Msg.Dispose();
-            // System.IO.File.Delete(_path);
+            
         }
 
     }

@@ -379,6 +379,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="DiscussionFileUpload\ChintamanisLogo.jpeg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -419,6 +420,7 @@
     <Content Include="Scripts\datetimepicker-master\pull_request_template.md" />
     <Content Include="Scripts\datetimepicker-master\README.md" />
     <Content Include="Scripts\datetimepicker-master\yarn.lock" />
+    <Content Include="DiscussionFileUpload\podar pathardi list.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\datetimepicker-master\build\jquery.datetimepicker.full.js" />
     <Content Include="Scripts\datetimepicker-master\build\jquery.datetimepicker.full.min.js" />
@@ -734,7 +736,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="DashboardReports\" />
-    <Folder Include="DisussionFileUpload\" />
     <Folder Include="DLCImages\" />
     <Folder Include="DocLibDownload\" />
     <Folder Include="Temp\" />

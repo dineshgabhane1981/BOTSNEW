@@ -42,7 +42,7 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Customer Success", Value = "Customer Success" }, new SelectListItem() { Text = "Finance", Value = "Finance" }, new SelectListItem() { Text = "Operations", Value = "Operations" }, new SelectListItem() { Text = "Technology", Value = "Technology" }};
         }
-
+       
         public SelectListItem[] CustomerType()
         {
             return new SelectListItem[5] 

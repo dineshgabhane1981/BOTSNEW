@@ -54,13 +54,14 @@ namespace BOTS_BL.Models.CommonDB
         [NotMapped]
         public string GroupName { get; set; }
 
-        [NotMapped]
+        
         public string Department { get; set; }
-        [NotMapped]
-        public string Member { get; set; }
-
-        [NotMapped]
+        
+        public string AssignedMember { get; set; }
+        
         public string Priority { get; set; }
+        public string DiscussionType { get; set; }
+        public string AttachedFile { get; set; }
     }
 
     public class DiscussionDetails
