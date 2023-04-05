@@ -253,6 +253,7 @@
     <Compile Include="Models\CommonDB\tblCity.cs" />
     <Compile Include="Models\CommonDB\tblDepartMember.cs" />
     <Compile Include="Models\CommonDB\tblDocumentsLibrary.cs" />
+    <Compile Include="Models\CommonDB\tblDocumentType.cs" />
     <Compile Include="Models\CommonDB\tblErrorLog.cs" />
     <Compile Include="Models\CommonDB\tblFestival.cs" />
     <Compile Include="Models\CommonDB\tblGroupDetail.cs" />

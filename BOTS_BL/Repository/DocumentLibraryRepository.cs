@@ -22,7 +22,7 @@ namespace BOTS_BL.Repository
         //string AWSSecretKey = "";
         //string AWSBucketName = "";
         Exceptions newexception = new Exceptions();
-        public bool UploadDocumentToS3(string fileData,string fileName,string Groupid,string GroupName,string Comment,string DocType, string Addedby,string Addeddate)
+        public bool UploadDocumentToS3(string fileData, string fileName, string Groupid, string GroupName, string Comment, string DocType, string Addedby, string Addeddate, string FinGroupid, string FinGroupName, string Department, string Vendor)
         {
             List<tblAWSAccessDetail> AccessDetails = new List<tblAWSAccessDetail>();
             bool status = false;
@@ -42,7 +42,7 @@ namespace BOTS_BL.Repository
                 IAmazonS3 client = new AmazonS3Client(AWSAccessKey, AWSSecretKey, RegionEndpoint.APSouth1);
                 TransferUtility utility = new TransferUtility(client);
                 TransferUtilityUploadRequest request = new TransferUtilityUploadRequest();
-                string path = @"Documents/"+ GroupName;
+                string path = @"Documents/" + GroupName;
                 S3DirectoryInfo di = new S3DirectoryInfo(client, AWSBucketName, path);
                 if (!di.Exists)
                 {
@@ -63,30 +63,51 @@ namespace BOTS_BL.Repository
 
                 using (var context = new CommonDBContext())
                 {
-                    
-                    tblDocumentsLibrary ObjDocLib = new tblDocumentsLibrary();
 
-                    ObjDocLib.GroupId = Convert.ToString(Groupid);
-                    ObjDocLib.GroupName = Convert.ToString(GroupName);
+                    tblDocumentsLibrary ObjDocLib = new tblDocumentsLibrary();
+                    if (Convert.ToString(GroupName) == "Finance")
+                    {
+                        ObjDocLib.GroupId = Convert.ToString(FinGroupid);
+                        if (FinGroupName == "Please Select")
+                            ObjDocLib.GroupName = "Finance";
+                        else
+                            ObjDocLib.GroupName = Convert.ToString(FinGroupName);
+                    }
+                    else
+                    {
+                        ObjDocLib.GroupId = Convert.ToString(Groupid);
+                        ObjDocLib.GroupName = Convert.ToString(GroupName);
+                    }
+
                     ObjDocLib.DocumentType = Convert.ToString(DocType);
                     ObjDocLib.Path = path2 + "/" + fileName;
                     ObjDocLib.UploadedBy = Convert.ToString(Addedby);
                     ObjDocLib.UploadDate = Convert.ToDateTime(Addeddate);
                     ObjDocLib.Comments = Convert.ToString(Comment);
                     ObjDocLib.FileName = Convert.ToString(fileName);
+                    if (Department != null && Department != "Please Select")
+                        ObjDocLib.Department = Convert.ToString(Department);
+                    else
+                        ObjDocLib.Department = null;
+
+                    if (Vendor != null && Vendor != "Please Select")
+                        ObjDocLib.Vendor = Convert.ToString(Vendor);
+                    else
+                        ObjDocLib.Vendor = null;
+
 
                     context.tblDocumentsLibraries.Add(ObjDocLib);
                     context.SaveChanges();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "UploadDocumentToS3");
             }
 
             return status;
         }
-        public List<SelectListItem> GetGroupDetails(string roleId,string loginId)
+        public List<SelectListItem> GetGroupDetails(string roleId, string loginId)
         {
             List<SelectListItem> lstGroupDetails = new List<SelectListItem>();
             List<tblGroupDetail> GroupDetails = new List<tblGroupDetail>();
@@ -115,17 +136,26 @@ namespace BOTS_BL.Repository
             }
             return lstGroupDetails;
         }
-        public List<tblDocumentsLibrary> GetDocLibData(string Groupid)
+        public List<tblDocumentsLibrary> GetDocLibData(string Groupid, string Dept,string Vendor)
         {
             List<tblDocumentsLibrary> ObjLibList = new List<tblDocumentsLibrary>();
-            
-           
             using (var context = new CommonDBContext())
             {
                 try
                 {
-                     //ObjLibList = (from c in context.tblDocumentsLibraries where (c.GroupId == Groupid) select c).ToList();
-                    ObjLibList = context.tblDocumentsLibraries.Where(x => x.GroupId == Groupid).ToList();
+                    if(Vendor!=null & Dept!=null)
+                    {
+                        ObjLibList = context.tblDocumentsLibraries.Where(x => x.Vendor == Vendor).ToList();
+                    }
+                    else if (string.IsNullOrEmpty(Dept))
+                        ObjLibList = context.tblDocumentsLibraries.Where(x => x.GroupId == Groupid && x.Department == null).ToList();
+                    else
+                    {
+                        if (Dept == "Finance")
+                            ObjLibList = context.tblDocumentsLibraries.Where(x => x.GroupId == Groupid && x.Department == Dept).ToList();
+                        else
+                            ObjLibList = context.tblDocumentsLibraries.Where(x => x.Department == Dept).ToList();
+                    }
 
 
                     foreach (var item in ObjLibList)
@@ -139,10 +169,36 @@ namespace BOTS_BL.Repository
                     newexception.AddException(ex, "GetDocLibData");
                 }
             }
-          
             return ObjLibList;
         }
 
+        public List<SelectListItem> GetDolumentTypesByDept(string dept)
+        {
+            List<SelectListItem> lstDocumentType = new List<SelectListItem>();
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    var DocumentTypes = context.tblDocumentTypes.Where(x => x.Dept == dept).ToList();
+                    foreach (var item in DocumentTypes)
+                    {
+                        lstDocumentType.Add(new SelectListItem
+                        {
+                            Text = item.DocumentType,
+                            Value = Convert.ToString(item.DocumentType)
+                        });
+
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GetDolumentTypesByDept");
+                }
+            }
+            return lstDocumentType;
+        }
         public string GetDownloadData(string SLno)
         {
             bool status;
@@ -160,8 +216,8 @@ namespace BOTS_BL.Repository
 
                     foreach (var item in ObjList)
                     {
-                         FileName = item.FileName;
-                         Path = item.Path;
+                        FileName = item.FileName;
+                        Path = item.Path;
                         DownloadFileFromS3(FileName, Path);
                     }
                 }
@@ -169,13 +225,13 @@ namespace BOTS_BL.Repository
                 {
                     newexception.AddException(ex, "GetDownloadData");
                 }
-               
+
             }
             return FileName;
 
         }
 
-        public string DownloadFileFromS3(string FileName,string Path)
+        public string DownloadFileFromS3(string FileName, string Path)
         {
             string returnLocation = string.Empty;
             List<tblAWSAccessDetail> AccessDetails = new List<tblAWSAccessDetail>();
@@ -196,17 +252,17 @@ namespace BOTS_BL.Repository
                     AWSSecretKey = Convert.ToString(item.SecretKey);
                 }
 
-                    var filelink = Path;
-                    string _FilePath = ConfigurationManager.AppSettings["SharedLocation"];
-                    string FileLocation = _FilePath + "/" + FileName;
-                    FileStream fs = File.Create(FileLocation);
-                    fs.Close();
-                    string path = @"Documents/" + filelink;
-                    IAmazonS3 client = new AmazonS3Client(AWSAccessKey, AWSSecretKey, RegionEndpoint.APSouth1);
-                    TransferUtility fileTransferUtility = new TransferUtility(client);
-                    fileTransferUtility.Download(FileLocation, AWSBucketName, path);
-                    fileTransferUtility.Dispose();
-                    returnLocation = _FilePath;
+                var filelink = Path;
+                string _FilePath = ConfigurationManager.AppSettings["SharedLocation"];
+                string FileLocation = _FilePath + "/" + FileName;
+                FileStream fs = File.Create(FileLocation);
+                fs.Close();
+                string path = @"Documents/" + filelink;
+                IAmazonS3 client = new AmazonS3Client(AWSAccessKey, AWSSecretKey, RegionEndpoint.APSouth1);
+                TransferUtility fileTransferUtility = new TransferUtility(client);
+                fileTransferUtility.Download(FileLocation, AWSBucketName, path);
+                fileTransferUtility.Dispose();
+                returnLocation = _FilePath;
                 //}
             }
             catch (Exception ex)

@@ -6,12 +6,9 @@
     string baseURL = ConfigurationManager.AppSettings["BaseDocUrl"];
 }
 
-
-
 <div class="app-main__inner">
     <input type="hidden" id="hdnuploadDocBase64" />
-    <input type="hidden" id="hdnFileName" />
-    @*<input type="hidden" id="baseURL" value="http://localhost:57265/DocLibDownload/" />*@
+    <input type="hidden" id="hdnFileName" />   
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-4">
@@ -21,7 +18,6 @@
                     <input type="radio" id="rdnInternal" style="width: 20px; margin-right: 5px; margin-left: 15px; cursor: pointer; " name="cust_type" /><span> Internal</span>
                 }
             </div>
-
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvCustomer">
                 <div class="col-lg-3 col-md-3 ">
                     Group Name
@@ -29,15 +25,7 @@
                 <div class="col-md-3 col-xl-3">
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
-            </div>
-            @*<div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
-                    <div class="col-lg-3 col-md-3 ">
-                        Department
-                    </div>
-                    <div class="col-md-3 col-xl-3">
-                        @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                    </div>
-                </div>*@
+            </div>           
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
                 <div class="col-lg-3 col-md-3 ">
                     Department
@@ -51,7 +39,23 @@
                     DocumentType
                 </div>
                 <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.DocType, new SelectList(Model.DocumentType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDocumentType" })
+                    @Html.DropDownListFor(model => model.DocType, new SelectList(Model.lstDocumentType, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDocumentType" })
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternalGroup" style="display:none;">
+                <div class="col-lg-3 col-md-3 ">
+                    Group Name
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDeptGroupDetails" })
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvVendors" style="display:none;">
+                <div class="col-lg-3 col-md-3 ">
+                    Vendor
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.Vendor, new SelectList(Model.Vendors(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlVendor" })
                 </div>
             </div>
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
@@ -62,15 +66,12 @@
                     <input type="file" id="uploadDoc" />
                 </div>
             </div>
-
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
                 <input class="input150" id="txtComment" placeholder="Comment" />
             </div>
-
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
                 <input type="button" id="btnUpload1" class="btn btn-primary" value="Upload" />
             </div>
-
         </div>
     </div>
     <div class="row mb-3 card" id="Doclist">
@@ -79,12 +80,10 @@
                 <table class="table" id="InstanceTable">
                     <thead>
                         <tr>
-
                             <th scope="col" style="text-align:center;">DocType</th>
                             <th scope="col" style="text-align:center;">Uploaded Date</th>
                             <th scope="col" style="text-align:center;">Comments</th>
                             <th scope="col" style="text-align:center;">Download</th>
-
                         </tr>
                     </thead>
                     <tbody style="text-align:center;">
@@ -100,30 +99,71 @@
         document.getElementById("uploadDoc").addEventListener('change', handleFileSelectProductWise, false);
 
         $("#btnUpload1").click(function () {
-            //UploadDocuments();
             ValidationUpload();
         });
         $("#rdnCustomer").change(function () {
             ShowHideDDL();
-
+            FillDocumentTypeDDL("Customer");
+            $('#ddlDepartment').prop('selectedIndex', 0);
+            $('#ddlDocumentType').prop('selectedIndex', 0);
+            $('#ddlDeptGroupDetails').prop('selectedIndex', 0);
+            $('#ddlVendor').prop('selectedIndex', 0);
         });
         $("#rdnInternal").change(function () {
             ShowHideDDL();
         });
+        $("#ddlDepartment").change(function () {
+            ShowDeptGroup();
+            FillDocumentTypeDDL($("#ddlDepartment").val());
+        });
+
     });
 
     $("#ddlGroupDetails").change(function(){
         var GroupId = $("#ddlGroupDetails").val();
-        var FilterData = [];
-        item = {};
-        item["GroupId"] = GroupId;
-        FilterData.push(item);
-        var data = JSON.stringify(FilterData);
+
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("ListDocuments", "DocumentLibrary")',
-                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                data: '{GroupId: ' + JSON.stringify(GroupId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    $("#Tabl").show();
+                    tableData = [];
+                    $.map(result, function (item) {
+                        optionItem = {}
+
+                        optionItem["SlNo"] = item.SlNo;
+                        optionItem["DocumentType"] = item.DocumentType;
+                        optionItem["Path"] = item.Path;
+                        optionItem["UploadDate"] = item.UploadDateStr;
+                        optionItem["Comments"] = item.Comments;
+
+                        tableData.push(optionItem);
+                    });
+                    console.log(tableData)
+                    DrawTable();
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(111)
+                    console.log(result.responseText)
+                }
+            });
+
+    });
+
+    $("#ddlDeptGroupDetails").change(function(){
+        var GroupId = $("#ddlDeptGroupDetails").val();
+
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ListDocuments", "DocumentLibrary")',
+                data: '{GroupId: ' + JSON.stringify(GroupId) + ',Dept: ' + JSON.stringify($("#ddlDepartment").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -154,17 +194,13 @@
     });
 
     $("#ddlDepartment").change(function () {
-        var GroupId = $("#ddlDepartment").val();
-        var FilterData = [];
-        item = {};
-        item["GroupId"] = GroupId;
-        FilterData.push(item);
-        var data = JSON.stringify(FilterData);
+        var Dept = $("#ddlDepartment").val();
+        var GroupId = "";
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("ListDocuments", "DocumentLibrary")',
-                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                data: '{GroupId: ' + JSON.stringify(GroupId) + ',Dept: ' + JSON.stringify(Dept) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -173,7 +209,6 @@
                     tableData = [];
                     $.map(result, function (item) {
                         optionItem = {}
-
                         optionItem["SlNo"] = item.SlNo;
                         optionItem["DocumentType"] = item.DocumentType;
                         optionItem["Path"] = item.Path;
@@ -187,7 +222,51 @@
                     $("#divLoader").hide();
                 },
                 error: function (result) {
-                    alert(111)
+                    console.log(result.responseText)
+                }
+            });
+    });
+
+    $("#ddlDocumentType").change(function () {
+        var DocType = $("#ddlDocumentType").val();
+        if (DocType == "Invoice Inward") {
+            $("#dvVendors").show();
+        }
+        else {
+            $("#dvVendors").hide();
+        }
+    });
+
+    $("#ddlVendor").change(function () {
+        var Dept = $("#ddlDepartment").val();
+        var Vendor = $("#ddlVendor").val();
+        var GroupId = "";
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ListDocuments", "DocumentLibrary")',
+                data: '{GroupId: ' + JSON.stringify(GroupId) + ',Dept: ' + JSON.stringify(Dept) + ',Vendor: ' + JSON.stringify(Vendor) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    $("#Tabl").show();
+                    tableData = [];
+                    $.map(result, function (item) {
+                        optionItem = {}
+                        optionItem["SlNo"] = item.SlNo;
+                        optionItem["DocumentType"] = item.DocumentType;
+                        optionItem["Path"] = item.Path;
+                        optionItem["UploadDate"] = item.UploadDateStr;
+                        optionItem["Comments"] = item.Comments;
+
+                        tableData.push(optionItem);
+                    });
+                    console.log(tableData)
+                    DrawTable();
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
                     console.log(result.responseText)
                 }
             });
@@ -196,16 +275,50 @@
     function ShowHideDDL() {
         if ($("#rdnCustomer").is(":checked")) {
             $("#dvCustomer").show();
+            $("#dvInternalGroup").hide();
             $("#dvInternal").hide();
+            $('#dvVendors').hide();
         }
         else {
             $("#dvCustomer").hide();
             $("#dvInternal").show();
         }
-        //if ($("#rdnInternal").is(":checked")) {
-        //    $("#dvCustomer").hide();
-        //    $("#dvInternal").show();
-        //}
+    }
+
+    function FillDocumentTypeDDL(dept) {
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDocumentTypes", "DocumentLibrary")',
+                data: '{Type: ' + JSON.stringify(dept) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#divLoader").hide();
+                    var items;
+                    $("#ddlDocumentType").empty();
+                    items = "<option value='Please Select'>Please Select</option>";
+                    $.each(result, function (i, item) {
+                        items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                    });
+                    $("#ddlDocumentType").html(items);
+                },
+                error: function (result) {
+
+                    console.log(result.responseText)
+                }
+            });
+    }
+
+    function ShowDeptGroup() {
+        if ($("#ddlDepartment").val() == "Finance") {
+            $("#dvInternalGroup").show();
+
+        }
+        else {
+            $("#dvInternalGroup").hide();
+            $("#dvVendors").hide();
+        }
     }
 
     function handleFileSelectProductWise(evt) {
@@ -311,14 +424,15 @@
             fileData.append("GroupName", GroupName);
             fileData.append("Comment", Comment);
             fileData.append("DocType", DocType);
+            fileData.append("FinGroupName", $("#ddlDeptGroupDetails option:selected").text());
+            fileData.append("FinGroupId", $("#ddlDeptGroupDetails").val());
+        fileData.append("Department", $("#ddlDepartment option:selected").text());
+        fileData.append("Vendor", $("#ddlVendor option:selected").text());
 
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UploadDocument", "DocumentLibrary")',
-                //data: '{fileData: ' + JSON.stringify(DocumentStr) + ',filename: ' + JSON.stringify(filename) + ',GroupId: ' + JSON.stringify(GroupId) + ',GroupName: ' + JSON.stringify(GroupName) + ',Comment: ' + JSON.stringify(Comment) + ',DocType: ' + JSON.stringify(DocType) + '}',
-                //contentType: "application/json; charset=utf-8",
-                //dataType: "json",
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data
                 data: fileData,
@@ -328,7 +442,7 @@
                         cuteAlert({
                             type: "success",
                             title: "Saved",
-                            message: "Earn config saved successfully",
+                            message: "Document Uploaded successfully",
                             buttonText: "Okay"
                         }).then(() => {
 
@@ -375,7 +489,6 @@
                 }
             });
         }
-    //}
 
     function Index()
     {
@@ -383,7 +496,7 @@
         window.location.href = urlLink;
     }
 
-        function DrawTable() {
+    function DrawTable() {
 
             var table1 = $('#InstanceTable').DataTable();
             table1.destroy();
@@ -461,11 +574,3 @@
     }
 
 </script>
-@*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
-
-@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
-    <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />*@

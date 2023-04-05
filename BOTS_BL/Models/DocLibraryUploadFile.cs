@@ -14,6 +14,10 @@ namespace BOTS_BL.Models
         public string GroupName { get; set; }
         public string Comment { get; set; }
         public string DocType { get; set; }
+        public string FinGroupName { get; set; }
+        public string FinGroupId { get; set; }
+        public string Department { get; set; }
+        public string Vendor { get; set; }
 
     }
 }

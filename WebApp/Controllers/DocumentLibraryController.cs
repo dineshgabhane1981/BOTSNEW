@@ -22,6 +22,7 @@ namespace WebApp.Controllers
             DocumentLibraryViewModel objdata = new DocumentLibraryViewModel();
             List<tblDocumentsLibrary> ObjList = new List<tblDocumentsLibrary>();
             objdata.lstGroupDetails = DLR.GetGroupDetails(userDetails.LoginType, userDetails.LoginId);
+            objdata.lstDocumentType = DLR.GetDolumentTypesByDept("Customer");
             objdata.roleId = userDetails.LoginType;
             return View(objdata);
         }
@@ -39,26 +40,33 @@ namespace WebApp.Controllers
             string GroupName = objFileData.GroupName;
             string Comment = objFileData.Comment;
             string DocType = objFileData.DocType;
-
-            status = DLR.UploadDocumentToS3(fileData, fileName, Groupid, GroupName, Comment, DocType, Addedby, Addeddate);
+            string FinGroupid = objFileData.FinGroupId;
+            string FinGroupName = objFileData.FinGroupName;
+            string Department = objFileData.Department;
+            string Vendor = objFileData.Vendor;
+            status = DLR.UploadDocumentToS3(fileData, fileName, Groupid, GroupName, Comment, DocType, Addedby, Addeddate, FinGroupid, FinGroupName, Department, Vendor);
             return status;
         }
 
         [HttpPost]
-        public JsonResult ListDocuments(string jsonData)
+        public JsonResult ListDocuments(string GroupId, string Dept,string Vendor)
         {
             List<tblDocumentsLibrary> Doclist = new List<tblDocumentsLibrary>();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            Doclist = DLR.GetDocLibData(GroupId, Dept, Vendor);
+            //if (!string.IsNullOrEmpty(Dept))
+            //{
+            //    Doclist = DLR.GetDocLibData(GroupId, Dept);
+            //}
+            //else
+            //{
+            //    foreach (Dictionary<string, object> item in objData)
+            //    {
+            //        GroupId = Convert.ToString(item["GroupId"]);
 
-            foreach (Dictionary<string, object> item in objData)
-            {
-                string GroupId = Convert.ToString(item["GroupId"]);
-
-                Doclist = DLR.GetDocLibData(GroupId);
-            }
+            //        Doclist = DLR.GetDocLibData(GroupId, Dept);
+            //    }
+            //}
 
                 return new JsonResult() { Data = Doclist, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -79,5 +87,12 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = Filename, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+    
+        public JsonResult GetDocumentTypes(string Type)
+        {            
+            var objData = DLR.GetDolumentTypesByDept(Type);
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+    
     }
 }

@@ -17,6 +17,9 @@ namespace BOTS_BL.Models.CommonDB
         public string GroupName { get; set; }
 
         [StringLength(100)]
+        public string Department { get; set; }
+
+        [StringLength(100)]
         public string DocumentType { get; set; }
 
         public string Path { get; set; }
@@ -35,5 +38,7 @@ namespace BOTS_BL.Models.CommonDB
         public string FileName { get; set; }
         [NotMapped]
         public string UploadDateStr { get; set; }
+        [StringLength(100)]
+        public string  Vendor { get; set; }
     }
 }

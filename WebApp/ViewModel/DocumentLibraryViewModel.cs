@@ -9,23 +9,20 @@ namespace WebApp.ViewModel
 {
     public class DocumentLibraryViewModel
     {
-
         public List<SelectListItem> lstGroupDetails { get; set; }
-
         public tblGroupDetail tblGroupDetails { get; set; }
         public string dept { get; set; }
-
         public SelectListItem[] Departments()
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "HR", Value = "HR" }, new SelectListItem() { Text = "Sales", Value = "Sales" }, new SelectListItem() { Text = "Finance", Value = "Finance" } };
         }
-
+        public SelectListItem[] Vendors()
+        {
+            return new SelectListItem[4] { new SelectListItem() { Text = "Techocore", Value = "Techocore" }, new SelectListItem() { Text = "Vision", Value = "Vision" }, new SelectListItem() { Text = "Pinnacle", Value = "Pinnacle" }, new SelectListItem() { Text = "Value First", Value = "Value First" } };
+        }
         public string DocType { get; set; }
         public string roleId { get; set; }
-
-        public SelectListItem[] DocumentType()
-        {
-            return new SelectListItem[4] { new SelectListItem() { Text = "Configuration Sheet", Value = "ConfigurationSheet" }, new SelectListItem() { Text = "Knowledge Series", Value = "KnowledgeSeries" }, new SelectListItem() { Text = "Creatives", Value = "Creatives" }, new SelectListItem() { Text = "DLT Docs", Value = "DLTDocs" } };
-        }
+        public List<SelectListItem> lstDocumentType { get; set; }
+        public string Vendor { get; set; }
     }
 }
