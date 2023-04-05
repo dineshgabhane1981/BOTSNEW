@@ -989,7 +989,31 @@ namespace BOTS_BL.Repository
             }
             return objtbldepart;
         }
-        
+
+        public List<BOTS_TblDiscussion> GetTaskCount(string id)
+        {
+            List<BOTS_TblDiscussion> objtbldepart = new List<BOTS_TblDiscussion>();
+            int varid = Convert.ToInt32(id);
+            try
+            {
+                using (var context = new CommonDBContext())
+
+
+                {
+                    var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid && x.Status == "WIP").Count();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return objtbldepart;
+        }
+
+
+
         public void SendEmail(string _DepartHead, string _SendTo, bool _Filestatus, string _path,string _Addby, string _Member,string _SubCallType, string _CallType)
         {
             var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();

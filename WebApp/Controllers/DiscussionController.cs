@@ -263,5 +263,21 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult GetTaskCount(string Callid)
+        {
+            List<BOTS_TblDiscussion> objDepartMem = new List<BOTS_TblDiscussion>();
+
+            //JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            //json_serializer.MaxJsonLength = int.MaxValue;
+            //object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            //foreach (Dictionary<string, object> item in objData)
+
+            //string id = Convert.ToString(item["id"]);
+            objDepartMem = DR.GetTaskCount(Callid);
+
+
+            return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }

@@ -64,6 +64,7 @@
             @Html.HiddenFor(model => model.dept, new { @id = "hdnDepartment" })
             @Html.HiddenFor(model => model.prior, new { @id = "hdnPriority" })
             @Html.HiddenFor(model => model.Member, new { @id = "hdnMember" })
+            @Html.HiddenFor(model => model.objDiscussion.Status, new { @id = "hdnStatus" })
 
             <div class="card" style="margin-bottom: 20px;">
                 <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
@@ -98,8 +99,8 @@
                         Call Mode
                     </div>
                     @*<div class="col-sm-4" style="float:left;margin-top:10px;">
-                    @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
-                </div>*@
+                @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
+            </div>*@
                     <div class="col-sm-4" style="float:left;margin-top:20px;">
                         <input id="rbtnPhone" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Phone &nbsp;
                         <input id="rbtnZoom" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Zoom &nbsp;
@@ -138,12 +139,44 @@
                 </div>
 
                 <div class="row" style="margin: 0;">
+
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Discussion Regarding
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @*<div style="display:flex;">*@
+                        <input id="rbtnQuery" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Query
+                        <input id="rbtnRequest" name="ProductWise" type="radio" class="rbtnClass"> &nbsp; Request
+                        <input id="rbtnComplaint" name="ProductWise" type="radio" class="rbtnClass">&nbsp; Complaint
+                        <input id="rbtnOTP" name="ProductWise" type="radio" class="rbtnClass">&nbsp; OTP
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        No. Of Tasks
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" id="TaskCount" name="TaskCount" class="input100">
+                    </div>
+
+
+                </div>
+
+                <div class="row" style="margin: 0;">
+
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         Status
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.Status, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlStatus" })
+                        &nbsp; <input id="rbtnWIP" name="StatusWise" type="radio" class="rbtnClass"> &nbsp; WIP &nbsp;
+                        <input id="rbtnCompleted" name="StatusWise" type="radio" class="rbtnClass"> &nbsp; Completed &nbsp;
                     </div>
+
+
+                    @*<div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Status
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.DropDownListFor(model => model.objDiscussion.Status, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlStatus" })
+            </div>*@
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         FollowUp Date
                     </div>
@@ -186,8 +219,8 @@
                         </select>
                     </div>
                     @*<div class="col-sm-4" style="float:left;margin-top:10px;">
-                    @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
-                </div>*@
+                @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Status(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
+            </div>*@
                 </div>
 
                 <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -501,6 +534,17 @@
 
         if (returnStatus) {
 
+            var Status;
+            var File = $("#uploadDocBase64").val();
+            if (document.getElementById("rbtnWIP").checked) {
+                Status = "WIP"
+            }
+            else {
+                Status = "Completed"
+            }
+            $("#hdnStatus").val(Status);
+
+
             var CallMode;
             var File = $("#uploadDocBase64").val();
 
@@ -776,5 +820,33 @@
                     console.log(result.responseText)
                 }
             });
+    });
+
+     $('#ddMembers').change(function () {
+
+        if ($("#ddMembers option:selected").text() != "Please Select") {
+            var Member = $("#ddMembers option:selected").text();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTaskCount", "Discussion")',
+                //url: "/Discussion/GetSubCallTypes",
+                data: '{callId: ' + JSON.stringify(Member) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#TaskCount").empty();
+                    $.each(result, function () {
+                        $("#TaskCount").text(this.Text);
+                    });
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                }
+            });
+        }
+        else {
+            $("#TaskCount").empty();
+
+        }
     });
 </script>
