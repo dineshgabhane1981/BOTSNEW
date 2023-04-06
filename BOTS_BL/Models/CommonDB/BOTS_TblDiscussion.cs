@@ -54,7 +54,6 @@ namespace BOTS_BL.Models.CommonDB
         [NotMapped]
         public string GroupName { get; set; }
 
-        
         public string Department { get; set; }
         
         public string AssignedMember { get; set; }
@@ -62,6 +61,9 @@ namespace BOTS_BL.Models.CommonDB
         public string Priority { get; set; }
         public string DiscussionType { get; set; }
         public string AttachedFile { get; set; }
+
+        [NotMapped]
+        public string ReassignMember { get; set; }
     }
 
     public class DiscussionDetails

@@ -125,7 +125,7 @@ namespace BOTS_BL.Repository
         }
         public bool AddDiscussions(BOTS_TblDiscussion objDiscussion, string _File, string FileName)
         {
-            bool status = false,Filestatus = false;
+            bool status = false;
             string path = string.Empty;
 
 
@@ -142,7 +142,6 @@ namespace BOTS_BL.Repository
 
                     if (!string.IsNullOrEmpty(_File))
                     {
-                        Filestatus = true;
                         byte[] imageBytes = Convert.FromBase64String(_File);
                         MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
                         ms.Write(imageBytes, 0, imageBytes.Length);
@@ -179,7 +178,6 @@ namespace BOTS_BL.Repository
                     var _CallType = context.BOTS_TblCallTypes.Where(x=> x.Id == objDiscussion.CallType).FirstOrDefault();
 
                     string _DepartHead = DepartmentHead.EmailId;
-                    //string _Sendfrom = Sendfrom.EmailId;
                     string _Addby = Sendfrom.Members;
                     string _SendTo = SendTo.EmailId;
                     string _Priority = objDiscussion.Priority;
@@ -187,7 +185,7 @@ namespace BOTS_BL.Repository
                    string _CallTypetext  = _CallType.CallType;
                     string _subtypetext = _SubCallType.CallSubType;
 
-                    Thread _job1 = new Thread(() => SendEmail(_DepartHead, _SendTo, Filestatus, path, _Addby, _Member, _subtypetext, _CallTypetext));
+                    Thread _job1 = new Thread(() => SendEmail(_DepartHead, _SendTo, _Priority,path, _Addby, _Member, _subtypetext, _CallTypetext));
                     _job1.Start();
 
 
@@ -206,21 +204,27 @@ namespace BOTS_BL.Repository
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             bool status = false;
+            string path = string.Empty;
+            bool UpdateStatus = false;
+            string _SendTo = string.Empty;
             try
             {
                 string _FilePath = ConfigurationManager.AppSettings["DiscussionFileUpload"];
+                string _FileURL = ConfigurationManager.AppSettings["DiscussionDocumentURL"];
                 string FileLocation = _FilePath + "/" + DoneFileName;
 
                 if (!string.IsNullOrEmpty(FileDone))
                 {
+                    
                     byte[] imageBytes = Convert.FromBase64String(FileDone);
                     MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
                     ms.Write(imageBytes, 0, imageBytes.Length);
-                    var path = HttpContext.Current.Server.MapPath("~/DiscussionFileUpload/" + DoneFileName);
+                    path = HttpContext.Current.Server.MapPath("~/DiscussionFileUpload/" + DoneFileName);
                     FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
                     ms.WriteTo(fileNew);
                     fileNew.Close();
                     ms.Close();
+                    objsubdiscussion.AttachedFile = _FileURL + DoneFileName;
                 }
 
                 using (var context = new CommonDBContext())
@@ -247,9 +251,49 @@ namespace BOTS_BL.Repository
                     objsubdiscussion.Status = objDiscussion.Status;
                     objsubdiscussion.UpdatedBy = LoginId;
                     objsubdiscussion.AddedDate = DateTime.Now;
+                    objsubdiscussion.ReassignedMember = Reassign;
+                    
                     context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                     context.SaveChanges();
                     status = true;
+
+                    int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
+
+                    var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == objDiscussion.Department && x.Role == "02").FirstOrDefault();
+                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();                    
+                    var SendTo = context.tblDepartMembers.Where(x => x.Members == Reassign).FirstOrDefault();
+
+                    var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
+                    var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
+
+                    string _DepartHead = DepartmentHead.EmailId;
+                    string _Addby = Sendfrom.Members;
+                    string _AddbyEmail = Sendfrom.EmailId;
+                    if (objsubdiscussion.Status == "Completed")
+                    {
+                        _SendTo = _AddbyEmail;
+                        UpdateStatus = true;
+                    }
+                    else
+                    {
+                        _SendTo = SendTo.EmailId;
+                    }
+                    string _Priority = objDiscussion.Priority;
+                    string _Member = Reassign;
+                    string _CallTypetext = _CallType.CallType;
+                    string _subtypetext = _SubCallType.CallSubType;
+
+                    if (UpdateStatus)
+                    {
+                        Thread _job1 = new Thread(() => SendEmailComplete(_DepartHead, _SendTo, path, _Priority, _Addby, _Member, _subtypetext, _CallTypetext));
+                        _job1.Start();
+                    }
+                    else
+                    {
+                        Thread _job1 = new Thread(() => SendEmailUpdate(_DepartHead, _SendTo, path, _Priority, _Addby, _Member, _subtypetext, _CallTypetext));
+                        _job1.Start();
+                    }
+       
                 }
             }
             catch (Exception ex)
@@ -284,7 +328,8 @@ namespace BOTS_BL.Repository
                                                 Description = ct.Description,
                                                 UpdatedBy = cld.UserName,
                                                 Status = ct.Status,
-                                                AddedDate = ct.AddedDate
+                                                AddedDate = ct.AddedDate,
+                                                RessignedTo = ct.ReassignedMember
 
                                             }).OrderByDescending(x => x.FollowupDate).ToList();
 
@@ -960,7 +1005,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    objtbldepart = context.tblDepartMembers.Where(x => x.Department == Department).ToList();
+                    objtbldepart = context.tblDepartMembers.Where(x => x.Department == Department && x.status == "00").ToList();
                 }
 
             }
@@ -973,15 +1018,15 @@ namespace BOTS_BL.Repository
         public List<tblDepartMember> GetReAssignMemberdetails(string id)
         {
             List<tblDepartMember> objtbldepart = new List<tblDepartMember>();
+            //List<BOTS_TblDiscussion> objdata = new List<BOTS_TblDiscussion>();
             int varid = Convert.ToInt32(id);
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid).ToList();
-
-                    //objdata.
-                    //objtbldepart = = context.tblDepartMembers.Where(x => x.Department == Department).ToList();
+                    var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid).FirstOrDefault();
+                    string AssignedDepartment = objdata.Department;
+                    objtbldepart = context.tblDepartMembers.Where(x => x.Department == AssignedDepartment && x.status == "00").ToList();
                 }
 
             }
@@ -1009,9 +1054,7 @@ namespace BOTS_BL.Repository
             return taskCount;
         }
 
-
-
-        public void SendEmail(string _DepartHead, string _SendTo, bool _Filestatus, string _path,string _Addby, string _Member,string _SubCallType, string _CallType)
+        public void SendEmail(string _DepartHead, string _SendTo,string _Priority, string _path,string _Addby, string _Member,string _SubCallType, string _CallType)
         {
             var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
             var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
@@ -1021,7 +1064,7 @@ namespace BOTS_BL.Repository
                 StringBuilder str = new StringBuilder();
                 str.AppendLine("Dear "+ _Member + ",");
                 str.AppendLine();
-                str.AppendLine("You have assigned a task with sub call type - " + _SubCallType + "from "+ _Addby);
+                str.AppendLine("You have assigned a task with sub call type - " + _SubCallType + " from "+ _Addby +" with priority "+ _Priority);
                 str.AppendLine();
                 str.AppendLine("Regards,");
                 str.AppendLine(" - BlueOcktopus Team");
@@ -1051,6 +1094,85 @@ namespace BOTS_BL.Repository
                 //status = true;
             }
             
+        }
+
+        public void SendEmailUpdate(string _DepartHead, string _SendTo, string path,string _Priority, string _Addby, string _Member, string _subtypetext, string _CallTypetext)
+        {
+            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
+            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+
+            using (MailMessage mail = new MailMessage(from, _SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            {
+                StringBuilder str = new StringBuilder();
+                str.AppendLine("Dear " + _Member + ",");
+                str.AppendLine();
+                str.AppendLine("You have assigned a task with sub call type - " + _subtypetext + " from " + _Addby + " with priority " + _Priority);
+                str.AppendLine();
+                str.AppendLine("Regards,");
+                str.AppendLine(" - BlueOcktopus Team");
+
+                mail.Subject = "Call type " + _CallTypetext + " SubCallType " + _subtypetext;
+                mail.SubjectEncoding = System.Text.Encoding.Default;
+                mail.CC.Add(_DepartHead);
+                mail.Body = str.ToString();
+                mail.IsBodyHtml = false;
+                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                if (!string.IsNullOrEmpty(path))
+                {
+                    Attachment data = new Attachment(path, MediaTypeNames.Application.Octet);
+                    mail.Attachments.Add(data);
+                }
+
+
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.zoho.com";
+                smtp.EnableSsl = true;
+                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = networkCredential;
+                smtp.Port = 587;
+                smtp.Send(mail);
+                
+            }
+        }
+
+        public void SendEmailComplete(string _DepartHead, string _SendTo, string path, string _Priority, string _Addby, string _Member, string _subtypetext, string _CallTypetext)
+        {
+            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
+            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+
+            using (MailMessage mail = new MailMessage(from, _SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            {
+                StringBuilder str = new StringBuilder();
+                str.AppendLine("Dear " + _Addby + ",");
+                str.AppendLine();
+                str.AppendLine("You have assigned a task is Completed by "+ _Member);
+                str.AppendLine();
+                str.AppendLine("Regards,");
+                str.AppendLine(" - BlueOcktopus Team");
+
+                mail.Subject = "Call type " + _CallTypetext + " SubCallType " + _subtypetext + " Done";
+                mail.SubjectEncoding = System.Text.Encoding.Default;
+                mail.CC.Add(_DepartHead);
+                mail.Body = str.ToString();
+                mail.IsBodyHtml = false;
+                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                if (!string.IsNullOrEmpty(path))
+                {
+                    Attachment data = new Attachment(path, MediaTypeNames.Application.Octet);
+                    mail.Attachments.Add(data);
+                }
+
+                SmtpClient smtp = new SmtpClient();
+                smtp.Host = "smtp.zoho.com";
+                smtp.EnableSsl = true;
+                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                smtp.UseDefaultCredentials = true;
+                smtp.Credentials = networkCredential;
+                smtp.Port = 587;
+                smtp.Send(mail);
+
+            }
         }
 
     }

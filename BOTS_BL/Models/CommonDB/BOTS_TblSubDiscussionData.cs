@@ -32,6 +32,10 @@ namespace BOTS_BL.Models.CommonDB
         public string Status { get; set; }
 
         public DateTime? AddedDate { get; set; }
+
+        public string ReassignedMember { get; set; }
+
+        public string AttachedFile { get; set; }
     }
 
     public class SubDiscussionData
@@ -45,5 +49,7 @@ namespace BOTS_BL.Models.CommonDB
         public string Status { get; set; }
         public string UpdatedDate { get; set; }
         public DateTime? AddedDate { get; set; }
-    }
+
+        public string RessignedTo { get; set; }
+}
 }
