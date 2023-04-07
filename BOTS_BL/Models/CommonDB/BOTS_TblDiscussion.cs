@@ -59,8 +59,10 @@ namespace BOTS_BL.Models.CommonDB
         public string AssignedMember { get; set; }
         
         public string Priority { get; set; }
+        
         public string DiscussionType { get; set; }
         public string AttachedFile { get; set; }
+        public string DiscussionDoneNotDone { get; set; }
 
         [NotMapped]
         public string ReassignMember { get; set; }

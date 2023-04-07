@@ -155,7 +155,10 @@ namespace BOTS_BL.Repository
                         ms.Close();
                         objDiscussion.AttachedFile = _FileURL + FileName;
                     }
-
+                    if(objDiscussion.SubCallType!="25" && objDiscussion.SubCallType != "26" && objDiscussion.SubCallType != "27")
+                    {
+                        objDiscussion.DiscussionDoneNotDone = null;
+                    }
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
                     if (objDiscussion.Status == "WIP")

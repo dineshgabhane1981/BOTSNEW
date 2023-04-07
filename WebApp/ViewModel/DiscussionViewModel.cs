@@ -61,5 +61,9 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Valid", Value = "Valid" }, new SelectListItem() { Text = "Invalid", Value = "Invalid" } };
         }
+        public SelectListItem[] DiscussionDoneNotDone()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Done", Value = "Done" }, new SelectListItem() { Text = "Not Done", Value = "Not Done" } };
+        }
     }
 }

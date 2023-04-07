@@ -125,7 +125,10 @@
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
                     </div>
-              
+                    <div id="dvDoneNotDone"  style="float:left;margin-top:10px;display:none;">
+                        @Html.DropDownListFor(model => model.objDiscussion.DiscussionDoneNotDone, new SelectList(Model.DiscussionDoneNotDone(), "Value", "Text"),  htmlAttributes: new { @class = "input20", @id = "ddlDiscussionStatus" })
+                    </div>
+
                 </div>
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
@@ -479,6 +482,12 @@
             }
             else {
                 $('#ddlCallType').css('border-color', '');
+            }
+            if ($("#ddlSubCallType").val() == "25" || $("#ddlSubCallType").val() == "26" || $("#ddlSubCallType").val() == "27") {
+                $("#dvDoneNotDone").show();
+            }
+            else {
+                $("#dvDoneNotDone").hide();
             }
         });
 
