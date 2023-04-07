@@ -74,6 +74,9 @@ namespace WebApp.Controllers
             callSubType.Add(item);
             objData.lstCallSubTypes = callSubType;
 
+            var CustNames = DR.GetAllDiscussionCustNames();
+            ViewBag.CustNames = CustNames.ToArray();
+            ViewBag.CustNames1 = CustNames;
             return View(objData);
         }
 
@@ -107,12 +110,6 @@ namespace WebApp.Controllers
             objData.objDiscussion.AddedDate = DateTime.Now;
             objData.objDiscussion.UpdatedDate = DateTime.Now;
             objData.objDiscussion.AddedBy = userDetails.LoginId;
-           
-
-
-            //objData.objDiscussion.Department = objData.dept;
-            //objData.objDiscussion.AssignedMember = objData.Member;
-            //objData.objDiscussion.Priority = objData.prior;
             string File = objData.File;
             string FileName = objData.FileName;
             status = DR.AddDiscussions(objData.objDiscussion, File, FileName);
@@ -121,8 +118,7 @@ namespace WebApp.Controllers
         }
         public JsonResult GetSubDiscussionList(int Id)
         {
-            List<SubDiscussionData> lstsubdiscussionLists = new List<SubDiscussionData>();
-            // List<BOTS_TblSubDiscussionData> lstsubdiscussionlists = new List<BOTS_TblSubDiscussionData>();
+            List<SubDiscussionData> lstsubdiscussionLists = new List<SubDiscussionData>();            
             lstsubdiscussionLists = DR.GetNestedDiscussionList(Id);
 
             return new JsonResult() { Data = lstsubdiscussionLists, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -271,5 +267,10 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = TaskCount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult GetDiscussionCustMobileNo(string CustName)
+        {
+            var CustMobileNo = DR.GetDiscussionCustMobile(CustName);
+            return new JsonResult() { Data = CustMobileNo, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

@@ -161,6 +161,15 @@ namespace BOTS_BL.Repository
                     }
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
+                    var isCustomerExist = context.tblDiscussionCustomerDatas.Where(x => x.MobileNo == objDiscussion.ContactNo).FirstOrDefault();
+                    if (isCustomerExist == null)
+                    {
+                        tblDiscussionCustomerData objDiscussionCustData = new tblDiscussionCustomerData();
+                        objDiscussionCustData.MobileNo = objDiscussion.ContactNo;
+                        objDiscussionCustData.CustomerName = objDiscussion.SpokenTo;
+                        context.tblDiscussionCustomerDatas.AddOrUpdate(objDiscussionCustData);
+                        context.SaveChanges();
+                    }
                     if (objDiscussion.Status == "WIP")
                     {
                         objsubdiscussion.DiscussionId = objDiscussion.Id;
@@ -1208,5 +1217,23 @@ namespace BOTS_BL.Repository
             }
         }
 
+        public string GetDiscussionCustMobile(string CustomerName)
+        {
+            string CustMobile = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                CustMobile = context.tblDiscussionCustomerDatas.Where(x => x.CustomerName == CustomerName).Select(y => y.MobileNo).FirstOrDefault();
+            }
+            return CustMobile;
+        }
+        public List<string> GetAllDiscussionCustNames()
+        {
+            List<string> lstCustNames = new List<string>();
+            using (var context = new CommonDBContext())
+            {
+                lstCustNames = context.tblDiscussionCustomerDatas.Select(y => y.CustomerName).ToList();
+            }
+            return lstCustNames;
+        }
     }
 }

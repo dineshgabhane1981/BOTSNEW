@@ -49,10 +49,11 @@
     input:read-only {
         background-color: lightgray;
     }
-    .chkClass{
-        width:20px;
-        height:20px;
-        cursor:pointer;
+
+    .chkClass {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
     }
 </style>
 <div class="app-main__inner">
@@ -62,163 +63,163 @@
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             @using (Html.BeginForm("AddDiscussion", "Discussion", FormMethod.Post, new { id = "frmadddiscussion", enctype = "multipart/form-data" }))
             {
-            @Html.HiddenFor(model => model.File, new { @id = "uploadDocBase64" })
-            @Html.HiddenFor(model => model.FileName, new { @id = "uploadFileName" })
-            @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
+                @Html.HiddenFor(model => model.File, new { @id = "uploadDocBase64" })
+                @Html.HiddenFor(model => model.FileName, new { @id = "uploadFileName" })
+                @Html.HiddenFor(model => model.objDiscussion.GroupId, new { @id = "hdnGroupID" })
 
-            <div class="card" style="margin-bottom: 20px;">
-                <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
-                    Customer Name -  @Model.objDiscussion.GroupName
-                </div>
-            </div>
-            <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;margin-bottom:10px;">
-                <div class="row" style="margin: 0;">
-                    <div style="float:left;text-align:right;width:100px;margin-top:10px;">
-                        Spoken To
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.objDiscussion.SpokenTo, new { @class = "input100", @id = "txtSpokenTo" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        Contact No
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.objDiscussion.ContactNo, new { @class = "input100", @type = "number", @id = "txtContactNo" })
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="row" style="margin: 10px;align-self:center;font-size:22px;">
+                        Customer Name -  @Model.objDiscussion.GroupName
                     </div>
                 </div>
-                <div class="row" style="margin: 0;">
+                <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;margin-bottom:10px;">
+                    <div class="row" style="margin: 0;">
+                        <div style="float:left;text-align:right;width:100px;margin-top:10px;">
+                            Spoken To
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.objDiscussion.SpokenTo, new { @class = "input100", @id = "txtSpokenTo" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Contact No
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.objDiscussion.ContactNo, new { @class = "input100", @type = "number", @id = "txtContactNo" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
 
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Customer Type
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Customer Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.CustomerType, new SelectList(Model.CustomerType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCustomerType" })
+
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 20px;">
+                            Call Mode
+                        </div>
+                        @*<div class="col-sm-4" style="float:left;margin-top:10px;">
+                                @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
+                            </div>*@
+                        <div class="col-sm-4" style="float:left;margin-top:20px;">
+                            @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Phone", new { @id = "rbtnPhone", @checked = "checked", @class = "chkClass" }) <span>Phone</span>
+                            @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Zoom", new { @id = "rbtnZoom", @class = "chkClass" }) Zoom
+                            @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Physical", new { @id = "rbtnPhysical", @class = "chkClass" }) Physical
+                            @*<input id="rbtnPhone" name="CallMode" type="radio" class="rbtnClass" checked> &nbsp; Phone &nbsp;
+                                <input id="rbtnZoom" name="CallMode" type="radio" class="rbtnClass"> &nbsp; Zoom &nbsp;
+                                <input id="rbtnPhysical" name="CallMode" type="radio" class="rbtnClass">&nbsp; Physical &nbsp;*@
+
+                        </div>
                     </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.CustomerType, new SelectList(Model.CustomerType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCustomerType" })
+
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Call Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.CallType, new SelectList(Model.lstCallTypes, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallType" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Call Sub Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
+                        </div>
+                        <div id="dvDoneNotDone" style="float:left;margin-top:10px;display:none;">
+                            @Html.DropDownListFor(model => model.objDiscussion.DiscussionDoneNotDone, new SelectList(Model.DiscussionDoneNotDone(), "Value", "Text"), htmlAttributes: new { @class = "input20", @id = "ddlDiscussionStatus" })
+                        </div>
 
                     </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 20px;">
-                        Call Mode
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Department
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.Department, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDepartment" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            Members
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.AssignedMember, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddMembers" })
+                            @*<select id="ddMembers" class="input100"><option value="S">Please Select</option></select>*@
+                        </div>
                     </div>
-                    @*<div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.DropDownListFor(model => model.objDiscussion.CallMode, new SelectList(Model.CallMode(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallMode" })
-            </div>*@
-                <div class="col-sm-4" style="float:left;margin-top:20px;">
-                    @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Phone", new { @id = "rbtnPhone", @checked = "checked", @class= "chkClass" }) <span>Phone</span>
-                    @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Zoom", new { @id = "rbtnZoom", @class = "chkClass" }) Zoom
-                    @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Physical", new { @id = "rbtnPhysical", @class = "chkClass" }) Physical
-                    @*<input id="rbtnPhone" name="CallMode" type="radio" class="rbtnClass" checked> &nbsp; Phone &nbsp;
-                    <input id="rbtnZoom" name="CallMode" type="radio" class="rbtnClass"> &nbsp; Zoom &nbsp;
-                    <input id="rbtnPhysical" name="CallMode" type="radio" class="rbtnClass">&nbsp; Physical &nbsp;*@
+
+                    <div class="row" style="margin: 0;">
+
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Discussion Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Query", new { @id = "rbtnQuery", @checked = "checked", @class = "chkClass" }) Query
+                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Request", new { @id = "rbtnRequest", @class = "chkClass" }) Request
+                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Complaint", new { @id = "rbtnComplaint", @class = "chkClass" }) Complaint
+                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "OTP", new { @id = "rbtnOTP", @class = "chkClass" }) OTP
+
+                            @*<input id="rbtnQuery" name="DiscussionType" type="radio" class="rbtnClass" checked> &nbsp; Query
+                                <input id="rbtnRequest" name="DiscussionType" type="radio" class="rbtnClass"> &nbsp; Request
+                                <input id="rbtnComplaint" name="DiscussionType" type="radio" class="rbtnClass">&nbsp; Complaint
+                                <input id="rbtnOTP" name="DiscussionType" type="radio" class="rbtnClass">&nbsp; OTP*@
+                        </div>
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            No. Of Tasks
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <h4><label id="TaskCount"></label></h4>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Status
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.RadioButtonFor(model => model.objDiscussion.Status, "WIP", new { @id = "rbtnWIP", @checked = "checked", @class = "chkClass" }) WIP
+                            @Html.RadioButtonFor(model => model.objDiscussion.Status, "Completed", new { @id = "rbtnCompleted", @class = "chkClass" }) Completed
+                            @*&nbsp; <input id="rbtnWIP" name="StatusWise" type="radio" class="rbtnClass" checked> &nbsp; WIP &nbsp;
+                                <input id="rbtnCompleted" name="StatusWise" type="radio" class="rbtnClass"> &nbsp; Completed &nbsp;*@
+                        </div>
+
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                            FollowUp Date
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextBoxFor(model => model.objDiscussion.FollowupDate, new { @class = "input100", @id = "txtFollowupDate" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Description
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.TextAreaFor(model => model.objDiscussion.Description, new { @class = "input100", @id = "txtDescription" })
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Priority
+                        </div>
+                        <div style="float:left;margin-top:10px;margin-left:30px;">
+                            @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Priority(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Upload
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="file" id="uploadfile" />
+                            @*@Html.TextBoxFor(model => model.File, new { type = "file", @id = "FileUpload" })*@
+                        </div>
+
+                    </div>
+
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                        <button type="button" id="btnCancel" class="btn btn-primary pull-right" style="margin-right:10px;">Cancel</button>
+                        <button type="button" id="btnDiscussionSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
+                    </div>
 
                 </div>
-                </div>
-
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Call Type
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.CallType, new SelectList(Model.lstCallTypes, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCallType" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        Call Sub Type
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
-                    </div>
-                    <div id="dvDoneNotDone"  style="float:left;margin-top:10px;display:none;">
-                        @Html.DropDownListFor(model => model.objDiscussion.DiscussionDoneNotDone, new SelectList(Model.DiscussionDoneNotDone(), "Value", "Text"),  htmlAttributes: new { @class = "input20", @id = "ddlDiscussionStatus" })
-                    </div>
-
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Department
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.Department, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDepartment" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        Members
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.AssignedMember, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddMembers" })
-                        @*<select id="ddMembers" class="input100"><option value="S">Please Select</option></select>*@
-                    </div>
-                </div>
-
-                <div class="row" style="margin: 0;">
-
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Discussion Type
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Query", new { @id = "rbtnQuery", @checked = "checked", @class = "chkClass" }) Query
-                        @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Request", new { @id = "rbtnRequest", @class = "chkClass" }) Request
-                        @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Complaint", new { @id = "rbtnComplaint", @class = "chkClass" }) Complaint
-                        @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "OTP", new { @id = "rbtnOTP", @class = "chkClass" }) OTP
-
-                        @*<input id="rbtnQuery" name="DiscussionType" type="radio" class="rbtnClass" checked> &nbsp; Query
-                        <input id="rbtnRequest" name="DiscussionType" type="radio" class="rbtnClass"> &nbsp; Request
-                        <input id="rbtnComplaint" name="DiscussionType" type="radio" class="rbtnClass">&nbsp; Complaint
-                        <input id="rbtnOTP" name="DiscussionType" type="radio" class="rbtnClass">&nbsp; OTP*@
-                    </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        No. Of Tasks
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <h4><label id="TaskCount"></label></h4>
-                    </div>
-                </div>
-
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Status
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.RadioButtonFor(model => model.objDiscussion.Status, "WIP", new { @id = "rbtnWIP", @checked = "checked", @class = "chkClass" }) WIP
-                        @Html.RadioButtonFor(model => model.objDiscussion.Status, "Completed", new { @id = "rbtnCompleted", @class = "chkClass" }) Completed
-                        @*&nbsp; <input id="rbtnWIP" name="StatusWise" type="radio" class="rbtnClass" checked> &nbsp; WIP &nbsp;
-                        <input id="rbtnCompleted" name="StatusWise" type="radio" class="rbtnClass"> &nbsp; Completed &nbsp;*@
-                    </div>
-                   
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        FollowUp Date
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.objDiscussion.FollowupDate, new { @class = "input100", @id = "txtFollowupDate" })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Description
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objDiscussion.Description, new { @class = "input100", @id = "txtDescription" })
-                    </div>
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Priority
-                    </div>
-                    <div style="float:left;margin-top:10px;margin-left:30px;">
-                        @Html.DropDownListFor(model => model.objDiscussion.Priority, new SelectList(Model.Priority(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlPriority" })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Upload
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="file" id="uploadfile" />
-                        @*@Html.TextBoxFor(model => model.File, new { type = "file", @id = "FileUpload" })*@
-                    </div>                   
-                   
-                </div>
-
-                <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-                    <button type="button" id="btnCancel" class="btn btn-primary pull-right" style="margin-right:10px;">Cancel</button>
-                    <button type="button" id="btnDiscussionSave" class="btn btn-primary pull-right" onclick="return CheckValidation();" style="margin-right:10px;">Save</button>
-                </div>
-
-            </div>
             }
             <div class="row">
                 <div class="col search-container">
@@ -313,17 +314,25 @@
         dateFormat: "yy-mm-dd",
         minDate: today,
     });
+    var availableTags = [];
     $(document).ready(function () {
+        availableTags = @Html.Raw(Json.Encode(ViewBag.CustNames1));
+        $("#txtSpokenTo").autocomplete({
+            source: availableTags
+        });
+
+        $("#txtSpokenTo").focusout(function () {
+            GetMobileNo($("#txtSpokenTo").val());
+        });
 
         document.getElementById("uploadfile").addEventListener('change', handleFileSelect, false);
         document.getElementById("idFileDone").addEventListener('change', handleDoneFile, false);
-               
+
         $('#ddlStatus').change(function () {
             if ($('#ddlStatus').val() == "Completed") {
                 $('#txtFollowupDate').attr("disabled", "disabled");
             }
             else {
-
                 $('#txtFollowupDate').removeAttr("disabled");
             }
         });
@@ -371,6 +380,25 @@
         });
 
     });
+
+    function GetMobileNo(SpokenToName) {
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDiscussionCustMobileNo", "Discussion")',
+            data: '{CustName: ' + JSON.stringify(SpokenToName) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#txtContactNo").val(result);
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                }
+            });
+    }
+
 
     function ShowHideFollowUpDate() {
         if ($("#rbtnWIP").is(":checked")){
@@ -567,7 +595,7 @@
                 CallMode = "Physical"
             }
 
-            $("#hdnCallMode").val(CallMode);          
+            $("#hdnCallMode").val(CallMode);
 
             //var data = $('#frmadddiscussion').serialize() + '&Member=' + Member + '&File=' + File + '&FileName=' + UploadFileName; //'&FileUpload=' + UploadFile +
 
@@ -639,7 +667,7 @@
         $("#ddReassignMember").empty()
         $("#ddReassignMember").append("<option>Please Select</option>");
         $("#ddReassignMember").append("<option>" + AddedBy + "</option>");
-    
+
         var FilterData = [];
         item = {};
         item["id"] = id;
@@ -653,7 +681,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(result)  
+                    console.log(result)
                     for (item in result) {
                         $("#ddReassignMember").append("<option>" + result[item].Members + "</option>");
                     }
@@ -685,7 +713,7 @@
                 data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) +'}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                
+
                 success: function (result) {
                     $("#myModal").hide(1000);
                 },
@@ -769,7 +797,7 @@
                 else {
                     htmlStr += "<td style=\"width: 100px;\">" + item.AssignedTo + "</td>";
                 }
-                
+
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });

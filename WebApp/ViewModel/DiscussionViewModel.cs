@@ -28,6 +28,8 @@ namespace WebApp.ViewModel
         public string File { get; set; }
 
         public string FileName { get; set; }
+        public string[] CustNames { get; set; }
+        public List<string> CustNames1 { get; set; }
 
 
         public SelectListItem[] CallMode()
