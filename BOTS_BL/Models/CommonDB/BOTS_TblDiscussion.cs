@@ -83,9 +83,27 @@ namespace BOTS_BL.Models.CommonDB
         public string Description { get; set; }
         public string ActionItems { get; set; }
         public string AddedBy { get; set; }
-        
+        public string AssignedMember { get; set; }
+
 
 
     }
 
+    public class EmailDetails
+    {
+        public string DepartHead { get; set; }
+        public string Addby { get; set; }
+        public string SendTo { get; set; }
+        public string Priority { get; set; }
+        public string Member { get; set; }
+        public string CallTypetext { get; set; }
+        public string subtypetext { get; set; }
+        public string GroupName { get; set; }
+        public int id { get; set; }
+        public string Description { get; set; } 
+        public string FilePath { get; set; }
+        public string TeamName { get; set; }
+        public string AddbyEmail { get; set; }
+        public string MemberCompleted { get; set; }
+    }
 }

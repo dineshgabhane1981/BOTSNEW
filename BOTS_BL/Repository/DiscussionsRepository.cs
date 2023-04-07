@@ -52,6 +52,8 @@ namespace BOTS_BL.Repository
                                        ActionItems = c.ActionItems,
                                        AddedBy = cld.UserName,
                                        Status = c.Status,
+                                       AssignedMember = c.AssignedMember
+
 
                                    }).OrderByDescending(x => x.AddedDate).ToList();
                     }
@@ -75,6 +77,7 @@ namespace BOTS_BL.Repository
                                        ActionItems = c.ActionItems,
                                        AddedBy = cld.UserName,
                                        Status = c.Status,
+                                       AssignedMember = c.AssignedMember
 
                                    }).OrderByDescending(x => x.AddedDate).ToList();
                     }
@@ -163,6 +166,7 @@ namespace BOTS_BL.Repository
                         objsubdiscussion.Description = objDiscussion.Description;
                         objsubdiscussion.Status = objDiscussion.Status;
                         objsubdiscussion.UpdatedBy = objDiscussion.AddedBy;
+                        objsubdiscussion.ReassignedMember = objDiscussion.AssignedMember;
                         context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                         context.SaveChanges();
                     }
@@ -170,22 +174,32 @@ namespace BOTS_BL.Repository
 
 
                     int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
+                    int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
 
                     var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == objDiscussion.Department && x.Role == "02").FirstOrDefault();
                     var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == objDiscussion.AssignedMember).FirstOrDefault();
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x=> x.Id == objDiscussion.CallType).FirstOrDefault();
+                    var _GroupDetails = context.tblGroupDetails.Where(x=> x.GroupId == _GroupId).FirstOrDefault();
 
-                    string _DepartHead = DepartmentHead.EmailId;
-                    string _Addby = Sendfrom.Members;
-                    string _SendTo = SendTo.EmailId;
-                    string _Priority = objDiscussion.Priority;
-                    string _Member = objDiscussion.AssignedMember;
-                   string _CallTypetext  = _CallType.CallType;
-                    string _subtypetext = _SubCallType.CallSubType;
 
-                    Thread _job1 = new Thread(() => SendEmail(_DepartHead, _SendTo, _Priority,path, _Addby, _Member, _subtypetext, _CallTypetext));
+
+                    EmailDetails ObjEmailData = new EmailDetails();
+                    ObjEmailData.DepartHead = DepartmentHead.EmailId;
+                    ObjEmailData.Addby = Sendfrom.Members;
+                    ObjEmailData.SendTo = SendTo.EmailId;
+                    ObjEmailData.Priority = objDiscussion.Priority;
+                    ObjEmailData.Member = objDiscussion.AssignedMember;
+                    ObjEmailData.CallTypetext  = _CallType.CallType;
+                    ObjEmailData.subtypetext = _SubCallType.CallSubType;
+                    ObjEmailData.GroupName = _GroupDetails.GroupName;
+                    ObjEmailData.id = objDiscussion.Id;
+                    ObjEmailData.Description = objDiscussion.Description;
+                    ObjEmailData.FilePath = path;
+                    ObjEmailData.TeamName = Sendfrom.Department;
+   
+                    Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
                     _job1.Start();
 
 
@@ -198,7 +212,6 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-
         public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone)
         {
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
@@ -258,39 +271,51 @@ namespace BOTS_BL.Repository
                     status = true;
 
                     int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
+                    int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
 
                     var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == objDiscussion.Department && x.Role == "02").FirstOrDefault();
                     var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();                    
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == Reassign).FirstOrDefault();
-
+                    var Completedid = context.tblDepartMembers.Where(x => x.LoginId == LoginId).FirstOrDefault();
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
+                    var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
 
-                    string _DepartHead = DepartmentHead.EmailId;
-                    string _Addby = Sendfrom.Members;
+
+                    EmailDetails objmail = new EmailDetails();
+
+                    objmail.DepartHead = DepartmentHead.EmailId;
+                    objmail.Addby = Sendfrom.Members;
                     string _AddbyEmail = Sendfrom.EmailId;
+                    objmail.Priority = objDiscussion.Priority;
+                    objmail.Member = Reassign;
+                    objmail.CallTypetext = _CallType.CallType;
+                    objmail.subtypetext = _SubCallType.CallSubType;
+                    objmail.MemberCompleted = Completedid.Members;
+                    objmail.FilePath = path;
+                    objmail.GroupName = _GroupDetails.GroupName;
+                    objmail.id = objDiscussion.Id;
+                    objmail.Description = objsubdiscussion.Description;
+                    objmail.TeamName = Sendfrom.Department;
                     if (objsubdiscussion.Status == "Completed")
                     {
-                        _SendTo = _AddbyEmail;
+                        objmail.SendTo = _AddbyEmail;
                         UpdateStatus = true;
                     }
                     else
                     {
-                        _SendTo = SendTo.EmailId;
+                        objmail.SendTo = SendTo.EmailId;
                     }
-                    string _Priority = objDiscussion.Priority;
-                    string _Member = Reassign;
-                    string _CallTypetext = _CallType.CallType;
-                    string _subtypetext = _SubCallType.CallSubType;
+                    
 
                     if (UpdateStatus)
                     {
-                        Thread _job1 = new Thread(() => SendEmailComplete(_DepartHead, _SendTo, path, _Priority, _Addby, _Member, _subtypetext, _CallTypetext));
+                        Thread _job1 = new Thread(() => SendEmailComplete(objmail));
                         _job1.Start();
                     }
                     else
                     {
-                        Thread _job1 = new Thread(() => SendEmailUpdate(_DepartHead, _SendTo, path, _Priority, _Addby, _Member, _subtypetext, _CallTypetext));
+                        Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
                         _job1.Start();
                     }
        
@@ -329,7 +354,7 @@ namespace BOTS_BL.Repository
                                                 UpdatedBy = cld.UserName,
                                                 Status = ct.Status,
                                                 AddedDate = ct.AddedDate,
-                                                RessignedTo = ct.ReassignedMember
+                                                AssignedTo = ct.ReassignedMember
 
                                             }).OrderByDescending(x => x.FollowupDate).ToList();
 
@@ -1054,30 +1079,32 @@ namespace BOTS_BL.Repository
             return taskCount;
         }
 
-        public void SendEmail(string _DepartHead, string _SendTo,string _Priority, string _path,string _Addby, string _Member,string _SubCallType, string _CallType)
+        public void SendEmail(EmailDetails Emaildata)
         {
             var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
             var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
 
-            using (MailMessage mail = new MailMessage(from, _SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
             {
                 StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear "+ _Member + ",");
+                str.AppendLine("Dear "+ Emaildata.Member + ",");
                 str.AppendLine();
-                str.AppendLine("You have assigned a task with sub call type - " + _SubCallType + " from "+ _Addby +" with priority "+ _Priority);
+                str.AppendLine("You have a task assigned from - "+ Emaildata.Addby + " with priority "+ Emaildata.Priority);
+                str.AppendLine();
+                str.AppendLine("Discription : " + Emaildata.Description);
                 str.AppendLine();
                 str.AppendLine("Regards,");
-                str.AppendLine(" - BlueOcktopus Team");
+                str.AppendLine(" - "+ Emaildata.TeamName + " Team");
 
-                mail.Subject = "Call type "+ _CallType + " SubCallType " + _SubCallType;
+                mail.Subject = "WIP Raised[#"+ Emaildata.id + "]: "+ Emaildata.GroupName + " : "+ Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                 mail.SubjectEncoding = System.Text.Encoding.Default;
-                mail.CC.Add(_DepartHead);
+                mail.CC.Add(Emaildata.DepartHead);
                 mail.Body = str.ToString();
                 mail.IsBodyHtml = false;
                 mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-                if(!string.IsNullOrEmpty(_path))
+                if(!string.IsNullOrEmpty(Emaildata.FilePath))
                 {
-                    Attachment data = new Attachment(_path, MediaTypeNames.Application.Octet);
+                    Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
                     mail.Attachments.Add(data);
                 }
                 
@@ -1096,33 +1123,34 @@ namespace BOTS_BL.Repository
             
         }
 
-        public void SendEmailUpdate(string _DepartHead, string _SendTo, string path,string _Priority, string _Addby, string _Member, string _subtypetext, string _CallTypetext)
+        public void SendEmailUpdate(EmailDetails Emaildata)
         {
             var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
             var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
 
-            using (MailMessage mail = new MailMessage(from, _SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
             {
                 StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear " + _Member + ",");
+                str.AppendLine("Dear " + Emaildata.Member + ",");
                 str.AppendLine();
-                str.AppendLine("You have assigned a task with sub call type - " + _subtypetext + " from " + _Addby + " with priority " + _Priority);
+                str.AppendLine("You have a task assigned from - " + Emaildata.Addby + " with priority " + Emaildata.Priority);
+                str.AppendLine();
+                str.AppendLine("Discription : " + Emaildata.Description);
                 str.AppendLine();
                 str.AppendLine("Regards,");
-                str.AppendLine(" - BlueOcktopus Team");
+                str.AppendLine(" - " + Emaildata.TeamName + " Team");
 
-                mail.Subject = "Call type " + _CallTypetext + " SubCallType " + _subtypetext;
+                mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                 mail.SubjectEncoding = System.Text.Encoding.Default;
-                mail.CC.Add(_DepartHead);
+                mail.CC.Add(Emaildata.DepartHead);
                 mail.Body = str.ToString();
                 mail.IsBodyHtml = false;
                 mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-                if (!string.IsNullOrEmpty(path))
+                if (!string.IsNullOrEmpty(Emaildata.FilePath))
                 {
-                    Attachment data = new Attachment(path, MediaTypeNames.Application.Octet);
+                    Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
                     mail.Attachments.Add(data);
                 }
-
 
                 SmtpClient smtp = new SmtpClient();
                 smtp.Host = "smtp.zoho.com";
@@ -1136,30 +1164,32 @@ namespace BOTS_BL.Repository
             }
         }
 
-        public void SendEmailComplete(string _DepartHead, string _SendTo, string path, string _Priority, string _Addby, string _Member, string _subtypetext, string _CallTypetext)
+        public void SendEmailComplete(EmailDetails Emaildata)
         {
             var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
             var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
 
-            using (MailMessage mail = new MailMessage(from, _SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
             {
                 StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear " + _Addby + ",");
+                str.AppendLine("Dear " + Emaildata.Addby + ",");
                 str.AppendLine();
-                str.AppendLine("You have assigned a task is Completed by "+ _Member);
+                str.AppendLine("Your assigned task is Completed by "+ Emaildata.MemberCompleted);
+                str.AppendLine();
+                str.AppendLine("Discription : " + Emaildata.Description);
                 str.AppendLine();
                 str.AppendLine("Regards,");
-                str.AppendLine(" - BlueOcktopus Team");
+                str.AppendLine(" - " + Emaildata.TeamName + " Team");
 
-                mail.Subject = "Call type " + _CallTypetext + " SubCallType " + _subtypetext + " Done";
+                mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                 mail.SubjectEncoding = System.Text.Encoding.Default;
-                mail.CC.Add(_DepartHead);
+                mail.CC.Add(Emaildata.DepartHead);
                 mail.Body = str.ToString();
                 mail.IsBodyHtml = false;
                 mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-                if (!string.IsNullOrEmpty(path))
+                if (!string.IsNullOrEmpty(Emaildata.FilePath))
                 {
-                    Attachment data = new Attachment(path, MediaTypeNames.Application.Octet);
+                    Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
                     mail.Attachments.Add(data);
                 }
 

@@ -107,6 +107,8 @@ namespace WebApp.Controllers
             objData.objDiscussion.AddedDate = DateTime.Now;
             objData.objDiscussion.UpdatedDate = DateTime.Now;
             objData.objDiscussion.AddedBy = userDetails.LoginId;
+           
+
 
             //objData.objDiscussion.Department = objData.dept;
             //objData.objDiscussion.AssignedMember = objData.Member;

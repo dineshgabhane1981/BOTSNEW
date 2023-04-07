@@ -125,6 +125,7 @@
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
                     </div>
+              
                 </div>
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
@@ -740,7 +741,7 @@
             htmlStr += "<th scope=\"col\">Updated By</th>";
             htmlStr += "<th scope=\"col\">Description</th>";
             htmlStr += "<th scope=\"col\">Followup Date</th>";
-            htmlStr += "<th scope=\"col\">Reassigned To</th>";
+            htmlStr += "<th scope=\"col\">Assigned To</th>";
             htmlStr += "<th scope=\"col\">Status</th>";
             htmlStr += "</tr>";
 
@@ -753,7 +754,13 @@
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
                 htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.FollowupDate + "</td>";
-                htmlStr += "<td style=\"width: 100px;\">" + item.RessignedTo + "</td>";
+                if (item.AssignedTo == null) {
+                    htmlStr += "<td style=\"width: 100px;\"> -- </td>";
+                }
+                else {
+                    htmlStr += "<td style=\"width: 100px;\">" + item.AssignedTo + "</td>";
+                }
+                
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });
