@@ -17,5 +17,7 @@ namespace BOTS_BL.Models
 
         [StringLength(250)]
         public string CustomerName { get; set; }
+        [StringLength(50)]
+        public string GroupId { get; set; }
     }
 }

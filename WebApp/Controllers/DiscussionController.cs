@@ -74,7 +74,7 @@ namespace WebApp.Controllers
             callSubType.Add(item);
             objData.lstCallSubTypes = callSubType;
 
-            var CustNames = DR.GetAllDiscussionCustNames();
+            var CustNames = DR.GetAllDiscussionCustNames(groupId);
             ViewBag.CustNames = CustNames.ToArray();
             ViewBag.CustNames1 = CustNames;
             return View(objData);
@@ -269,7 +269,8 @@ namespace WebApp.Controllers
 
         public ActionResult GetDiscussionCustMobileNo(string CustName)
         {
-            var CustMobileNo = DR.GetDiscussionCustMobile(CustName);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var CustMobileNo = DR.GetDiscussionCustMobile(CustName, userDetails.GroupId);
             return new JsonResult() { Data = CustMobileNo, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

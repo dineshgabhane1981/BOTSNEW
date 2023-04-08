@@ -162,6 +162,18 @@ namespace BOTS_BL.Repository
 
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
+
+                    var custDetails = context.tblDiscussionCustomerDatas.Where(x => x.CustomerName == objDiscussion.SpokenTo && x.MobileNo == objDiscussion.ContactNo && x.GroupId == objDiscussion.GroupId).FirstOrDefault();
+                    if (custDetails == null)
+                    {
+                        tblDiscussionCustomerData objData = new tblDiscussionCustomerData();
+                        objData.CustomerName = objDiscussion.SpokenTo;
+                        objData.MobileNo = objDiscussion.ContactNo;
+                        objData.GroupId = objDiscussion.GroupId;
+
+                        context.tblDiscussionCustomerDatas.AddOrUpdate(objData);
+                        context.SaveChanges();
+                    }
                     if (objDiscussion.Status == "WIP")
                     {
                         objsubdiscussion.DiscussionId = objDiscussion.Id;
@@ -1410,5 +1422,30 @@ namespace BOTS_BL.Repository
             }
         }
 
+        public string GetDiscussionCustMobile(string CustName, string groupId)
+        {
+            var MobileNo = string.Empty;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    MobileNo = context.tblDiscussionCustomerDatas.Where(x => x.CustomerName == CustName && x.GroupId == groupId).Select(y => y.MobileNo).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDiscussionCustMobile");
+            }
+            return MobileNo;
+        }
+        public List<string> GetAllDiscussionCustNames(string groupId)
+        {
+            List<string> CustList = new List<string>();
+            using (var context = new CommonDBContext())
+            {
+                CustList = context.tblDiscussionCustomerDatas.Where(x => x.GroupId == groupId).Select(y => y.CustomerName).ToList();
+            }
+            return CustList;
+        }
     }
 }
