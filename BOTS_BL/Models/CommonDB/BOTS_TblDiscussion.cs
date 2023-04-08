@@ -107,5 +107,18 @@ namespace BOTS_BL.Models.CommonDB
         public string TeamName { get; set; }
         public string AddbyEmail { get; set; }
         public string MemberCompleted { get; set; }
+        public string DepartHeadName { get; set; }
+    }
+
+    public class MessageDetails
+    {
+        public string Mobileno { get; set; }
+        public string Message { get; set; }
+        public string Tokenid { get; set; }
+        public string Groupid { get; set; }
+        public string GroupName { get; set; }
+        public string Description { get; set; }
+        public string TeamName { get; set; }
+
     }
 }

@@ -131,7 +131,6 @@ namespace BOTS_BL.Repository
             bool status = false;
             string path = string.Empty;
 
-
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             try
             {
@@ -155,21 +154,14 @@ namespace BOTS_BL.Repository
                         ms.Close();
                         objDiscussion.AttachedFile = _FileURL + FileName;
                     }
-                    if(objDiscussion.SubCallType!="25" && objDiscussion.SubCallType != "26" && objDiscussion.SubCallType != "27")
+
+                    if (objDiscussion.SubCallType != "25" && objDiscussion.SubCallType != "26" && objDiscussion.SubCallType != "27")
                     {
                         objDiscussion.DiscussionDoneNotDone = null;
                     }
+
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
-                    var isCustomerExist = context.tblDiscussionCustomerDatas.Where(x => x.MobileNo == objDiscussion.ContactNo).FirstOrDefault();
-                    if (isCustomerExist == null)
-                    {
-                        tblDiscussionCustomerData objDiscussionCustData = new tblDiscussionCustomerData();
-                        objDiscussionCustData.MobileNo = objDiscussion.ContactNo;
-                        objDiscussionCustData.CustomerName = objDiscussion.SpokenTo;
-                        context.tblDiscussionCustomerDatas.AddOrUpdate(objDiscussionCustData);
-                        context.SaveChanges();
-                    }
                     if (objDiscussion.Status == "WIP")
                     {
                         objsubdiscussion.DiscussionId = objDiscussion.Id;
@@ -184,37 +176,64 @@ namespace BOTS_BL.Repository
                     }
                     status = true;
 
-
                     int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
 
-                    var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == objDiscussion.Department && x.Role == "02").FirstOrDefault();
-                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();
+                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
+                    var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == Sendfrom.Department && x.Role == "02").FirstOrDefault();
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == objDiscussion.AssignedMember).FirstOrDefault();
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
-                    var _CallType = context.BOTS_TblCallTypes.Where(x=> x.Id == objDiscussion.CallType).FirstOrDefault();
-                    var _GroupDetails = context.tblGroupDetails.Where(x=> x.GroupId == _GroupId).FirstOrDefault();
-
-
+                    var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
+                    var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
+                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "0").FirstOrDefault();
 
                     EmailDetails ObjEmailData = new EmailDetails();
+
                     ObjEmailData.DepartHead = DepartmentHead.EmailId;
+                    ObjEmailData.DepartHeadName = DepartmentHead.Members;
                     ObjEmailData.Addby = Sendfrom.Members;
-                    ObjEmailData.SendTo = SendTo.EmailId;
+
+                    if (SendTo != null)
+                    {
+                        ObjEmailData.SendTo = SendTo.EmailId;
+                    }
+                    else
+                    {
+                        ObjEmailData.SendTo = DepartmentHead.EmailId;
+                    }
+
                     ObjEmailData.Priority = objDiscussion.Priority;
                     ObjEmailData.Member = objDiscussion.AssignedMember;
-                    ObjEmailData.CallTypetext  = _CallType.CallType;
+                    ObjEmailData.CallTypetext = _CallType.CallType;
                     ObjEmailData.subtypetext = _SubCallType.CallSubType;
                     ObjEmailData.GroupName = _GroupDetails.GroupName;
                     ObjEmailData.id = objDiscussion.Id;
                     ObjEmailData.Description = objDiscussion.Description;
                     ObjEmailData.FilePath = path;
                     ObjEmailData.TeamName = Sendfrom.Department;
-   
-                    Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
-                    _job1.Start();
 
+                    MessageDetails ObjMsgData = new MessageDetails();
+                    ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
+                    ObjMsgData.Description = objDiscussion.Description;
+                    ObjMsgData.GroupName = _GroupDetails.GroupName;
+                    ObjMsgData.TeamName = Sendfrom.Department;
 
+                    if (objDiscussion.AssignedMember == null)
+                    {
+                        Thread _job1 = new Thread(() => SendEmailOnlyHOD(ObjEmailData));
+                        _job1.Start();
+                    }
+                    else
+                    {
+                        Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
+                        _job1.Start();
+                    }
+
+                    if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
+                    {
+                        Thread _job2 = new Thread(() => SendWAMessage(ObjMsgData));
+                        _job2.Start();
+                    }
                 }
             }
             catch (Exception ex)
@@ -240,7 +259,7 @@ namespace BOTS_BL.Repository
 
                 if (!string.IsNullOrEmpty(FileDone))
                 {
-                    
+
                     byte[] imageBytes = Convert.FromBase64String(FileDone);
                     MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
                     ms.Write(imageBytes, 0, imageBytes.Length);
@@ -277,7 +296,7 @@ namespace BOTS_BL.Repository
                     objsubdiscussion.UpdatedBy = LoginId;
                     objsubdiscussion.AddedDate = DateTime.Now;
                     objsubdiscussion.ReassignedMember = Reassign;
-                    
+
                     context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                     context.SaveChanges();
                     status = true;
@@ -286,7 +305,7 @@ namespace BOTS_BL.Repository
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
 
                     var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == objDiscussion.Department && x.Role == "02").FirstOrDefault();
-                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();                    
+                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == Reassign).FirstOrDefault();
                     var Completedid = context.tblDepartMembers.Where(x => x.LoginId == LoginId).FirstOrDefault();
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
@@ -318,19 +337,20 @@ namespace BOTS_BL.Repository
                     {
                         objmail.SendTo = SendTo.EmailId;
                     }
-                    
+
 
                     if (UpdateStatus)
                     {
+
                         Thread _job1 = new Thread(() => SendEmailComplete(objmail));
                         _job1.Start();
                     }
                     else
                     {
+
                         Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
                         _job1.Start();
                     }
-       
                 }
             }
             catch (Exception ex)
@@ -565,8 +585,8 @@ namespace BOTS_BL.Repository
                     {
                         var sublist = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == raisedby).Select(y => y.DiscussionId).ToList();
                         var newlist = list.Where(x => x.AddedBy != raisedby && sublist.Contains(x.Id)).ToList();
-                        
-                        list = list.Where(x => x.AddedBy == raisedby).ToList();                        
+
+                        list = list.Where(x => x.AddedBy == raisedby).ToList();
                         list.AddRange(newlist);
 
                     }
@@ -1046,11 +1066,11 @@ namespace BOTS_BL.Repository
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
-                return objtbldepart;
+            return objtbldepart;
         }
         public List<tblDepartMember> GetReAssignMemberdetails(string id)
         {
@@ -1093,147 +1113,302 @@ namespace BOTS_BL.Repository
 
         public void SendEmail(EmailDetails Emaildata)
         {
+            string responseString;
             var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
             var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
-
-            using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            try
             {
-                StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear "+ Emaildata.Member + ",");
-                str.AppendLine();
-                str.AppendLine("You have a task assigned from - "+ Emaildata.Addby + " with priority "+ Emaildata.Priority);
-                str.AppendLine();
-                str.AppendLine("Discription : " + Emaildata.Description);
-                str.AppendLine();
-                str.AppendLine("Regards,");
-                str.AppendLine(" - "+ Emaildata.TeamName + " Team");
-
-                mail.Subject = "WIP Raised[#"+ Emaildata.id + "]: "+ Emaildata.GroupName + " : "+ Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
-                mail.SubjectEncoding = System.Text.Encoding.Default;
-                mail.CC.Add(Emaildata.DepartHead);
-                mail.Body = str.ToString();
-                mail.IsBodyHtml = false;
-                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-                if(!string.IsNullOrEmpty(Emaildata.FilePath))
+                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
                 {
-                    Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
-                    mail.Attachments.Add(data);
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine("Dear " + Emaildata.Member + ",");
+                    str.AppendLine();
+                    str.AppendLine("You have a task assigned from - " + Emaildata.Addby + " with priority " + Emaildata.Priority);
+                    str.AppendLine();
+                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine();
+                    str.AppendLine("Regards,");
+                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+
+                    mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    mail.CC.Add(Emaildata.DepartHead);
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = false;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                    {
+                        Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
+                        mail.Attachments.Add(data);
+                    }
+
+
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.zoho.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCredential;
+                    smtp.Port = 587;
+                    smtp.Send(mail);
                 }
-                
-                
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.zoho.com";
-                smtp.EnableSsl = true;
-                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = networkCredential;
-                smtp.Port = 587;
-                smtp.Send(mail);
-                //TempData["Status"] = "File Uploaded successfully";
-                //status = true;
             }
-            
+
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+
+        }
+
+        public void SendEmailOnlyHOD(EmailDetails Emaildata)
+        {
+            string responseString;
+            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
+            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            try
+            {
+                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                {
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine("Dear " + Emaildata.DepartHeadName + ",");
+                    str.AppendLine();
+                    str.AppendLine("I have raised a ticket for - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
+                    str.AppendLine();
+                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine();
+                    str.AppendLine("Regards,");
+                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+
+                    mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    //mail.CC.Add(Emaildata.DepartHead);
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = false;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                    {
+                        Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
+                        mail.Attachments.Add(data);
+                    }
+
+
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.zoho.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCredential;
+                    smtp.Port = 587;
+                    smtp.Send(mail);
+                }
+            }
+
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
         }
 
         public void SendEmailUpdate(EmailDetails Emaildata)
         {
+            string responseString;
             var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
             var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
-
-            using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            try
             {
-                StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear " + Emaildata.Member + ",");
-                str.AppendLine();
-                str.AppendLine("You have a task assigned from - " + Emaildata.Addby + " with priority " + Emaildata.Priority);
-                str.AppendLine();
-                str.AppendLine("Discription : " + Emaildata.Description);
-                str.AppendLine();
-                str.AppendLine("Regards,");
-                str.AppendLine(" - " + Emaildata.TeamName + " Team");
-
-                mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
-                mail.SubjectEncoding = System.Text.Encoding.Default;
-                mail.CC.Add(Emaildata.DepartHead);
-                mail.Body = str.ToString();
-                mail.IsBodyHtml = false;
-                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-                if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
                 {
-                    Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
-                    mail.Attachments.Add(data);
-                }
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine("Dear " + Emaildata.Member + ",");
+                    str.AppendLine();
+                    str.AppendLine("You have a task assigned from - " + Emaildata.Addby + " with priority " + Emaildata.Priority);
+                    str.AppendLine();
+                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine();
+                    str.AppendLine("Regards,");
+                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
 
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.zoho.com";
-                smtp.EnableSsl = true;
-                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = networkCredential;
-                smtp.Port = 587;
-                smtp.Send(mail);
-                
+                    mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    mail.CC.Add(Emaildata.DepartHead);
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = false;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                    {
+                        Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
+                        mail.Attachments.Add(data);
+                    }
+
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.zoho.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCredential;
+                    smtp.Port = 587;
+                    smtp.Send(mail);
+
+                }
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
 
         public void SendEmailComplete(EmailDetails Emaildata)
         {
+            string responseString;
             var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
             var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
-
-            using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+            try
             {
-                StringBuilder str = new StringBuilder();
-                str.AppendLine("Dear " + Emaildata.Addby + ",");
-                str.AppendLine();
-                str.AppendLine("Your assigned task is Completed by "+ Emaildata.MemberCompleted);
-                str.AppendLine();
-                str.AppendLine("Discription : " + Emaildata.Description);
-                str.AppendLine();
-                str.AppendLine("Regards,");
-                str.AppendLine(" - " + Emaildata.TeamName + " Team");
-
-                mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
-                mail.SubjectEncoding = System.Text.Encoding.Default;
-                mail.CC.Add(Emaildata.DepartHead);
-                mail.Body = str.ToString();
-                mail.IsBodyHtml = false;
-                mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-                if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
                 {
-                    Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
-                    mail.Attachments.Add(data);
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine("Dear " + Emaildata.Addby + ",");
+                    str.AppendLine();
+                    str.AppendLine("Your assigned task is Completed by " + Emaildata.MemberCompleted);
+                    str.AppendLine();
+                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine();
+                    str.AppendLine("Regards,");
+                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+
+                    mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    mail.CC.Add(Emaildata.DepartHead);
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = false;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                    {
+                        Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
+                        mail.Attachments.Add(data);
+                    }
+
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.zoho.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCredential;
+                    smtp.Port = 587;
+                    smtp.Send(mail);
                 }
-
-                SmtpClient smtp = new SmtpClient();
-                smtp.Host = "smtp.zoho.com";
-                smtp.EnableSsl = true;
-                NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                smtp.UseDefaultCredentials = true;
-                smtp.Credentials = networkCredential;
-                smtp.Port = 587;
-                smtp.Send(mail);
-
             }
-        }
-
-        public string GetDiscussionCustMobile(string CustomerName)
-        {
-            string CustMobile = string.Empty;
-            using (var context = new CommonDBContext())
+            catch (ArgumentException ex)
             {
-                CustMobile = context.tblDiscussionCustomerDatas.Where(x => x.CustomerName == CustomerName).Select(y => y.MobileNo).FirstOrDefault();
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
             }
-            return CustMobile;
-        }
-        public List<string> GetAllDiscussionCustNames()
-        {
-            List<string> lstCustNames = new List<string>();
-            using (var context = new CommonDBContext())
+            catch (WebException ex)
             {
-                lstCustNames = context.tblDiscussionCustomerDatas.Select(y => y.CustomerName).ToList();
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
             }
-            return lstCustNames;
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+
         }
+
+        public void SendWAMessage(MessageDetails objMsg)
+        {
+            string responseString;
+
+            try
+            {
+
+                //obj.Message = obj.Message.Replace("#99", "&");
+                //objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
+                //string type = "TEXT";
+                StringBuilder stb = new StringBuilder();
+                stb.AppendLine("Dear " + objMsg.GroupName + ",");
+                stb.AppendLine();
+                stb.AppendLine("Description: " + objMsg.Description);
+                stb.AppendLine();
+                stb.AppendLine("Regards,");
+                stb.AppendLine(" - " + objMsg.TeamName + " Team");
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
+                sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
+                sbposdata.AppendFormat("&phone={0}", objMsg.Mobileno);
+                sbposdata.AppendFormat("&message={0}", stb.ToString());
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
     }
 }
