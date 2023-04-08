@@ -162,18 +162,6 @@ namespace BOTS_BL.Repository
 
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
-
-                    var custDetails = context.tblDiscussionCustomerDatas.Where(x => x.CustomerName == objDiscussion.SpokenTo && x.MobileNo == objDiscussion.ContactNo && x.GroupId == objDiscussion.GroupId).FirstOrDefault();
-                    if (custDetails == null)
-                    {
-                        tblDiscussionCustomerData objData = new tblDiscussionCustomerData();
-                        objData.CustomerName = objDiscussion.SpokenTo;
-                        objData.MobileNo = objDiscussion.ContactNo;
-                        objData.GroupId = objDiscussion.GroupId;
-
-                        context.tblDiscussionCustomerDatas.AddOrUpdate(objData);
-                        context.SaveChanges();
-                    }
                     if (objDiscussion.Status == "WIP")
                     {
                         objsubdiscussion.DiscussionId = objDiscussion.Id;
@@ -197,7 +185,7 @@ namespace BOTS_BL.Repository
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
-                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "0").FirstOrDefault();
+                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
 
                     EmailDetails ObjEmailData = new EmailDetails();
 
@@ -307,8 +295,11 @@ namespace BOTS_BL.Repository
                     objsubdiscussion.Status = objDiscussion.Status;
                     objsubdiscussion.UpdatedBy = LoginId;
                     objsubdiscussion.AddedDate = DateTime.Now;
-                    objsubdiscussion.ReassignedMember = Reassign;
 
+                    if (Reassign != "Please Select" && Reassign != null)
+                    {
+                        objsubdiscussion.ReassignedMember = Reassign;
+                    }
                     context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                     context.SaveChanges();
                     status = true;
@@ -316,18 +307,28 @@ namespace BOTS_BL.Repository
                     int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
 
-                    var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == objDiscussion.Department && x.Role == "02").FirstOrDefault();
-                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy && x.Department == objDiscussion.Department).FirstOrDefault();
+                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
+                    var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == Sendfrom.Department && x.Role == "02").FirstOrDefault();
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == Reassign).FirstOrDefault();
                     var Completedid = context.tblDepartMembers.Where(x => x.LoginId == LoginId).FirstOrDefault();
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
-
+                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
 
                     EmailDetails objmail = new EmailDetails();
 
+                    if (SendTo != null)
+                    {
+                        objmail.SendTo = SendTo.EmailId;
+                    }
+                    else
+                    {
+                        objmail.SendTo = DepartmentHead.EmailId;
+                    }
+
                     objmail.DepartHead = DepartmentHead.EmailId;
+                    objmail.DepartHeadName = DepartmentHead.Members;
                     objmail.Addby = Sendfrom.Members;
                     string _AddbyEmail = Sendfrom.EmailId;
                     objmail.Priority = objDiscussion.Priority;
@@ -340,6 +341,13 @@ namespace BOTS_BL.Repository
                     objmail.id = objDiscussion.Id;
                     objmail.Description = objsubdiscussion.Description;
                     objmail.TeamName = Sendfrom.Department;
+
+                    MessageDetails ObjMsgData = new MessageDetails();
+                    ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
+                    ObjMsgData.Description = objsubdiscussion.Description;
+                    ObjMsgData.GroupName = _GroupDetails.GroupName;
+                    ObjMsgData.TeamName = Sendfrom.Department;
+
                     if (objsubdiscussion.Status == "Completed")
                     {
                         objmail.SendTo = _AddbyEmail;
@@ -347,21 +355,44 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        objmail.SendTo = SendTo.EmailId;
+                        if (SendTo != null)
+                        {
+                            objmail.SendTo = SendTo.EmailId;
+                        }
                     }
-
 
                     if (UpdateStatus)
                     {
+                        if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
+                        {
+                            Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
+                            _job1.Start();
 
-                        Thread _job1 = new Thread(() => SendEmailComplete(objmail));
-                        _job1.Start();
+                            Thread _job2 = new Thread(() => SendWAMessageCompleteHOD(ObjMsgData));
+                            _job2.Start();
+                        }
+                        else
+                        {
+                            Thread _job1 = new Thread(() => SendEmailComplete(objmail));
+                            _job1.Start();
+                        }
+
                     }
                     else
                     {
+                        if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
+                        {
+                            Thread _job1 = new Thread(() => SendEmailUpdateOnlyHOD(objmail));
+                            _job1.Start();
 
-                        Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
-                        _job1.Start();
+                            Thread _job2 = new Thread(() => SendWAMessageUpdateHOD(ObjMsgData));
+                            _job2.Start();
+                        }
+                        else
+                        {
+                            Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
+                            _job1.Start();
+                        }
                     }
                 }
             }
@@ -1418,6 +1449,223 @@ namespace BOTS_BL.Repository
             catch (Exception ex)
             {
 
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void SendEmailUpdateOnlyHOD(EmailDetails Emaildata)
+        {
+            string responseString;
+            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
+            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            try
+            {
+                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                {
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine("Dear " + Emaildata.DepartHeadName + ",");
+                    str.AppendLine();
+                    str.AppendLine("I have rescheduled task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
+                    str.AppendLine();
+                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine();
+                    str.AppendLine("Regards,");
+                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+
+                    mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    //mail.CC.Add(Emaildata.DepartHead);
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = false;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                    {
+                        Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
+                        mail.Attachments.Add(data);
+                    }
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.zoho.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCredential;
+                    smtp.Port = 587;
+                    smtp.Send(mail);
+                }
+            }
+
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void SendWAMessageUpdateHOD(MessageDetails objMsg)
+        {
+            string responseString;
+
+            try
+            {
+                StringBuilder stb = new StringBuilder();
+                stb.AppendLine("Dear " + objMsg.GroupName + ",");
+                stb.AppendLine();
+                stb.AppendLine("Description: " + objMsg.Description);
+                stb.AppendLine();
+                stb.AppendLine("Regards,");
+                stb.AppendLine(" - " + objMsg.TeamName + " Team");
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
+                sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
+                sbposdata.AppendFormat("&phone={0}", objMsg.Mobileno);
+                sbposdata.AppendFormat("&message={0}", stb.ToString());
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void SendWAMessageCompleteHOD(MessageDetails objMsg)
+        {
+            string responseString;
+
+            try
+            {
+
+                StringBuilder stb = new StringBuilder();
+                stb.AppendLine("Dear " + objMsg.GroupName + ",");
+                stb.AppendLine();
+                stb.AppendLine("Description: " + objMsg.Description);
+                stb.AppendLine();
+                stb.AppendLine("Regards,");
+                stb.AppendLine(" - " + objMsg.TeamName + " Team");
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
+                sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
+                sbposdata.AppendFormat("&phone={0}", objMsg.Mobileno);
+                sbposdata.AppendFormat("&message={0}", stb.ToString());
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void SendEmailCompleteOnlyHOD(EmailDetails Emaildata)
+        {
+            string responseString;
+            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
+            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            try
+            {
+                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                {
+                    StringBuilder str = new StringBuilder();
+                    str.AppendLine("Dear " + Emaildata.DepartHeadName + ",");
+                    str.AppendLine();
+                    str.AppendLine("Completed the task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
+                    str.AppendLine();
+                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine();
+                    str.AppendLine("Regards,");
+                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+
+                    mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    //mail.CC.Add(Emaildata.DepartHead);
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = false;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                    {
+                        Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
+                        mail.Attachments.Add(data);
+                    }
+                    SmtpClient smtp = new SmtpClient();
+                    smtp.Host = "smtp.zoho.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = networkCredential;
+                    smtp.Port = 587;
+                    smtp.Send(mail);
+                }
+            }
+
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
