@@ -92,6 +92,11 @@
                     @Html.DropDownList("calltype", new SelectList(ViewBag.lstCallTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlcalltype" })
                 </div>
             </div>
+            <div>
+                Select Assigned Member
+
+                @Html.DropDownList("AssignedMember", new SelectList(ViewBag.lstMemberAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlMemberAssign" })
+            </div>
             <div class="row mt-3 mb-4">
 
                 <div class="col-md-8 col-xl-8">
@@ -207,6 +212,7 @@
         $('#ddlstatus').prop('selectedIndex', 0);
         $('#ddlcalltype').prop('selectedIndex', 0);
         $('#ddlRaisedBy').prop('selectedIndex', 0);
+        $('#ddlMemberAssign').prop('selectedIndex', 0);
         $("#dvListing").hide();
 
     }
@@ -269,6 +275,13 @@
         else {
             item["selectedRaisedBy"] = null;
         }
+        if ($("#ddlMemberAssign").prop('selectedIndex') !== 0) {
+
+            item["selectedMemberAssign"] = $("#ddlMemberAssign option:selected").val();
+        }
+        else {
+            item["selectedMemberAssign"] = null;
+        }
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
         $.ajax({
@@ -306,6 +319,7 @@
         var calltype = 0;
         var status = '';
         var raisedby = '';
+        var AssignedMember = '';
         console.log(Id);
 
         if ($("#rdndaterange").is(":checked")) {
@@ -345,6 +359,13 @@
         }
         else {
             raisedby = '';
+        }
+        if ($("#ddlMemberAssign").prop('selectedIndex') !== 0) {
+
+            AssignedMember = $("#ddlMemberAssign option:selected").val();
+        }
+        else {
+            AssignedMember = '';
         }
 
         var urlLink = "@Url.Action("ExportToExcelCommonFilteredDiscussion", "Discussion")";

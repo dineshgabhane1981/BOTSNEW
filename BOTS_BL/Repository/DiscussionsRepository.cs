@@ -1140,6 +1140,35 @@ namespace BOTS_BL.Repository
             return objtbldepart;
         }
 
+        public List<SelectListItem> GetAssignedMemberList()
+        {
+            List<SelectListItem> lstMemberAssigned = new List<SelectListItem>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+
+                    //var raised = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
+                    var raised = context.tblDepartMembers.Where(x => x.status == "00").ToList();
+                    lstMemberAssigned.Add(new SelectListItem() { Text = "--Select--", Value = "0" });
+                    foreach (var item in raised)
+                    {
+                        lstMemberAssigned.Add(new SelectListItem
+                        {
+                            Text = item.Members,
+                            Value = Convert.ToString(item.Members)
+                        });
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAssignedMemberList");
+            }
+            return lstMemberAssigned;
+        }
+
         public int GetTaskCount(string MemberName)
         {
             int taskCount = 0;

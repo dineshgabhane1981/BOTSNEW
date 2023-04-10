@@ -90,6 +90,7 @@ namespace WebApp.Controllers
             ViewBag.lstgroupdetails = DR.GetGroupDetails();
             ViewBag.lstCallTypes = DR.GetCallTypes(LoginType);
             ViewBag.lstRMAssigned = DR.GetRaisedby();
+            ViewBag.lstMemberAssigned = DR.GetAssignedMemberList();
             ObjData.lstDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "", "", LoginType, userDetails.LoginId, false);
             ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "", "", LoginType, userDetails.LoginId, true);
             return View(ObjData);
@@ -159,7 +160,7 @@ namespace WebApp.Controllers
                 int calltype = Convert.ToInt32(item["selectedcall"]);
                 string status = Convert.ToString(item["selectedstatus"]);
                 string raisedby = Convert.ToString(item["selectedRaisedBy"]);
-
+                string AssignMember = Convert.ToString(item["selectedMemberAssign"]);
                 ObjData.lstDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, false);
                 ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, true);
 
