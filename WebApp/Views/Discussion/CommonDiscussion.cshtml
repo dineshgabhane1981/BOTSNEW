@@ -90,35 +90,43 @@
                     Select Call Type
 
                     @Html.DropDownList("calltype", new SelectList(ViewBag.lstCallTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlcalltype" })
-                </div>
-            </div>
-            <div>
-                Select Assigned Member
-
-                @Html.DropDownList("AssignedMember", new SelectList(ViewBag.lstMemberAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlMemberAssign" })
+                </div>               
             </div>
             <div class="row mt-3 mb-4">
+                <div class="col-md-4 col-xl-6">
 
-                <div class="col-md-8 col-xl-8">
-                    <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
-                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
-                    <input id="txtToDate" placeholder="To Date" class="input50" />
-                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
-                    <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
-                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport" style="margin-left:17px;margin-top:5px;">
-                        <i class="fas fa-file-export"></i> Export
-                    </button>
+                    Select Assigned Member
+
+                    @Html.DropDownList("AssignedMember", new SelectList(ViewBag.lstMemberAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlMemberAssign" })
+                </div>
+                <div class="col-md-4 col-xl-6">
+                    Call Sub Type
+
+                    @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
                 </div>
             </div>
+                <div class="row mt-3 mb-4">
+
+                    <div class="col-md-8 col-xl-8">
+                        <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
+                        <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input id="txtToDate" placeholder="To Date" class="input50" />
+                        <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                        <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
+                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport" style="margin-left:17px;margin-top:5px;">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
 
 
 
-            <div id="dvListing">
-                @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
+                <div id="dvListing">
+                    @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
+                </div>
             </div>
-        </div>
-    </div>
+            </div>
 </div>
 <div id="myModal" class="modal">
     <div class="modal-content">
@@ -177,7 +185,7 @@
         dateFormat: "yy-mm-dd",
         minDate: today,
     });
-   
+
     $(document).ready(function () {
        // GetData();
         SetFilter();
@@ -194,12 +202,39 @@
         $("#btncancel").click(function () {
             resetAll();
         });
-        $('#btnPopupCloseNew').on("click", function () {            
+        $('#btnPopupCloseNew').on("click", function () {
             $("#myModal").hide(1000);
         });
         $('#btnUpdateStatusNew').on("click", function () {
             UpdateStatusNew();
         });
+        $('#ddlcalltype').change(function () {
+            
+            if ($("#ddlcalltype option:selected").text() != "Please Select") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetSubCallTypes", "Discussion")',
+                    //url: "/Discussion/GetSubCallTypes",
+                    data: '{callId: ' + JSON.stringify($("#ddlcalltype").val()) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlSubCallType").empty();
+                        $.each(result, function () {
+                            $("#ddlSubCallType").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                    }
+                });
+            }
+            else {
+                $("#ddlSubCallType").empty();
+                $("#ddlSubCallType").append($("<option />").val(0).text("Please Select"));
+            }
+        });
+      
     });
 
     function resetAll() {
@@ -210,7 +245,7 @@
         $('#txtToDate').val('');
         $('#ddlGroupnm').prop('selectedIndex', 0);
         $('#ddlstatus').prop('selectedIndex', 0);
-        $('#ddlcalltype').prop('selectedIndex', 0);
+        $('#ddlcalltype').prop('selectedIndex', 0);        
         $('#ddlRaisedBy').prop('selectedIndex', 0);
         $('#ddlMemberAssign').prop('selectedIndex', 0);
         $("#dvListing").hide();
@@ -260,7 +295,7 @@
         }
         else {
             item["selectedcall"] = null;
-        }
+        }        
         if ($("#ddlstatus").prop('selectedIndex') !== 0) {
 
             item["selectedstatus"]= $("#ddlstatus option:selected").val();
@@ -316,7 +351,7 @@
         var fromdt = '';
         var Todt = '';
         var groupnm = '';
-        var calltype = 0;
+        var calltype = 0;        
         var status = '';
         var raisedby = '';
         var AssignedMember = '';
@@ -345,7 +380,7 @@
         }
         else {
             calltype = 0;
-        }
+        }       
         if ($("#ddlstatus").prop('selectedIndex') !== 0) {
 
             status = $("#ddlstatus option:selected").val();
@@ -533,7 +568,7 @@
         var Desc = $("#txtDesc").val();
         var Status = $("#ddlPopupStatus").val();
         var FollowupDate = $("#txtFollowupDateNew").val();
-        
+
         if (Desc != "") {
             $.ajax({
                 type: "POST",
