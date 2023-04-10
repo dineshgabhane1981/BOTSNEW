@@ -350,8 +350,11 @@ namespace BOTS_BL.Repository
 
                     if (objsubdiscussion.Status == "Completed")
                     {
-                        objmail.SendTo = _AddbyEmail;
                         UpdateStatus = true;
+                        if (SendTo != null)
+                        {
+                          objmail.SendTo = _AddbyEmail;
+                        }  
                     }
                     else
                     {
@@ -1392,7 +1395,6 @@ namespace BOTS_BL.Repository
             }
 
         }
-
         public void SendWAMessage(MessageDetails objMsg)
         {
             string responseString;
@@ -1452,7 +1454,6 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
         public void SendEmailUpdateOnlyHOD(EmailDetails Emaildata)
         {
             string responseString;
@@ -1507,7 +1508,6 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
         public void SendWAMessageUpdateHOD(MessageDetails objMsg)
         {
             string responseString;
@@ -1560,7 +1560,6 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
         public void SendWAMessageCompleteHOD(MessageDetails objMsg)
         {
             string responseString;
@@ -1614,7 +1613,6 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
         public void SendEmailCompleteOnlyHOD(EmailDetails Emaildata)
         {
             string responseString;
@@ -1669,7 +1667,6 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
         public string GetDiscussionCustMobile(string CustName, string groupId)
         {
             var MobileNo = string.Empty;
