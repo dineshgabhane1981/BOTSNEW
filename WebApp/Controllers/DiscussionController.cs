@@ -161,8 +161,16 @@ namespace WebApp.Controllers
                 string status = Convert.ToString(item["selectedstatus"]);
                 string raisedby = Convert.ToString(item["selectedRaisedBy"]);
                 string AssignMember = Convert.ToString(item["selectedMemberAssign"]);
-                ObjData.lstDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, false);
-                ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, true);
+                if(AssignMember == null)
+                {
+                    ObjData.lstDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, false);
+                    ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, true);
+                }
+                else
+                {
+                    ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, false, AssignMember);
+                    ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, true, AssignMember);
+                }
 
                 //lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId,false);
             }

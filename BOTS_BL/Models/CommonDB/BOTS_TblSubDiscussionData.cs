@@ -50,5 +50,5 @@ namespace BOTS_BL.Models.CommonDB
         public string UpdatedDate { get; set; }
         public DateTime? AddedDate { get; set; }
         public string AssignedTo { get; set; }
-}
+    }
 }

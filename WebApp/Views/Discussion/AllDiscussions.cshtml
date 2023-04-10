@@ -791,7 +791,7 @@
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
                 htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.FollowupDate + "</td>";
-                if (item.AssignedTo == null) {
+                if (item.AssignedTo == null || item.AssignedTo == "Please Select") {
                     htmlStr += "<td style=\"width: 100px;\"> -- </td>";
                 }
                 else {
