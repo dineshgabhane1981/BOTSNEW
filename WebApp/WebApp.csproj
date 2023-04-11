@@ -380,6 +380,7 @@
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="DiscussionFileUpload\ChintamanisLogo.jpeg" />
+    <Content Include="DiscussionScripts.xml" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -582,6 +583,9 @@
     <Content Include="Views\DLCConfig\ProfileConfig.cshtml" />
     <Content Include="Views\DLCConfig\GenerateDLCLink.cshtml" />
     <Content Include="Views\DocumentLibrary\Index.cshtml" />
+    <Content Include="Views\BOPromoCampaign\BOPromoText.cshtml" />
+    <Content Include="Views\BOPromoCampaign\BOPromoFileWithCaption.cshtml" />
+    <Content Include="Views\BOPromoCampaign\BOPromoFile.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

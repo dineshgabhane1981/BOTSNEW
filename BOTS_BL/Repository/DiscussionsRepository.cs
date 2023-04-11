@@ -18,13 +18,14 @@ using System.Threading;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Globalization;
+using System.Xml;
 
 namespace BOTS_BL.Repository
 {
     public class DiscussionsRepository
     {
         Exceptions newexception = new Exceptions();
-
+     
         public List<DiscussionDetails> GetDiscussions(string GroupId, string LoginType)
         {
             List<DiscussionDetails> objData = new List<DiscussionDetails>();
@@ -129,8 +130,14 @@ namespace BOTS_BL.Repository
         }
         public bool AddDiscussions(BOTS_TblDiscussion objDiscussion, string _File, string FileName)
         {
+            XmlDocument doc = new XmlDocument();
+            var xmlpath = ConfigurationManager.AppSettings["DiscussionScripts"].ToString();
+            doc.Load(xmlpath);
+            
+
             bool status = false;
             string path = string.Empty;
+            
 
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             try
@@ -146,6 +153,7 @@ namespace BOTS_BL.Repository
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
                     string _GroupName = _GroupDetails.GroupName;
+                    string Script = string.Empty;
 
                     if (!string.IsNullOrEmpty(_File))
                     {
@@ -245,21 +253,66 @@ namespace BOTS_BL.Repository
                     ObjEmailData.FilePath = path;
                     ObjEmailData.TeamName = Sendfrom.Department;
 
+                    if (objDiscussion.SubCallType != "25" && objDiscussion.SubCallType != "26" && objDiscussion.SubCallType != "27")
+                    {
+                        if (objDiscussion.SubCallType == "27" && objDiscussion.DiscussionDoneNotDone == "1")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DiscussionFirstDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "27" && objDiscussion.DiscussionDoneNotDone == "0")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DiscussionFirstNotDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "26" && objDiscussion.DiscussionDoneNotDone == "1")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/IdeasCampaignDiscussionDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "26" && objDiscussion.DiscussionDoneNotDone == "0")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/IdeasCampaignDiscussionNotDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "25" && objDiscussion.DiscussionDoneNotDone == "1")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DashboardCampaignDiscussionDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "25" && objDiscussion.DiscussionDoneNotDone == "0")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DashboardCampaignDiscussionNotDone");
+                            Script = node.InnerText;
+                        }
+                    }
+                        
+
+
                     MessageDetails ObjMsgData = new MessageDetails();
                     ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
                     ObjMsgData.Description = objDiscussion.Description;
                     ObjMsgData.GroupName = _GroupDetails.GroupName;
-                    ObjMsgData.TeamName = Sendfrom.Department;
+                    ObjMsgData.BOEmpName = Sendfrom.Members;
+                    ObjMsgData.Addby = objDiscussion.AddedBy;
+                    ObjMsgData.Message = Script;
+                    ObjMsgData.SpokenTo = objDiscussion.SpokenTo;
 
                     if (objDiscussion.AssignedMember == null)
                     {
-                        Thread _job1 = new Thread(() => SendEmailOnlyHOD(ObjEmailData));
-                        _job1.Start();
+                        if(objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                        {
+                            Thread _job1 = new Thread(() => SendEmailOnlyHOD(ObjEmailData));
+                            _job1.Start();
+                        }                       
                     }
                     else
                     {
-                        Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
-                        _job1.Start();
+                        if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                        {
+                            Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
+                            _job1.Start();
+                        }                          
                     }
 
                     if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
@@ -340,6 +393,7 @@ namespace BOTS_BL.Repository
                     int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
 
+                    
                     var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
                     var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == Sendfrom.Department && x.Role == "02").FirstOrDefault();
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == Reassign).FirstOrDefault();
@@ -380,6 +434,7 @@ namespace BOTS_BL.Repository
                     ObjMsgData.Description = objsubdiscussion.Description;
                     ObjMsgData.GroupName = _GroupDetails.GroupName;
                     ObjMsgData.TeamName = Sendfrom.Department;
+                    ObjMsgData.Addby = objDiscussion.AddedBy;
 
                     if (objsubdiscussion.Status == "Completed")
                     {
@@ -401,16 +456,22 @@ namespace BOTS_BL.Repository
                     {
                         if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
                         {
-                            Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
-                            _job1.Start();
-
+                            if(objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                            {
+                                Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
+                                _job1.Start();
+                            }
+                                
                             Thread _job2 = new Thread(() => SendWAMessageCompleteHOD(ObjMsgData));
                             _job2.Start();
                         }
                         else
                         {
-                            Thread _job1 = new Thread(() => SendEmailComplete(objmail));
-                            _job1.Start();
+                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                            {
+                                Thread _job1 = new Thread(() => SendEmailComplete(objmail));
+                                _job1.Start();
+                            }                                
                         }
 
                     }
@@ -418,16 +479,22 @@ namespace BOTS_BL.Repository
                     {
                         if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
                         {
-                            Thread _job1 = new Thread(() => SendEmailUpdateOnlyHOD(objmail));
-                            _job1.Start();
-
+                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                            {
+                                Thread _job1 = new Thread(() => SendEmailUpdateOnlyHOD(objmail));
+                                _job1.Start();
+                            }
+                                
                             Thread _job2 = new Thread(() => SendWAMessageUpdateHOD(ObjMsgData));
                             _job2.Start();
                         }
                         else
                         {
-                            Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
-                            _job1.Start();
+                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                            {
+                                Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
+                                _job1.Start();
+                            }                                
                         }
                     }
                 }
@@ -1957,16 +2024,15 @@ namespace BOTS_BL.Repository
             try
             {
 
-                //obj.Message = obj.Message.Replace("#99", "&");
-                //objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
+                objMsg.Message = objMsg.Message.Replace("#spokento", "@"+ objMsg.SpokenTo);
+                objMsg.Message = objMsg.Message.Replace("#01", "@" + objMsg.GroupName);
+                objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
                 //string type = "TEXT";
                 StringBuilder stb = new StringBuilder();
-                stb.AppendLine("Dear " + objMsg.GroupName + ",");
-                stb.AppendLine();
-                stb.AppendLine("Description: " + objMsg.Description);
+                stb.AppendLine(objMsg.Message);
                 stb.AppendLine();
                 stb.AppendLine("Regards,");
-                stb.AppendLine(" - " + objMsg.TeamName + " Team");
+                stb.AppendLine(" - " + objMsg.Addby);
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
                 sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");

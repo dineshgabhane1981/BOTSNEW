@@ -119,6 +119,9 @@ namespace BOTS_BL.Models.CommonDB
         public string GroupName { get; set; }
         public string Description { get; set; }
         public string TeamName { get; set; }
+        public string SpokenTo { get; set; }
+        public string Addby { get; set; }
+        public string BOEmpName { get; set; }
 
     }
 }
