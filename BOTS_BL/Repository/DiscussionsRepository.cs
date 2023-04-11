@@ -574,21 +574,25 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     var CallTypes = context.BOTS_TblCallTypes.ToList();
+                    
                     foreach (var item in CallTypes)
                     {
                         if (Convert.ToString(item.Id) == "12" || Convert.ToString(item.Id) == "9" || Convert.ToString(item.Id) == "10" || Convert.ToString(item.Id) == "18" || Convert.ToString(item.Id) == "1")
                         {
                             lstCallTypes.Add(new SelectListItem
                             {
+                                
                                 Text = item.CallType,
                                 Value = Convert.ToString(item.Id)
                             });
                         }
                     }
                 }
+                
             }
+            
             else
-            {
+            {   
                 using (var context = new CommonDBContext())
                 {
                     var CallTypes = context.BOTS_TblCallTypes.ToList();
@@ -602,16 +606,16 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-
+            lstCallTypes = lstCallTypes.OrderBy(x => x.Text).ToList();
             return lstCallTypes;
         }
         public List<SelectListItem> GetSubCallTypes(int Id)
         {
             List<SelectListItem> lstSubCallTypes = new List<SelectListItem>();
-            SelectListItem item1 = new SelectListItem();
-            item1.Value = "0";
-            item1.Text = "Please Select";
-            lstSubCallTypes.Add(item1);
+            //SelectListItem item1 = new SelectListItem();
+            //item1.Value = "0";
+            //item1.Text = "Please Select";
+            //lstSubCallTypes.Add(item1);
             using (var context = new CommonDBContext())
             {
                 var SubCallTypes = context.BOTS_TblCallSubTypes.Where(x => x.CallTypeId == Id).ToList();
@@ -624,6 +628,7 @@ namespace BOTS_BL.Repository
                     });
                 }
             }
+            lstSubCallTypes = lstSubCallTypes.OrderBy(x => x.Text).ToList();
             return lstSubCallTypes;
         }
         public List<SelectListItem> GetGroupDetails()
