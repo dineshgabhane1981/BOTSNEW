@@ -61,22 +61,26 @@
             <input type="hidden" id="hdnIdNew" name="hdnIdNew" />
             <b>Common Discussions</b>
 
-            <div class="row mt-2">
-                <div class="col-md-4 col-xl-6">
-                    Select Group
-
+            <div class="row" style="margin: 0;">
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Group
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
                     @Html.DropDownList("Group", new SelectList(ViewBag.lstgroupdetails, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlGroupnm" })
                 </div>
-                <div class="col-md-4 col-xl-6 ">
-                    Select Staus
-
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                     Staus
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
                     @Html.DropDownList("Staus", new SelectList(ViewBag.lstcommonstatus, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlstatus" })
                 </div>
 
             </div>
-            <div class="row mt-3 mb-4">
-                <div class="col-md-4 col-xl-6">
-                    Select Raise by
+            <div class="row" style="margin: 0;">
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Raise by
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
                     @if (userDetails.LoginType == "7")
                     {
                         @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @disabled = "disabled", @id = "ddlRaisedBy" })
@@ -86,23 +90,25 @@
                         @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlRaisedBy" })
                     }
                 </div>
-                <div class="col-md-4 col-xl-6">
-                    Select Call Type
-
-                    @Html.DropDownList("calltype", new SelectList(ViewBag.lstCallTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlcalltype" })
-                </div>               
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                   Call Type
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    @Html.DropDownList("calltype", new SelectList(ViewBag.lstCallTypes, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input100", @id = "ddlcalltype" })
+                </div>
             </div>
-            <div class="row mt-3 mb-4">
-                <div class="col-md-4 col-xl-6">
-
-                    Select Assigned Member
-
+            <div class="row" style="margin: 0;">
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Assigned Member
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
                     @Html.DropDownList("AssignedMember", new SelectList(ViewBag.lstMemberAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlMemberAssign" })
                 </div>
-                <div class="col-md-4 col-xl-6">
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                     Call Sub Type
-
-                    @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"),"--Select--", htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
                 </div>
             </div>
                 <div class="row mt-3 mb-4">
@@ -210,7 +216,7 @@
         });
         $('#ddlcalltype').change(function () {
             
-            if ($("#ddlcalltype option:selected").text() != "Please Select") {
+            if ($("#ddlcalltype option:selected").text() != "--Select--") {
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("GetSubCallTypes", "Discussion")',
@@ -231,7 +237,7 @@
             }
             else {
                 $("#ddlSubCallType").empty();
-                $("#ddlSubCallType").append($("<option />").val(0).text("Please Select"));
+                $("#ddlSubCallType").append($("<option />").val(0).text("--Select--"));
             }
         });
       
@@ -295,7 +301,7 @@
         }
         else {
             item["selectedcall"] = null;
-        }        
+        }
         if ($("#ddlstatus").prop('selectedIndex') !== 0) {
 
             item["selectedstatus"]= $("#ddlstatus option:selected").val();
@@ -317,6 +323,15 @@
         else {
             item["selectedMemberAssign"] = null;
         }
+        if ($("#ddlSubCallType").prop('selectedIndex') !== 0) {
+
+            item["SubCallType"] = $("#ddlSubCallType option:selected").val();
+        }
+        else {
+            item["SubCallType"] = null;
+        }
+
+        
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
         $.ajax({
@@ -351,7 +366,8 @@
         var fromdt = '';
         var Todt = '';
         var groupnm = '';
-        var calltype = 0;        
+        var calltype = 0;
+        var subcalltype = 0;
         var status = '';
         var raisedby = '';
         var AssignedMember = '';
@@ -402,9 +418,16 @@
         else {
             AssignedMember = '';
         }
+        if ($("#ddlSubCallType").prop('selectedIndex') !== 0) {
+
+            subcalltype = $("#ddlSubCallType option:selected").val();
+        }
+        else {
+            subcalltype = 0;
+        }
 
         var urlLink = "@Url.Action("ExportToExcelCommonFilteredDiscussion", "Discussion")";
-        urlLink = urlLink + "?fromdt=" + fromdt + "&Todt=" + Todt + "&Groupnm=" + groupnm + "&calltype=" + calltype + "&status=" + status + "&raised=" + raisedby +"&ReportName=DiscussionReport";
+        urlLink = urlLink + "?fromdt=" + fromdt + "&Todt=" + Todt + "&Groupnm=" + groupnm + "&calltype=" + calltype + "&subcalltype=" + subcalltype + "&status=" + status + "&raised=" + raisedby + "&AssignMember=" + AssignedMember +"&ReportName=DiscussionReport";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();

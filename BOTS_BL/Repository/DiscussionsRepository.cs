@@ -118,6 +118,7 @@ namespace BOTS_BL.Repository
                                    ActionItems = c.ActionItems,
                                    AddedBy = cld.UserName,
                                    Status = c.Status,
+                                   AssignedMember = c.AssignedMember
 
                                }).OrderByDescending(x => x.AddedDate).ToList();
                 }
@@ -562,37 +563,51 @@ namespace BOTS_BL.Repository
 
             return lstsubdiscussionlist;
         }
+        public List<SelectListItem> GetSubCallTypes(int Id)
+        {
+            List<SelectListItem> lstSubCallTypes = new List<SelectListItem>();           
+            using (var context = new CommonDBContext())
+            {
+                var SubCallTypes = context.BOTS_TblCallSubTypes.Where(x => x.CallTypeId == Id).ToList();
+                foreach (var item in SubCallTypes)
+                {
+                    lstSubCallTypes.Add(new SelectListItem
+                    {
+                        Text = item.CallSubType,
+                        Value = Convert.ToString(item.Id)
+                    });
+                }
+            }
+            lstSubCallTypes = lstSubCallTypes.OrderBy(x => x.Text).ToList();
+            return lstSubCallTypes;
+        }
+
         public List<SelectListItem> GetCallTypes(string LoginType)
         {
             List<SelectListItem> lstCallTypes = new List<SelectListItem>();
-            //SelectListItem item1 = new SelectListItem();
-            //item1.Value = "0";
-            //item1.Text = "Please Select";
-            //lstCallTypes.Add(item1);
+            
             if (LoginType == "9" || LoginType == "10")
             {
                 using (var context = new CommonDBContext())
                 {
                     var CallTypes = context.BOTS_TblCallTypes.ToList();
-                    
+
                     foreach (var item in CallTypes)
                     {
                         if (Convert.ToString(item.Id) == "12" || Convert.ToString(item.Id) == "9" || Convert.ToString(item.Id) == "10" || Convert.ToString(item.Id) == "18" || Convert.ToString(item.Id) == "1")
                         {
                             lstCallTypes.Add(new SelectListItem
                             {
-                                
+
                                 Text = item.CallType,
                                 Value = Convert.ToString(item.Id)
                             });
                         }
                     }
                 }
-                
             }
-            
             else
-            {   
+            {
                 using (var context = new CommonDBContext())
                 {
                     var CallTypes = context.BOTS_TblCallTypes.ToList();
@@ -608,28 +623,6 @@ namespace BOTS_BL.Repository
             }
             lstCallTypes = lstCallTypes.OrderBy(x => x.Text).ToList();
             return lstCallTypes;
-        }
-        public List<SelectListItem> GetSubCallTypes(int Id)
-        {
-            List<SelectListItem> lstSubCallTypes = new List<SelectListItem>();
-            //SelectListItem item1 = new SelectListItem();
-            //item1.Value = "0";
-            //item1.Text = "Please Select";
-            //lstSubCallTypes.Add(item1);
-            using (var context = new CommonDBContext())
-            {
-                var SubCallTypes = context.BOTS_TblCallSubTypes.Where(x => x.CallTypeId == Id).ToList();
-                foreach (var item in SubCallTypes)
-                {
-                    lstSubCallTypes.Add(new SelectListItem
-                    {
-                        Text = item.CallSubType,
-                        Value = Convert.ToString(item.Id)
-                    });
-                }
-            }
-            lstSubCallTypes = lstSubCallTypes.OrderBy(x => x.Text).ToList();
-            return lstSubCallTypes;
         }
         public List<SelectListItem> GetGroupDetails()
         {
@@ -1169,7 +1162,7 @@ namespace BOTS_BL.Repository
             return lstdiscuss;
         }
 
-        public List<DiscussionDetails> GetfilteredDiscussionDataAssign(string status, int calltype, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp, string AssignMember)
+        public List<DiscussionDetails> GetfilteredDiscussionDataAssign(string status, int calltype, int SubCallType, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp, string AssignMember)
         {
             List<DiscussionDetails> lstdiscuss = new List<DiscussionDetails>();
             List<DiscussionDetails> lstdiscussOnBoarding = new List<DiscussionDetails>();
@@ -1224,6 +1217,11 @@ namespace BOTS_BL.Repository
                     {
                         list = list.Where(x => x.CallType == calltype).ToList();
                     }
+                    if (SubCallType != 0)
+                    {
+                        var subCallTypeStr = Convert.ToString(SubCallType);
+                        list = list.Where(x => x.SubCallType == subCallTypeStr).ToList();
+                    }
 
                     if (fromDate != "" && toDate != "")
                     {
@@ -1267,6 +1265,7 @@ namespace BOTS_BL.Repository
                                               ActionItems = c.ActionItems,
                                               AddedBy = cld.UserName,
                                               Status = c.Status,
+                                              AssignedMember = c.AssignedMember,
 
                                           }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1292,6 +1291,7 @@ namespace BOTS_BL.Repository
                                                         ActionItems = c.ActionItems,
                                                         AddedBy = cld.UserName,
                                                         Status = c.Status,
+                                                        AssignedMember = c.AssignedMember,
 
                                                     }).OrderByDescending(x => x.AddedDate).ToList();
                         }
@@ -1317,6 +1317,7 @@ namespace BOTS_BL.Repository
                                               ActionItems = c.ActionItems,
                                               AddedBy = cld.UserName,
                                               Status = c.Status,
+                                              AssignedMember = c.AssignedMember,
 
                                           }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1340,6 +1341,7 @@ namespace BOTS_BL.Repository
                                                         ActionItems = c.ActionItems,
                                                         AddedBy = cld.UserName,
                                                         Status = c.Status,
+                                                        AssignedMember = c.AssignedMember,
 
                                                     }).OrderByDescending(x => x.AddedDate).ToList();
                         }
@@ -1371,6 +1373,7 @@ namespace BOTS_BL.Repository
                                                   ActionItems = c.ActionItems,
                                                   AddedBy = cld.UserName,
                                                   Status = c.Status,
+                                                  AssignedMember = c.AssignedMember,
 
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1395,6 +1398,7 @@ namespace BOTS_BL.Repository
                                                             ActionItems = c.ActionItems,
                                                             AddedBy = cld.UserName,
                                                             Status = c.Status,
+                                                            AssignedMember = c.AssignedMember,
 
                                                         }).OrderByDescending(x => x.AddedDate).ToList();
                             }
@@ -1421,6 +1425,7 @@ namespace BOTS_BL.Repository
                                                   ActionItems = c.ActionItems,
                                                   AddedBy = cld.UserName,
                                                   Status = c.Status,
+                                                  AssignedMember = c.AssignedMember,
 
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1445,6 +1450,7 @@ namespace BOTS_BL.Repository
                                                             ActionItems = c.ActionItems,
                                                             AddedBy = cld.UserName,
                                                             Status = c.Status,
+                                                            AssignedMember = c.AssignedMember,
 
                                                         }).OrderByDescending(x => x.AddedDate).ToList();
                             }
@@ -1476,6 +1482,7 @@ namespace BOTS_BL.Repository
                                                       ActionItems = c.ActionItems,
                                                       AddedBy = cld.UserName,
                                                       Status = c.Status,
+                                                      AssignedMember = c.AssignedMember,
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1500,6 +1507,7 @@ namespace BOTS_BL.Repository
                                                                 ActionItems = c.ActionItems,
                                                                 AddedBy = cld.UserName,
                                                                 Status = c.Status,
+                                                                AssignedMember = c.AssignedMember,
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -1526,6 +1534,7 @@ namespace BOTS_BL.Repository
                                                       ActionItems = c.ActionItems,
                                                       AddedBy = cld.UserName,
                                                       Status = c.Status,
+                                                      AssignedMember = c.AssignedMember,
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1550,6 +1559,7 @@ namespace BOTS_BL.Repository
                                                                 ActionItems = c.ActionItems,
                                                                 AddedBy = cld.UserName,
                                                                 Status = c.Status,
+                                                                AssignedMember = c.AssignedMember,
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -1578,6 +1588,7 @@ namespace BOTS_BL.Repository
                                                       ActionItems = c.ActionItems,
                                                       AddedBy = cld.UserName,
                                                       Status = c.Status,
+                                                      AssignedMember = c.AssignedMember,
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1601,6 +1612,7 @@ namespace BOTS_BL.Repository
                                                                 ActionItems = c.ActionItems,
                                                                 AddedBy = cld.UserName,
                                                                 Status = c.Status,
+                                                                AssignedMember = c.AssignedMember,
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -1626,6 +1638,7 @@ namespace BOTS_BL.Repository
                                                       ActionItems = c.ActionItems,
                                                       AddedBy = cld.UserName,
                                                       Status = c.Status,
+                                                      AssignedMember = c.AssignedMember,
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1649,6 +1662,7 @@ namespace BOTS_BL.Repository
                                                                 ActionItems = c.ActionItems,
                                                                 AddedBy = cld.UserName,
                                                                 Status = c.Status,
+                                                                AssignedMember = c.AssignedMember,
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }

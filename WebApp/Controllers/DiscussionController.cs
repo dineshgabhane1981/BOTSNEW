@@ -119,7 +119,7 @@ namespace WebApp.Controllers
         }
         public JsonResult GetSubDiscussionList(int Id)
         {
-            List<SubDiscussionData> lstsubdiscussionLists = new List<SubDiscussionData>();            
+            List<SubDiscussionData> lstsubdiscussionLists = new List<SubDiscussionData>();
             lstsubdiscussionLists = DR.GetNestedDiscussionList(Id);
 
             return new JsonResult() { Data = lstsubdiscussionLists, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -146,6 +146,8 @@ namespace WebApp.Controllers
         public ActionResult GetCommonFilteredDiscussion(string jsonData)
         {
             //var lstdashboard ="";
+            int calltype = 0;
+            int SubCallType = 0;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             string LoginType = userDetails.LoginType;
             DiscussionViewModel ObjData = new DiscussionViewModel();
@@ -157,26 +159,20 @@ namespace WebApp.Controllers
                 string fromDate = Convert.ToString(item["fromDate"]);
                 string toDate = Convert.ToString(item["toDate"]);
                 string groupnm = Convert.ToString(item["selectedgrp"]);
-                int calltype = Convert.ToInt32(item["selectedcall"]);
+                if (!string.IsNullOrEmpty(Convert.ToString(item["selectedcall"])))
+                    calltype = Convert.ToInt32(item["selectedcall"]);
                 string status = Convert.ToString(item["selectedstatus"]);
                 string raisedby = Convert.ToString(item["selectedRaisedBy"]);
                 string AssignMember = Convert.ToString(item["selectedMemberAssign"]);
-                if(AssignMember == null)
-                {
-                    ObjData.lstDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, false);
-                    ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, true);
-                }
-                else
-                {
-                    ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, false, AssignMember);
-                    ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, true, AssignMember);
-                }
+                if (!string.IsNullOrEmpty(Convert.ToString(item["SubCallType"])))
+                    SubCallType = Convert.ToInt32(item["SubCallType"]);
 
-                //lstdashboard = DR.GetfilteredDiscussionData(status, calltype, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId,false);
+                ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign(status, calltype, SubCallType, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, false, AssignMember);
+                ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign(status, calltype, SubCallType, groupnm, fromDate, toDate, raisedby, userDetails.LoginType, userDetails.LoginId, true, AssignMember);
             }
             return PartialView("_CommonDiscussionList", ObjData);
         }
-        public ActionResult ExportToExcelCommonFilteredDiscussion(string fromdt, string Todt, string Groupnm, int calltype, string status, string raised, string ReportName)
+        public ActionResult ExportToExcelCommonFilteredDiscussion(string fromdt, string Todt, string Groupnm, int calltype, int subcalltype, string status, string raised, string AssignMember, string ReportName)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -186,7 +182,7 @@ namespace WebApp.Controllers
                 List<DiscussionDetails> lstdashboard = new List<DiscussionDetails>();
                 // List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
                 // lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString);
-                lstdashboard = DR.GetfilteredDiscussionData(status, calltype, Groupnm, fromdt, Todt, raised, LoginType, userDetails.LoginId, false);
+                lstdashboard = DR.GetfilteredDiscussionDataAssign(status, calltype, subcalltype, Groupnm, fromdt, Todt, raised, LoginType, userDetails.LoginId, false, AssignMember);
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(DiscussionDetails));
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);

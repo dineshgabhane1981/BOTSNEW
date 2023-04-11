@@ -128,7 +128,7 @@
                                         <th scope="col">FollowUp Date</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Description</th>
-                                        <th scope="col">Action Item</th>
+                                        <th scope="col">Assigned Member</th>
                                         <th scope="col">Raised By</th>
                                         <th scope="col">Action</th>
                                     </tr>
@@ -191,16 +191,8 @@
                                                 {
                                                     <td>--</td>
                                                 }
-                                                @if (!string.IsNullOrEmpty(item.ActionItems))
-                                                {
-                                                    <td style="min-width:100px !important;">@item.ActionItems</td>
-                                                }
-                                                else
-                                                {
-                                                    <td>--</td>
-                                                }
-
-
+                                                
+                                                    <td style="min-width:100px !important;">@item.AssignedMember</td>                                   
                                                 <td>@item.AddedBy</td>
                                                 @if (item.Status != "Completed")
                                                 {
@@ -278,7 +270,7 @@
                                         <th scope="col">FollowUp Date</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Description</th>
-                                        <th scope="col">Action Item</th>
+                                        <th scope="col">Assigned Member</th>
                                         <th scope="col">Raised By</th>
                                         <th scope="col">Action</th>
                                     </tr>
@@ -342,14 +334,14 @@
                                                 {
                                                     <td>--</td>
                                                 }
-                                                @if (!string.IsNullOrEmpty(item.ActionItems))
-                                                {
-                                                    <td>@item.ActionItems</td>
-                                                }
+                                                @*@if (!string.IsNullOrEmpty(item.AssignedMember))
+                                                {*@
+                                                    <td>@item.AssignedMember</td>
+                                                @*}
                                                 else
                                                 {
                                                     <td>--</td>
-                                                }
+                                                }*@
 
 
                                                 <td>@item.AddedBy</td>
