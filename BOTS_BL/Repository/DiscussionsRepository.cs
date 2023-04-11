@@ -1157,8 +1157,18 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
+            
+                
+            
             }
             lstdiscuss.AddRange(lstdiscussOnBoarding);
+            using (var context = new CommonDBContext())
+            {
+                foreach (var item in lstdiscuss)
+                {
+                    item.SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.DiscussionId == item.Id).Count();
+                }
+            }
             return lstdiscuss;
         }
 
