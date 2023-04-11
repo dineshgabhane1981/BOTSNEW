@@ -25,7 +25,7 @@ namespace BOTS_BL.Repository
     public class DiscussionsRepository
     {
         Exceptions newexception = new Exceptions();
-     
+
         public List<DiscussionDetails> GetDiscussions(string GroupId, string LoginType)
         {
             List<DiscussionDetails> objData = new List<DiscussionDetails>();
@@ -133,11 +133,11 @@ namespace BOTS_BL.Repository
             XmlDocument doc = new XmlDocument();
             var xmlpath = ConfigurationManager.AppSettings["DiscussionScripts"].ToString();
             doc.Load(xmlpath);
-            
+
 
             bool status = false;
             string path = string.Empty;
-            
+
 
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             try
@@ -159,7 +159,11 @@ namespace BOTS_BL.Repository
                     {
                         if (Directory.Exists(_FilePath))
                         {
-
+                            var GroupFolder = _FilePath + "/" + _GroupName;
+                            if (!Directory.Exists(GroupFolder))
+                            {
+                                Directory.CreateDirectory(GroupFolder);
+                            }
                             byte[] imageBytes = Convert.FromBase64String(_File);
                             MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
                             ms.Write(imageBytes, 0, imageBytes.Length);
@@ -185,13 +189,13 @@ namespace BOTS_BL.Repository
                         }
                     }
 
-                        if (objDiscussion.SubCallType != "25" && objDiscussion.SubCallType != "26" && objDiscussion.SubCallType != "27")
-                        {
-                           objDiscussion.DiscussionDoneNotDone = null;
-                        }
+                    if (objDiscussion.SubCallType != "25" && objDiscussion.SubCallType != "26" && objDiscussion.SubCallType != "27")
+                    {
+                        objDiscussion.DiscussionDoneNotDone = null;
+                    }
                     else
                     {
-                        if(objDiscussion.DiscussionDoneNotDone == "Done")
+                        if (objDiscussion.DiscussionDoneNotDone == "Done")
                         {
                             objDiscussion.DiscussionDoneNotDone = "1";
                         }
@@ -212,20 +216,21 @@ namespace BOTS_BL.Repository
                         objsubdiscussion.Status = objDiscussion.Status;
                         objsubdiscussion.UpdatedBy = objDiscussion.AddedBy;
                         objsubdiscussion.ReassignedMember = objDiscussion.AssignedMember;
+                        objsubdiscussion.AttachedFile = _FileURL + _GroupName + "/" + FileName;
                         context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                         context.SaveChanges();
                     }
                     status = true;
 
                     int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
-                    
+
 
                     var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
                     var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == Sendfrom.Department && x.Role == "02").FirstOrDefault();
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == objDiscussion.AssignedMember).FirstOrDefault();
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
-                    
+
                     var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
 
                     EmailDetails ObjEmailData = new EmailDetails();
@@ -286,7 +291,7 @@ namespace BOTS_BL.Repository
                             Script = node.InnerText;
                         }
                     }
-                        
+
 
 
                     MessageDetails ObjMsgData = new MessageDetails();
@@ -300,11 +305,11 @@ namespace BOTS_BL.Repository
 
                     if (objDiscussion.AssignedMember == null)
                     {
-                        if(objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                        if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
                         {
                             Thread _job1 = new Thread(() => SendEmailOnlyHOD(ObjEmailData));
                             _job1.Start();
-                        }                       
+                        }
                     }
                     else
                     {
@@ -312,7 +317,7 @@ namespace BOTS_BL.Repository
                         {
                             Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
                             _job1.Start();
-                        }                          
+                        }
                     }
 
                     if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
@@ -393,7 +398,7 @@ namespace BOTS_BL.Repository
                     int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
 
-                    
+
                     var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
                     var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == Sendfrom.Department && x.Role == "02").FirstOrDefault();
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == Reassign).FirstOrDefault();
@@ -441,8 +446,8 @@ namespace BOTS_BL.Repository
                         UpdateStatus = true;
                         if (SendTo != null)
                         {
-                          objmail.SendTo = _AddbyEmail;
-                        }  
+                            objmail.SendTo = _AddbyEmail;
+                        }
                     }
                     else
                     {
@@ -456,12 +461,12 @@ namespace BOTS_BL.Repository
                     {
                         if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
                         {
-                            if(objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
                             {
                                 Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
                                 _job1.Start();
                             }
-                                
+
                             Thread _job2 = new Thread(() => SendWAMessageCompleteHOD(ObjMsgData));
                             _job2.Start();
                         }
@@ -471,7 +476,7 @@ namespace BOTS_BL.Repository
                             {
                                 Thread _job1 = new Thread(() => SendEmailComplete(objmail));
                                 _job1.Start();
-                            }                                
+                            }
                         }
 
                     }
@@ -484,7 +489,7 @@ namespace BOTS_BL.Repository
                                 Thread _job1 = new Thread(() => SendEmailUpdateOnlyHOD(objmail));
                                 _job1.Start();
                             }
-                                
+
                             Thread _job2 = new Thread(() => SendWAMessageUpdateHOD(ObjMsgData));
                             _job2.Start();
                         }
@@ -494,7 +499,7 @@ namespace BOTS_BL.Repository
                             {
                                 Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
                                 _job1.Start();
-                            }                                
+                            }
                         }
                     }
                 }
@@ -533,7 +538,7 @@ namespace BOTS_BL.Repository
                                                 Status = ct.Status,
                                                 AddedDate = ct.AddedDate,
                                                 AssignedTo = ct.ReassignedMember
-                                                
+
 
 
                                             }).OrderByDescending(x => x.FollowupDate).ToList();
@@ -1159,7 +1164,7 @@ namespace BOTS_BL.Repository
             return lstdiscuss;
         }
 
-        public List<DiscussionDetails> GetfilteredDiscussionDataAssign(string status, int calltype, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp,string AssignMember)
+        public List<DiscussionDetails> GetfilteredDiscussionDataAssign(string status, int calltype, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp, string AssignMember)
         {
             List<DiscussionDetails> lstdiscuss = new List<DiscussionDetails>();
             List<DiscussionDetails> lstdiscussOnBoarding = new List<DiscussionDetails>();
@@ -1167,7 +1172,10 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
 
-                var list = context.BOTS_TblDiscussion.Where(x=>x.AssignedMember == AssignMember).ToList();
+                var list = context.BOTS_TblDiscussion.ToList();
+                if (AssignMember != "")
+                    list = list.Where(x => x.AssignedMember == AssignMember).ToList();
+
                 if (groupnm != "")
                 {
                     list = list.Where(x => x.GroupId == groupnm).ToList();
@@ -2024,7 +2032,7 @@ namespace BOTS_BL.Repository
             try
             {
 
-                objMsg.Message = objMsg.Message.Replace("#spokento", "@"+ objMsg.SpokenTo);
+                objMsg.Message = objMsg.Message.Replace("#spokento", "@" + objMsg.SpokenTo);
                 objMsg.Message = objMsg.Message.Replace("#01", "@" + objMsg.GroupName);
                 objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
                 //string type = "TEXT";

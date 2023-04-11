@@ -8,8 +8,10 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link rel="stylesheet" href="~/Content/style.css" />
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+@*<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />*@
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
 <style>
     #loader {
         display: flex;
@@ -74,7 +76,12 @@
                 if (!string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
                 {
                     <script>
-                        toastr.error('@Convert.ToString(TempData["InvalidUserMessage"])');
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: '@Convert.ToString(TempData["InvalidUserMessage"])',
+                            buttonText: "Okay"
+                        })                        
                     </script>
                 }
                 <input type="hidden" id="hdnOTPOrPassword" />
@@ -111,7 +118,13 @@
 
         if ($("#LoginId").val() == "") {
             $("#LoginId").focus();
-            toastr.error('Please enter Login ID');
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Login ID",
+                buttonText: "Okay"
+            })
+            //toastr.error('Please enter Login ID');
             return false;
         }
         $("#divLoader").show();
@@ -125,7 +138,13 @@
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
-                    toastr.error('There is problem while sending OTP, please try after sometime');
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is problem while sending OTP, please try after sometime",
+                        buttonText: "Okay"
+                    })
+                    /*toastr.error('There is problem while sending OTP, please try after sometime');*/
                     $("#divLoader").hide();
                 },
                 error: function (response) {
@@ -143,14 +162,32 @@
                         $("#btnProceed").hide();
                         $("#btnSubmit").show();
                         $("#hdnOTPOrPassword").val(2);
-                        toastr.success('OTP Sent Successfully');
+                        cuteAlert({
+                            type: "success",
+                            title: "Sent",
+                            message: "OTP Sent Successfully",
+                            buttonText: "Okay"
+                        })
+                        //toastr.success('OTP Sent Successfully');
                     }
                     if (response.responseText == "error in sending OTP") {
-                        toastr.error('There is problem while sending OTP, please try after sometime');
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is problem while sending OTP, please try after sometime",
+                            buttonText: "Okay"
+                        })
+                        //toastr.error('There is problem while sending OTP, please try after sometime');
                         $("#divLoader").hide();
                     }
                     if (response.responseText == "NoUserFound") {
-                        toastr.error('No User exist');
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "No User exist",
+                            buttonText: "Okay"
+                        })
+                        //toastr.error('No User exist');
                         $("#divLoader").hide();
                     }
                     $("#divLoader").hide();
@@ -162,11 +199,23 @@
 
     function Validate() {
         if ($("#hdnOTPOrPassword").val() == "1" && $("#txtPassword").val() == "") {
-            toastr.error('Please enter Password');
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Password",
+                buttonText: "Okay"
+            })
+            //toastr.error('Please enter Password');
             return false;
         }
         if ($("#hdnOTPOrPassword").val() == 2 && $("#txtOTP").val() == "") {
-            toastr.error('Please enter OTP');
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter OTP",
+                buttonText: "Okay"
+            })
+            //toastr.error('Please enter OTP');
             return false;
         }
         return true;
@@ -181,21 +230,21 @@
             dataType: "json", // The type of data that you're exerciseecting back
 
             error: function () {
-                
+
                 // A function to be called if the request fails.
             },
 
             success: function (response) {
-               
+
                 console.log(response);
                 // A function to be called if the request succeeds.
             },
             complete: function (response) {
-               
+
                 // A function to be called when the request finishes
             },
             failure: function (response) {
-                
+
                 // A function to be called when the request finishes
             },
 

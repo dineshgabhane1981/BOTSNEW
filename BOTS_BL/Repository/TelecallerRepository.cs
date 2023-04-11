@@ -171,6 +171,11 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, GroupId);
             }
+            lsttelereportdata = lsttelereportdata.OrderBy(x => x.AddedDate).ToList();
+            foreach(var item in lsttelereportdata)
+            {
+                item.AddedDate = item.AddedDate.Value.AddHours(5).AddMinutes(30);
+            }
             return lsttelereportdata;
 
         }
