@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <packets>
-	<DiscussionFirstDone>#spokento Dear #01, Thank you for your time for Detailed Dashboard Discussion today. You can connect with me for any assistance required on the same</DiscussionFirstDone>
-	<DiscussionFirstNotDone>#spokento Dear #01, We request you to provide time for DASHBOARD Discussion as per your convinience as we could not have the same done today.</DiscussionFirstNotDone>
-	<IdeasCampaignDiscussionDone>#spokento Dear #01, Thank you for your time for Campaign discussion today. Will share the details as discussed, if any.</IdeasCampaignDiscussionDone>
-	<IdeasCampaignDiscussionNotDone>#spokento Dear #01, Request you to provide an alternate time for Campaign Discussion as per your convinience as we could not have the same discussed today. Please note we can plan for the campaigns post our discussion only</IdeasCampaignDiscussionNotDone>
-	<DashboardCampaignDiscussionDone>#spokento Dear #01, Thank you for your time for Dashboard and Campaign discussion today.</DashboardCampaignDiscussionDone>
-	<DashboardCampaignDiscussionNotDone>#spokento Dear #01, Request you to provide an alternate time for Dashboard Discussion as per your convinient as we could not have the same done today. This will help us plan for this month/season campaigns</DashboardCampaignDiscussionNotDone>
+	<DiscussionFirstDone>Dear #01, Thank you for your time for Detailed Dashboard Discussion today. You can connect with me for any assistance required on the same</DiscussionFirstDone>
+	<DiscussionFirstNotDone>Dear #01, We request you to provide time for DASHBOARD Discussion as per your convinience as we could not have the same done today.</DiscussionFirstNotDone>
+	<IdeasCampaignDiscussionDone>Dear #01, Thank you for your time for Campaign discussion today. Will share the details as discussed, if any.</IdeasCampaignDiscussionDone>
+	<IdeasCampaignDiscussionNotDone>Dear #01, Request you to provide an alternate time for Campaign Discussion as per your convinience as we could not have the same discussed today. Please note we can plan for the campaigns post our discussion only</IdeasCampaignDiscussionNotDone>
+	<DashboardCampaignDiscussionDone>Dear #01, Thank you for your time for Dashboard and Campaign discussion today.</DashboardCampaignDiscussionDone>
+	<DashboardCampaignDiscussionNotDone>Dear #01, Request you to provide an alternate time for Dashboard Discussion as per your convinient as we could not have the same done today. This will help us plan for this month/season campaigns</DashboardCampaignDiscussionNotDone>
 </packets>
