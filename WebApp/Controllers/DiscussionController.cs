@@ -138,7 +138,7 @@ namespace WebApp.Controllers
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File);
+            status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File, userDetails.GroupId);
 
             return status;
         }

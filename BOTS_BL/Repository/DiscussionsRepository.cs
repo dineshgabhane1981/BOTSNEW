@@ -222,6 +222,7 @@ namespace BOTS_BL.Repository
                         objsubdiscussion.UpdatedBy = objDiscussion.AddedBy;
                         objsubdiscussion.ReassignedMember = objDiscussion.AssignedMember;
                         objsubdiscussion.AttachedFile = _FileURL + _GroupName + "/" + FileName;
+                        objsubdiscussion.FileName = FileName;
                         context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                         context.SaveChanges();
                     }
@@ -300,9 +301,6 @@ namespace BOTS_BL.Repository
                             Script = node.InnerText;
                         }
                     }
-
-
-
                     MessageDetails ObjMsgData = new MessageDetails();
                     ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
                     ObjMsgData.Description = objDiscussion.Description;
@@ -343,7 +341,7 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone)
+        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone, string groupId)
         {
             XmlDocument doc = new XmlDocument();
             var xmlpath = ConfigurationManager.AppSettings["DiscussionScripts"].ToString();
@@ -365,16 +363,32 @@ namespace BOTS_BL.Repository
 
                 if (!string.IsNullOrEmpty(FileDone))
                 {
+                    int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
+                    string _GroupName = string.Empty;
+                    using (var context = new CommonDBContext())
+                    {
+                        var gId = Convert.ToInt32(groupId);
+                        var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
+                        _GroupName = _GroupDetails.GroupName;
+
+                    }
+                    var GroupFolder = _FilePath + "/" + _GroupName;
+                    if (!Directory.Exists(GroupFolder))
+                    {
+                        Directory.CreateDirectory(GroupFolder);
+                    }
 
                     byte[] imageBytes = Convert.FromBase64String(FileDone);
                     MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
                     ms.Write(imageBytes, 0, imageBytes.Length);
-                    path = HttpContext.Current.Server.MapPath("~/DiscussionFileUpload/" + DoneFileName);
+                    path = HttpContext.Current.Server.MapPath("~/DiscussionFileUpload/" + _GroupName + "/" + DoneFileName);
                     FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
                     ms.WriteTo(fileNew);
                     fileNew.Close();
                     ms.Close();
-                    objsubdiscussion.AttachedFile = _FileURL + DoneFileName;
+                    objsubdiscussion.AttachedFile = _FileURL + _GroupName + "/" + DoneFileName;
+                    //objsubdiscussion.AttachedFile = _FileURL + DoneFileName;
+                    objsubdiscussion.FileName = DoneFileName;
                 }
 
                 using (var context = new CommonDBContext())
@@ -383,9 +397,10 @@ namespace BOTS_BL.Repository
                     objDiscussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
                     objDiscussion.UpdatedDate = DateTime.Now;
                     objDiscussion.Status = Status;
-
+                    objDiscussion.AssignedMember = Reassign;
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
+
                     if (!string.IsNullOrEmpty(FollowupDate))
                     {
                         objsubdiscussion.FollowupDate = Convert.ToDateTime(FollowupDate);
@@ -396,7 +411,6 @@ namespace BOTS_BL.Repository
                     }
                     objsubdiscussion.DiscussionId = objDiscussion.Id;
                     objsubdiscussion.GroupId = objDiscussion.GroupId;
-
                     objsubdiscussion.Description = Desc;
                     objsubdiscussion.Status = objDiscussion.Status;
                     objsubdiscussion.UpdatedBy = LoginId;
@@ -469,7 +483,6 @@ namespace BOTS_BL.Repository
                         objmail.FromName = Sendfrom.Members;
                     }
 
-
                     if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
                     {
                         if (objDiscussion.SubCallType == "27" && objsubdiscussion.Status == "Completed")
@@ -539,17 +552,14 @@ namespace BOTS_BL.Repository
                                 Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
                                 _job1.Start();
                             }
-
                             Thread _job2 = new Thread(() => SendWAMessageCompleteHOD(ObjMsgData));
                             _job2.Start();
                         }
                         else
                         {
-
                             Thread _job1 = new Thread(() => SendEmailComplete(objmail));
                             _job1.Start();
                         }
-
                     }
                     else
                     {
@@ -605,9 +615,9 @@ namespace BOTS_BL.Repository
                                                 UpdatedBy = cld.UserName,
                                                 Status = ct.Status,
                                                 AddedDate = ct.AddedDate,
-                                                AssignedTo = ct.ReassignedMember
-
-
+                                                AssignedTo = ct.ReassignedMember,
+                                                AttachedFile = ct.AttachedFile,
+                                                FileName = ct.FileName
 
                                             }).OrderByDescending(x => x.FollowupDate).ToList();
 
@@ -632,7 +642,7 @@ namespace BOTS_BL.Repository
         }
         public List<SelectListItem> GetSubCallTypes(int Id)
         {
-            List<SelectListItem> lstSubCallTypes = new List<SelectListItem>();           
+            List<SelectListItem> lstSubCallTypes = new List<SelectListItem>();
             using (var context = new CommonDBContext())
             {
                 var SubCallTypes = context.BOTS_TblCallSubTypes.Where(x => x.CallTypeId == Id).ToList();
@@ -652,7 +662,7 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetCallTypes(string LoginType)
         {
             List<SelectListItem> lstCallTypes = new List<SelectListItem>();
-            
+
             if (LoginType == "9" || LoginType == "10")
             {
                 using (var context = new CommonDBContext())
@@ -1224,9 +1234,9 @@ namespace BOTS_BL.Repository
                         }
                     }
                 }
-            
-                
-            
+
+
+
             }
             lstdiscuss.AddRange(lstdiscussOnBoarding);
             using (var context = new CommonDBContext())

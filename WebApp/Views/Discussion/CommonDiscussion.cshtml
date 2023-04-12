@@ -69,7 +69,7 @@
                     @Html.DropDownList("Group", new SelectList(ViewBag.lstgroupdetails, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlGroupnm" })
                 </div>
                 <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                     Staus
+                     Status
                 </div>
                 <div class="col-sm-4" style="float:left;margin-top:10px;">
                     @Html.DropDownList("Staus", new SelectList(ViewBag.lstcommonstatus, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlstatus" })
@@ -470,6 +470,7 @@
             htmlStr += "<th scope=\"col\">Updated By</th>";
             htmlStr += "<th scope=\"col\">Description</th>";
             htmlStr += "<th scope=\"col\">Followup Date</th>";
+            htmlStr += "<th scope=\"col\">Uploaded File</th>";
             htmlStr += "<th scope=\"col\">Status</th>";
             htmlStr += "</tr>";
 
@@ -482,6 +483,12 @@
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
                 htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.FollowupDate + "</td>";
+                if (item.FileName == null || item.FileName == "") {
+                    htmlStr += "<td style=\"width: 100px;\">--</td>";
+                }
+                else {
+                    htmlStr += "<td style=\"width: 100px;\"><a href='" + item.AttachedFile + "' target=_blank>" + item.FileName + "</a></td>";
+                }
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });
@@ -545,6 +552,7 @@
             htmlStr += "<th scope=\"col\">Updated By</th>";
             htmlStr += "<th scope=\"col\">Description</th>";
             htmlStr += "<th scope=\"col\">Followup Date</th>";
+            htmlStr += "<th scope=\"col\">Uploaded File</th>";
             htmlStr += "<th scope=\"col\">Status</th>";
             htmlStr += "</tr>";
 
@@ -557,6 +565,12 @@
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
                 htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.FollowupDate + "</td>";
+                if (item.FileName == null || item.FileName == "") {
+                    htmlStr += "<td style=\"width: 100px;\">--</td>";
+                }
+                else {
+                    htmlStr += "<td style=\"width: 100px;\"><a href='" + item.AttachedFile + "' target=_blank>" + item.FileName + "</a></td>";
+                }
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });
