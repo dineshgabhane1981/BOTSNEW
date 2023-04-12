@@ -1936,7 +1936,7 @@ namespace BOTS_BL.Repository
                         mail.CC.Add(Emaildata.DepartHead);
                     }
                     mail.Body = str.ToString();
-                    mail.IsBodyHtml = false;
+                    mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
                     if (!string.IsNullOrEmpty(Emaildata.FilePath))
                     {
@@ -1996,7 +1996,7 @@ namespace BOTS_BL.Repository
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     //mail.CC.Add(Emaildata.DepartHead);
                     mail.Body = str.ToString();
-                    mail.IsBodyHtml = false;
+                    mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
                     if (!string.IsNullOrEmpty(Emaildata.FilePath))
                     {
@@ -2058,7 +2058,7 @@ namespace BOTS_BL.Repository
                         mail.CC.Add(Emaildata.DepartHead);
                     }
                     mail.Body = str.ToString();
-                    mail.IsBodyHtml = false;
+                    mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
                     if (!string.IsNullOrEmpty(Emaildata.FilePath))
                     {
@@ -2119,7 +2119,7 @@ namespace BOTS_BL.Repository
                         mail.CC.Add(Emaildata.DepartHead);
                     }
                     mail.Body = str.ToString();
-                    mail.IsBodyHtml = false;
+                    mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
                     if (!string.IsNullOrEmpty(Emaildata.FilePath))
                     {
@@ -2236,7 +2236,7 @@ namespace BOTS_BL.Repository
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     //mail.CC.Add(Emaildata.DepartHead);
                     mail.Body = str.ToString();
-                    mail.IsBodyHtml = false;
+                    mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
                     if (!string.IsNullOrEmpty(Emaildata.FilePath))
                     {
@@ -2402,7 +2402,7 @@ namespace BOTS_BL.Repository
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     //mail.CC.Add(Emaildata.DepartHead);
                     mail.Body = str.ToString();
-                    mail.IsBodyHtml = false;
+                    mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
                     if (!string.IsNullOrEmpty(Emaildata.FilePath))
                     {
