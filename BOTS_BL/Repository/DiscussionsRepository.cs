@@ -341,7 +341,7 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone, string groupId)
+        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone)
         {
             XmlDocument doc = new XmlDocument();
             var xmlpath = ConfigurationManager.AppSettings["DiscussionScripts"].ToString();
@@ -363,10 +363,12 @@ namespace BOTS_BL.Repository
 
                 if (!string.IsNullOrEmpty(FileDone))
                 {
-                    int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
+                    
                     string _GroupName = string.Empty;
                     using (var context = new CommonDBContext())
                     {
+                        int mId = Convert.ToInt32(id);
+                        var groupId = context.BOTS_TblDiscussion.Where(x => x.Id == mId).Select(y => y.GroupId).FirstOrDefault();
                         var gId = Convert.ToInt32(groupId);
                         var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
                         _GroupName = _GroupDetails.GroupName;
@@ -439,7 +441,7 @@ namespace BOTS_BL.Repository
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
-                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "0").FirstOrDefault();
+                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
                     var _Discussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
 
                     EmailDetails objmail = new EmailDetails();
@@ -1246,13 +1248,13 @@ namespace BOTS_BL.Repository
 
             }
             lstdiscuss.AddRange(lstdiscussOnBoarding);
-            using (var context = new CommonDBContext())
-            {
-                foreach (var item in lstdiscuss)
-                {
-                    item.SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.DiscussionId == item.Id).Count();
-                }
-            }
+            //using (var context = new CommonDBContext())
+            //{
+            //    foreach (var item in lstdiscuss)
+            //    {
+            //        item.SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.DiscussionId == item.Id).Count();
+            //    }
+            //}
             return lstdiscuss;
         }
 
@@ -1767,6 +1769,13 @@ namespace BOTS_BL.Repository
                 }
             }
             lstdiscuss.AddRange(lstdiscussOnBoarding);
+            //using (var context = new CommonDBContext())
+            //{
+            //    foreach (var item in lstdiscuss)
+            //    {
+            //        item.SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.DiscussionId == item.Id).Count();
+            //    }
+            //}
             return lstdiscuss;
         }
         public List<DiscussionCount> GetDiscussionCountReport()

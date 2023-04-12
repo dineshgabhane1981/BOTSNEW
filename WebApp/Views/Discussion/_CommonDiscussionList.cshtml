@@ -147,10 +147,10 @@
                                             <tr>
 
                                                 <td style="text-align:center;">
-                                                    @if (item.SubDiscussionCount > 0)
-                                                    {
+                                                    @*@if (item.SubDiscussionCount > 0)
+                                                    {*@
                                                         <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowFollowUpActivities(@item.Id);" />
-                                                    }
+                                                    @*}*@
                                                 </td>
                                                 <td style="max-width:100px !important;">@item.GroupName</td>
                                                 <td>@item.AddedDate</td>
