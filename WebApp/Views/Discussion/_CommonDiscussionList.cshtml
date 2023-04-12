@@ -199,7 +199,7 @@
                                                 @if (item.Status != "Completed")
                                                 {
                                                     <td style="text-align:center;">
-                                                        <a href="#" onclick="OpenStatusPopupNew(@item.Id);">
+                                                        <a href="#" onclick="OpenStatusPopupNew(@item.Id,'@item.AddedBy');">
                                                             <img src="~/Content/assets/images/task.png" width="35" />
                                                         </a>
                                                     </td>
@@ -352,7 +352,7 @@
                                                 @if (item.Status != "Completed")
                                                 {
                                                     <td style="text-align:center;">
-                                                        <a href="#" onclick="OpenStatusPopupNew(@item.Id);">
+                                                        <a href="#" onclick="OpenStatusPopupNew(@item.Id,'@item.AddedBy');">
                                                             <img src="~/Content/assets/images/task.png" width="35" />
                                                         </a>
                                                     </td>

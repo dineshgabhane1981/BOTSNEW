@@ -237,7 +237,7 @@ namespace BOTS_BL.Repository
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
 
-                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
+                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "0").FirstOrDefault();
 
                     EmailDetails ObjEmailData = new EmailDetails();
 
@@ -439,7 +439,7 @@ namespace BOTS_BL.Repository
                     var _SubCallType = context.BOTS_TblCallSubTypes.Where(x => x.Id == _subtyprId).FirstOrDefault();
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
-                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
+                    var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "0").FirstOrDefault();
                     var _Discussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
 
                     EmailDetails objmail = new EmailDetails();
@@ -552,13 +552,17 @@ namespace BOTS_BL.Repository
                                 Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
                                 _job1.Start();
                             }
+
                             Thread _job2 = new Thread(() => SendWAMessageCompleteHOD(ObjMsgData));
                             _job2.Start();
                         }
                         else
                         {
-                            Thread _job1 = new Thread(() => SendEmailComplete(objmail));
-                            _job1.Start();
+                            if (Reassign != "Please Select")
+                            {
+                                Thread _job1 = new Thread(() => SendEmailComplete(objmail));
+                                _job1.Start();
+                            }
                         }
                     }
                     else
@@ -576,8 +580,11 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
-                            _job1.Start();
+                            if (Reassign != "Please Select")
+                            {
+                                Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
+                                _job1.Start();
+                            }
                         }
                     }
                 }
@@ -1915,7 +1922,10 @@ namespace BOTS_BL.Repository
 
                     mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
-                    mail.CC.Add(Emaildata.DepartHead);
+                    if (Emaildata.DepartHead != null)
+                    {
+                        mail.CC.Add(Emaildata.DepartHead);
+                    }
                     mail.Body = str.ToString();
                     mail.IsBodyHtml = false;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
@@ -2034,7 +2044,10 @@ namespace BOTS_BL.Repository
 
                     mail.Subject = "WIP Reassigned[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
-                    mail.CC.Add(Emaildata.DepartHead);
+                    if (Emaildata.DepartHead != null)
+                    {
+                        mail.CC.Add(Emaildata.DepartHead);
+                    }
                     mail.Body = str.ToString();
                     mail.IsBodyHtml = false;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
@@ -2092,7 +2105,10 @@ namespace BOTS_BL.Repository
 
                     mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
-                    mail.CC.Add(Emaildata.DepartHead);
+                    if (Emaildata.DepartHead != null)
+                    {
+                        mail.CC.Add(Emaildata.DepartHead);
+                    }
                     mail.Body = str.ToString();
                     mail.IsBodyHtml = false;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");

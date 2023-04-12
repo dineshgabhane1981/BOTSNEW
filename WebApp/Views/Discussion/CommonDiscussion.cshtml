@@ -69,7 +69,7 @@
                     @Html.DropDownList("Group", new SelectList(ViewBag.lstgroupdetails, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlGroupnm" })
                 </div>
                 <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                     Status
+                    Staus
                 </div>
                 <div class="col-sm-4" style="float:left;margin-top:10px;">
                     @Html.DropDownList("Staus", new SelectList(ViewBag.lstcommonstatus, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlstatus" })
@@ -91,7 +91,7 @@
                     }
                 </div>
                 <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                   Call Type
+                    Call Type
                 </div>
                 <div class="col-sm-4" style="float:left;margin-top:10px;">
                     @Html.DropDownList("calltype", new SelectList(ViewBag.lstCallTypes, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input100", @id = "ddlcalltype" })
@@ -108,31 +108,31 @@
                     Call Sub Type
                 </div>
                 <div class="col-sm-4" style="float:left;margin-top:10px;">
-                    @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"),"--Select--", htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
+                    @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
                 </div>
             </div>
-                <div class="row mt-3 mb-4">
+            <div class="row mt-3 mb-4">
 
-                    <div class="col-md-8 col-xl-8">
-                        <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
-                        <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input id="txtToDate" placeholder="To Date" class="input50" />
-                        <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
-                        <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
-                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport" style="margin-left:17px;margin-top:5px;">
-                            <i class="fas fa-file-export"></i> Export
-                        </button>
-                    </div>
-                </div>
-
-
-
-                <div id="dvListing">
-                    @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
+                <div class="col-md-8 col-xl-8">
+                    <input type="radio" id="rdnnorange" checked name="cust_type" /> No Range &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdndaterange" name="cust_type" /> Date Range <br /><br />
+                    <input id="txtFromDate" placeholder="From Date" class="input50" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input id="txtToDate" placeholder="To Date" class="input50" />
+                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                    <button type="button" id="btncancel" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>CANCEL</b></button>
+                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport" style="margin-left:17px;margin-top:5px;">
+                        <i class="fas fa-file-export"></i> Export
+                    </button>
                 </div>
             </div>
+
+
+
+            <div id="dvListing">
+                @Html.Partial("~/Views/Discussion/_CommonDiscussionList.cshtml", Model)
             </div>
+        </div>
+    </div>
 </div>
 <div id="myModal" class="modal">
     <div class="modal-content">
@@ -142,6 +142,13 @@
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 <textarea id="txtDesc" rows="5" cols="45" style="border-radius:10px;"></textarea>
+            </div>
+            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                ReAssign -
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @*<select id="ddReassign" class="input100"><option value="S">Please Select</option></select>*@
+                @Html.DropDownListFor(model => model.objDiscussion.ReassignMember, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddReassignMember" })
             </div>
         </div>
         <div class="row" style="margin: 0;">
@@ -153,6 +160,12 @@
                     <option value="WIP">WIP</option>
                     <option value="Completed">Completed</option>
                 </select>
+            </div>
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Upload File
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <input type="file" id="idFileDone" />
             </div>
         </div>
         <div class="row" style="margin: 0;">
@@ -202,6 +215,8 @@
             SetFilter();
         });
 
+        document.getElementById("idFileDone").addEventListener('change', handleDoneFile, false);
+
         $("#btnFilter").click(function () {
             GetData();
         });
@@ -215,7 +230,7 @@
             UpdateStatusNew();
         });
         $('#ddlcalltype').change(function () {
-            
+
             if ($("#ddlcalltype option:selected").text() != "--Select--") {
                 $.ajax({
                     type: "POST",
@@ -240,7 +255,7 @@
                 $("#ddlSubCallType").append($("<option />").val(0).text("--Select--"));
             }
         });
-      
+
     });
 
     function resetAll() {
@@ -251,7 +266,7 @@
         $('#txtToDate').val('');
         $('#ddlGroupnm').prop('selectedIndex', 0);
         $('#ddlstatus').prop('selectedIndex', 0);
-        $('#ddlcalltype').prop('selectedIndex', 0);        
+        $('#ddlcalltype').prop('selectedIndex', 0);
         $('#ddlRaisedBy').prop('selectedIndex', 0);
         $('#ddlMemberAssign').prop('selectedIndex', 0);
         $("#dvListing").hide();
@@ -270,6 +285,26 @@
             $("#txtFromDate").removeAttr("disabled");
             $("#txtToDate").removeAttr("disabled");
         }
+    }
+
+    function handleDoneFile(evt) {
+
+        var id = evt.currentTarget.id;
+
+        var f = evt.target.files[0];
+        var Name = evt.target.files[0].name;
+        var reader = new FileReader();
+        reader.onload = (function (theFile) {
+            return function (e) {
+                var binaryData = e.target.result;
+                var base64String = window.btoa(binaryData);
+                $("#DoneDocBase64").val(base64String);
+                $("#DoneFileName").val(Name);
+
+
+            };
+        })(f);
+        reader.readAsBinaryString(f);
     }
 
     function GetData() {
@@ -331,7 +366,7 @@
             item["SubCallType"] = null;
         }
 
-        
+
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
         $.ajax({
@@ -396,7 +431,7 @@
         }
         else {
             calltype = 0;
-        }       
+        }
         if ($("#ddlstatus").prop('selectedIndex') !== 0) {
 
             status = $("#ddlstatus option:selected").val();
@@ -470,7 +505,6 @@
             htmlStr += "<th scope=\"col\">Updated By</th>";
             htmlStr += "<th scope=\"col\">Description</th>";
             htmlStr += "<th scope=\"col\">Followup Date</th>";
-            htmlStr += "<th scope=\"col\">Uploaded File</th>";
             htmlStr += "<th scope=\"col\">Status</th>";
             htmlStr += "</tr>";
 
@@ -483,12 +517,6 @@
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
                 htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.FollowupDate + "</td>";
-                if (item.FileName == null || item.FileName == "") {
-                    htmlStr += "<td style=\"width: 100px;\">--</td>";
-                }
-                else {
-                    htmlStr += "<td style=\"width: 100px;\"><a href='" + item.AttachedFile + "' target=_blank>" + item.FileName + "</a></td>";
-                }
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });
@@ -552,7 +580,6 @@
             htmlStr += "<th scope=\"col\">Updated By</th>";
             htmlStr += "<th scope=\"col\">Description</th>";
             htmlStr += "<th scope=\"col\">Followup Date</th>";
-            htmlStr += "<th scope=\"col\">Uploaded File</th>";
             htmlStr += "<th scope=\"col\">Status</th>";
             htmlStr += "</tr>";
 
@@ -565,12 +592,6 @@
                 htmlStr += "<td>" + item.UpdatedBy + "</td>";
                 htmlStr += "<td style=\"width: 600px;\">" + item.Description + "</td>";
                 htmlStr += "<td style=\"width: 100px;\">" + item.FollowupDate + "</td>";
-                if (item.FileName == null || item.FileName == "") {
-                    htmlStr += "<td style=\"width: 100px;\">--</td>";
-                }
-                else {
-                    htmlStr += "<td style=\"width: 100px;\"><a href='" + item.AttachedFile + "' target=_blank>" + item.FileName + "</a></td>";
-                }
                 htmlStr += "<td style=\"width: 100px;\">" + item.Status + "</td>";
                 htmlStr += "</tr>"
             });
@@ -595,7 +616,38 @@
 
     }
 
-    function OpenStatusPopupNew(id) {
+    function OpenStatusPopupNew(id, AddedBy) {
+       
+        $("#ddReassignMember").empty()
+        $("#ddReassignMember").append("<option>Please Select</option>");
+        $("#ddReassignMember").append("<option>" + AddedBy + "</option>");
+
+        var FilterData = [];
+        item = {};
+        item["id"] = id;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetReAssignMember", "Discussion")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    for (item in result) {
+                        $("#ddReassignMember").append("<option>" + result[item].Members + "</option>");
+                    }
+
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                }
+        });
+
         $("#myModal").show(1000);
         $("#hdnIdNew").val(id);
     }
@@ -604,13 +656,16 @@
         var id = $("#hdnIdNew").val();
         var Desc = $("#txtDesc").val();
         var Status = $("#ddlPopupStatus").val();
+        var Reassign = $("#ddReassignMember").val();
+        var FileDone = $("#DoneDocBase64").val();
+        var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew").val();
 
         if (Desc != "") {
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
-                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + '}',
+                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) +'}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
