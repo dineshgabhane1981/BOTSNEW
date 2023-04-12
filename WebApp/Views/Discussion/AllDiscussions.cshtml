@@ -348,6 +348,7 @@
                     dataType: "json",
                     success: function (result) {
                         $("#ddlSubCallType").empty();
+                        $("#ddlSubCallType").append("<option>Please Select</option>");
                         $.each(result, function () {
                             $("#ddlSubCallType").append($("<option />").val(this.Value).text(this.Text));
                         });
@@ -497,6 +498,9 @@
             }
             else {
                 $('#ddlCallType').css('border-color', '');
+            }
+            if ($("#ddlCallType").val() != "2") {
+                $("#dvDoneNotDone").hide();
             }
         });
         $('#ddlSubCallType').change(function () {
