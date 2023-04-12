@@ -205,6 +205,10 @@ namespace BOTS_BL.Repository
                             objDiscussion.DiscussionDoneNotDone = "0";
                         }
                     }
+                    if (objDiscussion.AssignedMember == "Please Select")
+                    {
+                        objDiscussion.AssignedMember = null;
+                    }
 
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
@@ -240,6 +244,8 @@ namespace BOTS_BL.Repository
                     ObjEmailData.DepartHeadName = DepartmentHead.Members;
                     ObjEmailData.Addby = Sendfrom.Members;
 
+
+
                     if (SendTo != null)
                     {
                         ObjEmailData.SendTo = SendTo.EmailId;
@@ -258,8 +264,10 @@ namespace BOTS_BL.Repository
                     ObjEmailData.Description = objDiscussion.Description;
                     ObjEmailData.FilePath = path;
                     ObjEmailData.TeamName = Sendfrom.Department;
+                    ObjEmailData.FromName = Sendfrom.Members;
 
-                    if (objDiscussion.SubCallType != "25" && objDiscussion.SubCallType != "26" && objDiscussion.SubCallType != "27")
+
+                    if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
                     {
                         if (objDiscussion.SubCallType == "27" && objDiscussion.DiscussionDoneNotDone == "1")
                         {
@@ -306,7 +314,7 @@ namespace BOTS_BL.Repository
 
                     if (objDiscussion.AssignedMember == null)
                     {
-                        if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                        if (objDiscussion.DiscussionType != "Query")
                         {
                             Thread _job1 = new Thread(() => SendEmailOnlyHOD(ObjEmailData));
                             _job1.Start();
@@ -314,11 +322,11 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
-                        {
-                            Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
-                            _job1.Start();
-                        }
+                        //if (objDiscussion.DiscussionType != "Query" )
+                        //{
+                        Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
+                        _job1.Start();
+                        //}
                     }
 
                     if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
@@ -337,12 +345,18 @@ namespace BOTS_BL.Repository
         }
         public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone)
         {
+            XmlDocument doc = new XmlDocument();
+            var xmlpath = ConfigurationManager.AppSettings["DiscussionScripts"].ToString();
+            doc.Load(xmlpath);
+
             BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
             bool status = false;
             string path = string.Empty;
             bool UpdateStatus = false;
             string _SendTo = string.Empty;
+            string Script = string.Empty;
+
             try
             {
                 string _FilePath = ConfigurationManager.AppSettings["DiscussionFileUpload"];
@@ -388,7 +402,7 @@ namespace BOTS_BL.Repository
                     objsubdiscussion.UpdatedBy = LoginId;
                     objsubdiscussion.AddedDate = DateTime.Now;
 
-                    if (Reassign != "Please Select" && Reassign != null)
+                    if (Reassign != "Please Select")
                     {
                         objsubdiscussion.ReassignedMember = Reassign;
                     }
@@ -399,8 +413,12 @@ namespace BOTS_BL.Repository
                     int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
 
-
-                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
+                    var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == LoginId).FirstOrDefault();
+                    if (Status == "Completed")
+                    {
+                        Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
+                    }
+                    var SendfromComplete = context.tblDepartMembers.Where(x => x.LoginId == LoginId).FirstOrDefault();
                     var DepartmentHead = context.tblDepartMembers.Where(x => x.Department == Sendfrom.Department && x.Role == "02").FirstOrDefault();
                     var SendTo = context.tblDepartMembers.Where(x => x.Members == Reassign).FirstOrDefault();
                     var Completedid = context.tblDepartMembers.Where(x => x.LoginId == LoginId).FirstOrDefault();
@@ -408,6 +426,7 @@ namespace BOTS_BL.Repository
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
                     var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
+                    var _Discussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
 
                     EmailDetails objmail = new EmailDetails();
 
@@ -417,7 +436,14 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        objmail.SendTo = DepartmentHead.EmailId;
+                        if (Status == "Completed")
+                        {
+                            objmail.SendTo = Sendfrom.EmailId;
+                        }
+                        else
+                        {
+                            objmail.SendTo = DepartmentHead.EmailId;
+                        }
                     }
 
                     objmail.DepartHead = DepartmentHead.EmailId;
@@ -434,6 +460,49 @@ namespace BOTS_BL.Repository
                     objmail.id = objDiscussion.Id;
                     objmail.Description = objsubdiscussion.Description;
                     objmail.TeamName = Sendfrom.Department;
+                    if (Status == "Completed")
+                    {
+                        objmail.FromName = SendfromComplete.Members;
+                    }
+                    else
+                    {
+                        objmail.FromName = Sendfrom.Members;
+                    }
+
+
+                    if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
+                    {
+                        if (objDiscussion.SubCallType == "27" && objsubdiscussion.Status == "Completed")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DiscussionFirstDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "27" && objsubdiscussion.Status != "Completed")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DiscussionFirstNotDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "26" && objsubdiscussion.Status == "Completed")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/IdeasCampaignDiscussionDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "26" && objsubdiscussion.Status != "Completed")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/IdeasCampaignDiscussionNotDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "25" && objsubdiscussion.Status == "Completed")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DashboardCampaignDiscussionDone");
+                            Script = node.InnerText;
+                        }
+                        else if (objDiscussion.SubCallType == "25" && objsubdiscussion.Status != "Completed")
+                        {
+                            XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DashboardCampaignDiscussionNotDone");
+                            Script = node.InnerText;
+                        }
+                    }
 
                     MessageDetails ObjMsgData = new MessageDetails();
                     ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
@@ -441,6 +510,9 @@ namespace BOTS_BL.Repository
                     ObjMsgData.GroupName = _GroupDetails.GroupName;
                     ObjMsgData.TeamName = Sendfrom.Department;
                     ObjMsgData.Addby = objDiscussion.AddedBy;
+                    ObjMsgData.Message = Script;
+                    ObjMsgData.SpokenTo = _Discussion.SpokenTo;
+                    ObjMsgData.BOEmpName = Sendfrom.Members;
 
                     if (objsubdiscussion.Status == "Completed")
                     {
@@ -462,7 +534,7 @@ namespace BOTS_BL.Repository
                     {
                         if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
                         {
-                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                            if (objDiscussion.DiscussionType != "Query")
                             {
                                 Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
                                 _job1.Start();
@@ -473,11 +545,9 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
-                            {
-                                Thread _job1 = new Thread(() => SendEmailComplete(objmail));
-                                _job1.Start();
-                            }
+
+                            Thread _job1 = new Thread(() => SendEmailComplete(objmail));
+                            _job1.Start();
                         }
 
                     }
@@ -485,7 +555,7 @@ namespace BOTS_BL.Repository
                     {
                         if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
                         {
-                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
+                            if (objDiscussion.DiscussionType != "Query")
                             {
                                 Thread _job1 = new Thread(() => SendEmailUpdateOnlyHOD(objmail));
                                 _job1.Start();
@@ -496,11 +566,8 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != null)
-                            {
-                                Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
-                                _job1.Start();
-                            }
+                            Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
+                            _job1.Start();
                         }
                     }
                 }
@@ -1825,15 +1892,16 @@ namespace BOTS_BL.Repository
             {
                 using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
                 {
+
                     StringBuilder str = new StringBuilder();
                     str.AppendLine("Dear " + Emaildata.Member + ",");
                     str.AppendLine();
-                    str.AppendLine("You have a task assigned from - " + Emaildata.Addby + " with priority " + Emaildata.Priority);
+                    str.AppendLine("You have a task assigned with <b>" + Emaildata.Priority + "priority</b>");
                     str.AppendLine();
                     str.AppendLine("Discription : " + Emaildata.Description);
                     str.AppendLine();
                     str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+                    str.AppendLine(" - " + Emaildata.FromName);
 
                     mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
@@ -1876,7 +1944,6 @@ namespace BOTS_BL.Repository
             }
 
         }
-
         public void SendEmailOnlyHOD(EmailDetails Emaildata)
         {
             string responseString;
@@ -1891,10 +1958,10 @@ namespace BOTS_BL.Repository
                     str.AppendLine();
                     str.AppendLine("I have raised a ticket for - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
                     str.AppendLine();
-                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
                     str.AppendLine();
                     str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+                    str.AppendLine(" - " + Emaildata.FromName);
 
                     mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
@@ -1936,7 +2003,6 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
         public void SendEmailUpdate(EmailDetails Emaildata)
         {
             string responseString;
@@ -1949,14 +2015,14 @@ namespace BOTS_BL.Repository
                     StringBuilder str = new StringBuilder();
                     str.AppendLine("Dear " + Emaildata.Member + ",");
                     str.AppendLine();
-                    str.AppendLine("You have a task assigned from - " + Emaildata.Addby + " with priority " + Emaildata.Priority);
+                    str.AppendLine("You have a task assigned from - " + Emaildata.Addby + " with <b> priority " + Emaildata.Priority + "</b>");
                     str.AppendLine();
-                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
                     str.AppendLine();
                     str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+                    str.AppendLine(" - " + Emaildata.FromName);
 
-                    mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.Subject = "WIP Reassigned[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     mail.CC.Add(Emaildata.DepartHead);
                     mail.Body = str.ToString();
@@ -1995,7 +2061,6 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
         public void SendEmailComplete(EmailDetails Emaildata)
         {
             string responseString;
@@ -2010,10 +2075,10 @@ namespace BOTS_BL.Repository
                     str.AppendLine();
                     str.AppendLine("Your assigned task is Completed by " + Emaildata.MemberCompleted);
                     str.AppendLine();
-                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
                     str.AppendLine();
                     str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+                    str.AppendLine(" - " + Emaildata.FromName);
 
                     mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
@@ -2061,15 +2126,16 @@ namespace BOTS_BL.Repository
             try
             {
 
-                objMsg.Message = objMsg.Message.Replace("#spokento", "@" + objMsg.SpokenTo);
-                objMsg.Message = objMsg.Message.Replace("#01", "@" + objMsg.GroupName);
+                //objMsg.Message = objMsg.Message.Replace("#spokento", "@" + objMsg.SpokenTo);
+                //objMsg.Message = objMsg.Message.Replace("#01", "Sir,Madam");
+                objMsg.Message = objMsg.Message.Replace("#01", objMsg.SpokenTo);
                 objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
                 //string type = "TEXT";
                 StringBuilder stb = new StringBuilder();
                 stb.AppendLine(objMsg.Message);
                 stb.AppendLine();
                 stb.AppendLine("Regards,");
-                stb.AppendLine(" - " + objMsg.Addby);
+                stb.AppendLine(" - " + objMsg.BOEmpName);
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
                 sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
@@ -2126,12 +2192,12 @@ namespace BOTS_BL.Repository
                     str.AppendLine();
                     str.AppendLine("I have rescheduled task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
                     str.AppendLine();
-                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
                     str.AppendLine();
                     str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+                    str.AppendLine(" - " + Emaildata.FromName);
 
-                    mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.Subject = "WIP Rescheduled[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     //mail.CC.Add(Emaildata.DepartHead);
                     mail.Body = str.ToString();
@@ -2172,13 +2238,16 @@ namespace BOTS_BL.Repository
 
             try
             {
+                //objMsg.Message = objMsg.Message.Replace("#spokento", "@" + objMsg.SpokenTo);
+                //objMsg.Message = objMsg.Message.Replace("#01", "Sir,Madam");
+                objMsg.Message = objMsg.Message.Replace("#01", objMsg.SpokenTo);
+                objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
+
                 StringBuilder stb = new StringBuilder();
-                stb.AppendLine("Dear " + objMsg.GroupName + ",");
-                stb.AppendLine();
-                stb.AppendLine("Description: " + objMsg.Description);
+                stb.AppendLine(objMsg.Message);
                 stb.AppendLine();
                 stb.AppendLine("Regards,");
-                stb.AppendLine(" - " + objMsg.TeamName + " Team");
+                stb.AppendLine(" - " + objMsg.BOEmpName);
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
                 sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
@@ -2224,6 +2293,10 @@ namespace BOTS_BL.Repository
 
             try
             {
+                //objMsg.Message = objMsg.Message.Replace("#spokento", "@" + objMsg.SpokenTo);
+                //objMsg.Message = objMsg.Message.Replace("#01", "Sir,Madam");
+                objMsg.Message = objMsg.Message.Replace("#01", objMsg.SpokenTo);
+                objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
 
                 StringBuilder stb = new StringBuilder();
                 stb.AppendLine("Dear " + objMsg.GroupName + ",");
@@ -2231,7 +2304,7 @@ namespace BOTS_BL.Repository
                 stb.AppendLine("Description: " + objMsg.Description);
                 stb.AppendLine();
                 stb.AppendLine("Regards,");
-                stb.AppendLine(" - " + objMsg.TeamName + " Team");
+                stb.AppendLine(" - " + objMsg.BOEmpName);
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
                 sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");
@@ -2285,10 +2358,10 @@ namespace BOTS_BL.Repository
                     str.AppendLine();
                     str.AppendLine("Completed the task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
                     str.AppendLine();
-                    str.AppendLine("Discription : " + Emaildata.Description);
+                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
                     str.AppendLine();
                     str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.TeamName + " Team");
+                    str.AppendLine(" - " + Emaildata.FromName);
 
                     mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
@@ -2325,6 +2398,7 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
+
         public string GetDiscussionCustMobile(string CustName, string groupId)
         {
             var MobileNo = string.Empty;

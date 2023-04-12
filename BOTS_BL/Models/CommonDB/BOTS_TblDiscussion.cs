@@ -108,6 +108,8 @@ namespace BOTS_BL.Models.CommonDB
         public string AddbyEmail { get; set; }
         public string MemberCompleted { get; set; }
         public string DepartHeadName { get; set; }
+        public string FromName { get; set; }
+
     }
 
     public class MessageDetails
@@ -122,6 +124,8 @@ namespace BOTS_BL.Models.CommonDB
         public string SpokenTo { get; set; }
         public string Addby { get; set; }
         public string BOEmpName { get; set; }
+       
+
 
     }
 }
