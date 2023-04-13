@@ -699,6 +699,7 @@
 
     }
     function UpdateStatus() {
+        /*alert(100)*/
         var id = $("#hdnId").val();
         var Desc = $("#txtDesc").val();
         var Status = $("#ddlPopupStatus").val();
@@ -706,12 +707,16 @@
         var FileDone = $("#DoneDocBase64").val();
         var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew1").val();
-
+        var RequestType = $("#ddlRequestType").val();
+        //alert(FileDone)
+        //alert(DoneFileName)
+        //alert(FollowupDate)
+        //alert(RequestType)
         if (Desc != "") {
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
-                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) +'}',
+                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) + ',RequestType: ' + JSON.stringify(RequestType) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
 

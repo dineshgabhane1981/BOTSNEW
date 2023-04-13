@@ -134,11 +134,11 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public bool UpdateStatusAndDiscussion(string dId, string Desc, string Status, string FollowupDate, string Reassign, string FileName, string File)
+        public bool UpdateStatusAndDiscussion(string dId, string Desc, string Status, string FollowupDate, string Reassign, string FileName, string File,string RequestType)
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File);
+            status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File,RequestType);
 
             return status;
         }
