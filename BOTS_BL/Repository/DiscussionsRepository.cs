@@ -138,6 +138,7 @@ namespace BOTS_BL.Repository
 
             bool status = false;
             string path = string.Empty;
+            int _subtyprId = 0;
 
 
             BOTS_TblSubDiscussionData objsubdiscussion = new BOTS_TblSubDiscussionData();
@@ -228,7 +229,11 @@ namespace BOTS_BL.Repository
                     }
                     status = true;
 
-                    int _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
+                    if(objDiscussion.SubCallType != "Please Select")
+                    {
+                       _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
+                    }
+                    
 
 
                     var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
@@ -238,13 +243,16 @@ namespace BOTS_BL.Repository
                     var _CallType = context.BOTS_TblCallTypes.Where(x => x.Id == objDiscussion.CallType).FirstOrDefault();
                     var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "0").FirstOrDefault();
 
+                    if (_GroupId == 1051)
+                    {
+                       _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
+                    }
+                    
                     EmailDetails ObjEmailData = new EmailDetails();
 
                     ObjEmailData.DepartHead = DepartmentHead.EmailId;
                     ObjEmailData.DepartHeadName = DepartmentHead.Members;
                     ObjEmailData.Addby = Sendfrom.Members;
-
-
 
                     if (SendTo != null)
                     {
@@ -327,12 +335,9 @@ namespace BOTS_BL.Repository
                     }
 
                     if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
-                    {
-                        if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != "OTP")
-                        {
+                    { 
                             Thread _job2 = new Thread(() => SendWAMessage(ObjMsgData));
-                            _job2.Start();
-                        }    
+                            _job2.Start();  
                     }
                 }
             }
@@ -446,6 +451,11 @@ namespace BOTS_BL.Repository
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
                     var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "0").FirstOrDefault();
                     var _Discussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
+
+                    if (_GroupId == 1051)
+                    {
+                        _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
+                    }
 
                     EmailDetails objmail = new EmailDetails();
 
@@ -676,7 +686,6 @@ namespace BOTS_BL.Repository
             lstSubCallTypes = lstSubCallTypes.OrderBy(x => x.Text).ToList();
             return lstSubCallTypes;
         }
-
         public List<SelectListItem> GetCallTypes(string LoginType)
         {
             List<SelectListItem> lstCallTypes = new List<SelectListItem>();
@@ -1266,7 +1275,6 @@ namespace BOTS_BL.Repository
             //}
             return lstdiscuss;
         }
-
         public List<DiscussionDetails> GetfilteredDiscussionDataAssign(string status, int calltype, int SubCallType, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp, string AssignMember)
         {
             List<DiscussionDetails> lstdiscuss = new List<DiscussionDetails>();
@@ -1871,7 +1879,6 @@ namespace BOTS_BL.Repository
             }
             return objtbldepart;
         }
-
         public List<SelectListItem> GetAssignedMemberList()
         {
             List<SelectListItem> lstMemberAssigned = new List<SelectListItem>();
@@ -1900,7 +1907,6 @@ namespace BOTS_BL.Repository
             }
             return lstMemberAssigned;
         }
-
         public int GetTaskCount(string MemberName)
         {
             int taskCount = 0;
@@ -1917,7 +1923,6 @@ namespace BOTS_BL.Repository
             }
             return taskCount;
         }
-
         public void SendEmail(EmailDetails Emaildata)
         {
             string responseString;
