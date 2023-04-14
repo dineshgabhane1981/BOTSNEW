@@ -78,6 +78,7 @@ namespace BOTS_BL.Models.CommonDB
         public string ContactNo { get; set; }
         public string CustomerType { get; set; }
         public string CallType { get; set; }
+        public string SubCallType { get; set; }
         public string Status { get; set; }
         public DateTime? FollowupDate { get; set; }
         public string Followupdt { get; set; }

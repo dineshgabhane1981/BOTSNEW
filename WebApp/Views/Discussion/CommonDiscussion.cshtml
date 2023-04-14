@@ -243,6 +243,7 @@
                     dataType: "json",
                     success: function (result) {
                         $("#ddlSubCallType").empty();
+                        $("#ddlSubCallType").append("<option>--Select--</option>");
                         $.each(result, function () {
                             $("#ddlSubCallType").append($("<option />").val(this.Value).text(this.Text));
                         });
