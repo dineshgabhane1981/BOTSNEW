@@ -1949,9 +1949,9 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid).FirstOrDefault();
-                    string AssignedDepartment = objdata.Department;
-                    objtbldepart = context.tblDepartMembers.Where(x => x.Department == AssignedDepartment && x.status == "00").ToList();
+                    //var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid).FirstOrDefault();
+                    //string AssignedDepartment = objdata.Department;
+                    objtbldepart = context.tblDepartMembers.Where(x => x.status == "00").ToList();
                 }
 
             }
