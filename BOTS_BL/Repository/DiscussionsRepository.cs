@@ -545,7 +545,7 @@ namespace BOTS_BL.Repository
                     if (objsubdiscussion.Status == "Completed")
                     {
                         UpdateStatus = true;
-                        if (SendTo != null)
+                        if (SendTo == null)
                         {
                             objmail.SendTo = _AddbyEmail;
                         }
@@ -573,14 +573,14 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            if (Reassign != "Please Select")
-                            {
+                            //if (Reassign != "Please Select")
+                            //{
                                 if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != "OTP")
                                 {
                                     Thread _job1 = new Thread(() => SendEmailComplete(objmail));
                                     _job1.Start();
                                 }                                   
-                            }
+                            //}
                         }
                     }
                     else
