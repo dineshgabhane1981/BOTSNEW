@@ -65,11 +65,12 @@ namespace WebApp.ViewModel
         }
         public SelectListItem[] DiscussionDoneNotDone()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Done", Value = "Done" }, new SelectListItem() { Text = "Not Done", Value = "Not Done" } };
+            return new SelectListItem[3] { new SelectListItem() { Text = "Done", Value = "Done" }, new SelectListItem() { Text = "Not Done", Value = "Not Done" }, new SelectListItem() { Text = "Reschedule", Value = "Reschedule" } };
         }
         public SelectListItem[] DiscussionType()
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Query", Value = "Query" }, new SelectListItem() { Text = "Request", Value = "Request" }, new SelectListItem() { Text = "Complaint", Value = "Complaint" } };
         }
+        
     }
 }

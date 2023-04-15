@@ -206,6 +206,10 @@ namespace BOTS_BL.Repository
                         {
                             objDiscussion.DiscussionDoneNotDone = "1";
                         }
+                        if (objDiscussion.DiscussionDoneNotDone == "Reschedule")
+                        {
+                            objDiscussion.DiscussionDoneNotDone = "2";
+                        }
                         else
                         {
                             objDiscussion.DiscussionDoneNotDone = "0";
@@ -384,7 +388,7 @@ namespace BOTS_BL.Repository
                         }
                     }
 
-                    if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
+                    if ((objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27") && objDiscussion.DiscussionDoneNotDone != "2")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
                     {
                         Thread _job2 = new Thread(() => SendWAMessage(ObjMsgData));
                         _job2.Start();
