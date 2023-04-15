@@ -88,7 +88,8 @@ namespace BOTS_BL.Models.CommonDB
         public string AddedBy { get; set; }
         public string AssignedMember { get; set; }
         public int SubDiscussionCount { get; set; }
-
+        public string DiscussionType { get; set; }
+        public string Priority { get; set; }
 
     }
 

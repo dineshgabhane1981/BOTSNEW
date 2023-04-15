@@ -252,7 +252,6 @@
                 @*<select id="ddReassign" class="input100"><option value="S">Please Select</option></select>*@
                 @Html.DropDownListFor(model => model.objDiscussion.ReassignMember, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddReassignMember" })
             </div>
-
         </div>
         <div class="row" style="margin: 0;">
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
@@ -667,7 +666,7 @@
     function OpenStatusPopup(id, AddedBy) {
         $("#ddReassignMember").empty()
         $("#ddReassignMember").append("<option>Please Select</option>");
-        //$("#ddReassignMember").append("<option>" + AddedBy + "</option>");
+        $("#ddReassignMember").append("<option>" + AddedBy + "</option>");
 
         var FilterData = [];
         item = {};
@@ -805,7 +804,7 @@
                 else {
                     htmlStr += "<td style=\"width: 100px;\"><a href='" + item.AttachedFile + "' target=_blank>" + item.FileName + "</a></td>";
                 }
-                
+
                 if (item.AssignedTo == null || item.AssignedTo == "Please Select") {
                     htmlStr += "<td style=\"width: 100px;\"> -- </td>";
                 }

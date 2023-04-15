@@ -31,7 +31,6 @@ namespace WebApp.ViewModel
         public string[] CustNames { get; set; }
         public List<string> CustNames1 { get; set; }
 
-
         public SelectListItem[] CallMode()
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Phone", Value = "Phone" }, new SelectListItem() { Text = "Zoom", Value = "Zoom" }, new SelectListItem() { Text = "Physical", Value = "Physical" } };
@@ -55,6 +54,7 @@ namespace WebApp.ViewModel
                  new SelectListItem() { Text = "Another Owner", Value = "AnotherOwner" }
             };
         }
+
         public SelectListItem[] Priority()
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Critical", Value = "Critical" }, new SelectListItem() { Text = "High", Value = "High" }, new SelectListItem() { Text = "Medium", Value = "Medium" }, new SelectListItem() { Text = "Low", Value = "Low" } };
@@ -66,6 +66,10 @@ namespace WebApp.ViewModel
         public SelectListItem[] DiscussionDoneNotDone()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Done", Value = "Done" }, new SelectListItem() { Text = "Not Done", Value = "Not Done" } };
+        }
+        public SelectListItem[] DiscussionType()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "Query", Value = "Query" }, new SelectListItem() { Text = "Request", Value = "Request" }, new SelectListItem() { Text = "Complaint", Value = "Complaint" } };
         }
     }
 }

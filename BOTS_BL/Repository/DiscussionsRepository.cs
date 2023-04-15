@@ -37,7 +37,7 @@ namespace BOTS_BL.Repository
                     if (LoginType == "9" || LoginType == "10")
                     {
                         objData = (from c in context.BOTS_TblDiscussion
-                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id                                   
+                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                    where c.GroupId == GroupId && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.CallType == 1)
                                    select new DiscussionDetails
@@ -54,10 +54,11 @@ namespace BOTS_BL.Repository
                                        ActionItems = c.ActionItems,
                                        AddedBy = cld.UserName,
                                        Status = c.Status,
-                                       AssignedMember = c.AssignedMember
+                                       AssignedMember = c.AssignedMember,
+                                       Priority = c.Priority
 
 
-                                   }).OrderByDescending(x => x.AddedDate).ToList();
+                                   }).OrderBy(y => y.Priority).OrderByDescending(x => x.AddedDate).ToList();
                     }
                     else
                     {
@@ -79,9 +80,10 @@ namespace BOTS_BL.Repository
                                        ActionItems = c.ActionItems,
                                        AddedBy = cld.UserName,
                                        Status = c.Status,
-                                       AssignedMember = c.AssignedMember
+                                       AssignedMember = c.AssignedMember,
+                                       Priority = c.Priority
 
-                                   }).OrderByDescending(x => x.AddedDate).ToList();
+                                   }).OrderBy(y => y.Priority).OrderByDescending(x => x.AddedDate).ToList();
                     }
 
                 }
@@ -136,9 +138,11 @@ namespace BOTS_BL.Repository
             var xmlpath = ConfigurationManager.AppSettings["DiscussionScripts"].ToString();
             doc.Load(xmlpath);
 
+            tblDiscussionCustomerData ObjDisCustomerData = new tblDiscussionCustomerData();
 
             bool status = false;
             string path = string.Empty;
+            string Priority = string.Empty;
             int _subtyprId = 0;
 
 
@@ -212,6 +216,52 @@ namespace BOTS_BL.Repository
                         objDiscussion.AssignedMember = null;
                     }
 
+
+                    if (objDiscussion.Priority == "Critical")
+                    {
+                        Priority = "Critical";
+                        objDiscussion.Priority = "1";
+                    }
+                    else if (objDiscussion.Priority == "High")
+                    {
+                        Priority = "High";
+                        objDiscussion.Priority = "2";
+                    }
+                    else if (objDiscussion.Priority == "Medium")
+                    {
+                        Priority = "Medium";
+                        objDiscussion.Priority = "3";
+                    }
+                    else if (objDiscussion.Priority == "Low")
+                    {
+                        Priority = "Low";
+                        objDiscussion.Priority = "4";
+                    }
+                    else
+                    {
+                        Priority = "";
+                        objDiscussion.Priority = "5";
+                    }
+
+                    if (objDiscussion.SubCallType != "Please Select")
+                    {
+                        _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
+                    }
+                    else
+                    {
+                        objDiscussion.SubCallType = "0";
+                    }
+
+                    ObjDisCustomerData.CustomerName = objDiscussion.SpokenTo;
+                    ObjDisCustomerData.MobileNo = objDiscussion.ContactNo;
+                    ObjDisCustomerData.GroupId = objDiscussion.GroupId;
+                    var TMobileno = context.tblDiscussionCustomerDatas.Where(x => x.MobileNo == objDiscussion.ContactNo && x.GroupId == objDiscussion.GroupId).Select(y => y.MobileNo).FirstOrDefault();
+                    if (TMobileno == null)
+                    {
+                        context.tblDiscussionCustomerDatas.AddOrUpdate(ObjDisCustomerData);
+                        context.SaveChanges();
+                    }
+
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
                     if (objDiscussion.Status == "WIP")
@@ -230,11 +280,6 @@ namespace BOTS_BL.Repository
                     }
                     status = true;
 
-                    if(objDiscussion.SubCallType != "Please Select")
-                    {
-                       _subtyprId = Convert.ToInt32(objDiscussion.SubCallType);
-                    }
-                    
 
 
                     var Sendfrom = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
@@ -246,9 +291,9 @@ namespace BOTS_BL.Repository
 
                     if (_GroupId == 1051)
                     {
-                       _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
+                        _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "5").FirstOrDefault();
                     }
-                    
+
                     EmailDetails ObjEmailData = new EmailDetails();
 
                     ObjEmailData.DepartHead = DepartmentHead.EmailId;
@@ -264,10 +309,14 @@ namespace BOTS_BL.Repository
                         ObjEmailData.SendTo = DepartmentHead.EmailId;
                     }
 
-                    ObjEmailData.Priority = objDiscussion.Priority;
+                    ObjEmailData.Priority = Priority;
                     ObjEmailData.Member = objDiscussion.AssignedMember;
                     ObjEmailData.CallTypetext = _CallType.CallType;
-                    ObjEmailData.subtypetext = _SubCallType.CallSubType;
+                    if (_SubCallType != null)
+                    {
+                        ObjEmailData.subtypetext = _SubCallType.CallSubType;
+                    }
+
                     ObjEmailData.GroupName = _GroupDetails.GroupName;
                     ObjEmailData.id = objDiscussion.Id;
                     ObjEmailData.Description = objDiscussion.Description;
@@ -336,9 +385,9 @@ namespace BOTS_BL.Repository
                     }
 
                     if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
-                    { 
-                            Thread _job2 = new Thread(() => SendWAMessage(ObjMsgData));
-                            _job2.Start();  
+                    {
+                        Thread _job2 = new Thread(() => SendWAMessage(ObjMsgData));
+                        _job2.Start();
                     }
                 }
             }
@@ -1325,7 +1374,7 @@ namespace BOTS_BL.Repository
             //}
             return lstdiscuss;
         }
-        public List<DiscussionDetails> GetfilteredDiscussionDataAssign(string status, int calltype, int SubCallType, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp, string AssignMember)
+        public List<DiscussionDetails> GetfilteredDiscussionDataAssign(string status, int calltype, int SubCallType, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp, string AssignMember, string DiscussionType)
         {
             List<DiscussionDetails> lstdiscuss = new List<DiscussionDetails>();
             List<DiscussionDetails> lstdiscussOnBoarding = new List<DiscussionDetails>();
@@ -1385,6 +1434,10 @@ namespace BOTS_BL.Repository
                         var subCallTypeStr = Convert.ToString(SubCallType);
                         list = list.Where(x => x.SubCallType == subCallTypeStr).ToList();
                     }
+                    if (!string.IsNullOrEmpty(DiscussionType))
+                    {
+                        list = list.Where(x => x.DiscussionType == DiscussionType).ToList();
+                    }
 
                     if (fromDate != "" && toDate != "")
                     {
@@ -1410,7 +1463,6 @@ namespace BOTS_BL.Repository
                             lstdiscuss = (from c in list
                                           join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                           join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                          join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                           join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                           where c.Status == "WIP"
 
@@ -1430,7 +1482,8 @@ namespace BOTS_BL.Repository
                                               AddedBy = cld.UserName,
                                               Status = c.Status,
                                               AssignedMember = c.AssignedMember,
-                                              SubCallType=sct.CallSubType
+                                              SubCallType = c.SubCallType,
+                                              DiscussionType = c.DiscussionType
 
                                           }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1438,7 +1491,6 @@ namespace BOTS_BL.Repository
                             lstdiscussOnBoarding = (from c in list
                                                     join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                     join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                    join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                     join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                     where c.Status == "WIP"
 
@@ -1458,7 +1510,8 @@ namespace BOTS_BL.Repository
                                                         AddedBy = cld.UserName,
                                                         Status = c.Status,
                                                         AssignedMember = c.AssignedMember,
-                                                        SubCallType = sct.CallSubType,
+                                                        SubCallType = c.SubCallType,
+                                                        DiscussionType = c.DiscussionType
 
                                                     }).OrderByDescending(x => x.AddedDate).ToList();
                         }
@@ -1467,7 +1520,6 @@ namespace BOTS_BL.Repository
                             lstdiscuss = (from c in list
                                           join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                           join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                          join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                           join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
 
                                           select new DiscussionDetails
@@ -1486,14 +1538,14 @@ namespace BOTS_BL.Repository
                                               AddedBy = cld.UserName,
                                               Status = c.Status,
                                               AssignedMember = c.AssignedMember,
-                                              SubCallType = sct.CallSubType,
+                                              SubCallType = c.SubCallType,
+                                              DiscussionType = c.DiscussionType
 
                                           }).OrderByDescending(x => x.AddedDate).ToList();
 
                             lstdiscussOnBoarding = (from c in list
                                                     join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                     join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                    join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                     join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
 
                                                     select new DiscussionDetails
@@ -1512,7 +1564,8 @@ namespace BOTS_BL.Repository
                                                         AddedBy = cld.UserName,
                                                         Status = c.Status,
                                                         AssignedMember = c.AssignedMember,
-                                                        SubCallType = sct.CallSubType,
+                                                        SubCallType = c.SubCallType,
+                                                        DiscussionType = c.DiscussionType
 
                                                     }).OrderByDescending(x => x.AddedDate).ToList();
                         }
@@ -1526,7 +1579,6 @@ namespace BOTS_BL.Repository
                                 lstdiscuss = (from c in list
                                               join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                              join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                               where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
 
@@ -1546,14 +1598,14 @@ namespace BOTS_BL.Repository
                                                   AddedBy = cld.UserName,
                                                   Status = c.Status,
                                                   AssignedMember = c.AssignedMember,
-                                                  SubCallType = sct.CallSubType,
+                                                  SubCallType = c.SubCallType,
+                                                  DiscussionType = c.DiscussionType
 
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
                                 lstdiscussOnBoarding = (from c in list
                                                         join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                         join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                        join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                         join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                         where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
 
@@ -1573,7 +1625,8 @@ namespace BOTS_BL.Repository
                                                             AddedBy = cld.UserName,
                                                             Status = c.Status,
                                                             AssignedMember = c.AssignedMember,
-                                                            SubCallType = sct.CallSubType,
+                                                            SubCallType = c.SubCallType,
+                                                            DiscussionType = c.DiscussionType
 
                                                         }).OrderByDescending(x => x.AddedDate).ToList();
                             }
@@ -1582,7 +1635,6 @@ namespace BOTS_BL.Repository
                                 lstdiscuss = (from c in list
                                               join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                              join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                               where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
 
@@ -1602,14 +1654,14 @@ namespace BOTS_BL.Repository
                                                   AddedBy = cld.UserName,
                                                   Status = c.Status,
                                                   AssignedMember = c.AssignedMember,
-                                                  SubCallType = sct.CallSubType,
+                                                  SubCallType = c.SubCallType,
+                                                  DiscussionType = c.DiscussionType
 
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
                                 lstdiscussOnBoarding = (from c in list
                                                         join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                         join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                        join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                         join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                         where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
 
@@ -1629,7 +1681,8 @@ namespace BOTS_BL.Repository
                                                             AddedBy = cld.UserName,
                                                             Status = c.Status,
                                                             AssignedMember = c.AssignedMember,
-                                                            SubCallType = sct.CallSubType,
+                                                            SubCallType = c.SubCallType,
+                                                            DiscussionType = c.DiscussionType
 
                                                         }).OrderByDescending(x => x.AddedDate).ToList();
                             }
@@ -1643,7 +1696,6 @@ namespace BOTS_BL.Repository
                                     lstdiscuss = (from c in list
                                                   join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                   where c.AddedBy == LoginId && c.Status == "WIP"
 
@@ -1663,14 +1715,14 @@ namespace BOTS_BL.Repository
                                                       AddedBy = cld.UserName,
                                                       Status = c.Status,
                                                       AssignedMember = c.AssignedMember,
-                                                      SubCallType = sct.CallSubType,
+                                                      SubCallType = c.SubCallType,
+                                                      DiscussionType = c.DiscussionType
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
                                     lstdiscussOnBoarding = (from c in list
                                                             join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                             join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                            join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                             join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                             where c.AddedBy == LoginId && c.Status == "WIP"
 
@@ -1690,7 +1742,8 @@ namespace BOTS_BL.Repository
                                                                 AddedBy = cld.UserName,
                                                                 Status = c.Status,
                                                                 AssignedMember = c.AssignedMember,
-                                                                SubCallType = sct.CallSubType,
+                                                                SubCallType = c.SubCallType,
+                                                                DiscussionType = c.DiscussionType
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -1699,7 +1752,6 @@ namespace BOTS_BL.Repository
                                     lstdiscuss = (from c in list
                                                   join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                   where c.AddedBy == LoginId
 
@@ -1719,14 +1771,14 @@ namespace BOTS_BL.Repository
                                                       AddedBy = cld.UserName,
                                                       Status = c.Status,
                                                       AssignedMember = c.AssignedMember,
-                                                      SubCallType = sct.CallSubType,
+                                                      SubCallType = c.SubCallType,
+                                                      DiscussionType = c.DiscussionType
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
                                     lstdiscussOnBoarding = (from c in list
                                                             join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                             join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                            join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                             join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                             where c.AddedBy == LoginId
 
@@ -1746,7 +1798,8 @@ namespace BOTS_BL.Repository
                                                                 AddedBy = cld.UserName,
                                                                 Status = c.Status,
                                                                 AssignedMember = c.AssignedMember,
-                                                                SubCallType = sct.CallSubType,
+                                                                SubCallType = c.SubCallType,
+                                                                DiscussionType = c.DiscussionType
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -1758,7 +1811,6 @@ namespace BOTS_BL.Repository
                                     lstdiscuss = (from c in list
                                                   join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                   where c.Status == "WIP"
                                                   select new DiscussionDetails
@@ -1777,14 +1829,14 @@ namespace BOTS_BL.Repository
                                                       AddedBy = cld.UserName,
                                                       Status = c.Status,
                                                       AssignedMember = c.AssignedMember,
-                                                      SubCallType = sct.CallSubType,
+                                                      SubCallType = c.SubCallType,
+                                                      DiscussionType = c.DiscussionType
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
                                     lstdiscussOnBoarding = (from c in list
                                                             join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                             join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                            join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                             join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
                                                             where c.Status == "WIP"
                                                             select new DiscussionDetails
@@ -1803,7 +1855,8 @@ namespace BOTS_BL.Repository
                                                                 AddedBy = cld.UserName,
                                                                 Status = c.Status,
                                                                 AssignedMember = c.AssignedMember,
-                                                                SubCallType = sct.CallSubType,
+                                                                SubCallType = c.SubCallType,
+                                                                DiscussionType = c.DiscussionType
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -1812,7 +1865,6 @@ namespace BOTS_BL.Repository
                                     lstdiscuss = (from c in list
                                                   join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
 
                                                   select new DiscussionDetails
@@ -1831,14 +1883,14 @@ namespace BOTS_BL.Repository
                                                       AddedBy = cld.UserName,
                                                       Status = c.Status,
                                                       AssignedMember = c.AssignedMember,
-                                                      SubCallType = sct.CallSubType,
+                                                      SubCallType = c.SubCallType,
+                                                      DiscussionType = c.DiscussionType
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
                                     lstdiscussOnBoarding = (from c in list
                                                             join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                             join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                            join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                             join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
 
                                                             select new DiscussionDetails
@@ -1857,7 +1909,8 @@ namespace BOTS_BL.Repository
                                                                 AddedBy = cld.UserName,
                                                                 Status = c.Status,
                                                                 AssignedMember = c.AssignedMember,
-                                                                SubCallType = sct.CallSubType,
+                                                                SubCallType = c.SubCallType,
+                                                                DiscussionType = c.DiscussionType
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -2008,23 +2061,58 @@ namespace BOTS_BL.Repository
         public void SendEmail(EmailDetails Emaildata)
         {
             string responseString;
-            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
-            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            var from = ConfigurationManager.AppSettings["Email"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailAppPassword"].ToString();
+            var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            var PortNo = 587;
+
             try
             {
-                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                using (MailMessage mail = new MailMessage())//tech@blueocktopus.in operations@blueocktopus.in
                 {
 
                     StringBuilder str = new StringBuilder();
-                    str.AppendLine("Dear " + Emaildata.Member + ",");
+                    str.Append("<table>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Dear " + Emaildata.Member + ",</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("You have a task assigned with <b>" + Emaildata.Priority + "priority</b>");
-                    str.AppendLine("</br>");
-                    str.AppendLine("Discription : " + Emaildata.Description);
-                    str.AppendLine("</br>");
-                    str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.FromName);
+                    str.Append("</tr>");
 
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    if (Emaildata.Priority == " ")
+                    {
+                        str.AppendLine("<td> You have a task assigned with <b>" + Emaildata.Priority + "priority</b></td>");
+                    }
+                    else
+                    {
+                        str.AppendLine("<td>You have a task assigned</td>");
+                    }
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Discription : " + Emaildata.Description + "</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Regards,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td> - " + Emaildata.FromName + "</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(Emaildata.SendTo);
                     mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     if (Emaildata.DepartHead != null)
@@ -2040,15 +2128,13 @@ namespace BOTS_BL.Repository
                         mail.Attachments.Add(data);
                     }
 
-
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.zoho.com";
-                    smtp.EnableSsl = true;
-                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                    smtp.UseDefaultCredentials = true;
-                    smtp.Credentials = networkCredential;
-                    smtp.Port = 587;
-                    smtp.Send(mail);
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, PortNo))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(from, PWD);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
                 }
             }
 
@@ -2072,25 +2158,49 @@ namespace BOTS_BL.Repository
         public void SendEmailOnlyHOD(EmailDetails Emaildata)
         {
             string responseString;
-            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
-            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            var from = ConfigurationManager.AppSettings["Email"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailAppPassword"].ToString();
+            var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            var PortNo = 587;
             try
             {
-                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                using (MailMessage mail = new MailMessage())//tech@blueocktopus.in operations@blueocktopus.in
                 {
                     StringBuilder str = new StringBuilder();
-                    str.AppendLine("Dear " + Emaildata.DepartHeadName + ",");
+                    str.Append("<table>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Dear " + Emaildata.DepartHeadName + ",</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("I have raised a ticket for - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
-                    str.AppendLine("</br>");
-                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
-                    str.AppendLine("</br>");
-                    str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.FromName);
+                    str.Append("</tr>");
 
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>I have raised a ticket for - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext + "</td>");
+                    str.AppendLine("</br>");
+                    str.AppendLine("<td><b>Discription : </b>" + Emaildata.Description + "</td>");
+                    str.AppendLine("</br>");
+                    str.Append("<tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Regards,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td> - " + Emaildata.FromName + "</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
+
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(Emaildata.SendTo);
                     mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
-                    //mail.CC.Add(Emaildata.DepartHead);
                     mail.Body = str.ToString();
                     mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
@@ -2100,15 +2210,13 @@ namespace BOTS_BL.Repository
                         mail.Attachments.Add(data);
                     }
 
-
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.zoho.com";
-                    smtp.EnableSsl = true;
-                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                    smtp.UseDefaultCredentials = true;
-                    smtp.Credentials = networkCredential;
-                    smtp.Port = 587;
-                    smtp.Send(mail);
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, PortNo))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(from, PWD);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
                 }
             }
 
@@ -2131,21 +2239,48 @@ namespace BOTS_BL.Repository
         public void SendEmailUpdate(EmailDetails Emaildata)
         {
             string responseString;
-            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
-            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            var from = ConfigurationManager.AppSettings["Email"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailAppPassword"].ToString();
+            var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            var PortNo = 587;
+
             try
             {
-                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                using (MailMessage mail = new MailMessage())//tech@blueocktopus.in operations@blueocktopus.in
                 {
                     StringBuilder str = new StringBuilder();
-                    str.AppendLine("Dear " + Emaildata.Member + ",");
+                    str.Append("<table>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Dear " + Emaildata.Member + ",</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("You have a task assigned from - " + Emaildata.Addby + " with <b> priority " + Emaildata.Priority + "</b>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>You have a task assigned from - " + Emaildata.Addby + " with <b> priority " + Emaildata.Priority + "</b></td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td><b>Discription : </b>" + Emaildata.Description + "</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.FromName);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Regards,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td> - " + Emaildata.FromName + "</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
 
                     mail.Subject = "WIP Reassigned[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
@@ -2162,15 +2297,13 @@ namespace BOTS_BL.Repository
                         mail.Attachments.Add(data);
                     }
 
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.zoho.com";
-                    smtp.EnableSsl = true;
-                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                    smtp.UseDefaultCredentials = true;
-                    smtp.Credentials = networkCredential;
-                    smtp.Port = 587;
-                    smtp.Send(mail);
-
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, PortNo))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(from, PWD);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
                 }
             }
             catch (ArgumentException ex)
@@ -2192,21 +2325,47 @@ namespace BOTS_BL.Repository
         public void SendEmailComplete(EmailDetails Emaildata)
         {
             string responseString;
-            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
-            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            var from = ConfigurationManager.AppSettings["Email"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailAppPassword"].ToString();
+            var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            var PortNo = 587;
             try
             {
-                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                using (MailMessage mail = new MailMessage())//tech@blueocktopus.in operations@blueocktopus.in
                 {
                     StringBuilder str = new StringBuilder();
-                    str.AppendLine("Dear " + Emaildata.Addby + ",");
+                    str.Append("<table>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Dear " + Emaildata.Addby + ",</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("Your assigned task is Completed by " + Emaildata.MemberCompleted);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Your assigned task is Completed by " + Emaildata.MemberCompleted + "</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td><b>Discription : </b>" + Emaildata.Description + "</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.FromName);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Regards,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td> - " + Emaildata.FromName + "</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
 
                     mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
@@ -2223,14 +2382,13 @@ namespace BOTS_BL.Repository
                         mail.Attachments.Add(data);
                     }
 
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.zoho.com";
-                    smtp.EnableSsl = true;
-                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                    smtp.UseDefaultCredentials = true;
-                    smtp.Credentials = networkCredential;
-                    smtp.Port = 587;
-                    smtp.Send(mail);
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, PortNo))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(from, PWD);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
                 }
             }
             catch (ArgumentException ex)
@@ -2312,21 +2470,47 @@ namespace BOTS_BL.Repository
         public void SendEmailUpdateOnlyHOD(EmailDetails Emaildata)
         {
             string responseString;
-            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
-            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            var from = ConfigurationManager.AppSettings["Email"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailAppPassword"].ToString();
+            var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            var PortNo = 587;
             try
             {
-                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                using (MailMessage mail = new MailMessage())//tech@blueocktopus.in operations@blueocktopus.in
                 {
                     StringBuilder str = new StringBuilder();
-                    str.AppendLine("Dear " + Emaildata.DepartHeadName + ",");
+                    str.Append("<table>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Dear " + Emaildata.DepartHeadName + ",</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("I have rescheduled task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>I have rescheduled task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext + "</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td><b>Discription : </b><td>" + Emaildata.Description);
                     str.AppendLine("</br>");
-                    str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.FromName);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Regards,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td> - " + Emaildata.FromName + "</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
 
                     mail.Subject = "WIP Rescheduled[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
@@ -2339,14 +2523,13 @@ namespace BOTS_BL.Repository
                         Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
                         mail.Attachments.Add(data);
                     }
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.zoho.com";
-                    smtp.EnableSsl = true;
-                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                    smtp.UseDefaultCredentials = true;
-                    smtp.Credentials = networkCredential;
-                    smtp.Port = 587;
-                    smtp.Send(mail);
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, PortNo))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(from, PWD);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
                 }
             }
 
@@ -2478,21 +2661,47 @@ namespace BOTS_BL.Repository
         public void SendEmailCompleteOnlyHOD(EmailDetails Emaildata)
         {
             string responseString;
-            var from = ConfigurationManager.AppSettings["DiscussionEmail"].ToString();
-            var PWD = ConfigurationManager.AppSettings["DiscussionEmailPwd"].ToString();
+            var from = ConfigurationManager.AppSettings["Email"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailAppPassword"].ToString();
+            var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            var PortNo = 587;
             try
             {
-                using (MailMessage mail = new MailMessage(from, Emaildata.SendTo))//tech@blueocktopus.in operations@blueocktopus.in
+                using (MailMessage mail = new MailMessage())//tech@blueocktopus.in operations@blueocktopus.in
                 {
                     StringBuilder str = new StringBuilder();
-                    str.AppendLine("Dear " + Emaildata.DepartHeadName + ",");
+                    str.Append("<table>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Dear " + Emaildata.DepartHeadName + ",</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("Completed the task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Completed the task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext + "</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("<b>Discription : </b>" + Emaildata.Description);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td><b>Discription : </b>" + Emaildata.Description + "</td>");
                     str.AppendLine("</br>");
-                    str.AppendLine("Regards,");
-                    str.AppendLine(" - " + Emaildata.FromName);
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Regards,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td> - " + Emaildata.FromName + "</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
 
                     mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
@@ -2505,14 +2714,13 @@ namespace BOTS_BL.Repository
                         Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
                         mail.Attachments.Add(data);
                     }
-                    SmtpClient smtp = new SmtpClient();
-                    smtp.Host = "smtp.zoho.com";
-                    smtp.EnableSsl = true;
-                    NetworkCredential networkCredential = new NetworkCredential(from, PWD);
-                    smtp.UseDefaultCredentials = true;
-                    smtp.Credentials = networkCredential;
-                    smtp.Port = 587;
-                    smtp.Send(mail);
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, PortNo))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(from, PWD);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
                 }
             }
 

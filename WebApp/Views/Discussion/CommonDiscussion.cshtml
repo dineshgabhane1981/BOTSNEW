@@ -113,6 +113,22 @@
                     @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
                 </div>
             </div>
+            <div class="row" style="margin: 0;">
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Discussion Type
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    @Html.DropDownListFor(model => model.objDiscussion.DiscussionType, new SelectList(Model.DiscussionType(), "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input100", @id = "ddlDiscussionType" })
+                </div>
+                <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+
+                </div>
+            </div>
+
+
             <div class="row mt-3 mb-4">
 
                 <div class="col-md-8 col-xl-8">
@@ -243,7 +259,6 @@
                     dataType: "json",
                     success: function (result) {
                         $("#ddlSubCallType").empty();
-                        $("#ddlSubCallType").append("<option>--Select--</option>");
                         $.each(result, function () {
                             $("#ddlSubCallType").append($("<option />").val(this.Value).text(this.Text));
                         });
@@ -368,7 +383,12 @@
         else {
             item["SubCallType"] = null;
         }
-
+        if ($("#ddlDiscussionType").prop('selectedIndex') !== 0) {
+            item["DiscussionType"] = $("#ddlDiscussionType option:selected").val();
+        }
+        else {
+            item["DiscussionType"] = null;
+        }
 
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
@@ -409,6 +429,7 @@
         var status = '';
         var raisedby = '';
         var AssignedMember = '';
+        var DiscussionType = '';
         console.log(Id);
 
         if ($("#rdndaterange").is(":checked")) {
@@ -463,9 +484,15 @@
         else {
             subcalltype = 0;
         }
+        if ($("#ddlDiscussionType").prop('selectedIndex') !== 0) {
+            DiscussionType = $("#ddlDiscussionType option:selected").val();
+        }
+        else {
+            DiscussionType = null;
+        }
 
         var urlLink = "@Url.Action("ExportToExcelCommonFilteredDiscussion", "Discussion")";
-        urlLink = urlLink + "?fromdt=" + fromdt + "&Todt=" + Todt + "&Groupnm=" + groupnm + "&calltype=" + calltype + "&subcalltype=" + subcalltype + "&status=" + status + "&raised=" + raisedby + "&AssignMember=" + AssignedMember +"&ReportName=DiscussionReport";
+        urlLink = urlLink + "?fromdt=" + fromdt + "&Todt=" + Todt + "&Groupnm=" + groupnm + "&calltype=" + calltype + "&subcalltype=" + subcalltype + "&status=" + status + "&raised=" + raisedby + "&AssignMember=" + AssignedMember + "&DiscussionType=" + DiscussionType +"&ReportName=DiscussionReport";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();
@@ -634,7 +661,7 @@
     }
 
     function OpenStatusPopupNew(id, AddedBy) {
-       
+
         $("#ddReassignMember").empty()
         $("#ddReassignMember").append("<option>Please Select</option>");
         $("#ddReassignMember").append("<option>" + AddedBy + "</option>");
@@ -677,9 +704,9 @@
         var FileDone = $("#DoneDocBase64").val();
         var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew").val();
-        
+
         if (Desc != "") {
-           
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
