@@ -26,7 +26,7 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
 
-        public List<DiscussionDetails> GetDiscussions(string GroupId, string LoginType)
+        public List<DiscussionDetails> GetDiscussions(string GroupId, string LoginType, string LoginId, string LoginName)
         {
             List<DiscussionDetails> objData = new List<DiscussionDetails>();
             try

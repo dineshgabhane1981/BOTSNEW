@@ -42,8 +42,11 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.GroupId = groupId;
             userDetails.CustomerName = CR.GetCustomerName(groupId);
+            
 
             string LoginType = userDetails.LoginType;
+            string LoginId = userDetails.LoginId;
+            string LoginName = userDetails.UserName;
 
             Session["buttons"] = "Discussion";
 
@@ -65,7 +68,7 @@ namespace WebApp.Controllers
             objDiscussion.GroupId = groupId;
             objDiscussion.GroupName = GroupName;
             objData.objDiscussion = objDiscussion;
-            objData.lstDiscussions = DR.GetDiscussions(groupId, LoginType);
+            objData.lstDiscussions = DR.GetDiscussions(groupId, LoginType, LoginId, LoginName);
             objData.lstCallTypes = DR.GetCallTypes(LoginType);
             List<SelectListItem> callSubType = new List<SelectListItem>();
             SelectListItem item = new SelectListItem();
@@ -129,7 +132,10 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             string LoginType = userDetails.LoginType;
-            var lstDiscussions = DR.GetDiscussions(groupId, LoginType);
+            string LoginId = userDetails.LoginId;
+            string LoginName = userDetails.UserName;
+
+            var lstDiscussions = DR.GetDiscussions(groupId, LoginType, LoginId, LoginName);
             return PartialView("_DiscussionList", lstDiscussions);
         }
 

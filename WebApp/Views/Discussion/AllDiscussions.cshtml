@@ -145,7 +145,7 @@
                             @Html.DropDownListFor(model => model.objDiscussion.Department, new SelectList(Model.Departments(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDepartment" })
                         </div>
                         <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                            Members
+                            Assign To
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.DropDownListFor(model => model.objDiscussion.AssignedMember, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddMembers" })
