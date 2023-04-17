@@ -206,7 +206,7 @@ namespace BOTS_BL.Repository
                         {
                             objDiscussion.DiscussionDoneNotDone = "1";
                         }
-                        if (objDiscussion.DiscussionDoneNotDone == "Reschedule")
+                        else if (objDiscussion.DiscussionDoneNotDone == "Reschedule")
                         {
                             objDiscussion.DiscussionDoneNotDone = "2";
                         }
