@@ -153,7 +153,7 @@
                         </div>
                     </div>
 
-                    <div class="row" style="margin: 0;">
+                    <div class="row" style="margin: 0;display:none;" id="dvTaskCount">
                         
                         <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                             No. Of Tasks
@@ -370,40 +370,43 @@
         $("#rbtnCompleted").change(function () {
             ShowHideFollowUpDate();
         });
-        $("#rbtnRequest").on("click", function () {
-            
-            if ($("#rbtnQuery").is(":checked")) {
-
-               
+        $("#rbtnRequest").on("click", function () {            
+            if ($("#rbtnQuery").is(":checked")) {                
                 $("#dvPriority").hide();
                 $("#dvDepartMembers").hide();
+                $("#dvTaskCount").hide();
             }
-            else {
+            else {                
                 $("#dvPriority").show();
                 $("#dvDepartMembers").show();
+                $("#dvTaskCount").show();
 
             }
         });
         $("#rbtnComplaint").on("click", function () {
-            
+
             if ($("#rbtnQuery").is(":checked")) {
                 $("#dvPriority").hide();
                 $("#dvDepartMembers").hide();
+                $("#dvTaskCount").hide();
             }
             else {
                 $("#dvPriority").show();
                 $("#dvDepartMembers").show();
+                $("#dvTaskCount").show();
             }
         });
         $("#rbtnQuery").on("click", function () {
-            
+
             if ($("#rbtnQuery").is(":checked")) {
                 $("#dvPriority").hide();
                 $("#dvDepartMembers").hide();
+                $("#dvTaskCount").hide();
             }
             else {
                 $("#dvPriority").show();
                 $("#dvDepartMembers").show();
+                $("#dvTaskCount").show();
             }
 
         });
@@ -713,7 +716,10 @@
                 success: function (result) {
                     console.log(result)
                     for (item in result) {
-                        $("#ddReassignMember").append("<option>" + result[item].Members + "</option>");
+                        if (result[item].Selected)
+                            $("#ddReassignMember").append("<option selected>" + result[item].Text + "</option>");
+                        else
+                            $("#ddReassignMember").append("<option>" + result[item].Text + "</option>");
                     }
 
                     $("#divLoader").hide();
@@ -729,7 +735,7 @@
 
     }
     function UpdateStatus() {
-        
+
         var id = $("#hdnId").val();
         var Desc = $("#txtDesc").val();
         var Status = $("#ddlPopupStatus").val();
@@ -738,7 +744,7 @@
         var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew1").val();
         var RequestType = $("#ddlRequestType").val();
-        
+
         if (Desc != "") {
             $.ajax({
                 type: "POST",
@@ -775,7 +781,7 @@
         }
     }
     function ShowActivities(id) {
-     
+
         if ($("#dvDiscussionData" + id).is(":visible")) {
             $("#dvDiscussionData" + id).hide(1000);
             $("#trActivities" + id).hide(1000);
@@ -895,32 +901,37 @@
                     //alert(111)
                     console.log(result.responseText)
                 }
-            });
-    });
+        });
 
-     $('#ddMembers').change(function () {
-
-        if ($("#ddMembers option:selected").text() != "Please Select") {
-            var MemberName = $("#ddMembers").val();
-            $.ajax({
+        $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetTaskCount", "Discussion")',
+                url: '@Url.Action("GetTaskCounts", "Discussion")',
                 //url: "/Discussion/GetSubCallTypes",
-                data: '{MemberName: ' + JSON.stringify(MemberName) + '}',
+            data: '{Department: ' + JSON.stringify(Department) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (result) {
-                    $("#TaskCount").empty();
-                    $("#TaskCount").text(result);
+            success: function (result) {
+                console.log(result)
+                $("#TaskCount").empty();
+
+                var htmlStr = "<table border=\"2\" style=\"font-size:14px; margin-left: 11px;width: 98%;\" class=\"table\">";
+                htmlStr += "<tr style=\"text-align: center;\">"
+                htmlStr += "<th scope=\"col\">Member Name</th>";
+                htmlStr += "<th scope=\"col\">Count</th>";
+                htmlStr += "</tr>";
+                $.map(result, function (item) {
+                    htmlStr += "<tr style=\"text-align: center;\">"
+                    htmlStr += "<td>" + item.Name + "</td>";
+                    htmlStr += "<td>" + item.TotalCount + "</td>";
+                    htmlStr += "</tr>"
+                });
+
+                    $("#TaskCount").html(htmlStr);
                 },
                 error: function (result) {
                     console.log(result.responseText);
                 }
             });
-        }
-        else {
-            $("#TaskCount").empty();
-
-        }
     });
+    
 </script>

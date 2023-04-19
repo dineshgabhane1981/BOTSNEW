@@ -102,7 +102,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     //objData = context.BOTS_TblDiscussion.Where(x => x.GroupId == GroupId).ToList();
-                    objData = (from c in context.BOTS_TblDiscussion                               
+                    objData = (from c in context.BOTS_TblDiscussion
                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
 
@@ -121,7 +121,7 @@ namespace BOTS_BL.Repository
                                    AddedBy = cld.UserName,
                                    Status = c.Status,
                                    AssignedMember = c.AssignedMember,
-                                   
+
 
                                }).OrderByDescending(x => x.AddedDate).ToList();
                 }
@@ -402,7 +402,7 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone,string RequestType)
+        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone, string RequestType)
         {
             XmlDocument doc = new XmlDocument();
             var xmlpath = ConfigurationManager.AppSettings["DiscussionScripts"].ToString();
@@ -424,7 +424,7 @@ namespace BOTS_BL.Repository
 
                 if (!string.IsNullOrEmpty(FileDone))
                 {
-                    
+
                     string _GroupName = string.Empty;
                     using (var context = new CommonDBContext())
                     {
@@ -629,11 +629,11 @@ namespace BOTS_BL.Repository
                         {
                             //if (Reassign != "Please Select")
                             //{
-                                if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != "OTP")
-                                {
-                                    Thread _job1 = new Thread(() => SendEmailComplete(objmail));
-                                    _job1.Start();
-                                }                                   
+                            if (objDiscussion.DiscussionType != "Query" && objDiscussion.DiscussionType != "OTP")
+                            {
+                                Thread _job1 = new Thread(() => SendEmailComplete(objmail));
+                                _job1.Start();
+                            }
                             //}
                         }
                     }
@@ -658,7 +658,7 @@ namespace BOTS_BL.Repository
                                 {
                                     Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
                                     _job1.Start();
-                                }     
+                                }
                             }
                         }
                     }
@@ -926,8 +926,8 @@ namespace BOTS_BL.Repository
                                               ActionItems = c.ActionItems,
                                               AddedBy = cld.UserName,
                                               Status = c.Status,
-                                              AssignedMember= c.AssignedMember,
-                                              SubCallType= sct.CallSubType,
+                                              AssignedMember = c.AssignedMember,
+                                              SubCallType = sct.CallSubType,
 
                                           }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1385,10 +1385,18 @@ namespace BOTS_BL.Repository
             List<BOTS_TblDiscussion> lsttbldiscuss = new List<BOTS_TblDiscussion>();
             using (var context = new CommonDBContext())
             {
-
+                var AssignedName = "";
                 var list = context.BOTS_TblDiscussion.ToList();
-                if (AssignMember != "")
-                    list = list.Where(x => x.AssignedMember == AssignMember).ToList();
+                if (LoginType != "1" && LoginType != "7")
+                {
+                    if (AssignMember != "")
+                    {
+                        AssignedName = context.tblDepartMembers.Where(x => x.LoginId == AssignMember).Select(y => y.Members).FirstOrDefault();
+                        //list = list.Where(x => x.AssignedMember == AssignedName).ToList();
+                        list = list.Where(x => x.AssignedMember == AssignedName || x.AddedBy == AssignMember).ToList();
+                    }
+                }
+
 
                 if (groupnm != "")
                 {
@@ -1488,7 +1496,6 @@ namespace BOTS_BL.Repository
                                               AssignedMember = c.AssignedMember,
                                               SubCallType = c.SubCallType,
                                               DiscussionType = c.DiscussionType
-
                                           }).OrderByDescending(x => x.AddedDate).ToList();
 
 
@@ -1516,7 +1523,6 @@ namespace BOTS_BL.Repository
                                                         AssignedMember = c.AssignedMember,
                                                         SubCallType = c.SubCallType,
                                                         DiscussionType = c.DiscussionType
-
                                                     }).OrderByDescending(x => x.AddedDate).ToList();
                         }
                         else
@@ -1544,7 +1550,6 @@ namespace BOTS_BL.Repository
                                               AssignedMember = c.AssignedMember,
                                               SubCallType = c.SubCallType,
                                               DiscussionType = c.DiscussionType
-
                                           }).OrderByDescending(x => x.AddedDate).ToList();
 
                             lstdiscussOnBoarding = (from c in list
@@ -1570,7 +1575,6 @@ namespace BOTS_BL.Repository
                                                         AssignedMember = c.AssignedMember,
                                                         SubCallType = c.SubCallType,
                                                         DiscussionType = c.DiscussionType
-
                                                     }).OrderByDescending(x => x.AddedDate).ToList();
                         }
                     }
@@ -1584,7 +1588,8 @@ namespace BOTS_BL.Repository
                                               join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                              where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
+                                              where c.Status == "WIP" && ((c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18) || 
+                                              (c.AssignedMember== AssignedName))
 
                                               select new DiscussionDetails
                                               {
@@ -1611,8 +1616,8 @@ namespace BOTS_BL.Repository
                                                         join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                         join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                         join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                        where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
-
+                                                        where c.Status == "WIP" && ((c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18) ||
+                                                        (c.AssignedMember == AssignedName))
                                                         select new DiscussionDetails
                                                         {
                                                             GroupName = gd.GroupName,
@@ -1640,7 +1645,7 @@ namespace BOTS_BL.Repository
                                               join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                              where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
+                                              where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.AssignedMember == AssignedName
 
                                               select new DiscussionDetails
                                               {
@@ -1667,7 +1672,7 @@ namespace BOTS_BL.Repository
                                                         join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                         join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                         join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                        where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
+                                                        where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.AssignedMember == AssignedName
 
                                                         select new DiscussionDetails
                                                         {
@@ -1997,18 +2002,29 @@ namespace BOTS_BL.Repository
             }
             return objtbldepart;
         }
-        public List<tblDepartMember> GetReAssignMemberdetails(string id)
+        public List<SelectListItem> GetReAssignMemberdetails(string id)
         {
-            List<tblDepartMember> objtbldepart = new List<tblDepartMember>();
+            List<SelectListItem> objtbldepart = new List<SelectListItem>();
             //List<BOTS_TblDiscussion> objdata = new List<BOTS_TblDiscussion>();
             int varid = Convert.ToInt32(id);
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    //var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid).FirstOrDefault();
+                    var objdata = context.BOTS_TblDiscussion.Where(x => x.Id == varid).FirstOrDefault();
                     //string AssignedDepartment = objdata.Department;
-                    objtbldepart = context.tblDepartMembers.Where(x => x.status == "00").ToList();
+                  var  objtbldepart1 = context.tblDepartMembers.Where(x => x.status == "00").ToList();
+                    foreach (var item in objtbldepart1)
+                    {
+                        objtbldepart.Add(new SelectListItem
+                        {
+                            Text = item.Members,
+                            Value = Convert.ToString(item.Members),
+                            Selected = objdata.AssignedMember == item.Members ? true : false
+
+                        });
+                    }
+
                 }
 
             }
@@ -2046,21 +2062,30 @@ namespace BOTS_BL.Repository
             }
             return lstMemberAssigned;
         }
-        public int GetTaskCount(string MemberName)
+        public List<DiscussionMemberWiseCount> GetTaskCount(string Department)
         {
-            int taskCount = 0;
+            List<DiscussionMemberWiseCount> lstCount = new List<DiscussionMemberWiseCount>();           
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    taskCount = context.BOTS_TblDiscussion.Where(x => x.AssignedMember == MemberName && x.Status == "WIP").Count();
+                    //taskCount = context.BOTS_TblDiscussion.Where(x => x.AssignedMember == MemberName && x.Status == "WIP").Count();
+                    var lstMembers = context.tblDepartMembers.Where(x => x.Department == Department).ToList();
+                    foreach(var item in lstMembers)
+                    {
+                        DiscussionMemberWiseCount newItem = new DiscussionMemberWiseCount();
+                        newItem.Name = item.Members;
+                        newItem.TotalCount = context.BOTS_TblDiscussion.Where(x => x.AssignedMember == item.Members && x.Status == "WIP").Count();
+                        lstCount.Add(newItem);
+                    }
+
                 }
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "GetTaskCount");
             }
-            return taskCount;
+            return lstCount;
         }
         public void SendEmail(EmailDetails Emaildata)
         {

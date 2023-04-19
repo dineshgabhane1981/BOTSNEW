@@ -94,8 +94,8 @@ namespace WebApp.Controllers
             ViewBag.lstCallTypes = DR.GetCallTypes(LoginType);
             ViewBag.lstRMAssigned = DR.GetRaisedby();
             ViewBag.lstMemberAssigned = DR.GetAssignedMemberList();
-            ObjData.lstDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "", "", LoginType, userDetails.LoginId, false);
-            ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionData("", 0, "", "", "", "", LoginType, userDetails.LoginId, true);
+            ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "","", LoginType, userDetails.LoginId, false, userDetails.LoginId,"");
+            ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, true, userDetails.LoginId, "");
             return View(ObjData);
         }
 
@@ -262,7 +262,7 @@ namespace WebApp.Controllers
 
         public ActionResult GetReAssignMember(string jsonData)
         {
-            List<tblDepartMember> objDepartMem = new List<tblDepartMember>();
+            List<SelectListItem> objDepartMem = new List<SelectListItem>();
 
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -276,9 +276,9 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult GetTaskCount(string MemberName)
+        public ActionResult GetTaskCounts(string Department)
         {
-            var TaskCount = DR.GetTaskCount(MemberName);
+            var TaskCount = DR.GetTaskCount(Department);
             return new JsonResult() { Data = TaskCount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 

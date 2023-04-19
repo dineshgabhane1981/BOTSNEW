@@ -15,4 +15,9 @@ namespace BOTS_BL.Models
         public int TotalWIPLast3Days { get; set; }
         public int TotalWIPBefore3Days { get; set; }
     }
+    public class DiscussionMemberWiseCount
+    {
+        public string Name { get; set; }
+        public int TotalCount { get; set; }
+    }
 }

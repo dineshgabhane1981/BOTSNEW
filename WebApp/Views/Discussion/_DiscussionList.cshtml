@@ -56,7 +56,7 @@
                                 {
                                     <td>@followupdate</td>
                                 }
-                                
+
                                 @if (item.Status == "Completed")
                                 {
                                     <td style="background-color:lightgreen;"></td>
@@ -77,7 +77,15 @@
                                     <td style="text-align:center;">--</td>
                                 }
                                 <td>@item.Description</td>
-                                <td>@item.AssignedMember</td>
+                                @if (item.AssignedMember == "Please Select")
+                                {
+                                    <td>--</td>
+                                }
+                                else
+                                {
+                                    <td>@item.AssignedMember</td>
+                                }
+
                                 <td>@item.AddedBy</td>
 
                                 @if (item.Status != "Completed")
@@ -85,14 +93,14 @@
                                     <td style="text-align:center;">
                                         <a href="#" onclick="OpenStatusPopup(@item.Id,'@item.AddedBy');">
                                             @*,@item.AddedBy*@
-                                        <img src="~/Content/assets/images/task.png" width="35" />
-                                    </a>
-                                </td>
-                            }
-                            else
-                            {
-                                <td style="text-align:center;">--</td>
-                            }
+                                            <img src="~/Content/assets/images/task.png" width="35" />
+                                        </a>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="text-align:center;">--</td>
+                                }
 
                             </tr>
 
