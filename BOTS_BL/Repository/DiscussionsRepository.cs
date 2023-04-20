@@ -2659,9 +2659,7 @@ namespace BOTS_BL.Repository
                 objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
 
                 StringBuilder stb = new StringBuilder();
-                stb.AppendLine("Dear " + objMsg.GroupName + ",");
-                stb.AppendLine();
-                stb.AppendLine("Description: " + objMsg.Description);
+                stb.AppendLine(objMsg.Message);
                 stb.AppendLine();
                 stb.AppendLine("Regards,");
                 stb.AppendLine(" - " + objMsg.BOEmpName);
