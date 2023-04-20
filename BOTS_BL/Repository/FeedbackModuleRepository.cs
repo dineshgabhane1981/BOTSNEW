@@ -553,7 +553,9 @@ namespace BOTS_BL.Repository
                         objPointsAndMessages.IsPositiveMessage = Convert.ToBoolean(item["IsPositiveMessage"]);
                         objPointsAndMessages.IsAudio = Convert.ToBoolean(item["IsAudio"]);
                         objPointsAndMessages.AudioMessageText = Convert.ToString(item["AudioMessageText"]);
-
+                        objPointsAndMessages.IsGoogleReview = Convert.ToBoolean(item["IsGoogleReview"]);
+                        objPointsAndMessages.GoogleReviewLink = Convert.ToString(item["GoogleReviewLink"]);
+                        
                     }
                     if (objPointsAndMessages.AddedBy == null)
                     {

@@ -31,7 +31,9 @@ namespace BOTS_BL.Models
         public string MsgMissedFeedback { get; set; }
         public string PointsConfig { get; set; }
         public bool IsAudio { get; set; }
-        public string AudioMessageText { get; set; }        
+        public string AudioMessageText { get; set; }
+        public bool IsGoogleReview { get; set; }
+        public string GoogleReviewLink { get; set; }
 
         [StringLength(50)]
         public string AddedBy { get; set; }

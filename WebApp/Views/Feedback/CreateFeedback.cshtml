@@ -225,6 +225,16 @@
                         @Html.TextBoxFor(model => model.PointsAndMessages.CustomFieldText, new { @class = "input150", @id = "txtCustomFieldText" })
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        @Html.CheckBoxFor(model => model.PointsAndMessages.IsGoogleReview, new { @id = "chkIsGoogleReview" }) Do you want to include <b>Google Review</b>?
+                    </div>
+                </div>
+                <div class="row" id="dvGoogleLink" style="display:none;">
+                    <div class="col-md-12 col-xl-12" style="margin-left:20px; margin-top:20px;">
+                        @Html.TextBoxFor(model => model.PointsAndMessages.GoogleReviewLink, new { @class = "input150", @id = "txtGoogleReviewLink" })
+                    </div>
+                </div>
             </div>
 
             <div class="col-md-12 col-xl-12   pl-3 pr-3 pb-3 mt-2" style="border:2px solid grey; border-radius:10px;">
@@ -622,6 +632,15 @@
 
             }
         });
+        $('#chkIsGoogleReview').click(function () {
+            if ($(this).is(':checked')) {
+                $("#dvGoogleLink").show();
+            }
+            else {
+                $("#dvGoogleLink").hide();
+
+            }
+        });
         
 
         if ($("#chkSalesRep").is(":checked")) {
@@ -640,7 +659,9 @@
         if ($("#chkIsCustomField").is(":checked")) {
             $("#dvCustomFieldText").show();
         }
-
+        if ($("#chkIsGoogleReview").is(":checked")) {
+            $("#dvGoogleLink").show();
+        }
         LoadPreview();
         ChangePreview();
     });
@@ -706,6 +727,8 @@
 
         itemOtherConfig["IsCustomField"] = $("#chkIsCustomField").is(":checked");
         itemOtherConfig["CustomFieldText"] = $("#txtCustomFieldText").val();
+        itemOtherConfig["IsGoogleReview"] = $("#chkIsGoogleReview").is(":checked");
+        itemOtherConfig["GoogleReviewLink"] = $("#txtGoogleReviewLink").val();
 
         
         
@@ -762,11 +785,11 @@
         $('[id^=chkIsDisplayHome]').each(function (i, item) {
                 if (this.checked) {
                     var id = item.id.substr(16);
-                    $("#spnHome" + id).text($("#txtHomeHeadingText" + id).val());
+                    $("#spnHome" + id).html($("#txtHomeHeadingText" + id).val());
                 }
                 else {
                     var id = item.id.substr(16);
-                    $("#spnHome" + id).text("");
+                    $("#spnHome" + id).html("");
                 }
         });
 

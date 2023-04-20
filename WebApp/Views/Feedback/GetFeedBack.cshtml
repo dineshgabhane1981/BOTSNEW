@@ -623,8 +623,8 @@
             }
             //txtCustomField
             if (base64data == "data:" || base64data == "") {
-                
-                $("#divLoader").show();               
+
+                $("#divLoader").show();
                 var mobileNo = "";
                 if (@Model.GroupId != "1051") {
                     mobileNo = $("#txtMobileNo").val();
@@ -654,7 +654,11 @@
                                     message: "Feedback Sent Successfully!",
                                     buttonText: "Okay"
                                 }).then((e) => {
-                                    window.location.replace("https://www.blueocktopus.com/");
+                                    var googleSetting = '@Model.PointsAndMessages.IsGoogleReview';
+                                    if (googleSetting == 'True') {
+                                        window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
+                                    }
+                                    //window.location.replace("https://www.blueocktopus.com/");
                                 });
                             }
                             else {
@@ -668,7 +672,13 @@
                                         message: "FeedBack Save Successfully!",
                                         buttonText: "Okay"
                                     }).then((e) => {
-                                        window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                        var googleSetting = '@Model.PointsAndMessages.IsGoogleReview';
+                                        if (googleSetting == 'True') {
+                                            window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
+                                        }
+                                        else {
+                                            window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                        }
                                     });
                                 }
                             }
@@ -687,12 +697,18 @@
                                 message: "FeedBack Save Successfully!",
                                 buttonText: "Okay"
                             }).then((e) => {
-                                window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                 var googleSetting = '@Model.PointsAndMessages.IsGoogleReview';
+                                        if (googleSetting == 'True') {
+                                            window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
+                                        }
+                                        else {
+                                            window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                        }
                             });
                             $("#divLoader").hide();
                         }
 
-                        
+
                     },
                     failure: function (response) {
                         $("#divLoader").hide();
@@ -703,7 +719,7 @@
                     }
                 });
             }
-            else {               
+            else {
                 setTimeout(() => {
                     $("#divLoader").show();
                     var mobileNo = "";
@@ -774,7 +790,7 @@
                         $("#divLoader").hide();
                     }
 
-                    
+
                 },
                 failure: function (response) {
                     $("#divLoader").hide();
