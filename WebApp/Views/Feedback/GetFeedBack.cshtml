@@ -507,15 +507,6 @@
                 $('#txtMobileNo').css('border-color', 'red');
             }
         });
-        //$("#txtBirthDate").focusout(function () {
-        //    if ($("#txtBirthDate").val() != "") {
-        //        $('#txtBirthDate').css('border-color', '');
-        //    }
-        //    else {
-        //        $('#txtBirthDate').css('border-color', 'red');
-        //    }
-        //});
-
 
         $('#ddlKnowAboutUs').change(function () {
             if ($("#ddlKnowAboutUs option:selected").text() == "Please Select") {
@@ -525,7 +516,6 @@
                 $('#ddlKnowAboutUs').css('border-color', '');
             }
         });
-
     });
 
     function SubmitRating() {
@@ -541,7 +531,6 @@
                             $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
 
                                 if ($("#" + itemradio.id).is(":checked")) {
-                                    //console.log(itemradio.id + "  - Checked");
                                     count = 1;
                                 }
                             });
@@ -658,6 +647,9 @@
                                     if (googleSetting == 'True') {
                                         window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
                                     }
+                                    else {
+                                        window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                    }
                                     //window.location.replace("https://www.blueocktopus.com/");
                                 });
                             }
@@ -752,7 +744,12 @@
                                 message: "Feedback Sent Successfully!",
                                 buttonText: "Okay"
                             }).then((e) => {
-                                window.location.replace("https://www.blueocktopus.com/");
+                                if (googleSetting == 'True') {
+                                            window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
+                                        }
+                                        else {
+                                            window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                        }
                             });
                         }
                         else {
@@ -766,7 +763,12 @@
                                     message: "FeedBack Save Successfully!",
                                     buttonText: "Okay"
                                 }).then((e) => {
-                                    window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                    if (googleSetting == 'True') {
+                                            window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
+                                        }
+                                        else {
+                                            window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                        }
                                 });
                             }
                         }
@@ -785,7 +787,12 @@
                             message: "FeedBack Save Successfully!",
                             buttonText: "Okay"
                         }).then((e) => {
-                            window.location.replace($("#url").text() + $("#hdoutletId").val());
+                            if (googleSetting == 'True') {
+                                            window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
+                                        }
+                                        else {
+                                            window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                        }
                         });
                         $("#divLoader").hide();
                     }

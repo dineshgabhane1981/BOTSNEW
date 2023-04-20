@@ -73,6 +73,17 @@
                     </div>
                 </div>
                 <div id="dvAddDiscussion" class="card" style="display:none;padding:20px;margin-bottom:10px;">
+                    <div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Discussion Type
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Query", new { @id = "rbtnQuery", @checked = "checked", @class = "chkClass" }) Query
+                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Request", new { @id = "rbtnRequest", @class = "chkClass" }) Request
+                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Complaint", new { @id = "rbtnComplaint", @class = "chkClass" }) Complaint
+                            @*@Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "OTP", new { @id = "rbtnOTP", @class = "chkClass" }) OTP*@
+                        </div>
+                    </div>
                     <div class="row" style="margin: 0;">
                         <div style="float:left;text-align:right;width:100px;margin-top:10px;">
                             Spoken To
@@ -99,12 +110,12 @@
                         <div style="float: left; text-align: right; width: 115px; margin-top: 20px;">
                             Call Mode
                         </div>
-                       
+
                         <div class="col-sm-4" style="float:left;margin-top:20px;">
                             @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Phone", new { @id = "rbtnPhone", @checked = "checked", @class = "chkClass" }) <span>Phone</span>
                             @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Anydesk", new { @id = "rbtnAnydesk", @class = "chkClass" }) Anydesk
                             @Html.RadioButtonFor(model => model.objDiscussion.CallMode, "Physical", new { @id = "rbtnPhysical", @class = "chkClass" }) Physical
-                            
+
                         </div>
                     </div>
 
@@ -126,17 +137,7 @@
                         </div>
 
                     </div>
-                    <div>
-                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                            Discussion Type
-                        </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
-                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Query", new { @id = "rbtnQuery", @checked = "checked", @class = "chkClass" }) Query
-                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Request", new { @id = "rbtnRequest", @class = "chkClass" }) Request
-                            @Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "Complaint", new { @id = "rbtnComplaint", @class = "chkClass" }) Complaint
-                            @*@Html.RadioButtonFor(model => model.objDiscussion.DiscussionType, "OTP", new { @id = "rbtnOTP", @class = "chkClass" }) OTP*@
-                        </div>
-                    </div>
+
                     <div id="dvDepartMembers" class="row" style="margin: 0;display:none;">
                         <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Department
@@ -154,11 +155,11 @@
                     </div>
 
                     <div class="row" style="margin: 0;display:none;" id="dvTaskCount">
-                        
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px; padding-right:15px;">
                             No. Of Tasks
                         </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <div class="col-sm-4" style="float:left;margin-top:10px;padding-left:0px;">
                             <h4><label id="TaskCount"></label></h4>
                         </div>
                     </div>
@@ -170,7 +171,7 @@
                         <div class="col-sm-4" style="float:left;margin-top:10px;">
                             @Html.RadioButtonFor(model => model.objDiscussion.Status, "WIP", new { @id = "rbtnWIP", @checked = "checked", @class = "chkClass" }) WIP
                             @Html.RadioButtonFor(model => model.objDiscussion.Status, "Completed", new { @id = "rbtnCompleted", @class = "chkClass" }) Completed
-                            
+
                         </div>
 
                         <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
@@ -370,45 +371,20 @@
         $("#rbtnCompleted").change(function () {
             ShowHideFollowUpDate();
         });
-        $("#rbtnRequest").on("click", function () {            
-            if ($("#rbtnQuery").is(":checked")) {                
-                $("#dvPriority").hide();
-                $("#dvDepartMembers").hide();
-                $("#dvTaskCount").hide();
-            }
-            else {                
-                $("#dvPriority").show();
-                $("#dvDepartMembers").show();
-                $("#dvTaskCount").show();
-
-            }
+        $("#rbtnRequest").on("click", function () {
+            $("#dvPriority").show();
+            $("#dvDepartMembers").show();
+            $("#dvTaskCount").hide();            
         });
         $("#rbtnComplaint").on("click", function () {
-
-            if ($("#rbtnQuery").is(":checked")) {
-                $("#dvPriority").hide();
-                $("#dvDepartMembers").hide();
-                $("#dvTaskCount").hide();
-            }
-            else {
-                $("#dvPriority").show();
-                $("#dvDepartMembers").show();
-                $("#dvTaskCount").show();
-            }
+            $("#dvPriority").show();
+            $("#dvDepartMembers").show();
+            $("#dvTaskCount").hide();            
         });
         $("#rbtnQuery").on("click", function () {
-
-            if ($("#rbtnQuery").is(":checked")) {
-                $("#dvPriority").hide();
-                $("#dvDepartMembers").hide();
-                $("#dvTaskCount").hide();
-            }
-            else {
-                $("#dvPriority").show();
-                $("#dvDepartMembers").show();
-                $("#dvTaskCount").show();
-            }
-
+            $("#dvPriority").hide();
+            $("#dvDepartMembers").hide();
+            $("#dvTaskCount").hide();
         });
 
     });
@@ -874,13 +850,18 @@
 
     $("#ddlDepartment").change(function () {
         var Department = $("#ddlDepartment").val();
-        var FilterData = [];
-        item = {};
-        item["Department"] = Department;
-        FilterData.push(item);
-        var data = JSON.stringify(FilterData);
-        $("#divLoader").show();
-        $.ajax({
+        
+        if ($("#ddlDepartment option:selected").text() == "Please Select") {
+            $("#dvTaskCount").hide();
+        }
+        else {
+            var FilterData = [];
+            item = {};
+            item["Department"] = Department;
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetDepartmentMember", "Discussion")',
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
@@ -893,45 +874,49 @@
                     $("#ddMembers").append("<option>Please Select</option>");
                     for (item in result) {
                         $("#ddMembers").append("<option>" + result[item].Members + "</option>");
-                    }
-
-                    $("#divLoader").hide();
+                    }                   
                 },
                 error: function (result) {
                     //alert(111)
                     console.log(result.responseText)
                 }
-        });
+            });
 
-        $.ajax({
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetTaskCounts", "Discussion")',
-                //url: "/Discussion/GetSubCallTypes",
-            data: '{Department: ' + JSON.stringify(Department) + '}',
+                data: '{Department: ' + JSON.stringify(Department) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-            success: function (result) {
-                console.log(result)
-                $("#TaskCount").empty();
+                success: function (result) {
+                    console.log(result)
+                    $("#TaskCount").empty();
 
-                var htmlStr = "<table border=\"2\" style=\"font-size:14px; margin-left: 11px;width: 98%;\" class=\"table\">";
-                htmlStr += "<tr style=\"text-align: center;\">"
-                htmlStr += "<th scope=\"col\">Member Name</th>";
-                htmlStr += "<th scope=\"col\">Count</th>";
-                htmlStr += "</tr>";
-                $.map(result, function (item) {
+                    var htmlStr = "<table border=\"2\" style=\"font-size:14px; margin-left: 0px;width: 100%;\" class=\"table\">";
                     htmlStr += "<tr style=\"text-align: center;\">"
-                    htmlStr += "<td>" + item.Name + "</td>";
-                    htmlStr += "<td>" + item.TotalCount + "</td>";
-                    htmlStr += "</tr>"
-                });
+                    htmlStr += "<th  scope=\"col\">Member Name</th>";
+                    $.map(result, function (item) {
+                        htmlStr += "<td>" + item.Name + "</td>";
+                    });
+                    htmlStr += "</tr>";
+
+                    htmlStr += "<th scope=\"col\">Count</th>";
+                    $.map(result, function (item) {
+                        htmlStr += "<td>" + item.TotalCount + "</td>";
+                    });
+                    htmlStr += "</tr>";
+                    htmlStr += "</table>";
 
                     $("#TaskCount").html(htmlStr);
+                    $("#dvTaskCount").show();
+                    $("#divLoader").hide();
                 },
                 error: function (result) {
                     console.log(result.responseText);
+                    $("#divLoader").hide();
                 }
             });
-    });
+        }
+        });
     
 </script>
