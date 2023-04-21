@@ -159,7 +159,7 @@ namespace BOTS_BL.Repository
 
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
-                    string _GroupName = _GroupDetails.GroupName;
+                    string _GroupName = _GroupDetails.RetailName.Trim();
                     string Script = string.Empty;
 
                     if (!string.IsNullOrEmpty(_File))
@@ -432,7 +432,7 @@ namespace BOTS_BL.Repository
                         var groupId = context.BOTS_TblDiscussion.Where(x => x.Id == mId).Select(y => y.GroupId).FirstOrDefault();
                         var gId = Convert.ToInt32(groupId);
                         var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
-                        _GroupName = _GroupDetails.GroupName;
+                        _GroupName = _GroupDetails.RetailName.Trim();
 
                     }
                     var GroupFolder = _FilePath + "/" + _GroupName;
