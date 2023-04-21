@@ -682,7 +682,10 @@
                 success: function (result) {
                     console.log(result)
                     for (item in result) {
-                        $("#ddReassignMember").append("<option>" + result[item].Members + "</option>");
+                        if (result[item].Selected)
+                            $("#ddReassignMember").append("<option selected>" + result[item].Text + "</option>");
+                        else
+                            $("#ddReassignMember").append("<option>" + result[item].Text + "</option>");
                     }
 
                     $("#divLoader").hide();
@@ -705,9 +708,9 @@
         var FileDone = $("#DoneDocBase64").val();
         var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew").val();
-
+        
         if (Desc != "") {
-
+            alert(111)
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',

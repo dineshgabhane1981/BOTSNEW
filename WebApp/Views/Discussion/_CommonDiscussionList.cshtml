@@ -121,6 +121,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col"></th>
+                                        <th scope="col">Ticket No</th>
                                         <th scope="col">Group Name</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Customer Details</th>
@@ -153,6 +154,7 @@
                                             <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowFollowUpActivities(@item.Id);" />
                                             @*}*@
                                         </td>
+                                        <td>@item.Id</td>
                                         <td style="max-width:100px !important;">@item.GroupName</td>
                                         <td>@item.AddedDate</td>
                                         <td>@item.SpokenTo/<br />@item.ContactNo/<br />@item.CustomerType/<br />@item.CallMode</td>

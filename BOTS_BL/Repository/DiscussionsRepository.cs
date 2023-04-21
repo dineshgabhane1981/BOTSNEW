@@ -1388,14 +1388,17 @@ namespace BOTS_BL.Repository
             {
                 var AssignedName = "";
                 var list = context.BOTS_TblDiscussion.ToList();
-                if (LoginType != "1" && LoginType != "7")
+                if (AssignMember != "")
                 {
-                    if (AssignMember != "")
+                    AssignedName = context.tblDepartMembers.Where(x => x.LoginId == AssignMember).Select(y => y.Members).FirstOrDefault();
+                    if (LoginType == "9" || LoginType == "10")
                     {
-                        AssignedName = context.tblDepartMembers.Where(x => x.LoginId == AssignMember).Select(y => y.Members).FirstOrDefault();
-                        //list = list.Where(x => x.AssignedMember == AssignedName).ToList();
-                        list = list.Where(x => x.AssignedMember == AssignedName || x.AddedBy == AssignMember).ToList();
+                        list = list.Where(x => x.AssignedMember == AssignMember || x.AddedBy == LoginId || x.CallType == 3 || x.CallType == 9 || x.CallType == 10 || x.CallType == 12 || x.CallType == 18).ToList();//3,9,10,12,18
                     }
+                    else if (LoginType == "1" && LoginType == "7")
+                        list = list.Where(x => x.AssignedMember == AssignMember).ToList();
+                    else
+                        list = list.Where(x => x.AssignedMember == AssignedName || x.AddedBy == LoginId).ToList();
                 }
 
 

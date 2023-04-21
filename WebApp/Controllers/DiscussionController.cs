@@ -94,8 +94,16 @@ namespace WebApp.Controllers
             ViewBag.lstCallTypes = DR.GetCallTypes(LoginType);
             ViewBag.lstRMAssigned = DR.GetRaisedby();
             ViewBag.lstMemberAssigned = DR.GetAssignedMemberList();
-            ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "","", LoginType, userDetails.LoginId, false, userDetails.LoginId,"");
-            ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, true, userDetails.LoginId, "");
+            if (LoginType != "1" && LoginType != "7")
+            {
+                ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, false, userDetails.LoginId, "");
+                ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, true, userDetails.LoginId, "");
+            }
+            else
+            {
+                ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, false, "", "");
+                ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, true, "", "");
+            }
             return View(ObjData);
         }
 
