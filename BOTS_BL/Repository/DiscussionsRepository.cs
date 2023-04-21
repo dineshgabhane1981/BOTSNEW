@@ -1395,7 +1395,7 @@ namespace BOTS_BL.Repository
                     {
                         list = list.Where(x => x.AssignedMember == AssignMember || x.AddedBy == LoginId || x.CallType == 3 || x.CallType == 9 || x.CallType == 10 || x.CallType == 12 || x.CallType == 18).ToList();//3,9,10,12,18
                     }
-                    else if (LoginType == "1" && LoginType == "7")
+                    else if (LoginType == "1" || LoginType == "7")
                         list = list.Where(x => x.AssignedMember == AssignMember).ToList();
                     else
                         list = list.Where(x => x.AssignedMember == AssignedName || x.AddedBy == LoginId).ToList();

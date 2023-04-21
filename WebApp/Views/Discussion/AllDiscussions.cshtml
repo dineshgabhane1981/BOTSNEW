@@ -454,21 +454,28 @@
     }
 
     function ShowAddDiscussion() {
-        $('#rbtnRequest').prop("checked", "");
-        $('#rbtnComplaint').prop("checked", "");
+        $('#rbtnQuery').prop("checked", true);
+        $('#rbtnWIP').prop("checked", true);
+        $('#rbtnPhone').prop("checked", true);        
         $('#txtSpokenTo').val('');
-        $('#txtContactNo').val('');
-        $('#ddlCustomerType').val('Please Select');
-        $('#ddlCallType').val('Please Select');
-        $('#ddlSubCallType').val('Please Select');
-        $('#ddlDiscussionStatus').val('Please Select');
-        $('#ddlDepartment').val('Please Select');
-        $('#ddMembers').val('Please Select');
-        $('#rbtnCompleted').prop("checked", "");
+        $('#txtContactNo').val('');        
+        $("#ddlCustomerType").prop("selectedIndex", 0);
+        $("#ddlCallType").prop("selectedIndex", 0);
+        $("#ddlSubCallType").prop("selectedIndex", 0);
+        $("#ddlDiscussionStatus").prop("selectedIndex", 0);
+        $("#ddlDepartment").prop("selectedIndex", 0);
+        $("#ddMembers").prop("selectedIndex", 0);
+        $("#ddlPriority").prop("selectedIndex", 0);
         $('#txtFollowupDate').val('');
         $('#txtDescription').val('');
-        $('#ddlPriority').val('Please Select');
-
+        $("#dvDepartMembers").hide();        
+        $("#dvTaskCount").empty();
+        $("#dvTaskCount").hide();
+        $("#ddlSubCallType").empty();
+        $("#ddlSubCallType").append("<option>Please Select</option>");
+        $("#ddMembers").empty();
+        $("#ddMembers").append("<option>Please Select</option>");
+        $("#uploadfile").val(null);
 
         $("#dvAddDiscussion").show(1000);
     }
