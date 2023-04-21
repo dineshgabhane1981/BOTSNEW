@@ -454,6 +454,22 @@
     }
 
     function ShowAddDiscussion() {
+        $('#rbtnRequest').prop("checked", "");
+        $('#rbtnComplaint').prop("checked", "");
+        $('#txtSpokenTo').val('');
+        $('#txtContactNo').val('');
+        $('#ddlCustomerType').val('Please Select');
+        $('#ddlCallType').val('Please Select');
+        $('#ddlSubCallType').val('Please Select');
+        $('#ddlDiscussionStatus').val('Please Select');
+        $('#ddlDepartment').val('Please Select');
+        $('#ddMembers').val('Please Select');
+        $('#rbtnCompleted').prop("checked", "");
+        $('#txtFollowupDate').val('');
+        $('#txtDescription').val('');
+        $('#ddlPriority').val('Please Select');
+
+
         $("#dvAddDiscussion").show(1000);
     }
     function RemoveRequiredBorder() {

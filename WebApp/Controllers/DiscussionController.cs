@@ -146,6 +146,8 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File,RequestType);
 
+            ModelState.Clear();
+
             return status;
         }
 

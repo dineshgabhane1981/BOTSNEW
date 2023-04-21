@@ -2268,17 +2268,14 @@ namespace BOTS_BL.Repository
 
             catch (ArgumentException ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
             }
             catch (WebException ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
             }
             catch (Exception ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
@@ -2328,6 +2325,8 @@ namespace BOTS_BL.Repository
                     str.Append("</tr>");
                     str.Append("</table>");
 
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(Emaildata.SendTo);
                     mail.Subject = "WIP Reassigned[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     if (Emaildata.DepartHead != null)
@@ -2354,17 +2353,14 @@ namespace BOTS_BL.Repository
             }
             catch (ArgumentException ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
             }
             catch (WebException ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
             }
             catch (Exception ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
@@ -2413,6 +2409,8 @@ namespace BOTS_BL.Repository
                     str.Append("</tr>");
                     str.Append("</table>");
 
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(Emaildata.SendTo);
                     mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     if (Emaildata.DepartHead != null)
@@ -2439,20 +2437,16 @@ namespace BOTS_BL.Repository
             }
             catch (ArgumentException ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
             }
             catch (WebException ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
             }
             catch (Exception ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
-
         }
         public void SendWAMessage(MessageDetails objMsg)
         {
@@ -2558,6 +2552,8 @@ namespace BOTS_BL.Repository
                     str.Append("</tr>");
                     str.Append("</table>");
 
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(Emaildata.SendTo);
                     mail.Subject = "WIP Rescheduled[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     //mail.CC.Add(Emaildata.DepartHead);
@@ -2747,6 +2743,8 @@ namespace BOTS_BL.Repository
                     str.Append("</tr>");
                     str.Append("</table>");
 
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(Emaildata.SendTo);
                     mail.Subject = "Completed [#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     //mail.CC.Add(Emaildata.DepartHead);
