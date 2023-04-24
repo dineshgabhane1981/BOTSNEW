@@ -744,13 +744,26 @@
         var FollowupDate = $("#txtFollowupDateNew1").val();
         var RequestType = $("#ddlRequestType").val();
 
+        var fileData = new FormData();
+        fileData.append("dId", id);
+        fileData.append("Desc", Desc);
+        fileData.append("Status", Status);
+        fileData.append("FollowupDate", FollowupDate);
+        fileData.append("Reassign", Reassign);
+        fileData.append("FileName", DoneFileName);
+        fileData.append("File", FileDone);
+        fileData.append("RequestType", RequestType);
+
         if (Desc != "") {
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
-                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) + ',RequestType: ' + JSON.stringify(RequestType) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                //data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) + ',RequestType: ' + JSON.stringify(RequestType) + '}',
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
 
                 success: function (result) {
                     $("#myModal").hide(1000);

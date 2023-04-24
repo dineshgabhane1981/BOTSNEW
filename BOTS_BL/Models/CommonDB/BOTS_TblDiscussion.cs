@@ -5,6 +5,7 @@ namespace BOTS_BL.Models.CommonDB
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web;
 
     public partial class BOTS_TblDiscussion
     {
@@ -127,6 +128,18 @@ namespace BOTS_BL.Models.CommonDB
         public string Addby { get; set; }
         public string BOEmpName { get; set; }
        
+    }
+
+    public class UpdateCompleteThread
+    {
+        public string dId { get; set; }
+        public string Desc { get; set; }
+        public string Status { get; set; }
+        public string FollowupDate { get; set; }
+        public string Reassign { get; set; }
+        public string FileName { get; set; }
+        public string File { get; set; }
+        public string RequestType { get; set; }
 
 
     }

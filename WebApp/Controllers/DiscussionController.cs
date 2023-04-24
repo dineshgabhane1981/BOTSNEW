@@ -148,10 +148,18 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public bool UpdateStatusAndDiscussion(string dId, string Desc, string Status, string FollowupDate, string Reassign, string FileName, string File,string RequestType)
+        public bool UpdateStatusAndDiscussion(UpdateCompleteThread Obj)//(string dId, string Desc, string Status, string FollowupDate, string Reassign, string FileName, string File,string RequestType)
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string dId = Obj.dId;
+            string Desc = Obj.Desc;
+            string Status = Obj.Status;
+            string FollowupDate = Obj.FollowupDate;
+            string Reassign = Obj.Reassign;
+            string FileName = Obj.FileName;
+            string File = Obj.File;
+            string RequestType = Obj.RequestType;
             status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File,RequestType);
 
             ModelState.Clear();
