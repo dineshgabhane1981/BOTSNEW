@@ -40,7 +40,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignTilesData");
             }
 
             return objCampaignTiles;
@@ -63,7 +63,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignCelebrationsData");
             }
 
             return objCampaignCelebrations;
@@ -87,7 +87,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignCelebrationsSecondData");
             }
 
             return objCampaignCelebrationsData;
@@ -110,7 +110,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignPointsExpiryData");
             }
 
             return objCampaignPointsExpiry;
@@ -133,7 +133,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignPointsExpirySecondData");
             }
             return objCampaignCelebrationsData;
         }
@@ -155,7 +155,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignInactiveData");
             }
 
             return objCampaignInactive;
@@ -187,7 +187,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignInactiveSecondData");
             }
 
             return objCampaignInactiveData;
@@ -210,7 +210,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignFirstData");
             }
             return objCampaignData;
         }
@@ -233,7 +233,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignSecondData");
             }
             return objCampaignData;
         }
@@ -256,7 +256,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignThirdData");
             }
             return objCampaignData;
         }
@@ -278,7 +278,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignSMSBlastFirstData");
             }
             return objCampaignSMSBlastFirstData;
         }
@@ -301,7 +301,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetSMSBlastsSecondData");
             }
             return objCampaignData;
         }
@@ -324,7 +324,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetSMSBlastsThirdData");
             }
             return objCampaignData;
         }
@@ -348,7 +348,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "OutletData");
             }
             return OutletData;
         }
@@ -484,7 +484,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GatewayDetails");
             }
             return SMSGatewayDetails;
         }
@@ -611,7 +611,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, GroupId);
+                    newexception.AddException(ex, "GetFiltData");
                 }
 
             }
@@ -638,7 +638,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "SaveCampaignData");
             }
             return Data;
         }
@@ -657,7 +657,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, GroupId);
+                    newexception.AddException(ex, "CampDataDownload");
                 }
             }
             return CmpData;
@@ -759,7 +759,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, GroupId);
+                    newexception.AddException(ex, "GetCampList");
                 }
 
             }
@@ -789,7 +789,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, GroupId);
+                    newexception.AddException(ex, "SendDLTData");
                 }
 
             }
@@ -826,7 +826,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, GroupId);
+                    newexception.AddException(ex, "CampDLTDetailsLst");
                 }
 
             }
@@ -865,7 +865,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, Groupid);
+                    newexception.AddException(ex, "UpdateCampDLCLinkDLTStatus");
                 }
                 return CM;
             }
@@ -900,7 +900,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, Groupid);
+                    newexception.AddException(ex, "UpdateCampDLTRejectStat");
                 }
                 return CM;
             }
@@ -942,7 +942,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, GroupId);
+                    newexception.AddException(ex, "SaveDLCCampaignDetails");
                 }
                 return status;
             }
@@ -1007,7 +1007,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "SendTestSMSData");
             }
             return Data;
         }
@@ -1246,7 +1246,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "SendSMSData");
             }
             return Data;
         }
@@ -1270,7 +1270,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "SaveCampaignDataWA");
             }
             return Data;
         }
@@ -1336,7 +1336,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "WASendTestMsgData");
             }
             return Data;
         }
@@ -1585,7 +1585,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, Groupid);
+                newexception.AddException(ex, "GetWAInsData");
             }
             return WAInsDetails;
         }
@@ -1620,7 +1620,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignCelebrationSummery");
             }
 
             return objData;
@@ -1658,7 +1658,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignCelebrationDetail");
             }
 
             return objData;
@@ -1694,7 +1694,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignPointExpirySummary");
             }
 
             return objData;
@@ -1730,7 +1730,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignPointExpiryDetailed");
             }
 
             return objData;
@@ -1766,7 +1766,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignInactiveSummary");
             }
 
             return objData;
@@ -1802,7 +1802,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignInactiveDetailed");
             }
 
             return objData;
@@ -1847,7 +1847,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignSummary");
             }
 
             return objData;
@@ -1870,7 +1870,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignDetailed");
             }
             return objData;
         }
@@ -1902,7 +1902,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignPromoBlastSummary");
             }
 
             return objData;
@@ -1925,7 +1925,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCampaignPromoBlastDetailed");
             }
             return objData;
         }
