@@ -159,8 +159,8 @@
                         <div style="float: left; text-align: right; width: 115px; margin-top: 10px; padding-right:15px;">
                             No. Of Tasks
                         </div>
-                        <div class="col-sm-4" style="float:left;margin-top:10px;padding-left:0px;">
-                            <h4><label id="TaskCount"></label></h4>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;padding-left:0px;" id="TaskCount">
+                            
                         </div>
                     </div>
 
@@ -454,6 +454,7 @@
     }
 
     function ShowAddDiscussion() {
+        alert(111)
         $('#rbtnQuery').prop("checked", true);
         $('#rbtnWIP').prop("checked", true);
         $('#rbtnPhone').prop("checked", true);        
@@ -468,8 +469,7 @@
         $("#ddlPriority").prop("selectedIndex", 0);
         $('#txtFollowupDate').val('');
         $('#txtDescription').val('');
-        $("#dvDepartMembers").hide();        
-        $("#dvTaskCount").empty();
+        $("#dvDepartMembers").hide();
         $("#dvTaskCount").hide();
         $("#ddlSubCallType").empty();
         $("#ddlSubCallType").append("<option>Please Select</option>");
@@ -925,9 +925,6 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    console.log(result)
-                    $("#TaskCount").empty();
-
                     var htmlStr = "<table border=\"2\" style=\"font-size:14px; margin-left: 0px;width: 100%;\" class=\"table\">";
                     htmlStr += "<tr style=\"text-align: center;\">"
                     htmlStr += "<th  scope=\"col\">Member Name</th>";
@@ -942,12 +939,11 @@
                     });
                     htmlStr += "</tr>";
                     htmlStr += "</table>";
-
-                    $("#TaskCount").html(htmlStr);
                     $("#dvTaskCount").show();
+                    $("#TaskCount").html(htmlStr);
                     $("#divLoader").hide();
                 },
-                error: function (result) {
+                error: function (result) {alert(111)
                     console.log(result.responseText);
                     $("#divLoader").hide();
                 }
