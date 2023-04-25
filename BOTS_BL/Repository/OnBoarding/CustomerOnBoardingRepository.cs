@@ -38,7 +38,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetTblCategories");
             }
             return objtblcategory;
         }
@@ -58,7 +58,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "AddCategory");
             }
             return result;
         }
@@ -86,7 +86,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetTblSourceBy");
             }
             return objtblSourceBy;
         }
@@ -106,7 +106,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "AddSource");
             }
             return result;
         }
@@ -134,7 +134,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetTblSourceType");
             }
             return objtblSourcetype;
         }
@@ -154,7 +154,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "AddSourceType");
             }
             return result;
         }
@@ -162,9 +162,16 @@ namespace BOTS_BL.Repository
         public tblSourceType GetSourceTypeById(int SourceTypeId)
         {
             tblSourceType objSourcetype = new tblSourceType();
-            using (var context = new CommonDBContext())
+            try
             {
-                objSourcetype = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceTypeId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objSourcetype = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceTypeId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetSourceTypeById");
             }
             return objSourcetype;
         }
@@ -193,7 +200,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetCityList");
             }
             return objtblcity;
         }
@@ -221,7 +228,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetChannelPartnerList");
             }
             return objchannelpartner;
         }
@@ -241,7 +248,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "AddCity");
             }
             return result;
         }
@@ -260,7 +267,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "AddChannelPartner");
             }
             return result;
         }
@@ -291,7 +298,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetRMList");
             }
             return objRMDetails;
         }
@@ -311,7 +318,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "AddRM");
             }
             return result;
         }
@@ -319,9 +326,16 @@ namespace BOTS_BL.Repository
         public tblCategory GetCategoryById(int CategoryId)
         {
             tblCategory objcategory = new tblCategory();
-            using (var context = new CommonDBContext())
+            try
             {
-                objcategory = context.tblCategories.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
+               using (var context = new CommonDBContext())
+               {
+                  objcategory = context.tblCategories.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
+               }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCategoryById");
             }
             return objcategory;
         }
@@ -329,9 +343,16 @@ namespace BOTS_BL.Repository
         public tblCity GetCityById(int CityId)
         {
             tblCity objcity = new tblCity();
+            try
+            { 
             using (var context = new CommonDBContext())
-            {
+              {
                 objcity = context.tblCities.Where(x => x.CityId == CityId).FirstOrDefault();
+              }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCityById");
             }
             return objcity;
         }
@@ -339,9 +360,16 @@ namespace BOTS_BL.Repository
         public tblChannelPartner GetchannelById(int ChannelPartnerid)
         {
             tblChannelPartner objchannel = new tblChannelPartner();
-            using (var context = new CommonDBContext())
+            try 
             {
-                objchannel = context.tblChannelPartners.Where(x => x.CPId == ChannelPartnerid).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objchannel = context.tblChannelPartners.Where(x => x.CPId == ChannelPartnerid).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetchannelById");
             }
             return objchannel;
         }
@@ -349,9 +377,16 @@ namespace BOTS_BL.Repository
         public tblRMAssigned GetRMById(int RMId)
         {
             tblRMAssigned objRM = new tblRMAssigned();
-            using (var context = new CommonDBContext())
+            try 
             {
-                objRM = context.tblRMAssigneds.Where(x => x.RMAssignedId == RMId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objRM = context.tblRMAssigneds.Where(x => x.RMAssignedId == RMId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRMById");
             }
             return objRM;
         }
@@ -359,9 +394,16 @@ namespace BOTS_BL.Repository
         public tblSourcedBy GetSourceById(int SourceId)
         {
             tblSourcedBy objsource = new tblSourcedBy();
-            using (var context = new CommonDBContext())
+            try
             {
-                objsource = context.tblSourcedBies.Where(x => x.SourcedbyId == SourceId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objsource = context.tblSourcedBies.Where(x => x.SourcedbyId == SourceId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetSourceById");
             }
             return objsource;
         }
@@ -381,7 +423,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "AddBillingPartner");
             }
             return result;
         }
@@ -401,7 +443,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "AddBillingPartnerProduct");
             }
             return result;
         }
@@ -409,9 +451,16 @@ namespace BOTS_BL.Repository
         public tblBillingPartner GetBillingPartnerById(int BillingpartnerId)
         {
             tblBillingPartner objbillingpartner = new tblBillingPartner();
-            using (var context = new CommonDBContext())
+            try
             {
-                objbillingpartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objbillingpartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBillingPartnerById");
             }
             return objbillingpartner;
         }
@@ -419,9 +468,16 @@ namespace BOTS_BL.Repository
         public BOTS_TblBillingPartnerProduct GetBillingPartnerProductByProductId(int BillingpartnerProductId)
         {
             BOTS_TblBillingPartnerProduct objbillingpartner = new BOTS_TblBillingPartnerProduct();
-            using (var context = new CommonDBContext())
+            try
             {
-                objbillingpartner = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingpartnerProductId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objbillingpartner = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingpartnerProductId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBillingPartnerProductByProductId");
             }
             return objbillingpartner;
         }
@@ -452,7 +508,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetBillingPartnerList");
             }
             return objbillingpartnerDetails;
         }
@@ -496,7 +552,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetBillingPartner");
             }
             return BillingPartnerItem;
         }
@@ -540,7 +596,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "onboarding_master");
+                newexception.AddException(ex, "GetChannelPartner");
             }
             return lstChannelPartner;
         }
@@ -576,7 +632,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetBillingPartnerProductById");
             }
             return objbillingpartnerproduct;
         }
@@ -585,24 +641,31 @@ namespace BOTS_BL.Repository
         {
             tblBillingPartner objbillingpartner = new tblBillingPartner();
             SPResponse result = new SPResponse();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                objbillingpartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
-
-                if (objbillingpartner.IsActive == true)
+                using (var context = new CommonDBContext())
                 {
-                    objbillingpartner.IsActive = false;
-                }
-                else
-                {
-                    objbillingpartner.IsActive = true;
-                }
 
-                context.tblBillingPartners.AddOrUpdate(objbillingpartner);
-                context.SaveChanges();
-                result.ResponseCode = "00";
-                result.ResponseMessage = "Billing Partner Updated Successfully";
+                    objbillingpartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingpartnerId).FirstOrDefault();
+
+                    if (objbillingpartner.IsActive == true)
+                    {
+                        objbillingpartner.IsActive = false;
+                    }
+                    else
+                    {
+                        objbillingpartner.IsActive = true;
+                    }
+
+                    context.tblBillingPartners.AddOrUpdate(objbillingpartner);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Billing Partner Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ActiveInactiveBillingPartner");
             }
             return result;
         }
@@ -611,24 +674,31 @@ namespace BOTS_BL.Repository
         {
             tblCategory objcategory = new tblCategory();
             SPResponse result = new SPResponse();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                objcategory = context.tblCategories.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
-
-                if (objcategory.IsActive == true)
+                using (var context = new CommonDBContext())
                 {
-                    objcategory.IsActive = false;
-                }
-                else
-                {
-                    objcategory.IsActive = true;
-                }
 
-                context.tblCategories.AddOrUpdate(objcategory);
-                context.SaveChanges();
-                result.ResponseCode = "00";
-                result.ResponseMessage = "Category Updated Successfully";
+                    objcategory = context.tblCategories.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
+
+                    if (objcategory.IsActive == true)
+                    {
+                        objcategory.IsActive = false;
+                    }
+                    else
+                    {
+                        objcategory.IsActive = true;
+                    }
+
+                    context.tblCategories.AddOrUpdate(objcategory);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Category Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ActiveInactiveCategory");
             }
             return result;
         }
@@ -637,24 +707,31 @@ namespace BOTS_BL.Repository
         {
             tblCity objcity = new tblCity();
             SPResponse result = new SPResponse();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                objcity = context.tblCities.Where(x => x.CityId == CityId).FirstOrDefault();
-
-                if (objcity.IsActive == true)
+                using (var context = new CommonDBContext())
                 {
-                    objcity.IsActive = false;
-                }
-                else
-                {
-                    objcity.IsActive = true;
-                }
 
-                context.tblCities.AddOrUpdate(objcity);
-                context.SaveChanges();
-                result.ResponseCode = "00";
-                result.ResponseMessage = "City Updated Successfully";
+                    objcity = context.tblCities.Where(x => x.CityId == CityId).FirstOrDefault();
+
+                    if (objcity.IsActive == true)
+                    {
+                        objcity.IsActive = false;
+                    }
+                    else
+                    {
+                        objcity.IsActive = true;
+                    }
+
+                    context.tblCities.AddOrUpdate(objcity);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "City Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ActiveInactiveCity");
             }
             return result;
         }
@@ -663,24 +740,31 @@ namespace BOTS_BL.Repository
         {
             tblChannelPartner objchannel = new tblChannelPartner();
             SPResponse result = new SPResponse();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                objchannel = context.tblChannelPartners.Where(x => x.CPId == ChannelPartnerId).FirstOrDefault();
-
-                if (objchannel.IsActive == true)
+                using (var context = new CommonDBContext())
                 {
-                    objchannel.IsActive = false;
-                }
-                else
-                {
-                    objchannel.IsActive = true;
-                }
 
-                context.tblChannelPartners.AddOrUpdate(objchannel);
-                context.SaveChanges();
-                result.ResponseCode = "00";
-                result.ResponseMessage = "Channel Partner Updated Successfully";
+                    objchannel = context.tblChannelPartners.Where(x => x.CPId == ChannelPartnerId).FirstOrDefault();
+
+                    if (objchannel.IsActive == true)
+                    {
+                        objchannel.IsActive = false;
+                    }
+                    else
+                    {
+                        objchannel.IsActive = true;
+                    }
+
+                    context.tblChannelPartners.AddOrUpdate(objchannel);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Channel Partner Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ActiveInactiveChannelPartner");
             }
             return result;
         }
@@ -689,24 +773,31 @@ namespace BOTS_BL.Repository
         {
             tblRMAssigned objRM = new tblRMAssigned();
             SPResponse result = new SPResponse();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                objRM = context.tblRMAssigneds.Where(x => x.RMAssignedId == RmAssignedId).FirstOrDefault();
-
-                if (objRM.IsActive == true)
+                using (var context = new CommonDBContext())
                 {
-                    objRM.IsActive = false;
-                }
-                else
-                {
-                    objRM.IsActive = true;
-                }
 
-                context.tblRMAssigneds.AddOrUpdate(objRM);
-                context.SaveChanges();
-                result.ResponseCode = "00";
-                result.ResponseMessage = "CS Updated Successfully";
+                    objRM = context.tblRMAssigneds.Where(x => x.RMAssignedId == RmAssignedId).FirstOrDefault();
+
+                    if (objRM.IsActive == true)
+                    {
+                        objRM.IsActive = false;
+                    }
+                    else
+                    {
+                        objRM.IsActive = true;
+                    }
+
+                    context.tblRMAssigneds.AddOrUpdate(objRM);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "CS Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ActiveInactiveCS");
             }
             return result;
         }
@@ -715,24 +806,31 @@ namespace BOTS_BL.Repository
         {
             tblSourcedBy objsource = new tblSourcedBy();
             SPResponse result = new SPResponse();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                objsource = context.tblSourcedBies.Where(x => x.SourcedbyId == Sourcedbyid).FirstOrDefault();
-
-                if (objsource.IsActive == true)
+                using (var context = new CommonDBContext())
                 {
-                    objsource.IsActive = false;
-                }
-                else
-                {
-                    objsource.IsActive = true;
-                }
 
-                context.tblSourcedBies.AddOrUpdate(objsource);
-                context.SaveChanges();
-                result.ResponseCode = "00";
-                result.ResponseMessage = "SourceBy Updated Successfully";
+                    objsource = context.tblSourcedBies.Where(x => x.SourcedbyId == Sourcedbyid).FirstOrDefault();
+
+                    if (objsource.IsActive == true)
+                    {
+                        objsource.IsActive = false;
+                    }
+                    else
+                    {
+                        objsource.IsActive = true;
+                    }
+
+                    context.tblSourcedBies.AddOrUpdate(objsource);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "SourceBy Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ActiveInactiveSourceBy");
             }
             return result;
         }
@@ -741,24 +839,31 @@ namespace BOTS_BL.Repository
         {
             tblSourceType objsourcetype = new tblSourceType();
             SPResponse result = new SPResponse();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                objsourcetype = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceTypeid).FirstOrDefault();
-
-                if (objsourcetype.IsActive == true)
+                using (var context = new CommonDBContext())
                 {
-                    objsourcetype.IsActive = false;
-                }
-                else
-                {
-                    objsourcetype.IsActive = true;
-                }
 
-                context.tblSourceTypes.AddOrUpdate(objsourcetype);
-                context.SaveChanges();
-                result.ResponseCode = "00";
-                result.ResponseMessage = "Source Type Updated Successfully";
+                    objsourcetype = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceTypeid).FirstOrDefault();
+
+                    if (objsourcetype.IsActive == true)
+                    {
+                        objsourcetype.IsActive = false;
+                    }
+                    else
+                    {
+                        objsourcetype.IsActive = true;
+                    }
+
+                    context.tblSourceTypes.AddOrUpdate(objsourcetype);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Source Type Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ActiveInactiveSourceType");
             }
             return result;
         }
@@ -767,24 +872,31 @@ namespace BOTS_BL.Repository
         {
             BOTS_TblBillingPartnerProduct objbillingpartnerproduct = new BOTS_TblBillingPartnerProduct();
             SPResponse result = new SPResponse();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingPartnerProductId).FirstOrDefault();
-
-                if (objbillingpartnerproduct.IsActive == true)
+                using (var context = new CommonDBContext())
                 {
-                    objbillingpartnerproduct.IsActive = false;
-                }
-                else
-                {
-                    objbillingpartnerproduct.IsActive = true;
-                }
 
-                context.BOTS_TblBillingPartnerProduct.AddOrUpdate(objbillingpartnerproduct);
-                context.SaveChanges();
-                result.ResponseCode = "00";
-                result.ResponseMessage = "Billing Partner product Updated Successfully";
+                    objbillingpartnerproduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingPartnerProductId).FirstOrDefault();
+
+                    if (objbillingpartnerproduct.IsActive == true)
+                    {
+                        objbillingpartnerproduct.IsActive = false;
+                    }
+                    else
+                    {
+                        objbillingpartnerproduct.IsActive = true;
+                    }
+
+                    context.BOTS_TblBillingPartnerProduct.AddOrUpdate(objbillingpartnerproduct);
+                    context.SaveChanges();
+                    result.ResponseCode = "00";
+                    result.ResponseMessage = "Billing Partner product Updated Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ActiveInactiveBillingPartnerProduct");
             }
             return result;
         }
