@@ -179,7 +179,7 @@ namespace BOTS_BL.Repository
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        newexception.AddException(ex, "OnBoarding");
+                        newexception.AddException(ex, "AddOnboardingCustomer");
                         GroupId = 0;
                         //throw ex;
                     }
@@ -254,7 +254,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "OnBoarding");
+                newexception.AddException(ex, "GetOnBoardingListings");
             }
             return onBoardingListings;
         }
@@ -262,17 +262,24 @@ namespace BOTS_BL.Repository
         public BOTS_TblGroupMaster GetGroupMasterDetails(string GroupId)
         {
             BOTS_TblGroupMaster objData = new BOTS_TblGroupMaster();
-            using (var context = new CommonDBContext())
+            try
+            { 
+               using (var context = new CommonDBContext())
+                 {
+                    objData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    var cityId = Convert.ToInt32(objData.City);
+                    objData.CityName = context.tblCities.Where(x => x.CityId == cityId).Select(y => y.CityName).FirstOrDefault();
+                    var SBy = Convert.ToInt32(objData.SourcedBy);
+                    objData.SourceByName = context.tblSourcedBies.Where(x => x.SourcedbyId == SBy).Select(y => y.SourcedbyName).FirstOrDefault();
+                    //var AssignedCS = Convert.ToInt32(objData.AssignedCS);
+                    objData.AssignedCSName = context.tblRMAssigneds.Where(x => x.LoginId == objData.AssignedCS).Select(y => y.RMAssignedName).FirstOrDefault();
+                    var SourceType = Convert.ToInt32(objData.Referredby);
+                    objData.SourceTypeName = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceType).Select(y => y.SourceTypeName).FirstOrDefault();
+                 }
+            }
+            catch (Exception ex)
             {
-                objData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                var cityId = Convert.ToInt32(objData.City);
-                objData.CityName = context.tblCities.Where(x => x.CityId == cityId).Select(y => y.CityName).FirstOrDefault();
-                var SBy = Convert.ToInt32(objData.SourcedBy);
-                objData.SourceByName = context.tblSourcedBies.Where(x => x.SourcedbyId == SBy).Select(y => y.SourcedbyName).FirstOrDefault();
-                //var AssignedCS = Convert.ToInt32(objData.AssignedCS);
-                objData.AssignedCSName = context.tblRMAssigneds.Where(x => x.LoginId == objData.AssignedCS).Select(y => y.RMAssignedName).FirstOrDefault();
-                var SourceType = Convert.ToInt32(objData.Referredby);
-                objData.SourceTypeName = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceType).Select(y => y.SourceTypeName).FirstOrDefault();
+                newexception.AddException(ex, "GetGroupMasterDetails");
             }
             return objData;
         }
@@ -280,19 +287,34 @@ namespace BOTS_BL.Repository
         public BOTS_TblDealDetails GetDealMasterDetails(string GroupId)
         {
             BOTS_TblDealDetails objData = new BOTS_TblDealDetails();
+            try 
+            { 
             using (var context = new CommonDBContext())
-            {
+               {
                 objData = context.BOTS_TblDealDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+               }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDealMasterDetails");
+            }
+
             return objData;
         }
 
         public BOTS_TblPaymentDetails GetPaymentDetails(string GroupId)
         {
             BOTS_TblPaymentDetails objData = new BOTS_TblPaymentDetails();
-            using (var context = new CommonDBContext())
+            try
+            {            
+               using (var context = new CommonDBContext())
+                 {
+                   objData = context.BOTS_TblPaymentDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                 }
+            }
+            catch (Exception ex)
             {
-                objData = context.BOTS_TblPaymentDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                newexception.AddException(ex, "GetPaymentDetails");
             }
             return objData;
         }
@@ -300,32 +322,47 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblRetailMaster> GetRetailDetails(string GroupId)
         {
             List<BOTS_TblRetailMaster> objData = new List<BOTS_TblRetailMaster>();
-            using (var context = new CommonDBContext())
-            {
-                objData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
-                foreach (var item in objData)
+            try 
+              { 
+                using (var context = new CommonDBContext())
                 {
-                    if (!string.IsNullOrEmpty(item.BillingPartner))
-                    {
-                        var BillingPartner = Convert.ToInt32(item.BillingPartner);
-                        item.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
-                    }
-                    if (!string.IsNullOrEmpty(item.BillingProduct))
-                    {
-                        var BillingProduct = Convert.ToInt32(item.BillingProduct);
-                        item.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
-                    }
+                  objData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
+                  foreach (var item in objData)
+                   {
+                     if (!string.IsNullOrEmpty(item.BillingPartner))
+                       {
+                           var BillingPartner = Convert.ToInt32(item.BillingPartner);
+                           item.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
+                       }
+                         if (!string.IsNullOrEmpty(item.BillingProduct))
+                           {
+                             var BillingProduct = Convert.ToInt32(item.BillingProduct);
+                             item.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
+                           }
+                   }
                 }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRetailDetails");
+            }
+
             return objData;
         }
 
         public List<BOTS_TblOutletMaster> GetOutletDetails(string GroupId)
         {
             List<BOTS_TblOutletMaster> objData = new List<BOTS_TblOutletMaster>();
-            using (var context = new CommonDBContext())
+            try 
+            { 
+                using (var context = new CommonDBContext())
             {
                 objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
+            }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutletDetails");
             }
             return objData;
         }
@@ -333,14 +370,22 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblInstallmentDetails> GetInstallmentDetails(string GroupId)
         {
             List<BOTS_TblInstallmentDetails> objData = new List<BOTS_TblInstallmentDetails>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblInstallmentDetails.Where(x => x.GroupId == GroupId).ToList();
-                foreach (var item in objData)
+                using (var context = new CommonDBContext())
                 {
-                    item.PaymentDateStr = item.PaymentDate.ToString("yyyy-MM-dd");
+                    objData = context.BOTS_TblInstallmentDetails.Where(x => x.GroupId == GroupId).ToList();
+                    foreach (var item in objData)
+                    {
+                        item.PaymentDateStr = item.PaymentDate.ToString("yyyy-MM-dd");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetInstallmentDetails");
+            }
+
             return objData;
         }
 
@@ -351,17 +396,24 @@ namespace BOTS_BL.Repository
             item1.Value = "0";
             item1.Text = "Please Select";
             lstBillingPartnerProduct.Add(item1);
-            using (var context = new CommonDBContext())
+            try
             {
-                var BillingPartnerProduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == Id).ToList();
-                foreach (var item in BillingPartnerProduct)
+                using (var context = new CommonDBContext())
                 {
-                    lstBillingPartnerProduct.Add(new SelectListItem
+                    var BillingPartnerProduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerId == Id).ToList();
+                    foreach (var item in BillingPartnerProduct)
                     {
-                        Text = item.BillingPartnerProductName,
-                        Value = Convert.ToString(item.BillingPartnerProductId)
-                    });
+                        lstBillingPartnerProduct.Add(new SelectListItem
+                        {
+                            Text = item.BillingPartnerProductName,
+                            Value = Convert.ToString(item.BillingPartnerProductId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBillingPartnerProduct");
             }
             return lstBillingPartnerProduct;
         }
@@ -373,44 +425,51 @@ namespace BOTS_BL.Repository
             item1.Value = "0";
             item1.Text = "Please Select";
             lstRefferedName.Add(item1);
-            using (var context = new CommonDBContext())
+            try
             {
-                if (SourceType == "1")
+                using (var context = new CommonDBContext())
                 {
-                    var CustomerList = context.tblGroupDetails.ToList();
-                    foreach (var item in CustomerList)
+                    if (SourceType == "1")
                     {
-                        lstRefferedName.Add(new SelectListItem
+                        var CustomerList = context.tblGroupDetails.ToList();
+                        foreach (var item in CustomerList)
                         {
-                            Text = item.GroupName,
-                            Value = item.GroupName
-                        });
+                            lstRefferedName.Add(new SelectListItem
+                            {
+                                Text = item.GroupName,
+                                Value = item.GroupName
+                            });
+                        }
+                    }
+                    if (SourceType == "3")
+                    {
+                        var BillingPartners = context.tblBillingPartners.ToList();
+                        foreach (var item in BillingPartners)
+                        {
+                            lstRefferedName.Add(new SelectListItem
+                            {
+                                Text = item.BillingPartnerName,
+                                Value = item.BillingPartnerName
+                            });
+                        }
+                    }
+                    if (SourceType == "4")
+                    {
+                        var ChannelPartners = context.tblChannelPartners.ToList();
+                        foreach (var item in ChannelPartners)
+                        {
+                            lstRefferedName.Add(new SelectListItem
+                            {
+                                Text = item.CPartnerName,
+                                Value = Convert.ToString(item.CPId)
+                            });
+                        }
                     }
                 }
-                if (SourceType == "3")
-                {
-                    var BillingPartners = context.tblBillingPartners.ToList();
-                    foreach (var item in BillingPartners)
-                    {
-                        lstRefferedName.Add(new SelectListItem
-                        {
-                            Text = item.BillingPartnerName,
-                            Value = item.BillingPartnerName
-                        });
-                    }
-                }
-                if (SourceType == "4")
-                {
-                    var ChannelPartners = context.tblChannelPartners.ToList();
-                    foreach (var item in ChannelPartners)
-                    {
-                        lstRefferedName.Add(new SelectListItem
-                        {
-                            Text = item.CPartnerName,
-                            Value = Convert.ToString(item.CPId)
-                        });
-                    }
-                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRefferedName");
             }
             return lstRefferedName;
         }
@@ -418,21 +477,28 @@ namespace BOTS_BL.Repository
         public List<RetailDetails> GetRetailDetailsForEmail(string GroupId)
         {
             List<RetailDetails> objData = new List<RetailDetails>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var data = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
-
-                foreach (var item in data)
+                using (var context = new CommonDBContext())
                 {
-                    RetailDetails item1 = new RetailDetails();
-                    item1.CategoryName = item.CategoryName;
-                    item1.NoOfOutlets = item.NoOfOutlets;
-                    item1.NoOfEnrolled = item.NoOfEnrolled;
-                    var id = Convert.ToInt32(item.BillingPartner);
-                    item1.BillingPartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
-                    item1.BOProduct = item.BOProduct == "1" ? "Octa Plus" : "Octa XS";
-                    objData.Add(item1);
+                    var data = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
+
+                    foreach (var item in data)
+                    {
+                        RetailDetails item1 = new RetailDetails();
+                        item1.CategoryName = item.CategoryName;
+                        item1.NoOfOutlets = item.NoOfOutlets;
+                        item1.NoOfEnrolled = item.NoOfEnrolled;
+                        var id = Convert.ToInt32(item.BillingPartner);
+                        item1.BillingPartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
+                        item1.BOProduct = item.BOProduct == "1" ? "Octa Plus" : "Octa XS";
+                        objData.Add(item1);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRetailDetailsForEmail");
             }
             return objData;
         }
@@ -440,49 +506,62 @@ namespace BOTS_BL.Repository
         public List<string> GetAllInternalEmailIds()
         {
             List<string> lstEmails = new List<string>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var loginTypeList = new List<string> { "2", "3", "4" };
-                lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType != null && !loginTypeList.Contains(x.LoginType) && x.UserStatus == true).Select(y => y.EmailId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    var loginTypeList = new List<string> { "2", "3", "4" };
+                    lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType != null && !loginTypeList.Contains(x.LoginType) && x.UserStatus == true).Select(y => y.EmailId).ToList();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllInternalEmailIds");
+            }
             return lstEmails;
         }
 
         public OnBoardingCustomerDetails GetOnBoardingCustomerDetails(string groupId)
         {
             OnBoardingCustomerDetails objData = new OnBoardingCustomerDetails();
-            using (var context = new CommonDBContext())
+            try
             {
-                var GroupDetails = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
-                objData.GroupId = GroupDetails.GroupId;
-                objData.GroupName = GroupDetails.GroupName;
-                objData.OwnerMobileNo = GroupDetails.OwnerMobileNo;
-                objData.OwnerEmailId = GroupDetails.OwnerEmailId;
-                objData.City = GroupDetails.City;
-                objData.AlternateMobileNo = GroupDetails.AlternateMobileNo;
-                objData.AlternateEmailId = GroupDetails.AlternateEmailId;
-                objData.NoOfRetailCategory = GroupDetails.NoOfRetailCategory;
-                objData.IsMWP = GroupDetails.IsMWP;
-                objData.IsWhatsApp = GroupDetails.IsWhatsApp;
-                objData.NoOfFreeWhatsAppMsg = GroupDetails.NoOfFreeWhatsAppMsg;
-                objData.NoOfFreeSMS = GroupDetails.NoOfFreeSMS;
-                objData.NoOfPaidWhatsAppMsg = GroupDetails.NoOfPaidWhatsAppMsg;
-                objData.NoOfPaidSMS = GroupDetails.NoOfPaidSMS;
-                objData.IsMobileApp = GroupDetails.IsMobileApp;
-                objData.SourcedBy = GroupDetails.SourcedBy;
-                objData.AssignedCS = GroupDetails.AssignedCS;
-                objData.Comments = GroupDetails.Comments;
-                objData.Referredby = GroupDetails.Referredby;
-                objData.ReferredName = GroupDetails.ReferredName;
-                objData.OtherFees = GroupDetails.OtherFees;
-                objData.OtherFeesDescription = GroupDetails.OtherFeesDescription;
-                objData.IsKeyAccount = GroupDetails.IsKeyAccount;
-                objData.CreatedDate = GroupDetails.CreatedDate;
-                objData.CreatedBy = GroupDetails.CreatedBy;
-                objData.GSTDocument = GroupDetails.GSTDocument;
-                objData.PANDocument = GroupDetails.PANDocument;
+                using (var context = new CommonDBContext())
+                {
+                    var GroupDetails = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    objData.GroupId = GroupDetails.GroupId;
+                    objData.GroupName = GroupDetails.GroupName;
+                    objData.OwnerMobileNo = GroupDetails.OwnerMobileNo;
+                    objData.OwnerEmailId = GroupDetails.OwnerEmailId;
+                    objData.City = GroupDetails.City;
+                    objData.AlternateMobileNo = GroupDetails.AlternateMobileNo;
+                    objData.AlternateEmailId = GroupDetails.AlternateEmailId;
+                    objData.NoOfRetailCategory = GroupDetails.NoOfRetailCategory;
+                    objData.IsMWP = GroupDetails.IsMWP;
+                    objData.IsWhatsApp = GroupDetails.IsWhatsApp;
+                    objData.NoOfFreeWhatsAppMsg = GroupDetails.NoOfFreeWhatsAppMsg;
+                    objData.NoOfFreeSMS = GroupDetails.NoOfFreeSMS;
+                    objData.NoOfPaidWhatsAppMsg = GroupDetails.NoOfPaidWhatsAppMsg;
+                    objData.NoOfPaidSMS = GroupDetails.NoOfPaidSMS;
+                    objData.IsMobileApp = GroupDetails.IsMobileApp;
+                    objData.SourcedBy = GroupDetails.SourcedBy;
+                    objData.AssignedCS = GroupDetails.AssignedCS;
+                    objData.Comments = GroupDetails.Comments;
+                    objData.Referredby = GroupDetails.Referredby;
+                    objData.ReferredName = GroupDetails.ReferredName;
+                    objData.OtherFees = GroupDetails.OtherFees;
+                    objData.OtherFeesDescription = GroupDetails.OtherFeesDescription;
+                    objData.IsKeyAccount = GroupDetails.IsKeyAccount;
+                    objData.CreatedDate = GroupDetails.CreatedDate;
+                    objData.CreatedBy = GroupDetails.CreatedBy;
+                    objData.GSTDocument = GroupDetails.GSTDocument;
+                    objData.PANDocument = GroupDetails.PANDocument;
 
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOnBoardingCustomerDetails");
             }
             return objData;
         }
@@ -647,37 +726,56 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblSMSConfig> GetCommunicationSMSConfig(string GroupId, int SetId)
         {
             List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
-            using (var context = new CommonDBContext())
+            try
             {
-                if (SetId > 0)
+                using (var context = new CommonDBContext())
                 {
-                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId).ToList();
-                }
-                else
-                {
-                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();
+                    if (SetId > 0)
+                    {
+                        objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId).ToList();
+                    }
+                    else
+                    {
+                        objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationSMSConfig");
+            }
             return objData;
         }
 
         public List<BOTS_TblSMSConfig> GetCommunicationSMSConfigForDLT(string GroupId, int SetId)
         {
             List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId && x.DLTStatus != "" && x.DLTStatus != null).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId && x.DLTStatus != "" && x.DLTStatus != null).ToList();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationSMSConfigForDLT");
+            }
             return objData;
         }
         public List<BOTS_TblVariableWords> GetVariableWordsList()
         {
             List<BOTS_TblVariableWords> objData = new List<BOTS_TblVariableWords>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblVariableWords.ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblVariableWords.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetVariableWordsList");
             }
             return objData;
         }
@@ -685,24 +783,38 @@ namespace BOTS_BL.Repository
         public BOTS_TblSMSConfig GetCommunicationSMSConfigById(int Id)
         {
             BOTS_TblSMSConfig objSMSConfig = new BOTS_TblSMSConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objSMSConfig = context.BOTS_TblSMSConfig.Where(x => x.Id == Id).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objSMSConfig = context.BOTS_TblSMSConfig.Where(x => x.Id == Id).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationSMSConfigById");
             }
             return objSMSConfig;
         }
         public bool SaveIndividualSMSConfig(BOTS_TblSMSConfig objItem)
         {
             bool status = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
-                context.SaveChanges();
-                status = true;
-                if (objItem.UpdatedBy == null || objItem.UpdatedBy == "")
-                    AddTracking(Convert.ToString(objItem.GroupId), "SMS Script saved", objItem.AddedBy);
-                else
-                    AddTracking(Convert.ToString(objItem.GroupId), "SMS Script saved", objItem.UpdatedBy);
+                using (var context = new CommonDBContext())
+                {
+                    context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
+                    context.SaveChanges();
+                    status = true;
+                    if (objItem.UpdatedBy == null || objItem.UpdatedBy == "")
+                        AddTracking(Convert.ToString(objItem.GroupId), "SMS Script saved", objItem.AddedBy);
+                    else
+                        AddTracking(Convert.ToString(objItem.GroupId), "SMS Script saved", objItem.UpdatedBy);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveIndividualSMSConfig");
             }
             return status;
         }
@@ -710,35 +822,42 @@ namespace BOTS_BL.Repository
         public bool UpdateStatusSMSConfig(int ItemId, string DLTStatus, string LoginId, string rejectReason, BOTS_TblSMSConfig objSMSConfig)
         {
             bool status = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var objItem = context.BOTS_TblSMSConfig.Where(x => x.Id == ItemId).FirstOrDefault();
-                if (objItem != null)
+                using (var context = new CommonDBContext())
                 {
-                    objItem.UpdatedBy = LoginId;
-                    objItem.UpdatedDate = DateTime.Now;
-                    objItem.DLTStatus = DLTStatus;
-                    if (DLTStatus == "Rejected")
+                    var objItem = context.BOTS_TblSMSConfig.Where(x => x.Id == ItemId).FirstOrDefault();
+                    if (objItem != null)
                     {
-                        if (!string.IsNullOrEmpty(objItem.RejectReason))
-                            objItem.RejectReason = objItem.RejectReason + " // " + rejectReason;
-                        else
-                            objItem.RejectReason = rejectReason;
-                    }
-                    if (DLTStatus == "Approved")
-                    {
-                        objItem.TemplateId = objSMSConfig.TemplateId;
-                        objItem.TemplateName = objSMSConfig.TemplateName;
-                        objItem.TemplateType = objSMSConfig.TemplateType;
-                        objItem.SMSScriptDLT = objSMSConfig.SMSScriptDLT;
-                        objItem.SMSScript = objSMSConfig.SMSScript;
-                    }
-                    context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
-                    context.SaveChanges();
-                    status = true;
+                        objItem.UpdatedBy = LoginId;
+                        objItem.UpdatedDate = DateTime.Now;
+                        objItem.DLTStatus = DLTStatus;
+                        if (DLTStatus == "Rejected")
+                        {
+                            if (!string.IsNullOrEmpty(objItem.RejectReason))
+                                objItem.RejectReason = objItem.RejectReason + " // " + rejectReason;
+                            else
+                                objItem.RejectReason = rejectReason;
+                        }
+                        if (DLTStatus == "Approved")
+                        {
+                            objItem.TemplateId = objSMSConfig.TemplateId;
+                            objItem.TemplateName = objSMSConfig.TemplateName;
+                            objItem.TemplateType = objSMSConfig.TemplateType;
+                            objItem.SMSScriptDLT = objSMSConfig.SMSScriptDLT;
+                            objItem.SMSScript = objSMSConfig.SMSScript;
+                        }
+                        context.BOTS_TblSMSConfig.AddOrUpdate(objItem);
+                        context.SaveChanges();
+                        status = true;
 
-                    AddTracking(Convert.ToString(objItem.GroupId), "DLT Status Changed - " + DLTStatus, LoginId);
+                        AddTracking(Convert.ToString(objItem.GroupId), "DLT Status Changed - " + DLTStatus, LoginId);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateStatusSMSConfig");
             }
             return status;
         }
@@ -778,29 +897,41 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblWAConfig> GetCommunicationWAConfig(string GroupId, int SetId)
         {
             List<BOTS_TblWAConfig> objData = new List<BOTS_TblWAConfig>();
-            using (var context = new CommonDBContext())
+            try
             {
-                if (SetId > 0)
+                using (var context = new CommonDBContext())
                 {
-                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId).ToList();
-                }
-                else
-                {
-                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId).ToList();
+                    if (SetId > 0)
+                    {
+                        objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId && x.SetId == SetId).ToList();
+                    }
+                    else
+                    {
+                        objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId).ToList();
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationWAConfig");
+            }
             return objData;
         }
 
         public BOTS_TblCommunicationSet GetSetDetails(int SetId)
         {
             BOTS_TblCommunicationSet objSetData = new BOTS_TblCommunicationSet();
-            using (var context = new CommonDBContext())
+            try
             {
-                objSetData = context.BOTS_TblCommunicationSet.Where(x => x.SetId == SetId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objSetData = context.BOTS_TblCommunicationSet.Where(x => x.SetId == SetId).FirstOrDefault();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetSetDetails");
+            }
             return objSetData;
         }
 
@@ -865,20 +996,24 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "SaveDLCLinkConfig");
             }
-
-
             return status;
         }
 
         public BOTS_TblDLCLinkConfig GetDLCLinkData(string groupId)
         {
             BOTS_TblDLCLinkConfig objDLCLinkConfig = new BOTS_TblDLCLinkConfig();
-            using (var context = new CommonDBContext())
+            try
             {
+                using (var context = new CommonDBContext())
+                {
 
-                objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == groupId).FirstOrDefault();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCLinkData");
+            }
             return objDLCLinkConfig;
         }
 
@@ -919,9 +1054,16 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblVelocityChecksConfig> GetVelocityChecksData(string groupId)
         {
             List<BOTS_TblVelocityChecksConfig> objData = new List<BOTS_TblVelocityChecksConfig>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblVelocityChecksConfig.Where(x => x.GroupId == groupId).OrderBy(y => y.VelocityType).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblVelocityChecksConfig.Where(x => x.GroupId == groupId).OrderBy(y => y.VelocityType).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetVelocityChecksData");
             }
 
             return objData;
@@ -1040,9 +1182,16 @@ namespace BOTS_BL.Repository
         public BOTS_TblCampaignOtherConfig GetCampaignOtherConfig(string groupId, string type)
         {
             BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCampaignOtherConfig");
             }
             return objData;
         }
@@ -1125,11 +1274,17 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblCommunicationSet> GetCommunicationSetsByGroupId(string GroupId)
         {
             List<BOTS_TblCommunicationSet> lstSets = new List<BOTS_TblCommunicationSet>();
-            using (var context = new CommonDBContext())
+            try
             {
-                lstSets = context.BOTS_TblCommunicationSet.Where(x => x.GroupId == GroupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    lstSets = context.BOTS_TblCommunicationSet.Where(x => x.GroupId == GroupId).ToList();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationSetsByGroupId");
+            }
             return lstSets;
         }
 
@@ -1140,17 +1295,24 @@ namespace BOTS_BL.Repository
             item.Value = "0";
             item.Text = "Please Select";
             lstCommunicationSet.Add(item);
-            using (var context = new CommonDBContext())
+            try
             {
-                var CommunicationSets = context.BOTS_TblCommunicationSet.Where(x => x.GroupId == GroupId).ToList();
-                foreach (var item1 in CommunicationSets)
+                using (var context = new CommonDBContext())
                 {
-                    lstCommunicationSet.Add(new SelectListItem
+                    var CommunicationSets = context.BOTS_TblCommunicationSet.Where(x => x.GroupId == GroupId).ToList();
+                    foreach (var item1 in CommunicationSets)
                     {
-                        Text = item1.SetName,
-                        Value = Convert.ToString(item1.SetId)
-                    });
+                        lstCommunicationSet.Add(new SelectListItem
+                        {
+                            Text = item1.SetName,
+                            Value = Convert.ToString(item1.SetId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationSetList");
             }
             return lstCommunicationSet;
         }
@@ -1159,34 +1321,41 @@ namespace BOTS_BL.Repository
         {
             List<SelectListItem> lstOutlets = new List<SelectListItem>();
             List<BOTS_TblOutletMaster> objData = new List<BOTS_TblOutletMaster>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
-                var SetIdInt = Convert.ToInt32(SetId);
-                var outletForSet = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == GroupId && x.SetId == SetIdInt).ToList();
-
-                var outletForSetNew = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == GroupId && x.SetId != SetIdInt).ToList();
-
-                foreach (var outlet in objData)
+                using (var context = new CommonDBContext())
                 {
-                    var brandName = context.BOTS_TblRetailMaster.Where(x => x.BrandId == outlet.BrandId && x.GroupId == GroupId).Select(y => y.BrandName).FirstOrDefault();
-                    SelectListItem newItem = new SelectListItem();
-                    newItem.Value = Convert.ToString(outlet.Id);
-                    newItem.Text = brandName + " - " + outlet.OutletName;
-                    var exist = outletForSet.Where(x => x.OutletId == outlet.Id.ToString()).FirstOrDefault();
-                    if (exist != null)
-                    {
-                        newItem.Selected = true;
-                        //newItem.Disabled = true;
-                    }
-                    var existNew = outletForSetNew.Where(x => x.OutletId == outlet.Id.ToString()).FirstOrDefault();
-                    if (existNew != null)
-                    {
-                        newItem.Disabled = true;
-                    }
+                    objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
+                    var SetIdInt = Convert.ToInt32(SetId);
+                    var outletForSet = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == GroupId && x.SetId == SetIdInt).ToList();
 
-                    lstOutlets.Add(newItem);
+                    var outletForSetNew = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == GroupId && x.SetId != SetIdInt).ToList();
+
+                    foreach (var outlet in objData)
+                    {
+                        var brandName = context.BOTS_TblRetailMaster.Where(x => x.BrandId == outlet.BrandId && x.GroupId == GroupId).Select(y => y.BrandName).FirstOrDefault();
+                        SelectListItem newItem = new SelectListItem();
+                        newItem.Value = Convert.ToString(outlet.Id);
+                        newItem.Text = brandName + " - " + outlet.OutletName;
+                        var exist = outletForSet.Where(x => x.OutletId == outlet.Id.ToString()).FirstOrDefault();
+                        if (exist != null)
+                        {
+                            newItem.Selected = true;
+                            //newItem.Disabled = true;
+                        }
+                        var existNew = outletForSetNew.Where(x => x.OutletId == outlet.Id.ToString()).FirstOrDefault();
+                        if (existNew != null)
+                        {
+                            newItem.Disabled = true;
+                        }
+
+                        lstOutlets.Add(newItem);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutletListWithAssignment");
             }
             return lstOutlets;
         }
@@ -1229,41 +1398,47 @@ namespace BOTS_BL.Repository
         {
             string convertStr = string.Empty;
             var arrStr = CSScript.Split(' ');
-            using (var context = new CommonDBContext())
+            try
             {
-                foreach (var item in arrStr)
+                using (var context = new CommonDBContext())
                 {
-                    if (item.Contains("#"))
+                    foreach (var item in arrStr)
                     {
-                        convertStr = convertStr + "{#var#}";
-                        if (item.Contains(","))
+                        if (item.Contains("#"))
                         {
-                            convertStr = convertStr + ", ";
-                        }
-                        else if (item.Contains("."))
-                        {
-                            convertStr = convertStr + ". ";
+                            convertStr = convertStr + "{#var#}";
+                            if (item.Contains(","))
+                            {
+                                convertStr = convertStr + ", ";
+                            }
+                            else if (item.Contains("."))
+                            {
+                                convertStr = convertStr + ". ";
+                            }
+                            else
+                            {
+                                convertStr = convertStr + " ";
+                            }
                         }
                         else
                         {
-                            convertStr = convertStr + " ";
-                        }
-                    }
-                    else
-                    {
-                        var isExist = context.BOTS_TblVariableWords.Where(x => x.VariableWords == item.ToLower()).FirstOrDefault();
-                        if (isExist != null)
-                        {
-                            convertStr = convertStr + "{#var#} ";
-                        }
-                        else
-                        {
-                            convertStr = convertStr + item + " ";
+                            var isExist = context.BOTS_TblVariableWords.Where(x => x.VariableWords == item.ToLower()).FirstOrDefault();
+                            if (isExist != null)
+                            {
+                                convertStr = convertStr + "{#var#} ";
+                            }
+                            else
+                            {
+                                convertStr = convertStr + item + " ";
+                            }
                         }
                     }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetConvertedScript");
+            }
             return convertStr.Trim();
         }
 
@@ -1311,7 +1486,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "SendPerpetualCampaignToDLT");
             }
             return status;
         }
@@ -1319,125 +1494,149 @@ namespace BOTS_BL.Repository
         public bool AddVariableWord(string word)
         {
             bool status = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var isexist = context.BOTS_TblVariableWords.Where(x => x.VariableWords == word).FirstOrDefault();
-                if (isexist == null)
+                using (var context = new CommonDBContext())
                 {
-                    BOTS_TblVariableWords objData = new BOTS_TblVariableWords();
-                    objData.VariableWords = word;
-                    context.BOTS_TblVariableWords.AddOrUpdate(objData);
-                    context.SaveChanges();
-                    status = true;
+                    var isexist = context.BOTS_TblVariableWords.Where(x => x.VariableWords == word).FirstOrDefault();
+                    if (isexist == null)
+                    {
+                        BOTS_TblVariableWords objData = new BOTS_TblVariableWords();
+                        objData.VariableWords = word;
+                        context.BOTS_TblVariableWords.AddOrUpdate(objData);
+                        context.SaveChanges();
+                        status = true;
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddVariableWord");
+            }
             return status;
         }
 
         public BOTS_TblCampaignOtherConfig GetCampaignOtherConfigForDLT(string groupId, string type)
         {
             BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCampaignOtherConfigForDLT");
+            }
             return objData;
         }
         public List<BOTS_TblCampaignInactive> GetCampaignAllInactiveForDLT(string groupId, string type)
         {
             List<BOTS_TblCampaignInactive> objData = new List<BOTS_TblCampaignInactive>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == groupId && x.InactiveType == type).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == groupId && x.InactiveType == type).ToList();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCampaignAllInactiveForDLT");
+            }
             return objData;
         }
         public bool UpdateBADLTStatus(int id, int statusid, string status, string loginid, string reason)
         {
             bool result = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == id).FirstOrDefault();
-                if (objData != null)
+                using (var context = new CommonDBContext())
                 {
-                    if (statusid == 1)
+                    var objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == id).FirstOrDefault();
+                    if (objData != null)
                     {
-                        objData.DLTStatus1 = status;
-                        if (status == "Rejected")
+                        if (statusid == 1)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
-                                objData.RejectReason1 = reason;
-                            else
-                                objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
+                            objData.DLTStatus1 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason1))
+                                    objData.RejectReason1 = reason;
+                                else
+                                    objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 2)
-                    {
-                        objData.DLTStatus2 = status;
-                        if (status == "Rejected")
+                        if (statusid == 2)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason2))
-                                objData.RejectReason2 = reason;
-                            else
-                                objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
+                            objData.DLTStatus2 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason2))
+                                    objData.RejectReason2 = reason;
+                                else
+                                    objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 3)
-                    {
-                        objData.DLTStatus3 = status;
-                        if (status == "Rejected")
+                        if (statusid == 3)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason3))
-                                objData.RejectReason3 = reason;
-                            else
-                                objData.RejectReason3 = objData.RejectReason3 + " // " + reason;
+                            objData.DLTStatus3 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason3))
+                                    objData.RejectReason3 = reason;
+                                else
+                                    objData.RejectReason3 = objData.RejectReason3 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 4)
-                    {
-                        objData.DLTStatus4 = status;
-                        if (status == "Rejected")
+                        if (statusid == 4)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason4))
-                                objData.RejectReason4 = reason;
-                            else
-                                objData.RejectReason4 = objData.RejectReason4 + " // " + reason;
+                            objData.DLTStatus4 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason4))
+                                    objData.RejectReason4 = reason;
+                                else
+                                    objData.RejectReason4 = objData.RejectReason4 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 5)
-                    {
-                        objData.DLTStatus5 = status;
-                        if (status == "Rejected")
+                        if (statusid == 5)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason5))
-                                objData.RejectReason5 = reason;
-                            else
-                                objData.RejectReason5 = objData.RejectReason5 + " // " + reason;
+                            objData.DLTStatus5 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason5))
+                                    objData.RejectReason5 = reason;
+                                else
+                                    objData.RejectReason5 = objData.RejectReason5 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 6)
-                    {
-                        objData.DLTStatus6 = status;
-                        if (status == "Rejected")
+                        if (statusid == 6)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason6))
-                                objData.RejectReason6 = reason;
-                            else
-                                objData.RejectReason6 = objData.RejectReason6 + " // " + reason;
+                            objData.DLTStatus6 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason6))
+                                    objData.RejectReason6 = reason;
+                                else
+                                    objData.RejectReason6 = objData.RejectReason6 + " // " + reason;
+                            }
                         }
-                    }
 
-                    objData.UpdatedBy = loginid;
-                    objData.UpdatedDate = DateTime.Now;
-                    context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
-                    context.SaveChanges();
-                    result = true;
+                        objData.UpdatedBy = loginid;
+                        objData.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
+                        context.SaveChanges();
+                        result = true;
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateBADLTStatus");
+            }
             return result;
         }
 
@@ -1575,51 +1774,64 @@ namespace BOTS_BL.Repository
         public bool UpdateInactiveDLTStatus(int id, int statusid, string status, string loginid, string reason)
         {
             bool result = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var objData = context.BOTS_TblCampaignInactive.Where(x => x.Id == id).FirstOrDefault();
-                if (objData != null)
+                using (var context = new CommonDBContext())
                 {
-                    if (statusid == 1)
+                    var objData = context.BOTS_TblCampaignInactive.Where(x => x.Id == id).FirstOrDefault();
+                    if (objData != null)
                     {
-                        objData.DLTStatus1 = status;
-                        if (status == "Rejected")
+                        if (statusid == 1)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
-                                objData.RejectReason1 = reason;
-                            else
-                                objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
+                            objData.DLTStatus1 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason1))
+                                    objData.RejectReason1 = reason;
+                                else
+                                    objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 2)
-                    {
-                        objData.DLTStatus2 = status;
-                        if (status == "Rejected")
+                        if (statusid == 2)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason2))
-                                objData.RejectReason2 = reason;
-                            else
-                                objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
+                            objData.DLTStatus2 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason2))
+                                    objData.RejectReason2 = reason;
+                                else
+                                    objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
+                            }
                         }
-                    }
 
-                    objData.UpdatedBy = loginid;
-                    objData.UpdatedDate = DateTime.Now;
-                    context.BOTS_TblCampaignInactive.AddOrUpdate(objData);
-                    context.SaveChanges();
-                    result = true;
+                        objData.UpdatedBy = loginid;
+                        objData.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblCampaignInactive.AddOrUpdate(objData);
+                        context.SaveChanges();
+                        result = true;
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateInactiveDLTStatus");
+            }
             return result;
         }
 
         public BOTS_TblCampaignInactive GetInactiveConfigById(int Id)
         {
             BOTS_TblCampaignInactive objInactiveConfig = new BOTS_TblCampaignInactive();
-            using (var context = new CommonDBContext())
+            try
             {
-                objInactiveConfig = context.BOTS_TblCampaignInactive.Where(x => x.Id == Id).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objInactiveConfig = context.BOTS_TblCampaignInactive.Where(x => x.Id == Id).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetInactiveConfigById");
             }
             return objInactiveConfig;
         }
@@ -1627,11 +1839,18 @@ namespace BOTS_BL.Repository
         public bool SaveInactiveDLTConfig(BOTS_TblCampaignInactive objData)
         {
             bool result = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                context.BOTS_TblCampaignInactive.AddOrUpdate(objData);
-                context.SaveChanges();
-                result = true;
+                using (var context = new CommonDBContext())
+                {
+                    context.BOTS_TblCampaignInactive.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveInactiveDLTConfig");
             }
             return result;
         }
@@ -1639,53 +1858,66 @@ namespace BOTS_BL.Repository
         public BOTS_TblCampaignOtherConfig GetCampaignRemainingForDLT(string groupId, string type)
         {
             BOTS_TblCampaignOtherConfig objData = new BOTS_TblCampaignOtherConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == groupId && x.CampaignType == type).FirstOrDefault();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCampaignRemainingForDLT");
+            }
             return objData;
         }
 
         public bool UpdateRemainingDLTStatus(int id, int statusid, string status, string loginid, string reason)
         {
             bool result = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == id).FirstOrDefault();
-                if (objData != null)
+                using (var context = new CommonDBContext())
                 {
-                    if (statusid == 1)
+                    var objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.Id == id).FirstOrDefault();
+                    if (objData != null)
                     {
-                        objData.DLTStatus1 = status;
-                        if (status == "Rejected")
+                        if (statusid == 1)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason1))
-                                objData.RejectReason1 = reason;
-                            else
-                                objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
+                            objData.DLTStatus1 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason1))
+                                    objData.RejectReason1 = reason;
+                                else
+                                    objData.RejectReason1 = objData.RejectReason1 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 2)
-                    {
-                        objData.DLTStatus2 = status;
-                        if (status == "Rejected")
+                        if (statusid == 2)
                         {
-                            if (string.IsNullOrEmpty(objData.RejectReason2))
-                                objData.RejectReason2 = reason;
-                            else
-                                objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
+                            objData.DLTStatus2 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objData.RejectReason2))
+                                    objData.RejectReason2 = reason;
+                                else
+                                    objData.RejectReason2 = objData.RejectReason2 + " // " + reason;
+                            }
                         }
-                    }
 
-                    objData.UpdatedBy = loginid;
-                    objData.UpdatedDate = DateTime.Now;
-                    context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
-                    context.SaveChanges();
-                    result = true;
+                        objData.UpdatedBy = loginid;
+                        objData.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblCampaignOtherConfig.AddOrUpdate(objData);
+                        context.SaveChanges();
+                        result = true;
+                    }
                 }
-            }
 
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateRemainingDLTStatus");
+            }
             return result;
         }
 
@@ -1726,117 +1958,130 @@ namespace BOTS_BL.Repository
         public bool UpdateDLCLinkDLTStatus(int id, int statusid, string status, string loginid, string reason)
         {
             bool result = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.Id == id).FirstOrDefault();
-                if (objDLCLinkConfig != null)
+                using (var context = new CommonDBContext())
                 {
-                    if (statusid == 1)
+                    var objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.Id == id).FirstOrDefault();
+                    if (objDLCLinkConfig != null)
                     {
-                        objDLCLinkConfig.DLTStatus1 = status;
-                        if (status == "Rejected")
+                        if (statusid == 1)
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
-                                objDLCLinkConfig.RejectReason1 = reason;
-                            else
-                                objDLCLinkConfig.RejectReason1 = objDLCLinkConfig.RejectReason1 + " // " + reason;
+                            objDLCLinkConfig.DLTStatus1 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason1))
+                                    objDLCLinkConfig.RejectReason1 = reason;
+                                else
+                                    objDLCLinkConfig.RejectReason1 = objDLCLinkConfig.RejectReason1 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 2)
-                    {
-                        objDLCLinkConfig.DLTStatus2 = status;
-                        if (status == "Rejected")
+                        if (statusid == 2)
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason2))
-                                objDLCLinkConfig.RejectReason2 = reason;
-                            else
-                                objDLCLinkConfig.RejectReason2 = objDLCLinkConfig.RejectReason2 + " // " + reason;
+                            objDLCLinkConfig.DLTStatus2 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason2))
+                                    objDLCLinkConfig.RejectReason2 = reason;
+                                else
+                                    objDLCLinkConfig.RejectReason2 = objDLCLinkConfig.RejectReason2 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 3)
-                    {
-                        objDLCLinkConfig.DLTStatus3 = status;
-                        if (status == "Rejected")
+                        if (statusid == 3)
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason3))
-                                objDLCLinkConfig.RejectReason3 = reason;
-                            else
-                                objDLCLinkConfig.RejectReason3 = objDLCLinkConfig.RejectReason3 + " // " + reason;
+                            objDLCLinkConfig.DLTStatus3 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason3))
+                                    objDLCLinkConfig.RejectReason3 = reason;
+                                else
+                                    objDLCLinkConfig.RejectReason3 = objDLCLinkConfig.RejectReason3 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 4)
-                    {
-                        objDLCLinkConfig.DLTStatus4 = status;
-                        if (status == "Rejected")
+                        if (statusid == 4)
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason4))
-                                objDLCLinkConfig.RejectReason4 = reason;
-                            else
-                                objDLCLinkConfig.RejectReason4 = objDLCLinkConfig.RejectReason4 + " // " + reason;
+                            objDLCLinkConfig.DLTStatus4 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason4))
+                                    objDLCLinkConfig.RejectReason4 = reason;
+                                else
+                                    objDLCLinkConfig.RejectReason4 = objDLCLinkConfig.RejectReason4 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 5)
-                    {
-                        objDLCLinkConfig.DLTStatus5 = status;
-                        if (status == "Rejected")
+                        if (statusid == 5)
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason5))
-                                objDLCLinkConfig.RejectReason5 = reason;
-                            else
-                                objDLCLinkConfig.RejectReason5 = objDLCLinkConfig.RejectReason5 + " // " + reason;
+                            objDLCLinkConfig.DLTStatus5 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason5))
+                                    objDLCLinkConfig.RejectReason5 = reason;
+                                else
+                                    objDLCLinkConfig.RejectReason5 = objDLCLinkConfig.RejectReason5 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 6)
-                    {
-                        objDLCLinkConfig.DLTStatus6 = status;
-                        if (status == "Rejected")
+                        if (statusid == 6)
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason6))
-                                objDLCLinkConfig.RejectReason6 = reason;
-                            else
-                                objDLCLinkConfig.RejectReason6 = objDLCLinkConfig.RejectReason6 + " // " + reason;
+                            objDLCLinkConfig.DLTStatus6 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason6))
+                                    objDLCLinkConfig.RejectReason6 = reason;
+                                else
+                                    objDLCLinkConfig.RejectReason6 = objDLCLinkConfig.RejectReason6 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 7)
-                    {
-                        objDLCLinkConfig.DLTStatus7 = status;
-                        if (status == "Rejected")
+                        if (statusid == 7)
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason7))
-                                objDLCLinkConfig.RejectReason7 = reason;
-                            else
-                                objDLCLinkConfig.RejectReason7 = objDLCLinkConfig.RejectReason7 + " // " + reason;
+                            objDLCLinkConfig.DLTStatus7 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason7))
+                                    objDLCLinkConfig.RejectReason7 = reason;
+                                else
+                                    objDLCLinkConfig.RejectReason7 = objDLCLinkConfig.RejectReason7 + " // " + reason;
+                            }
                         }
-                    }
-                    if (statusid == 8)
-                    {
-                        objDLCLinkConfig.DLTStatus8 = status;
-                        if (status == "Rejected")
+                        if (statusid == 8)
                         {
-                            if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason8))
-                                objDLCLinkConfig.RejectReason8 = reason;
-                            else
-                                objDLCLinkConfig.RejectReason8 = objDLCLinkConfig.RejectReason8 + " // " + reason;
+                            objDLCLinkConfig.DLTStatus8 = status;
+                            if (status == "Rejected")
+                            {
+                                if (string.IsNullOrEmpty(objDLCLinkConfig.RejectReason8))
+                                    objDLCLinkConfig.RejectReason8 = reason;
+                                else
+                                    objDLCLinkConfig.RejectReason8 = objDLCLinkConfig.RejectReason8 + " // " + reason;
+                            }
                         }
-                    }
 
-                    objDLCLinkConfig.UpdatedBy = loginid;
-                    objDLCLinkConfig.UpdatedDate = DateTime.Now;
-                    context.BOTS_TblDLCLinkConfig.AddOrUpdate(objDLCLinkConfig);
-                    context.SaveChanges();
-                    result = true;
+                        objDLCLinkConfig.UpdatedBy = loginid;
+                        objDLCLinkConfig.UpdatedDate = DateTime.Now;
+                        context.BOTS_TblDLCLinkConfig.AddOrUpdate(objDLCLinkConfig);
+                        context.SaveChanges();
+                        result = true;
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateDLCLinkDLTStatus");
+            }
             return result;
         }
 
         public BOTS_TblDLCLinkConfig GetDLCLinkDLTConfigById(int Id)
         {
             BOTS_TblDLCLinkConfig objDLCLinkConfig = new BOTS_TblDLCLinkConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.Id == Id).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objDLCLinkConfig = context.BOTS_TblDLCLinkConfig.Where(x => x.Id == Id).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCLinkDLTConfigById");
             }
             return objDLCLinkConfig;
         }
@@ -1844,11 +2089,18 @@ namespace BOTS_BL.Repository
         public bool SaveDLCLinkDLTConfig(BOTS_TblDLCLinkConfig objDLCLinkConfig)
         {
             bool result = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                context.BOTS_TblDLCLinkConfig.AddOrUpdate(objDLCLinkConfig);
-                context.SaveChanges();
-                result = true;
+                using (var context = new CommonDBContext())
+                {
+                    context.BOTS_TblDLCLinkConfig.AddOrUpdate(objDLCLinkConfig);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDLCLinkDLTConfig");
             }
             return result;
         }
@@ -1938,18 +2190,32 @@ namespace BOTS_BL.Repository
         public BOTS_TblEarnRuleConfig GetEarnRuleConfig(string GroupId)
         {
             BOTS_TblEarnRuleConfig objData = new BOTS_TblEarnRuleConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblEarnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblEarnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetEarnRuleConfig");
             }
             return objData;
         }
         public List<BOTS_TblSlabConfig> GetEarnRuleSlabConfig(string GroupId)
         {
             List<BOTS_TblSlabConfig> objData = new List<BOTS_TblSlabConfig>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblSlabConfig.Where(x => x.GroupId == GroupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblSlabConfig.Where(x => x.GroupId == GroupId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetEarnRuleSlabConfig");
             }
             return objData;
         }
@@ -1957,9 +2223,16 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblProductUpload> GetProductUpload(string GroupId)
         {
             List<BOTS_TblProductUpload> objData = new List<BOTS_TblProductUpload>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblProductUpload.Where(x => x.GroupId == GroupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblProductUpload.Where(x => x.GroupId == GroupId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetProductUpload");
             }
             return objData;
         }
@@ -1967,9 +2240,16 @@ namespace BOTS_BL.Repository
         public BOTS_TblBurnRuleConfig GetBurnRuleConfig(string GroupId)
         {
             BOTS_TblBurnRuleConfig objData = new BOTS_TblBurnRuleConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblBurnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblBurnRuleConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBurnRuleConfig");
             }
             return objData;
         }
@@ -2054,47 +2334,72 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblSMSConfig> GetCommunicationSMSConfigByGroupId(string GroupId)
         {
             List<BOTS_TblSMSConfig> objData = new List<BOTS_TblSMSConfig>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblSMSConfig.Where(x => x.GroupId == GroupId).ToList();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationSMSConfigByGroupId");
+            }
             return objData;
         }
         public List<BOTS_TblWAConfig> GetCommunicationWAConfigByGroupId(string GroupId)
         {
             List<BOTS_TblWAConfig> objData = new List<BOTS_TblWAConfig>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblWAConfig.Where(x => x.GroupId == GroupId).ToList();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCommunicationWAConfigByGroupId");
+            }
             return objData;
         }
 
         public BOTS_TblDLCLinkConfig GetDLCLinkDLTConfigByGroupId(string GroupId)
         {
             BOTS_TblDLCLinkConfig objData = new BOTS_TblDLCLinkConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblDLCLinkConfig.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCLinkDLTConfigByGroupId");
+            }
             return objData;
         }
         public List<BOTS_TblOutletMaster> GetOutletDetailsByGroupId(string GroupId)
         {
             List<BOTS_TblOutletMaster> objData = new List<BOTS_TblOutletMaster>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
-                foreach (var item in objData)
+                using (var context = new CommonDBContext())
                 {
-                    var city = COBR.GetCityById(Convert.ToInt32(item.City));
-                    item.CityName = city.CityName;
-                    var state = Convert.ToInt32(item.State);
-                    item.StateName = context.tblStates.Where(x => x.StateId == state).Select(y => y.StateName).FirstOrDefault();
+                    objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
+                    foreach (var item in objData)
+                    {
+                        var city = COBR.GetCityById(Convert.ToInt32(item.City));
+                        item.CityName = city.CityName;
+                        var state = Convert.ToInt32(item.State);
+                        item.StateName = context.tblStates.Where(x => x.StateId == state).Select(y => y.StateName).FirstOrDefault();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutletDetailsByGroupId");
             }
 
             return objData;
@@ -2103,9 +2408,16 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblCampaignOtherConfig> GetCampaignOtherConfigByGroupId(string GroupId)
         {
             List<BOTS_TblCampaignOtherConfig> objData = new List<BOTS_TblCampaignOtherConfig>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == GroupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblCampaignOtherConfig.Where(x => x.GroupId == GroupId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCampaignOtherConfigByGroupId");
             }
 
             return objData;
@@ -2114,9 +2426,16 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblCampaignInactive> GetCampaignInactiveByGroupId(string GroupId)
         {
             List<BOTS_TblCampaignInactive> objData = new List<BOTS_TblCampaignInactive>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblCampaignInactive.Where(x => x.GroupId == GroupId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCampaignInactiveByGroupId");
             }
 
             return objData;
@@ -2153,17 +2472,24 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblCommunicationSetAssignment> GetOutletsByAssignmentSetId(string groupId)
         {
             List<BOTS_TblCommunicationSetAssignment> lstData = new List<BOTS_TblCommunicationSetAssignment>();
-            using (var context = new CommonDBContext())
+            try
             {
-                lstData = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == groupId).ToList();
-
-                foreach (var item in lstData)
+                using (var context = new CommonDBContext())
                 {
-                    var outletId = Convert.ToInt32(item.OutletId);
-                    item.OutletName = context.BOTS_TblOutletMaster.Where(x => x.Id == outletId).Select(y => y.OutletName).FirstOrDefault();
-                    //item.OutletName = outlet.OutletName;
-                }
+                    lstData = context.BOTS_TblCommunicationSetAssignment.Where(x => x.GroupId == groupId).ToList();
 
+                    foreach (var item in lstData)
+                    {
+                        var outletId = Convert.ToInt32(item.OutletId);
+                        item.OutletName = context.BOTS_TblOutletMaster.Where(x => x.Id == outletId).Select(y => y.OutletName).FirstOrDefault();
+                        //item.OutletName = outlet.OutletName;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutletsByAssignmentSetId");
             }
 
             return lstData;
@@ -2172,10 +2498,17 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblRetailMaster> GetOutletsBrandId(string groupId)
         {
             List<BOTS_TblRetailMaster> lstData = new List<BOTS_TblRetailMaster>();
-            using (var context = new CommonDBContext())
+            try
             {
-                lstData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    lstData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupId).ToList();
 
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutletsBrandId");
             }
 
             return lstData;
@@ -2184,10 +2517,17 @@ namespace BOTS_BL.Repository
         public int GetBulkUpload(string GroupId)
         {
             int objData = 0;
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblBulkUpload.Where(x => x.GroupId == GroupId).Count();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblBulkUpload.Where(x => x.GroupId == GroupId).Count();
 
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBulkUpload");
             }
 
             return objData;
@@ -2302,18 +2642,32 @@ namespace BOTS_BL.Repository
         public string GetCSHeadEmailId()
         {
             string emailId = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                emailId = context.CustomerLoginDetails.Where(x => x.UserStatus.Value && x.LoginType == "6").Select(y => y.EmailId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    emailId = context.CustomerLoginDetails.Where(x => x.UserStatus.Value && x.LoginType == "6").Select(y => y.EmailId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCSHeadEmailId");
             }
             return emailId;
         }
         public string GetOnboardingGroupName(string groupid)
         {
             string groupName = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                groupName = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupid).Select(y => y.GroupName).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    groupName = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupid).Select(y => y.GroupName).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOnboardingGroupName");
             }
             return groupName;
         }
@@ -2321,9 +2675,16 @@ namespace BOTS_BL.Repository
         public string GetOnboardingBrandName(string groupid, string brandId)
         {
             string groupName = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                groupName = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupid && x.BrandId == brandId).Select(y => y.BrandName).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    groupName = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupid && x.BrandId == brandId).Select(y => y.BrandName).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOnboardingBrandName");
             }
             return groupName;
         }
@@ -2331,11 +2692,18 @@ namespace BOTS_BL.Repository
         public string GetAssignedCSNameForOnboarding(string groupid)
         {
             string CSEmail = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var RMAssignedId = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupid).Select(y => y.AssignedCS).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    var RMAssignedId = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupid).Select(y => y.AssignedCS).FirstOrDefault();
 
-                CSEmail = context.CustomerLoginDetails.Where(x => x.LoginId == RMAssignedId).Select(y => y.EmailId).FirstOrDefault();
+                    CSEmail = context.CustomerLoginDetails.Where(x => x.LoginId == RMAssignedId).Select(y => y.EmailId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAssignedCSNameForOnboarding");
             }
             return CSEmail;
         }
@@ -2367,14 +2735,22 @@ namespace BOTS_BL.Repository
         public bool UploadBrandLogo(string groupid, string brandId, string LogoURL)
         {
             bool result = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var brandDetails = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupid && x.BrandId == brandId).FirstOrDefault();
-                brandDetails.LogoPath = LogoURL;
-                context.BOTS_TblRetailMaster.AddOrUpdate(brandDetails);
-                context.SaveChanges();
+                using (var context = new CommonDBContext())
+                {
+                    var brandDetails = context.BOTS_TblRetailMaster.Where(x => x.GroupId == groupid && x.BrandId == brandId).FirstOrDefault();
+                    brandDetails.LogoPath = LogoURL;
+                    context.BOTS_TblRetailMaster.AddOrUpdate(brandDetails);
+                    context.SaveChanges();
 
-                result = true;
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UploadBrandLogo");
+
             }
             return result;
         }
@@ -2382,18 +2758,26 @@ namespace BOTS_BL.Repository
         public bool UploadOtherDocs(string groupid, string docName, string LogoURL, string addedBy)
         {
             bool result = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                BOTS_TblDocuments objData = new BOTS_TblDocuments();
-                objData.GroupId = groupid;
-                objData.DocumentName = docName;
-                objData.DocumentPath = LogoURL;
-                objData.AddedDate = DateTime.Now;
-                objData.AddedBy = addedBy;
-                context.BOTS_TblDocuments.AddOrUpdate(objData);
-                context.SaveChanges();
+                using (var context = new CommonDBContext())
+                {
+                    BOTS_TblDocuments objData = new BOTS_TblDocuments();
+                    objData.GroupId = groupid;
+                    objData.DocumentName = docName;
+                    objData.DocumentPath = LogoURL;
+                    objData.AddedDate = DateTime.Now;
+                    objData.AddedBy = addedBy;
+                    context.BOTS_TblDocuments.AddOrUpdate(objData);
+                    context.SaveChanges();
 
-                result = true;
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UploadOtherDocs");
+
             }
             return result;
         }
@@ -2401,9 +2785,17 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblDocuments> GetOtherDocuments(string groupId)
         {
             List<BOTS_TblDocuments> lstData = new List<BOTS_TblDocuments>();
-            using (var context = new CommonDBContext())
+            try
             {
-                lstData = context.BOTS_TblDocuments.Where(x => x.GroupId == groupId).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    lstData = context.BOTS_TblDocuments.Where(x => x.GroupId == groupId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOtherDocuments");
+
             }
 
             return lstData;
@@ -2485,16 +2877,24 @@ namespace BOTS_BL.Repository
         public bool RecordIntroCall(string groupId, string AddedBy)
         {
             bool status = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var existingData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
-                existingData.IntroductionCall = true;
-                existingData.IntroductionCallDate = DateTime.Now;
-                existingData.UpdatedBy = AddedBy;
-                existingData.UpdatedDate = DateTime.Now;
-                context.BOTS_TblGroupMaster.AddOrUpdate(existingData);
-                context.SaveChanges();
-                status = true;
+                using (var context = new CommonDBContext())
+                {
+                    var existingData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    existingData.IntroductionCall = true;
+                    existingData.IntroductionCallDate = DateTime.Now;
+                    existingData.UpdatedBy = AddedBy;
+                    existingData.UpdatedDate = DateTime.Now;
+                    context.BOTS_TblGroupMaster.AddOrUpdate(existingData);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "RecordIntroCall");
+
             }
             return status;
         }
@@ -2502,9 +2902,17 @@ namespace BOTS_BL.Repository
         public tblStandardRulesSetting GetStandardConfigurationRules(int CategoryId)
         {
             tblStandardRulesSetting objData = new tblStandardRulesSetting();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.tblStandardRulesSettings.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.tblStandardRulesSettings.Where(x => x.CategoryId == CategoryId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetStandardConfigurationRules");
+
             }
             return objData;
         }
