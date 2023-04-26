@@ -99,74 +99,81 @@ namespace BOTS_BL.Repository
         {
             Dashboardsummary objDashboardsummary = new Dashboardsummary();
             List<TransactionMaster> objtransactionmaster = new List<TransactionMaster>();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "")
+                using (var context = new ChitaleDBContext())
                 {
-                    objtransactionmaster = context.TransactionMasters.ToList();                   
-                }
-                else
-                {
-                    objtransactionmaster = context.TransactionMasters.ToList();
-                    if (City != "All")
+                    if (Cluster == "All" && SubCluster == "All" && City == "All" && FromDate == "" && Todate == "")
                     {
-                        var lstResult = from s in context.CustomerDetails
-                                        join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
-                                        where s.City == City
-                                        select sa;
-                        objtransactionmaster = lstResult.ToList();
-                    }                   
-                    else if (SubCluster != "All")
-                    {
-                        var lstResult = from s in context.CustomerDetails
-                                        join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
-                                        where s.SubCluster == SubCluster
-                                        select sa;
-                        objtransactionmaster = lstResult.ToList();
-                    }
-                    else if(Cluster != "All")
-                    {
-                        var lstResult = from s in context.CustomerDetails
-                                        join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
-                                        where s.Cluster == Cluster
-                                        select sa;
-                        objtransactionmaster = lstResult.ToList();
-                    }
-
-                    if (FromDate != "" && Todate != "")
-                    {
-                        objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(FromDate) && x.OrderDatetime <= Convert.ToDateTime(Todate)).ToList();
+                        objtransactionmaster = context.TransactionMasters.ToList();
                     }
                     else
                     {
-                        if (FromDate != "")
+                        objtransactionmaster = context.TransactionMasters.ToList();
+                        if (City != "All")
                         {
-                            objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(FromDate)).ToList();
+                            var lstResult = from s in context.CustomerDetails
+                                            join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
+                                            where s.City == City
+                                            select sa;
+                            objtransactionmaster = lstResult.ToList();
                         }
-                        if (Todate != "")
+                        else if (SubCluster != "All")
                         {
-                            objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(Todate)).ToList();
+                            var lstResult = from s in context.CustomerDetails
+                                            join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
+                                            where s.SubCluster == SubCluster
+                                            select sa;
+                            objtransactionmaster = lstResult.ToList();
                         }
-                    }
-                   
-                }
+                        else if (Cluster != "All")
+                        {
+                            var lstResult = from s in context.CustomerDetails
+                                            join sa in context.TransactionMasters on s.CustomerId equals sa.CustomerId
+                                            where s.Cluster == Cluster
+                                            select sa;
+                            objtransactionmaster = lstResult.ToList();
+                        }
 
-                if (objtransactionmaster != null)
-                {
-                    var TxnFromDate = context.TransactionMasters.OrderBy(y => y.OrderDatetime).Select(z => z.OrderDatetime).FirstOrDefault();
-                    if (TxnFromDate != null)
-                    {
-                        objDashboardsummary.FromDate = TxnFromDate.Value.ToString("dd-MM-yyyy");
-                        objDashboardsummary.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
+                        if (FromDate != "" && Todate != "")
+                        {
+                            objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(FromDate) && x.OrderDatetime <= Convert.ToDateTime(Todate)).ToList();
+                        }
+                        else
+                        {
+                            if (FromDate != "")
+                            {
+                                objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(FromDate)).ToList();
+                            }
+                            if (Todate != "")
+                            {
+                                objtransactionmaster = objtransactionmaster.Where(x => x.OrderDatetime >= Convert.ToDateTime(Todate)).ToList();
+                            }
+                        }
+
                     }
-                    objDashboardsummary.PurchaseOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.NormalPoints);
-                    objDashboardsummary.SalesOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Sale").Sum(x => x.NormalPoints);
-                    objDashboardsummary.AddOnPoints = (decimal)objtransactionmaster.Sum(x => x.AddOnPoints);
-                    objDashboardsummary.RedeemedPoints = 0;
-                    objDashboardsummary.LostPoints = (decimal)objtransactionmaster.Sum(x => x.PenaltyPoints);
-                    var NormalPoints = (decimal)objtransactionmaster.Sum(x => x.NormalPoints);
-                    objDashboardsummary.TotalPointsBalance = (NormalPoints + objDashboardsummary.AddOnPoints) - objDashboardsummary.LostPoints;
+
+                    if (objtransactionmaster != null)
+                    {
+                        var TxnFromDate = context.TransactionMasters.OrderBy(y => y.OrderDatetime).Select(z => z.OrderDatetime).FirstOrDefault();
+                        if (TxnFromDate != null)
+                        {
+                            objDashboardsummary.FromDate = TxnFromDate.Value.ToString("dd-MM-yyyy");
+                            objDashboardsummary.ToDate = DateTime.Now.ToString("dd-MM-yyyy");
+                        }
+                        objDashboardsummary.PurchaseOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Purchase").Sum(x => x.NormalPoints);
+                        objDashboardsummary.SalesOrderPoints = (decimal)objtransactionmaster.Where(x => x.TxnType == "Sale").Sum(x => x.NormalPoints);
+                        objDashboardsummary.AddOnPoints = (decimal)objtransactionmaster.Sum(x => x.AddOnPoints);
+                        objDashboardsummary.RedeemedPoints = 0;
+                        objDashboardsummary.LostPoints = (decimal)objtransactionmaster.Sum(x => x.PenaltyPoints);
+                        var NormalPoints = (decimal)objtransactionmaster.Sum(x => x.NormalPoints);
+                        objDashboardsummary.TotalPointsBalance = (NormalPoints + objDashboardsummary.AddOnPoints) - objDashboardsummary.LostPoints;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
             return objDashboardsummary;
         }
@@ -174,9 +181,16 @@ namespace BOTS_BL.Repository
         public List<CustomerDetail> GetTop5Participant(string type)
         {
             List<CustomerDetail> objTop5Participant = new List<CustomerDetail>();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                objTop5Participant = context.CustomerDetails.Where(a => a.CustomerType == type).OrderByDescending(x => x.Points).Take(5).ToList();
+                using (var context = new ChitaleDBContext())
+                {
+                    objTop5Participant = context.CustomerDetails.Where(a => a.CustomerType == type).OrderByDescending(x => x.Points).Take(5).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
 
             return objTop5Participant;
@@ -185,20 +199,34 @@ namespace BOTS_BL.Repository
         public List<CustomerDetail> Bottom5Participants(string type)
         {
             List<CustomerDetail> objTop5Participant = new List<CustomerDetail>();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                objTop5Participant = context.CustomerDetails.Where(a => a.CustomerType == type).OrderBy(x => x.Points).Take(5).ToList();
+                using (var context = new ChitaleDBContext())
+                {
+                    objTop5Participant = context.CustomerDetails.Where(a => a.CustomerType == type).OrderBy(x => x.Points).Take(5).ToList();
+                }
             }
 
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
             return objTop5Participant;
         }
 
         public List<Top5LostParticipants> GetTop5LostParticipant(string type)
         {
             List<Top5LostParticipants> objTop5Participant = new List<Top5LostParticipants>();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                objTop5Participant = context.Database.SqlQuery<Top5LostParticipants>("sp_GetTop5LostParticipants @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).ToList<Top5LostParticipants>();
+                using (var context = new ChitaleDBContext())
+                {
+                    objTop5Participant = context.Database.SqlQuery<Top5LostParticipants>("sp_GetTop5LostParticipants @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).ToList<Top5LostParticipants>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
 
             return objTop5Participant;
@@ -295,7 +323,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex);
             }
 
             return lstparticipantListsformgt;
@@ -325,7 +353,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex);
             }
 
             return lstparticipantListsformgt;
@@ -404,7 +432,7 @@ namespace BOTS_BL.Repository
 
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex);
             }
 
             return lstLeaderBrd;
@@ -414,16 +442,23 @@ namespace BOTS_BL.Repository
         public ManagementDashboardLostOpp GetManagementDashboardLostOpp(string type)
         {
             ManagementDashboardLostOpp objLostOpp = new ManagementDashboardLostOpp();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                try
+                using (var context = new ChitaleDBContext())
                 {
-                    objLostOpp = context.Database.SqlQuery<ManagementDashboardLostOpp>("sp_GetAvgOrderToRavanaDate @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).FirstOrDefault<ManagementDashboardLostOpp>();
-                }
-                catch (Exception ex)
-                {
+                    try
+                    {
+                        objLostOpp = context.Database.SqlQuery<ManagementDashboardLostOpp>("sp_GetAvgOrderToRavanaDate @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).FirstOrDefault<ManagementDashboardLostOpp>();
+                    }
+                    catch (Exception ex)
+                    {
 
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
             return objLostOpp;
         }
@@ -431,18 +466,25 @@ namespace BOTS_BL.Repository
         public List<ManagementTGTVsACHPerformance> GetManagementTGTVsACHPerformance(string type)
         {
             List<ManagementTGTVsACHPerformance> lstData = new List<ManagementTGTVsACHPerformance>();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                var lstResult = from s in context.CustomerDetails
-                                join sa in context.TgtvsAchMasters on s.CustomerId equals sa.CustomerId
-                                where sa.CustomerType == type && sa.ProductType == "Over All"
-                                select new ManagementTGTVsACHPerformance
-                                {
-                                    CustomerName = s.CustomerName,
-                                    VolumeAchPercentage = sa.VolumeAchPercentage
-                                };
+                using (var context = new ChitaleDBContext())
+                {
+                    var lstResult = from s in context.CustomerDetails
+                                    join sa in context.TgtvsAchMasters on s.CustomerId equals sa.CustomerId
+                                    where sa.CustomerType == type && sa.ProductType == "Over All"
+                                    select new ManagementTGTVsACHPerformance
+                                    {
+                                        CustomerName = s.CustomerName,
+                                        VolumeAchPercentage = sa.VolumeAchPercentage
+                                    };
 
-                lstData = lstResult.OrderByDescending(x => x.VolumeAchPercentage).Take(5).ToList();
+                    lstData = lstResult.OrderByDescending(x => x.VolumeAchPercentage).Take(5).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
             return lstData;
         }
@@ -450,16 +492,23 @@ namespace BOTS_BL.Repository
         public List<ManagementOrderToRavanaPerformance> GetManagementOrderToRavanaPerformance(string type)
         {
             List<ManagementOrderToRavanaPerformance> objdata = new List<ManagementOrderToRavanaPerformance>();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                try
+                using (var context = new ChitaleDBContext())
                 {
-                    objdata = context.Database.SqlQuery<ManagementOrderToRavanaPerformance>("sp_GetOrderToRavanaPerformance @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).ToList<ManagementOrderToRavanaPerformance>();
-                }
-                catch (Exception ex)
-                {
+                    try
+                    {
+                        objdata = context.Database.SqlQuery<ManagementOrderToRavanaPerformance>("sp_GetOrderToRavanaPerformance @pi_CustomerType", new SqlParameter("@pi_CustomerType", type)).ToList<ManagementOrderToRavanaPerformance>();
+                    }
+                    catch (Exception ex)
+                    {
 
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
             return objdata;
         }
@@ -564,7 +613,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-
+                    newexception.AddException(ex);
                 }
             }
 
