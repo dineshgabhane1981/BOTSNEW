@@ -33,7 +33,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex,"");
+                newexception.AddException(ex, "Index");
             }
             return View();
         }
@@ -77,7 +77,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "GoToDashboard");
             }
             return RedirectToAction("Index", "Home");
         }
@@ -113,7 +113,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "AddNewCustomer");
             }
             return View(objCustomerViewModel);
         }
@@ -132,7 +132,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "AddGroupDetails");
             }
             return Json(GroupId, JsonRequestBehavior.AllowGet);
         }
@@ -151,7 +151,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "AddModulesAndPayments");
             }
             return Json(status, JsonRequestBehavior.AllowGet);
         }
@@ -211,7 +211,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "AddBrandAndOutlet");
             }
             return result;
         }
@@ -226,7 +226,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "GetBrandAndOutletData");
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
@@ -241,35 +241,42 @@ namespace WebApp.Controllers
         public ActionResult GetCustomerConfigDetails(string groupId)
         {
             GroupConfigDetailsViewModel objData = new GroupConfigDetailsViewModel();
-            objData.objGroupDetails = CR.GetGroupDetails(Convert.ToInt32(groupId));
-            objData.objGroupDetails.Logo = FMR.GetLogo(groupId);
-            
-            objData.lstBrandDetails = CR.GetAllBrandsByGroupId(groupId);
-            objData.objGroupConfig = CR.GetGroupConfig(objData.objGroupDetails);
-            objData.objGroupConfig.MemberBase = CR.GetMemberBase(groupId);
-            objData.lstOutlets = CR.GetAllOutletsByGroupId(groupId);
-            objData.objEarnConfig = CR.GetPointsEarnConfig(groupId);
-            objData.objBurnConfig = CR.GetPointsBurnConfig(groupId);
+            try
+            {
+                objData.objGroupDetails = CR.GetGroupDetails(Convert.ToInt32(groupId));
+                objData.objGroupDetails.Logo = FMR.GetLogo(groupId);
 
-            var connectionString = CR.GetCustomerConnString(groupId);            
-            objData.lstOutletList = RR.GetOutletList(groupId, connectionString);
-            objData.objSMSDetails = CR.GetAllSMSDetails(groupId);
-            if(objData.objSMSDetails !=null)
-            {
-                objData.SMSDetailsCount = 1;
+                objData.lstBrandDetails = CR.GetAllBrandsByGroupId(groupId);
+                objData.objGroupConfig = CR.GetGroupConfig(objData.objGroupDetails);
+                objData.objGroupConfig.MemberBase = CR.GetMemberBase(groupId);
+                objData.lstOutlets = CR.GetAllOutletsByGroupId(groupId);
+                objData.objEarnConfig = CR.GetPointsEarnConfig(groupId);
+                objData.objBurnConfig = CR.GetPointsBurnConfig(groupId);
+
+                var connectionString = CR.GetCustomerConnString(groupId);
+                objData.lstOutletList = RR.GetOutletList(groupId, connectionString);
+                objData.objSMSDetails = CR.GetAllSMSDetails(groupId);
+                if (objData.objSMSDetails != null)
+                {
+                    objData.SMSDetailsCount = 1;
+                }
+                else
+                {
+                    objData.SMSDetailsCount = 0;
+                }
+                if (objData.SMSDetailsCount == 1)
+                {
+                    objData.objSMSConfig = CR.GetSMSEmailMasterDetails(groupId);
+                    objData.objWAConfig = CR.GetWAEmailMasterDetails(groupId);
+                }
+                objData.lstMWPDetails = CR.GetDLCDetails(groupId);
+                objData.objMWPSourceMaster = CR.GetMWPSourceMaster(groupId);
+                objData.lstUniquePoints = CR.GetUniquePoints(groupId);
             }
-            else
+            catch (Exception ex)
             {
-                objData.SMSDetailsCount = 0;
+                newexception.AddException(ex, "GetCustomerConfigDetails");
             }
-            if(objData.SMSDetailsCount==1)
-            {
-                objData.objSMSConfig = CR.GetSMSEmailMasterDetails(groupId);
-                objData.objWAConfig = CR.GetWAEmailMasterDetails(groupId);
-            }
-            objData.lstMWPDetails = CR.GetDLCDetails(groupId);
-            objData.objMWPSourceMaster = CR.GetMWPSourceMaster(groupId);
-            objData.lstUniquePoints = CR.GetUniquePoints(groupId);
 
             return PartialView("_GroupConfigDetails", objData);
         }
