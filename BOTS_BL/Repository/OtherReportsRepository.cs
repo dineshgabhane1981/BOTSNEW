@@ -27,7 +27,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetTop5SellingProductValue");
             }
             return lstTop5SessingProductValue;
         }
@@ -44,7 +44,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetBottom5SellingProductValue");
             }
             return lstBottom5SessingProductValue;
         }
@@ -69,10 +69,17 @@ namespace BOTS_BL.Repository
         public List<tblFranchiseeEnquiry> GetFranchiseeEnquiryList(string GroupId)
         {
             List<tblFranchiseeEnquiry> objData = new List<tblFranchiseeEnquiry>();
-            var connectionString = CR.GetCustomerConnString(GroupId);
-            using (var contextNew = new BOTSDBContext(connectionString))
+            try
             {
-                objData = contextNew.tblFranchiseeEnquiries.OrderByDescending(x => x.AddedDate).ToList();
+                var connectionString = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    objData = contextNew.tblFranchiseeEnquiries.OrderByDescending(x => x.AddedDate).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetFranchiseeEnquiryList");
             }
 
             return objData;
