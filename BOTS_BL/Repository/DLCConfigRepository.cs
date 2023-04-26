@@ -30,7 +30,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "SaveDLCDashboardConfig");
             }
             return result;
         }
@@ -47,7 +47,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetDLCDashboardConfig");
             }
 
             return objData;
@@ -116,15 +116,12 @@ namespace BOTS_BL.Repository
                             status = false;
                         }
                     }
-
-
-
                 }
             }
 
             catch (Exception ex)
             {
-                newexception.AddException(ex, Groupid);
+                newexception.AddException(ex, "ProfileDataInsert");
             }
 
 
@@ -167,7 +164,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "PublishDLCDashboardConfig");
             }
             return status;
         }
@@ -204,15 +201,12 @@ namespace BOTS_BL.Repository
                             status = false;
                         }
                     }
-
-
-
                 }
             }
 
             catch (Exception ex)
             {
-                newexception.AddException(ex, Groupid);
+                newexception.AddException(ex, "PublishDLCProfileUpdate");
             }
 
 
@@ -232,7 +226,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "GetPublishDLCDashboardConfig");
             }
             return objData;
         }
@@ -249,16 +243,23 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "GetDLCFrontEndPageData");
             }
             return objData;
         }
         public List<tblCountyCode> GetCountryCodes()
         {
             List<tblCountyCode> lstCodes = new List<tblCountyCode>();
-            using (var context = new CommonDBContext())
+            try
             {
-                lstCodes = context.tblCountyCodes.ToList();
+                using (var context = new CommonDBContext())
+                {
+                    lstCodes = context.tblCountyCodes.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCountryCodes");
             }
             return lstCodes;
         }
@@ -293,7 +294,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "CheckUserAndSendOTP");
             }
 
             return status;
