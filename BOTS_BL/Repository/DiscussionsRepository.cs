@@ -90,7 +90,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetDiscussions");
             }
             return objData;
         }
@@ -128,7 +128,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "GetAllDiscussions");
             }
             return objData;
         }
@@ -394,7 +394,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, objDiscussion.GroupId);
+                newexception.AddException(ex, "AddDiscussions");
             }
 
             return status;
@@ -664,7 +664,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, objDiscussion.GroupId);
+                newexception.AddException(ex, "UpdateDiscussions");
             }
 
             return status;
@@ -723,38 +723,63 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetSubCallTypes(int Id)
         {
             List<SelectListItem> lstSubCallTypes = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var SubCallTypes = context.BOTS_TblCallSubTypes.Where(x => x.CallTypeId == Id).ToList();
-                foreach (var item in SubCallTypes)
+                using (var context = new CommonDBContext())
                 {
-                    lstSubCallTypes.Add(new SelectListItem
+                    var SubCallTypes = context.BOTS_TblCallSubTypes.Where(x => x.CallTypeId == Id).ToList();
+                    foreach (var item in SubCallTypes)
                     {
-                        Text = item.CallSubType,
-                        Value = Convert.ToString(item.Id)
-                    });
+                        lstSubCallTypes.Add(new SelectListItem
+                        {
+                            Text = item.CallSubType,
+                            Value = Convert.ToString(item.Id)
+                        });
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetSubCallTypes");
+            }
             lstSubCallTypes = lstSubCallTypes.OrderBy(x => x.Text).ToList();
+            
             return lstSubCallTypes;
         }
         public List<SelectListItem> GetCallTypes(string LoginType)
         {
             List<SelectListItem> lstCallTypes = new List<SelectListItem>();
-
-            if (LoginType == "9" || LoginType == "10")
+            try
             {
-                using (var context = new CommonDBContext())
+                if (LoginType == "9" || LoginType == "10")
                 {
-                    var CallTypes = context.BOTS_TblCallTypes.ToList();
-
-                    foreach (var item in CallTypes)
+                    using (var context = new CommonDBContext())
                     {
-                        if (Convert.ToString(item.Id) == "12" || Convert.ToString(item.Id) == "9" || Convert.ToString(item.Id) == "10" || Convert.ToString(item.Id) == "18" || Convert.ToString(item.Id) == "1")
+                        var CallTypes = context.BOTS_TblCallTypes.ToList();
+
+                        foreach (var item in CallTypes)
+                        {
+                            if (Convert.ToString(item.Id) == "12" || Convert.ToString(item.Id) == "9" || Convert.ToString(item.Id) == "10" || Convert.ToString(item.Id) == "18" || Convert.ToString(item.Id) == "1")
+                            {
+                                lstCallTypes.Add(new SelectListItem
+                                {
+
+                                    Text = item.CallType,
+                                    Value = Convert.ToString(item.Id)
+                                });
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    using (var context = new CommonDBContext())
+                    {
+                        var CallTypes = context.BOTS_TblCallTypes.ToList();
+                        foreach (var item in CallTypes)
                         {
                             lstCallTypes.Add(new SelectListItem
                             {
-
                                 Text = item.CallType,
                                 Value = Convert.ToString(item.Id)
                             });
@@ -762,20 +787,9 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                using (var context = new CommonDBContext())
-                {
-                    var CallTypes = context.BOTS_TblCallTypes.ToList();
-                    foreach (var item in CallTypes)
-                    {
-                        lstCallTypes.Add(new SelectListItem
-                        {
-                            Text = item.CallType,
-                            Value = Convert.ToString(item.Id)
-                        });
-                    }
-                }
+                newexception.AddException(ex, "GetCallTypes");
             }
             lstCallTypes = lstCallTypes.OrderBy(x => x.Text).ToList();
             return lstCallTypes;
@@ -783,24 +797,31 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetGroupDetails()
         {
             List<SelectListItem> lstgroupdetails = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var data = context.tblGroupDetails.Select(x => new { x.GroupId, x.GroupName }).OrderBy(x => x.GroupName).ToList();
-                lstgroupdetails.Add(new SelectListItem
+                using (var context = new CommonDBContext())
                 {
-                    Text = "--Select--",
-                    Value = "0"
-                });
-                foreach (var item in data)
-                {
-
+                    var data = context.tblGroupDetails.Select(x => new { x.GroupId, x.GroupName }).OrderBy(x => x.GroupName).ToList();
                     lstgroupdetails.Add(new SelectListItem
                     {
-                        Text = item.GroupName,
-                        Value = Convert.ToString(item.GroupId)
+                        Text = "--Select--",
+                        Value = "0"
                     });
+                    foreach (var item in data)
+                    {
 
+                        lstgroupdetails.Add(new SelectListItem
+                        {
+                            Text = item.GroupName,
+                            Value = Convert.ToString(item.GroupId)
+                        });
+
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
             }
             return lstgroupdetails;
         }
@@ -811,20 +832,27 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetRaisedby()
         {
             List<SelectListItem> lstRMAssigned = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                //var raised = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
-                var raised = context.CustomerLoginDetails.Where(x => x.UserStatus == true && (x.LoginType == "6" || x.LoginType == "7" || x.LoginType == "9" || x.LoginType == "10")).ToList();
-                lstRMAssigned.Add(new SelectListItem() { Text = "--Select--", Value = "0" });
-                foreach (var item in raised)
+                using (var context = new CommonDBContext())
                 {
-                    lstRMAssigned.Add(new SelectListItem
+
+                    //var raised = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
+                    var raised = context.CustomerLoginDetails.Where(x => x.UserStatus == true && (x.LoginType == "6" || x.LoginType == "7" || x.LoginType == "9" || x.LoginType == "10")).ToList();
+                    lstRMAssigned.Add(new SelectListItem() { Text = "--Select--", Value = "0" });
+                    foreach (var item in raised)
                     {
-                        Text = item.UserName,
-                        Value = Convert.ToString(item.LoginId)
-                    });
+                        lstRMAssigned.Add(new SelectListItem
+                        {
+                            Text = item.UserName,
+                            Value = Convert.ToString(item.LoginId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRaisedby");
             }
             return lstRMAssigned;
         }
@@ -834,189 +862,74 @@ namespace BOTS_BL.Repository
             List<DiscussionDetails> lstdiscuss = new List<DiscussionDetails>();
             List<DiscussionDetails> lstdiscussOnBoarding = new List<DiscussionDetails>();
             List<BOTS_TblDiscussion> lsttbldiscuss = new List<BOTS_TblDiscussion>();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                var list = context.BOTS_TblDiscussion.ToList();
-                if (groupnm != "")
+                using (var context = new CommonDBContext())
                 {
-                    list = list.Where(x => x.GroupId == groupnm).ToList();
-                }
-                if (list.Count != 0)
-                {
-                    if (status != "")
+
+                    var list = context.BOTS_TblDiscussion.ToList();
+                    if (groupnm != "")
                     {
-                        DateTime FromDate;
-                        DateTime ToDate = DateTime.Now.Date.AddDays(1);
-                        FromDate = ToDate.Date;
-                        switch (status)
+                        list = list.Where(x => x.GroupId == groupnm).ToList();
+                    }
+                    if (list.Count != 0)
+                    {
+                        if (status != "")
                         {
-                            case "Completed":
-                                list = list.Where(x => x.Status == "Completed").ToList();
-                                break;
+                            DateTime FromDate;
+                            DateTime ToDate = DateTime.Now.Date.AddDays(1);
+                            FromDate = ToDate.Date;
+                            switch (status)
+                            {
+                                case "Completed":
+                                    list = list.Where(x => x.Status == "Completed").ToList();
+                                    break;
 
-                            case "WIP":
-                                list = list.Where(x => x.Status == "WIP").ToList();
-                                break;
+                                case "WIP":
+                                    list = list.Where(x => x.Status == "WIP").ToList();
+                                    break;
 
-                            case "WIP3":
-                                FromDate = ToDate.AddDays(-3);
-                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
-                                break;
-                            case "WIP7":
-                                ToDate = ToDate.AddDays(-3);
-                                FromDate = ToDate.AddDays(-7);
-                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
-                                break;
-                            case "WIP15":
-                                FromDate = ToDate.AddDays(-7);
-                                ToDate = ToDate.AddDays(-15);
-                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
-                                break;
+                                case "WIP3":
+                                    FromDate = ToDate.AddDays(-3);
+                                    list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
+                                    break;
+                                case "WIP7":
+                                    ToDate = ToDate.AddDays(-3);
+                                    FromDate = ToDate.AddDays(-7);
+                                    list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
+                                    break;
+                                case "WIP15":
+                                    FromDate = ToDate.AddDays(-7);
+                                    ToDate = ToDate.AddDays(-15);
+                                    list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
+                                    break;
+                            }
+
                         }
 
-                    }
-
-                    if (calltype != 0)
-                    {
-                        list = list.Where(x => x.CallType == calltype).ToList();
-                    }
-
-                    if (fromDate != "" && toDate != "")
-                    {
-                        DateTime fmdt = Convert.ToDateTime(fromDate);
-                        DateTime todt = Convert.ToDateTime(toDate);
-                        todt = todt.AddDays(1);
-                        list = list.Where(x => x.AddedDate > fmdt && x.AddedDate < todt).ToList();
-
-                    }
-                    if (raisedby != "")
-                    {
-                        var sublist = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == raisedby).Select(y => y.DiscussionId).ToList();
-                        var newlist = list.Where(x => x.AddedBy != raisedby && sublist.Contains(x.Id)).ToList();
-
-                        list = list.Where(x => x.AddedBy == raisedby).ToList();
-                        list.AddRange(newlist);
-
-                    }
-                    if (LoginType == "1")
-                    {
-                        if (IsFollowUp)
+                        if (calltype != 0)
                         {
-                            lstdiscuss = (from c in list
-                                          join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                          join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                          join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                          join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                          where c.Status == "WIP"
-
-                                          select new DiscussionDetails
-                                          {
-                                              GroupName = gd.GroupName,
-                                              Id = c.Id,
-                                              AddedDate = c.AddedDate,
-                                              SpokenTo = c.SpokenTo,
-                                              ContactNo = c.ContactNo,
-                                              CallType = ct.CallType,
-                                              CustomerType = c.CustomerType,
-                                              FollowupDate = c.FollowupDate,
-                                              CallMode = c.CallMode,
-                                              Description = c.Description,
-                                              ActionItems = c.ActionItems,
-                                              AddedBy = cld.UserName,
-                                              Status = c.Status,
-                                              AssignedMember = c.AssignedMember,
-                                              SubCallType = sct.CallSubType,
-
-                                          }).OrderByDescending(x => x.AddedDate).ToList();
-
-
-                            lstdiscussOnBoarding = (from c in list
-                                                    join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
-                                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                    join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                    where c.Status == "WIP"
-
-                                                    select new DiscussionDetails
-                                                    {
-                                                        GroupName = gd.GroupName,
-                                                        Id = c.Id,
-                                                        AddedDate = c.AddedDate,
-                                                        SpokenTo = c.SpokenTo,
-                                                        ContactNo = c.ContactNo,
-                                                        CallType = ct.CallType,
-                                                        CustomerType = c.CustomerType,
-                                                        FollowupDate = c.FollowupDate,
-                                                        CallMode = c.CallMode,
-                                                        Description = c.Description,
-                                                        ActionItems = c.ActionItems,
-                                                        AddedBy = cld.UserName,
-                                                        Status = c.Status,
-                                                        AssignedMember = c.AssignedMember,
-                                                        SubCallType = sct.CallSubType,
-
-                                                    }).OrderByDescending(x => x.AddedDate).ToList();
+                            list = list.Where(x => x.CallType == calltype).ToList();
                         }
-                        else
+
+                        if (fromDate != "" && toDate != "")
                         {
-                            lstdiscuss = (from c in list
-                                          join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                          join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                          join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                          join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                            DateTime fmdt = Convert.ToDateTime(fromDate);
+                            DateTime todt = Convert.ToDateTime(toDate);
+                            todt = todt.AddDays(1);
+                            list = list.Where(x => x.AddedDate > fmdt && x.AddedDate < todt).ToList();
 
-                                          select new DiscussionDetails
-                                          {
-                                              GroupName = gd.GroupName,
-                                              Id = c.Id,
-                                              AddedDate = c.AddedDate,
-                                              SpokenTo = c.SpokenTo,
-                                              ContactNo = c.ContactNo,
-                                              CallType = ct.CallType,
-                                              CustomerType = c.CustomerType,
-                                              FollowupDate = c.FollowupDate,
-                                              CallMode = c.CallMode,
-                                              Description = c.Description,
-                                              ActionItems = c.ActionItems,
-                                              AddedBy = cld.UserName,
-                                              Status = c.Status,
-                                              AssignedMember = c.AssignedMember,
-                                              SubCallType = sct.CallSubType,
-
-
-                                          }).OrderByDescending(x => x.AddedDate).ToList();
-
-                            lstdiscussOnBoarding = (from c in list
-                                                    join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
-                                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                    join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-
-                                                    select new DiscussionDetails
-                                                    {
-                                                        GroupName = gd.GroupName,
-                                                        Id = c.Id,
-                                                        AddedDate = c.AddedDate,
-                                                        SpokenTo = c.SpokenTo,
-                                                        ContactNo = c.ContactNo,
-                                                        CallType = ct.CallType,
-                                                        CustomerType = c.CustomerType,
-                                                        FollowupDate = c.FollowupDate,
-                                                        CallMode = c.CallMode,
-                                                        Description = c.Description,
-                                                        ActionItems = c.ActionItems,
-                                                        AddedBy = cld.UserName,
-                                                        Status = c.Status,
-                                                        AssignedMember = c.AssignedMember,
-                                                        SubCallType = sct.CallSubType,
-
-                                                    }).OrderByDescending(x => x.AddedDate).ToList();
                         }
-                    }
-                    else
-                    {
-                        if (LoginType == "9" || LoginType == "10")
+                        if (raisedby != "")
+                        {
+                            var sublist = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == raisedby).Select(y => y.DiscussionId).ToList();
+                            var newlist = list.Where(x => x.AddedBy != raisedby && sublist.Contains(x.Id)).ToList();
+
+                            list = list.Where(x => x.AddedBy == raisedby).ToList();
+                            list.AddRange(newlist);
+
+                        }
+                        if (LoginType == "1")
                         {
                             if (IsFollowUp)
                             {
@@ -1025,7 +938,7 @@ namespace BOTS_BL.Repository
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                               join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                              where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
+                                              where c.Status == "WIP"
 
                                               select new DiscussionDetails
                                               {
@@ -1047,12 +960,13 @@ namespace BOTS_BL.Repository
 
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
+
                                 lstdiscussOnBoarding = (from c in list
                                                         join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                         join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                         join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                         join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                        where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
+                                                        where c.Status == "WIP"
 
                                                         select new DiscussionDetails
                                                         {
@@ -1081,7 +995,6 @@ namespace BOTS_BL.Repository
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                               join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                              where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
 
                                               select new DiscussionDetails
                                               {
@@ -1101,6 +1014,7 @@ namespace BOTS_BL.Repository
                                                   AssignedMember = c.AssignedMember,
                                                   SubCallType = sct.CallSubType,
 
+
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
                                 lstdiscussOnBoarding = (from c in list
@@ -1108,7 +1022,6 @@ namespace BOTS_BL.Repository
                                                         join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                         join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                         join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                        where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
 
                                                         select new DiscussionDetails
                                                         {
@@ -1133,7 +1046,7 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            if (LoginType == "7")
+                            if (LoginType == "9" || LoginType == "10")
                             {
                                 if (IsFollowUp)
                                 {
@@ -1142,7 +1055,7 @@ namespace BOTS_BL.Repository
                                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                   join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                  where c.AddedBy == LoginId && c.Status == "WIP"
+                                                  where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
 
                                                   select new DiscussionDetails
                                                   {
@@ -1169,7 +1082,7 @@ namespace BOTS_BL.Repository
                                                             join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                             join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                             join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                            where c.AddedBy == LoginId && c.Status == "WIP"
+                                                            where c.Status == "WIP" && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18)
 
                                                             select new DiscussionDetails
                                                             {
@@ -1198,7 +1111,7 @@ namespace BOTS_BL.Repository
                                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                   join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                  where c.AddedBy == LoginId
+                                                  where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
 
                                                   select new DiscussionDetails
                                                   {
@@ -1225,7 +1138,7 @@ namespace BOTS_BL.Repository
                                                             join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                             join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                             join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                            where c.AddedBy == LoginId
+                                                            where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18
 
                                                             select new DiscussionDetails
                                                             {
@@ -1250,131 +1163,254 @@ namespace BOTS_BL.Repository
                             }
                             else
                             {
-                                if (IsFollowUp)
+                                if (LoginType == "7")
                                 {
-                                    lstdiscuss = (from c in list
-                                                  join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                                  join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                  join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                  where c.Status == "WIP"
-                                                  select new DiscussionDetails
-                                                  {
-                                                      GroupName = gd.GroupName,
-                                                      Id = c.Id,
-                                                      AddedDate = c.AddedDate,
-                                                      SpokenTo = c.SpokenTo,
-                                                      ContactNo = c.ContactNo,
-                                                      CallType = ct.CallType,
-                                                      CustomerType = c.CustomerType,
-                                                      FollowupDate = c.FollowupDate,
-                                                      CallMode = c.CallMode,
-                                                      Description = c.Description,
-                                                      ActionItems = c.ActionItems,
-                                                      AddedBy = cld.UserName,
-                                                      Status = c.Status,
-                                                      AssignedMember = c.AssignedMember,
-                                                      SubCallType = sct.CallSubType,
+                                    if (IsFollowUp)
+                                    {
+                                        lstdiscuss = (from c in list
+                                                      join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
+                                                      join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                      join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                      join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                      where c.AddedBy == LoginId && c.Status == "WIP"
 
-                                                  }).OrderByDescending(x => x.AddedDate).ToList();
+                                                      select new DiscussionDetails
+                                                      {
+                                                          GroupName = gd.GroupName,
+                                                          Id = c.Id,
+                                                          AddedDate = c.AddedDate,
+                                                          SpokenTo = c.SpokenTo,
+                                                          ContactNo = c.ContactNo,
+                                                          CallType = ct.CallType,
+                                                          CustomerType = c.CustomerType,
+                                                          FollowupDate = c.FollowupDate,
+                                                          CallMode = c.CallMode,
+                                                          Description = c.Description,
+                                                          ActionItems = c.ActionItems,
+                                                          AddedBy = cld.UserName,
+                                                          Status = c.Status,
+                                                          AssignedMember = c.AssignedMember,
+                                                          SubCallType = sct.CallSubType,
 
-                                    lstdiscussOnBoarding = (from c in list
-                                                            join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
-                                                            join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                            join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                            where c.Status == "WIP"
-                                                            select new DiscussionDetails
-                                                            {
-                                                                GroupName = gd.GroupName,
-                                                                Id = c.Id,
-                                                                AddedDate = c.AddedDate,
-                                                                SpokenTo = c.SpokenTo,
-                                                                ContactNo = c.ContactNo,
-                                                                CallType = ct.CallType,
-                                                                CustomerType = c.CustomerType,
-                                                                FollowupDate = c.FollowupDate,
-                                                                CallMode = c.CallMode,
-                                                                Description = c.Description,
-                                                                ActionItems = c.ActionItems,
-                                                                AddedBy = cld.UserName,
-                                                                Status = c.Status,
-                                                                AssignedMember = c.AssignedMember,
-                                                                SubCallType = sct.CallSubType,
+                                                      }).OrderByDescending(x => x.AddedDate).ToList();
 
-                                                            }).OrderByDescending(x => x.AddedDate).ToList();
+                                        lstdiscussOnBoarding = (from c in list
+                                                                join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                                join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                                where c.AddedBy == LoginId && c.Status == "WIP"
+
+                                                                select new DiscussionDetails
+                                                                {
+                                                                    GroupName = gd.GroupName,
+                                                                    Id = c.Id,
+                                                                    AddedDate = c.AddedDate,
+                                                                    SpokenTo = c.SpokenTo,
+                                                                    ContactNo = c.ContactNo,
+                                                                    CallType = ct.CallType,
+                                                                    CustomerType = c.CustomerType,
+                                                                    FollowupDate = c.FollowupDate,
+                                                                    CallMode = c.CallMode,
+                                                                    Description = c.Description,
+                                                                    ActionItems = c.ActionItems,
+                                                                    AddedBy = cld.UserName,
+                                                                    Status = c.Status,
+                                                                    AssignedMember = c.AssignedMember,
+                                                                    SubCallType = sct.CallSubType,
+
+                                                                }).OrderByDescending(x => x.AddedDate).ToList();
+                                    }
+                                    else
+                                    {
+                                        lstdiscuss = (from c in list
+                                                      join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
+                                                      join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                      join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                      join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                      where c.AddedBy == LoginId
+
+                                                      select new DiscussionDetails
+                                                      {
+                                                          GroupName = gd.GroupName,
+                                                          Id = c.Id,
+                                                          AddedDate = c.AddedDate,
+                                                          SpokenTo = c.SpokenTo,
+                                                          ContactNo = c.ContactNo,
+                                                          CallType = ct.CallType,
+                                                          CustomerType = c.CustomerType,
+                                                          FollowupDate = c.FollowupDate,
+                                                          CallMode = c.CallMode,
+                                                          Description = c.Description,
+                                                          ActionItems = c.ActionItems,
+                                                          AddedBy = cld.UserName,
+                                                          Status = c.Status,
+                                                          AssignedMember = c.AssignedMember,
+                                                          SubCallType = sct.CallSubType,
+
+                                                      }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                        lstdiscussOnBoarding = (from c in list
+                                                                join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                                join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                                where c.AddedBy == LoginId
+
+                                                                select new DiscussionDetails
+                                                                {
+                                                                    GroupName = gd.GroupName,
+                                                                    Id = c.Id,
+                                                                    AddedDate = c.AddedDate,
+                                                                    SpokenTo = c.SpokenTo,
+                                                                    ContactNo = c.ContactNo,
+                                                                    CallType = ct.CallType,
+                                                                    CustomerType = c.CustomerType,
+                                                                    FollowupDate = c.FollowupDate,
+                                                                    CallMode = c.CallMode,
+                                                                    Description = c.Description,
+                                                                    ActionItems = c.ActionItems,
+                                                                    AddedBy = cld.UserName,
+                                                                    Status = c.Status,
+                                                                    AssignedMember = c.AssignedMember,
+                                                                    SubCallType = sct.CallSubType,
+
+                                                                }).OrderByDescending(x => x.AddedDate).ToList();
+                                    }
                                 }
                                 else
                                 {
-                                    lstdiscuss = (from c in list
-                                                  join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                                  join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                  join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                    if (IsFollowUp)
+                                    {
+                                        lstdiscuss = (from c in list
+                                                      join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
+                                                      join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                      join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                      join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                      where c.Status == "WIP"
+                                                      select new DiscussionDetails
+                                                      {
+                                                          GroupName = gd.GroupName,
+                                                          Id = c.Id,
+                                                          AddedDate = c.AddedDate,
+                                                          SpokenTo = c.SpokenTo,
+                                                          ContactNo = c.ContactNo,
+                                                          CallType = ct.CallType,
+                                                          CustomerType = c.CustomerType,
+                                                          FollowupDate = c.FollowupDate,
+                                                          CallMode = c.CallMode,
+                                                          Description = c.Description,
+                                                          ActionItems = c.ActionItems,
+                                                          AddedBy = cld.UserName,
+                                                          Status = c.Status,
+                                                          AssignedMember = c.AssignedMember,
+                                                          SubCallType = sct.CallSubType,
 
-                                                  select new DiscussionDetails
-                                                  {
-                                                      GroupName = gd.GroupName,
-                                                      Id = c.Id,
-                                                      AddedDate = c.AddedDate,
-                                                      SpokenTo = c.SpokenTo,
-                                                      ContactNo = c.ContactNo,
-                                                      CallType = ct.CallType,
-                                                      CustomerType = c.CustomerType,
-                                                      FollowupDate = c.FollowupDate,
-                                                      CallMode = c.CallMode,
-                                                      Description = c.Description,
-                                                      ActionItems = c.ActionItems,
-                                                      AddedBy = cld.UserName,
-                                                      Status = c.Status,
-                                                      AssignedMember = c.AssignedMember,
-                                                      SubCallType = sct.CallSubType,
+                                                      }).OrderByDescending(x => x.AddedDate).ToList();
 
-                                                  }).OrderByDescending(x => x.AddedDate).ToList();
+                                        lstdiscussOnBoarding = (from c in list
+                                                                join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                                join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                                where c.Status == "WIP"
+                                                                select new DiscussionDetails
+                                                                {
+                                                                    GroupName = gd.GroupName,
+                                                                    Id = c.Id,
+                                                                    AddedDate = c.AddedDate,
+                                                                    SpokenTo = c.SpokenTo,
+                                                                    ContactNo = c.ContactNo,
+                                                                    CallType = ct.CallType,
+                                                                    CustomerType = c.CustomerType,
+                                                                    FollowupDate = c.FollowupDate,
+                                                                    CallMode = c.CallMode,
+                                                                    Description = c.Description,
+                                                                    ActionItems = c.ActionItems,
+                                                                    AddedBy = cld.UserName,
+                                                                    Status = c.Status,
+                                                                    AssignedMember = c.AssignedMember,
+                                                                    SubCallType = sct.CallSubType,
 
-                                    lstdiscussOnBoarding = (from c in list
-                                                            join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
-                                                            join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                            join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                                }).OrderByDescending(x => x.AddedDate).ToList();
+                                    }
+                                    else
+                                    {
+                                        lstdiscuss = (from c in list
+                                                      join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
+                                                      join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                      join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                      join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
 
-                                                            select new DiscussionDetails
-                                                            {
-                                                                GroupName = gd.GroupName,
-                                                                Id = c.Id,
-                                                                AddedDate = c.AddedDate,
-                                                                SpokenTo = c.SpokenTo,
-                                                                ContactNo = c.ContactNo,
-                                                                CallType = ct.CallType,
-                                                                CustomerType = c.CustomerType,
-                                                                FollowupDate = c.FollowupDate,
-                                                                CallMode = c.CallMode,
-                                                                Description = c.Description,
-                                                                ActionItems = c.ActionItems,
-                                                                AddedBy = cld.UserName,
-                                                                Status = c.Status,
-                                                                AssignedMember = c.AssignedMember,
-                                                                SubCallType = sct.CallSubType,
+                                                      select new DiscussionDetails
+                                                      {
+                                                          GroupName = gd.GroupName,
+                                                          Id = c.Id,
+                                                          AddedDate = c.AddedDate,
+                                                          SpokenTo = c.SpokenTo,
+                                                          ContactNo = c.ContactNo,
+                                                          CallType = ct.CallType,
+                                                          CustomerType = c.CustomerType,
+                                                          FollowupDate = c.FollowupDate,
+                                                          CallMode = c.CallMode,
+                                                          Description = c.Description,
+                                                          ActionItems = c.ActionItems,
+                                                          AddedBy = cld.UserName,
+                                                          Status = c.Status,
+                                                          AssignedMember = c.AssignedMember,
+                                                          SubCallType = sct.CallSubType,
 
-                                                            }).OrderByDescending(x => x.AddedDate).ToList();
+                                                      }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                        lstdiscussOnBoarding = (from c in list
+                                                                join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                                join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+
+                                                                select new DiscussionDetails
+                                                                {
+                                                                    GroupName = gd.GroupName,
+                                                                    Id = c.Id,
+                                                                    AddedDate = c.AddedDate,
+                                                                    SpokenTo = c.SpokenTo,
+                                                                    ContactNo = c.ContactNo,
+                                                                    CallType = ct.CallType,
+                                                                    CustomerType = c.CustomerType,
+                                                                    FollowupDate = c.FollowupDate,
+                                                                    CallMode = c.CallMode,
+                                                                    Description = c.Description,
+                                                                    ActionItems = c.ActionItems,
+                                                                    AddedBy = cld.UserName,
+                                                                    Status = c.Status,
+                                                                    AssignedMember = c.AssignedMember,
+                                                                    SubCallType = sct.CallSubType,
+
+                                                                }).OrderByDescending(x => x.AddedDate).ToList();
+                                    }
                                 }
-                            }
 
+                            }
                         }
                     }
+
+
+
                 }
-
-
-
+                lstdiscuss.AddRange(lstdiscussOnBoarding);
+                //using (var context = new CommonDBContext())
+                //{
+                //    foreach (var item in lstdiscuss)
+                //    {
+                //        item.SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.DiscussionId == item.Id).Count();
+                //    }
+                //}
             }
-            lstdiscuss.AddRange(lstdiscussOnBoarding);
-            //using (var context = new CommonDBContext())
-            //{
-            //    foreach (var item in lstdiscuss)
-            //    {
-            //        item.SubDiscussionCount = context.BOTS_TblSubDiscussionData.Where(x => x.DiscussionId == item.Id).Count();
-            //    }
-            //}
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRaisedby");
+            }
+
             return lstdiscuss;
         }
         public List<DiscussionDetails> GetfilteredDiscussionDataAssign(string status, int calltype, int SubCallType, string groupnm, string fromDate, string toDate, string raisedby, string LoginType, string LoginId, bool IsFollowUp, string AssignMember, string DiscussionType)
@@ -1382,220 +1418,106 @@ namespace BOTS_BL.Repository
             List<DiscussionDetails> lstdiscuss = new List<DiscussionDetails>();
             List<DiscussionDetails> lstdiscussOnBoarding = new List<DiscussionDetails>();
             List<BOTS_TblDiscussion> lsttbldiscuss = new List<BOTS_TblDiscussion>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var AssignedName = "";
-                var list = context.BOTS_TblDiscussion.ToList();
-                if (AssignMember != "")
+                using (var context = new CommonDBContext())
                 {
-                    AssignedName = context.tblDepartMembers.Where(x => x.LoginId == AssignMember).Select(y => y.Members).FirstOrDefault();
-                    if (LoginType == "9" || LoginType == "10")
+                    var AssignedName = "";
+                    var list = context.BOTS_TblDiscussion.ToList();
+                    if (AssignMember != "")
                     {
-                        list = list.Where(x => x.AssignedMember == AssignedName || x.AddedBy == LoginId || x.CallType == 3 || x.CallType == 9 || x.CallType == 10 || x.CallType == 12 || x.CallType == 18).ToList();//3,9,10,12,18
-                    }
-                    else if (LoginType == "1" || LoginType == "7")
-                        list = list.Where(x => x.AssignedMember == AssignedName).ToList();
-                    else
-                        list = list.Where(x => x.AssignedMember == AssignedName || x.AddedBy == LoginId).ToList();
-                }
-
-
-                if (groupnm != "")
-                {
-                    list = list.Where(x => x.GroupId == groupnm).ToList();
-                }
-                if (list.Count != 0)
-                {
-                    if (status != "")
-                    {
-                        DateTime FromDate;
-                        DateTime ToDate = DateTime.Now.Date.AddDays(1);
-                        FromDate = ToDate.Date;
-                        switch (status)
-                        {
-                            case "Completed":
-                                list = list.Where(x => x.Status == "Completed").ToList();
-                                break;
-
-                            case "WIP":
-                                list = list.Where(x => x.Status == "WIP").ToList();
-                                break;
-
-                            case "WIP3":
-                                FromDate = ToDate.AddDays(-3);
-                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
-                                break;
-                            case "WIP7":
-                                ToDate = ToDate.AddDays(-3);
-                                FromDate = ToDate.AddDays(-7);
-                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
-                                break;
-                            case "WIP15":
-                                FromDate = ToDate.AddDays(-7);
-                                ToDate = ToDate.AddDays(-15);
-                                list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
-                                break;
-                        }
-
-                    }
-
-                    if (calltype != 0)
-                    {
-                        list = list.Where(x => x.CallType == calltype).ToList();
-                    }
-                    if (SubCallType != 0)
-                    {
-                        var subCallTypeStr = Convert.ToString(SubCallType);
-                        list = list.Where(x => x.SubCallType == subCallTypeStr).ToList();
-                    }
-                    if (!string.IsNullOrEmpty(DiscussionType))
-                    {
-                        list = list.Where(x => x.DiscussionType == DiscussionType).ToList();
-                    }
-
-                    if (fromDate != "" && toDate != "")
-                    {
-                        DateTime fmdt = Convert.ToDateTime(fromDate);
-                        DateTime todt = Convert.ToDateTime(toDate);
-                        todt = todt.AddDays(1);
-                        list = list.Where(x => x.AddedDate > fmdt && x.AddedDate < todt).ToList();
-
-                    }
-                    if (raisedby != "")
-                    {
-                        var sublist = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == raisedby).Select(y => y.DiscussionId).ToList();
-                        var newlist = list.Where(x => x.AddedBy != raisedby && sublist.Contains(x.Id)).ToList();
-
-                        list = list.Where(x => x.AddedBy == raisedby).ToList();
-                        list.AddRange(newlist);
-
-                    }
-                    if (LoginType == "1")
-                    {
-                        if (IsFollowUp)
-                        {
-                            lstdiscuss = (from c in list
-                                          join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                          join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                          //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                          join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                          where c.Status == "WIP"
-
-                                          select new DiscussionDetails
-                                          {
-                                              GroupName = gd.GroupName,
-                                              Id = c.Id,
-                                              AddedDate = c.AddedDate,
-                                              SpokenTo = c.SpokenTo,
-                                              ContactNo = c.ContactNo,
-                                              CallType = ct.CallType,
-                                              CustomerType = c.CustomerType,
-                                              FollowupDate = c.FollowupDate,
-                                              CallMode = c.CallMode,
-                                              Description = c.Description,
-                                              ActionItems = c.ActionItems,
-                                              AddedBy = cld.UserName,
-                                              Status = c.Status,
-                                              AssignedMember = c.AssignedMember,
-                                              SubCallType = c.SubCallType,
-                                              DiscussionType = c.DiscussionType
-                                          }).OrderByDescending(x => x.AddedDate).ToList();
-
-
-                            lstdiscussOnBoarding = (from c in list
-                                                    join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
-                                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                    //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                    where c.Status == "WIP"
-
-                                                    select new DiscussionDetails
-                                                    {
-                                                        GroupName = gd.GroupName,
-                                                        Id = c.Id,
-                                                        AddedDate = c.AddedDate,
-                                                        SpokenTo = c.SpokenTo,
-                                                        ContactNo = c.ContactNo,
-                                                        CallType = ct.CallType,
-                                                        CustomerType = c.CustomerType,
-                                                        FollowupDate = c.FollowupDate,
-                                                        CallMode = c.CallMode,
-                                                        Description = c.Description,
-                                                        ActionItems = c.ActionItems,
-                                                        AddedBy = cld.UserName,
-                                                        Status = c.Status,
-                                                        AssignedMember = c.AssignedMember,
-                                                        SubCallType = c.SubCallType,
-                                                        DiscussionType = c.DiscussionType
-                                                    }).OrderByDescending(x => x.AddedDate).ToList();
-                        }
-                        else
-                        {
-                            lstdiscuss = (from c in list
-                                          join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                          join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                          //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                          join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-
-                                          select new DiscussionDetails
-                                          {
-                                              GroupName = gd.GroupName,
-                                              Id = c.Id,
-                                              AddedDate = c.AddedDate,
-                                              SpokenTo = c.SpokenTo,
-                                              ContactNo = c.ContactNo,
-                                              CallType = ct.CallType,
-                                              CustomerType = c.CustomerType,
-                                              FollowupDate = c.FollowupDate,
-                                              CallMode = c.CallMode,
-                                              Description = c.Description,
-                                              ActionItems = c.ActionItems,
-                                              AddedBy = cld.UserName,
-                                              Status = c.Status,
-                                              AssignedMember = c.AssignedMember,
-                                              SubCallType = c.SubCallType,
-                                              DiscussionType = c.DiscussionType
-                                          }).OrderByDescending(x => x.AddedDate).ToList();
-
-                            lstdiscussOnBoarding = (from c in list
-                                                    join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
-                                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                    //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-
-                                                    select new DiscussionDetails
-                                                    {
-                                                        GroupName = gd.GroupName,
-                                                        Id = c.Id,
-                                                        AddedDate = c.AddedDate,
-                                                        SpokenTo = c.SpokenTo,
-                                                        ContactNo = c.ContactNo,
-                                                        CallType = ct.CallType,
-                                                        CustomerType = c.CustomerType,
-                                                        FollowupDate = c.FollowupDate,
-                                                        CallMode = c.CallMode,
-                                                        Description = c.Description,
-                                                        ActionItems = c.ActionItems,
-                                                        AddedBy = cld.UserName,
-                                                        Status = c.Status,
-                                                        AssignedMember = c.AssignedMember,
-                                                        SubCallType = c.SubCallType,
-                                                        DiscussionType = c.DiscussionType
-                                                    }).OrderByDescending(x => x.AddedDate).ToList();
-                        }
-                    }
-                    else
-                    {
+                        AssignedName = context.tblDepartMembers.Where(x => x.LoginId == AssignMember).Select(y => y.Members).FirstOrDefault();
                         if (LoginType == "9" || LoginType == "10")
+                        {
+                            list = list.Where(x => x.AssignedMember == AssignedName || x.AddedBy == LoginId || x.CallType == 3 || x.CallType == 9 || x.CallType == 10 || x.CallType == 12 || x.CallType == 18).ToList();//3,9,10,12,18
+                        }
+                        else if (LoginType == "1" || LoginType == "7")
+                            list = list.Where(x => x.AssignedMember == AssignedName).ToList();
+                        else
+                            list = list.Where(x => x.AssignedMember == AssignedName || x.AddedBy == LoginId).ToList();
+                    }
+
+
+                    if (groupnm != "")
+                    {
+                        list = list.Where(x => x.GroupId == groupnm).ToList();
+                    }
+                    if (list.Count != 0)
+                    {
+                        if (status != "")
+                        {
+                            DateTime FromDate;
+                            DateTime ToDate = DateTime.Now.Date.AddDays(1);
+                            FromDate = ToDate.Date;
+                            switch (status)
+                            {
+                                case "Completed":
+                                    list = list.Where(x => x.Status == "Completed").ToList();
+                                    break;
+
+                                case "WIP":
+                                    list = list.Where(x => x.Status == "WIP").ToList();
+                                    break;
+
+                                case "WIP3":
+                                    FromDate = ToDate.AddDays(-3);
+                                    list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
+                                    break;
+                                case "WIP7":
+                                    ToDate = ToDate.AddDays(-3);
+                                    FromDate = ToDate.AddDays(-7);
+                                    list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
+                                    break;
+                                case "WIP15":
+                                    FromDate = ToDate.AddDays(-7);
+                                    ToDate = ToDate.AddDays(-15);
+                                    list = list.Where(x => x.UpdatedDate >= FromDate && x.UpdatedDate <= ToDate && x.Status == "WIP").ToList();
+                                    break;
+                            }
+
+                        }
+
+                        if (calltype != 0)
+                        {
+                            list = list.Where(x => x.CallType == calltype).ToList();
+                        }
+                        if (SubCallType != 0)
+                        {
+                            var subCallTypeStr = Convert.ToString(SubCallType);
+                            list = list.Where(x => x.SubCallType == subCallTypeStr).ToList();
+                        }
+                        if (!string.IsNullOrEmpty(DiscussionType))
+                        {
+                            list = list.Where(x => x.DiscussionType == DiscussionType).ToList();
+                        }
+
+                        if (fromDate != "" && toDate != "")
+                        {
+                            DateTime fmdt = Convert.ToDateTime(fromDate);
+                            DateTime todt = Convert.ToDateTime(toDate);
+                            todt = todt.AddDays(1);
+                            list = list.Where(x => x.AddedDate > fmdt && x.AddedDate < todt).ToList();
+
+                        }
+                        if (raisedby != "")
+                        {
+                            var sublist = context.BOTS_TblSubDiscussionData.Where(x => x.UpdatedBy == raisedby).Select(y => y.DiscussionId).ToList();
+                            var newlist = list.Where(x => x.AddedBy != raisedby && sublist.Contains(x.Id)).ToList();
+
+                            list = list.Where(x => x.AddedBy == raisedby).ToList();
+                            list.AddRange(newlist);
+
+                        }
+                        if (LoginType == "1")
                         {
                             if (IsFollowUp)
                             {
                                 lstdiscuss = (from c in list
                                               join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                              join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id //into ps from p in ps.DefaultIfEmpty()
+                                              join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                               //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                              join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId //into cldn from cl in cldn.DefaultIfEmpty()
-                                              where c.Status == "WIP"// && (c.CallType == 3 || c.CallType == 9 || c.CallType == 10 || c.CallType == 12 || c.CallType == 18 || c.AssignedMember == AssignedName)
+                                              join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                              where c.Status == "WIP"
 
                                               select new DiscussionDetails
                                               {
@@ -1615,15 +1537,16 @@ namespace BOTS_BL.Repository
                                                   AssignedMember = c.AssignedMember,
                                                   SubCallType = c.SubCallType,
                                                   DiscussionType = c.DiscussionType
-
                                               }).OrderByDescending(x => x.AddedDate).ToList();
+
 
                                 lstdiscussOnBoarding = (from c in list
                                                         join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
                                                         join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                         //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                         join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                        where c.Status == "WIP"// && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.AssignedMember == AssignedName)
+                                                        where c.Status == "WIP"
+
                                                         select new DiscussionDetails
                                                         {
                                                             GroupName = gd.GroupName,
@@ -1642,7 +1565,6 @@ namespace BOTS_BL.Repository
                                                             AssignedMember = c.AssignedMember,
                                                             SubCallType = c.SubCallType,
                                                             DiscussionType = c.DiscussionType
-
                                                         }).OrderByDescending(x => x.AddedDate).ToList();
                             }
                             else
@@ -1652,7 +1574,6 @@ namespace BOTS_BL.Repository
                                               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                               //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                              //where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.AssignedMember == AssignedName
 
                                               select new DiscussionDetails
                                               {
@@ -1672,7 +1593,6 @@ namespace BOTS_BL.Repository
                                                   AssignedMember = c.AssignedMember,
                                                   SubCallType = c.SubCallType,
                                                   DiscussionType = c.DiscussionType
-
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
                                 lstdiscussOnBoarding = (from c in list
@@ -1680,7 +1600,6 @@ namespace BOTS_BL.Repository
                                                         join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                         //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                         join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                        //where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.AssignedMember == AssignedName
 
                                                         select new DiscussionDetails
                                                         {
@@ -1700,22 +1619,21 @@ namespace BOTS_BL.Repository
                                                             AssignedMember = c.AssignedMember,
                                                             SubCallType = c.SubCallType,
                                                             DiscussionType = c.DiscussionType
-
                                                         }).OrderByDescending(x => x.AddedDate).ToList();
                             }
                         }
                         else
                         {
-                            if (LoginType == "7")
+                            if (LoginType == "9" || LoginType == "10")
                             {
                                 if (IsFollowUp)
                                 {
                                     lstdiscuss = (from c in list
                                                   join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                                  join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                  join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                  where c.AddedBy == LoginId && c.Status == "WIP"
+                                                  join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id //into ps from p in ps.DefaultIfEmpty()
+                                                                                                                  //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                  join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId //into cldn from cl in cldn.DefaultIfEmpty()
+                                                  where c.Status == "WIP"// && (c.CallType == 3 || c.CallType == 9 || c.CallType == 10 || c.CallType == 12 || c.CallType == 18 || c.AssignedMember == AssignedName)
 
                                                   select new DiscussionDetails
                                                   {
@@ -1743,8 +1661,7 @@ namespace BOTS_BL.Repository
                                                             join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                             //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                             join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                            where c.AddedBy == LoginId && c.Status == "WIP"
-
+                                                            where c.Status == "WIP"// && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.AssignedMember == AssignedName)
                                                             select new DiscussionDetails
                                                             {
                                                                 GroupName = gd.GroupName,
@@ -1773,7 +1690,7 @@ namespace BOTS_BL.Repository
                                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                   //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                  where c.AddedBy == LoginId
+                                                  //where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.AssignedMember == AssignedName
 
                                                   select new DiscussionDetails
                                                   {
@@ -1801,7 +1718,7 @@ namespace BOTS_BL.Repository
                                                             join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                                             //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
                                                             join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                            where c.AddedBy == LoginId
+                                                            //where c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.AssignedMember == AssignedName
 
                                                             select new DiscussionDetails
                                                             {
@@ -1827,125 +1744,251 @@ namespace BOTS_BL.Repository
                             }
                             else
                             {
-                                if (IsFollowUp)
+                                if (LoginType == "7")
                                 {
-                                    lstdiscuss = (from c in list
-                                                  join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                                  join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                  join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                  where c.Status == "WIP"
-                                                  select new DiscussionDetails
-                                                  {
-                                                      GroupName = gd.GroupName,
-                                                      Id = c.Id,
-                                                      AddedDate = c.AddedDate,
-                                                      SpokenTo = c.SpokenTo,
-                                                      ContactNo = c.ContactNo,
-                                                      CallType = ct.CallType,
-                                                      CustomerType = c.CustomerType,
-                                                      FollowupDate = c.FollowupDate,
-                                                      CallMode = c.CallMode,
-                                                      Description = c.Description,
-                                                      ActionItems = c.ActionItems,
-                                                      AddedBy = cld.UserName,
-                                                      Status = c.Status,
-                                                      AssignedMember = c.AssignedMember,
-                                                      SubCallType = c.SubCallType,
-                                                      DiscussionType = c.DiscussionType
+                                    if (IsFollowUp)
+                                    {
+                                        lstdiscuss = (from c in list
+                                                      join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
+                                                      join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                      //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                      join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                      where c.AddedBy == LoginId && c.Status == "WIP"
 
-                                                  }).OrderByDescending(x => x.AddedDate).ToList();
+                                                      select new DiscussionDetails
+                                                      {
+                                                          GroupName = gd.GroupName,
+                                                          Id = c.Id,
+                                                          AddedDate = c.AddedDate,
+                                                          SpokenTo = c.SpokenTo,
+                                                          ContactNo = c.ContactNo,
+                                                          CallType = ct.CallType,
+                                                          CustomerType = c.CustomerType,
+                                                          FollowupDate = c.FollowupDate,
+                                                          CallMode = c.CallMode,
+                                                          Description = c.Description,
+                                                          ActionItems = c.ActionItems,
+                                                          AddedBy = cld.UserName,
+                                                          Status = c.Status,
+                                                          AssignedMember = c.AssignedMember,
+                                                          SubCallType = c.SubCallType,
+                                                          DiscussionType = c.DiscussionType
 
-                                    lstdiscussOnBoarding = (from c in list
-                                                            join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
-                                                            join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                            //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                                            where c.Status == "WIP"
-                                                            select new DiscussionDetails
-                                                            {
-                                                                GroupName = gd.GroupName,
-                                                                Id = c.Id,
-                                                                AddedDate = c.AddedDate,
-                                                                SpokenTo = c.SpokenTo,
-                                                                ContactNo = c.ContactNo,
-                                                                CallType = ct.CallType,
-                                                                CustomerType = c.CustomerType,
-                                                                FollowupDate = c.FollowupDate,
-                                                                CallMode = c.CallMode,
-                                                                Description = c.Description,
-                                                                ActionItems = c.ActionItems,
-                                                                AddedBy = cld.UserName,
-                                                                Status = c.Status,
-                                                                AssignedMember = c.AssignedMember,
-                                                                SubCallType = c.SubCallType,
-                                                                DiscussionType = c.DiscussionType
+                                                      }).OrderByDescending(x => x.AddedDate).ToList();
 
-                                                            }).OrderByDescending(x => x.AddedDate).ToList();
+                                        lstdiscussOnBoarding = (from c in list
+                                                                join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                                //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                                where c.AddedBy == LoginId && c.Status == "WIP"
+
+                                                                select new DiscussionDetails
+                                                                {
+                                                                    GroupName = gd.GroupName,
+                                                                    Id = c.Id,
+                                                                    AddedDate = c.AddedDate,
+                                                                    SpokenTo = c.SpokenTo,
+                                                                    ContactNo = c.ContactNo,
+                                                                    CallType = ct.CallType,
+                                                                    CustomerType = c.CustomerType,
+                                                                    FollowupDate = c.FollowupDate,
+                                                                    CallMode = c.CallMode,
+                                                                    Description = c.Description,
+                                                                    ActionItems = c.ActionItems,
+                                                                    AddedBy = cld.UserName,
+                                                                    Status = c.Status,
+                                                                    AssignedMember = c.AssignedMember,
+                                                                    SubCallType = c.SubCallType,
+                                                                    DiscussionType = c.DiscussionType
+
+                                                                }).OrderByDescending(x => x.AddedDate).ToList();
+                                    }
+                                    else
+                                    {
+                                        lstdiscuss = (from c in list
+                                                      join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
+                                                      join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                      //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                      join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                      where c.AddedBy == LoginId
+
+                                                      select new DiscussionDetails
+                                                      {
+                                                          GroupName = gd.GroupName,
+                                                          Id = c.Id,
+                                                          AddedDate = c.AddedDate,
+                                                          SpokenTo = c.SpokenTo,
+                                                          ContactNo = c.ContactNo,
+                                                          CallType = ct.CallType,
+                                                          CustomerType = c.CustomerType,
+                                                          FollowupDate = c.FollowupDate,
+                                                          CallMode = c.CallMode,
+                                                          Description = c.Description,
+                                                          ActionItems = c.ActionItems,
+                                                          AddedBy = cld.UserName,
+                                                          Status = c.Status,
+                                                          AssignedMember = c.AssignedMember,
+                                                          SubCallType = c.SubCallType,
+                                                          DiscussionType = c.DiscussionType
+
+                                                      }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                        lstdiscussOnBoarding = (from c in list
+                                                                join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                                //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                                where c.AddedBy == LoginId
+
+                                                                select new DiscussionDetails
+                                                                {
+                                                                    GroupName = gd.GroupName,
+                                                                    Id = c.Id,
+                                                                    AddedDate = c.AddedDate,
+                                                                    SpokenTo = c.SpokenTo,
+                                                                    ContactNo = c.ContactNo,
+                                                                    CallType = ct.CallType,
+                                                                    CustomerType = c.CustomerType,
+                                                                    FollowupDate = c.FollowupDate,
+                                                                    CallMode = c.CallMode,
+                                                                    Description = c.Description,
+                                                                    ActionItems = c.ActionItems,
+                                                                    AddedBy = cld.UserName,
+                                                                    Status = c.Status,
+                                                                    AssignedMember = c.AssignedMember,
+                                                                    SubCallType = c.SubCallType,
+                                                                    DiscussionType = c.DiscussionType
+
+                                                                }).OrderByDescending(x => x.AddedDate).ToList();
+                                    }
                                 }
                                 else
                                 {
-                                    lstdiscuss = (from c in list
-                                                  join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
-                                                  join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                  //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                  join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                    if (IsFollowUp)
+                                    {
+                                        lstdiscuss = (from c in list
+                                                      join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
+                                                      join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                      //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                      join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                      where c.Status == "WIP"
+                                                      select new DiscussionDetails
+                                                      {
+                                                          GroupName = gd.GroupName,
+                                                          Id = c.Id,
+                                                          AddedDate = c.AddedDate,
+                                                          SpokenTo = c.SpokenTo,
+                                                          ContactNo = c.ContactNo,
+                                                          CallType = ct.CallType,
+                                                          CustomerType = c.CustomerType,
+                                                          FollowupDate = c.FollowupDate,
+                                                          CallMode = c.CallMode,
+                                                          Description = c.Description,
+                                                          ActionItems = c.ActionItems,
+                                                          AddedBy = cld.UserName,
+                                                          Status = c.Status,
+                                                          AssignedMember = c.AssignedMember,
+                                                          SubCallType = c.SubCallType,
+                                                          DiscussionType = c.DiscussionType
 
-                                                  select new DiscussionDetails
-                                                  {
-                                                      GroupName = gd.GroupName,
-                                                      Id = c.Id,
-                                                      AddedDate = c.AddedDate,
-                                                      SpokenTo = c.SpokenTo,
-                                                      ContactNo = c.ContactNo,
-                                                      CallType = ct.CallType,
-                                                      CustomerType = c.CustomerType,
-                                                      FollowupDate = c.FollowupDate,
-                                                      CallMode = c.CallMode,
-                                                      Description = c.Description,
-                                                      ActionItems = c.ActionItems,
-                                                      AddedBy = cld.UserName,
-                                                      Status = c.Status,
-                                                      AssignedMember = c.AssignedMember,
-                                                      SubCallType = c.SubCallType,
-                                                      DiscussionType = c.DiscussionType
+                                                      }).OrderByDescending(x => x.AddedDate).ToList();
 
-                                                  }).OrderByDescending(x => x.AddedDate).ToList();
+                                        lstdiscussOnBoarding = (from c in list
+                                                                join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                                //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                                where c.Status == "WIP"
+                                                                select new DiscussionDetails
+                                                                {
+                                                                    GroupName = gd.GroupName,
+                                                                    Id = c.Id,
+                                                                    AddedDate = c.AddedDate,
+                                                                    SpokenTo = c.SpokenTo,
+                                                                    ContactNo = c.ContactNo,
+                                                                    CallType = ct.CallType,
+                                                                    CustomerType = c.CustomerType,
+                                                                    FollowupDate = c.FollowupDate,
+                                                                    CallMode = c.CallMode,
+                                                                    Description = c.Description,
+                                                                    ActionItems = c.ActionItems,
+                                                                    AddedBy = cld.UserName,
+                                                                    Status = c.Status,
+                                                                    AssignedMember = c.AssignedMember,
+                                                                    SubCallType = c.SubCallType,
+                                                                    DiscussionType = c.DiscussionType
 
-                                    lstdiscussOnBoarding = (from c in list
-                                                            join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
-                                                            join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                                            //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
-                                                            join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                                                                }).OrderByDescending(x => x.AddedDate).ToList();
+                                    }
+                                    else
+                                    {
+                                        lstdiscuss = (from c in list
+                                                      join gd in context.tblGroupDetails on c.GroupId equals gd.GroupId.ToString()
+                                                      join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                      //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                      join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
 
-                                                            select new DiscussionDetails
-                                                            {
-                                                                GroupName = gd.GroupName,
-                                                                Id = c.Id,
-                                                                AddedDate = c.AddedDate,
-                                                                SpokenTo = c.SpokenTo,
-                                                                ContactNo = c.ContactNo,
-                                                                CallType = ct.CallType,
-                                                                CustomerType = c.CustomerType,
-                                                                FollowupDate = c.FollowupDate,
-                                                                CallMode = c.CallMode,
-                                                                Description = c.Description,
-                                                                ActionItems = c.ActionItems,
-                                                                AddedBy = cld.UserName,
-                                                                Status = c.Status,
-                                                                AssignedMember = c.AssignedMember,
-                                                                SubCallType = c.SubCallType,
-                                                                DiscussionType = c.DiscussionType
+                                                      select new DiscussionDetails
+                                                      {
+                                                          GroupName = gd.GroupName,
+                                                          Id = c.Id,
+                                                          AddedDate = c.AddedDate,
+                                                          SpokenTo = c.SpokenTo,
+                                                          ContactNo = c.ContactNo,
+                                                          CallType = ct.CallType,
+                                                          CustomerType = c.CustomerType,
+                                                          FollowupDate = c.FollowupDate,
+                                                          CallMode = c.CallMode,
+                                                          Description = c.Description,
+                                                          ActionItems = c.ActionItems,
+                                                          AddedBy = cld.UserName,
+                                                          Status = c.Status,
+                                                          AssignedMember = c.AssignedMember,
+                                                          SubCallType = c.SubCallType,
+                                                          DiscussionType = c.DiscussionType
 
-                                                            }).OrderByDescending(x => x.AddedDate).ToList();
+                                                      }).OrderByDescending(x => x.AddedDate).ToList();
+
+                                        lstdiscussOnBoarding = (from c in list
+                                                                join gd in context.BOTS_TblGroupMaster on c.GroupId equals gd.GroupId.ToString()
+                                                                join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                                                                //join sct in context.BOTS_TblCallSubTypes on c.SubCallType equals sct.Id.ToString()
+                                                                join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+
+                                                                select new DiscussionDetails
+                                                                {
+                                                                    GroupName = gd.GroupName,
+                                                                    Id = c.Id,
+                                                                    AddedDate = c.AddedDate,
+                                                                    SpokenTo = c.SpokenTo,
+                                                                    ContactNo = c.ContactNo,
+                                                                    CallType = ct.CallType,
+                                                                    CustomerType = c.CustomerType,
+                                                                    FollowupDate = c.FollowupDate,
+                                                                    CallMode = c.CallMode,
+                                                                    Description = c.Description,
+                                                                    ActionItems = c.ActionItems,
+                                                                    AddedBy = cld.UserName,
+                                                                    Status = c.Status,
+                                                                    AssignedMember = c.AssignedMember,
+                                                                    SubCallType = c.SubCallType,
+                                                                    DiscussionType = c.DiscussionType
+
+                                                                }).OrderByDescending(x => x.AddedDate).ToList();
+                                    }
                                 }
-                            }
 
+                            }
                         }
                     }
                 }
+                lstdiscuss.AddRange(lstdiscussOnBoarding);
             }
-            lstdiscuss.AddRange(lstdiscussOnBoarding);
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetfilteredDiscussionDataAssign");
+            }
             //using (var context = new CommonDBContext())
             //{
             //    foreach (var item in lstdiscuss)
@@ -2014,7 +2057,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetMemberdetails");
             }
             return objtbldepart;
         }
@@ -2046,7 +2089,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetReAssignMemberdetails");
             }
             return objtbldepart;
         }
@@ -2790,9 +2833,16 @@ namespace BOTS_BL.Repository
         public List<string> GetAllDiscussionCustNames(string groupId)
         {
             List<string> CustList = new List<string>();
-            using (var context = new CommonDBContext())
+            try
             {
-                CustList = context.tblDiscussionCustomerDatas.Where(x => x.GroupId == groupId).Select(y => y.CustomerName).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    CustList = context.tblDiscussionCustomerDatas.Where(x => x.GroupId == groupId).Select(y => y.CustomerName).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllDiscussionCustNames");
             }
             return CustList;
         }
