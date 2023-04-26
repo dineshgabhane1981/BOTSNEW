@@ -39,48 +39,56 @@ namespace WebApp.Controllers
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                string GroupId = Convert.ToString(item["GroupId"]);
-                string Fees = Convert.ToString(item["Fees"]);
-                string StartDate = Convert.ToString(item["StartDate"]);
-                string PerFeedback = Convert.ToString(item["PerFeedback"]);
-                string PaymentMode = Convert.ToString(item["PaymentMode"]);
-                string ReminderCount = Convert.ToString(item["ReminderCount"]);
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
-                Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
-                objFeedback.GroupId = Convert.ToInt32(GroupId);
-                objFeedback.Fees = Fees;
-                objFeedback.PaymentMode = PaymentMode;
-                objFeedback.PerFeedbackCharge = Convert.ToInt32(PerFeedback);
-                objFeedback.ReminderCount = Convert.ToInt32(ReminderCount);
-                objFeedback.StartDate = Convert.ToDateTime(StartDate).Date;
-                objFeedback.EndDate = Convert.ToDateTime(StartDate).AddDays(364).Date;
-                objFeedback.AddedBy = userDetails.LoginId;
-                objFeedback.AddedDate = DateTime.Now;
-                objFeedback.Status = "Active";
-                //Get XML File and send all content with this call to insert
-                var masterData = FMR.GetFeedbackMasterData();
-                List<Feedback_Content> lstData = new List<Feedback_Content>();
-                foreach (var newItem in masterData)
+                foreach (Dictionary<string, object> item in objData)
                 {
-                    Feedback_Content objNew = new Feedback_Content();
-                    objNew.GroupId = GroupId;
-                    objNew.Section = newItem.Section;
-                    objNew.Type = newItem.Type;
-                    objNew.TypeId = newItem.TypeId;
-                    objNew.Text = newItem.Text;
-                    objNew.IsDisplay = newItem.IsDisplay;
-                    objNew.IsMandatory = Convert.ToString(newItem.IsMandatory);
-                    objNew.AddedDate = DateTime.Now;
-                    objNew.AddedBy = userDetails.LoginId;
-                    lstData.Add(objNew);
-                }
+                    string GroupId = Convert.ToString(item["GroupId"]);
+                    string Fees = Convert.ToString(item["Fees"]);
+                    string StartDate = Convert.ToString(item["StartDate"]);
+                    string PerFeedback = Convert.ToString(item["PerFeedback"]);
+                    string PaymentMode = Convert.ToString(item["PaymentMode"]);
+                    string ReminderCount = Convert.ToString(item["ReminderCount"]);
 
-                status = FMR.EnableFeedbackModule(objFeedback, lstData);
+                    Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
+                    objFeedback.GroupId = Convert.ToInt32(GroupId);
+                    objFeedback.Fees = Fees;
+                    objFeedback.PaymentMode = PaymentMode;
+                    objFeedback.PerFeedbackCharge = Convert.ToInt32(PerFeedback);
+                    objFeedback.ReminderCount = Convert.ToInt32(ReminderCount);
+                    objFeedback.StartDate = Convert.ToDateTime(StartDate).Date;
+                    objFeedback.EndDate = Convert.ToDateTime(StartDate).AddDays(364).Date;
+                    objFeedback.AddedBy = userDetails.LoginId;
+                    objFeedback.AddedDate = DateTime.Now;
+                    objFeedback.Status = "Active";
+                    //Get XML File and send all content with this call to insert
+                    var masterData = FMR.GetFeedbackMasterData();
+                    List<Feedback_Content> lstData = new List<Feedback_Content>();
+                    foreach (var newItem in masterData)
+                    {
+                        Feedback_Content objNew = new Feedback_Content();
+                        objNew.GroupId = GroupId;
+                        objNew.Section = newItem.Section;
+                        objNew.Type = newItem.Type;
+                        objNew.TypeId = newItem.TypeId;
+                        objNew.Text = newItem.Text;
+                        objNew.IsDisplay = newItem.IsDisplay;
+                        objNew.IsMandatory = Convert.ToString(newItem.IsMandatory);
+                        objNew.AddedDate = DateTime.Now;
+                        objNew.AddedBy = userDetails.LoginId;
+                        lstData.Add(objNew);
+                    }
+
+                    status = FMR.EnableFeedbackModule(objFeedback, lstData);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "EnableFeedbackModule");
             }
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -90,16 +98,23 @@ namespace WebApp.Controllers
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
+            try
+            {
+                Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
 
-            objFeedback = FMR.GetFeedbackByGroupId(GroupId);
-            objFeedback.GroupId = Convert.ToInt32(GroupId);
-            objFeedback.StoppedReason = Reason;
-            objFeedback.EndDate = DateTime.Today.Date;
-            objFeedback.AddedBy = userDetails.LoginId;
-            objFeedback.StoppedDate = DateTime.Now;
-            objFeedback.Status = "Stop";
-            status = FMR.EnableFeedbackModule(objFeedback, null);
+                objFeedback = FMR.GetFeedbackByGroupId(GroupId);
+                objFeedback.GroupId = Convert.ToInt32(GroupId);
+                objFeedback.StoppedReason = Reason;
+                objFeedback.EndDate = DateTime.Today.Date;
+                objFeedback.AddedBy = userDetails.LoginId;
+                objFeedback.StoppedDate = DateTime.Now;
+                objFeedback.Status = "Stop";
+                status = FMR.EnableFeedbackModule(objFeedback, null);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "StopFeedbackModule");
+            }
 
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -109,27 +124,34 @@ namespace WebApp.Controllers
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                string GroupId = Convert.ToString(item["GroupId"]);
-                string Fees = Convert.ToString(item["Fees"]);
-                string StartDate = Convert.ToString(item["StartDate"]);
-                string PaymentMode = Convert.ToString(item["PaymentMode"]);
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string GroupId = Convert.ToString(item["GroupId"]);
+                    string Fees = Convert.ToString(item["Fees"]);
+                    string StartDate = Convert.ToString(item["StartDate"]);
+                    string PaymentMode = Convert.ToString(item["PaymentMode"]);
 
-                Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
+                    Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
 
-                objFeedback = FMR.GetFeedbackByGroupId(GroupId);
-                objFeedback.Fees = Fees;
-                objFeedback.PaymentMode = PaymentMode;
-                objFeedback.StartDate = Convert.ToDateTime(StartDate).Date;
-                objFeedback.EndDate = Convert.ToDateTime(StartDate).AddDays(364).Date;
-                objFeedback.AddedBy = userDetails.LoginId;
-                objFeedback.RenewDate = DateTime.Now;
-                objFeedback.Status = "Renew";
-                status = FMR.EnableFeedbackModule(objFeedback, null);
+                    objFeedback = FMR.GetFeedbackByGroupId(GroupId);
+                    objFeedback.Fees = Fees;
+                    objFeedback.PaymentMode = PaymentMode;
+                    objFeedback.StartDate = Convert.ToDateTime(StartDate).Date;
+                    objFeedback.EndDate = Convert.ToDateTime(StartDate).AddDays(364).Date;
+                    objFeedback.AddedBy = userDetails.LoginId;
+                    objFeedback.RenewDate = DateTime.Now;
+                    objFeedback.Status = "Renew";
+                    status = FMR.EnableFeedbackModule(objFeedback, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "RenewFeedbackModule");
             }
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -139,25 +161,32 @@ namespace WebApp.Controllers
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                string GroupId = Convert.ToString(item["GroupId"]);
-                string Fees = Convert.ToString(item["Fees"]);
-                //string StartDate = Convert.ToString(item["StartDate"]);
-                string PaymentMode = Convert.ToString(item["PaymentMode"]);
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string GroupId = Convert.ToString(item["GroupId"]);
+                    string Fees = Convert.ToString(item["Fees"]);
+                    //string StartDate = Convert.ToString(item["StartDate"]);
+                    string PaymentMode = Convert.ToString(item["PaymentMode"]);
 
-                Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
+                    Feedback_FeedbackConfig objFeedback = new Feedback_FeedbackConfig();
 
-                objFeedback = FMR.GetFeedbackByGroupId(GroupId);
-                objFeedback.Fees = Fees;
-                objFeedback.PaymentMode = PaymentMode;
-                objFeedback.EndDate = objFeedback.EndDate.Value.AddDays(364).Date;
-                objFeedback.RenewDate = DateTime.Now;
-                objFeedback.Status = "Renew";
-                status = FMR.EnableFeedbackModule(objFeedback, null);
+                    objFeedback = FMR.GetFeedbackByGroupId(GroupId);
+                    objFeedback.Fees = Fees;
+                    objFeedback.PaymentMode = PaymentMode;
+                    objFeedback.EndDate = objFeedback.EndDate.Value.AddDays(364).Date;
+                    objFeedback.RenewDate = DateTime.Now;
+                    objFeedback.Status = "Renew";
+                    status = FMR.EnableFeedbackModule(objFeedback, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "RenewActiveFeedbackModule");
             }
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -225,21 +254,28 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             FeedbackGetFeedbackViewModel objgetfeedbackviewmodel = new FeedbackGetFeedbackViewModel();
             Feedback_PointsAndMessages PointsAndMessages = new Feedback_PointsAndMessages();
-            
-            // List<Feedback_Content> lstfbget = new List<Feedback_Content>();
-            objgetfeedbackviewmodel.OutletId = Id;
-            objgetfeedbackviewmodel.GroupId = groupid;
-            objgetfeedbackviewmodel.IsExpiredOrStopped = FMR.CheckActiveLink(groupid);
-            objgetfeedbackviewmodel.GroupName = FMR.GetGroupName(groupid);
-            objgetfeedbackviewmodel.lstFeedbackData = FMR.GetFeedback_VisibleContents(groupid);
-            objgetfeedbackviewmodel.LogoUrl = FMR.GetLogo(groupid);
-            objgetfeedbackviewmodel.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
-            objgetfeedbackviewmodel.lstsalesRepresentive = FMR.GetSalesRepresentiveList(groupid);
-            PointsAndMessages = FMR.GetPointsAndMessages(groupid);
-            objgetfeedbackviewmodel.PointsAndMessages = PointsAndMessages;
+            try
+            {
+                // List<Feedback_Content> lstfbget = new List<Feedback_Content>();
+                objgetfeedbackviewmodel.OutletId = Id;
+                objgetfeedbackviewmodel.GroupId = groupid;
+                objgetfeedbackviewmodel.IsExpiredOrStopped = FMR.CheckActiveLink(groupid);
+                objgetfeedbackviewmodel.GroupName = FMR.GetGroupName(groupid);
+                objgetfeedbackviewmodel.lstFeedbackData = FMR.GetFeedback_VisibleContents(groupid);
+                objgetfeedbackviewmodel.LogoUrl = FMR.GetLogo(groupid);
+                objgetfeedbackviewmodel.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
+                objgetfeedbackviewmodel.lstsalesRepresentive = FMR.GetSalesRepresentiveList(groupid);
+                PointsAndMessages = FMR.GetPointsAndMessages(groupid);
+                objgetfeedbackviewmodel.PointsAndMessages = PointsAndMessages;
 
-            objgetfeedbackviewmodel.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
+                objgetfeedbackviewmodel.lstKnowAboutUs = FMR.GetHowToKnowAboutList();
 
+               
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetFeedBack");
+            }
             return View(objgetfeedbackviewmodel);
         }
 
@@ -248,15 +284,22 @@ namespace WebApp.Controllers
             bool status = false;
 
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objHomeData = (object[])json_serializer.DeserializeObject(HomeData);
-            object[] objQuestionData = (object[])json_serializer.DeserializeObject(QuestionData);
-            object[] objOtherInfoData = (object[])json_serializer.DeserializeObject(OtherInfoData);
-            object[] objOtherConfigData = (object[])json_serializer.DeserializeObject(OtherConfigData);
-            object[] objOutletMobileNos = (object[])json_serializer.DeserializeObject(OutletMobileNos);
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objHomeData = (object[])json_serializer.DeserializeObject(HomeData);
+                object[] objQuestionData = (object[])json_serializer.DeserializeObject(QuestionData);
+                object[] objOtherInfoData = (object[])json_serializer.DeserializeObject(OtherInfoData);
+                object[] objOtherConfigData = (object[])json_serializer.DeserializeObject(OtherConfigData);
+                object[] objOutletMobileNos = (object[])json_serializer.DeserializeObject(OutletMobileNos);
 
-            status = FMR.UpdateFeedbackDetails(objHomeData, objQuestionData, objOtherInfoData, objOtherConfigData, objOutletMobileNos, userDetails.GroupId, userDetails.LoginId);
+                status = FMR.UpdateFeedbackDetails(objHomeData, objQuestionData, objOtherInfoData, objOtherConfigData, objOutletMobileNos, userDetails.GroupId, userDetails.LoginId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateFeedbackDetails");
+            }
 
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -293,7 +336,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "DashboardNewData");
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -307,7 +350,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "DashboardExistingData");
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -332,7 +375,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "DashboardOutletWiseData");
             }
 
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -365,7 +408,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "DashboardSRWiseData");
             }
 
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -380,7 +423,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "DashboardLessThank12Data");
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -394,7 +437,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "Dashboard12To3Data");
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -408,7 +451,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "Dashboard3To6Data");
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -422,7 +465,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "DashboardMoreThan6Data");
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -447,7 +490,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "DashboardSourceWiseData");
             }
 
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -457,32 +500,39 @@ namespace WebApp.Controllers
         {
             FeedbackGetFeedbackViewModel objviewmodel = new FeedbackGetFeedbackViewModel();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objviewmodel.GroupId = userDetails.GroupId;
-            objviewmodel.PointsAndMessages = FMR.GetPointsAndMessages(objviewmodel.GroupId);
-            objviewmodel.lstsalesRepresentive = FMR.GetSalesRepresentiveList(objviewmodel.GroupId);
-            objviewmodel.lstoutletlist = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            try
+            {
+                objviewmodel.GroupId = userDetails.GroupId;
+                objviewmodel.PointsAndMessages = FMR.GetPointsAndMessages(objviewmodel.GroupId);
+                objviewmodel.lstsalesRepresentive = FMR.GetSalesRepresentiveList(objviewmodel.GroupId);
+                objviewmodel.lstoutletlist = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Report");
+            }
             return View(objviewmodel);
 
         }
         public ActionResult GetFilteredReport(string jsonData)
         {
             FeedbackGetFeedbackViewModel objviewmodel = new FeedbackGetFeedbackViewModel();
-            List<Feedback_Report> lstreport = new List<Feedback_Report>();
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
-            {
-                DateTime fromDate = Convert.ToDateTime(item["fromDate"]);
-                DateTime toDate = Convert.ToDateTime(item["toDate"]);
-                string Groupid = Convert.ToString(item["groupId"]);
-                string salesR = Convert.ToString(item["selectedsalesR"]);
-                string outletId = Convert.ToString(item["selectedoutlet"]);
+            
+                List<Feedback_Report> lstreport = new List<Feedback_Report>();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    DateTime fromDate = Convert.ToDateTime(item["fromDate"]);
+                    DateTime toDate = Convert.ToDateTime(item["toDate"]);
+                    string Groupid = Convert.ToString(item["groupId"]);
+                    string salesR = Convert.ToString(item["selectedsalesR"]);
+                    string outletId = Convert.ToString(item["selectedoutlet"]);
 
-                lstreport = FMR.GetReportData(Groupid, fromDate, toDate, salesR, outletId);
-            }
-
-            return PartialView("_ReportListing", lstreport);
+                    lstreport = FMR.GetReportData(Groupid, fromDate, toDate, salesR, outletId);
+                }
+                return PartialView("_ReportListing", lstreport);
         }
         public ActionResult GetIsCustomerExist(string mobileNo, string GroupId)
         {
@@ -493,7 +543,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "Get feedbackcust");
+                newexception.AddException(ex, "GetIsCustomerExist");
             }
             return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
@@ -508,7 +558,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "submit rating");
+                newexception.AddException(ex, "SubmitPoints");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
@@ -523,7 +573,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "submit points");
+                newexception.AddException(ex, "SubmitotherinfowithPoints");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
@@ -578,7 +628,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "ExportToExcelFeedbackReport");
                 return null;
             }
 
