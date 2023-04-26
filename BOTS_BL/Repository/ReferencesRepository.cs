@@ -21,6 +21,7 @@ namespace BOTS_BL.Repository
 {
     public class ReferencesRepository
     {
+        Exceptions newexception = new Exceptions();
         public bool InsertReferal(tblReference objdata)
         {
             bool status = false;
@@ -36,7 +37,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "InsertReferal");
             }
             return status;
         }
