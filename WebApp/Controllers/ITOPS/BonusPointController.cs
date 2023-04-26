@@ -42,7 +42,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "Index");
             }
             return View();
         }
@@ -50,6 +50,7 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult GetChangeNameData(string MobileNo, string CardNo)
         {
             var GroupId = (string)Session["GroupId"];
+
             MemberData objCustomerDetail = new MemberData();
             if (!string.IsNullOrEmpty(MobileNo))
             {
@@ -121,7 +122,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "LoadBonusData");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -146,7 +147,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "CancelTransaction");
             }
             return View();
         }
@@ -209,7 +210,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "DeleteTransaction");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
