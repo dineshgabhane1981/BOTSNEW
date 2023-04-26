@@ -19,19 +19,26 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetGroupDetails()
         {
             List<SelectListItem> lstGroups= new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var GroupDetails = context.GroupDetail.Where(x => x.ActiveStatus == "yes").ToList();
-
-                foreach (var item in GroupDetails)
+                using (var context = new CommonDBContext())
                 {
-                    lstGroups.Add(new SelectListItem
+                    var GroupDetails = context.GroupDetail.Where(x => x.ActiveStatus == "yes").ToList();
+
+                    foreach (var item in GroupDetails)
                     {
-                        Text = item.GroupName,
-                        Value = Convert.ToString(item.GroupId)
-                       
-                    });
+                        lstGroups.Add(new SelectListItem
+                        {
+                            Text = item.GroupName,
+                            Value = Convert.ToString(item.GroupId)
+
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
             }
             return lstGroups;
 
@@ -97,7 +104,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetOTPData");
             }
             return objMemberData;
         }
