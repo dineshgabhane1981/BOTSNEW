@@ -113,25 +113,40 @@ namespace BOTS_BL.Repository
         public List<Top5LostParticipants> GetTop5LostOppsParticipant(string type, string CustomerId, string CustomerType)
         {
             List<Top5LostParticipants> objTop5Participant = new List<Top5LostParticipants>();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                objTop5Participant = context.Database.SqlQuery<Top5LostParticipants>("sp_GetTop5LostParticipantsEmployee @pi_CustomerType, @pi_CustomerId, @pi_Type",
-                    new SqlParameter("@pi_CustomerType", type),
-                    new SqlParameter("@pi_CustomerId", CustomerId),
-                    new SqlParameter("@pi_Type", CustomerType)).ToList<Top5LostParticipants>();
+                using (var context = new ChitaleDBContext())
+                {
+                    objTop5Participant = context.Database.SqlQuery<Top5LostParticipants>("sp_GetTop5LostParticipantsEmployee @pi_CustomerType, @pi_CustomerId, @pi_Type",
+                        new SqlParameter("@pi_CustomerType", type),
+                        new SqlParameter("@pi_CustomerId", CustomerId),
+                        new SqlParameter("@pi_Type", CustomerType)).ToList<Top5LostParticipants>();
+                }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
+            }
+
 
             return objTop5Participant;
         }
         public List<Top5TgtVsAchPerformanceEmp> GetTop5TgtVsAchPerformanceEmp(string type, string CustomerId, string CustomerType)
         {
             List<Top5TgtVsAchPerformanceEmp> objTop5TgtVsAchPerformanceEmp = new List<Top5TgtVsAchPerformanceEmp>();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                objTop5TgtVsAchPerformanceEmp = context.Database.SqlQuery<Top5TgtVsAchPerformanceEmp>("sp_GetTgtVsAchEmployee @pi_CustomerType, @pi_CustomerId, @pi_Type",
-                    new SqlParameter("@pi_CustomerType", type),
-                    new SqlParameter("@pi_CustomerId", CustomerId),
-                    new SqlParameter("@pi_Type", CustomerType)).ToList<Top5TgtVsAchPerformanceEmp>();
+                using (var context = new ChitaleDBContext())
+                {
+                    objTop5TgtVsAchPerformanceEmp = context.Database.SqlQuery<Top5TgtVsAchPerformanceEmp>("sp_GetTgtVsAchEmployee @pi_CustomerType, @pi_CustomerId, @pi_Type",
+                        new SqlParameter("@pi_CustomerType", type),
+                        new SqlParameter("@pi_CustomerId", CustomerId),
+                        new SqlParameter("@pi_Type", CustomerType)).ToList<Top5TgtVsAchPerformanceEmp>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
 
             return objTop5TgtVsAchPerformanceEmp;
@@ -368,7 +383,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex);
             }
 
             return lstparticipantListsformgt;
