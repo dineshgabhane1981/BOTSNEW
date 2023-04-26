@@ -29,7 +29,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    //newexception.AddException(ex, "SaveNPCData");
+                    newexception.AddException(ex, "SaveNPCData");
                 }
             }
             return result;
@@ -55,7 +55,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "Hello");
+                newexception.AddException(ex, "CheckLogin");
             }
             return GroupId;
         }
@@ -79,7 +79,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, "Hello");
+                    newexception.AddException(ex, "GetOutlets");
                 }
             }
             return lstOutlets;
@@ -104,7 +104,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, "Hello");
+                    newexception.AddException(ex, "GetNPCEmployees");
                 }
             }
             return lstNPCEmployees;
@@ -132,33 +132,12 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, "Hello");
+                    newexception.AddException(ex, "GetNPCCategory");
                 }
             }
 
             return lstNPCCategory;
         }
-
-        //public List<SelectListItem> GetNPCSubCategory(string groupId, int CategoryId)
-        //{
-        //    List<SelectListItem> lstNPCCategory = new List<SelectListItem>();
-        //    List<SelectListItem> lstNPCSubCategory = new List<SelectListItem>();
-        //    string connectionString = CR.GetCustomerConnString(groupId);
-        //    using (var context = new BOTSDBContext(connectionString))
-        //    {
-        //        var NPCSubCategory = context.tblNPCSubCategories.Where(x => x.CategoryId == CategoryId ).ToList();
-
-        //        foreach (var item in NPCSubCategory)
-        //        {
-        //            lstNPCSubCategory.Add(new SelectListItem
-        //            {
-        //                Text = item.SubCategoryname,
-        //                Value = Convert.ToString(item.SubCategoryname)
-        //            });
-        //        }
-        //    }
-        //    return lstNPCSubCategory;
-        //}
 
         public List<SelectListItem> GetNPCSubCategory(string groupId,int cId)
         {
@@ -183,7 +162,7 @@ namespace BOTS_BL.Repository
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, "Hello");
+                    newexception.AddException(ex, "GetNPCSubCategory");
                 }
             }
 
@@ -195,10 +174,17 @@ namespace BOTS_BL.Repository
             string logoUrl = string.Empty;
 
             string connectionString = CR.GetCustomerConnString(groupId);
-            using (var context = new BOTSDBContext(connectionString))
+            try
             {
-                var objbrandDetail = context.BrandDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
-                logoUrl = objbrandDetail.BrandLogoUrl;
+                using (var context = new BOTSDBContext(connectionString))
+                {
+                    var objbrandDetail = context.BrandDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    logoUrl = objbrandDetail.BrandLogoUrl;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetLogo");
             }
             return logoUrl;
 
