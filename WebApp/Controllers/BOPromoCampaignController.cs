@@ -1,4 +1,5 @@
-﻿using BOTS_BL.Models;
+﻿using BOTS_BL;
+using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace WebApp.Controllers
     public class BOPromoCampaignController : Controller
     {
         PromoCampaignRepository PCR = new PromoCampaignRepository();
-
+        Exceptions newexception = new Exceptions();
         // GET: BOPromoCampaign
         public ActionResult Index()
         {
@@ -22,8 +23,14 @@ namespace WebApp.Controllers
         public ActionResult GroupList(string groupId)
         {
             PromoCampaignViewModel objData = new PromoCampaignViewModel();
-            objData.lstGroupList = PCR.GetGroupDetails();
-
+            try
+            {
+                objData.lstGroupList = PCR.GetGroupDetails();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GroupList");
+            }
             return View(objData);
         }
 
