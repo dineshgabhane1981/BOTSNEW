@@ -21,27 +21,42 @@ namespace WebApp.Controllers.ITOPS
         Exceptions newexception = new Exceptions();
         // GET: NameAndMobile
         public ActionResult Index(string groupId)
-        {
-            if (!string.IsNullOrEmpty(groupId))
+        { 
+        try
             {
-                CommonFunctions common = new CommonFunctions();
-                groupId = common.DecryptString(groupId);
-                Session["GroupId"] = groupId;
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                userDetails.GroupId = groupId;
-                userDetails.connectionString = objCustRepo.GetCustomerConnString(groupId);
-                userDetails.CustomerName = objCustRepo.GetCustomerName(groupId);
-                Session["UserSession"] = userDetails;
-                Session["buttons"] = "ITOPS";
-                ViewBag.GroupId = groupId;
-            }            
+                if (!string.IsNullOrEmpty(groupId))
+                {
+                    CommonFunctions common = new CommonFunctions();
+                    groupId = common.DecryptString(groupId);
+                    Session["GroupId"] = groupId;
+                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    userDetails.GroupId = groupId;
+                    userDetails.connectionString = objCustRepo.GetCustomerConnString(groupId);
+                    userDetails.CustomerName = objCustRepo.GetCustomerName(groupId);
+                    Session["UserSession"] = userDetails;
+                    Session["buttons"] = "ITOPS";
+                    ViewBag.GroupId = groupId;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Index");
+            }
             return View();
         }
 
         public ActionResult ChangeMobile()
         {
             var groupId = (string)Session["GroupId"];
-            ViewBag.GroupId = groupId;
+            try
+            {
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ChangeMobile");
+            }
             return View();
         }
 
@@ -112,7 +127,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "ChangeMemberName");
             }
             return result;
         }
@@ -169,7 +184,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "ChangeMemberMobile");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
