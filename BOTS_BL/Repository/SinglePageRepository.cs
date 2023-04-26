@@ -120,7 +120,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                // newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetSinglePageSummaryTable");
             }
 
             return lstsummarytable;
@@ -135,119 +135,126 @@ namespace BOTS_BL.Repository
             List<Tbl_SinglePageLowReferral> objlowreferral = new List<Tbl_SinglePageLowReferral>();
             List<Tbl_SinglePageHigherOnlyonceAndInactive> objhigheronlyonce = new List<Tbl_SinglePageHigherOnlyonceAndInactive>();
             DataSet dsm = new DataSet();
-            using (var context = new CommonDBContext())
+            try
             {
-                DateTime dt = DateTime.Now.Date;
-                if (Id == "1")
+                using (var context = new CommonDBContext())
                 {
-                    objlowerredemption = context.Tbl_SinglePageLowerRedemptionRate.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
-                    dsm = CreateDataTable(objlowerredemption, Id);
-                    //.Where(x => x.Date == dt)
-                }
-                else if (Id == "3")
-                {
-                    objlowprofile = context.Tbl_SinglePageLowProfileUpdates.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
-                    dsm = CreateDataTable(objlowprofile, Id);
-
-                }
-                else if (Id == "2")
-                {
-                    objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.Where(x => x.Date == dt && x.CustomerVintage == "Higher Only Once").OrderByDescending(i => i.Value).ToList();
-                    dsm = CreateDataTable(objhigheronlyonce, Id);
-
-                }
-                else if (Id == "6")
-                {
-                    objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.Where(x => x.Date == dt && x.CustomerVintage == "Higher InActive Rate").OrderByDescending(i => i.Value).ToList();
-                    dsm = CreateDataTable(objhigheronlyonce, Id);
-
-                }
-                else if (Id == "4")
-                {
-                    objlowreferral = context.Tbl_SinglePageLowReferral.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
-                    dsm = CreateDataTable(objlowreferral, Id);
-
-                }
-                else if (Id == "5")
-                {
-                    objlowreferralconversion = context.Tbl_SinglePageLowReferralConversions.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
-                    dsm = CreateDataTable(objlowreferralconversion, Id);
-                }
-
-
-                DataSet ds = new DataSet();
-                int fivecount = dsm.Tables[0].Rows.Count;
-                int tencount = dsm.Tables[1].Rows.Count;//dtlessten.Rows.Count;
-                int fifteencount = dsm.Tables[2].Rows.Count;//dtlessfifteen.Rows.Count;
-                int thirtycount = dsm.Tables[3].Rows.Count;//dtlessthirty.Rows.Count;
-                int fortycount = dsm.Tables[4].Rows.Count;//dtlessforty.Rows.Count;
-
-                int[] arr = new int[] { fivecount, tencount, fifteencount, thirtycount, fortycount };
-                Array.Sort<int>(arr, new Comparison<int>(
-                  (i1, i2) => i2.CompareTo(i1)));
-
-                int count = arr[0];
-                DataTable Maindt = new DataTable();
-                Maindt.Columns.Add("GroupNamelessthan5");
-                Maindt.Columns.Add("Valuethanlessthan5", typeof(double));
-                Maindt.Columns.Add("GroupNamelessthan10");
-                Maindt.Columns.Add("Valuelessthan10", typeof(double));
-                Maindt.Columns.Add("GroupNamelessthan15");
-                Maindt.Columns.Add("Valuelessthan15", typeof(double));
-                Maindt.Columns.Add("GroupNamelessthan30");
-                Maindt.Columns.Add("Valuelessthan30", typeof(double));
-                Maindt.Columns.Add("GroupNamelessthan40");
-                Maindt.Columns.Add("Valuelessthan40", typeof(double));
-                for (int a = 0; a < count; a++)
-                {
-                    DataRow dr = Maindt.NewRow();
-                    if (dsm.Tables[0].Rows.Count >= a + 1)
+                    DateTime dt = DateTime.Now.Date;
+                    if (Id == "1")
                     {
-                        dr["GroupNamelessthan5"] = Convert.ToString(dsm.Tables[0].Rows[a]["GroupName5"]);
-                        dr["Valuethanlessthan5"] = Convert.ToString(dsm.Tables[0].Rows[a]["value5"]);
+                        objlowerredemption = context.Tbl_SinglePageLowerRedemptionRate.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
+                        dsm = CreateDataTable(objlowerredemption, Id);
+                        //.Where(x => x.Date == dt)
                     }
-                    if (dsm.Tables[1].Rows.Count >= a + 1)
+                    else if (Id == "3")
                     {
-                        dr["GroupNamelessthan10"] = Convert.ToString(dsm.Tables[1].Rows[a]["GroupName10"]);
-                        dr["Valuelessthan10"] = Convert.ToString(dsm.Tables[1].Rows[a]["value10"]);
+                        objlowprofile = context.Tbl_SinglePageLowProfileUpdates.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
+                        dsm = CreateDataTable(objlowprofile, Id);
+
                     }
-                    if (dsm.Tables[2].Rows.Count >= a + 1)
+                    else if (Id == "2")
                     {
-                        dr["GroupNamelessthan15"] = Convert.ToString(dsm.Tables[2].Rows[a]["GroupName15"]);
-                        dr["Valuelessthan15"] = Convert.ToString(dsm.Tables[2].Rows[a]["value15"]);
+                        objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.Where(x => x.Date == dt && x.CustomerVintage == "Higher Only Once").OrderByDescending(i => i.Value).ToList();
+                        dsm = CreateDataTable(objhigheronlyonce, Id);
+
                     }
-                    if (dsm.Tables[3].Rows.Count >= a + 1)
+                    else if (Id == "6")
                     {
-                        dr["GroupNamelessthan30"] = Convert.ToString(dsm.Tables[3].Rows[a]["GroupName30"]);
-                        dr["Valuelessthan30"] = Convert.ToString(dsm.Tables[3].Rows[a]["value30"]);
+                        objhigheronlyonce = context.Tbl_SinglePageHigherOnlyonceAndInactive.Where(x => x.Date == dt && x.CustomerVintage == "Higher InActive Rate").OrderByDescending(i => i.Value).ToList();
+                        dsm = CreateDataTable(objhigheronlyonce, Id);
+
                     }
-                    if (dsm.Tables[4].Rows.Count >= a + 1)
+                    else if (Id == "4")
                     {
-                        dr["GroupNamelessthan40"] = Convert.ToString(dsm.Tables[4].Rows[a]["GroupName40"]);
-                        dr["Valuelessthan40"] = Convert.ToString(dsm.Tables[4].Rows[a]["value40"]);
+                        objlowreferral = context.Tbl_SinglePageLowReferral.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
+                        dsm = CreateDataTable(objlowreferral, Id);
+
+                    }
+                    else if (Id == "5")
+                    {
+                        objlowreferralconversion = context.Tbl_SinglePageLowReferralConversions.Where(x => x.Date == dt).OrderByDescending(i => i.Value).ToList();
+                        dsm = CreateDataTable(objlowreferralconversion, Id);
                     }
 
 
-                    Maindt.Rows.Add(dr);
+                    DataSet ds = new DataSet();
+                    int fivecount = dsm.Tables[0].Rows.Count;
+                    int tencount = dsm.Tables[1].Rows.Count;//dtlessten.Rows.Count;
+                    int fifteencount = dsm.Tables[2].Rows.Count;//dtlessfifteen.Rows.Count;
+                    int thirtycount = dsm.Tables[3].Rows.Count;//dtlessthirty.Rows.Count;
+                    int fortycount = dsm.Tables[4].Rows.Count;//dtlessforty.Rows.Count;
+
+                    int[] arr = new int[] { fivecount, tencount, fifteencount, thirtycount, fortycount };
+                    Array.Sort<int>(arr, new Comparison<int>(
+                      (i1, i2) => i2.CompareTo(i1)));
+
+                    int count = arr[0];
+                    DataTable Maindt = new DataTable();
+                    Maindt.Columns.Add("GroupNamelessthan5");
+                    Maindt.Columns.Add("Valuethanlessthan5", typeof(double));
+                    Maindt.Columns.Add("GroupNamelessthan10");
+                    Maindt.Columns.Add("Valuelessthan10", typeof(double));
+                    Maindt.Columns.Add("GroupNamelessthan15");
+                    Maindt.Columns.Add("Valuelessthan15", typeof(double));
+                    Maindt.Columns.Add("GroupNamelessthan30");
+                    Maindt.Columns.Add("Valuelessthan30", typeof(double));
+                    Maindt.Columns.Add("GroupNamelessthan40");
+                    Maindt.Columns.Add("Valuelessthan40", typeof(double));
+                    for (int a = 0; a < count; a++)
+                    {
+                        DataRow dr = Maindt.NewRow();
+                        if (dsm.Tables[0].Rows.Count >= a + 1)
+                        {
+                            dr["GroupNamelessthan5"] = Convert.ToString(dsm.Tables[0].Rows[a]["GroupName5"]);
+                            dr["Valuethanlessthan5"] = Convert.ToString(dsm.Tables[0].Rows[a]["value5"]);
+                        }
+                        if (dsm.Tables[1].Rows.Count >= a + 1)
+                        {
+                            dr["GroupNamelessthan10"] = Convert.ToString(dsm.Tables[1].Rows[a]["GroupName10"]);
+                            dr["Valuelessthan10"] = Convert.ToString(dsm.Tables[1].Rows[a]["value10"]);
+                        }
+                        if (dsm.Tables[2].Rows.Count >= a + 1)
+                        {
+                            dr["GroupNamelessthan15"] = Convert.ToString(dsm.Tables[2].Rows[a]["GroupName15"]);
+                            dr["Valuelessthan15"] = Convert.ToString(dsm.Tables[2].Rows[a]["value15"]);
+                        }
+                        if (dsm.Tables[3].Rows.Count >= a + 1)
+                        {
+                            dr["GroupNamelessthan30"] = Convert.ToString(dsm.Tables[3].Rows[a]["GroupName30"]);
+                            dr["Valuelessthan30"] = Convert.ToString(dsm.Tables[3].Rows[a]["value30"]);
+                        }
+                        if (dsm.Tables[4].Rows.Count >= a + 1)
+                        {
+                            dr["GroupNamelessthan40"] = Convert.ToString(dsm.Tables[4].Rows[a]["GroupName40"]);
+                            dr["Valuelessthan40"] = Convert.ToString(dsm.Tables[4].Rows[a]["value40"]);
+                        }
+
+
+                        Maindt.Rows.Add(dr);
+
+                    }
+                    //
+                    //  List< SinglepageLowerMetrics > = Maindt.ToCollection<SinglepageLowerMetrics>();
+                    lstlowermetrics = Maindt.AsEnumerable()
+                                      .Select(x => new SinglepageLowerMetrics()
+                                      {
+                                          GroupNamelessthan5 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan5")),
+                                          Valuethanlessthan5 = x.Field<double?>("Valuethanlessthan5"),
+                                          GroupNamelessthan10 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan10")),
+                                          Valuelessthan10 = x.Field<double?>("Valuelessthan10"),
+                                          GroupNamelessthan15 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan15")),
+                                          Valuelessthan15 = x.Field<double?>("Valuelessthan15"),
+                                          GroupNamelessthan30 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan30")),
+                                          Valuelessthan30 = x.Field<double?>("Valuelessthan30"),
+                                          GroupNamelessthan40 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan40")),
+                                          Valuelessthan40 = x.Field<double?>("Valuelessthan40")
+                                      }).ToList();
 
                 }
-                //
-                //  List< SinglepageLowerMetrics > = Maindt.ToCollection<SinglepageLowerMetrics>();
-                lstlowermetrics = Maindt.AsEnumerable()
-                                  .Select(x => new SinglepageLowerMetrics()
-                                  {
-                                      GroupNamelessthan5 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan5")),
-                                      Valuethanlessthan5 = x.Field<double?>("Valuethanlessthan5"),
-                                      GroupNamelessthan10 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan10")),
-                                      Valuelessthan10 = x.Field<double?>("Valuelessthan10"),
-                                      GroupNamelessthan15 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan15")),
-                                      Valuelessthan15 = x.Field<double?>("Valuelessthan15"),
-                                      GroupNamelessthan30 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan30")),
-                                      Valuelessthan30 = x.Field<double?>("Valuelessthan30"),
-                                      GroupNamelessthan40 = WrapDbNullValue<string>(x.Field<string>("GroupNamelessthan40")),
-                                      Valuelessthan40 = x.Field<double?>("Valuelessthan40")
-                                  }).ToList();
-
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetLowerMetrics");
             }
 
 
@@ -517,7 +524,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "GetCommunicationWhatsAppExpiryData");
             }
             return lstSmsbalance;
         }
@@ -729,7 +736,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetAllTransactionData");
             }
 
 
@@ -826,76 +833,96 @@ namespace BOTS_BL.Repository
         public List<DiscussionDataForGraph> GetDiscussionData()
         {
             List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
-                foreach (var group in groups)
+                using (var context = new CommonDBContext())
                 {
-                    DiscussionDataForGraph objItem = new DiscussionDataForGraph();
-                    objItem.groupid = group.GroupId;
-                    objItem.CustomerType = group.CustomerType;
-                    objItem.GroupName = group.GroupName;
-                    string grpId = Convert.ToString(group.GroupId);
-                    var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId && (y.CallType == 2 || y.CallType == 3 || y.CallType == 16 || y.CallType == 17)).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
-                    if (discussedDate.HasValue)
+                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
+                    foreach (var group in groups)
                     {
-                        var days = (DateTime.Today - discussedDate.Value).Days;
-                        if (days > 6)
+                        DiscussionDataForGraph objItem = new DiscussionDataForGraph();
+                        objItem.groupid = group.GroupId;
+                        objItem.CustomerType = group.CustomerType;
+                        objItem.GroupName = group.GroupName;
+                        string grpId = Convert.ToString(group.GroupId);
+                        var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId && (y.CallType == 2 || y.CallType == 3 || y.CallType == 16 || y.CallType == 17)).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
+                        if (discussedDate.HasValue)
                         {
-                            objItem.days = days;
-                            lstData.Add(objItem);
-                            objItem.RMAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
-                            objItem.RMLoginId = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.LoginId).FirstOrDefault();
+                            var days = (DateTime.Today - discussedDate.Value).Days;
+                            if (days > 6)
+                            {
+                                objItem.days = days;
+                                lstData.Add(objItem);
+                                objItem.RMAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
+                                objItem.RMLoginId = context.tblRMAssigneds.Where(x => x.RMAssignedId == group.RMAssigned).Select(y => y.LoginId).FirstOrDefault();
+                            }
                         }
-                    }
 
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDiscussionData");
+            }
+
             return lstData;
         }
         public List<DiscussionDataForGraph> GetDiscussionDataForGraph(string type, string CSMember)
         {
             List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
-
-            using (var context = new CommonDBContext())
+            try
             {
-                var result = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
-                              new SqlParameter("@type", type),
-                              new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
+                using (var context = new CommonDBContext())
+                {
+                    var result = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
+                                  new SqlParameter("@type", type),
+                                  new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
 
-                var ACount = result.Where(x => x.CustomerType == "A").Count();
-                var BCount = result.Where(x => x.CustomerType == "B").Count();
-                var CCount = result.Where(x => x.CustomerType == "C").Count();
+                    var ACount = result.Where(x => x.CustomerType == "A").Count();
+                    var BCount = result.Where(x => x.CustomerType == "B").Count();
+                    var CCount = result.Where(x => x.CustomerType == "C").Count();
 
-                DiscussionDataForGraph objdataA = new DiscussionDataForGraph();
-                objdataA.CustomerType = "A";
-                objdataA.count = ACount;
-                lstData.Add(objdataA);
+                    DiscussionDataForGraph objdataA = new DiscussionDataForGraph();
+                    objdataA.CustomerType = "A";
+                    objdataA.count = ACount;
+                    lstData.Add(objdataA);
 
-                DiscussionDataForGraph objdataB = new DiscussionDataForGraph();
-                objdataB.CustomerType = "B";
-                objdataB.count = BCount;
-                lstData.Add(objdataB);
+                    DiscussionDataForGraph objdataB = new DiscussionDataForGraph();
+                    objdataB.CustomerType = "B";
+                    objdataB.count = BCount;
+                    lstData.Add(objdataB);
 
-                DiscussionDataForGraph objdataC = new DiscussionDataForGraph();
-                objdataC.CustomerType = "C";
-                objdataC.count = CCount;
-                lstData.Add(objdataC);
+                    DiscussionDataForGraph objdataC = new DiscussionDataForGraph();
+                    objdataC.CustomerType = "C";
+                    objdataC.count = CCount;
+                    lstData.Add(objdataC);
+                }
             }
 
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDiscussionDataForGraph");
+            }
             return lstData;
         }
 
         public List<DiscussionDataForGraph> GetCSData(string type, string CSMember)
         {
             List<DiscussionDataForGraph> lstData = new List<DiscussionDataForGraph>();
-
-            using (var context = new CommonDBContext())
+            try
             {
-                lstData = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
-                              new SqlParameter("@type", type),
-                              new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
+                using (var context = new CommonDBContext())
+                {
+                    lstData = context.Database.SqlQuery<DiscussionDataForGraph>("sp_GetUntouchedDiscussionDataForGraph @type, @CSMember",
+                                  new SqlParameter("@type", type),
+                                  new SqlParameter("@CSMember", CSMember)).ToList<DiscussionDataForGraph>();
 
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCSData");
             }
             return lstData;
         }
@@ -903,13 +930,20 @@ namespace BOTS_BL.Repository
         public double GetDays(string groupId)
         {
             double days = 0;
-            using (var context = new CommonDBContext())
+            try
             {
-                var lastUpdatedDate = context.BOTS_TblDiscussion.Where(a => a.GroupId == groupId && (a.CallType == 2 || a.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(y => y.UpdatedDate).FirstOrDefault();
-                if (lastUpdatedDate.HasValue)
+                using (var context = new CommonDBContext())
                 {
-                    days = (DateTime.Today - lastUpdatedDate.Value).Days;
+                    var lastUpdatedDate = context.BOTS_TblDiscussion.Where(a => a.GroupId == groupId && (a.CallType == 2 || a.CallType == 3)).OrderByDescending(x => x.UpdatedDate).Select(y => y.UpdatedDate).FirstOrDefault();
+                    if (lastUpdatedDate.HasValue)
+                    {
+                        days = (DateTime.Today - lastUpdatedDate.Value).Days;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDays");
             }
 
             return days;
@@ -918,35 +952,41 @@ namespace BOTS_BL.Repository
         public List<NoCustomerConnect> GetNoCustomerConnect(string CSWise)
         {
             List<NoCustomerConnect> lstData = new List<NoCustomerConnect>();
-
-            using (var context = new CommonDBContext())
+            try
             {
-                var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
-                if (!string.IsNullOrEmpty(CSWise))
+                using (var context = new CommonDBContext())
                 {
-                    var csId = context.tblRMAssigneds.Where(x => x.LoginId == CSWise).Select(y => y.RMAssignedId).FirstOrDefault();
-                    groups = groups.Where(x => x.RMAssigned.Value == csId).ToList();
-                }
-                foreach (var group in groups)
-                {
-                    string grpId = Convert.ToString(group.GroupId);
-                    var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
-                    if (discussedDate.HasValue)
+                    var groups = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).ToList();
+                    if (!string.IsNullOrEmpty(CSWise))
                     {
-                        var days = (DateTime.Today - discussedDate.Value).Days;
-                        if (days > 30)
+                        var csId = context.tblRMAssigneds.Where(x => x.LoginId == CSWise).Select(y => y.RMAssignedId).FirstOrDefault();
+                        groups = groups.Where(x => x.RMAssigned.Value == csId).ToList();
+                    }
+                    foreach (var group in groups)
+                    {
+                        string grpId = Convert.ToString(group.GroupId);
+                        var discussedDate = context.BOTS_TblDiscussion.Where(y => y.GroupId == grpId).OrderByDescending(x => x.UpdatedDate).Select(z => z.UpdatedDate).FirstOrDefault();
+                        if (discussedDate.HasValue)
                         {
-                            NoCustomerConnect objItem = new NoCustomerConnect();
-                            objItem.Groupid = group.GroupId;
-                            objItem.GroupName = group.GroupName;
-                            objItem.CustomerType = group.CustomerType;
-                            objItem.LastConnectDate = discussedDate.Value;
+                            var days = (DateTime.Today - discussedDate.Value).Days;
+                            if (days > 30)
+                            {
+                                NoCustomerConnect objItem = new NoCustomerConnect();
+                                objItem.Groupid = group.GroupId;
+                                objItem.GroupName = group.GroupName;
+                                objItem.CustomerType = group.CustomerType;
+                                objItem.LastConnectDate = discussedDate.Value;
 
-                            lstData.Add(objItem);
+                                lstData.Add(objItem);
+                            }
                         }
                     }
-                }
 
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetNoCustomerConnect");
             }
             return lstData;
         }
@@ -954,16 +994,23 @@ namespace BOTS_BL.Repository
         public List<MostConnectedCustomers> GetMostConnectedCustomers(string CSWise)
         {
             List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
-            using (var context = new CommonDBContext())
+            try
             {
-                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetMostConnectedCustomers @pi_Date, @addedBy", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-30)), new SqlParameter("@addedBy", CSWise)).ToList<MostConnectedCustomers>();
-                foreach (var item in lstData)
+                using (var context = new CommonDBContext())
                 {
-                    int grpid = Convert.ToInt32(item.GroupId);
-                    item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
-                    item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
+                    lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetMostConnectedCustomers @pi_Date, @addedBy", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-30)), new SqlParameter("@addedBy", CSWise)).ToList<MostConnectedCustomers>();
+                    foreach (var item in lstData)
+                    {
+                        int grpid = Convert.ToInt32(item.GroupId);
+                        item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
+                        item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
 
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMostConnectedCustomers");
             }
 
             return lstData;
@@ -971,16 +1018,23 @@ namespace BOTS_BL.Repository
         public List<MostConnectedCustomers> GetLeastConnectedCustomers(string CSWise)
         {
             List<MostConnectedCustomers> lstData = new List<MostConnectedCustomers>();
-            using (var context = new CommonDBContext())
+            try
             {
-                lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetLeastConnectedCustomers @pi_Date,@addedBy", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-180)), new SqlParameter("@addedBy", CSWise)).ToList<MostConnectedCustomers>();
-                foreach (var item in lstData)
+                using (var context = new CommonDBContext())
                 {
-                    int grpid = Convert.ToInt32(item.GroupId);
-                    item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
-                    item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
+                    lstData = context.Database.SqlQuery<MostConnectedCustomers>("sp_GetLeastConnectedCustomers @pi_Date,@addedBy", new SqlParameter("@pi_Date", DateTime.Today.AddDays(-180)), new SqlParameter("@addedBy", CSWise)).ToList<MostConnectedCustomers>();
+                    foreach (var item in lstData)
+                    {
+                        int grpid = Convert.ToInt32(item.GroupId);
+                        item.GroupName = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.GroupName).FirstOrDefault();
+                        item.CustomerType = context.tblGroupDetails.Where(x => x.GroupId == grpid && x.IsActive == true && x.IsLive == true).Select(y => y.CustomerType).FirstOrDefault();
 
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetLeastConnectedCustomers");
             }
 
             return lstData;
@@ -1112,7 +1166,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, " GetRenewalByGroup");
             }
             return lstData;
         }
@@ -1140,9 +1194,16 @@ namespace BOTS_BL.Repository
         public List<NonTransacting> GetAllNonTransactingData()
         {
             List<NonTransacting> objData = new List<NonTransacting>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.NonTransacting.OrderByDescending(x=>x.LastTxnDate).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.NonTransacting.OrderByDescending(x => x.LastTxnDate).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllNonTransactingData");
             }
             return objData;
         }
@@ -1150,9 +1211,16 @@ namespace BOTS_BL.Repository
         public List<tblNonRedeemedGroup> GetAllNonRedeemedData()
         {
             List<tblNonRedeemedGroup> objData = new List<tblNonRedeemedGroup>();
-            using (var context = new CommonDBContext())
+            try
             {
-                objData = context.tblNonRedeemedGroups.OrderByDescending(x => x.LastTxnDate).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.tblNonRedeemedGroups.OrderByDescending(x => x.LastTxnDate).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllNonRedeemedData");
             }
             return objData;
         }
@@ -1160,19 +1228,26 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetGroupDetails()
         {
             List<SelectListItem> lstData = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-
-                var temp = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
-                foreach (var item in temp)
+                using (var context = new CommonDBContext())
                 {
-                    lstData.Add(new SelectListItem
-                    {
-                        Text = item.GroupName,
-                        Value = Convert.ToString(item.GroupId)
 
-                    });
+                    var temp = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                    foreach (var item in temp)
+                    {
+                        lstData.Add(new SelectListItem
+                        {
+                            Text = item.GroupName,
+                            Value = Convert.ToString(item.GroupId)
+
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
             }
 
             return lstData;
