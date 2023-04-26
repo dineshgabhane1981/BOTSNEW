@@ -54,7 +54,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetMemberSegmentResult");
             }            
             return new JsonResult() { Data = dataMemberSegment, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -76,7 +76,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetPointsSummaryResult");
             }
             return new JsonResult() { Data = dataPointsSummary, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -92,7 +92,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetBulkUploadResult");
             }
             return new JsonResult() { Data = objDashboardBulkUpload, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
