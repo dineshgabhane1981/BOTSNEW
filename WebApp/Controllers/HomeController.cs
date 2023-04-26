@@ -42,7 +42,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "Index");
             }
             return View(dataDashboard);
         }
@@ -74,7 +74,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetDashboardDataFiltered");
             }
             //lstMember = RR.GetMemberList(SearchText);
             return new JsonResult() { Data = dataDashboard, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -106,7 +106,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetMemberSegmentResult");
             }
             //lstMember = RR.GetMemberList(SearchText);
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -141,7 +141,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetSharedBizResult");
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -158,7 +158,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetMemberSegmentTxnResult");
             }
             return new JsonResult() { Data = dataMemberSegmentTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -188,7 +188,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetOutletEnrolmentResult");
             }
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -217,7 +217,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetPointsSummaryResult");
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -253,7 +253,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetMemberWebPageResult");
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -280,7 +280,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetBulkUploadResult");
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -311,7 +311,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetRedemptionResult");
             }
             return new JsonResult() { Data = dataList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -356,7 +356,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "SendOTP");
             }
             return status;
             //return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -397,7 +397,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "SendSMS");
             }
             return status;
         }
@@ -448,28 +448,35 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "GenerateReports");
             }
             return status;
         }
         public ActionResult GeneratePDF(string groupId)
         {
             DashboardSummaryViewModel objData = new DashboardSummaryViewModel();
-            objData.CustomerName = CR.GetCustomerName(groupId);
-            objData.CustomerLogoURL = CR.GetCustomerLogo(groupId);
-            objData.ReportMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + " - " + DateTime.Now.AddMonths(-1).Year.ToString();
-            objData.lstMemberBaseAndTransaction = CR.GetMemberBaseAndTransactions(groupId);
-            var connectionString = CR.GetCustomerConnString(groupId);
-            var dataDashboard = DR.GetDashboardData(groupId, connectionString, "", "", "");
-            TotalStats objStats = new TotalStats();
-            objStats.TotalBiz = dataDashboard.TotalBiz;
-            objStats.LoyaltyBiz = dataDashboard.LoyaltyBiz;
-            objStats.LoyaltyPercentage = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(dataDashboard.LoyaltyBiz * 100) / Convert.ToDouble(dataDashboard.TotalBiz)));
-            objData.objTotalStats = objStats;
+            try
+            {
+                objData.CustomerName = CR.GetCustomerName(groupId);
+                objData.CustomerLogoURL = CR.GetCustomerLogo(groupId);
+                objData.ReportMonth = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + " - " + DateTime.Now.AddMonths(-1).Year.ToString();
+                objData.lstMemberBaseAndTransaction = CR.GetMemberBaseAndTransactions(groupId);
+                var connectionString = CR.GetCustomerConnString(groupId);
+                var dataDashboard = DR.GetDashboardData(groupId, connectionString, "", "", "");
+                TotalStats objStats = new TotalStats();
+                objStats.TotalBiz = dataDashboard.TotalBiz;
+                objStats.LoyaltyBiz = dataDashboard.LoyaltyBiz;
+                objStats.LoyaltyPercentage = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(dataDashboard.LoyaltyBiz * 100) / Convert.ToDouble(dataDashboard.TotalBiz)));
+                objData.objTotalStats = objStats;
 
-            objData.objKeyMetricsTillDate = CR.GetKeyMetrics(groupId);
-            objData.lstKeyInfoForNextMonth = CR.GetKeyInfoForNextMonth(groupId);
-            objData.lstFestivals = CR.GetFestivalDates();
+                objData.objKeyMetricsTillDate = CR.GetKeyMetrics(groupId);
+                objData.lstKeyInfoForNextMonth = CR.GetKeyInfoForNextMonth(groupId);
+                objData.lstFestivals = CR.GetFestivalDates();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GeneratePDF");
+            }
 
             return View(objData);
         }
@@ -515,7 +522,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "SavePDF");
             }
         }
 
