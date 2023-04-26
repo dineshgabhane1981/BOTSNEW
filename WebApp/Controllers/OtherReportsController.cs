@@ -6,12 +6,14 @@ using System.Web;
 using System.Web.Mvc;
 using BOTS_BL.Models;
 using WebApp.ViewModel;
+using BOTS_BL;
 
 namespace WebApp.Controllers
 {
     public class OtherReportsController : Controller
     {
         OtherReportsRepository ORR = new OtherReportsRepository();
+        Exceptions newexception = new Exceptions();
         // GET: OtherReports
         public ActionResult Index()
         {
@@ -22,10 +24,17 @@ namespace WebApp.Controllers
         {
             OtherReportProductwiseViewModel objData = new OtherReportProductwiseViewModel();
             List<SellingProductValue> lstTop5SessingProductValue = new List<SellingProductValue>();
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
-            objData.lstTop5Value = ORR.GetTop5SellingProductValue(userDetails.GroupId, userDetails.connectionString);
-            objData.lstBottom5Value = ORR.GetBottom5SellingProductValue(userDetails.GroupId, userDetails.connectionString);
+                objData.lstTop5Value = ORR.GetTop5SellingProductValue(userDetails.GroupId, userDetails.connectionString);
+                objData.lstBottom5Value = ORR.GetBottom5SellingProductValue(userDetails.GroupId, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Productwise");
+            }
 
             return View(objData);
         }
@@ -36,8 +45,9 @@ namespace WebApp.Controllers
         }
         public ActionResult ReportsDownload()
         {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
-            var lstReportDownload = ORR.GetReportDownloadData(userDetails.GroupId);           
+            var userDetails = (CustomerLoginDetail)Session["UserSession"]; 
+            var lstReportDownload = ORR.GetReportDownloadData(userDetails.GroupId);
+                    
             return View(lstReportDownload);
         }
 
@@ -45,7 +55,14 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<tblFranchiseeEnquiry> objData = new List<tblFranchiseeEnquiry>();
-            objData = ORR.GetFranchiseeEnquiryList(userDetails.GroupId);
+            try
+            {
+                objData = ORR.GetFranchiseeEnquiryList(userDetails.GroupId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "FranchiseeEnquiryReport");
+            }
             return View(objData);
         }
     }
