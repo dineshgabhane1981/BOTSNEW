@@ -20,21 +20,29 @@ namespace BOTS_BL.Repository
         {
             DatabaseDetail DBDetails = new DatabaseDetail();
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
-            using (var context = new CommonDBContext())
+            try
             {
-                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == objLoginModel.LoginId && a.Password == objLoginModel.Password && a.UserStatus.Value == true).FirstOrDefault();
-
-                if (userDetail != null)
+                using (var context = new CommonDBContext())
                 {
-                    if (userDetail.GroupId != null)
+                    userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == objLoginModel.LoginId && a.Password == objLoginModel.Password && a.UserStatus.Value == true).FirstOrDefault();
+
+                    if (userDetail != null)
                     {
-                        DBDetails = context.DatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
-                        //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
+                        if (userDetail.GroupId != null)
+                        {
+                            DBDetails = context.DatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
+                            //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
 
-                        userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                            userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
 
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AuthenticateUser");
+
             }
             return userDetail;
 
@@ -44,9 +52,17 @@ namespace BOTS_BL.Repository
         {
             DatabaseDetail DBDetails = new DatabaseDetail();
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
-            using (var context = new CommonDBContext())
+            try
             {
-                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId && a.Password == Password).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId && a.Password == Password).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AuthenticateUserMobile");
+
             }
             return userDetail.GroupId;
 
@@ -56,9 +72,17 @@ namespace BOTS_BL.Repository
         {
             DatabaseDetail DBDetails = new DatabaseDetail();
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
-            using (var context = new CommonDBContext())
+            try
             {
-                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId && a.Password == Password).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId && a.Password == Password).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AuthenticateUserAPI");
+
             }
             return userDetail;
 
@@ -84,9 +108,17 @@ namespace BOTS_BL.Repository
         public CustomerLoginDetail CheckUserType(string LoginId)
         {
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
-            using (var context = new CommonDBContext())
+            try
             {
-                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CheckUserType");
+
             }
             return userDetail;
 
@@ -95,20 +127,28 @@ namespace BOTS_BL.Repository
         {
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
             DatabaseDetail DBDetails = new DatabaseDetail();
-            using (var context = new CommonDBContext())
+            try
             {
-                userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId).FirstOrDefault();
-                if (userDetail != null)
+                using (var context = new CommonDBContext())
                 {
-                    if (userDetail.GroupId != null)
+                    userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId).FirstOrDefault();
+                    if (userDetail != null)
                     {
-                        DBDetails = context.DatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
-                        //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
+                        if (userDetail.GroupId != null)
+                        {
+                            DBDetails = context.DatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
+                            //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
 
-                        userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                            userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
 
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetUserDetailsByLoginID");
+
             }
             return userDetail;
 
