@@ -42,7 +42,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "Index");
             }
             return View();
 
@@ -82,7 +82,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "Burn");
             }
             return View();
         }
@@ -169,7 +169,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "RedeemPointsData");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -270,7 +270,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddEarnData");
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
