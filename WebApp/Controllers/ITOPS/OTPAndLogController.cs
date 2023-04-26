@@ -25,7 +25,14 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult Index()
         {
             var groupId = (string)Session["GroupId"];
-            ViewBag.GroupId = groupId;
+            try
+            {
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Index");
+            }
             return View();
         }
 
@@ -47,7 +54,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "Log");
             }
 
             return View();
@@ -56,10 +63,17 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult GetOTPData(string MobileNo)
         {
             MemberData objCustomerDetail = new MemberData();
-            var GroupId = (string)Session["GroupId"];
-            if (!string.IsNullOrEmpty(MobileNo))
+            try
             {
-                objCustomerDetail = ITOPS.GetOTPData(GroupId, MobileNo);
+                var GroupId = (string)Session["GroupId"];
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetOTPData(GroupId, MobileNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOTPData");
             }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
@@ -68,8 +82,15 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult GetTxnLogData(string GroupId, string search)
         {
             List<LogDetailsRW> lstLogDetails = new List<LogDetailsRW>();
-            ITOpsRepository ITOPS = new ITOpsRepository();
-            lstLogDetails = ITOPS.GetLogDetails(search, GroupId);
+            ITOpsRepository ITOPS = new ITOpsRepository();           
+            try
+            {
+                lstLogDetails = ITOPS.GetLogDetails(search, GroupId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetTxnLogData");
+            }
             return Json(lstLogDetails, JsonRequestBehavior.AllowGet);
 
         }
