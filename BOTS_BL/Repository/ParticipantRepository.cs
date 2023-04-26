@@ -65,21 +65,28 @@ namespace BOTS_BL.Repository
         {
             RedemptionModel objData = new RedemptionModel();
             CustomerDetail objCustomerDetail = new CustomerDetail();
-            using (var context = new ChitaleDBContext())
+            try
             {
-                objCustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                if (objCustomerDetail != null)
+                using (var context = new ChitaleDBContext())
                 {
-                    objData.DepositData = objCustomerDetail.Deposit;
-                    objData.CreditData = objCustomerDetail.CashIncentive;
-                    objData.InfraData = objCustomerDetail.InfraStructure;
-                    objData.PromoData = objCustomerDetail.Promotion;
+                    objCustomerDetail = context.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
+                    if (objCustomerDetail != null)
+                    {
+                        objData.DepositData = objCustomerDetail.Deposit;
+                        objData.CreditData = objCustomerDetail.CashIncentive;
+                        objData.InfraData = objCustomerDetail.InfraStructure;
+                        objData.PromoData = objCustomerDetail.Promotion;
 
-                    objData.DepositDataStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objCustomerDetail.Deposit));
-                    objData.CreditDataStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objCustomerDetail.CashIncentive));
-                    objData.InfraDataStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objCustomerDetail.InfraStructure));
-                    objData.PromoDataStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objCustomerDetail.Promotion));
+                        objData.DepositDataStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objCustomerDetail.Deposit));
+                        objData.CreditDataStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objCustomerDetail.CashIncentive));
+                        objData.InfraDataStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objCustomerDetail.InfraStructure));
+                        objData.PromoDataStr = String.Format(new CultureInfo("en-IN", false), "{0:n}", Convert.ToDecimal(objCustomerDetail.Promotion));
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
             return objData;
         }
@@ -107,9 +114,16 @@ namespace BOTS_BL.Repository
         public string GetOTP(string MobileNo)
         {
             string OTP = string.Empty;
-            using (var context = new ChitaleDBContext())
+            try
             {
-                OTP = context.OTPMaintenances.Where(x => x.MobileNo == MobileNo).OrderByDescending(z => z.Datetime).Select(y => y.OTP).FirstOrDefault();
+                using (var context = new ChitaleDBContext())
+                {
+                    OTP = context.OTPMaintenances.Where(x => x.MobileNo == MobileNo).OrderByDescending(z => z.Datetime).Select(y => y.OTP).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex);
             }
             return OTP;
         }
