@@ -41,7 +41,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "Index");
             }
             return View();
         }
@@ -49,13 +49,20 @@ namespace WebApp.Controllers
         public ActionResult GetChangeNameData(string GroupId, string MobileNo, string CardNo)
         {
             MemberData objCustomerDetail = new MemberData();
-            if (!string.IsNullOrEmpty(MobileNo))
+            try
             {
-                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                }
             }
-            if (!string.IsNullOrEmpty(CardNo))
+            catch (Exception ex)
             {
-                objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                newexception.AddException(ex, "GetChangeNameData");
             }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
@@ -108,7 +115,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "ChangeMemberName");
             }
             return result;
         }
@@ -161,7 +168,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "ChangeMemberMobile");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -224,7 +231,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "AddEarnData");
             }
 
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -290,7 +297,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "RedeemPointsData");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -351,7 +358,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "LoadBonusData");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -414,7 +421,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "AddSingleMember");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -514,7 +521,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "AddBulkMemberData");
                 result.ResponseCode = "-1";
             }
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -540,7 +547,7 @@ namespace WebApp.Controllers
             catch (Exception ex)
             {
 
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetLoginIdByOutlets");
             }
 
             return Json(objreset, JsonRequestBehavior.AllowGet);
@@ -554,7 +561,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "UpdateSecurityKey");
             }
             return result;
         }
@@ -608,7 +615,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "ChangeSMSDetails");
             }
             return result;
         }
@@ -616,9 +623,16 @@ namespace WebApp.Controllers
         public ActionResult GetOTPData(string GroupId, string MobileNo)
         {
             MemberData objCustomerDetail = new MemberData();
-            if (!string.IsNullOrEmpty(MobileNo))
+            try
             {
-                objCustomerDetail = ITOPS.GetOTPData(GroupId, MobileNo);
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetOTPData(GroupId, MobileNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOTPData");
             }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
@@ -628,21 +642,28 @@ namespace WebApp.Controllers
         {
             MemberData objCustomerDetail = new MemberData();
             CancelTxnViewModel objData = new CancelTxnViewModel();
-            if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+            try
             {
-                
-                objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNoAndMobileNo(GroupId,MobileNo,InvoiceNo);
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
-            }            
-            else if(!string.IsNullOrEmpty(InvoiceNo))
-            {
-                objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNo(GroupId, InvoiceNo);
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
+                if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+                {
+
+                    objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNoAndMobileNo(GroupId, MobileNo, InvoiceNo);
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
+                }
+                else if (!string.IsNullOrEmpty(InvoiceNo))
+                {
+                    objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNo(GroupId, InvoiceNo);
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
+                }
+                else if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, MobileNo);
+                    objData.lstCancelTxnModel = ITOPS.GetTransactionByMobileNo(GroupId, MobileNo);
+                }
             }
-            else if (!string.IsNullOrEmpty(MobileNo))
+            catch (Exception ex)
             {
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, MobileNo);
-                objData.lstCancelTxnModel = ITOPS.GetTransactionByMobileNo(GroupId, MobileNo);
+                newexception.AddException(ex, "GetCancelTxnData");
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
@@ -684,7 +705,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "DeleteTransaction");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
