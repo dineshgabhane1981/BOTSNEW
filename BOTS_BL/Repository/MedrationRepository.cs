@@ -35,7 +35,7 @@ namespace BOTS_BL.Repository
                 catch (Exception ex)
                 {
                     status = false;
-                    newexception.AddException(ex, "Medration AddCustomerDetails");
+                    newexception.AddException(ex, "AddCustomerDetails");
                 }
             }
             return status;
