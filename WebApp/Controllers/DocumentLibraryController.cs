@@ -15,6 +15,7 @@ namespace WebApp.Controllers
     public class DocumentLibraryController : Controller
     {
         DocumentLibraryRepository DLR = new DocumentLibraryRepository();
+        Exceptions newexception = new Exceptions();
         // GET: DocumentLibrary
         public ActionResult Index()
         {
@@ -52,23 +53,31 @@ namespace WebApp.Controllers
         public JsonResult ListDocuments(string GroupId, string Dept,string Vendor)
         {
             List<tblDocumentsLibrary> Doclist = new List<tblDocumentsLibrary>();
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            Doclist = DLR.GetDocLibData(GroupId, Dept, Vendor);
-            //if (!string.IsNullOrEmpty(Dept))
-            //{
-            //    Doclist = DLR.GetDocLibData(GroupId, Dept);
-            //}
-            //else
-            //{
-            //    foreach (Dictionary<string, object> item in objData)
-            //    {
-            //        GroupId = Convert.ToString(item["GroupId"]);
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                Doclist = DLR.GetDocLibData(GroupId, Dept, Vendor);
+                //if (!string.IsNullOrEmpty(Dept))
+                //{
+                //    Doclist = DLR.GetDocLibData(GroupId, Dept);
+                //}
+                //else
+                //{
+                //    foreach (Dictionary<string, object> item in objData)
+                //    {
+                //        GroupId = Convert.ToString(item["GroupId"]);
 
-            //        Doclist = DLR.GetDocLibData(GroupId, Dept);
-            //    }
-            //}
+                //        Doclist = DLR.GetDocLibData(GroupId, Dept);
+                //    }
+                //}
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ListDocuments");
+            }
 
-                return new JsonResult() { Data = Doclist, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+            return new JsonResult() { Data = Doclist, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         [HttpPost]
@@ -79,18 +88,26 @@ namespace WebApp.Controllers
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                string SLno = Convert.ToString(item["SLno"]);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string SLno = Convert.ToString(item["SLno"]);
 
-                 Filename  = DLR.GetDownloadData(SLno);
+                    Filename = DLR.GetDownloadData(SLno);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDownloadDetails");
             }
             return new JsonResult() { Data = Filename, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     
         public JsonResult GetDocumentTypes(string Type)
-        {            
-            var objData = DLR.GetDolumentTypesByDept(Type);
+        {   
+              var objData = DLR.GetDolumentTypesByDept(Type);
+                                     
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     
