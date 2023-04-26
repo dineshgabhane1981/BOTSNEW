@@ -2109,7 +2109,7 @@ namespace BOTS_BL.Repository
                         lstMemberAssigned.Add(new SelectListItem
                         {
                             Text = item.Members,
-                            Value = Convert.ToString(item.Members)
+                            Value = Convert.ToString(item.LoginId)
                         });
                     }
                 }
