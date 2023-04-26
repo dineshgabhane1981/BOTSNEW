@@ -42,7 +42,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "Index");
             }
             return View();
         }
@@ -51,21 +51,28 @@ namespace WebApp.Controllers.ITOPS
             var groupId = (string)Session["GroupId"];
             MemberData objCustomerDetail = new MemberData();
             CancelTxnViewModel objData = new CancelTxnViewModel();
-            if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+            try
             {
+                if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+                {
 
-                objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNoAndMobileNo(groupId, MobileNo, InvoiceNo);
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(groupId, objData.objCancelTxnModel.MobileNo);
+                    objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNoAndMobileNo(groupId, MobileNo, InvoiceNo);
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(groupId, objData.objCancelTxnModel.MobileNo);
+                }
+                else if (!string.IsNullOrEmpty(InvoiceNo))
+                {
+                    objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNo(groupId, InvoiceNo);
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(groupId, objData.objCancelTxnModel.MobileNo);
+                }
+                else if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(groupId, MobileNo);
+                    objData.lstCancelTxnModel = ITOPS.GetTransactionByMobileNo(groupId, MobileNo);
+                }
             }
-            else if (!string.IsNullOrEmpty(InvoiceNo))
+            catch (Exception ex)
             {
-                objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNo(groupId, InvoiceNo);
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(groupId, objData.objCancelTxnModel.MobileNo);
-            }
-            else if (!string.IsNullOrEmpty(MobileNo))
-            {
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(groupId, MobileNo);
-                objData.lstCancelTxnModel = ITOPS.GetTransactionByMobileNo(groupId, MobileNo);
+                newexception.AddException(ex, "GetCancelTxnData");
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
@@ -75,7 +82,14 @@ namespace WebApp.Controllers.ITOPS
             //string GroupId = "";
             var groupId = (string)Session["GroupId"];
             CancelTxnViewModel objData = new CancelTxnViewModel();
-            objData.objCancelTxnModel = ITOPS.GetTransactionByTransactionId(groupId, TransactionId);
+            try
+            {
+                objData.objCancelTxnModel = ITOPS.GetTransactionByTransactionId(groupId, TransactionId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetModifyTxnData");
+            }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
 
@@ -117,7 +131,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "ModifyTransaction");
             }
             return result;
         }
@@ -159,7 +173,14 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult PointTransfer()
         {
             var groupId = (string)Session["GroupId"];
-            ViewBag.GroupId = groupId;
+            try
+            {
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "PointTransfer");
+            }
             return View();
         }
         public ActionResult TransferPoints(string jsonData)
@@ -214,7 +235,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "TransferPoints");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -222,13 +243,20 @@ namespace WebApp.Controllers.ITOPS
         {
             MemberData objCustomerDetail = new MemberData();
             var groupId = (string)Session["GroupId"];
-            if (!string.IsNullOrEmpty(MobileNo))
+            try
             {
-                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByCardNo(groupId, CardNo);
+                }
             }
-            if (!string.IsNullOrEmpty(CardNo))
+            catch (Exception ex)
             {
-                objCustomerDetail = ITOPS.GetChangeNameByCardNo(groupId, CardNo);
+                newexception.AddException(ex, "GetChangeNameData");
             }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
