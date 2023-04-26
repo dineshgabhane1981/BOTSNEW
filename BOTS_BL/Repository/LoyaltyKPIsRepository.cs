@@ -49,7 +49,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetobjLoyaltyKPIsData");
             }
 
             return objLoyaltyKPIs;
