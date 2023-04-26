@@ -109,33 +109,40 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
-            objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
-            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-
-            long? amt = 0;
-            long? apts = 0;
-            long? txnCount = 0;
-            foreach (var item in objCelebrationsMoreDetails)
+            try
             {
-                amt += item.TotalSpend;
-                apts += item.AvlPoints;
-                txnCount += item.TxnCount;
-            }
-            CelebrationsMoreDetails objTotal = new CelebrationsMoreDetails();
-            objTotal.EnrolledOutlet = "<b>Total</b>";
-            objTotal.MobileNo = "";
-            objTotal.TotalSpend = amt;
-            objTotal.AvlPoints = apts;
-            objTotal.TxnCount = txnCount;
-            objTotal.MemberName = "";
-            objCelebrationsMoreDetails.Add(objTotal);
+                objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
+                var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
 
-            if (!GroupDetails.IsMasked)
-            {
+                long? amt = 0;
+                long? apts = 0;
+                long? txnCount = 0;
                 foreach (var item in objCelebrationsMoreDetails)
                 {
-                    item.MaskedMobileNo = item.MobileNo;
+                    amt += item.TotalSpend;
+                    apts += item.AvlPoints;
+                    txnCount += item.TxnCount;
                 }
+                CelebrationsMoreDetails objTotal = new CelebrationsMoreDetails();
+                objTotal.EnrolledOutlet = "<b>Total</b>";
+                objTotal.MobileNo = "";
+                objTotal.TotalSpend = amt;
+                objTotal.AvlPoints = apts;
+                objTotal.TxnCount = txnCount;
+                objTotal.MemberName = "";
+                objCelebrationsMoreDetails.Add(objTotal);
+
+                if (!GroupDetails.IsMasked)
+                {
+                    foreach (var item in objCelebrationsMoreDetails)
+                    {
+                        item.MaskedMobileNo = item.MobileNo;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCelebrationsTxnResult");
             }
             return new JsonResult() { Data = objCelebrationsMoreDetails, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -143,6 +150,7 @@ namespace WebApp.Controllers
         public ActionResult CreateOwnSegment()
         {
             CreateOwnReportViewModel createownviewmodel = new CreateOwnReportViewModel();
+           
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             //var lstEnrolledList = RR.GetEnrolledList(userDetails.GroupId, userDetails.connectionString);
             //ViewBag.lstEnrolledList = lstEnrolledList;
@@ -175,39 +183,47 @@ namespace WebApp.Controllers
         }
         public JsonResult GetFilteredData(string jsonData)
         {
+            
             // var transcount = 0;
             CustomerIdListAndCount objcounts = new CustomerIdListAndCount();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<CustomerDetail> listCustD = new List<CustomerDetail>();
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                //string gender = Convert.ToString(item["Gender"]);
-                //string Age_min = Convert.ToString(item["Age-min"]);
-                //string Age_max = Convert.ToString(item["Age-max"]);
-                //string source = Convert.ToString(item["Source"]);
-                string Enroll_min = Convert.ToString(item["Enroll-min"]);
-                string Enroll_max = Convert.ToString(item["Enroll-max"]);
-                string Nontransacted_min = Convert.ToString(item["Nontransacted-min"]);
-                //string Nontransacted_max = Convert.ToString(item["Nontransacted-max"]);
-                DateTime fromdtforall = Convert.ToDateTime(item["fromdtall"]);
-                DateTime todtforall = Convert.ToDateTime(item["todtall"]);
-                int Spend_min = Convert.ToInt32(item["Spend-min"]);
-                int Spend_max = Convert.ToInt32(item["Spend-max"]);
-                int txncount_min = Convert.ToInt32(item["txncount-min"]);
-                int txncount_max = Convert.ToInt32(item["txncount-max"]);
-                int pointBaln_min = Convert.ToInt32(item["pointBaln-min"]);
-                int pointBaln_max = Convert.ToInt32(item["pointBaln-max"]);
-                string Redeem = Convert.ToString(item["Redeem"]);
-                //int TicketSize_min = Convert.ToInt32(item["TicketSize-min"]);
-                //int TicketSize_max = Convert.ToInt32(item["TicketSize-max"]);
-                string Brand = Convert.ToString(item["Brand"]);
-                object[] outletId = (object[])item["Outlet"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    //string gender = Convert.ToString(item["Gender"]);
+                    //string Age_min = Convert.ToString(item["Age-min"]);
+                    //string Age_max = Convert.ToString(item["Age-max"]);
+                    //string source = Convert.ToString(item["Source"]);
+                    string Enroll_min = Convert.ToString(item["Enroll-min"]);
+                    string Enroll_max = Convert.ToString(item["Enroll-max"]);
+                    string Nontransacted_min = Convert.ToString(item["Nontransacted-min"]);
+                    //string Nontransacted_max = Convert.ToString(item["Nontransacted-max"]);
+                    DateTime fromdtforall = Convert.ToDateTime(item["fromdtall"]);
+                    DateTime todtforall = Convert.ToDateTime(item["todtall"]);
+                    int Spend_min = Convert.ToInt32(item["Spend-min"]);
+                    int Spend_max = Convert.ToInt32(item["Spend-max"]);
+                    int txncount_min = Convert.ToInt32(item["txncount-min"]);
+                    int txncount_max = Convert.ToInt32(item["txncount-max"]);
+                    int pointBaln_min = Convert.ToInt32(item["pointBaln-min"]);
+                    int pointBaln_max = Convert.ToInt32(item["pointBaln-max"]);
+                    string Redeem = Convert.ToString(item["Redeem"]);
+                    //int TicketSize_min = Convert.ToInt32(item["TicketSize-min"]);
+                    //int TicketSize_max = Convert.ToInt32(item["TicketSize-max"]);
+                    string Brand = Convert.ToString(item["Brand"]);
+                    object[] outletId = (object[])item["Outlet"];
 
-                objcounts = RR.GetSliceAndDiceFilteredData(fromdtforall, todtforall, Enroll_max, Enroll_min, Nontransacted_min, Spend_min, Spend_max, txncount_min, txncount_max, pointBaln_min, pointBaln_max, Redeem, Brand, outletId, userDetails.GroupId, userDetails.connectionString);
-                Session["customerId"] = objcounts.lstcustomerDetails;
+                    objcounts = RR.GetSliceAndDiceFilteredData(fromdtforall, todtforall, Enroll_max, Enroll_min, Nontransacted_min, Spend_min, Spend_max, txncount_min, txncount_max, pointBaln_min, pointBaln_max, Redeem, Brand, outletId, userDetails.GroupId, userDetails.connectionString);
+                    Session["customerId"] = objcounts.lstcustomerDetails;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetFilteredData");
             }
             return new JsonResult() { Data = objcounts, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -265,27 +281,34 @@ namespace WebApp.Controllers
         {
 
             List<ReportFilterCount> filtercount = new List<ReportFilterCount>();
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            List<CustomerDetail> listCustD = new List<CustomerDetail>();
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                List<CustomerDetail> listCustD = new List<CustomerDetail>();
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
 
-                int Elementtype = Convert.ToInt32(item["Element_Type"]);
-                int Elementfilter = Convert.ToInt32(item["Element_Filter"]);
-                long Element1 = Convert.ToInt64(item["element1"]);
-                long Element2 = Convert.ToInt64(item["element2"]);
-                string BillSizeFilter = Convert.ToString(item["AvgBillFilter"]);
-                long BillSize_min = Convert.ToInt64(item["AvgBill-min"]);
-                long BillSize_max = Convert.ToInt64(item["AvgBill-max"]);
-                int periodsfilter = Convert.ToInt32(item["period_filter"]);
-                string periodFrm = Convert.ToString(item["period_From"]);
-                string periodTo = Convert.ToString(item["period_To"]);
-                string outletIds = Convert.ToString(item["OutletIds"]);
+                    int Elementtype = Convert.ToInt32(item["Element_Type"]);
+                    int Elementfilter = Convert.ToInt32(item["Element_Filter"]);
+                    long Element1 = Convert.ToInt64(item["element1"]);
+                    long Element2 = Convert.ToInt64(item["element2"]);
+                    string BillSizeFilter = Convert.ToString(item["AvgBillFilter"]);
+                    long BillSize_min = Convert.ToInt64(item["AvgBill-min"]);
+                    long BillSize_max = Convert.ToInt64(item["AvgBill-max"]);
+                    int periodsfilter = Convert.ToInt32(item["period_filter"]);
+                    string periodFrm = Convert.ToString(item["period_From"]);
+                    string periodTo = Convert.ToString(item["period_To"]);
+                    string outletIds = Convert.ToString(item["OutletIds"]);
 
-                filtercount = RR.GetFilterCountOfDrillDown(Elementtype, Elementfilter, Element1, Element2, BillSizeFilter, BillSize_min, BillSize_max, periodsfilter, periodFrm, periodTo, outletIds, userDetails.GroupId, userDetails.connectionString);
+                    filtercount = RR.GetFilterCountOfDrillDown(Elementtype, Elementfilter, Element1, Element2, BillSizeFilter, BillSize_min, BillSize_max, periodsfilter, periodFrm, periodTo, outletIds, userDetails.GroupId, userDetails.connectionString);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetFilteredCountforDrillDown");
             }
             return new JsonResult() { Data = filtercount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -294,8 +317,10 @@ namespace WebApp.Controllers
         public JsonResult GetPointsExpiryDataResult(int month, int year)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            PointExpiryTmp objPointExpiry = new PointExpiryTmp();
-            objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, month, year, userDetails.connectionString, userDetails.LoginId);
+            
+                PointExpiryTmp objPointExpiry = new PointExpiryTmp();
+                objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, month, year, userDetails.connectionString, userDetails.LoginId);
+            
             return new JsonResult() { Data = objPointExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -304,37 +329,44 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<PointExpiryTxn> objPointExpiryTxn = new List<PointExpiryTxn>();
-            objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, Convert.ToInt32(month), Convert.ToInt32(year), userDetails.connectionString, userDetails.LoginId);
-            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-            long amt = 0;
-            long epts = 0;
-            long apts = 0;
-            long txnCount = 0;
-            foreach (var item in objPointExpiryTxn)
+            try
             {
-                amt += item.TotalSpend;
-                epts += item.PointsExpiry;
-                apts += item.AvlPoints;
-                txnCount += item.TxnCount;
-            }
-
-            PointExpiryTxn objTotal = new PointExpiryTxn();
-            objTotal.EnrolledOutlet = "<b>Total</>";
-            objTotal.MobileNo = "";
-            objTotal.MemberName = "";
-            objTotal.TxnCount = txnCount;
-            objTotal.TotalSpend = amt;
-            objTotal.AvlPoints = apts;
-            objTotal.PointsExpiry = epts;
-
-            objPointExpiryTxn.Add(objTotal);
-
-            if (!GroupDetails.IsMasked)
-            {
+                objPointExpiryTxn = RR.GetPointExpiryTxnData(userDetails.GroupId, Convert.ToInt32(month), Convert.ToInt32(year), userDetails.connectionString, userDetails.LoginId);
+                var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                long amt = 0;
+                long epts = 0;
+                long apts = 0;
+                long txnCount = 0;
                 foreach (var item in objPointExpiryTxn)
                 {
-                    item.MaskedMobileNo = item.MobileNo;
+                    amt += item.TotalSpend;
+                    epts += item.PointsExpiry;
+                    apts += item.AvlPoints;
+                    txnCount += item.TxnCount;
                 }
+
+                PointExpiryTxn objTotal = new PointExpiryTxn();
+                objTotal.EnrolledOutlet = "<b>Total</>";
+                objTotal.MobileNo = "";
+                objTotal.MemberName = "";
+                objTotal.TxnCount = txnCount;
+                objTotal.TotalSpend = amt;
+                objTotal.AvlPoints = apts;
+                objTotal.PointsExpiry = epts;
+
+                objPointExpiryTxn.Add(objTotal);
+
+                if (!GroupDetails.IsMasked)
+                {
+                    foreach (var item in objPointExpiryTxn)
+                    {
+                        item.MaskedMobileNo = item.MobileNo;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetPointsExpiryTxnResult");
             }
             return new JsonResult() { Data = objPointExpiryTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -343,6 +375,7 @@ namespace WebApp.Controllers
         public JsonResult GetMemberDataResult(string SearchText)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
             if (SearchText.Equals("All"))
             {
                 SearchText = "";
@@ -510,40 +543,47 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();
-            lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString, userDetails.LoginId);
-            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-            decimal? amt = 0;
-            decimal? epts = 0;
-            decimal? bpts = 0;
-            foreach (var item in lstOutletWiseTransaction)
+            try
             {
-                amt += item.InvoiceAmt;
-                epts += item.PointsEarned;
-                bpts += item.PointsBurned;
-            }
-            OutletwiseTransaction totalObj = new OutletwiseTransaction();
-            totalObj.InvoiceAmt = amt;
-            totalObj.PointsEarned = epts;
-            totalObj.PointsBurned = bpts;
-            totalObj.OutletName = "<b>Total</b>";
-            totalObj.MobileNo = "-";
-            totalObj.MaskedMobileNo = "-";
-            totalObj.MemberName = "-";
-            totalObj.Type = "-";
-            totalObj.InvoiceNo = "-";
-            totalObj.TxnType = "-";
-            totalObj.TxnDatetime = "-";
-            totalObj.TxnUpdateDate = "-";
-
-
-            lstOutletWiseTransaction.Add(totalObj);
-
-            if (!GroupDetails.IsMasked)
-            {
+                lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString, userDetails.LoginId);
+                var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                decimal? amt = 0;
+                decimal? epts = 0;
+                decimal? bpts = 0;
                 foreach (var item in lstOutletWiseTransaction)
                 {
-                    item.MaskedMobileNo = item.MobileNo;
+                    amt += item.InvoiceAmt;
+                    epts += item.PointsEarned;
+                    bpts += item.PointsBurned;
                 }
+                OutletwiseTransaction totalObj = new OutletwiseTransaction();
+                totalObj.InvoiceAmt = amt;
+                totalObj.PointsEarned = epts;
+                totalObj.PointsBurned = bpts;
+                totalObj.OutletName = "<b>Total</b>";
+                totalObj.MobileNo = "-";
+                totalObj.MaskedMobileNo = "-";
+                totalObj.MemberName = "-";
+                totalObj.Type = "-";
+                totalObj.InvoiceNo = "-";
+                totalObj.TxnType = "-";
+                totalObj.TxnDatetime = "-";
+                totalObj.TxnUpdateDate = "-";
+
+
+                lstOutletWiseTransaction.Add(totalObj);
+
+                if (!GroupDetails.IsMasked)
+                {
+                    foreach (var item in lstOutletWiseTransaction)
+                    {
+                        item.MaskedMobileNo = item.MobileNo;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutletWiseTransactionResult");
             }
             return new JsonResult() { Data = lstOutletWiseTransaction, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -573,7 +613,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetMemberSearchResult");
             }
             return PartialView("_MemberSearch", objMemberSearch);
         }
@@ -699,7 +739,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "ExportToExcelTransactionwise");
                 return null;
             }
 
@@ -890,9 +930,9 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+                newexception.AddException(ex, "ExportToExcelOutletwise");
                 return null;
             }
-
 
         }
 
@@ -998,6 +1038,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+                newexception.AddException(ex, "ExportToExcelPointExpiry");
                 return null;
             }
 
@@ -1141,7 +1182,7 @@ namespace WebApp.Controllers
             catch (Exception ex)
             {
                 newexception.AddDummyException("1011");
-                newexception.AddException(ex, ReportName);
+                newexception.AddException(ex, "ExportToExcelCelebrations");
                 return null;
             }
 
@@ -1181,50 +1222,58 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<MemberList> lstMember = new List<MemberList>();
-            lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString, userDetails.LoginId);
-            int CountNumber = Convert.ToInt32(Count);
-            if (CountOrBusiness == "Count")
+            try
             {
-                lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(CountNumber).ToList();
-            }
-            if (CountOrBusiness == "Business")
-            {
-                lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(CountNumber).ToList();
-            }
-            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-            if (!GroupDetails.IsMasked)
-            {
+                lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString, userDetails.LoginId);
+                int CountNumber = Convert.ToInt32(Count);
+                if (CountOrBusiness == "Count")
+                {
+                    lstMember = lstMember.OrderByDescending(x => x.TxnCount).Take(CountNumber).ToList();
+                }
+                if (CountOrBusiness == "Business")
+                {
+                    lstMember = lstMember.OrderByDescending(x => x.TotalSpend).Take(CountNumber).ToList();
+                }
+                var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                if (!GroupDetails.IsMasked)
+                {
+                    foreach (var item in lstMember)
+                    {
+                        item.MaskedMobileNo = item.MobileNo;
+                    }
+                }
+
+                long? apts = 0;
+                long btxn = 0;
+                long txnCount = 0;
+                long bpts = 0;
+                long totalSpend = 0;
                 foreach (var item in lstMember)
                 {
-                    item.MaskedMobileNo = item.MobileNo;
+                    txnCount += item.TxnCount;
+                    totalSpend += item.TotalSpend;
+                    btxn += item.TotalBurnTxn;
+                    bpts += item.TotalBurnPoints;
+                    apts += item.AvlBalPoints;
                 }
+                MemberList objTotal = new MemberList();
+                objTotal.EnrooledOutlet = "<b>Total</b>";
+                objTotal.MobileNo = "";
+                objTotal.MemberName = "";
+                objTotal.TxnCount = txnCount;
+                objTotal.TotalSpend = totalSpend;
+                objTotal.TotalBurnTxn = btxn;
+                objTotal.TotalBurnPoints = bpts;
+                objTotal.AvlBalPoints = apts;
+                objTotal.MobileNo = "";
+                objTotal.MaskedMobileNo = "";
+                lstMember.Add(objTotal);
             }
-
-            long? apts = 0;
-            long btxn = 0;
-            long txnCount = 0;
-            long bpts = 0;
-            long totalSpend = 0;
-            foreach (var item in lstMember)
+            catch (Exception ex)
             {
-                txnCount += item.TxnCount;
-                totalSpend += item.TotalSpend;
-                btxn += item.TotalBurnTxn;
-                bpts += item.TotalBurnPoints;
-                apts += item.AvlBalPoints;
+                newexception.AddException(ex, "GetProfitableCustomersResult");
+                return null;
             }
-            MemberList objTotal = new MemberList();
-            objTotal.EnrooledOutlet = "<b>Total</b>";
-            objTotal.MobileNo = "";
-            objTotal.MemberName = "";
-            objTotal.TxnCount = txnCount;
-            objTotal.TotalSpend = totalSpend;
-            objTotal.TotalBurnTxn = btxn;
-            objTotal.TotalBurnPoints = bpts;
-            objTotal.AvlBalPoints = apts;
-            objTotal.MobileNo = "";
-            objTotal.MaskedMobileNo = "";
-            lstMember.Add(objTotal);
 
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -1351,7 +1400,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, ReportName);
+                newexception.AddException(ex, "ExportToProfitableCustomers");
                 return null;
             }
 
@@ -1421,7 +1470,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, ReportName);
+                newexception.AddException(ex, "ExportToExcelCreateOwnReport");
                 return null;
             }
         }
