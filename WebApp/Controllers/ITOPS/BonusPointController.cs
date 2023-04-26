@@ -50,17 +50,22 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult GetChangeNameData(string MobileNo, string CardNo)
         {
             var GroupId = (string)Session["GroupId"];
-
             MemberData objCustomerDetail = new MemberData();
-            if (!string.IsNullOrEmpty(MobileNo))
+            try
             {
-                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                }
             }
-            if (!string.IsNullOrEmpty(CardNo))
+            catch (Exception ex)
             {
-                objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                newexception.AddException(ex, "GetChangeNameData");
             }
-
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
 
@@ -156,22 +161,28 @@ namespace WebApp.Controllers.ITOPS
         {
             MemberData objCustomerDetail = new MemberData();
             CancelTxnViewModel objData = new CancelTxnViewModel();
-          
-            if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+            try
             {
+                if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+                {
 
-                objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNoAndMobileNo(GroupId, MobileNo, InvoiceNo);
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
+                    objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNoAndMobileNo(GroupId, MobileNo, InvoiceNo);
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
+                }
+                else if (!string.IsNullOrEmpty(InvoiceNo))
+                {
+                    objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNo(GroupId, InvoiceNo);
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
+                }
+                else if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, MobileNo);
+                    objData.lstCancelTxnModel = ITOPS.GetTransactionByMobileNo(GroupId, MobileNo);
+                }
             }
-            else if (!string.IsNullOrEmpty(InvoiceNo))
+            catch (Exception ex)
             {
-                objData.objCancelTxnModel = ITOPS.GetTransactionByInvoiceNo(GroupId, InvoiceNo);
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
-            }
-            else if (!string.IsNullOrEmpty(MobileNo))
-            {
-                objData.objCustomerDetail = ITOPS.GetCustomerByMobileNo(GroupId, MobileNo);
-                objData.lstCancelTxnModel = ITOPS.GetTransactionByMobileNo(GroupId, MobileNo);
+                newexception.AddException(ex, "GetCancelTxnData");
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }

@@ -53,15 +53,21 @@ namespace WebApp.Controllers.ITOPS
         {
             var GroupId = Convert.ToString(Session["GroupId"]);
             MemberData objCustomerDetail = new MemberData();
-            if (!string.IsNullOrEmpty(MobileNo))
+            try
             {
-                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                }
             }
-            if (!string.IsNullOrEmpty(CardNo))
+            catch (Exception ex)
             {
-                objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                newexception.AddException(ex, "GetData");
             }
-
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
 
@@ -90,15 +96,21 @@ namespace WebApp.Controllers.ITOPS
         {
             var GroupId = Convert.ToString(Session["GroupId"]);            
             MemberData objCustomerDetail = new MemberData();
-            if (!string.IsNullOrEmpty(MobileNo))
+            try
             {
-                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                }
             }
-            if (!string.IsNullOrEmpty(CardNo))
+            catch (Exception ex)
             {
-                objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                newexception.AddException(ex, "GetChangeNameData");
             }
-
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
