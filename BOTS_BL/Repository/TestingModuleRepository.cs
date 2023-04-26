@@ -29,9 +29,16 @@ namespace BOTS_BL.Repository
         public string GetLiveGroupId(string OBRGroupId)
         {
             string groupId = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                groupId = context.GroupIdMappings.Where(x => x.OnboardingGroupId == OBRGroupId).Select(y => y.LiveGroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    groupId = context.GroupIdMappings.Where(x => x.OnboardingGroupId == OBRGroupId).Select(y => y.LiveGroupId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetLiveGroupId");
             }
             return groupId;
         }
@@ -40,34 +47,47 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetBillingPartners(string GroupId)
         {
             List<SelectListItem> lstData = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var BPIds = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).Select(y => y.BillingPartner).ToList();
-
-                foreach (var item in BPIds)
+                using (var context = new CommonDBContext())
                 {
-                    var id = Convert.ToInt32(item);
-                    var BPName = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
-                    lstData.Add(new SelectListItem
+                    var BPIds = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).Select(y => y.BillingPartner).ToList();
+
+                    foreach (var item in BPIds)
                     {
-                        Text = BPName,
-                        Value = Convert.ToString(id)
-                    });
+                        var id = Convert.ToInt32(item);
+                        var BPName = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
+                        lstData.Add(new SelectListItem
+                        {
+                            Text = BPName,
+                            Value = Convert.ToString(id)
+                        });
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBillingPartners");
+            }
             return lstData;
         }
     
        public bool SaveAPIData(GroupTestingLog objgroupTesting)
         {
             bool result = false;
-            string connStr = CR.GetCustomerConnString(objgroupTesting.GroupId);
-            using (var context = new BOTSDBContext(connStr))
+            try
             {
-                context.GroupTestingLogs.AddOrUpdate(objgroupTesting);
-                context.SaveChanges();
-                result = true;
+                string connStr = CR.GetCustomerConnString(objgroupTesting.GroupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    context.GroupTestingLogs.AddOrUpdate(objgroupTesting);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveAPIData");
             }
             return result;
         }

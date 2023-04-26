@@ -233,17 +233,12 @@ namespace BOTS_BL.Repository
               bool status = false;
               string CounterId = OutletId + "01";
             List<JsonData> ObjJSON = new List<JsonData>();
-
-
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
                     ObjJSON = context.Database.SqlQuery<JsonData>(" sp_TeleCalEnroll @pi_CounterId, @pi_MobileNo,@pi_DOB,@pi_CustomerName,@pi_CardNo,@pi_Gender,@pi_Anniversary,@pi_Datetime,@pi_AddBy,@pi_Comment",
                     new SqlParameter("@pi_CounterId", CounterId), new SqlParameter("@pi_MobileNo", MobileNo), new SqlParameter("@pi_DOB", DOB), new SqlParameter("@pi_CustomerName", CustName), new SqlParameter("@pi_CardNo", CrdNo), new SqlParameter("@pi_Gender", Gender), new SqlParameter("@pi_Anniversary", DOA), new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")), new SqlParameter("@pi_AddBy", LoginId), new SqlParameter("@pi_Comment", Comment)).ToList<JsonData>();
-
-
-
                 }
             }
             catch(Exception ex)
