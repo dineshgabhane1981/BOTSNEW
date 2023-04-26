@@ -27,36 +27,50 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetRetailCategory()
         {
             List<SelectListItem> lstRetailCategory = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var RetailCategory = context.tblCategories.Where(x => x.IsActive == true).ToList();
-
-                foreach (var item in RetailCategory)
+                using (var context = new CommonDBContext())
                 {
-                    lstRetailCategory.Add(new SelectListItem
+                    var RetailCategory = context.tblCategories.Where(x => x.IsActive == true).ToList();
+
+                    foreach (var item in RetailCategory)
                     {
-                        Text = item.CategoryName,
-                        Value = Convert.ToString(item.CategoryId)
-                    });
+                        lstRetailCategory.Add(new SelectListItem
+                        {
+                            Text = item.CategoryName,
+                            Value = Convert.ToString(item.CategoryId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRetailCategory");
             }
             return lstRetailCategory;
         }
         public List<SelectListItem> GetCity()
         {
             List<SelectListItem> lstCity = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var RetailCategory = context.tblCities.Where(x => x.IsActive == true).OrderBy(x => x.CityName).ToList();
-
-                foreach (var item in RetailCategory)
+                using (var context = new CommonDBContext())
                 {
-                    lstCity.Add(new SelectListItem
+                    var RetailCategory = context.tblCities.Where(x => x.IsActive == true).OrderBy(x => x.CityName).ToList();
+
+                    foreach (var item in RetailCategory)
                     {
-                        Text = item.CityName,
-                        Value = Convert.ToString(item.CityId)
-                    });
+                        lstCity.Add(new SelectListItem
+                        {
+                            Text = item.CityName,
+                            Value = Convert.ToString(item.CityId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCity");
             }
             return lstCity;
         }
@@ -64,18 +78,25 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetStates()
         {
             List<SelectListItem> lstStates = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var RetailCategory = context.tblStates.ToList();
-
-                foreach (var item in RetailCategory)
+                using (var context = new CommonDBContext())
                 {
-                    lstStates.Add(new SelectListItem
+                    var RetailCategory = context.tblStates.ToList();
+
+                    foreach (var item in RetailCategory)
                     {
-                        Text = item.StateName,
-                        Value = Convert.ToString(item.StateId)
-                    });
+                        lstStates.Add(new SelectListItem
+                        {
+                            Text = item.StateName,
+                            Value = Convert.ToString(item.StateId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetStates");
             }
             return lstStates;
         }
@@ -83,72 +104,100 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetSourcedBy()
         {
             List<SelectListItem> lstSourcedBy = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var RetailCategory = context.tblSourcedBies.Where(x => x.IsActive == true).ToList();
-
-                foreach (var item in RetailCategory)
+                using (var context = new CommonDBContext())
                 {
-                    lstSourcedBy.Add(new SelectListItem
+                    var RetailCategory = context.tblSourcedBies.Where(x => x.IsActive == true).ToList();
+
+                    foreach (var item in RetailCategory)
                     {
-                        Text = item.SourcedbyName,
-                        Value = Convert.ToString(item.SourcedbyId)
-                    });
+                        lstSourcedBy.Add(new SelectListItem
+                        {
+                            Text = item.SourcedbyName,
+                            Value = Convert.ToString(item.SourcedbyId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetSourcedBy");
             }
             return lstSourcedBy;
         }
         public List<SelectListItem> GetRMAssigned()
         {
             List<SelectListItem> lstRMAssigned = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var RetailCategory = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
-
-                foreach (var item in RetailCategory)
+                using (var context = new CommonDBContext())
                 {
-                    lstRMAssigned.Add(new SelectListItem
+                    var RetailCategory = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
+
+                    foreach (var item in RetailCategory)
                     {
-                        Text = item.RMAssignedName,
-                        Value = Convert.ToString(item.LoginId)
-                    });
+                        lstRMAssigned.Add(new SelectListItem
+                        {
+                            Text = item.RMAssignedName,
+                            Value = Convert.ToString(item.LoginId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRMAssigned");
             }
             return lstRMAssigned;
         }
         public List<SelectListItem> GetBillingPartner()
         {
             List<SelectListItem> lstBillingPartner = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var RetailCategory = context.tblBillingPartners.Where(x => x.IsActive == true).ToList();
-
-                foreach (var item in RetailCategory)
+                using (var context = new CommonDBContext())
                 {
-                    lstBillingPartner.Add(new SelectListItem
+                    var RetailCategory = context.tblBillingPartners.Where(x => x.IsActive == true).ToList();
+
+                    foreach (var item in RetailCategory)
                     {
-                        Text = item.BillingPartnerName,
-                        Value = Convert.ToString(item.BillingPartnerId)
-                    });
+                        lstBillingPartner.Add(new SelectListItem
+                        {
+                            Text = item.BillingPartnerName,
+                            Value = Convert.ToString(item.BillingPartnerId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBillingPartner");
             }
             return lstBillingPartner;
         }
         public List<SelectListItem> GetBillingProduct(int BillingPartnerId)
         {
             List<SelectListItem> lstBillingProduct = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingPartnerId && x.IsActive == true).ToList();
-
-                foreach (var item in BillingProduct)
+                using (var context = new CommonDBContext())
                 {
-                    lstBillingProduct.Add(new SelectListItem
+                    var BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingPartnerId && x.IsActive == true).ToList();
+
+                    foreach (var item in BillingProduct)
                     {
-                        Text = item.BillingPartnerProductName,
-                        Value = Convert.ToString(item.BillingPartnerProductId)
-                    });
+                        lstBillingProduct.Add(new SelectListItem
+                        {
+                            Text = item.BillingPartnerProductName,
+                            Value = Convert.ToString(item.BillingPartnerProductId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBillingProduct");
             }
             return lstBillingProduct;
         }
@@ -156,18 +205,25 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetAllGroups()
         {
             List<SelectListItem> lstAllFroup = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var GroupDetails = context.tblGroupDetails.ToList();
-
-                foreach (var item in GroupDetails)
+                using (var context = new CommonDBContext())
                 {
-                    lstAllFroup.Add(new SelectListItem
+                    var GroupDetails = context.tblGroupDetails.ToList();
+
+                    foreach (var item in GroupDetails)
                     {
-                        Text = item.GroupName,
-                        Value = Convert.ToString(item.GroupId)
-                    });
+                        lstAllFroup.Add(new SelectListItem
+                        {
+                            Text = item.GroupName,
+                            Value = Convert.ToString(item.GroupId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllGroups");
             }
             return lstAllFroup;
         }
@@ -175,18 +231,25 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetAllActiveGroups()
         {
             List<SelectListItem> lstAllFroup = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).OrderBy(y => y.GroupName).ToList();
-
-                foreach (var item in GroupDetails)
+                using (var context = new CommonDBContext())
                 {
-                    lstAllFroup.Add(new SelectListItem
+                    var GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true && x.IsLive == true).OrderBy(y => y.GroupName).ToList();
+
+                    foreach (var item in GroupDetails)
                     {
-                        Text = item.GroupName,
-                        Value = Convert.ToString(item.GroupId)
-                    });
+                        lstAllFroup.Add(new SelectListItem
+                        {
+                            Text = item.GroupName,
+                            Value = Convert.ToString(item.GroupId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllActiveGroups");
             }
             return lstAllFroup;
         }
@@ -194,18 +257,25 @@ namespace BOTS_BL.Repository
         public List<SelectListItem> GetAllRefferedCategory()
         {
             List<SelectListItem> lstAllRefferedCategory = new List<SelectListItem>();
-            using (var context = new CommonDBContext())
+            try
             {
-                var SourceTypes = context.tblSourceTypes.Where(x => x.IsActive == true).ToList();
-
-                foreach (var item in SourceTypes)
+                using (var context = new CommonDBContext())
                 {
-                    lstAllRefferedCategory.Add(new SelectListItem
+                    var SourceTypes = context.tblSourceTypes.Where(x => x.IsActive == true).ToList();
+
+                    foreach (var item in SourceTypes)
                     {
-                        Text = item.SourceTypeName,
-                        Value = Convert.ToString(item.SourceTypeId)
-                    });
+                        lstAllRefferedCategory.Add(new SelectListItem
+                        {
+                            Text = item.SourceTypeName,
+                            Value = Convert.ToString(item.SourceTypeId)
+                        });
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllRefferedCategory");
             }
             return lstAllRefferedCategory;
         }
@@ -271,7 +341,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "GetAllCustomer");
             }
             return objGroupList;
         }
@@ -293,7 +363,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetCustomerConnString");
             }
             return ConnectionString;
         }
@@ -315,7 +385,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, CounterId);
+                newexception.AddException(ex, "GetRetailWebConnString");
             }
             return ConnectionString;
         }
@@ -323,10 +393,17 @@ namespace BOTS_BL.Repository
         public string GetCustomerName(string GroupId)
         {
             string CustomerName = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var TgroupId = Convert.ToInt32(GroupId);
-                CustomerName = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.GroupName).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    var TgroupId = Convert.ToInt32(GroupId);
+                    CustomerName = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.GroupName).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCustomerName");
             }
             return CustomerName;
         }
@@ -335,9 +412,16 @@ namespace BOTS_BL.Repository
         {
             var conStr = GetCustomerConnString(GroupId);
             string CustomerLogo = string.Empty;
-            using (var context = new BOTSDBContext(conStr))
+            try
             {
-                CustomerLogo = context.BrandDetails.Select(y => y.BrandLogoUrl).FirstOrDefault();
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    CustomerLogo = context.BrandDetails.Select(y => y.BrandLogoUrl).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCustomerLogo");
             }
             return CustomerLogo;
         }
@@ -345,15 +429,22 @@ namespace BOTS_BL.Repository
         public bool GetIsFeedback(string GroupId)
         {
             bool IsFeedback = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                var TgroupId = Convert.ToInt32(GroupId);
-                var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.IsFeedback).FirstOrDefault();
-                if (groupDetail.HasValue)
+                using (var context = new CommonDBContext())
                 {
-                    if (groupDetail.Value)
-                        IsFeedback = true;
+                    var TgroupId = Convert.ToInt32(GroupId);
+                    var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.IsFeedback).FirstOrDefault();
+                    if (groupDetail.HasValue)
+                    {
+                        if (groupDetail.Value)
+                            IsFeedback = true;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetIsFeedback");
             }
             return IsFeedback;
         }
@@ -361,15 +452,22 @@ namespace BOTS_BL.Repository
         public tblGroupDetail GetGroupDetails(int GroupId)
         {
             tblGroupDetail objGroupDetail = new tblGroupDetail();
-            using (var context = new CommonDBContext())
+            try
             {
-                objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objGroupDetail = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+                var connStr = GetCustomerConnString(Convert.ToString(GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    var ticketSize = contextNew.TransactionMasters.Average(x => x.InvoiceAmt);
+                    objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(ticketSize), 2);
+                }
             }
-            var connStr = GetCustomerConnString(Convert.ToString(GroupId));
-            using (var contextNew = new BOTSDBContext(connStr))
+            catch (Exception ex)
             {
-                var ticketSize = contextNew.TransactionMasters.Average(x => x.InvoiceAmt);
-                objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(ticketSize), 2);
+                newexception.AddException(ex, "GetGroupDetails");
             }
             return objGroupDetail;
         }
@@ -377,9 +475,16 @@ namespace BOTS_BL.Repository
         public BOTS_TblGroupMaster GetOnboardingGroupDetails(string GroupId)
         {
             BOTS_TblGroupMaster objGroupDetail = new BOTS_TblGroupMaster();
-            using (var context = new CommonDBContext())
+            try
             {
-                objGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOnboardingGroupDetails");
             }
             return objGroupDetail;
         }
@@ -387,9 +492,16 @@ namespace BOTS_BL.Repository
         public tblModulesPayment GetModulesAndPayments(int GroupId)
         {
             tblModulesPayment objModulesPayment = new tblModulesPayment();
-            using (var context = new CommonDBContext())
+            try
             {
-                objModulesPayment = context.tblModulesPayments.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objModulesPayment = context.tblModulesPayments.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetModulesAndPayments");
             }
             return objModulesPayment;
         }
@@ -397,92 +509,99 @@ namespace BOTS_BL.Repository
         public int AddGroupDetails(tblGroupDetail objGroupDetails)
         {
             int GroupId = 0;
-            using (var context = new CommonDBContext())
+            try
             {
-                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                using (var context = new CommonDBContext())
                 {
-                    try
+                    using (DbContextTransaction transaction = context.Database.BeginTransaction())
                     {
-                        if (!string.IsNullOrEmpty(objGroupDetails.OtherBillingPartner))
+                        try
                         {
-                            tblBillingPartner objBillingPartner = new tblBillingPartner();
-                            objBillingPartner.BillingPartnerName = objGroupDetails.OtherBillingPartner;
-                            context.tblBillingPartners.AddOrUpdate(objBillingPartner);
-                            context.SaveChanges();
-                            objGroupDetails.BillingPartner = objBillingPartner.BillingPartnerId;
-                        }
-                        if (!string.IsNullOrEmpty(objGroupDetails.OtherCity))
-                        {
-                            tblCity objCity = new tblCity();
-                            objCity.CityName = objGroupDetails.OtherCity;
-                            context.tblCities.AddOrUpdate(objCity);
-                            context.SaveChanges();
-                            objGroupDetails.City = objCity.CityId;
-                        }
-                        if (!string.IsNullOrEmpty(objGroupDetails.OtherRetailCategory))
-                        {
-                            tblCategory objCategory = new tblCategory();
-                            objCategory.CategoryName = objGroupDetails.OtherRetailCategory;
-                            context.tblCategories.AddOrUpdate(objCategory);
-                            context.SaveChanges();
-                            objGroupDetails.RetailCategory = objCategory.CategoryId;
-                        }
-                        if (!string.IsNullOrEmpty(objGroupDetails.OtherRMAssigned))
-                        {
-                            tblRMAssigned objRMAssigned = new tblRMAssigned();
-                            objRMAssigned.RMAssignedName = objGroupDetails.OtherRMAssigned;
-                            context.tblRMAssigneds.AddOrUpdate(objRMAssigned);
-                            context.SaveChanges();
-                            objGroupDetails.RMAssigned = objRMAssigned.RMAssignedId;
-                        }
-                        if (!string.IsNullOrEmpty(objGroupDetails.OtherSourcedBy))
-                        {
-                            tblSourcedBy objSourcedBy = new tblSourcedBy();
-                            objSourcedBy.SourcedbyName = objGroupDetails.OtherSourcedBy;
-                            context.tblSourcedBies.AddOrUpdate(objSourcedBy);
-                            context.SaveChanges();
-                            objGroupDetails.SourcedBy = objSourcedBy.SourcedbyId;
-                        }
+                            if (!string.IsNullOrEmpty(objGroupDetails.OtherBillingPartner))
+                            {
+                                tblBillingPartner objBillingPartner = new tblBillingPartner();
+                                objBillingPartner.BillingPartnerName = objGroupDetails.OtherBillingPartner;
+                                context.tblBillingPartners.AddOrUpdate(objBillingPartner);
+                                context.SaveChanges();
+                                objGroupDetails.BillingPartner = objBillingPartner.BillingPartnerId;
+                            }
+                            if (!string.IsNullOrEmpty(objGroupDetails.OtherCity))
+                            {
+                                tblCity objCity = new tblCity();
+                                objCity.CityName = objGroupDetails.OtherCity;
+                                context.tblCities.AddOrUpdate(objCity);
+                                context.SaveChanges();
+                                objGroupDetails.City = objCity.CityId;
+                            }
+                            if (!string.IsNullOrEmpty(objGroupDetails.OtherRetailCategory))
+                            {
+                                tblCategory objCategory = new tblCategory();
+                                objCategory.CategoryName = objGroupDetails.OtherRetailCategory;
+                                context.tblCategories.AddOrUpdate(objCategory);
+                                context.SaveChanges();
+                                objGroupDetails.RetailCategory = objCategory.CategoryId;
+                            }
+                            if (!string.IsNullOrEmpty(objGroupDetails.OtherRMAssigned))
+                            {
+                                tblRMAssigned objRMAssigned = new tblRMAssigned();
+                                objRMAssigned.RMAssignedName = objGroupDetails.OtherRMAssigned;
+                                context.tblRMAssigneds.AddOrUpdate(objRMAssigned);
+                                context.SaveChanges();
+                                objGroupDetails.RMAssigned = objRMAssigned.RMAssignedId;
+                            }
+                            if (!string.IsNullOrEmpty(objGroupDetails.OtherSourcedBy))
+                            {
+                                tblSourcedBy objSourcedBy = new tblSourcedBy();
+                                objSourcedBy.SourcedbyName = objGroupDetails.OtherSourcedBy;
+                                context.tblSourcedBies.AddOrUpdate(objSourcedBy);
+                                context.SaveChanges();
+                                objGroupDetails.SourcedBy = objSourcedBy.SourcedbyId;
+                            }
 
-                        if (!string.IsNullOrEmpty(objGroupDetails.Logo))
-                        {
-                            //Upload Logo Image
-                            var profilePhysicalURL = System.Configuration.ConfigurationManager.AppSettings["LogoPhysicalURL"];
-                            string filePhysicalPath = System.IO.Path.Combine(profilePhysicalURL + "\\");
-                            string base64String = Convert.ToString(objGroupDetails.LogoBase64);
-                            byte[] newBytes = Convert.FromBase64String(base64String);
-                            MemoryStream ms = new MemoryStream(newBytes, 0, newBytes.Length);
-                            ms.Write(newBytes, 0, newBytes.Length);
-                            var fileName = Convert.ToString(objGroupDetails.GroupId + ".jpg");
-                            FileStream fileNew = new FileStream(filePhysicalPath + "\\" + fileName, FileMode.Create, FileAccess.Write);
-                            ms.WriteTo(fileNew);
-                            fileNew.Close();
-                            ms.Close();
-                            objGroupDetails.Logo = fileName;
+                            if (!string.IsNullOrEmpty(objGroupDetails.Logo))
+                            {
+                                //Upload Logo Image
+                                var profilePhysicalURL = System.Configuration.ConfigurationManager.AppSettings["LogoPhysicalURL"];
+                                string filePhysicalPath = System.IO.Path.Combine(profilePhysicalURL + "\\");
+                                string base64String = Convert.ToString(objGroupDetails.LogoBase64);
+                                byte[] newBytes = Convert.FromBase64String(base64String);
+                                MemoryStream ms = new MemoryStream(newBytes, 0, newBytes.Length);
+                                ms.Write(newBytes, 0, newBytes.Length);
+                                var fileName = Convert.ToString(objGroupDetails.GroupId + ".jpg");
+                                FileStream fileNew = new FileStream(filePhysicalPath + "\\" + fileName, FileMode.Create, FileAccess.Write);
+                                ms.WriteTo(fileNew);
+                                fileNew.Close();
+                                ms.Close();
+                                objGroupDetails.Logo = fileName;
+                            }
+
+                            string grpId = Convert.ToString(objGroupDetails.GroupId);
+                            //Check Customer DB exist
+                            var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == grpId).FirstOrDefault();
+                            if (DBDetails == null)
+                            {
+                                //Create Customer DB And Add Entry to DatabaseDetails Table
+                                var LastGroupId = context.tblGroupDetails.OrderByDescending(x => x.GroupId).Take(1).Select(y => y.GroupId).FirstOrDefault();
+                                objGroupDetails.GroupId = LastGroupId + 1;
+                            }
+
+                            context.tblGroupDetails.AddOrUpdate(objGroupDetails);
+                            context.SaveChanges();
+
+                            transaction.Commit();
+                            GroupId = objGroupDetails.GroupId;
                         }
-
-                        string grpId = Convert.ToString(objGroupDetails.GroupId);
-                        //Check Customer DB exist
-                        var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == grpId).FirstOrDefault();
-                        if (DBDetails == null)
+                        catch (Exception ex)
                         {
-                            //Create Customer DB And Add Entry to DatabaseDetails Table
-                            var LastGroupId = context.tblGroupDetails.OrderByDescending(x => x.GroupId).Take(1).Select(y => y.GroupId).FirstOrDefault();
-                            objGroupDetails.GroupId = LastGroupId + 1;
+                            transaction.Rollback();
+                            throw ex;
                         }
-
-                        context.tblGroupDetails.AddOrUpdate(objGroupDetails);
-                        context.SaveChanges();
-
-                        transaction.Commit();
-                        GroupId = objGroupDetails.GroupId;
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        throw ex;
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddGroupDetails");
             }
 
             return GroupId;
@@ -491,23 +610,30 @@ namespace BOTS_BL.Repository
         public bool AddModulesAndPayments(tblModulesPayment objModulesPayment)
         {
             bool status = false;
-            using (var context = new CommonDBContext())
+            try
             {
-                using (DbContextTransaction transaction = context.Database.BeginTransaction())
+                using (var context = new CommonDBContext())
                 {
-                    try
+                    using (DbContextTransaction transaction = context.Database.BeginTransaction())
                     {
-                        context.tblModulesPayments.AddOrUpdate(objModulesPayment);
-                        context.SaveChanges();
-                        transaction.Commit();
-                        status = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        throw ex;
+                        try
+                        {
+                            context.tblModulesPayments.AddOrUpdate(objModulesPayment);
+                            context.SaveChanges();
+                            transaction.Commit();
+                            status = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            throw ex;
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddModulesAndPayments");
             }
             return status;
         }
@@ -516,118 +642,125 @@ namespace BOTS_BL.Repository
         {
             bool status = false;
             string ConnectionString = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-            }
-            using (var contextNew = new BOTSDBContext(ConnectionString))
-            {
-                using (DbContextTransaction transaction = contextNew.Database.BeginTransaction())
+                using (var context = new CommonDBContext())
                 {
-                    try
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                }
+                using (var contextNew = new BOTSDBContext(ConnectionString))
+                {
+                    using (DbContextTransaction transaction = contextNew.Database.BeginTransaction())
                     {
-                        var oldOutlets = contextNew.OutletDetails.Where(x => x.GroupId == GroupId).ToList();
-                        foreach (var item in oldOutlets)
+                        try
                         {
-                            contextNew.OutletDetails.Remove(item);
-                            contextNew.SaveChanges();
-                        }
-
-                        var oldBrands = contextNew.BrandDetails.Where(x => x.GroupId == GroupId).ToList();
-                        foreach (var item in oldBrands)
-                        {
-                            contextNew.BrandDetails.Remove(item);
-                            contextNew.SaveChanges();
-                        }
-
-                        string brandId = string.Empty;
-                        int sNoCount = 1;
-                        var LastBrand = contextNew.BrandDetails.Where(m => m.GroupId == GroupId).OrderByDescending(x => x.BrandId).Select(y => y).FirstOrDefault();
-
-                        if (LastBrand == null)
-                        {
-                            brandId = GroupId + sNoCount;
-                        }
-                        else
-                        {
-                            brandId = Convert.ToString(Convert.ToInt32(LastBrand.BrandId) + sNoCount);
-                        }
-                        int count = 0;
-                        int outletcount = 1;
-
-                        foreach (var item in lstBrand)
-                        {
-                            item.BrandId = Convert.ToString(Convert.ToInt32(brandId) + count);
-                            contextNew.BrandDetails.AddOrUpdate(item);
-                            contextNew.SaveChanges();
-
-                            var OutletId = string.Empty;
-
-                            if (sNoCount == 1)
+                            var oldOutlets = contextNew.OutletDetails.Where(x => x.GroupId == GroupId).ToList();
+                            foreach (var item in oldOutlets)
                             {
-                                foreach (var outletItem in lstOutlet)
+                                contextNew.OutletDetails.Remove(item);
+                                contextNew.SaveChanges();
+                            }
+
+                            var oldBrands = contextNew.BrandDetails.Where(x => x.GroupId == GroupId).ToList();
+                            foreach (var item in oldBrands)
+                            {
+                                contextNew.BrandDetails.Remove(item);
+                                contextNew.SaveChanges();
+                            }
+
+                            string brandId = string.Empty;
+                            int sNoCount = 1;
+                            var LastBrand = contextNew.BrandDetails.Where(m => m.GroupId == GroupId).OrderByDescending(x => x.BrandId).Select(y => y).FirstOrDefault();
+
+                            if (LastBrand == null)
+                            {
+                                brandId = GroupId + sNoCount;
+                            }
+                            else
+                            {
+                                brandId = Convert.ToString(Convert.ToInt32(LastBrand.BrandId) + sNoCount);
+                            }
+                            int count = 0;
+                            int outletcount = 1;
+
+                            foreach (var item in lstBrand)
+                            {
+                                item.BrandId = Convert.ToString(Convert.ToInt32(brandId) + count);
+                                contextNew.BrandDetails.AddOrUpdate(item);
+                                contextNew.SaveChanges();
+
+                                var OutletId = string.Empty;
+
+                                if (sNoCount == 1)
                                 {
-                                    if ((outletItem.BrandId == item.BrandId) || outletItem.BrandId == "1")
+                                    foreach (var outletItem in lstOutlet)
                                     {
-                                        var outletLast = contextNew.OutletDetails.Where(x => x.BrandId == item.BrandId).OrderByDescending(y => y.BrandId).FirstOrDefault();
-
-                                        if (outletLast == null)
+                                        if ((outletItem.BrandId == item.BrandId) || outletItem.BrandId == "1")
                                         {
-                                            OutletId = item.BrandId + "00" + outletcount;
-                                        }
-                                        else
-                                        {
-                                            OutletId = Convert.ToString(Convert.ToDouble(outletLast.OutletId) + 1);
-                                        }
-                                        outletItem.BrandId = item.BrandId;
-                                        outletItem.OutletId = OutletId;
+                                            var outletLast = contextNew.OutletDetails.Where(x => x.BrandId == item.BrandId).OrderByDescending(y => y.BrandId).FirstOrDefault();
 
-                                        contextNew.OutletDetails.AddOrUpdate(outletItem);
-                                        contextNew.SaveChanges();
+                                            if (outletLast == null)
+                                            {
+                                                OutletId = item.BrandId + "00" + outletcount;
+                                            }
+                                            else
+                                            {
+                                                OutletId = Convert.ToString(Convert.ToDouble(outletLast.OutletId) + 1);
+                                            }
+                                            outletItem.BrandId = item.BrandId;
+                                            outletItem.OutletId = OutletId;
 
-                                        outletcount++;
+                                            contextNew.OutletDetails.AddOrUpdate(outletItem);
+                                            contextNew.SaveChanges();
+
+                                            outletcount++;
+                                        }
                                     }
                                 }
-                            }
-                            if (sNoCount == 2)
-                            {
-                                outletcount = 1;
-                                foreach (var outletItem in lstOutlet)
+                                if (sNoCount == 2)
                                 {
-                                    if ((outletItem.BrandId == item.BrandId) || outletItem.BrandId == "2")
+                                    outletcount = 1;
+                                    foreach (var outletItem in lstOutlet)
                                     {
-                                        var outletLast = contextNew.OutletDetails.Where(x => x.BrandId == item.BrandId).OrderByDescending(y => y.BrandId).FirstOrDefault();
-                                        if (outletLast == null)
+                                        if ((outletItem.BrandId == item.BrandId) || outletItem.BrandId == "2")
                                         {
-                                            OutletId = item.BrandId + "00" + outletcount;
-                                        }
-                                        else
-                                        {
-                                            OutletId = Convert.ToString(Convert.ToDouble(outletLast.OutletId) + 1);
-                                        }
-                                        outletItem.BrandId = item.BrandId;
-                                        outletItem.OutletId = OutletId;
+                                            var outletLast = contextNew.OutletDetails.Where(x => x.BrandId == item.BrandId).OrderByDescending(y => y.BrandId).FirstOrDefault();
+                                            if (outletLast == null)
+                                            {
+                                                OutletId = item.BrandId + "00" + outletcount;
+                                            }
+                                            else
+                                            {
+                                                OutletId = Convert.ToString(Convert.ToDouble(outletLast.OutletId) + 1);
+                                            }
+                                            outletItem.BrandId = item.BrandId;
+                                            outletItem.OutletId = OutletId;
 
-                                        contextNew.OutletDetails.AddOrUpdate(outletItem);
-                                        contextNew.SaveChanges();
+                                            contextNew.OutletDetails.AddOrUpdate(outletItem);
+                                            contextNew.SaveChanges();
 
-                                        outletcount++;
+                                            outletcount++;
+                                        }
                                     }
                                 }
+                                count++;
+                                sNoCount++;
                             }
-                            count++;
-                            sNoCount++;
-                        }
 
-                        transaction.Commit();
-                        status = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
+                            transaction.Commit();
+                            status = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddBrandAndOutlet");
             }
             return status;
 
@@ -636,15 +769,22 @@ namespace BOTS_BL.Repository
         public List<BrandDetail> GetAllBrandsByGroupId(string GroupId)
         {
             List<BrandDetail> lstBrands = new List<BrandDetail>();
-            string ConnectionString = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                string ConnectionString = string.Empty;
+                using (var context = new CommonDBContext())
+                {
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                }
+                using (var contextNew = new BOTSDBContext(ConnectionString))
+                {
+                    lstBrands = contextNew.BrandDetails.Where(x => x.GroupId == GroupId).ToList();
+                }
             }
-            using (var contextNew = new BOTSDBContext(ConnectionString))
+            catch (Exception ex)
             {
-                lstBrands = contextNew.BrandDetails.Where(x => x.GroupId == GroupId).ToList();
+                newexception.AddException(ex, "GetAllBrandsByGroupId");
             }
             return lstBrands;
         }
@@ -705,7 +845,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetAllOutletsByGroupId");
             }
             return lstOutlets;
         }
@@ -814,11 +954,18 @@ namespace BOTS_BL.Repository
         public MobileAppOnceInMonthData GetMonthlySnapShotForMobileApp(string GroupId)
         {
             MobileAppOnceInMonthData objmobileappdata = new MobileAppOnceInMonthData();
-            using (var context = new CommonDBContext())
+            try
             {
-                // int gId = Convert.ToInt32(GroupId);
-                objmobileappdata = context.MobileAppOnceInMonthData.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    // int gId = Convert.ToInt32(GroupId);
+                    objmobileappdata = context.MobileAppOnceInMonthData.Where(x => x.GroupId == GroupId).FirstOrDefault();
 
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMonthlySnapShotForMobileApp");
             }
             return objmobileappdata;
         }
@@ -826,15 +973,22 @@ namespace BOTS_BL.Repository
         public long GetMemberBase(string GroupId)
         {
             long MemberBase = 0;
-            string ConnectionString = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-                using (var contextNew = new BOTSDBContext(ConnectionString))
+                string ConnectionString = string.Empty;
+                using (var context = new CommonDBContext())
                 {
-                    MemberBase = contextNew.CustomerDetails.Count();
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    using (var contextNew = new BOTSDBContext(ConnectionString))
+                    {
+                        MemberBase = contextNew.CustomerDetails.Count();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMemberBase");
             }
             return MemberBase;
         }
@@ -842,14 +996,21 @@ namespace BOTS_BL.Repository
         public GroupConfig GetGroupConfig(tblGroupDetail objGroupDetails)
         {
             GroupConfig objGroupConfig = new GroupConfig();
-            using (var context = new CommonDBContext())
+            try
             {
-                objGroupConfig.CityName = context.tblCities.Where(x => x.CityId == objGroupDetails.City).Select(y => y.CityName).FirstOrDefault();
-                objGroupConfig.CategoryName = context.tblCategories.Where(x => x.CategoryId == objGroupDetails.RetailCategory).Select(y => y.CategoryName).FirstOrDefault();
-                objGroupConfig.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == objGroupDetails.BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
-                objGroupConfig.BillingSystemName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == objGroupDetails.BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
-                objGroupConfig.SourceByName = context.tblSourcedBies.Where(x => x.SourcedbyId == objGroupDetails.SourcedBy).Select(y => y.SourcedbyName).FirstOrDefault();
-                objGroupConfig.CSAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == objGroupDetails.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    objGroupConfig.CityName = context.tblCities.Where(x => x.CityId == objGroupDetails.City).Select(y => y.CityName).FirstOrDefault();
+                    objGroupConfig.CategoryName = context.tblCategories.Where(x => x.CategoryId == objGroupDetails.RetailCategory).Select(y => y.CategoryName).FirstOrDefault();
+                    objGroupConfig.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == objGroupDetails.BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
+                    objGroupConfig.BillingSystemName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == objGroupDetails.BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
+                    objGroupConfig.SourceByName = context.tblSourcedBies.Where(x => x.SourcedbyId == objGroupDetails.SourcedBy).Select(y => y.SourcedbyName).FirstOrDefault();
+                    objGroupConfig.CSAssignedName = context.tblRMAssigneds.Where(x => x.RMAssignedId == objGroupDetails.RMAssigned).Select(y => y.RMAssignedName).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupConfig");
             }
             return objGroupConfig;
         }
@@ -892,7 +1053,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetPointsEarnConfig");
             }
             return objData;
         }
@@ -931,7 +1092,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetPointsBurnConfig");
             }
             return objData;
         }
@@ -956,7 +1117,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "GetAllSMSDetails");
             }
             return SMSDetails;
         }
@@ -985,7 +1146,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetSMSEmailMasterDetails");
             }
             return objData;
         }
@@ -1023,7 +1184,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetWAEmailMasterDetails");
             }
             return objData;
         }
@@ -1041,7 +1202,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetDLCDetails");
             }
             return lstData;
         }
@@ -1059,7 +1220,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetMWPSourceMaster");
             }
             return objData;
         }
@@ -1070,11 +1231,18 @@ namespace BOTS_BL.Repository
             string ConnectionString = string.Empty;
 
             ConnectionString = GetCustomerConnString(groupId);
-            using (var contextNew = new BOTSDBContext(ConnectionString))
+            try
             {
-                objData = contextNew.tblUniquePoints.ToList();
+                using (var contextNew = new BOTSDBContext(ConnectionString))
+                {
+                    objData = contextNew.tblUniquePoints.ToList();
+                }
             }
 
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetUniquePoints");
+            }
             return objData;
         }
 
@@ -1108,30 +1276,39 @@ namespace BOTS_BL.Repository
         {
             List<MemberBaseAndTransaction> objData = new List<MemberBaseAndTransaction>();
             var conStr = GetCustomerConnString(groupId);
-            if (!string.IsNullOrEmpty(conStr))
+            try
             {
-                using (var context = new BOTSDBContext(conStr))
+                if (!string.IsNullOrEmpty(conStr))
                 {
-                    MemberBaseAndTransaction objItem = new MemberBaseAndTransaction();
-                    var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, 1);
-                    var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month);
-                    var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, lastDay);
-                    objItem.MemberType = "New Enrollment";
-                    objItem.BaseCount = context.CustomerDetails.Where(x => x.DOJ >= FromDate && x.DOJ <= ToDate).Count();
-                    objItem.TxnCount = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Count();
-                    objItem.BizGen = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Select(y => y.InvoiceAmt).Sum();
-                    objData.Add(objItem);
+               
+                    using (var context = new BOTSDBContext(conStr))
+                    {
+                        MemberBaseAndTransaction objItem = new MemberBaseAndTransaction();
+                        var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, 1);
+                        var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month);
+                        var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.AddMonths(-1).Month, lastDay);
+                        objItem.MemberType = "New Enrollment";
+                        objItem.BaseCount = context.CustomerDetails.Where(x => x.DOJ >= FromDate && x.DOJ <= ToDate).Count();
+                        objItem.TxnCount = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Count();
+                        objItem.BizGen = context.TransactionMasters.Where(x => x.Datetime >= FromDate && x.Datetime <= ToDate).Select(y => y.InvoiceAmt).Sum();
+                        objData.Add(objItem);
 
-                    MemberBaseAndTransaction objItem1 = new MemberBaseAndTransaction();
-                    objItem1.MemberType = "Existing Base";
-                    objItem1.BaseCount = context.CustomerDetails.Count();
-                    objItem1.TxnCount = context.TransactionMasters.Count();
-                    objItem1.BizGen = context.TransactionMasters.Select(y => y.InvoiceAmt).Sum();
-                    objData.Add(objItem1);
+                        MemberBaseAndTransaction objItem1 = new MemberBaseAndTransaction();
+                        objItem1.MemberType = "Existing Base";
+                        objItem1.BaseCount = context.CustomerDetails.Count();
+                        objItem1.TxnCount = context.TransactionMasters.Count();
+                        objItem1.BizGen = context.TransactionMasters.Select(y => y.InvoiceAmt).Sum();
+                        objData.Add(objItem1);
+                    }
+
+
+
                 }
-
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMemberBaseAndTransactions");
+            }
 
             return objData;
         }
@@ -1140,77 +1317,86 @@ namespace BOTS_BL.Repository
         {
             KeyMetrics objData = new KeyMetrics();
             var conStr = GetCustomerConnString(groupId);
-            if (!string.IsNullOrEmpty(conStr))
+            try
             {
-                using (var context = new BOTSDBContext(conStr))
+                if (!string.IsNullOrEmpty(conStr))
                 {
-
-                    string sqlString = "select C.MobileNo,C.Points,C.EnrollingOutlet,(Convert(varchar(10),cast(C.DOJ as date),103)) as EnrolledDate,C.CustomerName,Count(TM.MobileNo) as " +
-                            "TxnCount,COUNT(CASE WHEN TM.TransType = '2' THEN 1 ELSE NULL END) as TotalBurnTxn,sum((case when TM.TransType = '2' then TM.PointsBurned else 0 " +
-                            "end)) as TotalBurnPoints,COUNT(CASE WHEN TM.TransType = '1' THEN 1 ELSE NULL END) as EarnCount,COUNT(CASE WHEN TM.TransType = '2' THEN 1 ELSE " +
-                            "NULL END) as BurnCount,Min(cast(TM.Datetime as date)) as FirstTxnDate,Max(cast(TM.Datetime as date)) as LastTxnDate,isnull(Sum(TM.PointsEarned) " +
-                            ", 0) as PointsEarned,isnull(sum(TM.PointsBurned), 0) as PointsBurned,isnull(sum(TM.InvoiceAmt), 0) as InvoiceAmt,sum((case when TM.TransType = '2' " +
-                            "then TM.InvoiceAmt else 0 end)) as BurnAmt from TransactionMaster TM right join CustomerDetails C on C.MobileNo = TM.MobileNo where " +
-                            "((TM.TransType = '1') or(TM.TransType = '2')) and TM.InvoiceNo != 'B_Birthday' and TM.InvoiceNo != 'B_Anniversary' and TM.InvoiceNo != " +
-                            "'B_ProfileUpdate' and TM.InvoiceNo != 'B_ReferralBonus' and TM.InvoiceNo != 'B_RefereePoints' and TM.InvoiceNo != 'B_GiftingPoints' and " +
-                            "TM.InvoiceNo != 'Bonus' and TM.InvoiceNo != 'B_ReferralPoints' and TM.InvoiceNo != 'B_RefereeBonus' and TM.Status = '06' and " +
-                            "((C.CustomerThrough = '2') or (C.CustomerThrough = '4') or (C.CustomerThrough = '5') or (C.CustomerThrough = '7')) and C.Status = '00' group by " +
-                            "C.MobileNo,C.Points,C.CustomerName,C.EnrollingOutlet,C.DOJ";
-
-                    var AllData = context.Database.SqlQuery<KeyMetricsData>(sqlString).ToList();
-                    decimal? TotalRedeemPoints = 0;
-                    decimal? TotalEarnPoints = 0;
-
-                    TotalRedeemPoints = AllData.Sum(x => x.TotalBurnPoints);
-                    if (TotalRedeemPoints == null)
-                        TotalRedeemPoints = 0;
-                    TotalEarnPoints = AllData.Sum(x => x.PointsEarned);
-                    if (TotalEarnPoints == null)
-                        TotalEarnPoints = 0;
-                    if (TotalRedeemPoints != 0 && TotalEarnPoints != 0)
+                    using (var context = new BOTSDBContext(conStr))
                     {
-                        objData.RedemptionRate = decimal.Round(Convert.ToDecimal(((TotalRedeemPoints / TotalEarnPoints) * 100)), 2, MidpointRounding.AwayFromZero);
+
+                        string sqlString = "select C.MobileNo,C.Points,C.EnrollingOutlet,(Convert(varchar(10),cast(C.DOJ as date),103)) as EnrolledDate,C.CustomerName,Count(TM.MobileNo) as " +
+                                "TxnCount,COUNT(CASE WHEN TM.TransType = '2' THEN 1 ELSE NULL END) as TotalBurnTxn,sum((case when TM.TransType = '2' then TM.PointsBurned else 0 " +
+                                "end)) as TotalBurnPoints,COUNT(CASE WHEN TM.TransType = '1' THEN 1 ELSE NULL END) as EarnCount,COUNT(CASE WHEN TM.TransType = '2' THEN 1 ELSE " +
+                                "NULL END) as BurnCount,Min(cast(TM.Datetime as date)) as FirstTxnDate,Max(cast(TM.Datetime as date)) as LastTxnDate,isnull(Sum(TM.PointsEarned) " +
+                                ", 0) as PointsEarned,isnull(sum(TM.PointsBurned), 0) as PointsBurned,isnull(sum(TM.InvoiceAmt), 0) as InvoiceAmt,sum((case when TM.TransType = '2' " +
+                                "then TM.InvoiceAmt else 0 end)) as BurnAmt from TransactionMaster TM right join CustomerDetails C on C.MobileNo = TM.MobileNo where " +
+                                "((TM.TransType = '1') or(TM.TransType = '2')) and TM.InvoiceNo != 'B_Birthday' and TM.InvoiceNo != 'B_Anniversary' and TM.InvoiceNo != " +
+                                "'B_ProfileUpdate' and TM.InvoiceNo != 'B_ReferralBonus' and TM.InvoiceNo != 'B_RefereePoints' and TM.InvoiceNo != 'B_GiftingPoints' and " +
+                                "TM.InvoiceNo != 'Bonus' and TM.InvoiceNo != 'B_ReferralPoints' and TM.InvoiceNo != 'B_RefereeBonus' and TM.Status = '06' and " +
+                                "((C.CustomerThrough = '2') or (C.CustomerThrough = '4') or (C.CustomerThrough = '5') or (C.CustomerThrough = '7')) and C.Status = '00' group by " +
+                                "C.MobileNo,C.Points,C.CustomerName,C.EnrollingOutlet,C.DOJ";
+
+                        var AllData = context.Database.SqlQuery<KeyMetricsData>(sqlString).ToList();
+                        decimal? TotalRedeemPoints = 0;
+                        decimal? TotalEarnPoints = 0;
+
+                        TotalRedeemPoints = AllData.Sum(x => x.TotalBurnPoints);
+                        if (TotalRedeemPoints == null)
+                            TotalRedeemPoints = 0;
+                        TotalEarnPoints = AllData.Sum(x => x.PointsEarned);
+                        if (TotalEarnPoints == null)
+                            TotalEarnPoints = 0;
+                        if (TotalRedeemPoints != 0 && TotalEarnPoints != 0)
+                        {
+                            objData.RedemptionRate = decimal.Round(Convert.ToDecimal(((TotalRedeemPoints / TotalEarnPoints) * 100)), 2, MidpointRounding.AwayFromZero);
+                        }
+                        var TotalBurnInvoiceAmt = AllData.Sum(x => x.BurnAmt);
+                        var TotalBurnPoints = AllData.Sum(x => x.TotalBurnPoints);
+                        var PointAllocation = context.EarnRules.Select(x => x.PointsAllocation).FirstOrDefault();
+                        if (TotalBurnPoints > 0)
+                        {
+                            objData.RedeemToInv = decimal.Round((Convert.ToDecimal(TotalBurnInvoiceAmt / (TotalBurnPoints * PointAllocation))), 2, MidpointRounding.AwayFromZero);
+                        }
+                        else
+                        {
+                            objData.RedeemToInv = 0;
+                        }
+                        objData.OnlyOnceBase = AllData.Where(x => x.TxnCount == 1).Count();
+                        objData.NonRedeemBase = AllData.Where(x => x.BurnCount == 1).Count();
+                        var InactiveDate = DateTime.Now.AddMonths(-6);
+                        objData.InactiveBase = AllData.Where(x => x.LastTxnDate < InactiveDate).Count();
+                        objData.BulkImportBase = context.CustomerDetails.Where(x => x.CustomerThrough == "1").Count();
+
+                        decimal? Issued = 0;
+                        decimal? Redeemed = 0;
+
+                        Issued = AllData.Sum(x => x.PointsEarned);
+                        Redeemed = AllData.Sum(x => x.PointsBurned);
+                        if (Issued == null)
+                            Issued = 0;
+                        if (Redeemed == null)
+                            Redeemed = 0;
+
+                        objData.Issued = Issued.Value;
+                        objData.Redeemed = Redeemed.Value;
+
+                        var ExpiredPointStr = "select sum(Points) from PointsExpiryDetails";
+                        decimal? ExpiredPoint = 0;
+                        ExpiredPoint = context.Database.SqlQuery<decimal?>(ExpiredPointStr).FirstOrDefault();
+                        if (ExpiredPoint != null)
+                            objData.Expired = ExpiredPoint.Value;
+                        else
+                            objData.Expired = 0;
+                        objData.Available = objData.Issued - (objData.Redeemed + objData.Expired);
+
                     }
-                    var TotalBurnInvoiceAmt = AllData.Sum(x => x.BurnAmt);
-                    var TotalBurnPoints = AllData.Sum(x => x.TotalBurnPoints);
-                    var PointAllocation = context.EarnRules.Select(x => x.PointsAllocation).FirstOrDefault();
-                    if (TotalBurnPoints > 0)
-                    {
-                        objData.RedeemToInv = decimal.Round((Convert.ToDecimal(TotalBurnInvoiceAmt / (TotalBurnPoints * PointAllocation))), 2, MidpointRounding.AwayFromZero);
-                    }
-                    else
-                    {
-                        objData.RedeemToInv = 0;
-                    }
-                    objData.OnlyOnceBase = AllData.Where(x => x.TxnCount == 1).Count();
-                    objData.NonRedeemBase = AllData.Where(x => x.BurnCount == 1).Count();
-                    var InactiveDate = DateTime.Now.AddMonths(-6);
-                    objData.InactiveBase = AllData.Where(x => x.LastTxnDate < InactiveDate).Count();
-                    objData.BulkImportBase = context.CustomerDetails.Where(x => x.CustomerThrough == "1").Count();
-
-                    decimal? Issued = 0;
-                    decimal? Redeemed = 0;
-
-                    Issued = AllData.Sum(x => x.PointsEarned);
-                    Redeemed = AllData.Sum(x => x.PointsBurned);
-                    if (Issued == null)
-                        Issued = 0;
-                    if (Redeemed == null)
-                        Redeemed = 0;
-
-                    objData.Issued = Issued.Value;
-                    objData.Redeemed = Redeemed.Value;
-
-                    var ExpiredPointStr = "select sum(Points) from PointsExpiryDetails";
-                    decimal? ExpiredPoint = 0;
-                    ExpiredPoint = context.Database.SqlQuery<decimal?>(ExpiredPointStr).FirstOrDefault();
-                    if (ExpiredPoint != null)
-                        objData.Expired = ExpiredPoint.Value;
-                    else
-                        objData.Expired = 0;
-                    objData.Available = objData.Issued - (objData.Redeemed + objData.Expired);
 
                 }
+            }
+
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetKeyMetrics");
             }
             return objData;
         }
@@ -1219,33 +1405,40 @@ namespace BOTS_BL.Repository
         {
             List<KeyInfoForNextMonth> lstData = new List<KeyInfoForNextMonth>();
             var conStr = GetCustomerConnString(groupId);
-            if (!string.IsNullOrEmpty(conStr))
+            try
             {
-                using (var context = new BOTSDBContext(conStr))
+                if (!string.IsNullOrEmpty(conStr))
                 {
-                    var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                    var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-                    var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, lastDay);
+                    using (var context = new BOTSDBContext(conStr))
+                    {
+                        var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                        var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                        var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, lastDay);
 
-                    var Birthday = context.CustomerDetails.Where(x => x.DOB >= FromDate && x.DOB <= ToDate).Count();
-                    var Anniversary = context.CustomerDetails.Where(x => x.AnniversaryDate >= FromDate && x.AnniversaryDate <= ToDate).Count();
-                    var Expiry = context.PointsExpiries.Where(x => x.ExpiryDate >= FromDate && x.ExpiryDate <= ToDate).GroupBy(y => y.MobileNo).Count();
+                        var Birthday = context.CustomerDetails.Where(x => x.DOB >= FromDate && x.DOB <= ToDate).Count();
+                        var Anniversary = context.CustomerDetails.Where(x => x.AnniversaryDate >= FromDate && x.AnniversaryDate <= ToDate).Count();
+                        var Expiry = context.PointsExpiries.Where(x => x.ExpiryDate >= FromDate && x.ExpiryDate <= ToDate).GroupBy(y => y.MobileNo).Count();
 
-                    KeyInfoForNextMonth objItem = new KeyInfoForNextMonth();
-                    objItem.Elements = "Birthday";
-                    objItem.BaseCount = Birthday;
-                    lstData.Add(objItem);
+                        KeyInfoForNextMonth objItem = new KeyInfoForNextMonth();
+                        objItem.Elements = "Birthday";
+                        objItem.BaseCount = Birthday;
+                        lstData.Add(objItem);
 
-                    KeyInfoForNextMonth objItem1 = new KeyInfoForNextMonth();
-                    objItem1.Elements = "Anniversary";
-                    objItem1.BaseCount = Anniversary;
-                    lstData.Add(objItem1);
+                        KeyInfoForNextMonth objItem1 = new KeyInfoForNextMonth();
+                        objItem1.Elements = "Anniversary";
+                        objItem1.BaseCount = Anniversary;
+                        lstData.Add(objItem1);
 
-                    KeyInfoForNextMonth objItem2 = new KeyInfoForNextMonth();
-                    objItem2.Elements = "Expiry";
-                    objItem2.BaseCount = Expiry;
-                    lstData.Add(objItem2);
+                        KeyInfoForNextMonth objItem2 = new KeyInfoForNextMonth();
+                        objItem2.Elements = "Expiry";
+                        objItem2.BaseCount = Expiry;
+                        lstData.Add(objItem2);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetKeyInfoForNextMonth");
             }
             return lstData;
         }
@@ -1253,13 +1446,19 @@ namespace BOTS_BL.Repository
         public List<tblFestival> GetFestivalDates()
         {
             List<tblFestival> lstData = new List<tblFestival>();
-
-            using (var context = new CommonDBContext())
+            try
             {
-                var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-                var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, lastDay);
-                lstData = context.tblFestivals.Where(x => x.Date >= FromDate && x.Date <= ToDate).ToList();
+                using (var context = new CommonDBContext())
+                {
+                    var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                    var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, lastDay);
+                    lstData = context.tblFestivals.Where(x => x.Date >= FromDate && x.Date <= ToDate).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetFestivalDates");
             }
             return lstData;
         }
@@ -1267,9 +1466,16 @@ namespace BOTS_BL.Repository
         public string GetWAGroupCode(string groupId)
         {
             string WAGroupCode = string.Empty;
-            using (var context = new CommonDBContext())
+            try
             {
-                WAGroupCode = context.WAReports.Where(x => x.GroupId == groupId).Select(y => y.GroupCode).FirstOrDefault();
+                using (var context = new CommonDBContext())
+                {
+                    WAGroupCode = context.WAReports.Where(x => x.GroupId == groupId).Select(y => y.GroupCode).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetWAGroupCode");
             }
             return WAGroupCode;
         }
