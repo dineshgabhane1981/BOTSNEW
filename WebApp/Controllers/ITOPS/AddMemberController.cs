@@ -30,7 +30,14 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult Index()
         {
             var groupId = (string)Session["GroupId"];
-            ViewBag.GroupId = groupId;
+            try
+            {
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Index");
+            }
             return View();
         }
 
@@ -41,8 +48,6 @@ namespace WebApp.Controllers.ITOPS
             var groupId = (string)Session["GroupId"];
             try
             {
-
-
                 string connStr = objCustRepo.GetCustomerConnString(groupId);
                 var lstOutlet = RR.GetOutletList(groupId, connStr);
                 //var lstBrand = RR.GetBrandList(groupId, connStr);
@@ -54,7 +59,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "BulkImport");
             }
             return View();
         }
@@ -124,7 +129,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "AddSingleMember");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -159,7 +164,7 @@ namespace WebApp.Controllers.ITOPS
                             }
                             catch (Exception ex)
                             {
-
+                                
                             }
                             i++;
                         }
@@ -221,7 +226,7 @@ namespace WebApp.Controllers.ITOPS
 
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "AddBulkMemberData");
                 result.ResponseCode = "-1";
             }
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -229,6 +234,7 @@ namespace WebApp.Controllers.ITOPS
 
         public bool CheckDate(string dateString)
         {
+
             bool isCorrect = false;
             string[] formats = {"M/d/yyyy h:mm:ss tt", "M/d/yyyy h:mm tt",
                    "MM/dd/yyyy hh:mm:ss", "M/d/yyyy h:mm:ss",
