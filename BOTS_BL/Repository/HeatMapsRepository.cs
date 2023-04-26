@@ -14,6 +14,8 @@ namespace BOTS_BL.Repository
     public class HeatMapsRepository
     {
         //string connstr = CustomerConnString.ConnectionStringCustomer;
+
+        Exceptions newexception = new Exceptions();
         public List<DaywiseHourwise> GetDaywiseHourwiseData(string GroupId,string outletId, string connstr)
         {
             List<DaywiseHourwise> objDaywiseHourwise = new List<DaywiseHourwise>();
@@ -27,7 +29,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                throw ex;
+                newexception.AddException(ex, "GetDaywiseHourwiseData");
             }
 
             return objDaywiseHourwise;
