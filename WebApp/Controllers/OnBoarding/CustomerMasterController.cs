@@ -118,7 +118,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddCategory");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -157,7 +157,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddCity");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -195,7 +195,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddChannelPartner");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -233,7 +233,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddSource");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -272,7 +272,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddRM");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -291,7 +291,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetCategory");
             }
             return Json(objcategory, JsonRequestBehavior.AllowGet);
 
@@ -310,7 +310,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetCity");
             }
             return Json(objcity, JsonRequestBehavior.AllowGet);
 
@@ -329,7 +329,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetChannelPartner");
             }
             return Json(objchannel, JsonRequestBehavior.AllowGet);
 
@@ -347,7 +347,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetBillingPartnerProduct");
             }
             return Json(lstbilling, JsonRequestBehavior.AllowGet);
 
@@ -365,7 +365,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetRM");
             }
             return Json(objRM, JsonRequestBehavior.AllowGet);
 
@@ -384,7 +384,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetSource");
             }
             return Json(objsource, JsonRequestBehavior.AllowGet);
 
@@ -424,7 +424,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddBillingPartner");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -462,7 +462,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddSourceType");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -479,7 +479,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetBillingPartner");
             }
             return Json(objbillingpartner, JsonRequestBehavior.AllowGet);
 
@@ -498,7 +498,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetSourceType");
             }
             return Json(objSourceType, JsonRequestBehavior.AllowGet);
 
@@ -515,7 +515,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetBillingPartnerProductByPartner");
             }
             return Json(lstbillingpartnerproduct, JsonRequestBehavior.AllowGet);
         }
@@ -554,7 +554,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddBillingPartnerProduct");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -570,7 +570,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "ActiveInactiveBillingPartner");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -586,7 +586,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "ActiveInactiveCategory");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -602,7 +602,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "ActiveInactiveCity");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -618,7 +618,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "ActiveInactiveChannelPartner");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -634,7 +634,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "ActiveInactiveCustomerSuccess");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -650,7 +650,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "ActiveInactiveSourceBy");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -666,7 +666,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "ActiveInactiveSourceType");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -681,7 +681,7 @@ namespace WebApp.Controllers.OnBoarding
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "ActiveInactiveBillingPartnerProduct");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
