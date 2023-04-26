@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BOTS_BL;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,19 @@ namespace WebApp.Controllers.ITOPS
     public class BitlyController : Controller
     {
         // GET: Bitly
+
+        Exceptions newexception = new Exceptions();
         public ActionResult Index()
         {
-            var groupId = (string)Session["GroupId"];
-            ViewBag.GroupId = groupId;
+            var groupId = (string)Session["GroupId"];           
+            try
+            {
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Index");
+            }
             return View();
         }
         public ActionResult Upload()
