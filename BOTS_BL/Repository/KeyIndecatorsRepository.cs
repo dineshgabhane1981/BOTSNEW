@@ -35,7 +35,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetOnlyOnceData");
             }
 
             return objOnlyOnce;
@@ -70,7 +70,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetOnlyOnceTxnData");
             }
 
             return objOnlyOnceTxn;
@@ -97,7 +97,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetNonTransactingData");
             }
 
             return objNonTransacting;
@@ -133,7 +133,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetNonTransactingTxnData");
             }
 
             return objNonTransactingTxn;
@@ -160,7 +160,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetNonRedemptionData");
             }
 
             return objNonRedemption;
@@ -196,7 +196,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetNonRedemptionTxnData");
             }
 
             return objNonRedemptionTxn;
@@ -216,7 +216,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetNewRegistrationData");
             }
 
             return objNonRedemptionTxn;
@@ -234,7 +234,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetMemberWebPageData");
             }
 
             return objMemberWebPage;
@@ -253,7 +253,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetMemberPageData");
             }
 
             return objMemberPage;
@@ -275,7 +275,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetMemberPageRefData");
             }
 
             return objMemberPageRefData;
@@ -307,7 +307,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetMemberMisinformationData");
             }
             return objMembersInformation;
         }
@@ -316,44 +316,62 @@ namespace BOTS_BL.Repository
         {
             List<DLCCreation> lstData = new List<DLCCreation>();
             var connectionString = CR.GetCustomerConnString(GroupId);
-            using (var context = new BOTSDBContext(connectionString))
+            try
             {
-                lstData = context.DLCCreations.ToList();
+                using (var context = new BOTSDBContext(connectionString))
+                {
+                    lstData = context.DLCCreations.ToList();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCCreationData");
+            }
             return lstData;
         }
         public List<SelectListItem> GetMemberType()
         {
             List<SelectListItem> countriesItem = new List<SelectListItem>();
-
-            countriesItem.Add(new SelectListItem
+            try
             {
-                Text = "New",
-                Value = "1"
-            });
-            countriesItem.Add(new SelectListItem
+                countriesItem.Add(new SelectListItem
+                {
+                    Text = "New",
+                    Value = "1"
+                });
+                countriesItem.Add(new SelectListItem
+                {
+                    Text = "Existing",
+                    Value = "2"
+                });
+            }
+            catch (Exception ex)
             {
-                Text = "Existing",
-                Value = "2"
-            });
+                newexception.AddException(ex, "GetMemberType");
+            }
 
             return countriesItem;
         }
         public List<SelectListItem> GetPointsExpiryType()
         {
             List<SelectListItem> countriesItem = new List<SelectListItem>();
-
-            countriesItem.Add(new SelectListItem
+            try
             {
-                Text = "Fixed",
-                Value = "1"
-            });
-            countriesItem.Add(new SelectListItem
+                countriesItem.Add(new SelectListItem
+                {
+                    Text = "Fixed",
+                    Value = "1"
+                });
+                countriesItem.Add(new SelectListItem
+                {
+                    Text = "Variable",
+                    Value = "2"
+                });
+            }
+            catch (Exception ex)
             {
-                Text = "Variable",
-                Value = "2"
-            });
+                newexception.AddException(ex, "GetPointsExpiryType");
+            }
 
             return countriesItem;
         }
@@ -373,7 +391,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "UpdateDLCCreation");
             }
 
             return status;
@@ -383,9 +401,16 @@ namespace BOTS_BL.Repository
         {
             DLCCreation objData = new DLCCreation();
             var connStr = CR.GetCustomerConnString(GroupId);
-            using (var context = new BOTSDBContext(connStr))
+            try
             {
-                objData = context.DLCCreations.Where(x => x.SlNo == SlNo).FirstOrDefault();
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objData = context.DLCCreations.Where(x => x.SlNo == SlNo).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCForEdit");
             }
             return objData;
         }
@@ -394,11 +419,17 @@ namespace BOTS_BL.Repository
         {
             int count = 0;
             var connStr = CR.GetCustomerConnString(GroupId);
-            using (var context = new BOTSDBContext(connStr))
+            try
             {
-                count = context.DLCCreations.Count();                
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    count = context.DLCCreations.Count();
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCRecordCount");
+            }
             return count;
         }
     
