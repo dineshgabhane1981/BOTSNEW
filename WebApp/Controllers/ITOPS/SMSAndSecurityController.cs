@@ -37,7 +37,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "Index");
             }
             return View();
             
@@ -60,7 +60,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "SecurityKey");
             }
 
             return View();
@@ -70,13 +70,21 @@ namespace WebApp.Controllers.ITOPS
         {
             var GroupId = (string)Session["GroupId"];
             MemberData objCustomerDetail = new MemberData();
-            if (!string.IsNullOrEmpty(MobileNo))
+            try 
             {
-                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByMobileNo(GroupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                }
             }
-            if (!string.IsNullOrEmpty(CardNo))
+            catch (Exception ex)
             {
-                objCustomerDetail = ITOPS.GetChangeNameByCardNo(GroupId, CardNo);
+                newexception.AddException(ex, "GetChangeNameData");
             }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
@@ -137,7 +145,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "ChangeSMSDetails");
             }
             return result;
         }
@@ -189,7 +197,7 @@ namespace WebApp.Controllers.ITOPS
             catch (Exception ex)
             {
 
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetLoginIdByOutlets");
             }
 
             return Json(objreset, JsonRequestBehavior.AllowGet);
@@ -215,7 +223,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "UpdateSecurityKey");
             }
             return result;
         }
