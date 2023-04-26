@@ -35,14 +35,21 @@ namespace WebApp.Controllers.ITOPS
         public ActionResult GetChangeNameData(string MobileNo, string CardNo)
         {
             MemberData objCustomerDetail = new MemberData();
-            var groupId = (string)Session["GroupId"];
-            if (!string.IsNullOrEmpty(MobileNo))
+            try
             {
-                objCustomerDetail = ITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+                var groupId = (string)Session["GroupId"];
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = ITOPS.GetChangeNameByCardNo(groupId, CardNo);
+                }
             }
-            if (!string.IsNullOrEmpty(CardNo))
+            catch (Exception ex)
             {
-                objCustomerDetail = ITOPS.GetChangeNameByCardNo(groupId, CardNo);
+                newexception.AddException(ex, "GetChangeNameData");
             }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
@@ -101,7 +108,7 @@ namespace WebApp.Controllers.ITOPS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, groupId);
+                newexception.AddException(ex, "ChangeExistingMemberMobile");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
