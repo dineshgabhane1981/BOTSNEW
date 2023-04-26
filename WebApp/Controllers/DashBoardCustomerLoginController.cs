@@ -1,4 +1,5 @@
-﻿using BOTS_BL.Models;
+﻿using BOTS_BL;
+using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,13 @@ using System.Web.Script.Serialization;
 
 namespace WebApp.Controllers
 {
+    
     public class DashBoardCustomerLoginController : Controller
     {
         ReportsRepository RR = new ReportsRepository();
         DashBoardCustomerLoginRepository DR = new DashBoardCustomerLoginRepository();
         CustomerRepository CR = new CustomerRepository();
+        Exceptions newexception = new Exceptions();
         public ActionResult Index()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -82,7 +85,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "AddCustomerLogin");
             }
             return status;
         }
@@ -99,7 +102,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-
+                newexception.AddException(ex, "GetDashboardlogins");
             }
             return Json(objdashboard, JsonRequestBehavior.AllowGet);
 
