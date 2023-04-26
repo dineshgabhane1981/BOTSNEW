@@ -41,7 +41,7 @@ namespace WebApp.Controllers
             }
             catch(Exception ex)
             {               
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "Index");
             }
             LoginModel objLogin = new LoginModel();
             return View(objLogin);
@@ -111,7 +111,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "UserAuthentication");
                 TempData["InvalidUserMessage"] = ex.Message;
                 return RedirectToAction("Index");
             }
@@ -156,7 +156,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "CheckUserAndSendOTP");
                 TempData["InvalidUserMessage"] = ex.Message;
                 returnString = "There is problem in Validation";
             }
