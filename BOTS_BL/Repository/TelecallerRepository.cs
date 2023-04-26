@@ -30,7 +30,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetTelecallerCustomer");
             }
             return objteledata;
 
@@ -111,7 +111,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "SaveTelecallerTracking");
             }
 
             return status;
@@ -169,7 +169,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, GroupId);
+                newexception.AddException(ex, "GetTelecallerReportData");
             }
             lsttelereportdata = lsttelereportdata.OrderBy(x => x.AddedDate).ToList();
             foreach(var item in lsttelereportdata)
@@ -248,7 +248,7 @@ namespace BOTS_BL.Repository
             }
             catch(Exception ex)
             {
-                newexception.AddException(ex, "");
+                newexception.AddException(ex, "SaveEnroll");
             }
 
             return ObjJSON;
