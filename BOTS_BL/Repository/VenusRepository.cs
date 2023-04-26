@@ -51,69 +51,75 @@ namespace BOTS_BL.Repository
             DataTable Tbl = new DataTable();
             SqlCommand cmdReport = new SqlCommand("sp_SaveCompetition", _Con);
             SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
-
-            using (cmdReport)
+            try
             {
-                SqlParameter param1 = new SqlParameter("pi_StudentName", StudentName);
-                SqlParameter param2 = new SqlParameter("pi_DOB", DOB);
-                SqlParameter param3 = new SqlParameter("pi_Gender", Gender);
-                SqlParameter param4 = new SqlParameter("pi_SchoolName", SchoolName);
-                SqlParameter param5 = new SqlParameter("pi_ClassStandard", ClassStandard);
-                SqlParameter param6 = new SqlParameter("pi_ParentName", ParentName);
-                SqlParameter param7 = new SqlParameter("pi_WhatsAppNo", WhatsAppNo);
-                SqlParameter param8 = new SqlParameter("pi_EmailId", EmailId);
-                SqlParameter param9 = new SqlParameter("pi_HomeAddress", HomeAddress);
-                cmdReport.CommandType = CommandType.StoredProcedure;
-                cmdReport.Parameters.Add(param1);
-                cmdReport.Parameters.Add(param2);
-                cmdReport.Parameters.Add(param3);
-                cmdReport.Parameters.Add(param4);
-                cmdReport.Parameters.Add(param5);
-                cmdReport.Parameters.Add(param6);
-                cmdReport.Parameters.Add(param7);
-                cmdReport.Parameters.Add(param8);
-                cmdReport.Parameters.Add(param9);
-
-                daReport.Fill(retVal);
-
-                Tbl = retVal.Tables[0];
-
-                for(int i =0;i< Tbl.Rows.Count;i++)
+                using (cmdReport)
                 {
-                    
+                    SqlParameter param1 = new SqlParameter("pi_StudentName", StudentName);
+                    SqlParameter param2 = new SqlParameter("pi_DOB", DOB);
+                    SqlParameter param3 = new SqlParameter("pi_Gender", Gender);
+                    SqlParameter param4 = new SqlParameter("pi_SchoolName", SchoolName);
+                    SqlParameter param5 = new SqlParameter("pi_ClassStandard", ClassStandard);
+                    SqlParameter param6 = new SqlParameter("pi_ParentName", ParentName);
+                    SqlParameter param7 = new SqlParameter("pi_WhatsAppNo", WhatsAppNo);
+                    SqlParameter param8 = new SqlParameter("pi_EmailId", EmailId);
+                    SqlParameter param9 = new SqlParameter("pi_HomeAddress", HomeAddress);
+                    cmdReport.CommandType = CommandType.StoredProcedure;
+                    cmdReport.Parameters.Add(param1);
+                    cmdReport.Parameters.Add(param2);
+                    cmdReport.Parameters.Add(param3);
+                    cmdReport.Parameters.Add(param4);
+                    cmdReport.Parameters.Add(param5);
+                    cmdReport.Parameters.Add(param6);
+                    cmdReport.Parameters.Add(param7);
+                    cmdReport.Parameters.Add(param8);
+                    cmdReport.Parameters.Add(param9);
 
-                    ObjRes.ResponseCode = Convert.ToString(Tbl.Rows[0]["ResponseCode"]);
-                    ObjRes.ResponseMessage = Convert.ToString(Tbl.Rows[0]["ResponseMessage"]);
+                    daReport.Fill(retVal);
 
-                   
+                    Tbl = retVal.Tables[0];
+
+                    for (int i = 0; i < Tbl.Rows.Count; i++)
+                    {
+
+
+                        ObjRes.ResponseCode = Convert.ToString(Tbl.Rows[0]["ResponseCode"]);
+                        ObjRes.ResponseMessage = Convert.ToString(Tbl.Rows[0]["ResponseMessage"]);
+
+
+                    }
+
+
+                    //daReport.Fill(Tbl);
+                    //if (Tbl.Rows[0]["ResponseCode"].ToString() == "0")
+                    //{
+
+                    //    string _Message;
+
+                    //    _Message = "*Dear #01, Your Registration No. " + WhatsAppNo + " for the Handwriting Competition is submitted successfully. See you soon! Thanks & Regards, Venus Traders.*";
+
+
+                    //    //"Dear *TestBO*,"
+
+                    //    //"*Your registration no. 5 for the Handwriting Competition is done successfully. See you soon! *"
+
+                    //    //Thanks & Regards,
+                    //    //Venus Traders.
+
+                    //    Thread _job = new Thread(() => SendWhatsText(StudentName, WhatsAppNo, _Message));
+                    //    _job.Start();
+
+                    //}
+
+
+
                 }
-                
-
-                //daReport.Fill(Tbl);
-                //if (Tbl.Rows[0]["ResponseCode"].ToString() == "0")
-                //{
-                  
-                //    string _Message;
-
-                //    _Message = "*Dear #01, Your Registration No. " + WhatsAppNo + " for the Handwriting Competition is submitted successfully. See you soon! Thanks & Regards, Venus Traders.*";
-
-
-                //    //"Dear *TestBO*,"
-
-                //    //"*Your registration no. 5 for the Handwriting Competition is done successfully. See you soon! *"
-
-                //    //Thanks & Regards,
-                //    //Venus Traders.
-
-                //    Thread _job = new Thread(() => SendWhatsText(StudentName, WhatsAppNo, _Message));
-                //    _job.Start();
-
-                //}
-
-
-
             }
 
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCompetitionData");
+            }
 
             return ObjRes;
 
