@@ -111,28 +111,35 @@ namespace BOTS_BL.Repository
         {
             List<SelectListItem> lstGroupDetails = new List<SelectListItem>();
             List<tblGroupDetail> GroupDetails = new List<tblGroupDetail>();
-            using (var context = new CommonDBContext())
+            try
             {
-                if (roleId == "7")
+                using (var context = new CommonDBContext())
                 {
-                    var rmAssignedId = context.tblRMAssigneds.Where(x => x.LoginId == loginId).Select(y => y.RMAssignedId).FirstOrDefault();
-                    GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true && x.RMAssigned == rmAssignedId).ToList();
-                }
-                else
-                {
-                    GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
-                    //var GroupDetails = context.WAReports.Where(x => x.SMSStatus == status).ToList();
-                }
-
-                foreach (var item in GroupDetails)
-                {
-                    lstGroupDetails.Add(new SelectListItem
+                    if (roleId == "7")
                     {
-                        Text = item.GroupName,
-                        Value = Convert.ToString(item.GroupId)
-                    });
+                        var rmAssignedId = context.tblRMAssigneds.Where(x => x.LoginId == loginId).Select(y => y.RMAssignedId).FirstOrDefault();
+                        GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true && x.RMAssigned == rmAssignedId).ToList();
+                    }
+                    else
+                    {
+                        GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                        //var GroupDetails = context.WAReports.Where(x => x.SMSStatus == status).ToList();
+                    }
+
+                    foreach (var item in GroupDetails)
+                    {
+                        lstGroupDetails.Add(new SelectListItem
+                        {
+                            Text = item.GroupName,
+                            Value = Convert.ToString(item.GroupId)
+                        });
+                    }
+                    lstGroupDetails = lstGroupDetails.OrderBy(x => x.Text).ToList();
                 }
-                lstGroupDetails = lstGroupDetails.OrderBy(x => x.Text).ToList();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
             }
             return lstGroupDetails;
         }
