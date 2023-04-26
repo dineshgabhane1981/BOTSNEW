@@ -21,6 +21,7 @@ namespace WebApp.Controllers.OnBoarding
         DLCConfigRepository DCR = new DLCConfigRepository();
         CustomerRepository CR = new CustomerRepository();
         CommonFunctions common = new CommonFunctions();
+        Exceptions newexception = new Exceptions();
         // GET: DLCConfig
         public ActionResult Index()
         {
@@ -32,14 +33,28 @@ namespace WebApp.Controllers.OnBoarding
             DLCDashboardViewModel objData = new DLCDashboardViewModel();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objDLCDashboard = DCR.GetDLCDashboardConfig(userDetails.GroupId);
-            objData.objDLCDashboard = objDLCDashboard;
+            try
+            {
+                objData.objDLCDashboard = objDLCDashboard;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DashboardConfig");
+            }
             return View(objData);
         }
         public ActionResult ProfileConfig()
         {
             DLCProfileUpdate objDLCProfUpdt = new DLCProfileUpdate();
             DLCProfileUpdateViewModel objProfData = new DLCProfileUpdateViewModel();
-            objProfData.objDLCProfUpdt = objDLCProfUpdt;
+            try
+            {
+                objProfData.objDLCProfUpdt = objDLCProfUpdt;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ProfileConfig");
+            }
             return View(objProfData);
         }
         public ActionResult SaveDashboard(string jsonData)
@@ -50,87 +65,94 @@ namespace WebApp.Controllers.OnBoarding
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objDashboardData = (object[])json_serializer.DeserializeObject(jsonData);
             tblDLCDashboardConfig objDashboard = new tblDLCDashboardConfig();
-            foreach (Dictionary<string, object> item in objDashboardData)
+            try
             {
-                string smallBase64String = Convert.ToString(item["SmallImageBase64"]);
-                if (!string.IsNullOrEmpty(smallBase64String))
+                foreach (Dictionary<string, object> item in objDashboardData)
                 {
-                    byte[] newBytes = Convert.FromBase64String(smallBase64String);
-                    MemoryStream ms = new MemoryStream(newBytes, 0, newBytes.Length);
-                    ms.Write(newBytes, 0, newBytes.Length);
-                    var fileName = Convert.ToString(userDetails.GroupId + "Small.jpg");
-                    var path = Server.MapPath("~/DLCImages/" + fileName);
-                    FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
-                    ms.WriteTo(fileNew);
-                    fileNew.Close();
-                    ms.Close();
+                    string smallBase64String = Convert.ToString(item["SmallImageBase64"]);
+                    if (!string.IsNullOrEmpty(smallBase64String))
+                    {
+                        byte[] newBytes = Convert.FromBase64String(smallBase64String);
+                        MemoryStream ms = new MemoryStream(newBytes, 0, newBytes.Length);
+                        ms.Write(newBytes, 0, newBytes.Length);
+                        var fileName = Convert.ToString(userDetails.GroupId + "Small.jpg");
+                        var path = Server.MapPath("~/DLCImages/" + fileName);
+                        FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
+                        ms.WriteTo(fileNew);
+                        fileNew.Close();
+                        ms.Close();
+                    }
+                    string mediumBase64String = Convert.ToString(item["MediumImageBase64"]);
+                    if (!string.IsNullOrEmpty(smallBase64String))
+                    {
+                        byte[] newBytes = Convert.FromBase64String(mediumBase64String);
+                        MemoryStream ms = new MemoryStream(newBytes, 0, newBytes.Length);
+                        ms.Write(newBytes, 0, newBytes.Length);
+                        var fileName = Convert.ToString(userDetails.GroupId + "Medium.jpg");
+                        var path = Server.MapPath("~/DLCImages/" + fileName);
+                        FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
+                        ms.WriteTo(fileNew);
+                        fileNew.Close();
+                        ms.Close();
+                    }
+                    string bigBase64String = Convert.ToString(item["BigImageBase64"]);
+                    if (!string.IsNullOrEmpty(smallBase64String))
+                    {
+                        byte[] newBytes = Convert.FromBase64String(bigBase64String);
+                        MemoryStream ms = new MemoryStream(newBytes, 0, newBytes.Length);
+                        ms.Write(newBytes, 0, newBytes.Length);
+                        var fileName = Convert.ToString(userDetails.GroupId + "Big.jpg");
+                        var path = Server.MapPath("~/DLCImages/" + fileName);
+                        FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
+                        ms.WriteTo(fileNew);
+                        fileNew.Close();
+                        ms.Close();
+                    }
+                    objDashboard.UseLogo = Convert.ToString(item["UseLogoSize"]);
+                    var baseLogoPath = ConfigurationManager.AppSettings["DLCLogoBaseURL"].ToString();
+                    if (objDashboard.UseLogo == "Small")
+                        objDashboard.UseLogoURL = baseLogoPath + Convert.ToString(userDetails.GroupId + "Small.jpg");
+                    if (objDashboard.UseLogo == "Medium")
+                        objDashboard.UseLogoURL = baseLogoPath + Convert.ToString(userDetails.GroupId + "Medium.jpg");
+                    if (objDashboard.UseLogo == "Big")
+                        objDashboard.UseLogoURL = baseLogoPath + Convert.ToString(userDetails.GroupId + "Big.jpg");
+
+                    objDashboard.LoginWithOTP = Convert.ToString(item["LoginWithOTP"]);
+                    objDashboard.RedirectToPage = Convert.ToString(item["RedirectToPage"]);
+
+                    objDashboard.AddPersonalDetails = Convert.ToBoolean(item["AddPersonalDetails"]);
+                    objDashboard.PersonalDetailsPoints = Convert.ToInt32(item["PersonalDetailsPoints"]);
+                    objDashboard.AddReferFriend = Convert.ToBoolean(item["AddReferFriend"]);
+                    objDashboard.ReferPoints = Convert.ToInt32(item["ReferPoints"]);
+                    objDashboard.AddGiftPoints = Convert.ToBoolean(item["AddGiftPoints"]);
+                    objDashboard.GiftPoints = Convert.ToInt32(item["GiftPoints"]);
+
+                    objDashboard.ExtraWidgetText1 = Convert.ToString(item["ExtraWidgetText1"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints1"])))
+                        objDashboard.ExtraWidgetPoints1 = Convert.ToInt32(item["ExtraWidgetPoints1"]);
+
+                    objDashboard.ExtraWidgetText2 = Convert.ToString(item["ExtraWidgetText2"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints2"])))
+                        objDashboard.ExtraWidgetPoints2 = Convert.ToInt32(item["ExtraWidgetPoints2"]);
+
+                    objDashboard.ExtraWidgetText3 = Convert.ToString(item["ExtraWidgetText3"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints3"])))
+                        objDashboard.ExtraWidgetPoints3 = Convert.ToInt32(item["ExtraWidgetPoints3"]);
+
+                    objDashboard.ShowLogoToFooter = Convert.ToBoolean(item["ShowFooterImage"]);
+                    objDashboard.CollectPersonalDataRandomly = Convert.ToBoolean(item["CollectInfoRendomly"]);
+                    objDashboard.HeaderColor = Convert.ToString(item["HeaderColor"]);
+                    objDashboard.PrefferedLanguage = Convert.ToString(item["PrefferedLanguage"]);
+                    objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
+                    objDashboard.AddedBy = userDetails.LoginId;
+                    objDashboard.AddedDate = DateTime.Now;
+
+                    status = DCR.SaveDLCDashboardConfig(userDetails.GroupId, objDashboard);
                 }
-                string mediumBase64String = Convert.ToString(item["MediumImageBase64"]);
-                if (!string.IsNullOrEmpty(smallBase64String))
-                {
-                    byte[] newBytes = Convert.FromBase64String(mediumBase64String);
-                    MemoryStream ms = new MemoryStream(newBytes, 0, newBytes.Length);
-                    ms.Write(newBytes, 0, newBytes.Length);
-                    var fileName = Convert.ToString(userDetails.GroupId + "Medium.jpg");
-                    var path = Server.MapPath("~/DLCImages/" + fileName);
-                    FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
-                    ms.WriteTo(fileNew);
-                    fileNew.Close();
-                    ms.Close();
-                }
-                string bigBase64String = Convert.ToString(item["BigImageBase64"]);
-                if (!string.IsNullOrEmpty(smallBase64String))
-                {
-                    byte[] newBytes = Convert.FromBase64String(bigBase64String);
-                    MemoryStream ms = new MemoryStream(newBytes, 0, newBytes.Length);
-                    ms.Write(newBytes, 0, newBytes.Length);
-                    var fileName = Convert.ToString(userDetails.GroupId + "Big.jpg");
-                    var path = Server.MapPath("~/DLCImages/" + fileName);
-                    FileStream fileNew = new FileStream(path, FileMode.Create, FileAccess.Write);
-                    ms.WriteTo(fileNew);
-                    fileNew.Close();
-                    ms.Close();
-                }
-                objDashboard.UseLogo = Convert.ToString(item["UseLogoSize"]);
-                var baseLogoPath = ConfigurationManager.AppSettings["DLCLogoBaseURL"].ToString();
-                if (objDashboard.UseLogo == "Small")
-                    objDashboard.UseLogoURL = baseLogoPath + Convert.ToString(userDetails.GroupId + "Small.jpg");
-                if (objDashboard.UseLogo == "Medium")
-                    objDashboard.UseLogoURL = baseLogoPath + Convert.ToString(userDetails.GroupId + "Medium.jpg");
-                if (objDashboard.UseLogo == "Big")
-                    objDashboard.UseLogoURL = baseLogoPath + Convert.ToString(userDetails.GroupId + "Big.jpg");
-
-                objDashboard.LoginWithOTP = Convert.ToString(item["LoginWithOTP"]);
-                objDashboard.RedirectToPage = Convert.ToString(item["RedirectToPage"]);
-
-                objDashboard.AddPersonalDetails = Convert.ToBoolean(item["AddPersonalDetails"]);
-                objDashboard.PersonalDetailsPoints = Convert.ToInt32(item["PersonalDetailsPoints"]);
-                objDashboard.AddReferFriend = Convert.ToBoolean(item["AddReferFriend"]);
-                objDashboard.ReferPoints = Convert.ToInt32(item["ReferPoints"]);
-                objDashboard.AddGiftPoints = Convert.ToBoolean(item["AddGiftPoints"]);
-                objDashboard.GiftPoints = Convert.ToInt32(item["GiftPoints"]);
-
-                objDashboard.ExtraWidgetText1 = Convert.ToString(item["ExtraWidgetText1"]);
-                if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints1"])))
-                    objDashboard.ExtraWidgetPoints1 = Convert.ToInt32(item["ExtraWidgetPoints1"]);
-
-                objDashboard.ExtraWidgetText2 = Convert.ToString(item["ExtraWidgetText2"]);
-                if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints2"])))
-                    objDashboard.ExtraWidgetPoints2 = Convert.ToInt32(item["ExtraWidgetPoints2"]);
-
-                objDashboard.ExtraWidgetText3 = Convert.ToString(item["ExtraWidgetText3"]);
-                if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints3"])))
-                    objDashboard.ExtraWidgetPoints3 = Convert.ToInt32(item["ExtraWidgetPoints3"]);
-
-                objDashboard.ShowLogoToFooter = Convert.ToBoolean(item["ShowFooterImage"]);
-                objDashboard.CollectPersonalDataRandomly = Convert.ToBoolean(item["CollectInfoRendomly"]);
-                objDashboard.HeaderColor = Convert.ToString(item["HeaderColor"]);
-                objDashboard.PrefferedLanguage = Convert.ToString(item["PrefferedLanguage"]);
-                objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
-                objDashboard.AddedBy = userDetails.LoginId;
-                objDashboard.AddedDate = DateTime.Now;
-
-                status = DCR.SaveDLCDashboardConfig(userDetails.GroupId, objDashboard);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDashboard");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -140,10 +162,17 @@ namespace WebApp.Controllers.OnBoarding
             tblDLCDashboardConfig objDashboard = new tblDLCDashboardConfig();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objDashboard = DCR.GetDLCDashboardConfig(userDetails.GroupId);
-            var baseLogoPath = ConfigurationManager.AppSettings["DLCLogoBaseURL"].ToString();
-            objDashboard.LogoFile1= baseLogoPath + Convert.ToString(userDetails.GroupId + "Small.jpg");
-            objDashboard.LogoFile2 = baseLogoPath + Convert.ToString(userDetails.GroupId + "Medium.jpg");
-            objDashboard.LogoFile3 = baseLogoPath + Convert.ToString(userDetails.GroupId + "Big.jpg");
+            try
+            {
+                var baseLogoPath = ConfigurationManager.AppSettings["DLCLogoBaseURL"].ToString();
+                objDashboard.LogoFile1 = baseLogoPath + Convert.ToString(userDetails.GroupId + "Small.jpg");
+                objDashboard.LogoFile2 = baseLogoPath + Convert.ToString(userDetails.GroupId + "Medium.jpg");
+                objDashboard.LogoFile3 = baseLogoPath + Convert.ToString(userDetails.GroupId + "Big.jpg");
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDashboardConfigDetails");
+            }
             return new JsonResult() { Data = objDashboard, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -155,27 +184,34 @@ namespace WebApp.Controllers.OnBoarding
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objDashboardData = (object[])json_serializer.DeserializeObject(jsonData);
             //DataTable table = JsonConvert.DeserializeObject<DataTable>(jsonData);
-
-            foreach (Dictionary<string, object> item in objDashboardData)
+            try
             {
-                string Name = Convert.ToString(item["Name"]);
-                string NameMandStat = Convert.ToString(item["NameMandStat"]);
-                string Gender = Convert.ToString(item["Gender"]);
-                string GenderMandStat = Convert.ToString(item["GenderMandStat"]);
-                string BirthDate = Convert.ToString(item["BirthDate"]);
-                string BirthMandStat = Convert.ToString(item["BirthMandStat"]);
-                string Marrital = Convert.ToString(item["Marrital"]);
-                string MargMandStat = Convert.ToString(item["MargMandStat"]);
-                string Area = Convert.ToString(item["Area"]);
-                string AreaMandStat = Convert.ToString(item["AreaMandStat"]);
-                string City = Convert.ToString(item["City"]);
-                string CityMandStat = Convert.ToString(item["CityMandStat"]);
-                string Pincode = Convert.ToString(item["Pincode"]);
-                string PinMandStat = Convert.ToString(item["PinMandStat"]);
-                string Email = Convert.ToString(item["Email"]);
-                string MailMandStat = Convert.ToString(item["MailMandStat"]);
+                foreach (Dictionary<string, object> item in objDashboardData)
+                {
+                    string Name = Convert.ToString(item["Name"]);
+                    string NameMandStat = Convert.ToString(item["NameMandStat"]);
+                    string Gender = Convert.ToString(item["Gender"]);
+                    string GenderMandStat = Convert.ToString(item["GenderMandStat"]);
+                    string BirthDate = Convert.ToString(item["BirthDate"]);
+                    string BirthMandStat = Convert.ToString(item["BirthMandStat"]);
+                    string Marrital = Convert.ToString(item["Marrital"]);
+                    string MargMandStat = Convert.ToString(item["MargMandStat"]);
+                    string Area = Convert.ToString(item["Area"]);
+                    string AreaMandStat = Convert.ToString(item["AreaMandStat"]);
+                    string City = Convert.ToString(item["City"]);
+                    string CityMandStat = Convert.ToString(item["CityMandStat"]);
+                    string Pincode = Convert.ToString(item["Pincode"]);
+                    string PinMandStat = Convert.ToString(item["PinMandStat"]);
+                    string Email = Convert.ToString(item["Email"]);
+                    string MailMandStat = Convert.ToString(item["MailMandStat"]);
 
-                status = DCR.ProfileDataInsert(userDetails.GroupId, Name, NameMandStat, Gender, GenderMandStat, BirthDate, BirthMandStat, Marrital, MargMandStat, Area, AreaMandStat, City, CityMandStat, Pincode, PinMandStat, Email, MailMandStat);
+                    status = DCR.ProfileDataInsert(userDetails.GroupId, Name, NameMandStat, Gender, GenderMandStat, BirthDate, BirthMandStat, Marrital, MargMandStat, Area, AreaMandStat, City, CityMandStat, Pincode, PinMandStat, Email, MailMandStat);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveProfileUpdate");
             }
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -186,7 +222,14 @@ namespace WebApp.Controllers.OnBoarding
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            status = DCR.PublishDLCDashboardConfig(userDetails);
+            try
+            {
+                status = DCR.PublishDLCDashboardConfig(userDetails);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "PublishDLCDashboardConfig");
+            }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -194,7 +237,14 @@ namespace WebApp.Controllers.OnBoarding
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            status = DCR.PublishDLCProfileUpdate(userDetails.GroupId);
+            try
+            {
+                status = DCR.PublishDLCProfileUpdate(userDetails.GroupId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "PublishProfileUpdate");
+            }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult GenerateDLCLink()
@@ -204,12 +254,19 @@ namespace WebApp.Controllers.OnBoarding
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var BrandDetails = CR.GetAllBrandsByGroupId(userDetails.GroupId);
             //ViewBag.URLs = BrandDetails;
-            foreach(var item in BrandDetails)
+            try
             {
-                var url = BaseUrl + "?data=" + common.EncryptString("BrandId=" + item.BrandId);
-                Urls.Add(url);
+                foreach (var item in BrandDetails)
+                {
+                    var url = BaseUrl + "?data=" + common.EncryptString("BrandId=" + item.BrandId);
+                    Urls.Add(url);
+                }
+                ViewBag.URLs = Urls;
             }
-            ViewBag.URLs = Urls;
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GenerateDLCLink");
+            }
             return View();
         }
 
