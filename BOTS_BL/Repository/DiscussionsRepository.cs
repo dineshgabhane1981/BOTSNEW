@@ -300,6 +300,7 @@ namespace BOTS_BL.Repository
                     ObjEmailData.DepartHead = DepartmentHead.EmailId;
                     ObjEmailData.DepartHeadName = DepartmentHead.Members;
                     ObjEmailData.Addby = Sendfrom.Members;
+                    ObjEmailData.AddbyEmail = Sendfrom.EmailId;
 
                     if (SendTo != null)
                     {
@@ -378,10 +379,18 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        if (objDiscussion.DiscussionType != "Query")
+                        if ((objDiscussion.SubCallType == "30" || objDiscussion.SubCallType == "31" || objDiscussion.SubCallType == "32" || objDiscussion.SubCallType == "33"))
                         {
-                            Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
+                            Thread _job1 = new Thread(() => SendEmailForTeams(ObjEmailData));
                             _job1.Start();
+                        }
+                        else
+                        {
+                            if (objDiscussion.DiscussionType != "Query")
+                            {
+                                Thread _job1 = new Thread(() => SendEmail(ObjEmailData));
+                                _job1.Start();
+                            }
                         }
                     }
 
@@ -503,6 +512,7 @@ namespace BOTS_BL.Repository
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
                     var _WAGroupCode = context.WAReports.Where(x => x.GroupId == objDiscussion.GroupId && x.SMSStatus == "0").FirstOrDefault();
                     var _Discussion = context.BOTS_TblDiscussion.Where(x => x.Id == discussionId).FirstOrDefault();
+                    var DiscussionAddedBy = context.tblDepartMembers.Where(x => x.LoginId == objDiscussion.AddedBy).FirstOrDefault();
 
                     if (_GroupId == 1051)
                     {
@@ -511,19 +521,16 @@ namespace BOTS_BL.Repository
 
                     EmailDetails objmail = new EmailDetails();
 
-                    if (SendTo != null)
+                    if (Status == "Completed")
                     {
-                        objmail.SendTo = SendTo.EmailId;
+                        objmail.SendTo = Sendfrom.EmailId;
                     }
                     else
                     {
-                        if (Status == "Completed")
+                        objmail.SendTo = DepartmentHead.EmailId;
+                        if (SendTo != null)
                         {
-                            objmail.SendTo = Sendfrom.EmailId;
-                        }
-                        else
-                        {
-                            objmail.SendTo = DepartmentHead.EmailId;
+                            objmail.SendTo = SendTo.EmailId;
                         }
                     }
 
@@ -541,6 +548,7 @@ namespace BOTS_BL.Repository
                     objmail.id = objDiscussion.Id;
                     objmail.Description = objsubdiscussion.Description;
                     objmail.TeamName = Sendfrom.Department;
+                    objmail.DiscussionAddedBy = DiscussionAddedBy.EmailId;
                     if (Status == "Completed")
                     {
                         objmail.FromName = SendfromComplete.Members;
@@ -624,15 +632,12 @@ namespace BOTS_BL.Repository
                             _job2.Start();
                         }
                         else
-                        {
-                            //if (Reassign != "Please Select")
-                            //{
+                        { 
                             if (objDiscussion.DiscussionType != "Query")
                             {
                                 Thread _job1 = new Thread(() => SendEmailComplete(objmail));
                                 _job1.Start();
                             }
-                            //}
                         }
                     }
                     else
@@ -664,7 +669,7 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "UpdateDiscussions");
+                newexception.AddException(ex, objDiscussion.GroupId);
             }
 
             return status;
@@ -2238,10 +2243,8 @@ namespace BOTS_BL.Repository
                     mail.To.Add(Emaildata.SendTo);
                     mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
-                    if (Emaildata.DepartHead != null)
-                    {
-                        mail.CC.Add(Emaildata.DepartHead);
-                    }
+                    
+                    mail.CC.Add(Emaildata.AddbyEmail);
                     mail.Body = str.ToString();
                     mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
@@ -2406,10 +2409,9 @@ namespace BOTS_BL.Repository
                     mail.To.Add(Emaildata.SendTo);
                     mail.Subject = "WIP Reassigned[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
                     mail.SubjectEncoding = System.Text.Encoding.Default;
-                    if (Emaildata.DepartHead != null)
-                    {
-                        mail.CC.Add(Emaildata.DepartHead);
-                    }
+                    
+                    mail.CC.Add(Emaildata.DiscussionAddedBy);
+                    
                     mail.Body = str.ToString();
                     mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
@@ -2848,6 +2850,105 @@ namespace BOTS_BL.Repository
             {
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
+        }
+        public void SendEmailForTeams(EmailDetails Emaildata)
+        {
+            string responseString;
+            var from = ConfigurationManager.AppSettings["Email"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailAppPassword"].ToString();
+            var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            var PortNo = 587;
+            var OpsTeam = "operations@blueocktopus.in";
+
+            try
+            {
+                using (MailMessage mail = new MailMessage())//tech@blueocktopus.in operations@blueocktopus.in
+                {
+
+                    StringBuilder str = new StringBuilder();
+                    str.Append("<table>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Dear " + Emaildata.Member + ",</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    if (Emaildata.Priority == " ")
+                    {
+                        str.AppendLine("<td> You have a task assigned with <b>" + Emaildata.Priority + "priority</b></td>");
+                    }
+                    else
+                    {
+                        str.AppendLine("<td>You have a task assigned</td>");
+                    }
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Discription : " + Emaildata.Description + "</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Regards,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td> - " + Emaildata.FromName + "</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
+                    mail.From = new MailAddress(from);
+                    mail.To.Add(Emaildata.SendTo);
+                    mail.Subject = "WIP Raised[#" + Emaildata.id + "]: " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext;
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    if (Emaildata.DepartHead != null)
+                    {
+                        mail.CC.Add(Emaildata.DepartHead);
+                    }
+                    mail.CC.Add(OpsTeam);
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = true;
+                    mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
+                    if (!string.IsNullOrEmpty(Emaildata.FilePath))
+                    {
+                        Attachment data = new Attachment(Emaildata.FilePath, MediaTypeNames.Application.Octet);
+                        mail.Attachments.Add(data);
+                    }
+
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, PortNo))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(from, PWD);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
+                }
+            }
+
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+
         }
         public string GetDiscussionCustMobile(string CustName, string groupId)
         {

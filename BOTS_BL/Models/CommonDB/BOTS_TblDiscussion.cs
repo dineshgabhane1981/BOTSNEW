@@ -112,6 +112,7 @@ namespace BOTS_BL.Models.CommonDB
         public string MemberCompleted { get; set; }
         public string DepartHeadName { get; set; }
         public string FromName { get; set; }
+        public string DiscussionAddedBy { get; set; }
 
     }
 
