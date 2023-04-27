@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BOTS_BL;
 using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using ClosedXML.Excel;
@@ -18,6 +19,7 @@ namespace WebApp.Controllers
         KeyIndecatorsRepository KR = new KeyIndecatorsRepository();
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository CR = new CustomerRepository();
+        Exceptions newexception = new Exceptions();
         // GET: KeyIndicators
         public ActionResult Index()
         {
@@ -27,16 +29,30 @@ namespace WebApp.Controllers
         public ActionResult OnlyOnce()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.OutletList = lstOutlet;
+            try
+            {
+                var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.OutletList = lstOutlet;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "OnlyOnce");
+            }
             return View();
         }
 
         public ActionResult NonTransacting()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-            ViewBag.OutletList = lstOutlet;
+            try
+            {
+                var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+                ViewBag.OutletList = lstOutlet;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "NonTransacting");
+            }
             return View();
         }
 
@@ -52,49 +68,56 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             MemberWebPage objMemberWebPage = new MemberWebPage();
-            objMemberWebPage = KR.GetMemberWebPageData(userDetails.GroupId, userDetails.connectionString);
+            try
+            {
+                objMemberWebPage = KR.GetMemberWebPageData(userDetails.GroupId, userDetails.connectionString);
 
-            List<long> memberbasedataList = new List<long>();
-            memberbasedataList.Add(objMemberWebPage.TotalMember);
-            memberbasedataList.Add(objMemberWebPage.ReferringBase);
-            var lstMemberBaseData = string.Join(",", memberbasedataList);
+                List<long> memberbasedataList = new List<long>();
+                memberbasedataList.Add(objMemberWebPage.TotalMember);
+                memberbasedataList.Add(objMemberWebPage.ReferringBase);
+                var lstMemberBaseData = string.Join(",", memberbasedataList);
 
-            List<long> memberbaseProfileList = new List<long>();
-            memberbaseProfileList.Add(objMemberWebPage.TotalMember);
-            memberbaseProfileList.Add(objMemberWebPage.NoofProfileUpdate);
-            var lstMemberBaseProfileData = string.Join(",", memberbaseProfileList);
+                List<long> memberbaseProfileList = new List<long>();
+                memberbaseProfileList.Add(objMemberWebPage.TotalMember);
+                memberbaseProfileList.Add(objMemberWebPage.NoofProfileUpdate);
+                var lstMemberBaseProfileData = string.Join(",", memberbaseProfileList);
 
-            List<long> memberbaseGiftList = new List<long>();
-            memberbaseGiftList.Add(objMemberWebPage.TotalMember);
-            memberbaseGiftList.Add(objMemberWebPage.GiftPointsCount);
-            var lstMemberBaseGiftData = string.Join(",", memberbaseGiftList);
+                List<long> memberbaseGiftList = new List<long>();
+                memberbaseGiftList.Add(objMemberWebPage.TotalMember);
+                memberbaseGiftList.Add(objMemberWebPage.GiftPointsCount);
+                var lstMemberBaseGiftData = string.Join(",", memberbaseGiftList);
 
-            List<long> memberbaseGiftOptOutList = new List<long>();
-            memberbaseGiftOptOutList.Add(objMemberWebPage.ProgramOtpOut);
-            memberbaseGiftOptOutList.Add(objMemberWebPage.PromoSMSOtpOut);
-            var lstMemberBaseOptOutData = string.Join(",", memberbaseGiftOptOutList);
+                List<long> memberbaseGiftOptOutList = new List<long>();
+                memberbaseGiftOptOutList.Add(objMemberWebPage.ProgramOtpOut);
+                memberbaseGiftOptOutList.Add(objMemberWebPage.PromoSMSOtpOut);
+                var lstMemberBaseOptOutData = string.Join(",", memberbaseGiftOptOutList);
 
-            List<string> referralnameList = new List<string>();
-            referralnameList.Add("'Issued'");
-            referralnameList.Add("'Redeemed'");
-            referralnameList.Add("'Expired'");
-            referralnameList.Add("'Unused'");
-            var lstreferralNames = string.Join(",", referralnameList);
+                List<string> referralnameList = new List<string>();
+                referralnameList.Add("'Issued'");
+                referralnameList.Add("'Redeemed'");
+                referralnameList.Add("'Expired'");
+                referralnameList.Add("'Unused'");
+                var lstreferralNames = string.Join(",", referralnameList);
 
-            List<long> referraldataList = new List<long>();
-            referraldataList.Add(objMemberWebPage.ReferralPointsIssued);
-            referraldataList.Add(objMemberWebPage.ReferralPointsRedeem);
-            referraldataList.Add(objMemberWebPage.ReferralPointsExpired);
-            referraldataList.Add(objMemberWebPage.ReferralPointsUnused);
-            var lstreferraldata = string.Join(",", referraldataList);
+                List<long> referraldataList = new List<long>();
+                referraldataList.Add(objMemberWebPage.ReferralPointsIssued);
+                referraldataList.Add(objMemberWebPage.ReferralPointsRedeem);
+                referraldataList.Add(objMemberWebPage.ReferralPointsExpired);
+                referraldataList.Add(objMemberWebPage.ReferralPointsUnused);
+                var lstreferraldata = string.Join(",", referraldataList);
 
-            ViewBag.ReferralNames = lstreferralNames.Trim();
-            ViewBag.ReferralData = lstreferraldata.Trim();
-            ViewBag.MemberbaseProfileData = lstMemberBaseProfileData.Trim();
-            ViewBag.MemberbaseData = lstMemberBaseData.Trim();
-            ViewBag.MemberbaseGiftData = lstMemberBaseGiftData.Trim();
-            ViewBag.MemberbaseOptOutData = lstMemberBaseOptOutData.Trim();
+                ViewBag.ReferralNames = lstreferralNames.Trim();
+                ViewBag.ReferralData = lstreferraldata.Trim();
+                ViewBag.MemberbaseProfileData = lstMemberBaseProfileData.Trim();
+                ViewBag.MemberbaseData = lstMemberBaseData.Trim();
+                ViewBag.MemberbaseGiftData = lstMemberBaseGiftData.Trim();
+                ViewBag.MemberbaseOptOutData = lstMemberBaseOptOutData.Trim();
 
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "MemberWebPage");
+            }
             return View(objMemberWebPage);
         }
 
@@ -102,16 +125,29 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             MemberPage objMemberPage = new MemberPage();
-            objMemberPage = KR.GetMemberPageData(userDetails.GroupId, userDetails.connectionString);
+            try
+            {
+                objMemberPage = KR.GetMemberPageData(userDetails.GroupId, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "MemberPage");
+            }
             return View(objMemberPage);
         }
         [HttpPost]
         public JsonResult GetReferingBaseData(string type)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-
             List<MemberPageRefData> objMemberPageRefData = new List<MemberPageRefData>();
-            objMemberPageRefData = KR.GetMemberPageRefData(userDetails.GroupId, type, userDetails.connectionString);
+            try
+            {
+                objMemberPageRefData = KR.GetMemberPageRefData(userDetails.GroupId, type, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetReferingBaseData");
+            }
             return new JsonResult() { Data = objMemberPageRefData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -124,15 +160,22 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             OnlyOnce objOnlyOnce = new OnlyOnce();
-            objOnlyOnce = KR.GetOnlyOnceData(userDetails.GroupId, outletId, userDetails.connectionString, userDetails.LoginId);
+            try
+            {
+                objOnlyOnce = KR.GetOnlyOnceData(userDetails.GroupId, outletId, userDetails.connectionString, userDetails.LoginId);
 
-            objOnlyOnce.TotalMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.TotalMember));
-            objOnlyOnce.OnlyOnceMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.OnlyOnceMember));
-            objOnlyOnce.RecentVisitHighStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.RecentVisitHigh));
-            objOnlyOnce.RecentVisitLowStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.RecentVisitLow));
-            objOnlyOnce.NotSeenHighStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.NotSeenHigh));
-            objOnlyOnce.NotSeenLowStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.NotSeenLow));
+                objOnlyOnce.TotalMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.TotalMember));
+                objOnlyOnce.OnlyOnceMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.OnlyOnceMember));
+                objOnlyOnce.RecentVisitHighStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.RecentVisitHigh));
+                objOnlyOnce.RecentVisitLowStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.RecentVisitLow));
+                objOnlyOnce.NotSeenHighStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.NotSeenHigh));
+                objOnlyOnce.NotSeenLowStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.NotSeenLow));
 
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOnlyOnceResult");
+            }
             return new JsonResult() { Data = objOnlyOnce, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -145,32 +188,39 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
-            objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString, userDetails.LoginId);
-            long? totalspent = 0;
-            long? totalvisit = 0;
-            long? availbal = 0;
-            foreach (var item in objOnlyOnceTxn)
+            try
             {
-                totalspent += item.TotalSpend;
-                totalvisit += item.TotalVisit;
-                availbal += item.AvlBalPoints;
-            }
-            OnlyOnceTxn totalItem = new OnlyOnceTxn();
-            totalItem.EnrolledOutlet = "<b>Total</b>";
-            totalItem.TotalSpend = totalspent;
-            totalItem.TotalVisit = totalvisit;
-            totalItem.AvlBalPoints = availbal;
-            totalItem.MobileNo = "";
-            totalItem.MaskedMobileNo = "";
-            objOnlyOnceTxn.Add(totalItem);
-
-            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-            if (!GroupDetails.IsMasked)
-            {
+                objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString, userDetails.LoginId);
+                long? totalspent = 0;
+                long? totalvisit = 0;
+                long? availbal = 0;
                 foreach (var item in objOnlyOnceTxn)
                 {
-                    item.MaskedMobileNo = item.MobileNo;
+                    totalspent += item.TotalSpend;
+                    totalvisit += item.TotalVisit;
+                    availbal += item.AvlBalPoints;
                 }
+                OnlyOnceTxn totalItem = new OnlyOnceTxn();
+                totalItem.EnrolledOutlet = "<b>Total</b>";
+                totalItem.TotalSpend = totalspent;
+                totalItem.TotalVisit = totalvisit;
+                totalItem.AvlBalPoints = availbal;
+                totalItem.MobileNo = "";
+                totalItem.MaskedMobileNo = "";
+                objOnlyOnceTxn.Add(totalItem);
+
+                var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                if (!GroupDetails.IsMasked)
+                {
+                    foreach (var item in objOnlyOnceTxn)
+                    {
+                        item.MaskedMobileNo = item.MobileNo;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOnlyOnceTxnResult");
             }
             return new JsonResult() { Data = objOnlyOnceTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -269,6 +319,9 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+                newexception.AddException(ex, "ExportToExcelOnlyOnce");
+            }
+            {
                 return null;
             }
 
@@ -283,7 +336,14 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             NonTransactingCls objNonTransactingCls = new NonTransactingCls();
-            objNonTransactingCls = KR.GetNonTransactingData(userDetails.GroupId, outletId, userDetails.connectionString, userDetails.LoginId);
+            try
+            {
+                objNonTransactingCls = KR.GetNonTransactingData(userDetails.GroupId, outletId, userDetails.connectionString, userDetails.LoginId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetNonTransactingResult");
+            }
             return new JsonResult() { Data = objNonTransactingCls, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         [HttpPost]
@@ -309,34 +369,40 @@ namespace WebApp.Controllers
                 outletId = "";
             }
             List<NonTransactingTxn> objNonTransactingTxn = new List<NonTransactingTxn>();
-            objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString, userDetails.LoginId);
-            long? totalspent = 0;
-            long? totalvisit = 0;
-            long? availbal = 0;
-            foreach(var item in objNonTransactingTxn)
+            try
             {
-                totalspent += item.TotalSpend;
-                totalvisit += item.TotalVisit;
-                availbal += item.AvlBalPoints;
-            }
-            NonTransactingTxn totalItem = new NonTransactingTxn();
-            totalItem.EnrolledOutlet = "<b>Total</b>";
-            totalItem.TotalSpend = totalspent;
-            totalItem.TotalVisit = totalvisit;
-            totalItem.AvlBalPoints = availbal;
-            totalItem.MobileNo = "";
-            totalItem.MaskedMobileNo = "";
-            objNonTransactingTxn.Add(totalItem);
-
-            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-            if (!GroupDetails.IsMasked)
-            {
+                objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString, userDetails.LoginId);
+                long? totalspent = 0;
+                long? totalvisit = 0;
+                long? availbal = 0;
                 foreach (var item in objNonTransactingTxn)
                 {
-                    item.MaskedMobileNo = item.MobileNo;
+                    totalspent += item.TotalSpend;
+                    totalvisit += item.TotalVisit;
+                    availbal += item.AvlBalPoints;
+                }
+                NonTransactingTxn totalItem = new NonTransactingTxn();
+                totalItem.EnrolledOutlet = "<b>Total</b>";
+                totalItem.TotalSpend = totalspent;
+                totalItem.TotalVisit = totalvisit;
+                totalItem.AvlBalPoints = availbal;
+                totalItem.MobileNo = "";
+                totalItem.MaskedMobileNo = "";
+                objNonTransactingTxn.Add(totalItem);
+
+                var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                if (!GroupDetails.IsMasked)
+                {
+                    foreach (var item in objNonTransactingTxn)
+                    {
+                        item.MaskedMobileNo = item.MobileNo;
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetNonTransactingTxnResult");
+            }
             return new JsonResult() { Data = objNonTransactingTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -344,42 +410,55 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
-            objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString, userDetails.LoginId);
-            var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-            long totalspent = 0;
-            long? totalvisit = 0;
-            long availbal = 0;
-            foreach (var item in objNonRedemptionTxn)
+            try
             {
-                totalspent += item.TotalSpend;
-                totalvisit += item.TotalVisit;
-                availbal += item.AvlBalPoints;
-            }
-            NonRedemptionTxn totalItem = new NonRedemptionTxn();
-            totalItem.EnrolledOutlet = "<b>Total</b>";
-            totalItem.TotalSpend = totalspent;
-            totalItem.TotalVisit = totalvisit;
-            totalItem.AvlBalPoints = availbal;
-            totalItem.MobileNo = "";
-            totalItem.MaskedMobileNo = "";
-            objNonRedemptionTxn.Add(totalItem);
-
-
-            if (!GroupDetails.IsMasked)
-            {
+                objNonRedemptionTxn = KR.GetNonRedemptionTxnData(userDetails.GroupId, type, daysType, userDetails.connectionString, userDetails.LoginId);
+                var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
+                long totalspent = 0;
+                long? totalvisit = 0;
+                long availbal = 0;
                 foreach (var item in objNonRedemptionTxn)
                 {
-                    item.MaskedMobileNo = item.MobileNo;
+                    totalspent += item.TotalSpend;
+                    totalvisit += item.TotalVisit;
+                    availbal += item.AvlBalPoints;
+                }
+                NonRedemptionTxn totalItem = new NonRedemptionTxn();
+                totalItem.EnrolledOutlet = "<b>Total</b>";
+                totalItem.TotalSpend = totalspent;
+                totalItem.TotalVisit = totalvisit;
+                totalItem.AvlBalPoints = availbal;
+                totalItem.MobileNo = "";
+                totalItem.MaskedMobileNo = "";
+                objNonRedemptionTxn.Add(totalItem);
+
+
+                if (!GroupDetails.IsMasked)
+                {
+                    foreach (var item in objNonRedemptionTxn)
+                    {
+                        item.MaskedMobileNo = item.MobileNo;
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetNonRedemptionTxnResult");
+            }
             return new JsonResult() { Data = objNonRedemptionTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult GetNewRegistrationList(string SourceId)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<MemberPageNewRegisterationData> lstnewregdata = new List<MemberPageNewRegisterationData>();
-            lstnewregdata = KR.GetNewRegistrationData(userDetails.GroupId, SourceId, userDetails.connectionString);
+            try
+            {
+                lstnewregdata = KR.GetNewRegistrationData(userDetails.GroupId, SourceId, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetNewRegistrationList");
+            }
             return new JsonResult() { Data = lstnewregdata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -388,7 +467,14 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             MembersInformation objMembersInformation = new MembersInformation();
-            objMembersInformation = KR.GetMemberMisinformationData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
+            try
+            {
+                objMembersInformation = KR.GetMemberMisinformationData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMemberMisinformationData");
+            }
             return new JsonResult() { Data = objMembersInformation, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -478,7 +564,10 @@ namespace WebApp.Controllers
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex)           
+            {
+                newexception.AddException(ex, "ExportToExcelNonTransacting");
+            }
             {
                 return null;
             }
@@ -580,6 +669,9 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
+                newexception.AddException(ex, "ExportToExcelNonRedemption");
+            }
+            {
                 return null;
             }
         }
@@ -588,24 +680,38 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             List<DLCCreation> lstData = new List<DLCCreation>();
-            lstData = KR.GetDLCCreationData(userDetails.GroupId);
+            try
+            {
+                lstData = KR.GetDLCCreationData(userDetails.GroupId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DLCCreation");
+            }
             return View(lstData);
         }
         public ActionResult AddEditDLCCreation(string SlNo)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            ViewBag.MemberType = KR.GetMemberType();
-            ViewBag.PointsExpiryType = KR.GetPointsExpiryType();
             DLCCreation objData = new DLCCreation();
-            if (!string.IsNullOrEmpty(SlNo))
+            try
             {
-                objData = KR.GetDLCForEdit(Convert.ToInt64(SlNo), userDetails.GroupId);
+                ViewBag.MemberType = KR.GetMemberType();
+                ViewBag.PointsExpiryType = KR.GetPointsExpiryType();                
+                if (!string.IsNullOrEmpty(SlNo))
+                {
+                    objData = KR.GetDLCForEdit(Convert.ToInt64(SlNo), userDetails.GroupId);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddEditDLCCreation");
             }
             return View(objData);
         }
         public ActionResult UpdateDLCCreation(DLCCreation objDLCCreation)
         {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];           
             if (objDLCCreation.SlNo > 0)
             {
                 objDLCCreation.UpdatedBy = userDetails.LoginId;
