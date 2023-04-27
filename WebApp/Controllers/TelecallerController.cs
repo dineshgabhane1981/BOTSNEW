@@ -94,7 +94,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "GetReportData");
                 return null;
             }
 
@@ -185,7 +185,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "ExportToExcelTelecallerReport");
                 return null;
             }
 
