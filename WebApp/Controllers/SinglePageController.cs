@@ -92,7 +92,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "Single Page");
+                newexception.AddException(ex, "Index");
             }
             return View(singlevm);
         }
@@ -349,7 +349,7 @@ namespace WebApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    newexception.AddException(ex, "Single Page");
+                    newexception.AddException(ex, "CityWise");
                 }
 
 
@@ -391,7 +391,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "Single Page");
+                newexception.AddException(ex, "GroupWise");
             }
 
             return View(singlevm);
@@ -420,7 +420,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "Customer Renewal");
+                newexception.AddException(ex, "RenewalData");
             }
 
 
@@ -484,7 +484,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "NonTransactionData");
+                newexception.AddException(ex, "GetAllNonTransactingData");
             }
             return View("NonTransactionData", objDataNew);
         }
@@ -500,7 +500,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "NonRedeemedData");
+                newexception.AddException(ex, "GetAllNonRedeemedData");
             }
             return View("NonRedeemedData", objDataNew);
         }
