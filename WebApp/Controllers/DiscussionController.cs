@@ -42,44 +42,50 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             userDetails.GroupId = groupId;
             userDetails.CustomerName = CR.GetCustomerName(groupId);
-            
-
-            string LoginType = userDetails.LoginType;
-            string LoginId = userDetails.LoginId;
-            string LoginName = userDetails.UserName;
-
-            Session["buttons"] = "Discussion";
-
             DiscussionViewModel objData = new DiscussionViewModel();
-            BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
-            string GroupName = string.Empty;
-            if (string.IsNullOrEmpty(isOnboarding))
+            try
             {
-                var objGroup = CR.GetGroupDetails(Convert.ToInt32(groupId));
-                GroupName = objGroup.GroupName;
-                userDetails.connectionString = CR.GetCustomerConnString(groupId);
-            }
-            else
-            {
-                var objGroup = CR.GetOnboardingGroupDetails(groupId);
-                GroupName = objGroup.GroupName;
-            }
-            Session["UserSession"] = userDetails;
-            objDiscussion.GroupId = groupId;
-            objDiscussion.GroupName = GroupName;
-            objData.objDiscussion = objDiscussion;
-            objData.lstDiscussions = DR.GetDiscussions(groupId, LoginType, LoginId, LoginName);
-            objData.lstCallTypes = DR.GetCallTypes(LoginType);
-            List<SelectListItem> callSubType = new List<SelectListItem>();
-            SelectListItem item = new SelectListItem();
-            item.Value = "0";
-            item.Text = "Please Select";
-            callSubType.Add(item);
-            objData.lstCallSubTypes = callSubType;
+                string LoginType = userDetails.LoginType;
+                string LoginId = userDetails.LoginId;
+                string LoginName = userDetails.UserName;
 
-            var CustNames = DR.GetAllDiscussionCustNames(groupId);
-            ViewBag.CustNames = CustNames.ToArray();
-            ViewBag.CustNames1 = CustNames;
+                Session["buttons"] = "Discussion";
+
+                
+                BOTS_TblDiscussion objDiscussion = new BOTS_TblDiscussion();
+                string GroupName = string.Empty;
+                if (string.IsNullOrEmpty(isOnboarding))
+                {
+                    var objGroup = CR.GetGroupDetails(Convert.ToInt32(groupId));
+                    GroupName = objGroup.GroupName;
+                    userDetails.connectionString = CR.GetCustomerConnString(groupId);
+                }
+                else
+                {
+                    var objGroup = CR.GetOnboardingGroupDetails(groupId);
+                    GroupName = objGroup.GroupName;
+                }
+                Session["UserSession"] = userDetails;
+                objDiscussion.GroupId = groupId;
+                objDiscussion.GroupName = GroupName;
+                objData.objDiscussion = objDiscussion;
+                objData.lstDiscussions = DR.GetDiscussions(groupId, LoginType, LoginId, LoginName);
+                objData.lstCallTypes = DR.GetCallTypes(LoginType);
+                List<SelectListItem> callSubType = new List<SelectListItem>();
+                SelectListItem item = new SelectListItem();
+                item.Value = "0";
+                item.Text = "Please Select";
+                callSubType.Add(item);
+                objData.lstCallSubTypes = callSubType;
+
+                var CustNames = DR.GetAllDiscussionCustNames(groupId);
+                ViewBag.CustNames = CustNames.ToArray();
+                ViewBag.CustNames1 = CustNames;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AllDiscussions");
+            }
             return View(objData);
         }
 
@@ -89,42 +95,56 @@ namespace WebApp.Controllers
             userDetails.CustomerName = "";
             string LoginType = userDetails.LoginType;
             DiscussionViewModel ObjData = new DiscussionViewModel();
-            ViewBag.lstcommonstatus = DR.CommonStatus();
-            ViewBag.lstgroupdetails = DR.GetGroupDetails();
-            ViewBag.lstCallTypes = DR.GetCallTypes(LoginType);
-            ViewBag.lstRMAssigned = DR.GetRaisedby();
-            ViewBag.lstMemberAssigned = DR.GetAssignedMemberList();
-            if (LoginType != "1" && LoginType != "7")
+            try
             {
-                ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, false, userDetails.LoginId, "");
-                ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, true, userDetails.LoginId, "");
+                ViewBag.lstcommonstatus = DR.CommonStatus();
+                ViewBag.lstgroupdetails = DR.GetGroupDetails();
+                ViewBag.lstCallTypes = DR.GetCallTypes(LoginType);
+                ViewBag.lstRMAssigned = DR.GetRaisedby();
+                ViewBag.lstMemberAssigned = DR.GetAssignedMemberList();
+                if (LoginType != "1" && LoginType != "7")
+                {
+                    ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, false, userDetails.LoginId, "");
+                    ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, true, userDetails.LoginId, "");
+                }
+                else
+                {
+                    ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, false, "", "");
+                    ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, true, "", "");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ObjData.lstDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, false, "", "");
-                ObjData.lstFollowUpsDiscussions = DR.GetfilteredDiscussionDataAssign("", 0, 0, "", "", "", "", LoginType, userDetails.LoginId, true, "", "");
+                newexception.AddException(ex, "CommonDiscussion");
             }
             return View(ObjData);
         }
 
         [HttpPost]
         public JsonResult GetSubCallTypes(int callId)
-        {
-            var lstSubCallType = DR.GetSubCallTypes(callId);
-            return new JsonResult() { Data = lstSubCallType, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        {            
+                var lstSubCallType = DR.GetSubCallTypes(callId);
+                return new JsonResult() { Data = lstSubCallType, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         [HttpPost]
         public bool AddDiscussion(DiscussionViewModel objData)
         {
             bool status = false;
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objData.objDiscussion.AddedDate = DateTime.Now;
-            objData.objDiscussion.UpdatedDate = DateTime.Now;
-            objData.objDiscussion.AddedBy = userDetails.LoginId;
-            string File = objData.File;
-            string FileName = objData.FileName;
-            status = DR.AddDiscussions(objData.objDiscussion, File, FileName);
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                objData.objDiscussion.AddedDate = DateTime.Now;
+                objData.objDiscussion.UpdatedDate = DateTime.Now;
+                objData.objDiscussion.AddedBy = userDetails.LoginId;
+                string File = objData.File;
+                string FileName = objData.FileName;
+                status = DR.AddDiscussions(objData.objDiscussion, File, FileName);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddDiscussion");
+            }
 
             return status;
         }
@@ -152,18 +172,24 @@ namespace WebApp.Controllers
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            string dId = Obj.dId;
-            string Desc = Obj.Desc;
-            string Status = Obj.Status;
-            string FollowupDate = Obj.FollowupDate;
-            string Reassign = Obj.Reassign;
-            string FileName = Obj.FileName;
-            string File = Obj.File;
-            string RequestType = Obj.RequestType;
-            status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File,RequestType);
+            try
+            {
+                string dId = Obj.dId;
+                string Desc = Obj.Desc;
+                string Status = Obj.Status;
+                string FollowupDate = Obj.FollowupDate;
+                string Reassign = Obj.Reassign;
+                string FileName = Obj.FileName;
+                string File = Obj.File;
+                string RequestType = Obj.RequestType;
+                status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File, RequestType);
 
-            ModelState.Clear();
-
+                ModelState.Clear();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateStatusAndDiscussion");
+            }
             return status;
         }
 
@@ -254,7 +280,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, userDetails.GroupId);
+                newexception.AddException(ex, "ExportToExcelCommonFilteredDiscussion");
                 return null;
             }
 
@@ -269,12 +295,18 @@ namespace WebApp.Controllers
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                string Department = Convert.ToString(item["Department"]);
-                objDepartMem = DR.GetMemberdetails(Department);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string Department = Convert.ToString(item["Department"]);
+                    objDepartMem = DR.GetMemberdetails(Department);
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDepartmentMember");                
+            }
             return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -285,18 +317,25 @@ namespace WebApp.Controllers
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-            foreach (Dictionary<string, object> item in objData)
+            try
             {
-                string id = Convert.ToString(item["id"]);
-                objDepartMem = DR.GetReAssignMemberdetails(id);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string id = Convert.ToString(item["id"]);
+                    objDepartMem = DR.GetReAssignMemberdetails(id);
+                }
             }
-
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetReAssignMember");
+            }
             return new JsonResult() { Data = objDepartMem, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public ActionResult GetTaskCounts(string Department)
         {
-            var TaskCount = DR.GetTaskCount(Department);
+            
+                var TaskCount = DR.GetTaskCount(Department);
             return new JsonResult() { Data = TaskCount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
