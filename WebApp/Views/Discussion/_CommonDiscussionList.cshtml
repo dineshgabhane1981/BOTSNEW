@@ -146,20 +146,20 @@
                                                 followupdate = item.FollowupDate.Value.ToString();//.ToString("yyyy-MM-dd");
                                             }
                                             var imgId = "imgExpandFollowup" + item.Id;
+                                            //var subtype = (WebApp.ViewModel.SubCallTypeEnum)Convert.ToInt32(item.SubCallType);
                                             <tr>
 
                                                 <td style="text-align:center;">
-                                                    @*@if (item.SubDiscussionCount > 0)
-                                                        {*@
                                                     <img id="@imgId" src="~/Content/assets/images/details_open.png" style="cursor:pointer;" onclick="ShowFollowUpActivities(@item.Id);" />
-                                                    @*}*@
                                                 </td>
                                                 <td>@item.Id</td>
                                                 <td style="max-width:100px !important;">@item.GroupName</td>
                                                 <td>@item.AddedDate</td>
                                                 <td>@item.SpokenTo/<br />@item.ContactNo/<br />@item.CustomerType/<br />@item.CallMode</td>
                                                 <td>@item.CallType</td>
+
                                                 <td>@item.SubCallType</td>
+                                                @*   <td>@subtype.ToString()</td>*@
                                                 @if (followupdate == "--")
                                                 {
                                                     <td style="text-align:center;">--</td>
