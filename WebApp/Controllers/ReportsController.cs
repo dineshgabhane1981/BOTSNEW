@@ -150,7 +150,7 @@ namespace WebApp.Controllers
         public ActionResult CreateOwnSegment()
         {
             CreateOwnReportViewModel createownviewmodel = new CreateOwnReportViewModel();
-           
+
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             //var lstEnrolledList = RR.GetEnrolledList(userDetails.GroupId, userDetails.connectionString);
             //ViewBag.lstEnrolledList = lstEnrolledList;
@@ -183,7 +183,7 @@ namespace WebApp.Controllers
         }
         public JsonResult GetFilteredData(string jsonData)
         {
-            
+
             // var transcount = 0;
             CustomerIdListAndCount objcounts = new CustomerIdListAndCount();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -317,10 +317,10 @@ namespace WebApp.Controllers
         public JsonResult GetPointsExpiryDataResult(int month, int year)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            
-                PointExpiryTmp objPointExpiry = new PointExpiryTmp();
-                objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, month, year, userDetails.connectionString, userDetails.LoginId);
-            
+
+            PointExpiryTmp objPointExpiry = new PointExpiryTmp();
+            objPointExpiry = RR.GetPointExpiryData(userDetails.GroupId, month, year, userDetails.connectionString, userDetails.LoginId);
+
             return new JsonResult() { Data = objPointExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -667,9 +667,15 @@ namespace WebApp.Controllers
                 decimal? bpts = 0;
                 foreach (DataRow dr in table.Rows)
                 {
-                    amt += Convert.ToDecimal(dr["InvoiceAmt"]);
-                    epts += Convert.ToDecimal(dr["PointsEarned"]);
-                    bpts += Convert.ToDecimal(dr["PointsBurned"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["InvoiceAmt"])))
+                        amt += Convert.ToDecimal(dr["InvoiceAmt"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsEarned"])))
+                        epts += Convert.ToDecimal(dr["PointsEarned"]);
+
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["PointsBurned"])))
+                        bpts += Convert.ToDecimal(dr["PointsBurned"]);
+
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["InvoiceAmt"])))
                     {
                         dr["InvoiceAmtStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["InvoiceAmt"]));
@@ -687,10 +693,17 @@ namespace WebApp.Controllers
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
                         var subDate = Convert.ToString(dr["TxnDatetime"]).Substring(0, 10);
-                        var subTime = Convert.ToString(dr["TxnDatetime"]).Substring(11, 8);
+
+                        string subTime = "";
+                        if (Convert.ToString(dr["TxnDatetime"]).Length > 10)
+                            subTime = Convert.ToString(dr["TxnDatetime"]).Substring(11, 8);
                         var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                        dr["TxnDatetime"] = convertedDate + " " + subTime;
+                        
+                        if (subTime == "")
+                            dr["TxnDatetime"] = convertedDate;
+                        else
+                            dr["TxnDatetime"] = convertedDate + " " + subTime;
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TxnUpdateDate"])))
                     {
@@ -1410,7 +1423,7 @@ namespace WebApp.Controllers
         public ActionResult ExportToExcelCreateOwnReport(string ReportName)
         {
             System.Data.DataTable table = new System.Data.DataTable();
-            
+
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];

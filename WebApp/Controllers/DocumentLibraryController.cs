@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using WebApp.ViewModel;
 using System.Web.Script.Serialization;
+using BOTS_BL;
 
 namespace WebApp.Controllers
 {

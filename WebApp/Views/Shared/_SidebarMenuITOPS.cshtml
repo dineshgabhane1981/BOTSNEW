@@ -128,13 +128,24 @@
                                 Point Transfer
                             </a>
                         </li>
-                        @*<li class="@Html.IsSelected(controller: "Bitly", action: "Index,UploadData")">
-                            <a href="@Url.Action("Index", "Bitly")" class="@Html.IsSelected(controller: "Bitly", action: "Index,UploadData")">
+                        <li class="@Html.IsSelected(controller: "Member", action: "Index")">
+                            <a href="@Url.Action("Index", "Member")" class="@Html.IsSelected(controller: "Member", action: "Index")">
                                 <i class="metismenu-icon pe-7s-rocket"></i>
-                                Create Bitly
+                                Delete User
                             </a>
-                        </li>*@
-
+                        </li>
+                        <li class="@Html.IsSelected(controller: "Member", action: "Index")">
+                            <a href="@Url.Action("Index", "Member")" class="@Html.IsSelected(controller: "Member", action: "Index")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Block Message
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: "Member", action: "DeleteUser")">
+                            <a href="@Url.Action("DeleteUser", "Member")" class="@Html.IsSelected(controller: "Member", action: "DeleteUser")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Delete User
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>
