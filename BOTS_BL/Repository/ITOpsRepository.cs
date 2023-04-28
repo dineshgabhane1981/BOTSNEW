@@ -46,7 +46,7 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == searchData).FirstOrDefault();
+                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == searchData && x.Status == "00").FirstOrDefault();
                 }
                 if (objCustomerDetail != null)
                 {
@@ -82,7 +82,7 @@ namespace BOTS_BL.Repository
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CardNumber == searchData).FirstOrDefault();
+                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CardNumber == searchData && x.Status == "00").FirstOrDefault();
                 }
                 if (objCustomerDetail != null)
                 {
@@ -1135,6 +1135,42 @@ namespace BOTS_BL.Repository
             {
                 var result_00004 = streamReader_00004.ReadToEnd();
             }
+        }
+
+        public bool DeleteUser(string GroupId, string MobileNo,string CustomerId, tblAudit objAudit)
+        {
+            bool status = false;
+            try
+            {
+                CustomerDetail objCustomerDetail = new CustomerDetail();
+               
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
+                    
+                    objCustomerDetail.Status = "01";
+                    objCustomerDetail.IsSMS = false;
+
+                    contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
+                    contextNew.SaveChanges();
+
+
+
+                    status = true;
+
+                }
+                using (var context = new CommonDBContext())
+                {
+                    context.tblAudits.Add(objAudit);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DeleteUser");
+            }
+            return status;
         }
 
 
