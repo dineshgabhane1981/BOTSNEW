@@ -16,7 +16,7 @@ namespace OTPPage
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "OTPLogin", action = "Authenticate", id = UrlParameter.Optional }
+                defaults: new { controller = "OTPLogin", action = "OTPPage", id = UrlParameter.Optional }
             );
         }
     }

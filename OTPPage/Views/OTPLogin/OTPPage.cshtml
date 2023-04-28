@@ -3,8 +3,15 @@
     ViewBag.Title = "OTPPage";
 }
 
-<h2>OTPPage</h2>
-<div class="p-3 m-5 col-lg-6 col-md-6" style=" border: 1px solid grey; border-radius: 10px;margin-top:60px;">
+<style>
+    .input50 {
+        width: 170px;
+        padding: 12px 10px 12px 15px !important;
+        border-radius: 10px !important;
+        border: solid 1px #e1e1e1;
+    }
+</style>
+<div class="p-3 m-5 col-lg-6 col-md-6" style=" border: 1px solid grey; border-radius: 10px; margin-top: 60px; margin-left: 300px;">
     <div style="padding-right:10px; margin-top:20px;" class="row">
         <div class="col-lg-3 col-md-3" style="padding-left:30px;">
             <b>Group Name</b>
@@ -21,7 +28,94 @@
             <input type="Text" id="MobileNo" class="input50" />
         </div>
     </div>
-    <div style="margin-top:15px;margin-left:5px;text-align:center;"><button type="submit" class="btn btn-primary">Submit</button></div>
-
+    <div class="table-responsive">
+        <table class="table" id="InstanceTable" hidden>
+            <thead>
+                <tr>
+                    <th scope="col" style="text-align:center;">OutletName</th>
+                    <th scope="col" style="text-align:center;">Datetime</th>
+                    <th scope="col" style="text-align:center;">OTP</th>
+                    <th scope="col" style="text-align:center;">Points</th>
+                </tr>
+                <tr>
+                    <td style="text-align:center;" id="Tr1"></td>
+                    <td style="text-align:center;" id="Tr2"></td>
+                    <td style="text-align:center;" id="Tr3"></td>
+                    <td style="text-align:center;" id="Tr4"></td>
+                </tr>
+            </thead>
+            <tbody style="text-align:center;">
+            </tbody>
+        </table>
+    </div>
+    <div id="idSubmit" style="margin-top:15px;margin-left:5px;text-align:center;"><button type="submit" class="btn btn-primary">Submit</button></div>
+    <div id="idReset" style="margin-top:15px;margin-left:5px;text-align:center;" hidden><button type="submit" class="btn btn-primary">Reset</button></div>
 </div>
+@*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <script src="cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+@*<script src="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>*@
+@*<link href="~/Content/main.css" rel="stylesheet">*@
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+<script>
+    $("#idSubmit").click(function () {
+        var Mobileno = $("#MobileNo").val();
+        var Groupid = $("#ddlGroupDetails").val();
+        var FilterData = [];
+        item = {};
+        item["Mobileno"] = Mobileno;
+        item["Groupid"] = Groupid;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("GetOTP", "OTPLogin")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.OTP != null) {
+
+                        $("#InstanceTable").show();
+                        $("#Tr1").html(response.OutletName);
+                        $("#Tr2").html(response.Datetime);
+                        $("#Tr3").html(response.OTP);
+                        $("#Tr4").html(response.Points);
+                        $("#idReset").show();
+                        $("#idSubmit").hide();
+                     }
+
+                     else {
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "Details Not Found",
+                            buttonText: "Okay"
+                        })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                    alert("failure");
+                },
+                error: function (response) {
+                    alert("Error");
+                }
+            });
+    });
+
+    $("#idReset").click(function () {
+        var urlLink = "@Url.Action("OTPPage", "OTPLogin")";
+        window.location.href = urlLink;
+    });
+
+</script>
+
 

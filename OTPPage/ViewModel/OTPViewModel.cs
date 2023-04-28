@@ -14,4 +14,12 @@ namespace OTPPage.ViewModel
         public tblGroupDetail tblGroupDetails { get; set; }
 
     }
+
+    public class OTPResponse
+    {
+        public string OutletName { get; set; }
+        public string Datetime { get; set; }
+        public string OTP { get; set; }
+        public string Points { get; set; }
+    }
 }
