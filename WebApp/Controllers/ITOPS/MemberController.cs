@@ -7,17 +7,42 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using WebApp.App_Start;
 
 namespace WebApp.Controllers.ITOPS
 {
     public class MemberController : Controller
     {
+        CustomerRepository objCustRepo = new CustomerRepository();
         ITOpsRepository ITOPS = new ITOpsRepository();
         Exceptions newexception = new Exceptions();
         // GET: Member
-        public ActionResult Index()
+        public ActionResult Index(string groupId)
         {
-            return View();
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(groupId))
+                    {                       
+                        CommonFunctions common = new CommonFunctions();
+                        groupId = common.DecryptString(groupId);
+                        Session["GroupId"] = groupId;
+                        var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                        userDetails.GroupId = groupId;
+                        userDetails.connectionString = objCustRepo.GetCustomerConnString(groupId);
+                        userDetails.CustomerName = objCustRepo.GetCustomerName(groupId);
+                        Session["UserSession"] = userDetails;
+                        Session["buttons"] = "ITOPS";
+                        ViewBag.GroupId = groupId;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "Index");
+                }
+                return View();
+            }
         }
         public ActionResult DeleteUser()
         {
@@ -86,9 +111,6 @@ namespace WebApp.Controllers.ITOPS
             }
             return Json(result, JsonRequestBehavior.AllowGet);
             
-        }
-        
-
-        
+        }       
     }
 }
