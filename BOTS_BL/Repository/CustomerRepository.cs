@@ -1415,8 +1415,10 @@ namespace BOTS_BL.Repository
                         var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
                         var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, lastDay);
 
-                        var Birthday = context.CustomerDetails.Where(x => x.DOB >= FromDate && x.DOB <= ToDate).Count();
-                        var Anniversary = context.CustomerDetails.Where(x => x.AnniversaryDate >= FromDate && x.AnniversaryDate <= ToDate).Count();
+                        //var Birthday = context.CustomerDetails.Where(x => x.DOB >= FromDate && x.DOB <= ToDate).Count();
+                        var Birthday = (from p in context.CustomerDetails where p.DOB.Value.Month == FromDate.Month && p.DOB.Value.Year != 1900 select p.DOB).Count();
+                        //var Anniversary = context.CustomerDetails.Where(x => x.AnniversaryDate >= FromDate && x.AnniversaryDate <= ToDate).Count();
+                        var Anniversary = (from p in context.CustomerDetails where p.AnniversaryDate.Value.Month == FromDate.Month && p.AnniversaryDate.Value.Year != 1900 select p.AnniversaryDate).Count();
                         var Expiry = context.PointsExpiries.Where(x => x.ExpiryDate >= FromDate && x.ExpiryDate <= ToDate).GroupBy(y => y.MobileNo).Count();
 
                         KeyInfoForNextMonth objItem = new KeyInfoForNextMonth();
