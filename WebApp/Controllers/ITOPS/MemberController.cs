@@ -112,5 +112,11 @@ namespace WebApp.Controllers.ITOPS
             return Json(result, JsonRequestBehavior.AllowGet);
             
         }       
+        [HttpPatch]
+        public ActionResult BlockMessage(string jsonData)
+        {
+            var result = false;
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

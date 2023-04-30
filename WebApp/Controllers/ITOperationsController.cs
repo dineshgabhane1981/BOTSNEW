@@ -191,7 +191,9 @@ namespace WebApp.Controllers
                 string InvoiceNumber = "";
                 string InvoiceAmount = "";
                 string OutletId = "";
-                decimal points = 0;
+                //decimal points = 0;
+                string points = "";
+                string Name = string.Empty;
 
                 foreach (Dictionary<string, object> item in objData)
                 {
@@ -201,10 +203,12 @@ namespace WebApp.Controllers
                     TransactionDate = Convert.ToString(item["TransactionDate"]);
                     InvoiceNumber = Convert.ToString(item["InvoiceNumber"]);
                     InvoiceAmount = Convert.ToString(item["InvoiceAmount"]);
-                    if(!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
-                    {
-                        points = Convert.ToDecimal(item["Points"]);
-                    }
+                    //if(!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
+                    //{
+                    //    points = Convert.ToDecimal(item["Points"]);
+                    //}
+                    points = Convert.ToString(item["Points"]);
+                    Name = Convert.ToString(item["CustomerName"]);
                     objAudit.GroupId = GroupId;
                     objAudit.RequestedFor = "Add / Earn";
                     objAudit.RequestedEntity = "Mobile No - " + MobileNo;
@@ -214,7 +218,7 @@ namespace WebApp.Controllers
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
-                result = ITOPS.AddEarnData(GroupId, MobileNo, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToString(IsSMS), points, objAudit);
+                result = ITOPS.AddEarnData(GroupId, MobileNo, Name, OutletId, Convert.ToDateTime(TransactionDate), DateTime.Now, InvoiceNumber, InvoiceAmount, Convert.ToString(IsSMS), points, objAudit);
                 if (result.ResponseCode == "00")
                 {
                     var subject = "Earning updated for mobile no  - " + MobileNo;

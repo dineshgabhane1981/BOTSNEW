@@ -70,6 +70,13 @@
                                         <th colspan="2" style="padding:10px;text-align:center;">Points Earning on a Purchase Txn</th>
                                     </tr>
                                     <tr>
+                                        <td style="padding:10px;width:200px;">Enter Member Name</td>
+                                        <td style="padding:10px;width:200px;">
+                                            <input type="text" id="txtMemberName" placeholder="Member Name" class="input50" />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td style="padding:10px;width:200px;">Enter Invoice Number</td>
                                         <td style="padding:10px;width:200px;">
                                             <input type="text" id="txtInvoiceNumber" placeholder="Invoice No" class="input50" />
@@ -198,7 +205,9 @@
                     $('#dtTransaction').val("");
                     $('#ddlOutletList').prop('selectedIndex', 0);
                     $('#ddlRequestedForum2').prop('selectedIndex', 0);
+                    $("#txtMemberName").val(result.MemberName);
                     $("#tblUpdateData2").show();
+                    
                 }
                 else {
 
@@ -216,8 +225,9 @@
                     $('#dtTransaction').val("");
                     $('#ddlOutletList').prop('selectedIndex', 0);
                     $('#ddlRequestedForum2').prop('selectedIndex', 0);
+                    $("#txtMemberName").val("");
                     $("#tblUpdateData2").show();
-
+                    
                 }
                 $("#divLoader").hide();
             },
@@ -270,6 +280,7 @@
             item["RequestedBy"] = $("#txtRequestedByName2").val();
             item["RequestedForum"] = $('#ddlRequestedForum2 :selected').text();
             item["RequestedOn"] = $("#dtTransaction").val();
+            item["CustomerName"] = $("#txtMemberName").val();
 
             if ($('#rbtnSMS2').is(":checked")) {
                 item["IsSMS"] = 1;

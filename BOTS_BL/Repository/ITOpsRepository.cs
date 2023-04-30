@@ -244,18 +244,18 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public SPResponse AddEarnData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, decimal Points, tblAudit objAudit)
+        public SPResponse AddEarnData(string GroupId, string MobileNo, string Name, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, string Points, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
             try
             {
                 string connStr = objCustRepo.GetCustomerConnString(GroupId);
-                
+
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    if(GroupId == "1226")
+                    if (GroupId == "1226")
                     {
-                        if(IsSMS == "True")
+                        if (IsSMS == "True")
                         {
                             IsSMS = "1";
                         }
@@ -280,6 +280,7 @@ namespace BOTS_BL.Repository
                             SqlParameter param9 = new SqlParameter("pi_RequestedOnForum", objAudit.RequestedOnForum);
                             SqlParameter param10 = new SqlParameter("pi_SMSFlag", IsSMS);
                             SqlParameter param11 = new SqlParameter("pi_Points", Points);
+                            SqlParameter param12 = new SqlParameter("pi_CustomerName", Name);
 
                             cmdReport.CommandType = CommandType.StoredProcedure;
                             cmdReport.Parameters.Add(param1);
@@ -293,6 +294,7 @@ namespace BOTS_BL.Repository
                             cmdReport.Parameters.Add(param9);
                             cmdReport.Parameters.Add(param10);
                             cmdReport.Parameters.Add(param11);
+                            cmdReport.Parameters.Add(param12);
 
                             daReport.Fill(DT);
 
@@ -302,7 +304,7 @@ namespace BOTS_BL.Repository
 
                             if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                                
+
                                 if (Convert.ToString(dt.Rows[0]["SMSFlag"]) == "1")
                                 {
                                     string SMSStatus = Convert.ToString(dt.Rows[0]["SMSFlag"]);
@@ -328,7 +330,7 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_Points",
+                        result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_Points,@pi_CustomerName",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
@@ -339,9 +341,10 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
                               new SqlParameter("@pi_SMSFlag", IsSMS),
-                              new SqlParameter("@pi_Points", Points)).FirstOrDefault<SPResponse>();
+                              new SqlParameter("@pi_Points", Points),
+                              new SqlParameter("@pi_CustomerName", Name)).FirstOrDefault<SPResponse>();
                     }
-                    
+
 
 
                     //DateTime.Now.ToString("yyyy-MM-dd")
@@ -371,7 +374,6 @@ namespace BOTS_BL.Repository
 
             return result;
         }
-
         //public SPResponse AddRedeemPointsData(string groupId, string mobileNo, string outletId, DateTime dateTime, DateTime now, string invoiceNumber, string invoiceAmount, decimal v1, string v2, string txnType, string v3, tblAudit objAudit)
         //{
         //    throw new NotImplementedException();
