@@ -158,7 +158,16 @@ namespace BOTS_BL.Repository
 
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
                     var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == _GroupId).FirstOrDefault();
-                    string _GroupName = _GroupDetails.GroupName;
+                    string _GroupName = string.Empty;
+                    if (_GroupDetails == null)
+                    {
+                        var onBoardingGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == objDiscussion.GroupId).FirstOrDefault();
+                        _GroupName = onBoardingGroupDetail.GroupName;
+                    }
+                    else
+                    {
+                        _GroupName = _GroupDetails.GroupName;
+                    }
                     string Script = string.Empty;
 
                     if (!string.IsNullOrEmpty(_File))
@@ -319,7 +328,7 @@ namespace BOTS_BL.Repository
                         ObjEmailData.subtypetext = _SubCallType.CallSubType;
                     }
 
-                    ObjEmailData.GroupName = _GroupDetails.GroupName;
+                    ObjEmailData.GroupName = _GroupName;
                     ObjEmailData.id = objDiscussion.Id;
                     ObjEmailData.Description = objDiscussion.Description;
                     ObjEmailData.FilePath = path;
@@ -361,13 +370,16 @@ namespace BOTS_BL.Repository
                         }
                     }
                     MessageDetails ObjMsgData = new MessageDetails();
-                    ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
-                    ObjMsgData.Description = objDiscussion.Description;
-                    ObjMsgData.GroupName = _GroupDetails.GroupName;
-                    ObjMsgData.BOEmpName = Sendfrom.Members;
-                    ObjMsgData.Addby = objDiscussion.AddedBy;
-                    ObjMsgData.Message = Script;
-                    ObjMsgData.SpokenTo = objDiscussion.SpokenTo;
+                    if (_WAGroupCode != null)
+                    {
+                        ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
+                        ObjMsgData.Description = objDiscussion.Description;
+                        ObjMsgData.GroupName = _GroupName;
+                        ObjMsgData.BOEmpName = Sendfrom.Members;
+                        ObjMsgData.Addby = objDiscussion.AddedBy;
+                        ObjMsgData.Message = Script;
+                        ObjMsgData.SpokenTo = objDiscussion.SpokenTo;
+                    }
 
                     if (objDiscussion.AssignedMember == null)
                     {
@@ -396,8 +408,11 @@ namespace BOTS_BL.Repository
 
                     if ((objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27") && objDiscussion.DiscussionDoneNotDone != "2")//calltype: Dashboard/subtype: DB & Campaign Discussion/Idea & Campaign Discussion/1st discussion
                     {
-                        Thread _job2 = new Thread(() => SendWAMessage(ObjMsgData));
-                        _job2.Start();
+                        if (_WAGroupCode != null)
+                        {
+                            Thread _job2 = new Thread(() => SendWAMessage(ObjMsgData));
+                            _job2.Start();
+                        }
                     }
                 }
             }
@@ -421,6 +436,7 @@ namespace BOTS_BL.Repository
             bool UpdateStatus = false;
             string _SendTo = string.Empty;
             string Script = string.Empty;
+            string _GroupName = string.Empty;
 
             try
             {
@@ -431,14 +447,23 @@ namespace BOTS_BL.Repository
                 if (FileDone != null)//(!string.IsNullOrEmpty(FileDone))
                 {
 
-                    string _GroupName = string.Empty;
+                    
                     using (var context = new CommonDBContext())
                     {
                         int mId = Convert.ToInt32(id);
                         var groupId = context.BOTS_TblDiscussion.Where(x => x.Id == mId).Select(y => y.GroupId).FirstOrDefault();
                         var gId = Convert.ToInt32(groupId);
                         var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
-                        _GroupName = _GroupDetails.GroupName;
+                        
+                        if (_GroupDetails == null)
+                        {
+                            var onBoardingGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                            _GroupName = onBoardingGroupDetail.GroupName;
+                        }
+                        else
+                        {
+                            _GroupName = _GroupDetails.GroupName;
+                        }
 
                     }
                     var GroupFolder = _FilePath + "/" + _GroupName;
@@ -544,7 +569,7 @@ namespace BOTS_BL.Repository
                     objmail.subtypetext = _SubCallType.CallSubType;
                     objmail.MemberCompleted = Completedid.Members;
                     objmail.FilePath = path;
-                    objmail.GroupName = _GroupDetails.GroupName;
+                    objmail.GroupName = _GroupName;
                     objmail.id = objDiscussion.Id;
                     objmail.Description = objsubdiscussion.Description;
                     objmail.TeamName = Sendfrom.Department;
@@ -591,16 +616,18 @@ namespace BOTS_BL.Repository
                             Script = node.InnerText;
                         }
                     }
-
                     MessageDetails ObjMsgData = new MessageDetails();
-                    ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
-                    ObjMsgData.Description = objsubdiscussion.Description;
-                    ObjMsgData.GroupName = _GroupDetails.GroupName;
-                    ObjMsgData.TeamName = Sendfrom.Department;
-                    ObjMsgData.Addby = objDiscussion.AddedBy;
-                    ObjMsgData.Message = Script;
-                    ObjMsgData.SpokenTo = _Discussion.SpokenTo;
-                    ObjMsgData.BOEmpName = Sendfrom.Members;
+                    if (_WAGroupCode != null)
+                    {                        
+                        ObjMsgData.Mobileno = _WAGroupCode.GroupCode;
+                        ObjMsgData.Description = objsubdiscussion.Description;
+                        ObjMsgData.GroupName = _GroupName;
+                        ObjMsgData.TeamName = Sendfrom.Department;
+                        ObjMsgData.Addby = objDiscussion.AddedBy;
+                        ObjMsgData.Message = Script;
+                        ObjMsgData.SpokenTo = _Discussion.SpokenTo;
+                        ObjMsgData.BOEmpName = Sendfrom.Members;
+                    }
 
                     if (objsubdiscussion.Status == "Completed")
                     {
@@ -627,9 +654,11 @@ namespace BOTS_BL.Repository
                                 Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
                                 _job1.Start();
                             }
-
-                            Thread _job2 = new Thread(() => SendWAMessageCompleteHOD(ObjMsgData));
-                            _job2.Start();
+                            if (_WAGroupCode != null)
+                            {
+                                Thread _job2 = new Thread(() => SendWAMessageCompleteHOD(ObjMsgData));
+                                _job2.Start();
+                            }
                         }
                         else
                         { 
@@ -649,9 +678,11 @@ namespace BOTS_BL.Repository
                                 Thread _job1 = new Thread(() => SendEmailUpdateOnlyHOD(objmail));
                                 _job1.Start();
                             }
-
-                            Thread _job2 = new Thread(() => SendWAMessageUpdateHOD(ObjMsgData));
-                            _job2.Start();
+                            if (_WAGroupCode != null)
+                            {
+                                Thread _job2 = new Thread(() => SendWAMessageUpdateHOD(ObjMsgData));
+                                _job2.Start();
+                            }
                         }
                         else
                         {
