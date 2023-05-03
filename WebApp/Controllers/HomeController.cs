@@ -34,6 +34,7 @@ namespace WebApp.Controllers
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
                 dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId, "", "");
                 userDetails.IsFeedback = CR.GetIsFeedback(userDetails.GroupId);
+                userDetails.IsEvent = CR.GetIsEvent(userDetails.GroupId);
                 Session["UserSession"] = userDetails;
                 ViewBag.OutletList = lstOutlet;
                 ViewBag.OutletCount = lstOutlet.Count;

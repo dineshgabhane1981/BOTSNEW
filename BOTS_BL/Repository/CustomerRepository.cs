@@ -448,6 +448,28 @@ namespace BOTS_BL.Repository
             }
             return IsFeedback;
         }
+        public bool GetIsEvent(string EventId)
+        {
+            bool IsEvent = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var TeventId = Convert.ToInt32(EventId);
+                    var eventDetail = context.tblGroupDetails.Where(x => x.GroupId == TeventId).Select(y => y.IsEvent).FirstOrDefault();
+                    if (eventDetail.HasValue)
+                    {
+                        if (eventDetail.Value)
+                            IsEvent = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetIsEvent");
+            }
+            return IsEvent;
+        }
 
         public tblGroupDetail GetGroupDetails(int GroupId)
         {

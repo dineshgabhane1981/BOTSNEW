@@ -218,6 +218,12 @@
                                         Feedback Configuration
                                     </a>
                                 </li>
+                                <li class="@Html.IsSelected(controller: "Events", action: "EventCustomers")">
+                                    <a href="@Url.Action("EventCustomers", "Events")" class="@Html.IsSelected(controller: "Events", action: "EventCustomers")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Event Configuration
+                                    </a>
+                                </li>
                             }
                             <li class="@Html.IsSelected(controller: "BOPromoCampaign", action: "GroupList")">
                                 <a href="@Url.Action("GroupList", "BOPromoCampaign")" class="@Html.IsSelected(controller: "BOPromoCampaign", action: "GroupList")">
@@ -523,6 +529,34 @@
                                 }
                                 <li class="@Html.IsSelected(controller: "Feedback", action: "Report")">
                                     <a href="@Url.Action("Report", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Report")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Report
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    }
+                    if (userDetails.IsEvent)
+                    {
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-date"></i>
+                                Event Module
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+
+                            <ul>
+                                
+                                    <li class="@Html.IsSelected(controller: "Events", action: "Index,CreateEvent")">
+                                        <a href="@Url.Action("Index", "Events")" class="@Html.IsSelected(controller: "Events", action: "Index,CreateEvent")">
+                                            <i class="metismenu-icon pe-7s-rocket"></i>
+                                            Events
+                                        </a>
+                                    </li>
+                                
+                                <li class="@Html.IsSelected(controller: "Events", action: "EventReport")">
+                                    <a href="@Url.Action("EventReport", "Events")" class="@Html.IsSelected(controller: "Events", action: "EventReport")">
                                         <i class="metismenu-icon pe-7s-rocket"></i>
                                         Report
                                     </a>

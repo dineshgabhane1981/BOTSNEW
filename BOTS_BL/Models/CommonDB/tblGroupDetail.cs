@@ -74,6 +74,7 @@ namespace BOTS_BL.Models
         public bool IsMasked { get; set; }
 
         public bool? IsLive { get; set; }
+        public bool? IsEvent { get; set; }        
 
         [StringLength(1)]
         public string CustomerType { get; set; }
