@@ -1,8 +1,174 @@
-﻿
+﻿@model WebApp.ViewModel.EventViewModel
 @{
     ViewBag.Title = "EventCustomers";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
 
-<h2>EventCustomers</h2>
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+    #one:checked ~ .panels #one-panel,
+    #two:checked ~ .panels #two-panel {
+        display: block
+    }
+
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+</style>
+<div class="app-main__inner">
+    <input class="radio" id="one" name="group" type="radio" checked>
+    <input class="radio" id="two" name="group" type="radio">
+
+    <div class="tabs">
+        <label class="tab" id="one-tab" for="one">Never Opted For</label>
+        <label class="tab" id="two-tab" for="two">Active</label>
+    </div>
+    <div class="panels">
+        <div class="multisteps-form__panel shadow  list-box bg-white panel" id="one-panel">
+            
+                <div class="row mt-3 p-4" id="dvneverOptedForData">
+                    <div class="table-responsive">
+                        <table class="table" id="neverOptedForTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="text-align:left;">Group Name</th>
+                                    <th scope="col" style="text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.lstNeverOptFor != null)
+                                {
+                                    foreach (var item in Model.lstNeverOptFor)
+                                    {
+                                        <tr>
+                                            <td>@item.GroupName</td>
+                                            <td style="text-align:center;"><a href="#" onclick="ShowEnableDetails(@item.GroupId);">Enable</a></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            
+        </div>
+
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
+            <div class="row mt-3 p-4" id="dvActiveData">
+                <div class="table-responsive">
+                    <table class="table" id="activeTable">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="text-align:left;">Group Name</th>
+                                <th scope="col" style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.lstActive != null)
+                            {
+                                foreach (var item in Model.lstActive)
+                                {
+                                    <tr>
+                                        <td>@item.GroupName</td>
+                                        <td style="text-align:center;"><a href="#" onclick="ShowDisableDetails(@item.GroupId);">Disable</a></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+<script>
+    
+    
+    $(document).ready(function () {
+        $('#neverOptedForTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+        $('#neverOptedForTable_filter').hide();
+        var table1 = $('#neverOptedForTable').DataTable();
+        table1.draw();
+
+        $('#activeTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+        $('#activeTable_filter').hide();
+        var table2 = $('#activeTable').DataTable();
+        table2.draw();
+    });
+   
+</script>
 
