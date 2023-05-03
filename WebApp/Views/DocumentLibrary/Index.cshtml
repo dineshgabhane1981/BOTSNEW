@@ -449,6 +449,40 @@
                             @*var urlLink = "@Url.Action("Index", "DocumentLibrary")";
                             window.location.href = urlLink;*@
                         })
+
+                         //var GroupId = $("#ddlGroupDetails").val();
+
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ListDocuments", "DocumentLibrary")',
+                data: '{GroupId: ' + JSON.stringify(GroupId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    $("#Tabl").show();
+                    tableData = [];
+                    $.map(result, function (item) {
+                        optionItem = {}
+
+                        optionItem["SlNo"] = item.SlNo;
+                        optionItem["DocumentType"] = item.DocumentType;
+                        optionItem["Path"] = item.Path;
+                        optionItem["UploadDate"] = item.UploadDateStr;
+                        optionItem["Comments"] = item.Comments;
+
+                        tableData.push(optionItem);
+                    });
+                    console.log(tableData)
+                    DrawTable();
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(111)
+                    console.log(result.responseText)
+                }
+            });
                         $("#divLoader").hide();
                     }
                     else {
