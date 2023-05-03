@@ -273,6 +273,7 @@
     <Compile Include="ViewModel\DLCDashboardViewModel.cs" />
     <Compile Include="ViewModel\DLCProfileUpdateViewModel.cs" />
     <Compile Include="ViewModel\DocumentLibraryViewModel.cs" />
+    <Compile Include="ViewModel\EventViewModel.cs" />
     <Compile Include="ViewModel\FeedbackAuthorViewModel.cs" />
     <Compile Include="ViewModel\FeedbackConfigViewModel.cs" />
     <Compile Include="ViewModel\FeedbackDashboardViewModel.cs" />
