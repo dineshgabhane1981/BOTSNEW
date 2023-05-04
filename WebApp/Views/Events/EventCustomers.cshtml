@@ -79,8 +79,7 @@
         <label class="tab" id="two-tab" for="two">Active</label>
     </div>
     <div class="panels">
-        <div class="multisteps-form__panel shadow  list-box bg-white panel" id="one-panel">
-            
+        <div class="multisteps-form__panel shadow  list-box bg-white panel" id="one-panel">           
                 <div class="row mt-3 p-4" id="dvneverOptedForData">
                     <div class="table-responsive">
                         <table class="table" id="neverOptedForTable">
@@ -167,11 +166,12 @@
         });
         $('#activeTable_filter').hide();
         var table2 = $('#activeTable').DataTable();
-        table2.draw();
+        table2.draw();       
     });
 
-    function ShowEnableDetails() {
+    function ShowEnableDetails(GroupId) {
         var returnStatus = true;
+        
         cuteAlert({
             type: "question",
             title: "Confirmation",
@@ -179,10 +179,32 @@
             confirmText: "Yes",
             cancelText: "No"
         }).then((e) => {
-            if (e == ("confirm")) {
-                alert("111")
+            if (e == ("confirm")) {               
+                var MemberData = [];
+                item = {}
+                item["GroupId"] = GroupId;                
+                MemberData.push(item);
+                var data = JSON.stringify(MemberData);
+                console.log(data)
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("EnableEventModule", "Events")',
+                    data: '{jsonData: ' + JSON.stringify(data) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        toastr.success("Event Module Enabled Successfully");
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+
+
+                    }
+                })
             }
-           
+
         })
     }
 

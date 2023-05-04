@@ -40,12 +40,19 @@ namespace WebApp.Controllers
             objData.lstActive = EVR.GetNeverOptForGroups(true);
             return View(objData);
         }
-        public ActionResult EnableEventModule(string GroupId, List<tblGroupDetail> contentData)
+        public ActionResult EnableEventModule(string jsonData)
         {
             bool status = false;
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
             try
             {
-                status = EVR.EnableEventModule(GroupId, contentData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string GroupId = Convert.ToString(item["GroupId"]);
+                    status = EVR.EnableEventModule(GroupId);
+                }
             }
             catch (Exception ex)
             {

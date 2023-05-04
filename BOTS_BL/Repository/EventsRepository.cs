@@ -31,7 +31,7 @@ namespace BOTS_BL.Repository
             return lstData;   
         }
 
-        public bool EnableEventModule(string GroupId, List<tblGroupDetail> contentData)
+        public bool EnableEventModule(string GroupId)
         {
             bool status = false;
             try
@@ -40,18 +40,10 @@ namespace BOTS_BL.Repository
                     tblGroupDetail obj = new tblGroupDetail();
                     int varid = Convert.ToInt32(GroupId);
                     using (var context = new CommonDBContext())
-                    {                        
-                        var groupDetails = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
-                        groupDetails.IsEvent = true;                        
+                    {
+                        var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
+                        groupDetail.IsEvent = true;
                         context.SaveChanges();
-                        if (contentData != null)
-                        {
-                            foreach (var item in contentData)
-                            {
-                                context.tblGroupDetails.Add(item);
-                                context.SaveChanges();
-                            }
-                        }
                         status = true;
                     }
                 }
