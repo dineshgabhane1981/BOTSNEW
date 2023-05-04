@@ -9,17 +9,10 @@ namespace BOTS_BL.Models
     public partial class EventMemberDetail
     {
         [Key]
-        [Column(Order = 0)]
         public int SLno { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int GroupId { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int EventId { get; set; }
 
         [StringLength(10)]
