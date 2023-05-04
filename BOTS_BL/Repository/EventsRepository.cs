@@ -1,6 +1,7 @@
 ﻿using BOTS_BL.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,13 +63,18 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool SaveEventData(string GroupId, string EventName, string EventDate, string EventPlace, string EventType, string EventStrDate, string EventEndDate, string BonusPoints, string PointsExp, string FirstRemaindScript, string FirstRemaindDate, string SecondRemaindScript, string SecondRemdDate, string Description)
+        public bool SaveEventData(EventDetail Obj,string connectionstring)
         {
             bool status = false;
 
             try
             {
-
+                using (var context = new BOTSDBContext(connectionstring))
+                {
+                    context.EventDetails.AddOrUpdate(Obj);
+                    context.SaveChanges();
+                    status = true;
+                }
             }
             catch (Exception ex)
             {

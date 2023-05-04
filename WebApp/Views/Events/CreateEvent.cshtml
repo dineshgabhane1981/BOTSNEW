@@ -87,8 +87,8 @@
                 <textarea class="input50" id="IdFirstRemaind" maxlength="10000" placeholder="Enter Script"></textarea>
             </div>
             <div class="ml-5">
-                @*<input type="date" id="IdFirstRemdDate" class="input50" style="margin-top: 20px; " />*@
-                <input type="datetime-local" id="IdFirstRemdDate" name="EndDate" class="input50" value="2023-01-01T00:00" min="2023-01-01T00:00" max="2073-01-01T00:00" style="margin-top: 20px;">
+                <input type="number" id="IdFirstRemdDays" class="input50" placeholder="Enter Remainder days" style="margin-top: 20px; " />
+                @*<input type="datetime-local" id="IdFirstRemdDate" name="EndDate" class="input50" value="2023-01-01T00:00" min="2023-01-01T00:00" max="2073-01-01T00:00" style="margin-top: 20px;">*@
             </div>
         </div>
         <div class="row mb-2 ml-2">
@@ -100,8 +100,8 @@
             </div>
 
             <div class="ml-5">
-                @*<input type="date" id="IdSecondRemdDate" class="input50" style="margin-top: 20px; " />*@
-                <input type="datetime-local" id="IdSecondRemdDate" name="EndDate" class="input50" value="2023-01-01T00:00" min="2023-01-01T00:00" max="2073-01-01T00:00" style="margin-top: 20px;">
+                <input type="number" id="IdSecondRemdDays" class="input50" placeholder="Enter Remainder days" style="margin-top: 20px; " />
+                @*<input type="datetime-local" id="IdSecondRemdDate" name="EndDate" class="input50" value="2023-01-01T00:00" min="2023-01-01T00:00" max="2073-01-01T00:00" style="margin-top: 20px;">*@
             </div>
         </div>
         <div class="row mb-2 ml-2">
@@ -132,9 +132,9 @@
         var BonusPoints = $("#IdBonusPoints").val();
         var PointsExp = $("#IdPointsExp").val();
         var FirstRemaindScript = $("#IdFirstRemaind").val();
-        var FirstRemaindDate = $("#IdFirstRemdDate").val();
+        var FirstRemdDays = $("#IdFirstRemdDays").val();
         var SecondRemaindScript = $("#IdSecondRemaind").val();
-        var SecondRemdDate = $("#IdSecondRemdDate").val();
+        var SecondRemdDays = $("#IdSecondRemdDays").val();
         var Description = $("#idDescription").val();
 
         if (EventName =="") {
@@ -202,7 +202,7 @@
                 buttonText: "Okay"
             })
         }
-        else if (FirstRemaind == "") {
+        else if (FirstRemaindScript == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
@@ -210,7 +210,7 @@
                 buttonText: "Okay"
             })
         }
-        else if (FirstRemaindDate == "") {
+        else if (FirstRemdDays == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
@@ -232,9 +232,9 @@
             item["BonusPoints"] = BonusPoints;
             item["PointsExp"] = PointsExp;
             item["FirstRemaindScript"] = FirstRemaindScript;
-            item["FirstRemaindDate"] = FirstRemaindDate;
+            item["FirstRemdDays"] = FirstRemdDays;
             item["SecondRemaindScript"] = SecondRemaindScript;
-            item["SecondRemdDate"] = SecondRemdDate;
+            item["SecondRemdDays"] = SecondRemdDays;
             item["Description"] = Description;
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
@@ -247,8 +247,28 @@
                   contentType: "application/json; charset=utf-8",
                   dataType: "json",
                   success: function (result) {
-                    console.log(result)
-                    
+                      console.log(result)
+                      if (result = true) {
+                          cuteAlert({
+                              type: "success",
+                              title: "Success Title",
+                              message: "Event Created Successfully",
+                              buttonText: "Okay"
+                          }).then(() => {
+                            var urlLink = "@Url.Action("CreateEvent", "Events")";
+                            window.location.href = urlLink;
+                        })
+                        $("#divLoader").hide();
+                      }
+                      else {
+                          cuteAlert({
+                              type: "error",
+                              title: "Oops..",
+                              message: "couldn't create Event",
+                              buttonText: "Okay"
+                          })
+                      }
+
                     $("#divLoader").hide();
                   },
                    error: function (result) {

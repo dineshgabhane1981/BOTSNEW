@@ -15,6 +15,7 @@ namespace WebApp.Controllers
     {
         Exceptions newexception = new Exceptions();
         EventsRepository EVR = new EventsRepository();
+        
         // GET: Events List
         public ActionResult Index()
         {
@@ -54,6 +55,8 @@ namespace WebApp.Controllers
         [HttpPost]
         public ActionResult SaveEvent(string jsonData)
         {
+            EventDetail ObjEventDetails = new EventDetail();
+
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             string GroupId = userDetails.GroupId;
@@ -61,25 +64,29 @@ namespace WebApp.Controllers
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
+            
             try
             {
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    string EventName = Convert.ToString(item["EventName"]);
-                    string EventDate = Convert.ToString(item["EventDate"]);
-                    string EventPlace = Convert.ToString(item["EventPlace"]);
-                    string EventType = Convert.ToString(item["EventType"]);
-                    string EventStrDate = Convert.ToString(item["EventStrDate"]);
-                    string EventEndDate = Convert.ToString(item["EEventEndDate"]);
-                    string BonusPoints = Convert.ToString(item["BonusPoints"]);
-                    string PointsExp = Convert.ToString(item["PointsExp"]);
-                    string FirstRemaindScript = Convert.ToString(item["FirstRemaindScript"]);
-                    string FirstRemaindDate = Convert.ToString(item["FirstRemaindDate"]);
-                    string SecondRemaindScript = Convert.ToString(item["SecondRemaindScript"]);
-                    string SecondRemdDate = Convert.ToString(item["SecondRemdDate"]);
-                    string Description = Convert.ToString(item["Description"]);
+                    ObjEventDetails.AddedBy = userDetails.LoginId;
+                    ObjEventDetails.GroupId = Convert.ToInt32(GroupId);
+                    ObjEventDetails.EventName = Convert.ToString(item["EventName"]);
+                    ObjEventDetails.Addeddate = Convert.ToDateTime(item["EventDate"]);
+                    ObjEventDetails.Place = Convert.ToString(item["EventPlace"]);
+                    ObjEventDetails.EventType = Convert.ToString(item["EventType"]);
+                    ObjEventDetails.EventStartDate = Convert.ToDateTime(item["EventStrDate"]);
+                    ObjEventDetails.EventEndDate = Convert.ToDateTime(item["EventEndDate"]);
+                    ObjEventDetails.BonusPoints = Convert.ToInt32(item["BonusPoints"]);
+                    ObjEventDetails.PointsExpiryDays = Convert.ToInt32(item["PointsExp"]);
+                    ObjEventDetails.C1stReminderScript = Convert.ToString(item["FirstRemaindScript"]);
+                    ObjEventDetails.C1stRemBefore = Convert.ToInt32(item["FirstRemdDays"]);
+                    ObjEventDetails.C2ndReminderScript = Convert.ToString(item["SecondRemaindScript"]);
+                    ObjEventDetails.C2ndRemBefore = Convert.ToInt32(item["SecondRemdDays"]);
+                    ObjEventDetails.Desciption = Convert.ToString(item["Description"]);
+                    //ObjEventDetails.EventId = Convert.ToInt32("123");
 
-                    var Response = EVR.SaveEventData(GroupId, EventName, EventDate, EventPlace, EventType, EventStrDate, EventEndDate, BonusPoints, PointsExp, FirstRemaindScript, FirstRemaindDate, SecondRemaindScript, SecondRemdDate, Description);
+                    var Response = EVR.SaveEventData(ObjEventDetails, userDetails.connectionString);
                 }
 
             }
