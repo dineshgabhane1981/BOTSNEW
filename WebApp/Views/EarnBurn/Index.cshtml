@@ -206,6 +206,7 @@
                     $('#ddlOutletList').prop('selectedIndex', 0);
                     $('#ddlRequestedForum2').prop('selectedIndex', 0);
                     $("#txtMemberName").val(result.MemberName);
+                    $("#txtMemberName").attr("disabled", "disabled");
                     $("#tblUpdateData2").show();
                     
                 }
@@ -225,6 +226,7 @@
                     $('#dtTransaction').val("");
                     $('#ddlOutletList').prop('selectedIndex', 0);
                     $('#ddlRequestedForum2').prop('selectedIndex', 0);
+                    $("#txtMemberName").removeAttr("disabled");
                     $("#txtMemberName").val("");
                     $("#tblUpdateData2").show();
                     
