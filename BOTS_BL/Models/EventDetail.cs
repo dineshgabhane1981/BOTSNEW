@@ -9,12 +9,8 @@ namespace BOTS_BL.Models
     public partial class EventDetail
     {
         [Key]
-        [Column(Order = 0)]
         public long EventId { get; set; }
 
-        [Key]
-        [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int GroupId { get; set; }
 
         public string EventName { get; set; }
@@ -49,13 +45,11 @@ namespace BOTS_BL.Models
 
         public string Desciption { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
+        [Required]
         [StringLength(50)]
         public string AddedBy { get; set; }
 
-        [Key]
-        [Column(Order = 3, TypeName = "date")]
+        [Column(TypeName = "date")]
         public DateTime Addeddate { get; set; }
     }
 }
