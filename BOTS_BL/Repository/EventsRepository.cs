@@ -61,5 +61,21 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public bool SaveEventData(string GroupId, string EventName, string EventDate, string EventPlace, string EventType, string EventStrDate, string EventEndDate, string BonusPoints, string PointsExp, string FirstRemaindScript, string FirstRemaindDate, string SecondRemaindScript, string SecondRemdDate, string Description)
+        {
+            bool status = false;
+
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveEventData");
+            }
+            return status;
+        }
     }
+    
 }

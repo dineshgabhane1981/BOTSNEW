@@ -4,5 +4,26 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<style>
+    .title {
+        text-align: center;
+        font-size: 20px;
+        font-style: italic;
+    }
+</style>
+<div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
+    <div class="title">
+        <b>List Of Event</b>
+    </div>
+    <div class="row mb-5 ml-1 card" style="border-radius:20px">
+        <div class="row mb-2 ml-1 mt-5" style="padding-top:20px">
+            <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
+                <a href="@Url.Action("CreateEvent", "Events")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Event</a>
+            </div>
+        </div>
+     </div>
+</div>
+
+
+
 
