@@ -97,7 +97,7 @@
                                     {
                                         <tr>
                                             <td>@item.GroupName</td>
-                                            <td style="text-align:center;"><a href="#" onclick="ShowEnableDetails(@item.GroupId);">Enable</a></td>
+                                            <td style="text-align:center;"><a id="btnEnableData" href="#" onclick="ShowEnableDetails(@item.GroupId);">Enable</a></td>
                                         </tr>
                                     }
                                 }
@@ -140,8 +140,8 @@
 
 </div>
 <script>
-    
-    
+
+
     $(document).ready(function () {
         $('#neverOptedForTable').DataTable({
             "aaSorting": [],
@@ -169,6 +169,22 @@
         var table2 = $('#activeTable').DataTable();
         table2.draw();
     });
-   
+
+    function ShowEnableDetails() {
+        var returnStatus = true;
+        cuteAlert({
+            type: "question",
+            title: "Confirmation",
+            message: "Do you want to Enable the customer ?",
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                alert("111")
+            }
+           
+        })
+    }
+
 </script>
 

@@ -29,5 +29,37 @@ namespace BOTS_BL.Repository
             }
             return lstData;   
         }
+
+        public bool EnableEventModule(string GroupId, List<tblGroupDetail> contentData)
+        {
+            bool status = false;
+            try
+            {
+                {
+                    tblGroupDetail obj = new tblGroupDetail();
+                    int varid = Convert.ToInt32(GroupId);
+                    using (var context = new CommonDBContext())
+                    {                        
+                        var groupDetails = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
+                        groupDetails.IsEvent = true;                        
+                        context.SaveChanges();
+                        if (contentData != null)
+                        {
+                            foreach (var item in contentData)
+                            {
+                                context.tblGroupDetails.Add(item);
+                                context.SaveChanges();
+                            }
+                        }
+                        status = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "EnableEventModule");
+            }
+            return status;
+        }
     }
 }
