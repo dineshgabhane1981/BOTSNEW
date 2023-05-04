@@ -55,6 +55,31 @@ namespace BOTS_BL.Repository
             return status;
         }
 
+        public bool DisableEventModule(string GroupId)
+        {
+            bool status = false;
+            try
+            {
+                {
+                    tblGroupDetail obj = new tblGroupDetail();
+                    int varid = Convert.ToInt32(GroupId);
+                    using (var context = new CommonDBContext())
+                    {
+                        var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
+                        groupDetail.IsEvent = false;
+                        context.SaveChanges();
+                        status = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DisableEventModule");
+            }
+            return status;
+        }
+
+
         public bool SaveEventData(EventDetail Obj,string connectionstring)
         {
             bool status = false;

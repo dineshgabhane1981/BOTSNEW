@@ -62,6 +62,28 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult DisableEventModule(string jsonData)
+        {
+            bool status = false;
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string GroupId = Convert.ToString(item["GroupId"]);
+                    status = EVR.DisableEventModule(GroupId);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "EnableEventModule");
+            }
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
         [HttpPost]
         public ActionResult SaveEvent(string jsonData)
         {

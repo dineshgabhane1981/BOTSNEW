@@ -166,12 +166,12 @@
         });
         $('#activeTable_filter').hide();
         var table2 = $('#activeTable').DataTable();
-        table2.draw();       
+        table2.draw();
     });
 
     function ShowEnableDetails(GroupId) {
         var returnStatus = true;
-        
+
         cuteAlert({
             type: "question",
             title: "Confirmation",
@@ -179,10 +179,10 @@
             confirmText: "Yes",
             cancelText: "No"
         }).then((e) => {
-            if (e == ("confirm")) {               
+            if (e == ("confirm")) {
                 var MemberData = [];
                 item = {}
-                item["GroupId"] = GroupId;                
+                item["GroupId"] = GroupId;
                 MemberData.push(item);
                 var data = JSON.stringify(MemberData);
                 console.log(data)
@@ -208,5 +208,43 @@
         })
     }
 
+    function ShowDisableDetails(GroupId) {
+        var returnStatus = true;
+
+        cuteAlert({
+            type: "question",
+            title: "Confirmation",
+            message: "Do you want to Disable the customer ?",
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                var MemberData = [];
+                item = {}
+                item["GroupId"] = GroupId;
+                MemberData.push(item);
+                var data = JSON.stringify(MemberData);
+                console.log(data)
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DisableEventModule", "Events")',
+                    data: '{jsonData: ' + JSON.stringify(data) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        toastr.success("Event Module Disable Successfully");
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+
+
+                    }
+                })
+            }
+
+        })
+    }
 </script>
 
