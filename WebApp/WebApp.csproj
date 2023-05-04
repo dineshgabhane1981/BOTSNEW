@@ -313,10 +313,12 @@
     <Content Include="Content\assets\images\CustomerLogo\images.png" />
     <Content Include="Content\assets\images\dashboard.jpg" />
     <Content Include="Content\assets\images\delete.png" />
+    <Content Include="Content\assets\images\Delete1.png" />
     <Content Include="Content\assets\images\details_close.png" />
     <Content Include="Content\assets\images\details_open.png" />
     <Content Include="Content\assets\images\discussion.png" />
     <Content Include="Content\assets\images\Download.png" />
+    <Content Include="Content\assets\images\Edit.png" />
     <Content Include="Content\assets\images\exit.png" />
     <Content Include="Content\assets\images\GoToDashboard.png" />
     <Content Include="Content\assets\images\itops.png" />
@@ -330,6 +332,7 @@
     <Content Include="Content\assets\images\ops.jpg" />
     <Content Include="Content\assets\images\ops.png" />
     <Content Include="Content\assets\images\shape_editUser.png" />
+    <Content Include="Content\assets\images\Start.png" />
     <Content Include="Content\assets\images\task.png" />
     <Content Include="Content\assets\images\woman.jpg" />
     <Content Include="Content\assets\OnlyLogo.png" />

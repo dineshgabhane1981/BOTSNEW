@@ -1,27 +1,80 @@
-﻿
+﻿@model WebApp.ViewModel.EventViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
+@*<style>
     .title {
         text-align: center;
         font-size: 20px;
         font-style: italic;
     }
-</style>
+</style>*@
 <div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
-    <div class="title">
+    @*<div class="title">
         <b>List Of Event</b>
-    </div>
+    </div>*@
+    
     <div class="row mb-5 ml-1 card" style="border-radius:20px">
-        <div class="row mb-2 ml-1 mt-5" style="padding-top:20px">
-            <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
+        <div class="row mt-3 p-4" id="dvneverOptedForData">
+            @if (Model.lstEvent != null)
+            {
+                <div class="table-responsive">
+                    <table class="table" id="neverOptedForTable">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="text-align:left;">Event Id</th>
+                                <th scope="col" style="text-align:left;">Event Name</th>
+                                <th scope="col" style="text-align: center;">Place</th>
+                                <th scope="col" style="text-align: center;">Event Type</th>
+                                <th scope="col" style="text-align: center;">StartDate</th>
+                                <th scope="col" style="text-align: center;">EndDate</th>
+                                <th scope="col" style="text-align: center;">BonusPoints</th>
+                                <th scope="col" style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.lstEvent != null)
+                            {
+                                foreach (var item in Model.lstEvent)
+                                {
+                                    <tr>
+                                        <td>@item.EventId</td>
+                                        <td>@item.EventName</td>
+                                        <td>@item.Place</td>
+                                        <td>@item.EventType</td>
+                                        <td>@item.EventStartDate</td>
+                                        <td>@item.EventEndDate</td>
+                                        <td>@item.BonusPoints</td>
+                                        <td style="text-align:center;">
+
+                                            <a href="" class="login" title="Start Event"><img src="~/Content/assets/images/Start.png" width="30" /></a>
+                                            <a href="" class="login" title="Edit Event"><img src="~/Content/assets/images/Edit.png" width="30" /></a>
+                                            <a href="" class="login" title="Delete Event"><img src="~/Content/assets/images/Delete1.png" width="30" /></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="row" style="margin-top : 5px; margin-left:10px;">
+                    <h6 style="font:xx-large"><b>No Events Found</b></h6>
+                </div>
+            }
+        </div>
+        
+        <div class="row mb-2 ml-1 mt-5" style="padding-top:4px">
+            <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 5px; ">
                 <a href="@Url.Action("CreateEvent", "Events")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Event</a>
             </div>
         </div>
-     </div>
+    </div>
 </div>
 
 

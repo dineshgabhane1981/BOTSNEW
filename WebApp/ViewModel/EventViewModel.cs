@@ -12,6 +12,7 @@ namespace WebApp.ViewModel
         //public tblGroupDetail NeverOptFor { get; set; }
         public List<tblGroupDetail> lstNeverOptFor { get; set; }
         public List<tblGroupDetail> lstActive { get; set; }
+        public List<EventDetail> lstEvent { get; set; }
 
         public string EvtType { get; set; }
 

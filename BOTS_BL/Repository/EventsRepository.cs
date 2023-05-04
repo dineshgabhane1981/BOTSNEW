@@ -104,6 +104,18 @@ namespace BOTS_BL.Repository
         {
             List<EventDetail> listEvent = new List<EventDetail>();
 
+            try
+            {
+                using (var context = new BOTSDBContext(connectionString))
+                {
+                    listEvent = context.EventDetails.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetListEvents");
+            }
+
             return listEvent;
         }
     }
