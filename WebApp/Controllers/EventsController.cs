@@ -19,6 +19,9 @@ namespace WebApp.Controllers
         // GET: Events List
         public ActionResult Index()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            var listEvents = EVR.GetListEvents(userDetails.GroupId,userDetails.connectionString);
             return View();
         }
         public ActionResult CreateEvent()
@@ -95,6 +98,11 @@ namespace WebApp.Controllers
                 newexception.AddException(ex, "CreateEventData");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult EventForm()
+        {
+            return View();
         }
 
     }

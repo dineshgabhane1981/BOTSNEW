@@ -82,6 +82,13 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public List<EventDetail> GetListEvents(string GroupId,string connectionString)
+        {
+            List<EventDetail> listEvent = new List<EventDetail>();
+
+            return listEvent;
+        }
     }
     
 }
