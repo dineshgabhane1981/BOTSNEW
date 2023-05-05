@@ -44,7 +44,7 @@ namespace BOTS_BL.Models
         public string C2ndReminderScript { get; set; }
 
         public string Desciption { get; set; }
-
+        public string Status { get; set; }
         [Required]
         [StringLength(50)]
         public string AddedBy { get; set; }

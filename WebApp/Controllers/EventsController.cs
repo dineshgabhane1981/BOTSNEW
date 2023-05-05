@@ -141,7 +141,35 @@ namespace WebApp.Controllers
         }
         public ActionResult EventDelete()
         {
+            var groupId = (string)Session["GroupId"];
+            ViewBag.GroupId = groupId;
             return View();
+        }
+        public ActionResult DeleteEventDetails(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var result = false;
+            string EventId, GroupId;
+            EventId = string.Empty;
+            GroupId = string.Empty;
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    EventId = Convert.ToString(item["EventId"]);
+                    GroupId = Convert.ToString(item["GroupId"]);
+                }
+                result = EVR.EventDelete(EventId, GroupId, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DeleteEventDetails");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
     }

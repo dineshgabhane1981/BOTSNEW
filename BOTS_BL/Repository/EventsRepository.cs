@@ -108,7 +108,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connectionString))
                 {
-                    listEvent = context.EventDetails.ToList();
+                    listEvent = context.EventDetails.Where(x => x.Status == null || x.Status != "Deleted").ToList();
                 }
             }
             catch (Exception ex)
@@ -117,6 +117,29 @@ namespace BOTS_BL.Repository
             }
 
             return listEvent;
+        }
+        public bool EventDelete(string EventId, string GroupId, string connectionstring)
+        {
+            bool status = false;
+            try
+            {
+                EventDetail ObjEventDetails = new EventDetail();
+                using (var context = new BOTSDBContext(connectionstring))
+                {
+                    int varid = Convert.ToInt32(EventId);
+                    ObjEventDetails = context.EventDetails.Where(x => x.EventId == varid).FirstOrDefault();
+                    ObjEventDetails.Status = "Deleted";
+
+                    context.EventDetails.AddOrUpdate(ObjEventDetails);
+                    context.SaveChanges();
+                }
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "EventDelete");
+            }
+            return status;
         }
     }
     
