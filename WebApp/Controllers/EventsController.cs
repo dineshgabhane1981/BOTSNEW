@@ -20,9 +20,10 @@ namespace WebApp.Controllers
         public ActionResult Index()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            EventViewModel objData = new EventViewModel();
 
-            var listEvents = EVR.GetListEvents(userDetails.GroupId,userDetails.connectionString);
-            return View();
+            objData.lstEvent = EVR.GetListEvents(userDetails.GroupId, userDetails.connectionString);
+            return View(objData);
         }
         public ActionResult CreateEvent()
         {
@@ -130,6 +131,15 @@ namespace WebApp.Controllers
         }
 
         public ActionResult EventForm()
+        {
+            return View();
+        }
+
+        public ActionResult EventEdit()
+        {
+            return View();
+        }
+        public ActionResult EventDelete()
         {
             return View();
         }

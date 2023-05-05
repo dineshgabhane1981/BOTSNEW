@@ -50,8 +50,8 @@
                                         <td style="text-align:center;">
 
                                             <a href="" class="login" title="Start Event"><img src="~/Content/assets/images/Start.png" width="30" /></a>
-                                            <a href="" class="login" title="Edit Event"><img src="~/Content/assets/images/Edit.png" width="30" /></a>
-                                            <a href="" class="login" title="Delete Event"><img src="~/Content/assets/images/Delete1.png" width="30" /></a>
+                                            <a href="@Url.Action("EventEdit", "Events")" class="login" title="Edit Event"><img src="~/Content/assets/images/Edit.png" width="30" /></a>
+                                            <a href="@Url.Action("EventDelete", "Events")" class="login" title="Delete Event"><img src="~/Content/assets/images/Delete1.png" width="30" /></a>
                                         </td>
                                     </tr>
                                 }
