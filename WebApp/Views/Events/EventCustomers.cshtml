@@ -79,38 +79,14 @@
         <label class="tab" id="two-tab" for="two">Active</label>
     </div>
     <div class="panels">
-        <div class="multisteps-form__panel shadow  list-box bg-white panel" id="one-panel">           
-                <div class="row mt-3 p-4" id="dvneverOptedForData">
-                    <div class="table-responsive">
-                        <table class="table" id="neverOptedForTable">
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="text-align:left;">Group Name</th>
-                                    <th scope="col" style="text-align: center;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.lstNeverOptFor != null)
-                                {
-                                    foreach (var item in Model.lstNeverOptFor)
-                                    {
-                                        <tr>
-                                            <td>@item.GroupName</td>
-                                            <td style="text-align:center;"><a id="btnEnableData" href="#" onclick="ShowEnableDetails(@item.GroupId);">Enable</a></td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            
-        </div>
-
-        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
-            <div class="row mt-3 p-4" id="dvActiveData">
+        <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="one-panel">
+            <div class="col search-container" style="margin-top:20px;">
+                <i class="fas fa-search"></i>
+                <input class="input100" type="text" id="txtSearch" placeholder="Search Groups..." />
+            </div>
+            <div class="row mt-3 p-4" id="dvneverOptedForData">
                 <div class="table-responsive">
-                    <table class="table" id="activeTable">
+                    <table class="table" id="neverOptedForTable">
                         <thead>
                             <tr>
                                 <th scope="col" style="text-align:left;">Group Name</th>
@@ -118,26 +94,54 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.lstActive != null)
-                            {
-                                foreach (var item in Model.lstActive)
+                            @if (Model.lstNeverOptFor != null)
                                 {
-                                    <tr>
-                                        <td>@item.GroupName</td>
-                                        <td style="text-align:center;"><a href="#" onclick="ShowDisableDetails(@item.GroupId);">Disable</a></td>
-                                    </tr>
+                                    foreach (var item in Model.lstNeverOptFor)
+                                    {
+                            <tr>
+                                <td>@item.GroupName</td>
+                                <td style="text-align:center;"><a id="btnEnableData" href="#" onclick="ShowEnableDetails(@item.GroupId);">Enable</a></td>
+                            </tr>
+                                    }
                                 }
-                            }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
+            <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
+                <div class="col search-container" style="margin-top:20px;">
+                    <i class="fas fa-search"></i>
+                    <input class="input100" type="text" id="txtSearch1" placeholder="Search Groups..." />
+                </div>
+                <div class="row mt-3 p-4" id="dvActiveData">
+                    <div class="table-responsive">
+                        <table class="table" id="activeTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="text-align:left;">Group Name</th>
+                                    <th scope="col" style="text-align: center;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.lstActive != null)
+                            {
+                                foreach (var item in Model.lstActive)
+                                {
+                                <tr>
+                                    <td>@item.GroupName</td>
+                                    <td style="text-align:center;"><a href="#" onclick="ShowDisableDetails(@item.GroupId);">Disable</a></td>
+                                </tr>
+                                }
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-
-</div>
+    
 <script>
 
 
@@ -167,6 +171,33 @@
         $('#activeTable_filter').hide();
         var table2 = $('#activeTable').DataTable();
         table2.draw();
+
+        $('#txtSearch').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table1 = $('#neverOptedForTable').DataTable();
+            table1.draw();
+        });
+        $('#txtSearch1').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch1').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table1 = $('#activeTable').DataTable();
+            table1.draw();
+        });
     });
 
     function ShowEnableDetails(GroupId) {

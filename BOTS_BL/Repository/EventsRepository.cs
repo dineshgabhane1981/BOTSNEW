@@ -21,7 +21,7 @@ namespace BOTS_BL.Repository
                     if (status)
                         lstData = context.tblGroupDetails.Where(x => x.IsEvent == true).ToList();
                     else
-                        lstData = context.tblGroupDetails.Where(x => x.IsEvent == null).ToList();
+                        lstData = context.tblGroupDetails.Where(x => x.IsEvent == null || x.IsEvent == false).ToList();
                 }
             }
             catch (Exception ex)
