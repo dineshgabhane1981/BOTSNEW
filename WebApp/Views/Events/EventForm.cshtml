@@ -6,3 +6,173 @@
 
 <h2>EventForm</h2>
 
+<div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
+    <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="row mb-2 ml-2">
+            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+            <input type="number" id="txtMobileNo" class="input50" />
+
+        </div>
+        <div class="row mb-2 ml-2">
+            <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
+                <button type="button" id="btnNew" style="margin-left:25px;" class="btn btn-primary"><b>New</b></button>
+                <button type="button" id="btnExisting" style="margin-left:15px;" class="btn btn-primary"><b>Existing</b></button>
+            </div>
+        </div>
+
+
+        <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; margin-top: 30px; ">
+            <input type="hidden" id="hdnCustomerId" />
+            <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px;  ">
+                <table border="1" cellpadding="5" cellspacing="5" style="display:none;" id="tblNewMemberData">
+                    <tr>
+                        <th colspan="2" style="padding:10px;text-align:center;">New Member Details</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Name</td>
+                        <td>
+                            <input type="text" id="txtName" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Gender</td>
+                        <td>
+                            <input type="text" id="txtGender" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">DOB</td>
+                        <td>
+                            <input type="text" id="dtDOB" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">DOA</td>
+                        <td>
+                            <input type="text" id="dtDOA" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Address</td>
+                        <td>
+                            <input type="text" id="txtAddress" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">EmailId</td>
+                        <td>
+                            <input type="text" id="txtEmail" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">AlternateMobileNo</td>
+                        <td>
+                            <input type="text" id="txtAlternateMobileNo" class="input50" />
+                        </td>
+                    </tr>
+
+
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;margin-top:30px;">
+            <input type="hidden" id="hdnCustomerId" />
+            <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
+                <table border="1" cellpadding="5" cellspacing="5" style="float: left;display:none;" id="tblExistingDetails">
+                    <tr>
+                        <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Name</td>
+                        <td>
+                            <input type="text" id="txtName" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Gender</td>
+                        <td>
+                            <input type="text" id="txtGender" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">DOB</td>
+                        <td>
+                            <input type="text" id="dtDOB" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">DOA</td>
+                        <td>
+                            <input type="text" id="dtDOA" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">Address</td>
+                        <td>
+                            <input type="text" id="txtAddress" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">EmailId</td>
+                        <td>
+                            <input type="text" id="txtEmail" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">TotalAvailablePoints</td>
+                        <td>
+                            <input type="text" id="txtAvailablePoints" class="input50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">LastTxnDate</td>
+                        <td style="padding:10px;"><input type="text" id="dtTransaction" class="input50" /></td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;">PointsExpiryDate</td>
+                        <td style="padding:10px;"><input type="text" id="dtTransaction" class="input50" /></td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <div class="button-row mt-5" style="text-align:end;">
+            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSaveMemberName" tabindex="20">Submit</button>
+        </div>
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        // alert(today);
+        $("#dtDOB").datepicker({
+
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            //  minDate: '-4'
+        });
+        $("#btnNew").on("click", function () {
+            $("#tblNewMemberData").show();
+            $("#tblExistingDetails").hide();
+
+        });
+        $("#btnExisting").on("click", function () {
+            $("#tblNewMemberData").hide();
+            $("#tblExistingDetails").show();
+
+        });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+    });
+
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+
+
