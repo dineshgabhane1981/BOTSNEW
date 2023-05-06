@@ -52,7 +52,7 @@
                             <td style="text-align:center;">
 
                                 <a href="" class="login" title="Start Event"><img src="~/Content/assets/images/Start.png" width="30" /></a>
-                                <a href="@Url.Action("EventEdit", "Events")" class="login" title="Edit Event"><img src="~/Content/assets/images/Edit.png" width="30" /></a>
+                                <a href="@Url.Action("EventEdit", "Events",new { groupId = @item.GroupId,eventid = @item.EventId})" class="login" title="Edit Event"><img src="~/Content/assets/images/Edit.png" width="30" /></a>
                                 <td style="margin-left:40px;"><img src="~/Content/assets/images/Delete1.png" onclick="EventDelete(@item.GroupId,@item.EventId);" style="cursor:pointer;" width="30" /></td>
                             
                         </tr>
