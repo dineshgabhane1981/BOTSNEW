@@ -51,13 +51,31 @@
                             <td>@item.BonusPoints</td>
                             <td style="text-align:center;">
 
-                                <a href="" class="login" title="Start Event"><img src="~/Content/assets/images/Start.png" width="30" /></a>
+                                @*<a href="" class="login" title="Start Event">*@<img src="~/Content/assets/images/Start.png" onclick="EventStart(@item.GroupId,@item.EventId,'@item.Place');"style="cursor:pointer;" width="30" />@*</a>*@
                                 <a href="@Url.Action("EventEdit", "Events",new { groupId = @item.GroupId,eventid = @item.EventId})" class="login" title="Edit Event"><img src="~/Content/assets/images/Edit.png" width="30" /></a>
-                                <td style="margin-left:40px;"><img src="~/Content/assets/images/Delete1.png" onclick="EventDelete(@item.GroupId,@item.EventId);" style="cursor:pointer;" width="30" /></td>
+                                <img src="~/Content/assets/images/Delete1.png" onclick="EventDelete(@item.GroupId,@item.EventId);" style="cursor:pointer;" width="30" />
                             
                         </tr>
-                                }
+                                var dynamicIdTr = "trEvent" + item.EventId;
+                                var dynamicIdDiv = "dvLinkList" + item.EventId;
+
+                    <tr id="@dynamicIdTr" style="display: none;">
+                        <td colspan="13">
+                            <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+
+                            </div>
+                        </td>
+                        <td style="display:none;"></td>
+                        <td style="display:none;"></td>
+                        <td style="display:none;"></td>
+                        <td style="display:none;"></td>
+                        <td style="display:none;"></td>
+                        <td style="display:none;"></td>
+                        <td style="display:none;"></td>
+                        <td style="display:none;"></td>
+                    </tr>
                             }
+                        }
 
                     </tbody>
                 </table>
@@ -96,12 +114,12 @@
             confirmText: "Yes",
             cancelText: "No"
         }).then((e) => {
-            if (e == ("confirm")) {                
+            if (e == ("confirm")) {
                 var MemberData = [];
                 item = {}
                 item["GroupId"] = GroupId;
                 item["EventId"] = EventId;
-                
+
                 MemberData.push(item);
                 var data = JSON.stringify(MemberData);
                 console.log(data)
@@ -120,7 +138,7 @@
                                 title: "Saved",
                                 message: "Event Deleted successfully",
                                 buttonText: "Okay"
-                                
+
                             }).then(() => {
                                 var urlLink = "@Url.Action("Index", "Events")";
                                 window.location.href = urlLink;
@@ -136,12 +154,10 @@
                             })
                             $("#divLoader").hide();
                         }
-                        
+
                     },
                     error: function (result) {
                         console.log(result.responseText)
-
-
                     }
                 });
             }
@@ -149,9 +165,65 @@
 
 
     }
-    
 
+    function EventStart(GroupId, EventId,Place) {
 
+        var FilterData = [];
+        item = {};
+        item["GroupId"] = GroupId;
+        item["EventId"] = EventId;
+        item["Place"] = Place;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CreateLink", "Events")',
+                    data: '{jsonData: ' + JSON.stringify(data) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result)
+                        BindActivities(GroupId, EventId, result);
+                           $("#divLoader").hide();
+                        
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+                    }
+                });
+    }
+
+    function BindActivities(GroupId, EventId, data) {
+        if (data != "") {
+            var htmlStr = "<table border=\"2\" style=\"background-color:white;margin-left: 11px;width: 98%;\" class=\"table\">";
+            htmlStr += "<tr style=\"text-align: center;\">"
+            htmlStr += "<th scope=\"col\">Place:</th>";
+            htmlStr += "<th scope=\"col\">Url:</th>";
+            htmlStr += "</tr>";
+
+            $.map(data, function (item) {
+                htmlStr += "<tr style=\"text-align: center;\">"
+                htmlStr += "<td>" + item.Place + "</td>";
+                htmlStr += "<td><a href=\"\">" + item.Url + "</a></td>";
+                htmlStr += "</tr>"
+            });
+            htmlStr += "</table>";
+            $("#dvLinkList" + EventId).html(htmlStr);
+            $("#trEvent" + EventId).show(1000);
+            $("#dvLinkList" + EventId).show(1000);
+        }
+        else {
+            cuteAlert({
+                type: "warning",
+                title: "Oops..",
+                message: "No tracking available",
+                buttonText: "Okay"
+            })
+        }
+    }
 </script>
 
 

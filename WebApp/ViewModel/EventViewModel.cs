@@ -16,6 +16,8 @@ namespace WebApp.ViewModel
 
         public EventDetail objEvent { get; set; }
 
+        public ListOfLink objlistlink { get; set; }
+
         public string EvtType { get; set; }
 
         public SelectListItem[] EventType()
@@ -23,4 +25,11 @@ namespace WebApp.ViewModel
             return new SelectListItem[2] { new SelectListItem() { Text = "Type1", Value = "Type1" }, new SelectListItem() { Text = "Type2", Value = "Type2" } };
         }
     }
+
+    public class ListOfLink
+    { 
+       public string Place { get; set; }
+       public string Url { get; set; }
+    }
+
 }

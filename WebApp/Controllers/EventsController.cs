@@ -3,10 +3,12 @@ using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using WebApp.App_Start;
 using WebApp.ViewModel;
 
 namespace WebApp.Controllers
@@ -178,6 +180,52 @@ namespace WebApp.Controllers
                 newexception.AddException(ex, "DeleteEventDetails");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult CreateLink(string jsonData)
+        {
+            string _BaseUrl = ConfigurationManager.AppSettings["BaseURL"];
+            CommonFunctions Common = new CommonFunctions();
+            List<ListOfLink> ObjList = new List<ListOfLink>();
+
+            bool status = false;
+            string EventId, GroupId, Place;
+            EventId = string.Empty;
+            GroupId = string.Empty;
+            Place = string.Empty;
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    EventId = Convert.ToString(item["EventId"]);
+                    GroupId = Convert.ToString(item["GroupId"]);
+                    Place = Convert.ToString(item["Place"]);
+                }
+                string[] ListOfPlace = Place.Split(',');
+
+                foreach(var item in ListOfPlace)
+                {
+                    string place = item;
+                    ListOfLink objLink = new ListOfLink();
+
+                    var Lstr = "groupid=" + GroupId;
+                    Lstr = "&eventid=" + EventId;
+                    Lstr = "&place=" + item;
+                    var url = _BaseUrl + "data=" + Common.EncryptString(Lstr);
+                    objLink.Place = place;
+                    objLink.Url = url;
+                    ObjList.Add(objLink);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CreateLink");
+            }
+
+            return new JsonResult() { Data = ObjList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
     }
