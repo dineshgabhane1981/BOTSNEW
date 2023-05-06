@@ -3,120 +3,117 @@
     ViewBag.Title = "CreateEvent";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<style>
+@*<style>
     .title{
         text-align:center;
         font-size:20px;
         font-style:italic;
     }
-</style>
+</style>*@
 <div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
-    <div class="title">
+    @*<div class="title">
         <b>Create Event</b>
-    </div>
-    
+    </div>*@
+    @Html.HiddenFor(model => model.objEvent.EventId, new { @id = "hdnEventId" })
     <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; border-radius:20px">
-        <div class="row mb-2 ml-2">
-            <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Event Name *</b>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Event Name
             </div>
-            <div>
-                <input type="text" id="IdEventName" class="input50" placeholder="Enter Event Name" style="margin-top: 20px; " />
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.EventName, new { @class = "input100", @id = "IdEventName" })
             </div>
-        </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Event Date *</b>
+            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                Event Date
             </div>
-            <div>
-                <input type="date" id="IdEventDate" class="input50" placeholder="Select Date" style="margin-top: 20px; " />
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.Addeddate, new { @class = "input100", @id = "IdEventDate" })
             </div>
         </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Event Place *</b>
-            </div>
-            <div>
-                <input type="text" id="IdEventPlace" class="input50" placeholder="Enter Event Place" style="margin-top: 20px; " />
-            </div>
-        </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Event Type *</b>
-            </div>
-            <div>
-                @Html.DropDownListFor(model => model.EvtType, new SelectList(Model.EventType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlIdEventType", @style = "margin-top: 20px; " })
-            </div>
-        </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Event Start & End Dates *</b>
-            </div>
-            <div>
-                @*<input type="date" id="IdEventStrDate" class="input50" placeholder="Enter Event Type" style="margin-top: 20px;"/>*@
-                <input type="datetime-local" id="IdEventStrDate" name="StrDate" class="input50" value="2023-01-01T00:00" min="2023-01-01T00:00" max="2073-01-01T00:00" style="margin-top: 20px;">
-            </div>
-            <div class="ml-5">
-                @*<input type="date" id="IdEventEndDate" class="input50" style="margin-top: 20px;"/>*@
-                <input type="datetime-local" id="IdEventEndDate" name="EndDate" class="input50" value="2023-01-01T00:00" min="2023-01-01T00:00" max="2073-01-01T00:00" style="margin-top: 20px;">
-            </div>
-        </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Bonus Points *</b>
-            </div>
 
-            <div>
-                <input type="number" id="IdBonusPoints" class="input50" placeholder="Enter Points" style="margin-top: 20px; " />              
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Event Place
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.Place, new { @class = "input100", @id = "IdEventPlace" })
+            </div>
+            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                Event Type
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.DropDownListFor(model => model.objEvent.EventType, new SelectList(Model.EventType(), "Value", "Text"), "Please Select", new { @class = "input100", @id = "ddlIdEventType" })
             </div>
         </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Bonus Points Expiry *</b>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Event Start Date
             </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.EventStartDate, new { @class = "input100", @id = "IdEventStrDate" })
+            </div>
+            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                Event End Dates
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.EventEndDate, new { @class = "input100", @id = "IdEventEndDate" })
+            </div>
+        </div>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Bonus Points
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.BonusPoints, new { @class = "input100", @id = "IdBonusPoints" })
+            </div>
+            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                Bonus Points Expiry
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.PointsExpiryDays, new { @class = "input100", @id = "IdPointsExp" })
+            </div>
+        </div>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                First Remainder
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextAreaFor(model => model.objEvent.C1stReminderScript, new { @class = "input100", @id = "IdFirstRemaind" })
+            </div>
+            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
 
-            <div>
-                <input type="number" id="IdPointsExp" class="input50" placeholder="Exp in Days" style="margin-top: 20px; " />                
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.C1stRemBefore, new { @class = "input100", @id = "IdFirstRemdDays" })
             </div>
         </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>First Remainder *</b>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Second Remainder
             </div>
-            <div class="mt-3">
-                <textarea class="input50" id="IdFirstRemaind" maxlength="10000" placeholder="Enter Script"></textarea>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextAreaFor(model => model.objEvent.C2ndReminderScript, new { @class = "input100", @id = "IdSecondRemaind" })
             </div>
-            <div class="ml-5">
-                <input type="number" id="IdFirstRemdDays" class="input50" placeholder="Enter Remainder days" style="margin-top: 20px; " />
-                @*<input type="datetime-local" id="IdFirstRemdDate" name="EndDate" class="input50" value="2023-01-01T00:00" min="2023-01-01T00:00" max="2073-01-01T00:00" style="margin-top: 20px;">*@
-            </div>
-        </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Second Remainder</b>
-            </div>
-            <div class="mt-3">
-                <textarea class="input50" id="IdSecondRemaind" maxlength="10000" placeholder="Enter Script"></textarea>
-            </div>
+            <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
 
-            <div class="ml-5">
-                <input type="number" id="IdSecondRemdDays" class="input50" placeholder="Enter Remainder days" style="margin-top: 20px; " />
-                @*<input type="datetime-local" id="IdSecondRemdDate" name="EndDate" class="input50" value="2023-01-01T00:00" min="2023-01-01T00:00" max="2073-01-01T00:00" style="margin-top: 20px;">*@
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextBoxFor(model => model.objEvent.C2ndRemBefore, new { @class = "input100", @id = "IdSecondRemdDays" })
             </div>
         </div>
-        <div class="row mb-2 ml-2">
-            <div class="col-md-3 col-xl-3" style="margin-left: 18px; margin-top: 20px; ">
-                <b>Description</b>
+        <div class="row" style="margin: 0;">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Description
             </div>
-
-            <div class="col-md-4 mt-3">
-                <textarea class="form-control" id="idDescription" rows="6" maxlength="10000" placeholder="Enter Description"></textarea>
+            <div class="col-sm-6" style="float:left;margin-top:10px;">
+                @Html.TextAreaFor(model => model.objEvent.Desciption, new { @class = "input100", @id = "idDescription" })
             </div>
         </div>
+        
         <div class="row mb-2 ml-2">
             <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
-                <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" Onclick="Validation()" ><b>Submit</b></button>
-                <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary"><b>Cancel</b></button>
+                <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" Onclick="Validation()"><b>Submit</b></button>
+                <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" Onclick="ResetForm()"><b>Reset</b></button>
             </div>
         </div>
     </div>
@@ -223,6 +220,7 @@
         {
             var FilterData = [];
             item = {};
+            item["EventId"] = $("#hdnEventId").val();            
             item["EventName"] = EventName;
             item["EventDate"] = EventDate;
             item["EventPlace"] = EventPlace;
@@ -277,6 +275,9 @@
                    }
                });
          }
-
+    }
+    function ResetForm() {
+        var urlLink = "@Url.Action("CreateEvent", "Events")";
+        window.location.href = urlLink;
     }
 </script>

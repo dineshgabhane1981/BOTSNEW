@@ -28,6 +28,8 @@ namespace WebApp.Controllers
         public ActionResult CreateEvent()
         {
             EventViewModel objData = new EventViewModel();
+            EventDetail objEvent = new EventDetail();
+            objData.objEvent = objEvent;
             return View(objData);
         }
         public ActionResult EventReport()
@@ -104,6 +106,7 @@ namespace WebApp.Controllers
                 {
                     ObjEventDetails.AddedBy = userDetails.LoginId;
                     ObjEventDetails.GroupId = Convert.ToInt32(GroupId);
+                    ObjEventDetails.EventId = Convert.ToInt64(item["EventId"]);
                     ObjEventDetails.EventName = Convert.ToString(item["EventName"]);
                     ObjEventDetails.Addeddate = Convert.ToDateTime(item["EventDate"]);
                     ObjEventDetails.Place = Convert.ToString(item["EventPlace"]);
@@ -135,9 +138,14 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public ActionResult EventEdit()
+        public ActionResult EventEdit(string groupId, string eventid)
         {
-            return View();
+            EventViewModel objData = new EventViewModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var ListEventData = EVR.GetEditEvents(groupId, eventid, userDetails.connectionString);
+
+            objData.objEvent = ListEventData;
+            return View("CreateEvent", objData);
         }
         public ActionResult EventDelete()
         {

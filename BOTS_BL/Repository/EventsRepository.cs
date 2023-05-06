@@ -79,7 +79,6 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-
         public bool SaveEventData(EventDetail Obj,string connectionstring)
         {
             bool status = false;
@@ -118,6 +117,7 @@ namespace BOTS_BL.Repository
 
             return listEvent;
         }
+
         public bool EventDelete(string EventId, string GroupId, string connectionstring)
         {
             bool status = false;
@@ -140,6 +140,19 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "EventDelete");
             }
             return status;
+        }
+
+        public EventDetail GetEditEvents(string groupId, string eventid, string connectionString)
+        {
+            EventDetail obj = new EventDetail();
+
+            int Id = Convert.ToInt32(eventid);
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                obj = context.EventDetails.Where(x => x.EventId == Id).FirstOrDefault();
+            }
+
+            return obj;
         }
     }
     

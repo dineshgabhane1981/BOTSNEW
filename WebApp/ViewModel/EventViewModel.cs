@@ -14,6 +14,8 @@ namespace WebApp.ViewModel
         public List<tblGroupDetail> lstActive { get; set; }
         public List<EventDetail> lstEvent { get; set; }
 
+        public EventDetail objEvent { get; set; }
+
         public string EvtType { get; set; }
 
         public SelectListItem[] EventType()
