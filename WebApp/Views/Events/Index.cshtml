@@ -192,7 +192,7 @@
                         console.log(result)
                         BindActivities(GroupId, EventId, result);
                            $("#divLoader").hide();
-                        
+
                     },
                     error: function (result) {
                         console.log(result.responseText)
@@ -201,33 +201,36 @@
     }
 
     function BindActivities(GroupId, EventId, data) {
+        var groupid = GroupId;
+        var eventid = EventId;
+        
         if (data != "") {
-            var htmlStr = "<table border=\"2\" style=\"background-color:white;margin-left: 11px;width: 98%;\" class=\"table\">";
-            htmlStr += "<tr style=\"text-align: center;\">"
-            htmlStr += "<th scope=\"col\">Place:</th>";
-            htmlStr += "<th scope=\"col\">Url:</th>";
-            htmlStr += "</tr>";
+                var htmlStr = "<table border=\"2\" style=\"background-color:white;margin-left: 11px;width: 98%;\" class=\"table\">";
+                htmlStr += "<tr style=\"text-align: center;\">"
+                htmlStr += "<th scope=\"col\">Place:</th>";
+                htmlStr += "<th scope=\"col\">Url:</th>";
+                htmlStr += "</tr>";
 
             $.map(data, function (item) {
                 htmlStr += "<tr style=\"text-align: center;\">"
                 htmlStr += "<td>" + item.Place + "</td>";
-                htmlStr += "<td><a href=\"\">" + item.Url + "</a></td>";
+                htmlStr += "<td><a href=\"@Url.Action("EventForm", "Events")\" target=\"_blank\">" + item.Url + "</a></td>";
                 htmlStr += "</tr>"
             });
-            htmlStr += "</table>";
+                htmlStr += "</table>";
             $("#dvLinkList" + EventId).html(htmlStr);
             $("#trEvent" + EventId).show(1000);
             $("#dvLinkList" + EventId).show(1000);
-        }
-        else {
-            cuteAlert({
+            }
+            else {
+                cuteAlert({
                 type: "warning",
                 title: "Oops..",
                 message: "No tracking available",
                 buttonText: "Okay"
-            })
+                })
         }
-    }
+        }
 </script>
 
 
