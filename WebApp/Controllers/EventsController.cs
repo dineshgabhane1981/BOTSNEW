@@ -17,7 +17,7 @@ namespace WebApp.Controllers
     {
         Exceptions newexception = new Exceptions();
         EventsRepository EVR = new EventsRepository();
-        
+
         // GET: Events List
         public ActionResult Index()
         {
@@ -101,7 +101,7 @@ namespace WebApp.Controllers
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
-            
+
             try
             {
                 foreach (Dictionary<string, object> item in objData)
@@ -135,8 +135,33 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult EventForm()
+        public ActionResult EventForm(string data)
         {
+            string eventId = string.Empty;
+            string groupId = string.Empty;
+            string place = string.Empty;
+            CommonFunctions common = new CommonFunctions();
+            var AData = common.DecryptString(data);
+            var lstParameter = AData.Split('&');
+            var groupIdStr = lstParameter[0];
+            var eventIdStr = lstParameter[1];
+            var placeStr = lstParameter[2];
+
+            var groupData = groupIdStr.Split('=');
+            groupId = groupData[1];
+
+            var eventData = eventIdStr.Split('=');
+            eventId = eventData[1];
+
+            var placeData = placeStr.Split('=');
+            place = placeData[1];
+
+            ViewBag.GroupId = groupId;
+            ViewBag.EventId = eventId;
+            ViewBag.Place = place;
+
+
+
             return View();
         }
 
@@ -206,15 +231,15 @@ namespace WebApp.Controllers
                 }
                 string[] ListOfPlace = Place.Split(',');
 
-                foreach(var item in ListOfPlace)
+                foreach (var item in ListOfPlace)
                 {
                     string place = item;
                     ListOfLink objLink = new ListOfLink();
 
                     var Lstr = "groupid=" + GroupId;
-                    Lstr = "&eventid=" + EventId;
-                    Lstr = "&place=" + item;
-                    var url = _BaseUrl + "data=" + Common.EncryptString(Lstr);
+                    Lstr += "&eventid=" + EventId;
+                    Lstr += "&place=" + item;
+                    var url = _BaseUrl + "Events/EventForm?data=" + Common.EncryptString(Lstr);
                     objLink.Place = place;
                     objLink.Url = url;
                     ObjList.Add(objLink);

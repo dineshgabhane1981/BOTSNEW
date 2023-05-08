@@ -214,7 +214,7 @@
             $.map(data, function (item) {
                 htmlStr += "<tr style=\"text-align: center;\">"
                 htmlStr += "<td>" + item.Place + "</td>";
-                htmlStr += "<td><a href=\"@Url.Action("EventForm", "Events")\" target=\"_blank\">" + item.Url + "</a></td>";
+                htmlStr += "<td><a href=" + item.Url + " target=\"_blank\">" + item.Url + "</a></td>";
                 htmlStr += "</tr>"
             });
                 htmlStr += "</table>";
