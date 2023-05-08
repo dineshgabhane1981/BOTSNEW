@@ -24,12 +24,12 @@
             <input type="number" id="txtMobileNo" class="input50" />
 
         </div>
-        <div class="row mb-2 ml-2">
+        @*<div class="row mb-2 ml-2">
             <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
                 <button type="button" id="btnNew" style="margin-left:25px;" class="btn btn-primary"><b>New</b></button>
                 <button type="button" id="btnExisting" style="margin-left:15px;" class="btn btn-primary"><b>Existing</b></button>
             </div>
-        </div>
+        </div>*@
 
 
         <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; margin-top: 30px; ">
@@ -99,52 +99,52 @@
                     <tr>
                         <td style="padding:10px;">Name</td>
                         <td>
-                            <input type="text" id="txtName" class="input50" />
+                            <input type="text" id="txtextName" class="input50" />
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:10px;">Gender</td>
                         <td>
-                            <input type="text" id="txtGender" class="input50" />
+                            <input type="text" id="txtextGender" class="input50" />
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:10px;">DOB</td>
                         <td>
-                            <input type="text" id="dtDOB" class="input50" />
+                            <input type="text" id="dtextDOB" class="input50" />
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:10px;">DOA</td>
                         <td>
-                            <input type="text" id="dtDOA" class="input50" />
+                            <input type="text" id="dtextDOA" class="input50" />
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:10px;">Address</td>
                         <td>
-                            <input type="text" id="txtAddress" class="input50" />
+                            <input type="text" id="txtextAddress" class="input50" />
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:10px;">EmailId</td>
                         <td>
-                            <input type="text" id="txtEmail" class="input50" />
+                            <input type="text" id="txtextEmail" class="input50" />
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:10px;">TotalAvailablePoints</td>
                         <td>
-                            <input type="text" id="txtAvailablePoints" class="input50" />
+                            <input type="text" id="txtextAvailablePoints" class="input50" />
                         </td>
                     </tr>
                     <tr>
                         <td style="padding:10px;">LastTxnDate</td>
-                        <td style="padding:10px;"><input type="text" id="dtTransaction" class="input50" /></td>
+                        <td style="padding:10px;"><input type="text" id="LastTxnDate" class="input50" /></td>
                     </tr>
                     <tr>
                         <td style="padding:10px;">PointsExpiryDate</td>
-                        <td style="padding:10px;"><input type="text" id="dtTransaction" class="input50" /></td>
+                        <td style="padding:10px;"><input type="text" id="PointsExpDate" class="input50" /></td>
                     </tr>
 
                 </table>
@@ -159,7 +159,6 @@
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        // alert(today);
         $("#dtDOB").datepicker({
 
             dateFormat: "yy-mm-dd",
@@ -177,6 +176,43 @@
 
         });
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+    });
+
+    $("#txtMobileNo").focusout(function () {
+        var Mobileno = $("#txtMobileNo").val();
+        var GroupId = $("#hdnGroupId").val();
+        var Place = $("#hdnPlace").val();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCustomerdata", "Events")',
+            //data: '{groupId: ' + JSON.stringify(GroupId) + ', Mobileno: ' + JSON.stringify(Mobileno) + ', Place: ' + JSON.stringify(Place) +'}',
+            data: '{groupId: ' + JSON.stringify(GroupId) + ',Mobileno: ' + JSON.stringify(Mobileno) + ',Place: ' + JSON.stringify(Place)+'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (responce) {
+                if (responce.Mobileno != null) {
+                    $("#txtextName").val(responce.CustomerName);
+                    $("#txtextGender").val(responce.Gender);
+                    $("#dtextDOB").val(responce.DOB);
+                    $("#dtextDOA").val(responce.AnniversaryDate);
+                    $("#txtextAddress").val(responce.Address);
+                    $("#txtextEmail").val(responce.EmailId);
+                    $("#txtextAvailablePoints").val(responce.Points);
+                    $("#LastTxnDate").val(responce.LastTxnDate);
+                    $("#PointsExpDate").val(responce.PointExp);
+                    $("#tblExistingDetails").show();
+                    $("#tblNewMemberData").hide();
+                }
+                else {
+                    $("#tblNewMemberData").show();
+                    $("#tblExistingDetails").hide();
+                }
+            },
+            error: function (responce) {              
+                alert("666");
+            }
+        });
     });
 
 </script>

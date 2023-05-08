@@ -1,5 +1,6 @@
 ﻿using BOTS_BL;
 using BOTS_BL.Models;
+using BOTS_BL.Models.EventModule;
 using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
@@ -251,6 +252,27 @@ namespace WebApp.Controllers
             }
 
             return new JsonResult() { Data = ObjList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        
+        [HttpPost]
+        public ActionResult GetCustomerdata(string groupId,string Mobileno,string Place)
+        {
+            //EventDetail objData = new EventDetail();
+            EventModuleData objData = new EventModuleData();
+           
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+                objData = EVR.GetCustomerDetails(groupId, Mobileno, Place, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCustomerdata");
+            }
+
+            return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
     }

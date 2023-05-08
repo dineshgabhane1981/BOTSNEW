@@ -31,5 +31,4 @@ namespace WebApp.ViewModel
        public string Place { get; set; }
        public string Url { get; set; }
     }
-
 }
