@@ -180,6 +180,25 @@ namespace BOTS_BL.Repository
             }            
                 return obj;
         }
+
+        public bool SaveNewMemberData(EventMemberDetail objData, string connectionstring)
+        {
+            bool result = false;
+            using (var context = new BOTSDBContext(connectionstring))
+            {
+                try
+                {
+                        context.EventMemberDetails.AddOrUpdate(objData);
+                        context.SaveChanges();
+                        result = true;              
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "SaveNewMemberData");
+                }
+            }
+            return result;
+        }
     }
     
 }

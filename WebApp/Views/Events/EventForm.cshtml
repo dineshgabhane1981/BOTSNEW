@@ -151,7 +151,7 @@
             </div>
         </div>
         <div class="button-row mt-5" style="text-align:end;">
-            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSaveMemberName" tabindex="20">Submit</button>
+            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSaveMemberName" tabindex="20" Onclick="Validate()">Submit</button>
         </div>
     </div>
 
@@ -209,11 +209,112 @@
                     $("#tblExistingDetails").hide();
                 }
             },
-            error: function (responce) {              
+            error: function (responce) {
                 alert("666");
             }
         });
     });
+
+    function Validate() {
+        
+        var MobileNo = $("#txtMobileNo").val();
+        var Name = $("#txtName").val();
+        var Gender = $("#txtGender").val();
+        var DOB = $("#dtDOB").val();
+        var DOA = $("#dtDOA").val();
+        var EmailId = $("#txtEmail").val();
+        var Address = $("#txtAddress").val();       
+        var AlternateMobileNo = $("#txtAlternateMobileNo").val();
+
+        if (Name == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Name",
+                buttonText: "Okay"
+            })
+        }
+        else if (Gender == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Gender",
+                buttonText: "Okay"
+            })
+        }
+        else if (DOB == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter DOB",
+                buttonText: "Okay"
+            })
+        }
+        else if (Address == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Address",
+                buttonText: "Okay"
+            })
+        }
+        else
+        {
+            var FilterData = [];
+            item = {};
+            item["GroupId"] = $("#hdnGroupId").val();
+            item["EventId"] = $("#hdnEventId").val();
+            item["Place"] = $("#hdnPlace").val();
+            item["Name"] = Name;
+            item["Mobileno"] = MobileNo;
+            item["Gender"] = Gender;
+            item["DOB"] = DOB;
+            item["DOA"] = DOA;
+            item["EmailId"] = EmailId;
+            item["Address"] = Address;
+            item["AlternateNo"] = AlternateMobileNo;
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $("#divLoader").show();
+
+               $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("SaveNewMemberData", "Events")',
+                  data: '{jsonData: ' + JSON.stringify(data) + '}',
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (result) {
+                      console.log(result)
+                      if (result = true) {
+                          cuteAlert({
+                              type: "success",
+                              title: "Success Title",
+                              message: "Member Details saved Successfully",
+                              buttonText: "Okay"
+                          }).then(() => {
+                            var urlLink = "@Url.Action("EventForm", "Events")";
+                            window.location.href = urlLink;
+                        })
+                        $("#divLoader").hide();
+                      }
+                      else {
+                          cuteAlert({
+                              type: "error",
+                              title: "Oops..",
+                              message: "There is problem while saving data",
+                              buttonText: "Okay"
+                          })
+                      }
+
+                    $("#divLoader").hide();
+                  },
+                   error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                   }
+               });
+         }
+    }
 
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>

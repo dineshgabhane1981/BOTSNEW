@@ -281,5 +281,34 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult SaveNewMemberData(string jsonData)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            EventMemberDetail objOutletData = new EventMemberDetail();
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            foreach (Dictionary<string, object> item in objData)
+            {
+
+                objOutletData.GroupId = Convert.ToInt32(item["GroupId"]);
+                objOutletData.EventId = Convert.ToInt32(item["EventId"]);
+                objOutletData.Place = Convert.ToString(item["Place"]);
+                objOutletData.Mobileno = Convert.ToString(item["Mobileno"]);
+                objOutletData.Name = Convert.ToString(item["Name"]);
+                objOutletData.Gender = Convert.ToString(item["Gender"]);
+                objOutletData.DOB = Convert.ToDateTime(item["DOB"]);
+                objOutletData.DOA = Convert.ToDateTime(item["DOA"]);
+                objOutletData.EmailId = Convert.ToString(item["EmailId"]);
+                objOutletData.Address = Convert.ToString(item["Address"]);
+                objOutletData.AlternateNo = Convert.ToString(item["AlternateNo"]);
+            }
+            result = EVR.SaveNewMemberData(objOutletData, userDetails.connectionString);
+
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+
+        }
     }
 }
