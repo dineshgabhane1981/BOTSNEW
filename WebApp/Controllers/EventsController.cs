@@ -123,6 +123,7 @@ namespace WebApp.Controllers
                     ObjEventDetails.C2ndReminderScript = Convert.ToString(item["SecondRemaindScript"]);
                     ObjEventDetails.C2ndRemBefore = Convert.ToInt32(item["SecondRemdDays"]);
                     ObjEventDetails.Desciption = Convert.ToString(item["Description"]);
+                    ObjEventDetails.Status = "Created";
                     //ObjEventDetails.EventId = Convert.ToInt32("123");
 
                     var Response = EVR.SaveEventData(ObjEventDetails, userDetails.connectionString);
@@ -213,8 +214,7 @@ namespace WebApp.Controllers
             string _BaseUrl = ConfigurationManager.AppSettings["BaseURL"];
             CommonFunctions Common = new CommonFunctions();
             List<ListOfLink> ObjList = new List<ListOfLink>();
-
-            bool status = false;
+           
             string EventId, GroupId, Place;
             EventId = string.Empty;
             GroupId = string.Empty;
@@ -245,6 +245,12 @@ namespace WebApp.Controllers
                     objLink.Url = url;
                     ObjList.Add(objLink);
                 }
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                var EventData = EVR.GetEditEvents(GroupId, EventId, userDetails.connectionString);
+                EventData.Status = "Started";
+                EventData.Addeddate = DateTime.Now;
+                var Response = EVR.SaveEventData(EventData, userDetails.connectionString);
+
             }
             catch (Exception ex)
             {
