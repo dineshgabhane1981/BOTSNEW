@@ -19,6 +19,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<CustomerChild> CustomerChilds { get; set; }
         public virtual DbSet<EventDetail> EventDetails { get; set; }
         public virtual DbSet<EventMemberDetail> EventMemberDetails { get; set; }
         public virtual DbSet<tblDLCFrontEndPageData> tblDLCFrontEndPageDatas { get; set; }
