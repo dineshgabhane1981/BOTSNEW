@@ -48,7 +48,12 @@
                     <tr>
                         <td style="padding:10px;">Gender</td>
                         <td>
-                            <input type="text" id="txtGender" class="input50" />
+                            @*<input type="text" id="txtGender" class="input50" />*@
+                            <select id="ddlGender" name="Gender" class="input50" style="font-size:medium;">
+                                <option>Select</option>
+                                <option>M</option>
+                                <option>F</option>
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -165,6 +170,12 @@
             maxDate: today,
             //  minDate: '-4'
         });
+        $("#dtDOA").datepicker({
+
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            //  minDate: '-4'
+        });
         $("#btnNew").on("click", function () {
             $("#tblNewMemberData").show();
             $("#tblExistingDetails").hide();
@@ -219,7 +230,7 @@
         
         var MobileNo = $("#txtMobileNo").val();
         var Name = $("#txtName").val();
-        var Gender = $("#txtGender").val();
+        var Gender = $("#ddlGender").val();
         var DOB = $("#dtDOB").val();
         var DOA = $("#dtDOA").val();
         var EmailId = $("#txtEmail").val();
@@ -291,10 +302,10 @@
                               title: "Success Title",
                               message: "Member Details saved Successfully",
                               buttonText: "Okay"
-                          }).then(() => {
+                          })@*.then(() => {
                             var urlLink = "@Url.Action("EventForm", "Events")";
                             window.location.href = urlLink;
-                        })
+                        })*@
                         $("#divLoader").hide();
                       }
                       else {

@@ -18,6 +18,7 @@ namespace WebApp.Controllers
     {
         Exceptions newexception = new Exceptions();
         EventsRepository EVR = new EventsRepository();
+        CustomerRepository CR = new CustomerRepository();
 
         // GET: Events List
         public ActionResult Index()
@@ -269,9 +270,10 @@ namespace WebApp.Controllers
            
             try
             {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                var connStr = CR.GetCustomerConnString(groupId);
+                //var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
-                objData = EVR.GetCustomerDetails(groupId, Mobileno, Place, userDetails.connectionString);
+                objData = EVR.GetCustomerDetails(groupId, Mobileno, Place, connStr);
             }
             catch (Exception ex)
             {
@@ -285,27 +287,47 @@ namespace WebApp.Controllers
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            EventMemberDetail objOutletData = new EventMemberDetail();
+            EventMemberDetail objEventDetail = new EventMemberDetail();
+            CustomerDetail objCustomerDetail = new CustomerDetail();
+            CustomerChild objCustomerChild = new CustomerChild();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+           
 
             foreach (Dictionary<string, object> item in objData)
             {
 
-                objOutletData.GroupId = Convert.ToInt32(item["GroupId"]);
-                objOutletData.EventId = Convert.ToInt32(item["EventId"]);
-                objOutletData.Place = Convert.ToString(item["Place"]);
-                objOutletData.Mobileno = Convert.ToString(item["Mobileno"]);
-                objOutletData.Name = Convert.ToString(item["Name"]);
-                objOutletData.Gender = Convert.ToString(item["Gender"]);
-                objOutletData.DOB = Convert.ToDateTime(item["DOB"]);
-                objOutletData.DOA = Convert.ToDateTime(item["DOA"]);
-                objOutletData.EmailId = Convert.ToString(item["EmailId"]);
-                objOutletData.Address = Convert.ToString(item["Address"]);
-                objOutletData.AlternateNo = Convert.ToString(item["AlternateNo"]);
+                objEventDetail.GroupId = Convert.ToInt32(item["GroupId"]);
+                objEventDetail.EventId = Convert.ToInt32(item["EventId"]);
+                objEventDetail.Place = Convert.ToString(item["Place"]);
+                objEventDetail.Mobileno = Convert.ToString(item["Mobileno"]);
+                objEventDetail.Name = Convert.ToString(item["Name"]);
+                objEventDetail.Gender = Convert.ToString(item["Gender"]);
+                objEventDetail.DOB = Convert.ToDateTime(item["DOB"]);
+                objEventDetail.DOA = Convert.ToDateTime(item["DOA"]);
+                objEventDetail.EmailId = Convert.ToString(item["EmailId"]);
+                objEventDetail.Address = Convert.ToString(item["Address"]);
+                objEventDetail.AlternateNo = Convert.ToString(item["AlternateNo"]);
             }
-            result = EVR.SaveNewMemberData(objOutletData, userDetails.connectionString);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                objCustomerDetail.MobileNo = Convert.ToString(item["Mobileno"]);
+                objCustomerDetail.CustomerName = Convert.ToString(item["Name"]);
+                objCustomerDetail.CardNumber = Convert.ToString(item["Mobileno"]);
+                objCustomerDetail.EmailId = Convert.ToString(item["EmailId"]);
+                objCustomerDetail.DOB = Convert.ToDateTime(item["DOB"]);
+                objCustomerDetail.AnniversaryDate = Convert.ToDateTime(item["DOA"]);
+                objCustomerDetail.Gender = Convert.ToString(item["Gender"]);
+                objCustomerDetail.OldMobileNo = Convert.ToString(item["AlternateNo"]);
+                
+            }
+            foreach (Dictionary<string, object> item in objData)
+            {
+                objCustomerChild.Address = Convert.ToString(item["Address"]);
+            }
+                var connStr = CR.GetCustomerConnString(Convert.ToString(objEventDetail.GroupId));
+            result = EVR.SaveNewMemberData(objEventDetail, objCustomerDetail, objCustomerChild, connStr);
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
