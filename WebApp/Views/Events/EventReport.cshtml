@@ -39,13 +39,13 @@
         dateFormat: "yy-mm-dd",
         maxDate: today,
     });
-   
+
     function GetData() {
         $("#divLoader").show();
          $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetFilterReportData", "Events")',
-             data: '{fromDate: ' + JSON.stringify($("#dtFrom").val()) + ',toDate: ' + JSON.stringify($("#dtTo").val()) + '}',
+                data: '{fromDate: ' + JSON.stringify($("#dtFrom").val()) + ',toDate: ' + JSON.stringify($("#dtTo").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -65,6 +65,15 @@
                     $("#divLoader").hide();
                 }
             });
+    }
+    function ExportDataExcel() {
+
+        var urlLink = "@Url.Action("ExportToExcelEventReport", "Events")";
+        urlLink = urlLink + "?fromDate=" + $("#dtFrom").val() + "&toDate=" + $("#dtTo").val() + "";
+
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
     }
 </script>
 

@@ -1060,11 +1060,11 @@ namespace WebApp.Controllers
 
         public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName, string EmailId)
         {
-            newexception.AddDummyException("0011");
+            
             System.Data.DataTable table = new System.Data.DataTable();
             try
             {
-                newexception.AddDummyException("111");
+               
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
                 objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
@@ -1073,7 +1073,7 @@ namespace WebApp.Controllers
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
-                newexception.AddDummyException("222");
+                
                 foreach (CelebrationsMoreDetails item in objCelebrationsMoreDetails)
                 {
                     DataRow row = table.NewRow();
@@ -1082,7 +1082,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                newexception.AddDummyException("333");
+                
                 if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
@@ -1100,7 +1100,7 @@ namespace WebApp.Controllers
                         table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                     }
                 }
-                newexception.AddDummyException("444");
+               
                 foreach (DataRow dr in table.Rows)
                 {
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
@@ -1124,7 +1124,7 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
-                newexception.AddDummyException("555");
+                
                 table.Columns.Remove("TotalSpend");
                 table.Columns.Remove("AvlPoints");
                 table.Columns.Remove("PointsExpiry");
@@ -1136,7 +1136,7 @@ namespace WebApp.Controllers
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
-                    newexception.AddDummyException("666");
+                   
                     //excelSheet.Name
                     table.TableName = ReportName;
                     IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
@@ -1175,26 +1175,25 @@ namespace WebApp.Controllers
                     }
                     worksheet.Cell(6, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
-                    newexception.AddDummyException("777");
+                    
                     using (MemoryStream stream = new MemoryStream())
                     {
-                        newexception.AddDummyException("888");
+                        
                         wb.SaveAs(stream);
-                        newexception.AddDummyException("999");
+                        
                         if (EmailId != "")
                         {
-                            newexception.AddDummyException("000");
+                            
                             RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
 
                         }
-                        newexception.AddDummyException("1010");
+                        
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
             }
             catch (Exception ex)
-            {
-                newexception.AddDummyException("1011");
+            {                
                 newexception.AddException(ex, "ExportToExcelCelebrations");
                 return null;
             }

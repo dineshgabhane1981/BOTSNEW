@@ -2,9 +2,14 @@
 using BOTS_BL.Models;
 using BOTS_BL.Models.EventModule;
 using BOTS_BL.Repository;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
+using System.Data;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -39,7 +44,7 @@ namespace WebApp.Controllers
         public ActionResult EventReport()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var lstData = EVR.GetEventReport(userDetails.GroupId,"","");
+            var lstData = EVR.GetEventReport(userDetails.GroupId, "", "");
             return View(lstData);
         }
         public ActionResult EventCustomers()
@@ -217,7 +222,7 @@ namespace WebApp.Controllers
             string _BaseUrl = ConfigurationManager.AppSettings["BaseURL"];
             CommonFunctions Common = new CommonFunctions();
             List<ListOfLink> ObjList = new List<ListOfLink>();
-           
+
             string EventId, GroupId, Place;
             EventId = string.Empty;
             GroupId = string.Empty;
@@ -263,13 +268,13 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = ObjList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        
+
         [HttpPost]
-        public ActionResult GetCustomerdata(string groupId,string Mobileno,string Place)
+        public ActionResult GetCustomerdata(string groupId, string Mobileno, string Place)
         {
             //EventDetail objData = new EventDetail();
             EventModuleData objData = new EventModuleData();
-           
+
             try
             {
                 var connStr = CR.GetCustomerConnString(groupId);
@@ -296,7 +301,7 @@ namespace WebApp.Controllers
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-           
+
 
             foreach (Dictionary<string, object> item in objData)
             {
@@ -325,26 +330,79 @@ namespace WebApp.Controllers
                 objCustomerDetail.AnniversaryDate = Convert.ToDateTime(item["DOA"]);
                 objCustomerDetail.Gender = Convert.ToString(item["Gender"]);
                 objCustomerDetail.OldMobileNo = Convert.ToString(item["AlternateNo"]);
-                
+
             }
             foreach (Dictionary<string, object> item in objData)
             {
                 objCustomerChild.Address = Convert.ToString(item["Address"]);
             }
-            
+
             var connStr = CR.GetCustomerConnString(Convert.ToString(objEventDetail.GroupId));
             result = EVR.SaveNewMemberData(objEventDetail, objCustomerDetail, objCustomerChild, objTM, connStr);
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
-    
-        public ActionResult GetFilterReportData(string fromDate,string toDate)
+
+        public ActionResult GetFilterReportData(string fromDate, string toDate)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var lstData = EVR.GetEventReport(userDetails.GroupId, fromDate, toDate);
             return PartialView("_EventReport", lstData);
         }
-    
+        public ActionResult ExportToExcelEventReport(string fromDate, string toDate)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                var lstData = EVR.GetEventReport(userDetails.GroupId, fromDate, toDate);
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(EventMemberDetail));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+
+                foreach (EventMemberDetail item in lstData)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                table.Columns.Remove("SLno");
+                table.Columns.Remove("GroupId");
+                table.Columns.Remove("EventId");
+                string fileName = "BOTS_EventsReport.xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = "EventsReport";
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: "EventsReport");
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Events Report";
+                    worksheet.Cell(2, 1).Value = "From Date";
+                    worksheet.Cell(2, 2).Value = fromDate;
+                    worksheet.Cell(3, 1).Value = "To Date";
+                    worksheet.Cell(3, 2).Value = toDate;                    
+                    
+                    worksheet.Cell(5, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
+
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream); 
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ExportToExcelEventReport");
+                return null;
+            }
+        }
+
     }
 }
