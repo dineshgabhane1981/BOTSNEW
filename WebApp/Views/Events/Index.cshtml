@@ -4,104 +4,86 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@*<style>
-    .title {
-        text-align: center;
-        font-size: 20px;
-        font-style: italic;
-    }
-</style>*@
+
 <div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
-    @*<div class="title">
-        <b>List Of Event</b>
-    </div>*@
-    
     <div class="row mb-5 ml-1 card" style="border-radius:20px">
+        <div class="row mb-2 ml-1 mt-4 col-md-12 col-xl-12" style="padding-top:4px">
+            <div class="col-md-12 col-xl-12" style="margin-top: 5px; ">
+                <a href="@Url.Action("CreateEvent", "Events")" class="btn btn-primary pull-right" role="button" data-bs-toggle="button">Create Event</a>
+            </div>
+        </div>
         <div class="row mt-3 p-4" id="dvneverOptedForData">
             @if (Model.lstEvent != null)
             {
-            <div class="table-responsive">
-                <table class="table" id="neverOptedForTable">
-                    <thead>
-                        <tr>
-                            @*<th scope="col" style="text-align:left;">Event Id</th>*@
-                            <th scope="col" style="text-align:left;">Event Name</th>
-                            <th scope="col" style="text-align: center;">Place</th>
-                            <th scope="col" style="text-align: center;">Event Type</th>
-                            <th scope="col" style="text-align: center;">Start Date</th>
-                            <th scope="col" style="text-align: center;">End Date</th>
-                            <th scope="col" style="text-align: center;">Bonus Points</th>
-                            <th scope="col" style="text-align: center;">Status</th>
-                            <th scope="col" style="text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.lstEvent != null)
-                        {
-                            foreach (var item in Model.lstEvent)
+                <div class="table-responsive">
+                    <table class="table" id="neverOptedForTable">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="text-align:left;">Event Name</th>
+                                <th scope="col" style="text-align: center;">Place</th>
+                                <th scope="col" style="text-align: center;">Event Type</th>
+                                <th scope="col" style="text-align: center;">Start Date</th>
+                                <th scope="col" style="text-align: center;">End Date</th>
+                                <th scope="col" style="text-align: center;">Bonus Points</th>
+                                <th scope="col" style="text-align: center;">Status</th>
+                                <th scope="col" style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.lstEvent != null)
                             {
-                                string GroupId = Convert.ToString(item.GroupId);
-                                string EventId = Convert.ToString(item.EventId);
-                        <tr>
-                            @*<td>@item.EventId</td>*@
-                            <td>@item.EventName</td>
-                            <td>@item.Place</td>
-                            <td>@item.EventType</td>
-                            <td>@item.EventStartDate</td>
-                            <td>@item.EventEndDate</td>
-                            <td>@item.BonusPoints</td>
-                            <td>@item.Status</td>
-                            <td style="text-align:center;">
+                                foreach (var item in Model.lstEvent)
+                                {
+                                    string GroupId = Convert.ToString(item.GroupId);
+                                    string EventId = Convert.ToString(item.EventId);
+                                    <tr>
+                                        <td>@item.EventName</td>
+                                        <td>@item.Place</td>
+                                        <td>@item.EventType</td>
+                                        <td>@item.EventStartDate</td>
+                                        <td>@item.EventEndDate</td>
+                                        <td>@item.BonusPoints</td>
+                                        <td>@item.Status</td>
+                                        <td style="text-align:center;">
 
-                                @*<a href="" class="login" title="Start Event">*@<img src="~/Content/assets/images/Start.png" onclick="EventStart(@item.GroupId,@item.EventId,'@item.Place');" style="cursor:pointer;" width="30" />@*</a>*@
-                                <a href="@Url.Action("EventEdit", "Events",new { groupId = @item.GroupId,eventid = @item.EventId})" class="login" title="Edit Event"><img src="~/Content/assets/images/Edit.png" width="30" /></a>
-                                <img src="~/Content/assets/images/Delete1.png" onclick="EventDelete(@item.GroupId,@item.EventId);" style="cursor:pointer;" width="30" />
+                                            <img src="~/Content/assets/images/Start.png" onclick="EventStart(@item.GroupId,@item.EventId,'@item.Place');" style="cursor:pointer;" width="30" />
+                                            <a href="@Url.Action("EventEdit", "Events",new { groupId = @item.GroupId,eventid = @item.EventId})" class="login" title="Edit Event"><img src="~/Content/assets/images/Edit.png" width="30" /></a>
+                                            <img src="~/Content/assets/images/Delete1.png" onclick="EventDelete(@item.GroupId,@item.EventId);" style="cursor:pointer;" width="30" />
 
-                        </tr>
-                                var dynamicIdTr = "trEvent" + item.EventId;
-                                var dynamicIdDiv = "dvLinkList" + item.EventId;
+                                    </tr>
+                                    var dynamicIdTr = "trEvent" + item.EventId;
+                                    var dynamicIdDiv = "dvLinkList" + item.EventId;
 
-                    <tr id="@dynamicIdTr" style="display: none;">
-                        <td colspan="13">
-                            <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
+                                    <tr id="@dynamicIdTr" style="display: none;">
+                                        <td colspan="13">
+                                            <div id="@dynamicIdDiv" style="display:none;" class="table-responsive">
 
-                            </div>
-                        </td>
-                        <td style="display:none;"></td>
-                        <td style="display:none;"></td>
-                        <td style="display:none;"></td>
-                        <td style="display:none;"></td>
-                        <td style="display:none;"></td>
-                        <td style="display:none;"></td>
-                        <td style="display:none;"></td>
-                        <td style="display:none;"></td>
-                    </tr>
+                                            </div>
+                                        </td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                        <td style="display:none;"></td>
+                                    </tr>
+                                }
                             }
-                        }
 
-                    </tbody>
-                </table>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
             }
             else
             {
-            <div class="row" style="margin-top : 5px; margin-left:10px;">
-                <h6 style="font:xx-large"><b>No Events Found</b></h6>
-            </div>
+                <div class="row" style="margin-top : 5px; margin-left:10px;">
+                    <h6 style="font:xx-large"><b>No Events Found</b></h6>
+                </div>
             }
         </div>
 
-        <div class="row mb-2 ml-1 mt-5" style="padding-top:4px">
-            <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 5px; ">
-                <a href="@Url.Action("CreateEvent", "Events")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Event</a>
-            </div>
-        </div>
-        <div class="row mb-2 ml-1 mt-5" style="padding-top:4px">
-            <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 5px; ">
-                <a href="@Url.Action("EventForm", "Events")" class="btn btn-primary" role="button" data-bs-toggle="button">Event Form</a>
-            </div>
-        </div>
-        
     </div>
 </div>
 <script>
@@ -168,8 +150,6 @@
                 });
             }
         })
-
-
     }
 
     function EventStart(GroupId, EventId,Place) {
@@ -194,7 +174,6 @@
                         console.log(result)
                         BindActivities(GroupId, EventId, result);
                            $("#divLoader").hide();
-
                     },
                     error: function (result) {
                         console.log(result.responseText)
@@ -203,9 +182,6 @@
     }
 
     function BindActivities(GroupId, EventId, data) {
-        var groupid = GroupId;
-        var eventid = EventId;
-        
         if (data != "") {
                 var htmlStr = "<table border=\"2\" style=\"background-color:white;margin-left: 11px;width: 98%;\" class=\"table\">";
                 htmlStr += "<tr style=\"text-align: center;\">"
@@ -213,26 +189,27 @@
                 htmlStr += "<th scope=\"col\">Event Url</th>";
                 htmlStr += "</tr>";
 
-            $.map(data, function (item) {
-                htmlStr += "<tr style=\"text-align: center;\">"
-                htmlStr += "<td>" + item.Place + "</td>";
-                htmlStr += "<td><a href=" + item.Url + " target=\"_blank\">Click Here</a></td>";
-                htmlStr += "</tr>"
-            });
+                $.map(data, function (item) {
+                    htmlStr += "<tr style=\"text-align: center;\">"
+                    htmlStr += "<td>" + item.Place + "</td>";
+                    htmlStr += "<td><a href=" + item.Url + " target=\"_blank\">Click Here</a></td>";
+                    htmlStr += "</tr>"
+                        
+                });
                 htmlStr += "</table>";
-            $("#dvLinkList" + EventId).html(htmlStr);
-            $("#trEvent" + EventId).show(1000);
-            $("#dvLinkList" + EventId).show(1000);
+                $("#dvLinkList" + EventId).html(htmlStr);
+                $("#trEvent" + EventId).show(1000);
+                $("#dvLinkList" + EventId).show(1000);
             }
             else {
-                cuteAlert({
-                type: "warning",
-                title: "Oops..",
-                message: "No tracking available",
-                buttonText: "Okay"
-                })
-        }
-        }
+                    cuteAlert({
+                    type: "warning",
+                    title: "Oops..",
+                    message: "No tracking available",
+                    buttonText: "Okay"
+                    })
+                }
+     }
 </script>
 
 

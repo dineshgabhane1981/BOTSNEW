@@ -38,7 +38,9 @@ namespace WebApp.Controllers
         }
         public ActionResult EventReport()
         {
-            return View();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstData = EVR.GetEventReport(userDetails.GroupId,"","");
+            return View(lstData);
         }
         public ActionResult EventCustomers()
         {
@@ -336,5 +338,13 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
+    
+        public ActionResult GetFilterReportData(string fromDate,string toDate)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstData = EVR.GetEventReport(userDetails.GroupId, fromDate, toDate);
+            return PartialView("_EventReport", lstData);
+        }
+    
     }
 }

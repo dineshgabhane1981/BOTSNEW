@@ -1,8 +1,84 @@
-﻿
+﻿@model List<BOTS_BL.Models.EventMemberDetail>
 @{
     ViewBag.Title = "EventReport";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="app-main__inner">
 
-<h2>EventReport</h2>
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="col-sm-10" style="display:flex;padding-bottom: 10px;margin-top:5px;">
+            <div class="col-md-3 col-xl-3">
+                <input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
+            </div>
+            <div class="col-md-3 col-xl-3" style="padding-top: 10px;">
+                <button id="btnFilter" class="btn btn-primary login-btn" style="margin-left:5px; " onclick="GetData();">Filter</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <div id="dvEventList">
+        @Html.Partial("~/Views/Events/_EventReport.cshtml", Model)
+    </div>
+</div>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+<script>
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $("#dtFrom").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+    $("#dtTo").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+   
+    function GetData() {
+        $("#divLoader").show();
+         $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetFilterReportData", "Events")',
+             data: '{fromDate: ' + JSON.stringify($("#dtFrom").val()) + ',toDate: ' + JSON.stringify($("#dtTo").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        $("#dvEventList").html(response);
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                    $("#dvEventList").html(response.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
 

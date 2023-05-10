@@ -13,6 +13,7 @@ namespace BOTS_BL.Repository
     public class EventsRepository
     {
         Exceptions newexception = new Exceptions();
+        CustomerRepository CR = new CustomerRepository();
         public List<tblGroupDetail> GetNeverOptForGroups(bool status)
         {
             List<tblGroupDetail> lstData = new List<tblGroupDetail>();
@@ -312,6 +313,32 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+    
+        public List<EventMemberDetail> GetEventReport(string groupid,string fromDate,string toDate)
+        {
+            List<EventMemberDetail> lstReportData = new List<EventMemberDetail>();
+            var connStr = CR.GetCustomerConnString(groupid);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                    {
+                        var fDate = Convert.ToDateTime(fromDate);
+                        var tDate = Convert.ToDateTime(toDate).AddDays(1);
+                        lstReportData = context.EventMemberDetails.Where(x => x.DateOfRegistration >= fDate && x.DateOfRegistration <= tDate).ToList();
+                    }
+                    else
+                        lstReportData = context.EventMemberDetails.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetEventReport");
+            }
+            return lstReportData;
+        }
+    
     }
     
 }
