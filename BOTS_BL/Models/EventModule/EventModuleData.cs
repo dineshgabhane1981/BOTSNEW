@@ -17,6 +17,6 @@ namespace BOTS_BL.Models.EventModule
         public string EmailId { get; set; }
         public decimal Points { get; set; }
         public DateTime LastTxnDate { get; set; }
-        public DateTime PointExp { get; set; }
+        public DateTime? PointExp { get; set; }
     }
 }
