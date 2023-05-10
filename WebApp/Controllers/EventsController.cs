@@ -290,6 +290,7 @@ namespace WebApp.Controllers
             EventMemberDetail objEventDetail = new EventMemberDetail();
             CustomerDetail objCustomerDetail = new CustomerDetail();
             CustomerChild objCustomerChild = new CustomerChild();
+            TransactionMaster objTM = new TransactionMaster();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -309,6 +310,8 @@ namespace WebApp.Controllers
                 objEventDetail.EmailId = Convert.ToString(item["EmailId"]);
                 objEventDetail.Address = Convert.ToString(item["Address"]);
                 objEventDetail.AlternateNo = Convert.ToString(item["AlternateNo"]);
+                objEventDetail.DateOfRegistration = DateTime.Now;
+
             }
             foreach (Dictionary<string, object> item in objData)
             {
@@ -326,8 +329,9 @@ namespace WebApp.Controllers
             {
                 objCustomerChild.Address = Convert.ToString(item["Address"]);
             }
-                var connStr = CR.GetCustomerConnString(Convert.ToString(objEventDetail.GroupId));
-            result = EVR.SaveNewMemberData(objEventDetail, objCustomerDetail, objCustomerChild, connStr);
+            
+            var connStr = CR.GetCustomerConnString(Convert.ToString(objEventDetail.GroupId));
+            result = EVR.SaveNewMemberData(objEventDetail, objCustomerDetail, objCustomerChild, objTM, connStr);
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 

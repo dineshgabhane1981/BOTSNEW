@@ -181,12 +181,14 @@ namespace BOTS_BL.Repository
                 return obj;
         }
 
-        public bool SaveNewMemberData(EventMemberDetail objData, CustomerDetail objCustomerDetail, CustomerChild objCustomerChild, string connectionstring)
+        public bool SaveNewMemberData(EventMemberDetail objData, CustomerDetail objCustomerDetail, CustomerChild objCustomerChild, TransactionMaster objTM, string connectionstring)
         {
             bool result = false;
             CustomerDetail TM2 = new CustomerDetail();
             CustomerChild objdata1 = new CustomerChild();
             OutletDetail objdata = new OutletDetail();
+            TransactionMaster obj = new TransactionMaster();
+            PointsExpiry obj1 = new PointsExpiry();
             using (var context = new BOTSDBContext(connectionstring))
             {
                 try
@@ -196,8 +198,17 @@ namespace BOTS_BL.Repository
                      result = true;
                      var bonusPoints = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y=>y.BonusPoints).FirstOrDefault();
                      var existingCust  = context.CustomerDetails.Where(x => x.MobileNo == objCustomerDetail.MobileNo).FirstOrDefault();
-                    var existingCust1 = context.CustomerChilds.Where(x => x.MobileNo == objCustomerChild.MobileNo).FirstOrDefault();
-
+                     var existingCust1 = context.CustomerChilds.Where(x => x.MobileNo == objCustomerChild.MobileNo).FirstOrDefault();
+                     var ExpiryDays = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.PointsExpiryDays).FirstOrDefault();
+                    if (existingCust == null)
+                    {
+                        objData.CustomerType = "New";
+                    }
+                    else
+                    {
+                        objData.CustomerType = "Existing";
+                    }
+                    objData.PointsGiven = bonusPoints;
                     if (existingCust == null)
                     {
                         var CustomerId = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
@@ -262,6 +273,36 @@ namespace BOTS_BL.Repository
                     context.CustomerChilds.AddOrUpdate(objdata1);
                     context.SaveChanges();
 
+                    obj.CounterId = (TM2.EnrollingOutlet + "01");
+                    obj.MobileNo = TM2.MobileNo;
+                    obj.Datetime = DateTime.Now;
+                    obj.TransType = "1";
+                    obj.TransSource = "1";
+                    obj.InvoiceNo = "Bonus";
+                    obj.InvoiceAmt = 0;
+                    obj.Status = "00";
+                    obj.CustomerId = TM2.CustomerId;
+                    obj.PointsEarned = bonusPoints;
+                    obj.PointsBurned = 0;
+                    obj.CampaignPoints = 0;
+                    obj.TxnAmt = 0;
+                    obj.CustomerPoints = TM2.Points;
+
+                    context.TransactionMasters.AddOrUpdate(obj);
+                    context.SaveChanges();
+
+                    obj1.MobileNo = TM2.MobileNo;
+                    obj1.CounterId = (TM2.EnrollingOutlet + "01");
+                    obj1.EarnDate = DateTime.Now;
+                    obj1.ExpiryDate = obj1.EarnDate.Value.AddDays(Convert.ToInt32(ExpiryDays));
+                    obj1.Points = TM2.Points;
+                    obj1.InvoiceNo = "Bonus";
+                    obj1.Status = "00";
+                    obj1.Datetime = DateTime.Now;
+                    obj1.CustomerId = TM2.CustomerId;
+
+                    context.PointsExpiries.AddOrUpdate(obj1);
+                    context.SaveChanges();
 
                 }
                 catch (Exception ex)
