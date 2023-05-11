@@ -4,16 +4,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @*<style>
-    .title{
-        text-align:center;
-        font-size:20px;
-        font-style:italic;
-    }
-</style>*@
+        .title{
+            text-align:center;
+            font-size:20px;
+            font-style:italic;
+        }
+    </style>*@
 <div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
     @*<div class="title">
-        <b>Create Event</b>
-    </div>*@
+            <b>Create Event</b>
+        </div>*@
     @Html.HiddenFor(model => model.objEvent.EventId, new { @id = "hdnEventId" })
     <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; border-radius:20px">
         <div class="row" style="margin: 0;">
@@ -27,7 +27,7 @@
                 Event Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.Addeddate, new { @class = "input100", @id = "IdEventDate" })
+                @Html.TextBoxFor(model => model.objEvent.strEventdate, new { @class = "input100", @id = "IdEventDate" })
             </div>
         </div>
 
@@ -50,13 +50,13 @@
                 Event Start Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.EventStartDate, new { @class = "input100", @id = "IdEventStrDate" })
+                @Html.TextBoxFor(model => model.objEvent.EventStartDate, new { @class = "input100", @id = "IdEventStrDate", @onclick = "Showdatetime1();" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                 Event End Dates
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.EventEndDate, new { @class = "input100", @id = "IdEventEndDate" })
+                @Html.TextBoxFor(model => model.objEvent.EventEndDate, new { @class = "input100", @id = "IdEventEndDate", @onclick = "Showdatetime2();" })
             </div>
         </div>
         <div class="row" style="margin: 0;">
@@ -109,7 +109,7 @@
                 @Html.TextAreaFor(model => model.objEvent.Desciption, new { @class = "input100", @id = "idDescription" })
             </div>
         </div>
-        
+
         <div class="row mb-2 ml-2">
             <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
                 <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" Onclick="Validation()"><b>Submit</b></button>
@@ -118,7 +118,21 @@
         </div>
     </div>
 </div>
+<link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
+<script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+
 <script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#IdEventDate").datepicker({
+
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            //  minDate: '-4'
+        });
+        //$("#IdEventStrDate").datetimepicker();
+        //$("#IdEventEndDate").datetimepicker();
+    });
     function Validation() {
         var EventName = $("#IdEventName").val();
         var EventDate = $("#IdEventDate").val();
@@ -220,7 +234,7 @@
         {
             var FilterData = [];
             item = {};
-            item["EventId"] = $("#hdnEventId").val();            
+            item["EventId"] = $("#hdnEventId").val();
             item["EventName"] = EventName;
             item["EventDate"] = EventDate;
             item["EventPlace"] = EventPlace;
@@ -253,7 +267,7 @@
                               message: "Event Created Successfully",
                               buttonText: "Okay"
                           }).then(() => {
-                            var urlLink = "@Url.Action("CreateEvent", "Events")";
+                            var urlLink = "@Url.Action("Index", "Events")";
                             window.location.href = urlLink;
                         })
                         $("#divLoader").hide();
@@ -280,4 +294,14 @@
         var urlLink = "@Url.Action("CreateEvent", "Events")";
         window.location.href = urlLink;
     }
+    function Showdatetime1() {
+        $('#IdEventStrDate').datetimepicker();
+    }
+    function Showdatetime2() {
+        $('#IdEventEndDate').datetimepicker();
+    }
+    function Showdatetime3() {
+        $("#IdEventDate").datetimepicker();
+    }
+
 </script>

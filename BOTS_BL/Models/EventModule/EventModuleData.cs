@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,5 +19,19 @@ namespace BOTS_BL.Models.EventModule
         public decimal Points { get; set; }
         public DateTime? LastTxnDate { get; set; }
         public DateTime? PointExp { get; set; }
+
+        [NotMapped]
+        public string strLsttxndate { get; set; }
+        [NotMapped]
+        public string strPointExp { get; set; }
+
+        [NotMapped]
+        public string strDOB { get; set; }
+        [NotMapped]
+        public string strDOA { get; set; }
+
+        [NotMapped]
+        public string AlternateMobileno { get; set; }
+
     }
 }

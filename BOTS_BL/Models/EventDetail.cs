@@ -51,5 +51,10 @@ namespace BOTS_BL.Models
 
         [Column(TypeName = "date")]
         public DateTime Addeddate { get; set; }
+
+        [NotMapped]
+
+        public string strEventdate { get; set; }
+
     }
 }

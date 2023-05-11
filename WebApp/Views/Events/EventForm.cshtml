@@ -3,6 +3,7 @@
     ViewBag.Title = "EventForm";
     Layout = null;
 }
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="~/Content/main.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
 
@@ -13,151 +14,226 @@
 <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
 <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
 <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+<style>
+    #loader {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        opacity: 1;
+        z-index: 1021;
+        background: rgba(255, 255, 255, .7);
+    }
 
+    .loader-inner {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        position: relative;
+        margin: auto;
+    }
+
+        .loader-inner:before,
+        .loader-inner:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            /* border-radius: 100%;
+                border: 10px solid transparent;
+                border-top-color: darkblue;*/
+        }
+
+        .loader-inner:before {
+            z-index: 100;
+            /*background-image: url(~/Content/assets/BlueocktopusLoadingGIF.mp4);
+                animation: spinner-border 1s infinite;*/
+        }
+
+        .loader-inner:after {
+            /*border: 10px solid lightblue;*/
+        }
+</style>
 <input type="hidden" value="@ViewBag.GroupId" id="hdnGroupId" />
 <input type="hidden" value="@ViewBag.EventId" id="hdnEventId" />
 <input type="hidden" value="@ViewBag.Place" id="hdnPlace" />
+<div id="divLoader" runat="server" style="display:none">
+    <div id="loader">
+        <div class="loader-inner">
+            <img src="~/Content/assets/BlueocktopusLoadingGIF.gif" width="100px" height="100px" />
+        </div>
+    </div>
+</div>
 <div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
     <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
         <div class="row mb-2 ml-2">
-            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
-            <input type="number" id="txtMobileNo" class="input50" />
-
-        </div>
-        @*<div class="row mb-2 ml-2">
-            <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
-                <button type="button" id="btnNew" style="margin-left:25px;" class="btn btn-primary"><b>New</b></button>
-                <button type="button" id="btnExisting" style="margin-left:15px;" class="btn btn-primary"><b>Existing</b></button>
+            <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
             </div>
-        </div>*@
-
-
-        <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; margin-top: 30px; ">
-            <input type="hidden" id="hdnCustomerId" />
-            <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px;  ">
-                <table border="1" cellpadding="5" cellspacing="5" style="display:none;" id="tblNewMemberData">
-                    <tr>
-                        <th colspan="2" style="padding:10px;text-align:center;">New Member Details</th>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Name</td>
-                        <td>
-                            <input type="text" id="txtName" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Gender</td>
-                        <td>
-                            @*<input type="text" id="txtGender" class="input50" />*@
-                            <select id="ddlGender" name="Gender" class="input50" style="font-size:medium;">
-                                <option>Select</option>
-                                <option>M</option>
-                                <option>F</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">DOB</td>
-                        <td>
-                            <input type="text" id="dtDOB" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">DOA</td>
-                        <td>
-                            <input type="text" id="dtDOA" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Address</td>
-                        <td>
-                            <input type="text" id="txtAddress" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">EmailId</td>
-                        <td>
-                            <input type="text" id="txtEmail" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">AlternateMobileNo</td>
-                        <td>
-                            <input type="text" id="txtAlternateMobileNo" class="input50" />
-                        </td>
-                    </tr>
-
-
-                </table>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <input type="number" id="txtMobileNo" class="input50" />
             </div>
         </div>
-
-
-
-        <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;margin-top:30px;">
-            <input type="hidden" id="hdnCustomerId" />
-            <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
-                <table border="1" cellpadding="5" cellspacing="5" style="float: left;display:none;" id="tblExistingDetails">
-                    <tr>
-                        <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Name</td>
-                        <td>
-                            <input type="text" id="txtextName" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Gender</td>
-                        <td>
-                            <input type="text" id="txtextGender" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">DOB</td>
-                        <td>
-                            <input type="text" id="dtextDOB" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">DOA</td>
-                        <td>
-                            <input type="text" id="dtextDOA" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">Address</td>
-                        <td>
-                            <input type="text" id="txtextAddress" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">EmailId</td>
-                        <td>
-                            <input type="text" id="txtextEmail" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">TotalAvailablePoints</td>
-                        <td>
-                            <input type="text" id="txtextAvailablePoints" class="input50" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">LastTxnDate</td>
-                        <td style="padding:10px;"><input type="text" id="LastTxnDate" class="input50" /></td>
-                    </tr>
-                    <tr>
-                        <td style="padding:10px;">PointsExpiryDate</td>
-                        <td style="padding:10px;"><input type="text" id="PointsExpDate" class="input50" /></td>
-                    </tr>
-
-                </table>
+        <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card col-md-8 col-xl-8" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Member Name *
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="txtName" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Gender *
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <select id="ddlGender" name="Gender" class="input100" style="font-size:medium;">
+                        <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Date Of Birth *
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="dtDOB" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Date Of Anniversary
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="dtDOA" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Address *
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <textarea type="text" id="txtAddress" class="input100"></textarea>
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    EmailId
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <Input type="text" id="txtEmail" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Alternate MobileNo
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="txtAlternateMobileNo" class="input100" />
+                </div>
+            </div>
+            <div class="button-row mt-5" style="text-align:center;">
+                <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnNewMember" tabindex="20" Onclick="Validate()">Submit</button>
             </div>
         </div>
-        <div class="button-row mt-5" style="text-align:end;">
-            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSaveMemberName" tabindex="20" Onclick="Validate()">Submit</button>
+
+        <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card  col-md-8 col-xl-8" id="tblExistingDetails" style="padding-bottom: 20px; border-radius: 20px; display: none">
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Member Name
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="txttxtName" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Gender
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <select id="ddltxtGender" name="Gender" class="input100" style="font-size:medium;">
+                        <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Date Of Birth
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="dtextDOB" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Date Of Anniversary
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="dttextDOA" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Address
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <textarea type="text" id="txtextAddress" class="input100"></textarea>
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    EmailId
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <Input type="text" id="txtextEmail" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Alternate MobileNo
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="txttextAlternateMobileNo" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Total AvailablePoints
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="txtextAvailablePoints" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    Last TxnDate
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="LastTxnDate" class="input100" />
+                </div>
+            </div>
+            <div class="row" style="margin: 0;">
+                <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                    PointsExpiryDate
+                </div>
+                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                    <input type="text" id="PointsExpDate" class="input100" />
+                </div>
+            </div>
+            <div class="button-row mt-5" style="text-align:center;">
+                <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnExistMember" tabindex="20">Submit</button>
+            </div>
         </div>
+
+
+
     </div>
 
 </div>
@@ -176,16 +252,26 @@
             maxDate: today,
             //  minDate: '-4'
         });
-        $("#btnNew").on("click", function () {
-            $("#tblNewMemberData").show();
-            $("#tblExistingDetails").hide();
 
-        });
-        $("#btnExisting").on("click", function () {
-            $("#tblNewMemberData").hide();
-            $("#tblExistingDetails").show();
+        $("#dtextDOB").datepicker({
 
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            //  minDate: '-4'
         });
+
+        $("#dttextDOA").datepicker({
+
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+            //  minDate: '-4'
+        });
+
+        //$("#btnExisting").on("click", function () {
+        //    $("#tblNewMemberData").hide();
+        //    $("#tblExistingDetails").show();
+
+        //});
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
 
@@ -193,7 +279,7 @@
         var Mobileno = $("#txtMobileNo").val();
         var GroupId = $("#hdnGroupId").val();
         var Place = $("#hdnPlace").val();
-
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCustomerdata", "Events")',
@@ -202,22 +288,35 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (responce) {
+                console.log(responce);
                 if (responce.Mobileno != null) {
-                    $("#txtextName").val(responce.CustomerName);
-                    $("#txtextGender").val(responce.Gender);
-                    $("#dtextDOB").val(responce.DOB);
-                    $("#dtextDOA").val(responce.AnniversaryDate);
+                    $("#txttxtName").val(responce.CustomerName);
+
+                    if (responce.Gender == "M") {
+                        $("#ddltxtGender").val("Male");
+                    }
+                    else if (responce.Gender == "F") {
+                        $("#ddltxtGender").val("Female");
+                    }
+                    $("#dtextDOB").val(responce.strDOB);
+                    $("#dttextDOA").val(responce.strDOA);
                     $("#txtextAddress").val(responce.Address);
                     $("#txtextEmail").val(responce.EmailId);
                     $("#txtextAvailablePoints").val(responce.Points);
-                    $("#LastTxnDate").val(responce.LastTxnDate);
-                    $("#PointsExpDate").val(responce.PointExp);
+                    $("#LastTxnDate").val(responce.strLsttxndate);
+                    $("#PointsExpDate").val(responce.strPointExp);
+                    $("#txttextAlternateMobileNo").val(responce.AlternateMobileno);
+                    $("#LastTxnDate").attr("disabled", "disabled");
+                    $("#PointsExpDate").attr("disabled", "disabled");
+                    $("#txtextAvailablePoints").attr("disabled", "disabled");
                     $("#tblExistingDetails").show();
                     $("#tblNewMemberData").hide();
+                    $("#divLoader").hide();
                 }
                 else {
                     $("#tblNewMemberData").show();
                     $("#tblExistingDetails").hide();
+                    $("#divLoader").hide();
                 }
             },
             error: function (responce) {
@@ -226,15 +325,17 @@
         });
     });
 
+
+
     function Validate() {
-        
+
         var MobileNo = $("#txtMobileNo").val();
         var Name = $("#txtName").val();
         var Gender = $("#ddlGender").val();
         var DOB = $("#dtDOB").val();
         var DOA = $("#dtDOA").val();
         var EmailId = $("#txtEmail").val();
-        var Address = $("#txtAddress").val();       
+        var Address = $("#txtAddress").val();
         var AlternateMobileNo = $("#txtAlternateMobileNo").val();
 
         if (Name == "") {
@@ -245,7 +346,7 @@
                 buttonText: "Okay"
             })
         }
-        else if (Gender == "") {
+        else if (Gender == "Select") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
@@ -269,8 +370,7 @@
                 buttonText: "Okay"
             })
         }
-        else
-        {
+        else {
             var FilterData = [];
             item = {};
             item["GroupId"] = $("#hdnGroupId").val();
@@ -288,44 +388,103 @@
             var data = JSON.stringify(FilterData);
             $("#divLoader").show();
 
-               $.ajax({
-                  type: "POST",
-                  url: '@Url.Action("SaveNewMemberData", "Events")',
-                  data: '{jsonData: ' + JSON.stringify(data) + '}',
-                  contentType: "application/json; charset=utf-8",
-                  dataType: "json",
-                  success: function (result) {
-                      console.log(result)
-                      if (result = true) {
-                          cuteAlert({
-                              type: "success",
-                              title: "Success Title",
-                              message: "Member Details saved Successfully",
-                              buttonText: "Okay"
-                          })@*.then(() => {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveNewMemberData", "Events")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result = true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Success Title",
+                            message: "Member Details saved Successfully",
+                            buttonText: "Okay"
+                        })@*.then(() => {
                             var urlLink = "@Url.Action("EventForm", "Events")";
                             window.location.href = urlLink;
                         })*@
                         $("#divLoader").hide();
-                      }
-                      else {
-                          cuteAlert({
-                              type: "error",
-                              title: "Oops..",
-                              message: "There is problem while saving data",
-                              buttonText: "Okay"
-                          })
-                      }
+                        location.reload();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is problem while saving data",
+                            buttonText: "Okay"
+                        })
+                    }
 
                     $("#divLoader").hide();
-                  },
-                   error: function (result) {
+                },
+                error: function (result) {
                     //alert(111)
                     console.log(result.responseText)
-                   }
-               });
-         }
+                }
+            });
+        }
+
     }
+        $("#btnExistMember").click(function () {
+            var FilterData = [];
+            item = {};
+            item["GroupId"] = $("#hdnGroupId").val();
+            item["EventId"] = $("#hdnEventId").val();
+            item["Place"] = $("#hdnPlace").val();
+            item["Name"] = $("#txttxtName").val();
+            item["Mobileno"] = $("#txtMobileNo").val();
+            item["Gender"] = $("#ddltxtGender").val();
+            item["DOB"] = $("#dtextDOB").val();
+            item["DOA"] = $("#dttextDOA").val();
+            item["EmailId"] = $("#txtextEmail").val();
+            item["Address"] = $("#txtextAddress").val();
+            item["AlternateNo"] = $("#txttextAlternateMobileNo").val();
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $("#divLoader").show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveNewMemberData", "Events")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result = true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Success Title",
+                            message: "Member Details saved Successfully",
+                            buttonText: "Okay"
+                        })@*.then(() => {
+                            var urlLink = "@Url.Action("EventForm", "Events")";
+                            window.location.href = urlLink;
+                        })*@
+                        $("#divLoader").hide();
+                        location.reload();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is problem while saving data",
+                            buttonText: "Okay"
+                        })
+                    }
+
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                }
+            });
+
+        });
 
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>

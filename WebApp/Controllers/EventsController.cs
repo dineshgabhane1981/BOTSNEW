@@ -129,7 +129,11 @@ namespace WebApp.Controllers
                     ObjEventDetails.C1stReminderScript = Convert.ToString(item["FirstRemaindScript"]);
                     ObjEventDetails.C1stRemBefore = Convert.ToInt32(item["FirstRemdDays"]);
                     ObjEventDetails.C2ndReminderScript = Convert.ToString(item["SecondRemaindScript"]);
-                    ObjEventDetails.C2ndRemBefore = Convert.ToInt32(item["SecondRemdDays"]);
+                    bool flag = string.IsNullOrEmpty(Convert.ToString(item["SecondRemdDays"]));
+                    if (flag == false)
+                    {
+                        ObjEventDetails.C2ndRemBefore = Convert.ToInt32(item["SecondRemdDays"]);
+                    }
                     ObjEventDetails.Desciption = Convert.ToString(item["Description"]);
                     ObjEventDetails.Status = "Created";
                     //ObjEventDetails.EventId = Convert.ToInt32("123");
@@ -335,6 +339,7 @@ namespace WebApp.Controllers
             foreach (Dictionary<string, object> item in objData)
             {
                 objCustomerChild.Address = Convert.ToString(item["Address"]);
+                objCustomerChild.MobileNo = Convert.ToString(item["Mobileno"]);
             }
 
             var connStr = CR.GetCustomerConnString(Convert.ToString(objEventDetail.GroupId));

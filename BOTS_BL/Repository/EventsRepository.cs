@@ -7,6 +7,7 @@ using BOTS_BL.Models.EventModule;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Data.Entity;
 
 namespace BOTS_BL.Repository
 {
@@ -154,6 +155,10 @@ namespace BOTS_BL.Repository
             {
                 obj = context.EventDetails.Where(x => x.EventId == Id).FirstOrDefault();
             }
+            if (obj.Addeddate != null)
+            {
+                obj.strEventdate = obj.Addeddate.ToString("yyyy/MM/dd");
+            }
 
             return obj;
         }
@@ -167,9 +172,29 @@ namespace BOTS_BL.Repository
                 {
                     var pointsexp = context.EarnRules.Select(e => e.PointsExpiryVariableDate).FirstOrDefault();
                     int PointExp = Convert.ToInt32(pointsexp);
-                    obj = context.Database.SqlQuery<EventModuleData>("select C.MobileNo,C.Points,C.CustomerName,C.Gender,C.DOB,C.AnniversaryDate,C.EmailId,min(CC.Address) as Address, CASE WHEN Max(cast(TM.Datetime as date)) = NULL THEN Max(cast(TM.Datetime as date)) ELSE Min(C.DOJ) END as LastTxnDate,DATEADD(MONTH, @PointExp, Max(cast(TM.Datetime as date))) as PointExp from CustomerDetails C Left join TransactionMaster TM on C.MobileNo = TM.MobileNo left join CustomerChild CC on CC.MobileNo = C.MobileNo and C.Status = '00' group by C.MobileNo, C.Points, C.CustomerName, C.EnrollingOutlet, C.Gender, C.DOB, C.AnniversaryDate, C.EmailId Having C.MobileNo = @Mobileno", new SqlParameter("@Mobileno", Mobileno), new SqlParameter("@PointExp", PointExp)).FirstOrDefault();
+                    obj = context.Database.SqlQuery<EventModuleData>("select C.MobileNo,C.Points,C.CustomerName,C.Gender,C.DOB,C.AnniversaryDate,C.EmailId,min(CC.Address) as Address,min(C.OldMobileno) as AlternateMobileNo, CASE WHEN Max(cast(TM.Datetime as date)) = NULL THEN Max(cast(TM.Datetime as date)) ELSE Min(C.DOJ) END as LastTxnDate,DATEADD(MONTH, @PointExp, Max(cast(TM.Datetime as date))) as PointExp from CustomerDetails C Left join TransactionMaster TM on C.MobileNo = TM.MobileNo left join CustomerChild CC on CC.MobileNo = C.MobileNo and C.Status = '00' group by C.MobileNo, C.Points, C.CustomerName, C.EnrollingOutlet, C.Gender, C.DOB, C.AnniversaryDate, C.EmailId Having C.MobileNo = @Mobileno", new SqlParameter("@Mobileno", Mobileno), new SqlParameter("@PointExp", PointExp)).FirstOrDefault();
 
-                    if(obj == null)
+                    if (obj != null)
+                    {
+                        if (obj.LastTxnDate.HasValue)
+                        {
+                            obj.strLsttxndate = obj.LastTxnDate.Value.ToString("MM/dd/yyyy");
+                        }
+                        if (obj.PointExp.HasValue)
+                        {
+                            obj.strPointExp = obj.PointExp.Value.ToString("MM/dd/yyyy");
+                        }
+                        if (obj.DOB.HasValue)
+                        {
+                            obj.strDOB = obj.DOB.Value.ToString("yyyy/MM/dd");
+                        }
+                        if (obj.AnniversaryDate.HasValue)
+                        {
+                            obj.strDOA = obj.AnniversaryDate.Value.ToString("yyyy/MM/dd");
+                        }
+                    }
+
+                    if (obj == null)
                     {
                         obj = new EventModuleData();
                     }
@@ -192,123 +217,165 @@ namespace BOTS_BL.Repository
             PointsExpiry obj1 = new PointsExpiry();
             using (var context = new BOTSDBContext(connectionstring))
             {
-                try
+                using (DbContextTransaction transaction = context.Database.BeginTransaction())
                 {
-                     context.EventMemberDetails.AddOrUpdate(objData);
-                     context.SaveChanges();
-                     result = true;
-                     var bonusPoints = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y=>y.BonusPoints).FirstOrDefault();
-                     var existingCust  = context.CustomerDetails.Where(x => x.MobileNo == objCustomerDetail.MobileNo).FirstOrDefault();
-                     var existingCust1 = context.CustomerChilds.Where(x => x.MobileNo == objCustomerChild.MobileNo).FirstOrDefault();
-                     var ExpiryDays = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.PointsExpiryDays).FirstOrDefault();
-                    if (existingCust == null)
+
+
+                    try
                     {
-                        objData.CustomerType = "New";
+
+                        var bonusPoints = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.BonusPoints).FirstOrDefault();
+                        var existingCust = context.CustomerDetails.Where(x => x.MobileNo == objCustomerDetail.MobileNo).FirstOrDefault();
+
+                        var ExpiryDays = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.PointsExpiryDays).FirstOrDefault();
+                        var Status = context.EventMemberDetails.Where(x => x.EventId == objData.EventId && x.Mobileno == objData.Mobileno).Select(y => y.Mobileno).FirstOrDefault();
+                        if (existingCust == null)
+                        {
+                            objData.CustomerType = "New";
+                        }
+                        else
+                        {
+                            objData.CustomerType = "Existing";
+                        }
+                        if (Status == null)
+                        {
+                            objData.PointsGiven = bonusPoints;
+                        }
+                        else
+                        {
+                            objData.PointsGiven = 0;
+                        }
+
+                        context.EventMemberDetails.AddOrUpdate(objData);
+                        context.SaveChanges();
+
+                        if (objCustomerDetail.Gender == "Male")
+                        {
+                            objCustomerDetail.Gender = "M";
+                        }
+                        else
+                        {
+                            objCustomerDetail.Gender = "F";
+                        }
+
+                        if (existingCust == null)
+                        {
+                            var CustomerId = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
+                            var AdminOutletId = context.OutletDetails.Where(x => x.OutletName.Contains("Admin")).Select(y => y.OutletId).FirstOrDefault();
+                            TM2.MobileNo = objCustomerDetail.MobileNo;
+                            TM2.CustomerName = objCustomerDetail.CustomerName;
+                            TM2.CustomerId = Convert.ToString(Convert.ToInt64(CustomerId) + 1);
+                            TM2.CardNumber = objCustomerDetail.CardNumber;
+                            TM2.EmailId = objCustomerDetail.EmailId;
+                            TM2.DOB = objCustomerDetail.DOB;
+                            TM2.AnniversaryDate = objCustomerDetail.AnniversaryDate;
+                            TM2.Gender = objCustomerDetail.Gender;
+                            TM2.DOJ = DateTime.Now;
+                            TM2.EnrollingOutlet = AdminOutletId;
+                            TM2.MemberGroupId = "1000";
+                            TM2.CustomerThrough = "1";
+                            TM2.Status = "00";
+                            TM2.OldMobileNo = objCustomerDetail.OldMobileNo;
+                            TM2.Points = bonusPoints;
+
+                        }
+                        else
+                        {
+                            TM2 = existingCust;
+                            TM2.CustomerName = objCustomerDetail.CustomerName;
+                            TM2.CardNumber = objCustomerDetail.CardNumber;
+                            TM2.EmailId = objCustomerDetail.EmailId;
+                            TM2.DOB = objCustomerDetail.DOB;
+                            TM2.AnniversaryDate = objCustomerDetail.AnniversaryDate;
+                            TM2.Gender = objCustomerDetail.Gender;
+                            TM2.OldMobileNo = objCustomerDetail.OldMobileNo;
+
+                            if (Status == null)
+                            {
+                                TM2.Points = TM2.Points + bonusPoints;
+                            }
+                            else
+                            {
+                                TM2.Points = TM2.Points;
+                            }
+                        }
+                        context.CustomerDetails.AddOrUpdate(TM2);
+                        context.SaveChanges();
+                        var existingCust1 = context.CustomerChilds.Where(x => x.MobileNo == objCustomerChild.MobileNo).FirstOrDefault();
+                        if (existingCust1 == null)
+                        {
+                            var CustomerId1 = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
+                            objdata1.MobileNo = objCustomerDetail.MobileNo;
+                            objdata1.CustomerId = Convert.ToString(Convert.ToInt64(CustomerId1));
+                            objdata1.ChildCount = objCustomerChild.ChildCount;
+                            objdata1.Child1DOB = objCustomerChild.Child1DOB;
+                            objdata1.Pincode = objCustomerChild.Pincode;
+                            objdata1.Address = objCustomerChild.Address;
+                            objdata1.PromotionalSMS = objCustomerChild.PromotionalSMS;
+                            objdata1.Child2DOB = objCustomerChild.Child2DOB;
+                            objdata1.Child3DOB = objCustomerChild.Child3DOB;
+                            objdata1.City = objCustomerChild.City;
+                            objdata1.LanguagePreferred = objCustomerChild.LanguagePreferred;
+                            objdata1.Religion = objCustomerChild.Religion;
+                            objdata1.Area = objCustomerChild.Area;
+                        }
+                        else
+                        {
+                            objdata1 = existingCust1;
+                            //objdata1.MobileNo = objCustomerChild.MobileNo;
+                            //objdata1.CustomerId = objCustomerChild.CustomerId;
+                            objdata1.Address = objCustomerChild.Address;
+
+                        }
+                        context.CustomerChilds.AddOrUpdate(objdata1);
+                        context.SaveChanges();
+
+                        if (Status == null)
+                        {
+                            obj.CounterId = (TM2.EnrollingOutlet + "01");
+                            obj.MobileNo = TM2.MobileNo;
+                            obj.Datetime = DateTime.Now;
+                            obj.TransType = "1";
+                            obj.TransSource = "1";
+                            obj.InvoiceNo = "Bonus";
+                            obj.InvoiceAmt = 0;
+                            obj.Status = "00";
+                            obj.CustomerId = TM2.CustomerId;
+                            obj.PointsEarned = bonusPoints;
+                            obj.PointsBurned = 0;
+                            obj.CampaignPoints = 0;
+                            obj.TxnAmt = 0;
+                            obj.CustomerPoints = TM2.Points;
+
+                            context.TransactionMasters.AddOrUpdate(obj);
+                            context.SaveChanges();
+
+                            obj1.MobileNo = TM2.MobileNo;
+                            obj1.CounterId = (TM2.EnrollingOutlet + "01");
+                            obj1.EarnDate = DateTime.Now;
+                            obj1.ExpiryDate = obj1.EarnDate.Value.AddDays(Convert.ToInt32(ExpiryDays));
+                            obj1.Points = TM2.Points;
+                            obj1.InvoiceNo = "Bonus";
+                            obj1.Status = "00";
+                            obj1.Datetime = DateTime.Now;
+                            obj1.CustomerId = TM2.CustomerId;
+
+                            context.PointsExpiries.AddOrUpdate(obj1);
+                            context.SaveChanges();
+
+                        }
+
+
+                        result = true;
+
+                        transaction.Commit();
+
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        objData.CustomerType = "Existing";
+                        transaction.Rollback();
+                        newexception.AddException(ex, "SaveNewMemberData");
                     }
-                    objData.PointsGiven = bonusPoints;
-                    if (existingCust == null)
-                    {
-                        var CustomerId = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
-                        var AdminOutletId = context.OutletDetails.Where(x => x.OutletName.Contains("Admin")).Select(y => y.OutletId).FirstOrDefault();
-                        TM2.MobileNo = objCustomerDetail.MobileNo;
-                        TM2.CustomerName = objCustomerDetail.CustomerName;
-                        TM2.CustomerId = Convert.ToString(Convert.ToInt64(CustomerId) + 1);
-                        TM2.CardNumber = objCustomerDetail.CardNumber;
-                        TM2.EmailId = objCustomerDetail.EmailId;
-                        TM2.DOB = objCustomerDetail.DOB;
-                        TM2.AnniversaryDate = objCustomerDetail.AnniversaryDate;
-                        TM2.Gender = objCustomerDetail.Gender;
-                        TM2.DOJ = DateTime.Now;
-                        TM2.EnrollingOutlet = AdminOutletId;
-                        TM2.MemberGroupId = "1000";
-                        TM2.CustomerThrough = "1";
-                        TM2.Status = "00";
-                        TM2.OldMobileNo = objCustomerDetail.OldMobileNo;
-                        TM2.Points = bonusPoints;
-                        
-                    }
-                    else
-                    {
-                        TM2 = existingCust;
-                        TM2.CustomerName = objCustomerDetail.CustomerName;
-                        TM2.CardNumber = objCustomerDetail.CardNumber;
-                        TM2.EmailId = objCustomerDetail.EmailId;
-                        TM2.DOB = objCustomerDetail.DOB;
-                        TM2.AnniversaryDate = objCustomerDetail.AnniversaryDate;
-                        TM2.Gender = objCustomerDetail.Gender;
-                        TM2.OldMobileNo = objCustomerDetail.OldMobileNo;
-                        TM2.Points = TM2.Points + bonusPoints;
-                    }
-                    context.CustomerDetails.AddOrUpdate(TM2);
-                    context.SaveChanges();
-
-                    if (existingCust1 == null)
-                    {
-                        var CustomerId1 = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
-                        objdata1.MobileNo = objCustomerDetail.MobileNo;
-                        objdata1.CustomerId = Convert.ToString(Convert.ToInt64(CustomerId1));
-                        objdata1.ChildCount = objCustomerChild.ChildCount;
-                        objdata1.Child1DOB = objCustomerChild.Child1DOB;
-                        objdata1.Pincode = objCustomerChild.Pincode;
-                        objdata1.Address = objCustomerChild.Address;
-                        objdata1.PromotionalSMS = objCustomerChild.PromotionalSMS;
-                        objdata1.Child2DOB = objCustomerChild.Child2DOB;
-                        objdata1.Child3DOB = objCustomerChild.Child3DOB;
-                        objdata1.City = objCustomerChild.City;
-                        objdata1.LanguagePreferred = objCustomerChild.LanguagePreferred;
-                        objdata1.Religion = objCustomerChild.Religion;
-                        objdata1.Area = objCustomerChild.Area;
-                    }
-                    else
-                    {
-                        objdata1 = existingCust1;
-                        objdata1.MobileNo = objCustomerChild.MobileNo;
-                        objdata1.CustomerId = objCustomerChild.CustomerId;
-                        objdata1.Address = objCustomerChild.Address;
-
-                    }
-                    context.CustomerChilds.AddOrUpdate(objdata1);
-                    context.SaveChanges();
-
-                    obj.CounterId = (TM2.EnrollingOutlet + "01");
-                    obj.MobileNo = TM2.MobileNo;
-                    obj.Datetime = DateTime.Now;
-                    obj.TransType = "1";
-                    obj.TransSource = "1";
-                    obj.InvoiceNo = "Bonus";
-                    obj.InvoiceAmt = 0;
-                    obj.Status = "00";
-                    obj.CustomerId = TM2.CustomerId;
-                    obj.PointsEarned = bonusPoints;
-                    obj.PointsBurned = 0;
-                    obj.CampaignPoints = 0;
-                    obj.TxnAmt = 0;
-                    obj.CustomerPoints = TM2.Points;
-
-                    context.TransactionMasters.AddOrUpdate(obj);
-                    context.SaveChanges();
-
-                    obj1.MobileNo = TM2.MobileNo;
-                    obj1.CounterId = (TM2.EnrollingOutlet + "01");
-                    obj1.EarnDate = DateTime.Now;
-                    obj1.ExpiryDate = obj1.EarnDate.Value.AddDays(Convert.ToInt32(ExpiryDays));
-                    obj1.Points = TM2.Points;
-                    obj1.InvoiceNo = "Bonus";
-                    obj1.Status = "00";
-                    obj1.Datetime = DateTime.Now;
-                    obj1.CustomerId = TM2.CustomerId;
-
-                    context.PointsExpiries.AddOrUpdate(obj1);
-                    context.SaveChanges();
-
-                }
-                catch (Exception ex)
-                {
-                    newexception.AddException(ex, "SaveNewMemberData");
                 }
             }
             return result;

@@ -14,7 +14,7 @@ namespace BOTS_BL.Models
 
         [StringLength(10)]
         public string MobileNo { get; set; }
-
+        
         [StringLength(12)]
         public string CustomerId { get; set; }
 
