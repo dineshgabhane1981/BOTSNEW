@@ -55,6 +55,7 @@ namespace BOTS_BL.Models
         [NotMapped]
 
         public string strEventdate { get; set; }
+        public string BonusMessageScript { get; set; }
 
     }
 }
