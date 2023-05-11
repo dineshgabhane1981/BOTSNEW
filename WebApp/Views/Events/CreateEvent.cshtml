@@ -54,7 +54,7 @@
                 @Html.TextBoxFor(model => model.objEvent.EventStartDate, new { @class = "input100", @id = "IdEventStrDate", @onclick = "Showdatetime1();" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                Event End Dates
+                Event End Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextBoxFor(model => model.objEvent.EventEndDate, new { @class = "input100", @id = "IdEventEndDate", @onclick = "Showdatetime2();" })
@@ -82,7 +82,7 @@
                 @Html.TextAreaFor(model => model.objEvent.C1stReminderScript, new { @class = "input100", @id = "IdFirstRemaind" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-
+                First Remd Days
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextBoxFor(model => model.objEvent.C1stRemBefore, new { @class = "input100", @id = "IdFirstRemdDays" })
@@ -96,8 +96,9 @@
                 @Html.TextAreaFor(model => model.objEvent.C2ndReminderScript, new { @class = "input100", @id = "IdSecondRemaind" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-
+                Second Remd Days
             </div>
+            
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextBoxFor(model => model.objEvent.C2ndRemBefore, new { @class = "input100", @id = "IdSecondRemdDays" })
             </div>
@@ -106,42 +107,43 @@
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                 Description
             </div>
-            <div class="col-sm-6" style="float:left;margin-top:10px;">
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextAreaFor(model => model.objEvent.Desciption, new { @class = "input100", @id = "idDescription" })
+            </div>
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Script
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextAreaFor(model => model.objEvent.BonusMessageScript, new { @class = "input100", @id = "idScript" })
             </div>
         </div>
 
         <div class="row mb-2 ml-2">
             <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
                 <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" Onclick="Validation()"><b>Submit</b></button>
-                <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" Onclick="ResetForm()"><b>Reset</b></button>
+                <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" Onclick="ResetForm()"><b>Cancel</b></button>
             </div>
         </div>
     </div>
 </div>
-<link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
-    <script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+//<link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
+//<script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
 
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#IdEventDate").datetimepicker({
-
-            //dateFormat: "yy-mm-dd",
-            //maxDate: today,
-
-            timepicker: false,
-            datepicker: true,
-            weeks: false,
-
-            allowTimes: [],
-            opened: false,
-            initTime: true,
-            inline: false,
-            theme: '',
-            touchMovedThreshold: 5,       
-        });
-        
+        $('#IdEventDate').datepicker({
+            changeMonth: true,
+            changeYear: true
+        })
+        $('#IdEventStrDate').datepicker({
+            changeMonth: true,
+            changeYear: true
+        })
+        $('#IdEventEndDate').datepicker({
+            changeMonth: true,
+            changeYear: true
+        })
     });
     function Validation() {
         var EventName = $("#IdEventName").val();
@@ -157,6 +159,7 @@
         var SecondRemaindScript = $("#IdSecondRemaind").val();
         var SecondRemdDays = $("#IdSecondRemdDays").val();
         var Description = $("#idDescription").val();
+        var Script = $("#idScript").val();
 
         if (EventName =="") {
             cuteAlert({
@@ -258,6 +261,7 @@
             item["SecondRemaindScript"] = SecondRemaindScript;
             item["SecondRemdDays"] = SecondRemdDays;
             item["Description"] = Description;
+            item["Script"] = Script;
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
             $("#divLoader").show();
@@ -301,17 +305,15 @@
          }
     }
     function ResetForm() {
-        var urlLink = "@Url.Action("CreateEvent", "Events")";
+        var urlLink = "@Url.Action("Index", "Events")";
         window.location.href = urlLink;
     }
-    function Showdatetime1() {
-        $('#IdEventStrDate').datetimepicker();
-    }
-    function Showdatetime2() {
-        $('#IdEventEndDate').datetimepicker();
-    }
-    function Showdatetime3() {
-        $("#IdEventDate").datetimepicker();
-    }
+    
+   
+    
 
 </script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

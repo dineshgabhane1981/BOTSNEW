@@ -135,6 +135,7 @@ namespace WebApp.Controllers
                         ObjEventDetails.C2ndRemBefore = Convert.ToInt32(item["SecondRemdDays"]);
                     }
                     ObjEventDetails.Desciption = Convert.ToString(item["Description"]);
+                    ObjEventDetails.BonusMessageScript = Convert.ToString(item["Script"]);
                     ObjEventDetails.Status = "Created";
                     //ObjEventDetails.EventId = Convert.ToInt32("123");
 
