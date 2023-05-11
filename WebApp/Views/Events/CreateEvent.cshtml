@@ -10,6 +10,7 @@
             font-style:italic;
         }
     </style>*@
+
 <div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
     @*<div class="title">
             <b>Create Event</b>
@@ -119,19 +120,28 @@
     </div>
 </div>
 <link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
-<script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+    <script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
 
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#IdEventDate").datepicker({
+        $("#IdEventDate").datetimepicker({
 
-            dateFormat: "yy-mm-dd",
-            maxDate: today,
-            //  minDate: '-4'
+            //dateFormat: "yy-mm-dd",
+            //maxDate: today,
+
+            timepicker: false,
+            datepicker: true,
+            weeks: false,
+
+            allowTimes: [],
+            opened: false,
+            initTime: true,
+            inline: false,
+            theme: '',
+            touchMovedThreshold: 5,       
         });
-        //$("#IdEventStrDate").datetimepicker();
-        //$("#IdEventEndDate").datetimepicker();
+        
     });
     function Validation() {
         var EventName = $("#IdEventName").val();
