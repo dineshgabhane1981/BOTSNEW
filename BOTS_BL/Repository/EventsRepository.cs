@@ -229,6 +229,7 @@ namespace BOTS_BL.Repository
 
                         var ExpiryDays = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.PointsExpiryDays).FirstOrDefault();
                         var Status = context.EventMemberDetails.Where(x => x.EventId == objData.EventId && x.Mobileno == objData.Mobileno).Select(y => y.Mobileno).FirstOrDefault();
+                        var EventName = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.EventName).FirstOrDefault();
                         if (existingCust == null)
                         {
                             objData.CustomerType = "New";
@@ -245,6 +246,7 @@ namespace BOTS_BL.Repository
                         {
                             objData.PointsGiven = 0;
                         }
+                        objData.EventName = EventName;
 
                         context.EventMemberDetails.AddOrUpdate(objData);
                         context.SaveChanges();

@@ -27,6 +27,7 @@
                         <table class="table" id="activityTable">
                             <thead>
                                 <tr>
+                                    <th scope="col">Event Name</th>
                                     <th scope="col">Mobile Number</th>
                                     <th scope="col">Member Name</th>
                                     <th scope="col">Address</th>
@@ -46,6 +47,7 @@
                                         foreach (var outlet in Model)
                                         {
                                             <tr>
+                                                <td>@outlet.EventName</td>
                                                 <td>@outlet.Mobileno</td>
                                                 <td>@outlet.Name</td>
                                                 <td>@outlet.Address</td>

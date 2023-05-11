@@ -47,5 +47,8 @@ namespace BOTS_BL.Models
 
         [StringLength(10)]
         public string CustomerType { get; set; }
+
+        [StringLength(500)]
+        public string EventName { get; set; }
     }
 }
