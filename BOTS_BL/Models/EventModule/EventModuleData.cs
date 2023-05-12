@@ -33,5 +33,9 @@ namespace BOTS_BL.Models.EventModule
         [NotMapped]
         public string AlternateMobileno { get; set; }
 
+        [NotMapped]
+
+        public string CustomerAvailFlag { get; set; }
+
     }
 }

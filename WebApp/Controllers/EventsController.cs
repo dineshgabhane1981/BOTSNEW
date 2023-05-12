@@ -275,7 +275,7 @@ namespace WebApp.Controllers
 
 
         [HttpPost]
-        public ActionResult GetCustomerdata(string groupId, string Mobileno, string Place)
+        public ActionResult GetCustomerdata(string groupId, string Mobileno, string Place,string EventId)
         {
             //EventDetail objData = new EventDetail();
             EventModuleData objData = new EventModuleData();
@@ -285,7 +285,7 @@ namespace WebApp.Controllers
                 var connStr = CR.GetCustomerConnString(groupId);
                 //var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
-                objData = EVR.GetCustomerDetails(groupId, Mobileno, Place, connStr);
+                objData = EVR.GetCustomerDetails(groupId, Mobileno, Place, EventId, connStr);
             }
             catch (Exception ex)
             {

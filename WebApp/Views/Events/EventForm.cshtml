@@ -68,24 +68,30 @@
 </div>
 <div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
     <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-        <div class="row mb-2 ml-2 justify-content-center">
-            <div class="col-sm-4" style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                <label style="padding-right: 5px; padding-top: 10px; font-size: medium;">Enter Mobile Number </label>
+        <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
+            @*<div class="col-md-4" style="font-size: medium; margin-top: 10px;">
+            <label style="padding-right: 5px; padding-top: 10px; font-size: medium;">Enter Mobile Number </label>
+        </div>
+        <div class="col-md-4" style="font-size: medium; margin-top: 10px;">
+            <input type="number" id="txtMobileNo" class="input50" />
+        </div>*@
+            <div class="col-lg-4 col-md-2" style="font-size: medium;">
+                Enter Mobile Number
             </div>
-            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                <input type="number" id="txtMobileNo" class="input50" />
+            <div class="col-lg-4 col-md-2">
+                <input type="number" id="txtMobileNo" class="input100" style="font-size:medium;"/>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card col-md-12 col-xl-5" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">
-              <div class="row" style="margin: 0;">
-                <div class="col-lg-4 col-md-2" style="font-size: medium;" >
-                    Member Name *
+                <div class="row" style="margin: 0;">
+                    <div class="col-lg-4 col-md-2" style="font-size: medium;" >
+                        Member Name *
+                      </div>
+                      <div class="col-lg-4 col-md-2">
+                        <input type="text" id="txtName" class="input100" style="font-size:medium;"/>
+                      </div>
                 </div>
-                <div class="col-lg-4 col-md-2">
-                    <input type="text" id="txtName" class="input100" style="font-size:medium;"/>
-                </div>
-              </div>
                 @*<div class="row" style="margin: 0;">                   
                     <div class="col-lg-4 col-md-2" style="font-size: medium;">
                         Student's Full Name
@@ -290,39 +296,82 @@
         var Mobileno = $("#txtMobileNo").val();
         var GroupId = $("#hdnGroupId").val();
         var Place = $("#hdnPlace").val();
+        var EventId = $("#hdnEventId").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCustomerdata", "Events")',
             //data: '{groupId: ' + JSON.stringify(GroupId) + ', Mobileno: ' + JSON.stringify(Mobileno) + ', Place: ' + JSON.stringify(Place) +'}',
-            data: '{groupId: ' + JSON.stringify(GroupId) + ',Mobileno: ' + JSON.stringify(Mobileno) + ',Place: ' + JSON.stringify(Place)+'}',
+            data: '{groupId: ' + JSON.stringify(GroupId) + ',Mobileno: ' + JSON.stringify(Mobileno) + ',Place: ' + JSON.stringify(Place) + ',EventId: ' + JSON.stringify(EventId) +'}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (responce) {
                 console.log(responce);
                 if (responce.Mobileno != null) {
-                    $("#txttxtName").val(responce.CustomerName);
 
-                    if (responce.Gender == "M") {
-                        $("#ddltxtGender").val("Male");
+                    if (responce.CustomerAvailFlag != null) {
+                        cuteAlert({
+                            type: "question",
+                            title: "Bonus Points Notification",
+                            message: "You can update your details, as you already enrolled in event you will not get bonus points.",
+                            confirmText: "Yes",
+                            cancelText: "No"
+                        }).then((e) => {
+                            if (e == ("confirm")) {
+                                $("#txttxtName").val(responce.CustomerName);
+
+                                if (responce.Gender == "M") {
+                                    $("#ddltxtGender").val("Male");
+                                }
+                                else if (responce.Gender == "F") {
+                                    $("#ddltxtGender").val("Female");
+                                }
+                                $("#dtextDOB").val(responce.strDOB);
+                                $("#dttextDOA").val(responce.strDOA);
+                                $("#txtextAddress").val(responce.Address);
+                                $("#txtextEmail").val(responce.EmailId);
+                                $("#txtextAvailablePoints").val(responce.Points);
+                                $("#LastTxnDate").val(responce.strLsttxndate);
+                                $("#PointsExpDate").val(responce.strPointExp);
+                                $("#txttextAlternateMobileNo").val(responce.AlternateMobileno);
+                                $("#LastTxnDate").attr("disabled", "disabled");
+                                $("#PointsExpDate").attr("disabled", "disabled");
+                                $("#txtextAvailablePoints").attr("disabled", "disabled");
+                                $("#tblExistingDetails").show();
+                                $("#tblNewMemberData").hide();
+                                $("#divLoader").hide();
+                            }
+                            else {
+                                $("#divLoader").hide();
+                                location.reload();
+                            }
+                        })
                     }
-                    else if (responce.Gender == "F") {
-                        $("#ddltxtGender").val("Female");
-                    }
-                    $("#dtextDOB").val(responce.strDOB);
-                    $("#dttextDOA").val(responce.strDOA);
-                    $("#txtextAddress").val(responce.Address);
-                    $("#txtextEmail").val(responce.EmailId);
-                    $("#txtextAvailablePoints").val(responce.Points);
-                    $("#LastTxnDate").val(responce.strLsttxndate);
-                    $("#PointsExpDate").val(responce.strPointExp);
-                    $("#txttextAlternateMobileNo").val(responce.AlternateMobileno);
-                    $("#LastTxnDate").attr("disabled", "disabled");
-                    $("#PointsExpDate").attr("disabled", "disabled");
-                    $("#txtextAvailablePoints").attr("disabled", "disabled");
-                    $("#tblExistingDetails").show();
-                    $("#tblNewMemberData").hide();
-                    $("#divLoader").hide();
+                
+                    else {
+                        $("#txttxtName").val(responce.CustomerName);
+
+                        if (responce.Gender == "M") {
+                            $("#ddltxtGender").val("Male");
+                        }
+                        else if (responce.Gender == "F") {
+                            $("#ddltxtGender").val("Female");
+                        }
+                        $("#dtextDOB").val(responce.strDOB);
+                        $("#dttextDOA").val(responce.strDOA);
+                        $("#txtextAddress").val(responce.Address);
+                        $("#txtextEmail").val(responce.EmailId);
+                        $("#txtextAvailablePoints").val(responce.Points);
+                        $("#LastTxnDate").val(responce.strLsttxndate);
+                        $("#PointsExpDate").val(responce.strPointExp);
+                        $("#txttextAlternateMobileNo").val(responce.AlternateMobileno);
+                        $("#LastTxnDate").attr("disabled", "disabled");
+                        $("#PointsExpDate").attr("disabled", "disabled");
+                        $("#txtextAvailablePoints").attr("disabled", "disabled");
+                        $("#tblExistingDetails").show();
+                        $("#tblNewMemberData").hide();
+                        $("#divLoader").hide();
+                    }                   
                 }
                 else {
                     $("#tblNewMemberData").show();

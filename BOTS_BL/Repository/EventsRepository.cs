@@ -163,17 +163,24 @@ namespace BOTS_BL.Repository
             return obj;
         }
 
-        public EventModuleData GetCustomerDetails(string groupId, string Mobileno, string Place, string connectionString)
+        public EventModuleData GetCustomerDetails(string groupId, string Mobileno, string Place,string EventId, string connectionString)
         {
             EventModuleData obj = new EventModuleData();
+            int eventId = Convert.ToInt32(EventId);
             try
-            {
+            { 
                 using (var context = new BOTSDBContext(connectionString))
                 {
+                    var statusavailable = context.EventMemberDetails.Where(e => e.EventId == eventId && e.Mobileno == Mobileno).Select(y => y.Mobileno).FirstOrDefault();
                     var pointsexp = context.EarnRules.Select(e => e.PointsExpiryVariableDate).FirstOrDefault();
                     int PointExp = Convert.ToInt32(pointsexp);
                     obj = context.Database.SqlQuery<EventModuleData>("select C.MobileNo,C.Points,C.CustomerName,C.Gender,C.DOB,C.AnniversaryDate,C.EmailId,min(CC.Address) as Address,min(C.OldMobileno) as AlternateMobileNo, CASE WHEN Max(cast(TM.Datetime as date)) = NULL THEN Max(cast(TM.Datetime as date)) ELSE Min(C.DOJ) END as LastTxnDate,DATEADD(MONTH, @PointExp, Max(cast(TM.Datetime as date))) as PointExp from CustomerDetails C Left join TransactionMaster TM on C.MobileNo = TM.MobileNo left join CustomerChild CC on CC.MobileNo = C.MobileNo and C.Status = '00' group by C.MobileNo, C.Points, C.CustomerName, C.EnrollingOutlet, C.Gender, C.DOB, C.AnniversaryDate, C.EmailId Having C.MobileNo = @Mobileno", new SqlParameter("@Mobileno", Mobileno), new SqlParameter("@PointExp", PointExp)).FirstOrDefault();
 
+                    if(statusavailable != null)
+                    {
+                        obj.CustomerAvailFlag = statusavailable;
+                    }
+                    
                     if (obj != null)
                     {
                         if (obj.LastTxnDate.HasValue)
