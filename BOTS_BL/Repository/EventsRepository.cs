@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data.Entity;
+using System.Web;
+using System.Net;
+using System.IO;
 
 namespace BOTS_BL.Repository
 {
@@ -222,6 +225,7 @@ namespace BOTS_BL.Repository
             OutletDetail objdata = new OutletDetail();
             TransactionMaster obj = new TransactionMaster();
             PointsExpiry obj1 = new PointsExpiry();
+            EventDetail objEvent = new EventDetail();
             using (var context = new BOTSDBContext(connectionstring))
             {
                 using (DbContextTransaction transaction = context.Database.BeginTransaction())
@@ -375,9 +379,22 @@ namespace BOTS_BL.Repository
                         }
 
 
-                        result = true;
-
+                        result = true;                       
                         transaction.Commit();
+
+                        if (Status == null)
+                        {
+                            using (var context1 = new CommonDBContext())
+                            {
+                                EventDetail ObjMsgData = new EventDetail();
+                                string groupid = Convert.ToString(objData.GroupId);
+                                //var WATokenid = context1.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();
+                                var WATokenid = "5fc8ed623629423c01ce4221";
+                                var ObjEventDetail =  context.EventDetails.Where(x => x.EventId == objData.EventId).FirstOrDefault();
+
+                                SendWAMessage(ObjEventDetail, objData, WATokenid);
+                            }
+                        }                                                   
 
                     }
                     catch (Exception ex)
@@ -436,6 +453,58 @@ namespace BOTS_BL.Repository
 
         }
 
+        public void SendWAMessage(EventDetail objMsg, EventMemberDetail objDetail, string WATokenid)
+        {
+            string responseString;
+
+            try
+            {
+                objMsg.BonusMessageScript = objMsg.BonusMessageScript.Replace("#01", objDetail.Name);
+                //objMsg.C1stReminderScript = HttpUtility.UrlEncode(objMsg.C1stReminderScript);
+                //string type = "TEXT";
+            
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
+                sbposdata.AppendFormat("token={0}", WATokenid);
+                sbposdata.AppendFormat("&phone=91{0}", objDetail.Mobileno);
+                sbposdata.AppendFormat("&message={0}", objMsg.BonusMessageScript);
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
     }
     
 }
