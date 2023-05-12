@@ -10,6 +10,8 @@ namespace WebApp.ViewModel
     public class EventViewModel
     {
         //public tblGroupDetail NeverOptFor { get; set; }
+        
+        public string Logo { get; set; }
         public List<tblGroupDetail> lstNeverOptFor { get; set; }
         public List<tblGroupDetail> lstActive { get; set; }
         public List<EventDetail> lstEvent { get; set; }

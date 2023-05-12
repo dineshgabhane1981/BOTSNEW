@@ -1,4 +1,4 @@
-﻿
+﻿@model WebApp.ViewModel.EventViewModel
 @{
     ViewBag.Title = "EventForm";
     Layout = null;
@@ -66,97 +66,87 @@
         </div>
     </div>
 </div>
-<div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
+<div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">   
     <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+
         <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
-            @*<div class="col-md-4" style="font-size: medium; margin-top: 10px;">
-            <label style="padding-right: 5px; padding-top: 10px; font-size: medium;">Enter Mobile Number </label>
-        </div>
-        <div class="col-md-4" style="font-size: medium; margin-top: 10px;">
-            <input type="number" id="txtMobileNo" class="input50" />
-        </div>*@
+            <div class="row col-lg-10 col-md-10">
+                <div class="col-lg-10 col-md-10" style="margin-bottom:20px; text-align: center;"><img src="@Model.Logo" alt="Logo" style="width:200px"></div>
+            </div>
             <div class="col-lg-4 col-md-2" style="font-size: medium;">
                 Enter Mobile Number
             </div>
             <div class="col-lg-4 col-md-2">
-                <input type="number" id="txtMobileNo" class="input100" style="font-size:medium;"/>
+                <input type="number" id="txtMobileNo" class="input100" style="font-size:medium;" />
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card col-md-12 col-xl-5" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">
                 <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium;" >
-                        Member Name *
-                      </div>
-                      <div class="col-lg-4 col-md-2">
-                        <input type="text" id="txtName" class="input100" style="font-size:medium;"/>
-                      </div>
-                </div>
-                @*<div class="row" style="margin: 0;">                   
                     <div class="col-lg-4 col-md-2" style="font-size: medium;">
-                        Student's Full Name
+                        Member Name *
                     </div>
                     <div class="col-lg-4 col-md-2">
-                        <input type="text" id="txtFullName" class="input100" style="font-size:medium;" />
-                    </div>
-                </div>*@
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Gender *
-                        </div>
-                        <div class="col-lg-4 col-md-2" >
-                            <select id="ddlGender" name="Gender" class="input100" style="font-size: medium; margin-top: 10px;">
-                                <option>Select</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Date Of Birth *
-                        </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="dtDOB" class="input100" />
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Date Of Anniversary
-                        </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="dtDOA" class="input100" />
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Address *
-                        </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <textarea type="text" id="txtAddress" class="input100"></textarea>
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Email Id
-                        </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <Input type="text" id="txtEmail" class="input100" />
-                        </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Alternate Mobile No
-                        </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="txtAlternateMobileNo" class="input100" />
-                        </div>
-                    </div>
-                    <div class="button-row mt-5" style="text-align:center;">
-                        <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnNewMember" tabindex="20" Onclick="Validate()">Submit</button>
+                        <input type="text" id="txtName" class="input100" style="font-size:medium;" />
                     </div>
                 </div>
+                <div class="row" style="margin: 0;">
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        Gender *
+                    </div>
+                    <div class="col-lg-4 col-md-2">
+                        <select id="ddlGender" name="Gender" class="input100" style="font-size: medium; margin-top: 10px;">
+                            <option>Select</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        Date Of Birth *
+                    </div>
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <input type="text" id="dtDOB" class="input100" />
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        Date Of Anniversary
+                    </div>
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <input type="text" id="dtDOA" class="input100" />
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        Address *
+                    </div>
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <textarea type="text" id="txtAddress" class="input100"></textarea>
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        Email Id
+                    </div>
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <Input type="text" id="txtEmail" class="input100" />
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        Alternate Mobile No
+                    </div>
+                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <input type="text" id="txtAlternateMobileNo" class="input100" />
+                    </div>
+                </div>
+                <div class="button-row mt-5" style="text-align:center;">
+                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnNewMember" tabindex="20" Onclick="Validate()">Submit</button>
+                </div>
             </div>
+        </div>
 
         <div class="row justify-content-center">
             <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card  col-md-12 col-xl-5" id="tblExistingDetails" style="padding-bottom: 20px; border-radius: 20px; display: none">
@@ -253,42 +243,27 @@
 
 
     </div>
- </div>
+</div>
 <script>
     $(document).ready(function () {
-        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-        $("#dtDOB").datepicker({
-
-            dateFormat: "yy-mm-dd",
-            maxDate: today,
-            //  minDate: '-4'
-        });
-        $("#dtDOA").datepicker({
-
-            dateFormat: "yy-mm-dd",
-            maxDate: today,
-            //  minDate: '-4'
-        });
-
-        $("#dtextDOB").datepicker({
-
-            dateFormat: "yy-mm-dd",
-            maxDate: today,
-            //  minDate: '-4'
-        });
-
-        $("#dttextDOA").datepicker({
-
-            dateFormat: "yy-mm-dd",
-            maxDate: today,
-            //  minDate: '-4'
-        });
-
-        //$("#btnExisting").on("click", function () {
-        //    $("#tblNewMemberData").hide();
-        //    $("#tblExistingDetails").show();
-
-        //});
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());        
+        $('#dtDOB').datepicker({
+            changeMonth: true,
+            changeYear: true
+        })        
+        $('#dtDOA').datepicker({
+            changeMonth: true,
+            changeYear: true
+        })        
+        $('#dtextDOB').datepicker({
+            changeMonth: true,
+            changeYear: true
+        })        
+        $('#dttextDOA').datepicker({
+            changeMonth: true,
+            changeYear: true
+        })
+        
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
 
@@ -347,7 +322,7 @@
                             }
                         })
                     }
-                
+
                     else {
                         $("#txttxtName").val(responce.CustomerName);
 
@@ -371,7 +346,7 @@
                         $("#tblExistingDetails").show();
                         $("#tblNewMemberData").hide();
                         $("#divLoader").hide();
-                    }                   
+                    }
                 }
                 else {
                     $("#tblNewMemberData").show();
@@ -462,12 +437,10 @@
                             title: "Success Title",
                             message: "Member Details saved Successfully",
                             buttonText: "Okay"
-                        })@*.then(() => {
-                            var urlLink = "@Url.Action("EventForm", "Events")";
-                            window.location.href = urlLink;
-                        })*@
-                        $("#divLoader").hide();
-                        location.reload();
+                        }).then(() => {
+                            window.location.reload(history.back());
+                        })
+                        $("#divLoader").hide();                        
                     }
                     else {
                         cuteAlert({
@@ -520,12 +493,10 @@
                             title: "Success Title",
                             message: "Member Details saved Successfully",
                             buttonText: "Okay"
-                        })@*.then(() => {
-                            var urlLink = "@Url.Action("EventForm", "Events")";
-                            window.location.href = urlLink;
-                        })*@
-                        $("#divLoader").hide();
-                        location.reload();
+                        }).then(() => {
+                            window.location.reload(history.back());
+                        })
+                        $("#divLoader").hide();                        
                     }
                     else {
                         cuteAlert({

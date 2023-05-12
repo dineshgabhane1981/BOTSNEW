@@ -414,7 +414,28 @@ namespace BOTS_BL.Repository
             }
             return lstReportData;
         }
-    
+
+        public string GetLogo(string groupId)
+        {
+            string logoUrl = string.Empty;
+
+            string connectionString = CR.GetCustomerConnString(groupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connectionString))
+                {
+                    var objbrandDetail = context.BrandDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    logoUrl = objbrandDetail.BrandLogoUrl;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetLogo");
+            }
+            return logoUrl;
+
+        }
+
     }
     
 }

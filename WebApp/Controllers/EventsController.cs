@@ -152,6 +152,8 @@ namespace WebApp.Controllers
 
         public ActionResult EventForm(string data)
         {
+            EventViewModel objdata = new EventViewModel();           
+            
             string eventId = string.Empty;
             string groupId = string.Empty;
             string place = string.Empty;
@@ -174,10 +176,10 @@ namespace WebApp.Controllers
             ViewBag.GroupId = groupId;
             ViewBag.EventId = eventId;
             ViewBag.Place = place;
+            objdata.Logo = EVR.GetLogo(groupId);
 
 
-
-            return View();
+            return View(objdata);
         }
 
         public ActionResult EventEdit(string groupId, string eventid)
