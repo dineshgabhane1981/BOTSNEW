@@ -11,6 +11,8 @@ using System.Data.Entity;
 using System.Web;
 using System.Net;
 using System.IO;
+using System.Globalization;
+using System.Data.Entity.Core.Objects;
 
 namespace BOTS_BL.Repository
 {
@@ -225,16 +227,12 @@ namespace BOTS_BL.Repository
             OutletDetail objdata = new OutletDetail();
             TransactionMaster obj = new TransactionMaster();
             PointsExpiry obj1 = new PointsExpiry();
-            EventDetail objEvent = new EventDetail();
             using (var context = new BOTSDBContext(connectionstring))
             {
                 using (DbContextTransaction transaction = context.Database.BeginTransaction())
                 {
-
-
                     try
                     {
-
                         var bonusPoints = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.BonusPoints).FirstOrDefault();
                         var existingCust = context.CustomerDetails.Where(x => x.MobileNo == objCustomerDetail.MobileNo).FirstOrDefault();
 
@@ -252,6 +250,11 @@ namespace BOTS_BL.Repository
                         if (Status == null)
                         {
                             objData.PointsGiven = bonusPoints;
+                            var objEventDetails = context.EventDetails.Where(e => e.EventId == objData.EventId).FirstOrDefault();
+
+                            DateTime Expirydate = objData.DateOfRegistration.Value.AddDays(Convert.ToInt32(objEventDetails.PointsExpiryDays));
+                            objData.FirstRemDate = Expirydate.AddDays(-Convert.ToInt32(objEventDetails.C1stRemBefore));
+                            objData.SecondRemDate = Expirydate.AddDays(-Convert.ToInt32(objEventDetails.C2ndRemBefore));
                         }
                         else
                         {
@@ -378,23 +381,9 @@ namespace BOTS_BL.Repository
 
                         }
 
+                        result = true;
 
-                        result = true;                       
                         transaction.Commit();
-
-                        if (Status == null)
-                        {
-                            using (var context1 = new CommonDBContext())
-                            {
-                                EventDetail ObjMsgData = new EventDetail();
-                                string groupid = Convert.ToString(objData.GroupId);
-                                //var WATokenid = context1.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();
-                                var WATokenid = "5fc8ed623629423c01ce4221";
-                                var ObjEventDetail =  context.EventDetails.Where(x => x.EventId == objData.EventId).FirstOrDefault();
-
-                                SendWAMessage(ObjEventDetail, objData, WATokenid);
-                            }
-                        }                                                   
 
                     }
                     catch (Exception ex)
@@ -406,7 +395,7 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-    
+
         public List<EventMemberDetail> GetEventReport(string groupid,string fromDate,string toDate)
         {
             List<EventMemberDetail> lstReportData = new List<EventMemberDetail>();
@@ -504,6 +493,207 @@ namespace BOTS_BL.Repository
 
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
+        }
+
+        public List<tblGroupDetail> GetAllEventCustomer()
+        {
+            List<tblGroupDetail> objGroupList = new List<tblGroupDetail>();
+
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    objGroupList = context.tblGroupDetails.Where(e => e.IsEvent.Value == true).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllEventCustomer");
+            }
+            return objGroupList;
+        }
+
+        public List<EventDetail> EventReportData(string groupid)
+        {
+            List<EventDetail> lstReportEventDate = new List<EventDetail>();
+            var connStr = CR.GetCustomerConnString(groupid);
+            //TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            //DateTime date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+            string Today = DateTime.Now.ToString("yyyy-MM-dd");
+            IFormatProvider culture = new CultureInfo("en-US", true);
+            DateTime dateVal = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    lstReportEventDate = context.EventDetails.Where(x => x.EventStartDate <= dateVal && x.EventEndDate >= dateVal && x.Status == "Started").ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "EventReportData");
+            }
+            return lstReportEventDate;
+        }
+
+        public List<EventMemberDetail> EventMemberData(string GroupId, string EventId)
+        {
+            List<EventMemberDetail> lstReportData = new List<EventMemberDetail>();
+            int eventid = Convert.ToInt32(EventId);
+            var connStr = CR.GetCustomerConnString(GroupId);
+            string Today = DateTime.Now.ToString("yyyy-MM-dd");
+            IFormatProvider culture = new CultureInfo("en-US", true);
+            DateTime dateVal = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    lstReportData = context.EventMemberDetails.Where(x => EntityFunctions.TruncateTime(x.DateOfRegistration) == dateVal && x.EventId == eventid).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "EventMemberData");
+            }
+
+
+            return lstReportData;
+        }
+
+
+        public string GetGroupdetails(string groupid)
+        {
+            string GroupName;
+            GroupName = string.Empty;
+            List<tblGroupDetail> lstGroupdetails = new List<tblGroupDetail>();
+            int Groupid = Convert.ToInt32(groupid);
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var GroupName1 = context.tblGroupDetails.Where(e => e.GroupId == Groupid).FirstOrDefault();
+                    GroupName = Convert.ToString(GroupName1.RetailName);
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupdetails");
+            }
+            return GroupName;
+        }
+
+        public List<ReminderData> FirstRemainderData(string groupid, string EventId)
+        {
+            List<EventModuleMessageData> lstmsgdata = new List<EventModuleMessageData>();
+            List<EventMemberDetail> lstMemberdetails = new List<EventMemberDetail>();
+            List<ReminderData> obj = new List<ReminderData>();
+            List<ReminderData> objData = new List<ReminderData>();
+
+            string Today = DateTime.Now.ToString("yyyy-MM-dd");
+            IFormatProvider culture = new CultureInfo("en-US", true);
+            DateTime dateVal = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
+            var connStr = CR.GetCustomerConnString(groupid);
+
+            int GroupidInt = Convert.ToInt32(groupid);
+            int EventIdInt = Convert.ToInt32(EventId);
+            string WATokenid, FirstRemainderscript;
+            WATokenid = string.Empty;
+            FirstRemainderscript = string.Empty;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var objWA = context.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();
+                    //WATokenid = Convert.ToString(objWA);
+                    WATokenid = "5fc8ed623629423c01ce4221";
+                }
+
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var obj1 = context.EventDetails.Where(e => e.GroupId == GroupidInt && e.EventId == EventIdInt).FirstOrDefault();
+                    FirstRemainderscript = obj1.C1stReminderScript;
+                    string EventStartDate = obj1.EventStartDate.Value.ToString("yyyy-MM-dd");
+                    DateTime dateVal1 = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
+                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
+                }
+
+                foreach (var item in obj)
+                {
+                    ReminderData Data = new ReminderData();
+                    Data.Mobileno = item.Mobileno;
+                    Data.Name = item.Name;
+                    Data.PointsGiven = item.PointsGiven;
+                    Data.FirstReminderScript = FirstRemainderscript;
+                    Data.Tokenid = WATokenid;
+
+                    objData.Add(Data);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "FirstRemainderData");
+            }
+
+            return objData;
+        }
+
+        public List<ReminderData> SecondRemainderData(string groupid, string EventId)
+        {
+            List<EventModuleMessageData> lstmsgdata = new List<EventModuleMessageData>();
+            List<EventMemberDetail> lstMemberdetails = new List<EventMemberDetail>();
+            List<ReminderData> obj = new List<ReminderData>();
+            List<ReminderData> objData = new List<ReminderData>();
+
+            string Today = DateTime.Now.ToString("yyyy-MM-dd");
+            IFormatProvider culture = new CultureInfo("en-US", true);
+            DateTime dateVal = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
+            var connStr = CR.GetCustomerConnString(groupid);
+
+            int GroupidInt = Convert.ToInt32(groupid);
+            int EventIdInt = Convert.ToInt32(EventId);
+            string WATokenid, SecondRemainderscript;
+            WATokenid = string.Empty;
+            SecondRemainderscript = string.Empty;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var objWA = context.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();
+                    //WATokenid = Convert.ToString(objWA);
+                    WATokenid = "5fc8ed623629423c01ce4221";
+                }
+
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var obj1 = context.EventDetails.Where(e => e.GroupId == GroupidInt && e.EventId == EventIdInt).FirstOrDefault();
+                    SecondRemainderscript = obj1.C2ndReminderScript;
+                    string EventStartDate = obj1.EventStartDate.Value.ToString("yyyy-MM-dd");
+                    DateTime dateVal1 = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
+                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven from EventMemberDetails E where E.SecondRemDate = @Today and E.EventId = @EvenId and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
+                }
+
+                foreach (var item in obj)
+                {
+                    ReminderData Data = new ReminderData();
+                    Data.Mobileno = item.Mobileno;
+                    Data.Name = item.Name;
+                    Data.PointsGiven = item.PointsGiven;
+                    Data.SecondReminderScript = SecondRemainderscript;
+                    Data.Tokenid = WATokenid;
+
+                    objData.Add(Data);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SecondRemainderData");
+            }
+
+            return objData;
         }
     }
     

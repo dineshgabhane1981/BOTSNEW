@@ -50,5 +50,14 @@ namespace BOTS_BL.Models
 
         [StringLength(500)]
         public string EventName { get; set; }
+
+        public DateTime? FirstRemSentDate { get; set; }
+
+        public DateTime? SecondRemSentDate { get; set; }
+
+        public DateTime? FirstRemDate { get; set; }
+
+        public DateTime? SecondRemDate { get; set; }
+
     }
 }

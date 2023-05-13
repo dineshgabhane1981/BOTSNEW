@@ -256,6 +256,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskService\EventSchedulerService.cs" />
+    <Compile Include="TaskService\EventTaskService.cs" />
     <Compile Include="TaskService\SchedulerService.cs" />
     <Compile Include="TaskService\TaskService.cs" />
     <Compile Include="ViewModel\BrandAndOutletViewModel.cs" />

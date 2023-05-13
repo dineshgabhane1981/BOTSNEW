@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using WebApp.TaskService;
+using WebApp.EventTaskService;
 
 namespace WebApp
 {
@@ -19,6 +20,9 @@ namespace WebApp
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             //The Schedular Class  
             SchedulerService.StartAsync().GetAwaiter().GetResult();
+            // The Event Schedular 
+            EventSchedulerService.StartAsync().GetAwaiter().GetResult();
+
         }
 
         protected void Application_EndRequest()

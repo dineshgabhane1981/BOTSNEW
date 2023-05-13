@@ -295,6 +295,8 @@
     <Compile Include="Models\EventDetail.cs" />
     <Compile Include="Models\EventMemberDetail.cs" />
     <Compile Include="Models\EventModule\EventModuleData.cs" />
+    <Compile Include="Models\EventModule\EventModuleMessageData.cs" />
+    <Compile Include="Models\EventModule\ReminderData.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
     <Compile Include="Models\FeedbackModule\DashboardNewAndExisting.cs" />
     <Compile Include="Models\FeedbackModule\FeedbackData.cs" />
