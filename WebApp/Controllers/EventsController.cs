@@ -485,7 +485,7 @@ namespace WebApp.Controllers
                 if (lstReportData.Count > 0)
                 {
                     string Emailheader = string.Empty;
-                    Emailheader = "Daily Event Report_" + GroupName;
+                    Emailheader = "Daily Event Report - " + GroupName;
                     StringBuilder str = new StringBuilder();
                     str.Append("<table>");
                     str.Append("<tr>");
@@ -499,7 +499,7 @@ namespace WebApp.Controllers
                     str.Append("</tr>");
                     str.Append("<tr>");
 
-                    str.AppendLine("<td>Please find Daily Event Report_" + EventName + "</td>");
+                    str.AppendLine("<td>Please find Daily Event Report - " + EventName + "</td>");
                     str.AppendLine("</br>");
                     str.Append("</tr>");
 
