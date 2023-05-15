@@ -662,7 +662,7 @@ namespace BOTS_BL.Repository
                     string EventStartDate = obj1.EventStartDate.Value.ToString("yyyy-MM-dd");
                     ExpDays = Convert.ToInt32(obj1.PointsExpiryDays);
                     DateTime dateVal1 = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
-                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven,cast(E.DateOfRegistration as date) from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.PointsGiven > 0 and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
+                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven,cast(E.DateOfRegistration as date) as DateOfRegistration,E.EventId from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.PointsGiven > 0 and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between cast(@EventStartDate as date) and cast(@Today as Date)) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
                 }
 
                 foreach (var item in obj)
@@ -676,6 +676,14 @@ namespace BOTS_BL.Repository
                     Data.ExpDate = item.DateOfRegistration.AddDays(ExpDays);
 
                     objData.Add(Data);
+
+                    using (var context = new BOTSDBContext(connStr))
+                    {
+                        var Lst = context.EventMemberDetails.Where(e => e.Mobileno == item.Mobileno && e.PointsGiven != 0 && e.EventId == item.EventId).FirstOrDefault();
+                        Lst.FirstRemSentDate = dateVal;
+                        context.EventMemberDetails.AddOrUpdate(Lst);
+                        context.SaveChanges();
+                    }
                 }
 
             }
@@ -721,7 +729,7 @@ namespace BOTS_BL.Repository
                     string EventStartDate = obj1.EventStartDate.Value.ToString("yyyy-MM-dd");
                     ExpDays = Convert.ToInt32(obj1.PointsExpiryDays);
                     DateTime dateVal1 = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
-                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven,cast(E.DateOfRegistration as date) as DateOfRegistration from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.PointsGiven > 0 and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between cast(@EventStartDate as date) and cast(@Today as date)) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
+                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven,cast(E.DateOfRegistration as date) as DateOfRegistration,E.EventId from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.PointsGiven > 0 and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between cast(@EventStartDate as date) and cast(@Today as date)) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
                     //obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven from EventMemberDetails E where E.SecondRemDate = @Today and E.EventId = @EvenId and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
                 }
 
@@ -736,6 +744,13 @@ namespace BOTS_BL.Repository
                     Data.ExpDate = item.DateOfRegistration.AddDays(ExpDays);
 
                     objData.Add(Data);
+                    using (var context = new BOTSDBContext(connStr))
+                    {
+                        var Lst = context.EventMemberDetails.Where(e => e.Mobileno == item.Mobileno && e.PointsGiven != 0 && e.EventId == item.EventId).FirstOrDefault();
+                        Lst.SecondRemSentDate = dateVal;
+                        context.EventMemberDetails.AddOrUpdate(Lst);
+                        context.SaveChanges();
+                    }
                 }
 
             }

@@ -449,14 +449,14 @@ namespace WebApp.Controllers
             {
                 var AllCustomer = EVR.GetAllEventCustomer();
 
-                //foreach (var customer in AllCustomer)
-                //{
-                //    GetReportData(Convert.ToString(customer.GroupId));
-                //}
-                //foreach (var customer in AllCustomer)
-                //{
-                //    GetFirstRemainderData(Convert.ToString(customer.GroupId));
-                //}
+                foreach (var customer in AllCustomer)
+                {
+                    GetReportData(Convert.ToString(customer.GroupId));
+                }
+                foreach (var customer in AllCustomer)
+                {
+                    GetFirstRemainderData(Convert.ToString(customer.GroupId));
+                }
                 foreach (var customer in AllCustomer)
                 {
                     GetSecondRemainderData(Convert.ToString(customer.GroupId));
@@ -503,13 +503,20 @@ namespace WebApp.Controllers
             {
                 lstReportData = EVR.EventMemberData(GroupId, EventId);
                 string GroupName = EVR.GetGroupdetails(GroupId);
-                foreach (var lst in listEventData)
-                {
-                    EventName = lst.EventName;
-                }
 
                 if (lstReportData.Count > 0)
                 {
+                    foreach (var lst in lstReportData)
+                    {
+                        if (lst.EventId == Convert.ToInt32(EventId))
+                        {
+
+                            EventName = lst.EventName;
+
+                        }
+
+                        break;
+                    }
                     string Emailheader = string.Empty;
                     Emailheader = "Daily Event Report - " + GroupName;
                     StringBuilder str = new StringBuilder();
@@ -711,9 +718,7 @@ namespace WebApp.Controllers
                 string responseString;
                 
                 try
-                {
-                     
-
+                {                    
                     item.FirstReminderScript = item.FirstReminderScript.Replace("#99", "&");
                     item.FirstReminderScript = item.FirstReminderScript.Replace("#01", item.Name);
                     item.FirstReminderScript = item.FirstReminderScript.Replace("#06", Convert.ToString(item.PointsGiven));

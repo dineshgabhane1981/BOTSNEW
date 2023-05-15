@@ -9,6 +9,8 @@ namespace BOTS_BL.Models.EventModule
     public class ReminderData
     {
         public string Mobileno { get; set; }
+
+        public int EventId { get; set; }
         public string Name { get; set; }
         public decimal PointsGiven { get; set; }
         public string FirstReminderScript  {get; set; }
