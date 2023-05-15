@@ -453,10 +453,10 @@ namespace WebApp.Controllers
                 //{
                 //    GetReportData(Convert.ToString(customer.GroupId));
                 //}
-                foreach (var customer in AllCustomer)
-                {
-                    GetFirstRemainderData(Convert.ToString(customer.GroupId));
-                }
+                //foreach (var customer in AllCustomer)
+                //{
+                //    GetFirstRemainderData(Convert.ToString(customer.GroupId));
+                //}
                 foreach (var customer in AllCustomer)
                 {
                     GetSecondRemainderData(Convert.ToString(customer.GroupId));
@@ -693,14 +693,14 @@ namespace WebApp.Controllers
 
                 foreach (var item in listEventData)
                 {
-                    var listData = EVR.FirstRemainderData(Convert.ToString(item.GroupId), Convert.ToString(item.EventId));
+                    var listData = EVR.SecondRemainderData(Convert.ToString(item.GroupId), Convert.ToString(item.EventId));
 
                     SendSecondMessage(listData);
                 }
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "GetFirstRemainderData");
+                newexception.AddException(ex, "GetSecondRemainderData");
             }
         }
 
@@ -709,10 +709,15 @@ namespace WebApp.Controllers
             foreach (var item in Data)
             {
                 string responseString;
+                
                 try
                 {
+                     
 
                     item.FirstReminderScript = item.FirstReminderScript.Replace("#99", "&");
+                    item.FirstReminderScript = item.FirstReminderScript.Replace("#01", item.Name);
+                    item.FirstReminderScript = item.FirstReminderScript.Replace("#06", Convert.ToString(item.PointsGiven));
+                    item.FirstReminderScript = item.FirstReminderScript.Replace("#15", item.ExpDate.ToString("yyyy-MM-dd"));
                     item.FirstReminderScript = HttpUtility.UrlEncode(item.FirstReminderScript);
                     //string type = "TEXT";
                     StringBuilder sbposdata = new StringBuilder();
@@ -758,6 +763,9 @@ namespace WebApp.Controllers
                 {
 
                     item.SecondReminderScript = item.SecondReminderScript.Replace("#99", "&");
+                    item.SecondReminderScript = item.SecondReminderScript.Replace("#01", item.Name);
+                    item.SecondReminderScript = item.SecondReminderScript.Replace("#06", Convert.ToString(item.PointsGiven));
+                    item.SecondReminderScript = item.SecondReminderScript.Replace("#15", item.ExpDate.ToString("yyyy-MM-dd"));
                     item.SecondReminderScript = HttpUtility.UrlEncode(item.SecondReminderScript);
                     //string type = "TEXT";
                     StringBuilder sbposdata = new StringBuilder();

@@ -643,6 +643,7 @@ namespace BOTS_BL.Repository
             int GroupidInt = Convert.ToInt32(groupid);
             int EventIdInt = Convert.ToInt32(EventId);
             string WATokenid, FirstRemainderscript;
+            int ExpDays;
             WATokenid = string.Empty;
             FirstRemainderscript = string.Empty;
             try
@@ -650,8 +651,8 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     var objWA = context.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();
-                    //WATokenid = Convert.ToString(objWA);
-                    WATokenid = "5fc8ed623629423c01ce4221";
+                    WATokenid = Convert.ToString(objWA);
+                    //WATokenid = "5fc8ed623629423c01ce4221";
                 }
 
                 using (var context = new BOTSDBContext(connStr))
@@ -659,8 +660,9 @@ namespace BOTS_BL.Repository
                     var obj1 = context.EventDetails.Where(e => e.GroupId == GroupidInt && e.EventId == EventIdInt).FirstOrDefault();
                     FirstRemainderscript = obj1.C1stReminderScript;
                     string EventStartDate = obj1.EventStartDate.Value.ToString("yyyy-MM-dd");
+                    ExpDays = Convert.ToInt32(obj1.PointsExpiryDays);
                     DateTime dateVal1 = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
-                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
+                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven,cast(E.DateOfRegistration as date) from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.PointsGiven > 0 and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
                 }
 
                 foreach (var item in obj)
@@ -671,6 +673,7 @@ namespace BOTS_BL.Repository
                     Data.PointsGiven = item.PointsGiven;
                     Data.FirstReminderScript = FirstRemainderscript;
                     Data.Tokenid = WATokenid;
+                    Data.ExpDate = item.DateOfRegistration.AddDays(ExpDays);
 
                     objData.Add(Data);
                 }
@@ -699,6 +702,7 @@ namespace BOTS_BL.Repository
             int GroupidInt = Convert.ToInt32(groupid);
             int EventIdInt = Convert.ToInt32(EventId);
             string WATokenid, SecondRemainderscript;
+            int ExpDays;
             WATokenid = string.Empty;
             SecondRemainderscript = string.Empty;
             try
@@ -706,8 +710,8 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     var objWA = context.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();
-                    //WATokenid = Convert.ToString(objWA);
-                    WATokenid = "5fc8ed623629423c01ce4221";
+                    WATokenid = Convert.ToString(objWA);
+                    //WATokenid = "5fc8ed623629423c01ce4221";
                 }
 
                 using (var context = new BOTSDBContext(connStr))
@@ -715,8 +719,10 @@ namespace BOTS_BL.Repository
                     var obj1 = context.EventDetails.Where(e => e.GroupId == GroupidInt && e.EventId == EventIdInt).FirstOrDefault();
                     SecondRemainderscript = obj1.C2ndReminderScript;
                     string EventStartDate = obj1.EventStartDate.Value.ToString("yyyy-MM-dd");
+                    ExpDays = Convert.ToInt32(obj1.PointsExpiryDays);
                     DateTime dateVal1 = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
-                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven from EventMemberDetails E where E.SecondRemDate = @Today and E.EventId = @EvenId and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
+                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven,cast(E.DateOfRegistration as date) as DateOfRegistration from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.PointsGiven > 0 and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between cast(@EventStartDate as date) and cast(@Today as date)) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
+                    //obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven from EventMemberDetails E where E.SecondRemDate = @Today and E.EventId = @EvenId and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
                 }
 
                 foreach (var item in obj)
@@ -727,6 +733,7 @@ namespace BOTS_BL.Repository
                     Data.PointsGiven = item.PointsGiven;
                     Data.SecondReminderScript = SecondRemainderscript;
                     Data.Tokenid = WATokenid;
+                    Data.ExpDate = item.DateOfRegistration.AddDays(ExpDays);
 
                     objData.Add(Data);
                 }
