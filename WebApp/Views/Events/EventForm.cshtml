@@ -249,19 +249,23 @@
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());        
         $('#dtDOB').datepicker({
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            yearRange: "-80:+0"
         })        
         $('#dtDOA').datepicker({
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            yearRange: "-80:+0"
         })        
         $('#dtextDOB').datepicker({
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            yearRange: "-80:+0"
         })        
         $('#dttextDOA').datepicker({
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            yearRange: "-80:+0"
         })
         
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
@@ -461,7 +465,15 @@
         }
 
     }
-        $("#btnExistMember").click(function () {
+    $("#btnExistMember").click(function () {
+
+        var Gender = $("#ddltxtGender").val();
+
+        if (Gender = "Select") {
+            Gender = null;
+        }
+
+
             var FilterData = [];
             item = {};
             item["GroupId"] = $("#hdnGroupId").val();
@@ -469,7 +481,7 @@
             item["Place"] = $("#hdnPlace").val();
             item["Name"] = $("#txttxtName").val();
             item["Mobileno"] = $("#txtMobileNo").val();
-            item["Gender"] = $("#ddltxtGender").val();
+            item["Gender"] = Gender;
             item["DOB"] = $("#dtextDOB").val();
             item["DOA"] = $("#dttextDOA").val();
             item["EmailId"] = $("#txtextEmail").val();

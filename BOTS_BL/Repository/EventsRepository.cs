@@ -280,7 +280,15 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
+                            objData.PointsGiven = bonusPoints;
+
                             objData.PointsGiven = 0;
+
+                            var objEventDetails = context.EventDetails.Where(e => e.EventId == objData.EventId).FirstOrDefault();
+
+                            DateTime Expirydate = objData.DateOfRegistration.Value.AddDays(Convert.ToInt32(objEventDetails.PointsExpiryDays));
+                            objData.FirstRemDate = Expirydate.AddDays(-Convert.ToInt32(objEventDetails.C1stRemBefore));
+                            objData.SecondRemDate = Expirydate.AddDays(-Convert.ToInt32(objEventDetails.C2ndRemBefore));
                         }
                         objData.EventName = EventName;
 

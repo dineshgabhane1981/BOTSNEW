@@ -126,23 +126,27 @@
         </div>
     </div>
 </div>
-//<link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
-//<script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+@*<link rel="stylesheet" href="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.min.css">
+<script src="~/Scripts/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>*@
 
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $('#IdEventDate').datepicker({
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            yearRange: "-0:+10"
+            
         })
         $('#IdEventStrDate').datepicker({
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            yearRange: "-0:+10"
         })
         $('#IdEventEndDate').datepicker({
             changeMonth: true,
-            changeYear: true
+            changeYear: true,
+            yearRange: "-0:+10"
         })
     });
     function Validation() {
