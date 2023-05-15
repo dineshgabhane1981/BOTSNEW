@@ -15,5 +15,8 @@ namespace BOTS_BL.Models.EventModule
         public string SecondReminderScript { get; set; }
         public string Tokenid { get; set; }
 
+        public DateTime  DateOfRegistration { get; set; }
+        public DateTime ExpDate { get; set; }
+
     }
 }
