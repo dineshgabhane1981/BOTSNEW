@@ -55,6 +55,28 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                         status = true;
                     }
+                    if (status)
+                    {
+                        string connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                        using (var contextdb = new BOTSDBContext(connStr))
+                        {
+                            string tableScript = "CREATE TABLE [dbo].[EventDetails]([EventId][bigint] IDENTITY(1, 1) NOT NULL,[GroupId] [int] NOT NULL,[EventName] [nvarchar](max)NULL,[Place] [nvarchar](500) NULL," +
+                                "[EventType] [nvarchar](500) NULL,[EventStartDate] [date] NULL,[EventEndDate] [date] NULL,[BonusPoints] [int] NULL,[PointsExpiryDays] [int] NULL,[1stRemBefore] [int] NULL," +
+                                "[1stReminderScript] [nvarchar](max)NULL,[2ndRemBefore] [int] NULL,[2ndReminderScript] [nvarchar](max)NULL,[Desciption] [nvarchar](max)NULL,[AddedBy] [nvarchar](50) NOT NULL," +
+                                "[Addeddate] [date] NOT NULL,[Status] [varchar](20) NULL,[BonusMessageScript] [nvarchar](max)NULL,CONSTRAINT[PK_EventDetails] PRIMARY KEY CLUSTERED([EventId] ASC)WITH(PAD_INDEX = OFF," +
+                                " STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY] TEXTIMAGE_ON[PRIMARY]";
+
+                            tableScript += "CREATE TABLE [dbo].[EventMemberDetails]([SLno][int] IDENTITY(1, 1) NOT NULL,[GroupId] [int] NOT NULL, [EventId] [int] NOT NULL,"+
+                                "[Mobileno] [varchar](10) NULL,[Name] [nvarchar](500) NULL,[Gender] [varchar](20) NULL,[DOB] [date] NULL,[DOA] [date] NULL," +
+                                "[Address] [nvarchar](max)NULL,[EmailId] [nvarchar](500) NULL,[AlternateNo] [varchar](10) NULL,[PointsGiven] [numeric](18, 2) NULL,[Place] [nvarchar](max)NULL," +
+                                "[DateOfRegistration] [datetime] NULL,[CustomerType] [varchar](10) NULL,[EventName] [nvarchar](500) NULL,[FirstRemSentDate] [date] NULL,[SecondRemSentDate] [date] NULL," +
+                                "[FirstRemDate] [date] NULL,[SecondRemDate] [date] NULL,CONSTRAINT[PK_EventMemberDetails] PRIMARY KEY CLUSTERED([SLno] ASC)WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF," +
+                                " IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY] TEXTIMAGE_ON[PRIMARY]";
+
+                            contextdb.Database.CreateIfNotExists();
+                            contextdb.Database.ExecuteSqlCommand(tableScript);
+                        }
+                    }
                 }
             }
             catch (Exception ex)

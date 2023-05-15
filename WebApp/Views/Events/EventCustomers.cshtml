@@ -226,19 +226,16 @@
                     dataType: "json",
                     success: function (result) {
                         toastr.success("Event Module Enabled Successfully");
+                        window.location.reload();
                         $("#divLoader").hide();
                     },
                     error: function (result) {
                         console.log(result.responseText)
-
-
                     }
                 })
             }
-
         })
     }
-
     function ShowDisableDetails(GroupId) {
         var returnStatus = true;
 
@@ -265,12 +262,11 @@
                     dataType: "json",
                     success: function (result) {
                         toastr.success("Event Module Disable Successfully");
+                        window.location.reload();
                         $("#divLoader").hide();
                     },
                     error: function (result) {
                         console.log(result.responseText)
-
-
                     }
                 })
             }
