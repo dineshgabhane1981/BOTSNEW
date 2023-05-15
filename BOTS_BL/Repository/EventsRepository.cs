@@ -407,6 +407,19 @@ namespace BOTS_BL.Repository
 
                         transaction.Commit();
 
+                        if (Status == null)
+                        {
+                            using (var context1 = new CommonDBContext())
+                            {
+                                EventDetail ObjMsgData = new EventDetail();
+                                string groupid = Convert.ToString(objData.GroupId);
+                                var WATokenid = context1.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();                                
+                                var ObjEventDetail = context.EventDetails.Where(x => x.EventId == objData.EventId).FirstOrDefault();
+
+                                SendWAMessage(ObjEventDetail, objData, WATokenid);
+                            }
+                        }
+
                     }
                     catch (Exception ex)
                     {
