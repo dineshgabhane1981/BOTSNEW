@@ -492,9 +492,10 @@ namespace BOTS_BL.Repository
             try
             {
                 objMsg.BonusMessageScript = objMsg.BonusMessageScript.Replace("#01", objDetail.Name);
-                //objMsg.C1stReminderScript = HttpUtility.UrlEncode(objMsg.C1stReminderScript);
+                objMsg.BonusMessageScript = objMsg.BonusMessageScript.Replace("#06", Convert.ToString(objDetail.PointsGiven));
+                objMsg.BonusMessageScript = HttpUtility.UrlEncode(objMsg.BonusMessageScript);
                 //string type = "TEXT";
-            
+
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat("https://bo.enotify.app/api/sendText?");
                 sbposdata.AppendFormat("token={0}", WATokenid);
