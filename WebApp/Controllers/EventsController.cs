@@ -181,7 +181,24 @@ namespace WebApp.Controllers
             ViewBag.EventId = eventId;
             ViewBag.Place = place;
             objdata.Logo = EVR.GetLogo(groupId);
-
+            var connStr = CR.GetCustomerConnString(groupId);
+            var eventDetails = EVR.GetEditEvents(groupId, eventId, connStr);
+            if (eventDetails.EventStartDate.Value > DateTime.Now)
+            {
+                ViewBag.EventStarted = "Not Started";
+            }
+            else
+            {
+                ViewBag.EventStarted = "Started";
+            }
+            if (eventDetails.EventEndDate.Value < DateTime.Now)
+            {
+                ViewBag.EventEnded = "Ended";
+            }
+            else
+            {
+                ViewBag.EventEnded = "Not Ended";
+            }
 
             return View(objdata);
         }

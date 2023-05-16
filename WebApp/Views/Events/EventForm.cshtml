@@ -66,7 +66,10 @@
         </div>
     </div>
 </div>
-<div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">   
+
+
+
+<div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
     <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
 
         <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
@@ -74,204 +77,219 @@
                 <div class="col-lg-10 col-md-10" style="margin-bottom:20px; text-align: center;"><img src="@Model.Logo" alt="Logo" style="width:200px"></div>
             </div>
         </div>
-        <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">        
-            <div class="col-lg-2 col-md-2" style="font-size: medium;">
-                Enter Mobile Number
+        @if (ViewBag.EventEnded == "Ended")
+        {
+            <div class="row justify-content-center">
+                <h2>This event is expired</h2>
             </div>
-            <div class="col-lg-4 col-md-2">
-                <input type="number" id="txtMobileNo" class="input100" style="font-size:medium;" />
+        }
+        else if (ViewBag.EventStarted == "Not Started")
+        {
+            <div class="row justify-content-center">
+                <h2> This event is not started yet</h2>
             </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card col-md-12 col-xl-5" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium;">
-                        Member Name *
-                    </div>
-                    <div class="col-lg-4 col-md-2">
-                        <input type="text" id="txtName" class="input100" style="font-size:medium;" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Gender *
-                    </div>
-                    <div class="col-lg-4 col-md-2">
-                        <select id="ddlGender" name="Gender" class="input100" style="font-size: medium; margin-top: 10px;">
-                            <option>Select</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Date Of Birth *
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <input type="text" id="dtDOB" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Date Of Anniversary
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <input type="text" id="dtDOA" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Address *
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <textarea type="text" id="txtAddress" class="input100"></textarea>
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Email Id
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <Input type="text" id="txtEmail" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Alternate Mobile No
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <input type="text" id="txtAlternateMobileNo" class="input100" />
-                    </div>
-                </div>
-                <div class="button-row mt-5" style="text-align:center;">
-                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnNewMember" tabindex="20" Onclick="Validate()">Submit</button>
-                </div>
-            </div>
-        </div>
+        }
+        else
+        {
 
-        <div class="row justify-content-center">
-            <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card  col-md-12 col-xl-5" id="tblExistingDetails" style="padding-bottom: 20px; border-radius: 20px; display: none">
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Member Name
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <input type="text" id="txttxtName" class="input100" />
-                    </div>
+            <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
+                <div class="col-lg-2 col-md-2" style="font-size: medium;">
+                    Enter Mobile Number
                 </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Gender
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <select id="ddltxtGender" name="Gender" class="input100" style="font-size:medium;">
-                            <option>Select</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Date Of Birth
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <input type="text" id="dtextDOB" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Date Of Anniversary
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <input type="text" id="dttextDOA" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Address
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        <textarea type="text" id="txtextAddress" class="input100"></textarea>
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Email Id
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                        <Input type="text" id="txtextEmail" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Alternate Mobile No
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                        <input type="text" id="txttextAlternateMobileNo" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                        Total Available Points
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                        <input type="text" id="txtextAvailablePoints" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                        Last Txn Date
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                        <input type="text" id="LastTxnDate" class="input100" />
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                        Points Expiry Date
-                    </div>
-                    <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                        <input type="text" id="PointsExpDate" class="input100" />
-                    </div>
-                </div>
-                <div class="button-row mt-5" style="text-align:center;">
-                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnExistMember" tabindex="20">Submit</button>
+                <div class="col-lg-4 col-md-2">
+                    <input type="number" id="txtMobileNo" class="input100" style="font-size:medium;" />
                 </div>
             </div>
-        </div>
+            <div class="row justify-content-center">
+                <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card col-md-12 col-xl-5" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium;">
+                            Member Name *
+                        </div>
+                        <div class="col-lg-4 col-md-2">
+                            <input type="text" id="txtName" class="input100" style="font-size:medium;" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Gender *
+                        </div>
+                        <div class="col-lg-4 col-md-2">
+                            <select id="ddlGender" name="Gender" class="input100" style="font-size: medium; margin-top: 10px;">
+                                <option>Select</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Date Of Birth *
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <input type="text" id="dtDOB" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Date Of Anniversary
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <input type="text" id="dtDOA" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Address *
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <textarea type="text" id="txtAddress" class="input100"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Email Id
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <Input type="text" id="txtEmail" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Alternate Mobile No
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <input type="text" id="txtAlternateMobileNo" class="input100" />
+                        </div>
+                    </div>
+                    <div class="button-row mt-5" style="text-align:center;">
+                        <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnNewMember" tabindex="20" Onclick="Validate()">Submit</button>
+                    </div>
+                </div>
+            </div>
 
+            <div class="row justify-content-center">
+                <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card  col-md-12 col-xl-5" id="tblExistingDetails" style="padding-bottom: 20px; border-radius: 20px; display: none">
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Member Name
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <input type="text" id="txttxtName" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Gender
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <select id="ddltxtGender" name="Gender" class="input100" style="font-size:medium;">
+                                <option>Select</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Date Of Birth
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <input type="text" id="dtextDOB" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Date Of Anniversary
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <input type="text" id="dttextDOA" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Address
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            <textarea type="text" id="txtextAddress" class="input100"></textarea>
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Email Id
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+                            <Input type="text" id="txtextEmail" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Alternate Mobile No
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+                            <input type="text" id="txttextAlternateMobileNo" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+                            Total Available Points
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtextAvailablePoints" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+                            Last Txn Date
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+                            <input type="text" id="LastTxnDate" class="input100" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                            Points Expiry Date
+                        </div>
+                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+                            <input type="text" id="PointsExpDate" class="input100" />
+                        </div>
+                    </div>
+                    <div class="button-row mt-5" style="text-align:center;">
+                        <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnExistMember" tabindex="20">Submit</button>
+                    </div>
+                </div>
+            </div>
 
+        }
 
     </div>
 </div>
 <script>
     $(document).ready(function () {
-        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+            var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $('#dtDOB').datepicker({
-            changeMonth: true,
+                changeMonth: true,
             changeYear: true,
             yearRange: "-80:+0"
         })
         $('#dtDOA').datepicker({
-            changeMonth: true,
+                changeMonth: true,
             changeYear: true,
             yearRange: "-80:+0"
         })
         $('#dtextDOB').datepicker({
-            changeMonth: true,
+                changeMonth: true,
             changeYear: true,
             yearRange: "-80:+0"
         })
         $('#dttextDOA').datepicker({
-            changeMonth: true,
+                changeMonth: true,
             changeYear: true,
             yearRange: "-80:+0"
         })
 
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
-    });
+        });
 
     $("#txtMobileNo").focusout(function () {
         var Mobileno = $("#txtMobileNo").val();
