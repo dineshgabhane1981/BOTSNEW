@@ -526,15 +526,12 @@ namespace WebApp.Controllers
                     {
                         if (lst.EventId == Convert.ToInt32(EventId))
                         {
-
                             EventName = lst.EventName;
-
                         }
-
                         break;
                     }
-                    string Emailheader = string.Empty;
-                    Emailheader = "Daily Event Report - " + GroupName;
+                    string EmailSubject = string.Empty;
+                    EmailSubject = "Daily Event Report - " + GroupName;
                     StringBuilder str = new StringBuilder();
                     str.Append("<table>");
                     str.Append("<tr>");
@@ -657,16 +654,13 @@ namespace WebApp.Controllers
 
                     str.Append("</table>");
 
-                    MailMessage Msg = new MailMessage();
-                    //Msg.From = new MailAddress(EmailId);
-                    //Msg.To.Add(Email);
-                    //Msg.CC.Add(CCEmail);
-                    //Msg.Bcc.Add(BCCEmail);
+                    MailMessage Msg = new MailMessage();                    
 
                     Msg.From = new MailAddress("report@blueocktopus.in");
-                    Msg.To.Add("sujith@blueocktopus.in");
+                    var emailId = EVR.GetReportEmail(Convert.ToInt32(GroupId));
+                    Msg.To.Add(emailId);
 
-                    Msg.Subject = Emailheader;
+                    Msg.Subject = EmailSubject;
                     Msg.Body = str.ToString();
 
                     Msg.IsBodyHtml = true;
@@ -678,7 +672,6 @@ namespace WebApp.Controllers
 
                     smtp.Send(Msg);
                     Msg.Dispose();
-
                 }
             }
             catch (Exception ex)

@@ -37,7 +37,7 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "GetNeverOptForGroups");
             }
-            return lstData;   
+            return lstData;
         }
 
         public bool EnableEventModule(string GroupId)
@@ -66,7 +66,7 @@ namespace BOTS_BL.Repository
                                 "[Addeddate] [date] NOT NULL,[Status] [varchar](20) NULL,[BonusMessageScript] [nvarchar](max)NULL,CONSTRAINT[PK_EventDetails] PRIMARY KEY CLUSTERED([EventId] ASC)WITH(PAD_INDEX = OFF," +
                                 " STATISTICS_NORECOMPUTE = OFF,IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY]) ON[PRIMARY] TEXTIMAGE_ON[PRIMARY]";
 
-                            tableScript += "CREATE TABLE [dbo].[EventMemberDetails]([SLno][int] IDENTITY(1, 1) NOT NULL,[GroupId] [int] NOT NULL, [EventId] [int] NOT NULL,"+
+                            tableScript += "CREATE TABLE [dbo].[EventMemberDetails]([SLno][int] IDENTITY(1, 1) NOT NULL,[GroupId] [int] NOT NULL, [EventId] [int] NOT NULL," +
                                 "[Mobileno] [varchar](10) NULL,[Name] [nvarchar](500) NULL,[Gender] [varchar](20) NULL,[DOB] [date] NULL,[DOA] [date] NULL," +
                                 "[Address] [nvarchar](max)NULL,[EmailId] [nvarchar](500) NULL,[AlternateNo] [varchar](10) NULL,[PointsGiven] [numeric](18, 2) NULL,[Place] [nvarchar](max)NULL," +
                                 "[DateOfRegistration] [datetime] NULL,[CustomerType] [varchar](10) NULL,[EventName] [nvarchar](500) NULL,[FirstRemSentDate] [date] NULL,[SecondRemSentDate] [date] NULL," +
@@ -110,7 +110,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool SaveEventData(EventDetail Obj,string connectionstring)
+        public bool SaveEventData(EventDetail Obj, string connectionstring)
         {
             bool status = false;
 
@@ -130,7 +130,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public List<EventDetail> GetListEvents(string GroupId,string connectionString)
+        public List<EventDetail> GetListEvents(string GroupId, string connectionString)
         {
             List<EventDetail> listEvent = new List<EventDetail>();
 
@@ -190,12 +190,12 @@ namespace BOTS_BL.Repository
             return obj;
         }
 
-        public EventModuleData GetCustomerDetails(string groupId, string Mobileno, string Place,string EventId, string connectionString)
+        public EventModuleData GetCustomerDetails(string groupId, string Mobileno, string Place, string EventId, string connectionString)
         {
             EventModuleData obj = new EventModuleData();
             int eventId = Convert.ToInt32(EventId);
             try
-            { 
+            {
                 using (var context = new BOTSDBContext(connectionString))
                 {
                     var statusavailable = context.EventMemberDetails.Where(e => e.EventId == eventId && e.Mobileno == Mobileno).Select(y => y.Mobileno).FirstOrDefault();
@@ -203,11 +203,11 @@ namespace BOTS_BL.Repository
                     int PointExp = Convert.ToInt32(pointsexp);
                     obj = context.Database.SqlQuery<EventModuleData>("select C.MobileNo,C.Points,C.CustomerName,C.Gender,C.DOB,C.AnniversaryDate,C.EmailId,min(CC.Address) as Address,min(C.OldMobileno) as AlternateMobileNo, CASE WHEN Max(cast(TM.Datetime as date)) = NULL THEN Max(cast(TM.Datetime as date)) ELSE Min(C.DOJ) END as LastTxnDate,DATEADD(MONTH, @PointExp, Max(cast(TM.Datetime as date))) as PointExp from CustomerDetails C Left join TransactionMaster TM on C.MobileNo = TM.MobileNo left join CustomerChild CC on CC.MobileNo = C.MobileNo and C.Status = '00' group by C.MobileNo, C.Points, C.CustomerName, C.EnrollingOutlet, C.Gender, C.DOB, C.AnniversaryDate, C.EmailId Having C.MobileNo = @Mobileno", new SqlParameter("@Mobileno", Mobileno), new SqlParameter("@PointExp", PointExp)).FirstOrDefault();
 
-                    if(statusavailable != null)
+                    if (statusavailable != null)
                     {
                         obj.CustomerAvailFlag = statusavailable;
                     }
-                    
+
                     if (obj != null)
                     {
                         if (obj.LastTxnDate.HasValue)
@@ -234,11 +234,11 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "GetCustomerDetails");
-            }            
-                return obj;
+            }
+            return obj;
         }
 
         public bool SaveNewMemberData(EventMemberDetail objData, CustomerDetail objCustomerDetail, CustomerChild objCustomerChild, TransactionMaster objTM, string connectionstring)
@@ -423,13 +423,13 @@ namespace BOTS_BL.Repository
                             {
                                 EventDetail ObjMsgData = new EventDetail();
                                 string groupid = Convert.ToString(objData.GroupId);
-                                var WATokenid = context1.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();                                
+                                var WATokenid = context1.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();
                                 var ObjEventDetail = context.EventDetails.Where(x => x.EventId == objData.EventId).FirstOrDefault();
                                 Message = ObjEventDetail.BonusMessageScript;
                                 if (!string.IsNullOrEmpty(Message))
                                 {
                                     SendWAMessage(ObjEventDetail, objData, WATokenid);
-                                }                                
+                                }
                             }
                         }
 
@@ -444,7 +444,7 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public List<EventMemberDetail> GetEventReport(string groupid,string fromDate,string toDate)
+        public List<EventMemberDetail> GetEventReport(string groupid, string fromDate, string toDate)
         {
             List<EventMemberDetail> lstReportData = new List<EventMemberDetail>();
             var connStr = CR.GetCustomerConnString(groupid);
@@ -766,6 +766,18 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+
+        public string GetReportEmail(int groupId)
+        {
+            string emailId = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                emailId = context.tblEventReportEmails.Where(x => x.GroupId == groupId).Select(y => y.EmailId).FirstOrDefault();
+            }
+            return emailId;
+        }
+
+
     }
-    
+
 }
