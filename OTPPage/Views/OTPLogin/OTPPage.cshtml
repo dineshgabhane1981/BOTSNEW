@@ -4,24 +4,44 @@
 }
 
 <style>
+    #loader {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        opacity: 1;
+        z-index: 1021;
+        background: rgba(255, 255, 255, .7);
+    }
     .input50 {
-        width: 170px;
-        padding: 12px 10px 12px 15px !important;
-        border-radius: 10px !important;
+        width: 200px;
+        margin-bottom: 20px;
+        padding: 12px 10px 12px 25px !important;
+        border-radius: 25px !important;
+        border: solid 1px #e1e1e1;
+    }
+
+    .input100 {
+        width: 300px;
+        margin-bottom: 20px;
+        padding: 12px 10px 12px 25px !important;
+        border-radius: 25px !important;
         border: solid 1px #e1e1e1;
     }
 </style>
-<div class="p-3 m-5 col-lg-6 col-md-6" style=" border: 1px solid grey; border-radius: 10px; margin-top: 60px; margin-left: 300px;">
-    <div style="padding-right:10px; margin-top:20px;" class="row">
-        <div class="col-lg-3 col-md-3" style="padding-left:30px;">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<div class="p-3 m-5 col-lg-6 col-md-6 col-sm-6" style=" border: 1px solid grey; border-radius: 10px; margin-top: 60px;">
+    <div class="row" style="padding-right:10px; margin-top:20px;">
+        <div class="col-lg-3 col-sm-2">
             <b>Group Name</b>
         </div>
-        <div class="col-lg-3 col-md-3">
+        <div class="col-lg-3 col-sm-2">
             @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
         </div>
     </div>
     <div style="padding-right:10px;margin-top:20px;" class="row">
-        <div class="col-lg-3 col-md-3" style="padding-left:30px;">
+        <div class="col-lg-3 col-md-3" >
             <b>Mobile No</b>
         </div>
         <div class="col-lg-3 col-md-3">
@@ -49,17 +69,13 @@
         </table>
     </div>
     <div id="idSubmit" style="margin-top:15px;margin-left:5px;text-align:center;"><button type="submit" class="btn btn-primary">Submit</button></div>
-    <div id="idReset" style="margin-top:15px;margin-left:5px;text-align:center;" hidden><button type="submit" class="btn btn-primary">Reset</button></div>
+
+
+    @*<div id="idReset" style="margin-top:15px;margin-left:5px;text-align:center;" hidden><button type="submit" class="btn btn-primary">Reset</button></div>*@
 </div>
-@*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-    <script src="cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" type="text/javascript"></script>
-    <link href="~/Content/jquery-ui.min.css" rel="stylesheet" />
-    <link href="~/Content/jquery-ui.css" rel="stylesheet" />*@
+
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-@*<script src="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>*@
-@*<link href="~/Content/main.css" rel="stylesheet">*@
 <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
 <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
 <script>
@@ -87,8 +103,8 @@
                         $("#Tr2").html(response.Datetime);
                         $("#Tr3").html(response.OTP);
                         $("#Tr4").html(response.Points);
-                        $("#idReset").show();
-                        $("#idSubmit").hide();
+                        //$("#idReset").show();
+                        //$("#idSubmit").hide();
                      }
 
                      else {
