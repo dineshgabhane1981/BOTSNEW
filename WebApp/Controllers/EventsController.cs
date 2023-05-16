@@ -279,7 +279,6 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = ObjList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-
         [HttpPost]
         public ActionResult GetCustomerdata(string groupId, string Mobileno, string Place,string EventId)
         {
@@ -356,7 +355,7 @@ namespace WebApp.Controllers
                     strDOA = Convert.ToString(item["DOA"]);
                     if (!string.IsNullOrEmpty(strDOA))
                     {
-                        objCustomerDetail.DOB = Convert.ToDateTime(item["DOA"]);
+                        objCustomerDetail.AnniversaryDate = Convert.ToDateTime(item["DOA"]);
                     }
                     objCustomerDetail.Gender = Convert.ToString(item["Gender"]);
                     objCustomerDetail.OldMobileNo = Convert.ToString(item["AlternateNo"]);

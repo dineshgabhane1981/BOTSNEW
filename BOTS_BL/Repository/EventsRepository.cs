@@ -244,6 +244,8 @@ namespace BOTS_BL.Repository
         public bool SaveNewMemberData(EventMemberDetail objData, CustomerDetail objCustomerDetail, CustomerChild objCustomerChild, TransactionMaster objTM, string connectionstring)
         {
             bool result = false;
+            string Message;
+            Message = string.Empty;
             CustomerDetail TM2 = new CustomerDetail();
             CustomerChild objdata1 = new CustomerChild();
             OutletDetail objdata = new OutletDetail();
@@ -423,8 +425,11 @@ namespace BOTS_BL.Repository
                                 string groupid = Convert.ToString(objData.GroupId);
                                 var WATokenid = context1.CommonWAInstanceMasters.Where(e => e.GroupId == groupid).Select(y => y.TokenId).FirstOrDefault();                                
                                 var ObjEventDetail = context.EventDetails.Where(x => x.EventId == objData.EventId).FirstOrDefault();
-
-                                SendWAMessage(ObjEventDetail, objData, WATokenid);
+                                Message = ObjEventDetail.BonusMessageScript;
+                                if (!string.IsNullOrEmpty(Message))
+                                {
+                                    SendWAMessage(ObjEventDetail, objData, WATokenid);
+                                }                                
                             }
                         }
 
@@ -729,7 +734,7 @@ namespace BOTS_BL.Repository
                     string EventStartDate = obj1.EventStartDate.Value.ToString("yyyy-MM-dd");
                     ExpDays = Convert.ToInt32(obj1.PointsExpiryDays);
                     DateTime dateVal1 = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
-                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven,cast(E.DateOfRegistration as date) as DateOfRegistration,E.EventId from EventMemberDetails E where E.FirstRemDate = @Today and E.EventId = @EvenId and E.PointsGiven > 0 and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between cast(@EventStartDate as date) and cast(@Today as date)) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
+                    obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven,cast(E.DateOfRegistration as date) as DateOfRegistration,E.EventId from EventMemberDetails E where E.SecondRemDate = @Today and E.EventId = @EvenId and E.PointsGiven > 0 and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between cast(@EventStartDate as date) and cast(@Today as date)) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
                     //obj = context.Database.SqlQuery<ReminderData>("select E.Mobileno,E.Name,E.PointsGiven from EventMemberDetails E where E.SecondRemDate = @Today and E.EventId = @EvenId and E.Mobileno not in (select T.Mobileno from TransactionMaster T where (cast(T.Datetime as Date) between @EventStartDate and @Today) and T.TransType = '2')", new SqlParameter("@Today", dateVal), new SqlParameter("@EventStartDate", dateVal1), new SqlParameter("@EvenId", EventIdInt)).ToList();
                 }
 
