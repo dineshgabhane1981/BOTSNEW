@@ -97,7 +97,7 @@
                     Enter Mobile Number
                 </div>
                 <div class="col-lg-4 col-md-2">
-                    <input type="number" id="txtMobileNo" class="input100" style="font-size:medium;" />
+                    <input type="number" id="txtMobileNo" class="input100" maxlength="10" style="font-size:medium;" />
                 </div>
             </div>
             <div class="row justify-content-center">
@@ -305,6 +305,16 @@
                 buttonText: "Okay"
             })
         }
+        else if ((Mobileno.length) != 10)
+        {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Mobile number with 10 digits",
+                buttonText: "Okay"
+            })
+        }
+        
         else {
             $("#divLoader").show();
         $.ajax({
