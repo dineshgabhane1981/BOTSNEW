@@ -349,6 +349,7 @@ namespace BOTS_BL.Repository
                         }
                         context.CustomerDetails.AddOrUpdate(TM2);
                         context.SaveChanges();
+                        //string MobNo = Convert.ToString(objCustomerChild.MobileNo);
                         var existingCust1 = context.CustomerChilds.Where(x => x.MobileNo == objCustomerChild.MobileNo).FirstOrDefault();
                         if (existingCust1 == null)
                         {

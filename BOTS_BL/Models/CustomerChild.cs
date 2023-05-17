@@ -10,7 +10,7 @@ namespace BOTS_BL.Models
     public partial class CustomerChild
     {
         [Key]
-        public int SlNo { get; set; }
+        public Int64 SlNo { get; set; }
 
         [StringLength(10)]
         public string MobileNo { get; set; }
