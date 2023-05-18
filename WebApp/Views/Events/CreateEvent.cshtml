@@ -25,7 +25,7 @@
                 @Html.TextBoxFor(model => model.objEvent.EventName, new { @class = "input100", @id = "IdEventName" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                Event Date
+                Event Created Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextBoxFor(model => model.objEvent.strEventdate, new { @class = "input100", @id = "IdEventDate" })
@@ -68,7 +68,7 @@
                 @Html.TextBoxFor(model => model.objEvent.BonusPoints, new { @class = "input100", @id = "IdBonusPoints" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                Bonus Points Expiry
+                Bonus Points Expiry In Days
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextBoxFor(model => model.objEvent.PointsExpiryDays, new { @class = "input100", @id = "IdPointsExp" })
@@ -76,7 +76,7 @@
         </div>
         <div class="row" style="margin: 0;">
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                First Remainder
+                First Remainder Script
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextAreaFor(model => model.objEvent.C1stReminderScript, new { @class = "input100", @id = "IdFirstRemaind" })
@@ -90,7 +90,7 @@
         </div>
         <div class="row" style="margin: 0;">
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                Second Remainder
+                Second Remainder Script
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextAreaFor(model => model.objEvent.C2ndReminderScript, new { @class = "input100", @id = "IdSecondRemaind" })
@@ -178,7 +178,7 @@
             cuteAlert({
                 type: "error",
                 title: "Oops..",
-                message: "Please enter the Event Date",
+                message: "Please enter the Event Created Date",
                 buttonText: "Okay"
             })
         }
