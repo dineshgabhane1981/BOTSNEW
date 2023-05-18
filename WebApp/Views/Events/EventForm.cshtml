@@ -92,14 +92,15 @@
         else
         {
 
-            <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
-                <div class="col-lg-2 col-md-2" style="font-size: medium;">
-                    Enter Mobile Number
-                </div>
-                <div class="col-lg-4 col-md-2">
-                    <input type="number" id="txtMobileNo" class="input100" maxlength="10" style="font-size:medium;" />
-                </div>
-            </div>
+    <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
+        <div class="col-lg-2 col-md-2" style="font-size: medium;">
+            Enter Mobile Number
+        </div>
+        <div class="col-lg-4 col-md-2">
+            <input type="number" id="txtMobileNo" class="input100" maxlength="10" style="font-size:medium;" />
+            <button class="btn btn-primary ml-auto mt-3" type="button" title="GO" id="btnGo" tabindex="20" style="margin-bottom:20px;" >GO</button>
+        </div>        
+    </div>
             <div class="row justify-content-center">
                 <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card col-md-12 col-xl-5" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">
                     <div class="row" style="margin: 0;">
@@ -291,7 +292,8 @@
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
         });
 
-    $("#txtMobileNo").focusout(function () {
+    //$("#txtMobileNo").focusout(function () {
+    $("#btnGo").click(function () {
         var Mobileno = $("#txtMobileNo").val();
         var GroupId = $("#hdnGroupId").val();
         var Place = $("#hdnPlace").val();
