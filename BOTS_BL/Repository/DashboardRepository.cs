@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Net;
 using System.Web;
 using System.IO;
+using BOTS_BL.Models.IndividualDBModels;
 
 namespace BOTS_BL.Repository
 {
@@ -17,6 +18,23 @@ namespace BOTS_BL.Repository
     public class DashboardRepository
     {
         Exceptions newexception = new Exceptions();
+
+        public List<ExecutiveSummaryAllData> GetExecutiveSummaryAllData(string GroupId, string connstr)
+        {
+            List<ExecutiveSummaryAllData> lstobj = new List<ExecutiveSummaryAllData>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    lstobj = context.Database.SqlQuery<ExecutiveSummaryAllData>("select * from View_CustTxnSummary").ToList();
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "GetExecutiveSummaryAllData");
+            }
+                return lstobj;
+        }
         public ExecutiveSummary GetDashboardData(string GroupId, string connstr, string LoginId, string frmDate, string toDate)
         {
             
@@ -93,8 +111,6 @@ namespace BOTS_BL.Repository
             }
             return dataDashboard;
         }
-
-
 
         public DashboardMemberSegment GetDashboardMemberSegmentData(string GroupId, string OutletId, string connstr, string loginId, string frmDate, string toDate)
         {
