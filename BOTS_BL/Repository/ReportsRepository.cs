@@ -52,23 +52,36 @@ namespace BOTS_BL.Repository
 
         public List<SelectListItem> GetOutletList(string GroupId, string connstr)
         {
-            List<SelectListItem> countriesItem = new List<SelectListItem>();
+            List<SelectListItem> countriesItem = new List<SelectListItem>();            
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {
-                    var lstOutlet = context.Database.SqlQuery<OutletList>("sp_GetOutletList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<OutletList>();
-                    foreach (var item in lstOutlet)
+                {                    
+                    if(GroupId=="1087")
                     {
-                        //if (!item.OutletName.ToLower().Contains("admin"))
-                        //{
+                        var lstOutlet = context.tblOutletMasters.ToList();
+                        foreach (var item in lstOutlet)
+                        {                            
                             countriesItem.Add(new SelectListItem
                             {
                                 Text = item.OutletName,
                                 Value = Convert.ToString(item.OutletId)
-                            });
-                        //}
+                            });                         
+                        }
                     }
+                    else
+                    {
+                        var lstOutlet = context.OutletDetails.ToList();
+                        foreach (var item in lstOutlet)
+                        {                            
+                            countriesItem.Add(new SelectListItem
+                            {
+                                Text = item.OutletName,
+                                Value = Convert.ToString(item.OutletId)
+                            });                            
+                        }
+                    }
+                    
                 }
             }
             catch (Exception ex)

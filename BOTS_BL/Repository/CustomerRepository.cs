@@ -353,11 +353,14 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                    //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
-                    if (DBDetails != null)
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();                    
+                    if (DBDetails != null && GroupId != "1087")
                     {
                         ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    }
+                    if (DBDetails != null && GroupId=="1087")
+                    {
+                        ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = MadhusudanTextiles_New; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                     }
                 }
             }

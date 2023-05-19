@@ -22,7 +22,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<CustomerChild> CustomerChilds { get; set; }
         public virtual DbSet<EventDetail> EventDetails { get; set; }
         public virtual DbSet<EventMemberDetail> EventMemberDetails { get; set; }
-        public virtual DbSet<tblDLCFrontEndPageData> tblDLCFrontEndPageDatas { get; set; }
+        public virtual DbSet<tblDLCFrontEndPageData> tblDLCFrontEndPageDataNews { get; set; }
         public virtual DbSet<tblDLCDashboardConfig_Publish> tblDLCDashboardConfig_Publish { get; set; }
         public virtual DbSet<tblDLCDashboardConfig> tblDLCDashboardConfigs { get; set; }
         public virtual DbSet<tblMedrationSubscription> tblMedrationSubscriptions { get; set; }
@@ -66,6 +66,64 @@ namespace BOTS_BL.Models
         public virtual DbSet<PointsExpiry> PointsExpiries { get; set; }
         public virtual DbSet<SMSDetail> SMSDetails { get; set; }
         public virtual DbSet<LogDetailsRW> LogDetailsRWs { get; set; }
+
+        //New DB Structure Tables
+        public virtual DbSet<tblBrandMaster> tblBrandMasters { get; set; }
+        public virtual DbSet<tblBurnPtsProrataInvAmt> tblBurnPtsProrataInvAmts { get; set; }
+        public virtual DbSet<tblCampaignMemberDetail> tblCampaignMemberDetails { get; set; }
+        public virtual DbSet<tblCampaignTxnDetail> tblCampaignTxnDetails { get; set; }
+        public virtual DbSet<tblCustDetailsMaster> tblCustDetailsMasters { get; set; }
+        public virtual DbSet<tblCustInfo> tblCustInfoes { get; set; }
+        public virtual DbSet<tblCustPointsMaster> tblCustPointsMasters { get; set; }
+        public virtual DbSet<tblCustTxnSummaryMaster> tblCustTxnSummaryMasters { get; set; }
+        public virtual DbSet<tblDLCReporting> tblDLCReportings { get; set; }
+        public virtual DbSet<tblGroupMaster> tblGroupMasters { get; set; }
+        public virtual DbSet<tblOutletMaster> tblOutletMasters { get; set; }
+        public virtual DbSet<tblPromoBlastMemberDetail> tblPromoBlastMemberDetails { get; set; }
+        public virtual DbSet<tblRuleMaster> tblRuleMasters { get; set; }
+        public virtual DbSet<tblSalesReturnMaster> tblSalesReturnMasters { get; set; }
+        public virtual DbSet<tblSMSWhatsAppCredential> tblSMSWhatsAppCredentials { get; set; }
+        public virtual DbSet<tblSMSWhatsAppScriptMaster> tblSMSWhatsAppScriptMasters { get; set; }
+        public virtual DbSet<tblStoreMaster> tblStoreMasters { get; set; }
+        public virtual DbSet<tblTxnBonusMaster> tblTxnBonusMasters { get; set; }
+        public virtual DbSet<tblTxnDetailsMaster> tblTxnDetailsMasters { get; set; }
+        public virtual DbSet<tblTxnDetailsMaster_Clone> tblTxnDetailsMaster_Clone { get; set; }
+        public virtual DbSet<tblBulkCustList> tblBulkCustLists { get; set; }
+        public virtual DbSet<tblBurnPtsProrataInvAmt_Clone> tblBurnPtsProrataInvAmt_Clone { get; set; }
+        public virtual DbSet<tblCampaignMaster> tblCampaignMasters { get; set; }
+        public virtual DbSet<tblCampaignMemberDetails_Clone> tblCampaignMemberDetails_Clone { get; set; }
+        public virtual DbSet<tblCampaignTxnDetails_Clone> tblCampaignTxnDetails_Clone { get; set; }
+        public virtual DbSet<tblCelebrationMaster> tblCelebrationMasters { get; set; }
+        public virtual DbSet<tblCelebrationMemberDetail> tblCelebrationMemberDetails { get; set; }
+        public virtual DbSet<tblCelebrationTxnDetail> tblCelebrationTxnDetails { get; set; }
+        public virtual DbSet<tblDLCFrontEndPageData> tblDLCFrontEndPageDatas { get; set; }
+        public virtual DbSet<tblDLCFrontEndPageDataReferTNC> tblDLCFrontEndPageDataReferTNCs { get; set; }
+        public virtual DbSet<tblDLCFrontEndPageDataTNC> tblDLCFrontEndPageDataTNCs { get; set; }
+        public virtual DbSet<tblDLCGiftPtsDetail> tblDLCGiftPtsDetails { get; set; }
+        public virtual DbSet<tblDLCNewRegMaster> tblDLCNewRegMasters { get; set; }
+        public virtual DbSet<tblDLCProfileUpdatedList> tblDLCProfileUpdatedLists { get; set; }
+        public virtual DbSet<tblDLCRegMemberDetail> tblDLCRegMemberDetails { get; set; }
+        public virtual DbSet<tblDLCRuleMaster> tblDLCRuleMasters { get; set; }
+        public virtual DbSet<tblDLCSMSWAScriptMaster> tblDLCSMSWAScriptMasters { get; set; }
+        public virtual DbSet<tblErrorServerLog> tblErrorServerLogs { get; set; }
+        public virtual DbSet<tblExpiredPointsMaster> tblExpiredPointsMasters { get; set; }
+        public virtual DbSet<tblInActiveMaster> tblInActiveMasters { get; set; }
+        public virtual DbSet<tblInActiveMemberDetail> tblInActiveMemberDetails { get; set; }
+        public virtual DbSet<tblOTPDetail> tblOTPDetails { get; set; }
+        public virtual DbSet<tblPointsExpiryMaster> tblPointsExpiryMasters { get; set; }
+        public virtual DbSet<tblPointsExpiryMemberDetail> tblPointsExpiryMemberDetails { get; set; }
+        public virtual DbSet<tblProductRuleMaster> tblProductRuleMasters { get; set; }
+        public virtual DbSet<tblProfileUpdateMaster> tblProfileUpdateMasters { get; set; }
+        public virtual DbSet<tblPromoBlastMaster> tblPromoBlastMasters { get; set; }
+        public virtual DbSet<tblPromoBlastMemberDetails_Clone> tblPromoBlastMemberDetails_Clone { get; set; }
+        public virtual DbSet<tblSalesReturnMaster_Clone> tblSalesReturnMaster_Clone { get; set; }
+        public virtual DbSet<tblSalesReturnProDetailsMaster> tblSalesReturnProDetailsMasters { get; set; }
+        public virtual DbSet<tblSalesReturnProDetailsMaster_Clone> tblSalesReturnProDetailsMaster_Clone { get; set; }
+        public virtual DbSet<tblTxnProDetailsMaster> tblTxnProDetailsMasters { get; set; }
+        public virtual DbSet<tblTxnProDetailsMaster_Clone> tblTxnProDetailsMaster_Clone { get; set; }
+
+
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             

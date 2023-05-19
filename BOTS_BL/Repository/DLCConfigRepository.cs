@@ -238,7 +238,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    objData = context.tblDLCFrontEndPageDatas.ToList();
+                    objData = context.tblDLCFrontEndPageDataNews.ToList();
                 }
             }
             catch (Exception ex)
