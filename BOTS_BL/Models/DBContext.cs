@@ -22,7 +22,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<CustomerChild> CustomerChilds { get; set; }
         public virtual DbSet<EventDetail> EventDetails { get; set; }
         public virtual DbSet<EventMemberDetail> EventMemberDetails { get; set; }
-        public virtual DbSet<tblDLCFrontEndPageData> tblDLCFrontEndPageDataNews { get; set; }
+        public virtual DbSet<tblDLCFrontEndPageDataNew> tblDLCFrontEndPageDataNews { get; set; }
         public virtual DbSet<tblDLCDashboardConfig_Publish> tblDLCDashboardConfig_Publish { get; set; }
         public virtual DbSet<tblDLCDashboardConfig> tblDLCDashboardConfigs { get; set; }
         public virtual DbSet<tblMedrationSubscription> tblMedrationSubscriptions { get; set; }

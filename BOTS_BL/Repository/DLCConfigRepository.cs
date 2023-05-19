@@ -230,9 +230,9 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
-        public List<tblDLCFrontEndPageData> GetDLCFrontEndPageData(string groupId)
+        public List<tblDLCFrontEndPageDataNew> GetDLCFrontEndPageData(string groupId)
         {
-            List<tblDLCFrontEndPageData> objData = new List<tblDLCFrontEndPageData>();
+            List<tblDLCFrontEndPageDataNew> objData = new List<tblDLCFrontEndPageDataNew>();
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             try
             {
