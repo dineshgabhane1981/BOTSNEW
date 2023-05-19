@@ -31,7 +31,7 @@ namespace WebApp.Controllers
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                var lstExecutiveSummData = DR.GetExecutiveSummaryAllData(userDetails.GroupId, userDetails.connectionString);
+                //var lstExecutiveSummData = DR.GetExecutiveSummaryAllData(userDetails.GroupId, userDetails.connectionString);
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
                 dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId, "", "");
                 userDetails.IsFeedback = CR.GetIsFeedback(userDetails.GroupId);
@@ -100,6 +100,7 @@ namespace WebApp.Controllers
                 dataList.Add(dataMemberSegment.NoofMember_NeverRedeem);
                 dataList.Add(dataMemberSegment.NoofMember_RecentlyEnrolled);
                 dataList.Add(dataMemberSegment.NoofMember_OnlyOnce);
+                dataList.Add(dataMemberSegment.NoofMember_NotTransacted);
                 lstDates.Add(dataMemberSegment.FromDate);
                 lstDates.Add(dataMemberSegment.ToDate);
                 lstData.Add(dataList);

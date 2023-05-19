@@ -13,6 +13,7 @@ namespace BOTS_BL.Models
         public long NoofMember_NeverRedeem { get; set; }
         public long NoofMember_OnlyOnce { get; set; }
         public long NoofMember_RecentlyEnrolled { get; set; }
+        public long NoofMember_NotTransacted { get; set; }
 
         public string FromDate { get; set; }
         public string ToDate { get; set; }
