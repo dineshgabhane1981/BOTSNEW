@@ -312,22 +312,104 @@ namespace BOTS_BL.Repository
                         newItem2.Unit = "Days";
                         if (string.IsNullOrEmpty(OutletId))
                         {
-
                             var newAllData = AllData.Where(x => x.LastTxnDate != null || x.FirstTxnDate != null).ToList();
                             var daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
                             var daysDiffSum = daysDiff.Sum(x => x.days);
-                            newItem2.TotalBase = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));                           
+                            newItem2.TotalBase = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
+
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) &&   x.EarnCount >= 1 && x.BurnCount > 0).ToList();
+                            daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.RepeatBase = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
+
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) && ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).ToList();
+                            daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.OnlyOnce = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
+
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) && x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).ToList();
+                            daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.NeverRedeem = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
+
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) && x.DOJ > dateToCheck).ToList();
+                            daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.RecentlyEnrolled = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
                         }
                         else
                         {
-                            
+                            var newAllData = AllData.Where(x => x.LastTxnDate != null || x.FirstTxnDate != null && x.CurrentEnrolledOutlet == OutletId).ToList();
+                            var daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            var daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.TotalBase = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
+
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) && x.EarnCount >= 1 && x.BurnCount > 0 && x.CurrentEnrolledOutlet == OutletId).ToList();
+                            daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.RepeatBase = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
+
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) && ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).ToList();
+                            daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.OnlyOnce = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
+
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) && x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).ToList();
+                            daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.NeverRedeem = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
+
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) && x.DOJ > dateToCheck && x.CurrentEnrolledOutlet == OutletId).ToList();
+                            daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
+                            daysDiffSum = daysDiff.Sum(x => x.days);
+                            newItem2.RecentlyEnrolled = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
                         }
                         dashboardMemberSegmentTxn.Add(newItem2);
 
+                        DashboardMemberSegmentTxn newItem3 = new DashboardMemberSegmentTxn();
+                        newItem3.Title = "Average Bill Size";
+                        newItem3.Unit = "Rs.";
 
+                        if (string.IsNullOrEmpty(OutletId))
+                        {
+                            newItem3.TotalBase = Convert.ToString(Math.Round(AllData.Sum(x => x.TotalSpend) / AllData.Sum(y=>y.TotalTxnCount)));
+                            newItem3.RepeatBase = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Sum(y => y.TotalTxnCount)));
+                            newItem3.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Sum(y => y.TotalTxnCount)));
+                            newItem3.NeverRedeem = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Sum(y => y.TotalTxnCount)));
+                            newItem3.RecentlyEnrolled = Convert.ToString(Math.Round(AllData.Where(x => x.DOJ > dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.DOJ > dateToCheck).Sum(y => y.TotalTxnCount)));
+                        }
+                        else
+                        {
+                            newItem3.TotalBase = Convert.ToString(Math.Round(AllData.Where(y=>y.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(y => y.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
+                            newItem3.RepeatBase = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
+                            newItem3.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
+                            newItem3.NeverRedeem = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
+                            newItem3.RecentlyEnrolled = Convert.ToString(Math.Round(AllData.Where(x => x.DOJ > dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.DOJ > dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
+                        }
+                        dashboardMemberSegmentTxn.Add(newItem3);
 
+                        DashboardMemberSegmentTxn newItem4 = new DashboardMemberSegmentTxn();
+                        newItem4.Title = "Per Member Spends";
+                        newItem4.Unit = "Rs.";
+                        if (string.IsNullOrEmpty(OutletId))
+                        {
+                            newItem4.TotalBase = Convert.ToString(Math.Round(AllData.Sum(x => x.TotalSpend) / AllData.Count()));
+                            newItem4.RepeatBase = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Count()));
+                            newItem4.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck ).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Count()));
+                            newItem4.NeverRedeem = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Count()));
+                            newItem4.RecentlyEnrolled = Convert.ToString(Math.Round(AllData.Where(x => x.DOJ > dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.DOJ > dateToCheck).Count()));
+                        }
+                        else
+                        {
+                            newItem4.TotalBase = Convert.ToString(Math.Round(AllData.Where(x=> x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Count(y => y.CurrentEnrolledOutlet == OutletId)));
+                            newItem4.RepeatBase = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count()));
+                            newItem4.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count()));
+                            newItem4.NeverRedeem = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count()));
+                            newItem4.RecentlyEnrolled = Convert.ToString(Math.Round(AllData.Where(x => x.DOJ > dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.DOJ > dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count()));
+
+                        }
+                        dashboardMemberSegmentTxn.Add(newItem4);
                     }
-
                 }
             }
             catch (Exception ex)
