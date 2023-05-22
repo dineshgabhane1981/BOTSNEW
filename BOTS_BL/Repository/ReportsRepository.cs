@@ -16,6 +16,7 @@ using System.Data.Entity.Core.Objects;
 using DocumentFormat.OpenXml.Office2019.Excel.RichData2;
 using System.Web;
 using System.Collections;
+using BOTS_BL.Models.IndividualDBModels;
 
 namespace BOTS_BL.Repository
 {
@@ -35,12 +36,71 @@ namespace BOTS_BL.Repository
                         lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
                         new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", SearchText)).ToList<MemberList>();
                     }
+                    else if (GroupId == "1087")
+                    {
+                        if(SearchText == "")
+                        {
+                            var lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
+                            foreach (var item in lstTempMemberData)
+                            {
+                                MemberList Obj = new MemberList();
+                                Obj.EnrooledOutlet = item.OutletName;
+                                Obj.EnrolledDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.Type = item.Type;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.TotalBurnTxn = item.BurnCount;
+                                Obj.TotalBurnPoints = item.BurnPts;
+                                Obj.AvlBalPoints = item.AvlPts;
+                                if (item.LasTTxnDate.HasValue)
+                                {
+                                    Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    Obj.LastTxnDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                }
+
+                                lstMember.Add(Obj);
+                            }
+
+                        }
+                        else
+                        {
+                            var lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts where CurrentEnrolledOutlet = @pi_OutletId", new SqlParameter("@pi_OutletId", SearchText)).ToList();
+                            foreach (var item in lstTempMemberData)
+                            {
+                                MemberList Obj = new MemberList();
+                                Obj.EnrooledOutlet = item.OutletName;
+                                Obj.EnrolledDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.Type = item.Type;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.TotalBurnTxn = item.BurnCount;
+                                Obj.TotalBurnPoints = item.BurnPts;
+                                Obj.AvlBalPoints = item.AvlPts;
+                                if (item.LasTTxnDate.HasValue)
+                                {
+                                    Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    Obj.LastTxnDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                }
+
+                                lstMember.Add(Obj);
+                            }
+                        }
+                    }
                     else
                     {
                         lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
                         new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", SearchText)).ToList<MemberList>();
-                    }
-
+                    }   
                 }
             }
             catch (Exception ex)

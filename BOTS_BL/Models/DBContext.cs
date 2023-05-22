@@ -1,6 +1,7 @@
 using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
 using BOTS_BL.Models.FeedBack;
+using BOTS_BL.Models.IndividualDBModels;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -121,6 +122,7 @@ namespace BOTS_BL.Models
         public virtual DbSet<tblSalesReturnProDetailsMaster_Clone> tblSalesReturnProDetailsMaster_Clone { get; set; }
         public virtual DbSet<tblTxnProDetailsMaster> tblTxnProDetailsMasters { get; set; }
         public virtual DbSet<tblTxnProDetailsMaster_Clone> tblTxnProDetailsMaster_Clone { get; set; }
+        
 
 
 

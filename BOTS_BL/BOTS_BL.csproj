@@ -321,6 +321,7 @@
     <Compile Include="Models\GroupWiseDetails.cs" />
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
     <Compile Include="Models\IndividualDBModels\ExecutiveSummaryAllData.cs" />
+    <Compile Include="Models\IndividualDBModels\MemberListAllData.cs" />
     <Compile Include="Models\IndividualDBModels\tblBrandMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblBulkCustList.cs" />
     <Compile Include="Models\IndividualDBModels\tblBurnPtsProrataInvAmt.cs" />

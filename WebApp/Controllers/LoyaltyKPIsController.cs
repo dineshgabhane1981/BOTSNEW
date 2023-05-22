@@ -28,7 +28,7 @@ namespace WebApp.Controllers
             LoyaltyKPIs objLoyaltyKPIs = new LoyaltyKPIs();
             objLoyaltyKPIs = LKR.GetobjLoyaltyKPIsData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
             var Sum = objLoyaltyKPIs.Redemption + objLoyaltyKPIs.Referrals + objLoyaltyKPIs.Campaigns + objLoyaltyKPIs.SMSBlastWA + objLoyaltyKPIs.NewMWPRegistration;
-            if (Sum != 0)
+            if (Sum != 0 && Sum != null)
             {
                 objLoyaltyKPIs.RedemptionPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Redemption) / Convert.ToDecimal(Sum)) * 100), 2);
                 objLoyaltyKPIs.ReferralsPer = Math.Round(((Convert.ToDecimal(objLoyaltyKPIs.Referrals) / Convert.ToDecimal(Sum)) * 100), 2);
