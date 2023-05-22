@@ -29,17 +29,17 @@ namespace BOTS_BL.Repository
                     lstobj = context.Database.SqlQuery<ExecutiveSummaryAllData>("select * from View_CustTxnSummary").ToList();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "GetExecutiveSummaryAllData");
             }
-                return lstobj;
+            return lstobj;
         }
         public ExecutiveSummary GetDashboardData(string GroupId, string connstr, string LoginId, string frmDate, string toDate)
         {
-            
+
             ExecutiveSummary dataDashboard = new ExecutiveSummary();
-            
+
             try
             {
                 using (var context = new BOTSDBContext(connstr))
@@ -50,12 +50,12 @@ namespace BOTS_BL.Repository
                         dataDashboard.TotalBiz = Convert.ToInt64(AllData.Sum(x => x.TotalSpend));
                         dataDashboard.Redemption = AllData.Sum(x => x.BurnAmtWithPts);
                         dataDashboard.Referrals = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCReferral").Sum(y => y.TotalSpend));
-                        dataDashboard.NewMWPRegistration= Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCWalkIn").Sum(y => y.TotalSpend));
+                        dataDashboard.NewMWPRegistration = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCWalkIn").Sum(y => y.TotalSpend));
                         dataDashboard.Campaign = 0;
                         dataDashboard.SMSBlastWA = 0;
                         dataDashboard.LoyaltyBiz = dataDashboard.Redemption + dataDashboard.Referrals + dataDashboard.NewMWPRegistration + dataDashboard.Campaign + dataDashboard.SMSBlastWA;
                         var outletList = context.tblOutletMasters.ToList();
-                        List<OutletDetails> lstOutletDetails = new List<OutletDetails>(); 
+                        List<OutletDetails> lstOutletDetails = new List<OutletDetails>();
                         foreach (var item in outletList)
                         {
                             OutletDetails newItem = new OutletDetails();
@@ -66,10 +66,10 @@ namespace BOTS_BL.Repository
                         dataDashboard.lstOutletDetails = lstOutletDetails;
                     }
                     else
-                    {                        
+                    {
                         dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date,@pi_LoginId,@pi_Month,@pi_Year,@pi_OutletId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", LoginId), new SqlParameter("@pi_Month", ""), new SqlParameter("@pi_Year", ""), new SqlParameter("@pi_OutletId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<ExecutiveSummary>();
                         dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
-                    }                   
+                    }
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -103,8 +103,8 @@ namespace BOTS_BL.Repository
                     //var RenewDate = context.tblRenewalDatas.Where(x => x.GroupId == GrpId).Select(y => y.PaymentDate).FirstOrDefault();
                     var RenewDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "Renewal" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
                     var VerifiedDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "VerifiedWA" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
-                    
-                    if(RenewDate == null)
+
+                    if (RenewDate == null)
                     {
                         dataDashboard.RenewDate = "";
                     }
@@ -119,7 +119,7 @@ namespace BOTS_BL.Repository
                     else
                     {
                         dataDashboard.VerifiedWARenewalDate = VerifiedDate.ToString();
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -155,7 +155,7 @@ namespace BOTS_BL.Repository
                             dashboardMemberSegment.NoofMember_NotTransacted = AllData.Where(x => x.DOJ < dateToCheck && x.TotalTxnCount == 0).Count();
                         }
                         else
-                        {                            
+                        {
                             dashboardMemberSegment.NoofMember_Total = AllData.Where(x => x.CurrentEnrolledOutlet == OutletId).Count();
                             dashboardMemberSegment.NoofMember_Repeat = AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
                             dashboardMemberSegment.NoofMember_NeverRedeem = AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
@@ -165,7 +165,7 @@ namespace BOTS_BL.Repository
                         }
 
                         var total = dashboardMemberSegment.NoofMember_Repeat + dashboardMemberSegment.NoofMember_NeverRedeem + dashboardMemberSegment.NoofMember_OnlyOnce + dashboardMemberSegment.NoofMember_RecentlyEnrolled + dashboardMemberSegment.NoofMember_NotTransacted;
-                        total = total+1;
+                        total = total + 1;
                     }
                     else
                     {
@@ -212,7 +212,7 @@ namespace BOTS_BL.Repository
                     {
                         dashboardMemberSegmentTxnDB = context.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_BOTS_DashboardMemberSegment1 @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).ToList<DashboardMemberSegmentTxnDB>();
                     }
-                    else if(GroupId == "1087")
+                    else if (GroupId == "1087")
                     {
 
                     }
@@ -272,7 +272,7 @@ namespace BOTS_BL.Repository
                         {
                             newItem.TotalBase = Convert.ToString(AllData.Sum(x => x.TotalTxnCount));
                             newItem.RepeatBase = Convert.ToString(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Sum(x => x.TotalTxnCount));
-                            newItem.OnlyOnce= Convert.ToString(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Sum(x => x.TotalTxnCount));
+                            newItem.OnlyOnce = Convert.ToString(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Sum(x => x.TotalTxnCount));
                             newItem.NeverRedeem = Convert.ToString(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Sum(x => x.TotalTxnCount));
                             newItem.RecentlyEnrolled = Convert.ToString(AllData.Where(x => x.DOJ > dateToCheck).Sum(x => x.TotalTxnCount));
                         }
@@ -317,7 +317,7 @@ namespace BOTS_BL.Repository
                             var daysDiffSum = daysDiff.Sum(x => x.days);
                             newItem2.TotalBase = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
 
-                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) &&   x.EarnCount >= 1 && x.BurnCount > 0).ToList();
+                            newAllData = AllData.Where(x => (x.LastTxnDate != null || x.FirstTxnDate != null) && x.EarnCount >= 1 && x.BurnCount > 0).ToList();
                             daysDiff = from items in newAllData select new { days = (items.LastTxnDate.Value - items.FirstTxnDate.Value).TotalDays };
                             daysDiffSum = daysDiff.Sum(x => x.days);
                             newItem2.RepeatBase = Convert.ToString(Math.Round(daysDiffSum / newAllData.Sum(x => x.TotalTxnCount)));
@@ -372,7 +372,7 @@ namespace BOTS_BL.Repository
 
                         if (string.IsNullOrEmpty(OutletId))
                         {
-                            newItem3.TotalBase = Convert.ToString(Math.Round(AllData.Sum(x => x.TotalSpend) / AllData.Sum(y=>y.TotalTxnCount)));
+                            newItem3.TotalBase = Convert.ToString(Math.Round(AllData.Sum(x => x.TotalSpend) / AllData.Sum(y => y.TotalTxnCount)));
                             newItem3.RepeatBase = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Sum(y => y.TotalTxnCount)));
                             newItem3.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Sum(y => y.TotalTxnCount)));
                             newItem3.NeverRedeem = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Sum(y => y.TotalTxnCount)));
@@ -380,7 +380,7 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            newItem3.TotalBase = Convert.ToString(Math.Round(AllData.Where(y=>y.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(y => y.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
+                            newItem3.TotalBase = Convert.ToString(Math.Round(AllData.Where(y => y.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(y => y.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
                             newItem3.RepeatBase = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
                             newItem3.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
                             newItem3.NeverRedeem = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(y => y.TotalTxnCount)));
@@ -395,13 +395,13 @@ namespace BOTS_BL.Repository
                         {
                             newItem4.TotalBase = Convert.ToString(Math.Round(AllData.Sum(x => x.TotalSpend) / AllData.Count()));
                             newItem4.RepeatBase = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Count()));
-                            newItem4.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck ).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Count()));
+                            newItem4.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Count()));
                             newItem4.NeverRedeem = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Count()));
                             newItem4.RecentlyEnrolled = Convert.ToString(Math.Round(AllData.Where(x => x.DOJ > dateToCheck).Sum(x => x.TotalSpend) / AllData.Where(x => x.DOJ > dateToCheck).Count()));
                         }
                         else
                         {
-                            newItem4.TotalBase = Convert.ToString(Math.Round(AllData.Where(x=> x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Count(y => y.CurrentEnrolledOutlet == OutletId)));
+                            newItem4.TotalBase = Convert.ToString(Math.Round(AllData.Where(x => x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Count(y => y.CurrentEnrolledOutlet == OutletId)));
                             newItem4.RepeatBase = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count()));
                             newItem4.OnlyOnce = Convert.ToString(Math.Round(AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count()));
                             newItem4.NeverRedeem = Convert.ToString(Math.Round(AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Sum(x => x.TotalSpend) / AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count()));
@@ -430,6 +430,29 @@ namespace BOTS_BL.Repository
                     if (GroupId == "1086")
                     {
                         dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
+                    }
+                    if (GroupId == "1087")
+                    {
+                        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
+                        var outlets = context.tblOutletMasters.ToList();
+                        foreach (var item in outlets)
+                        {
+                            DashboardOutletEnrolment newItem = new DashboardOutletEnrolment();
+                            if (!item.OutletName.ToLower().Contains("admin"))
+                            {
+                                newItem.OutletName = item.OutletName;
+                                if (monthFlag == "1")
+                                {
+                                    var FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                                    var lastDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                                    var ToDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, lastDay);
+                                    newItem.EnrollmentCount = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.DOJ >= FromDate && x.DOJ<=ToDate).Count();
+                                }
+                                else
+                                    newItem.EnrollmentCount = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                                dashboardOutletEnrolment.Add(newItem);
+                            }
+                        }
                     }
                     else
                     {
