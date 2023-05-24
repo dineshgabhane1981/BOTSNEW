@@ -1035,6 +1035,40 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
                     }
+                    else if(GroupId == "1087")
+                    {
+                        DateTime Today = DateTime.Now;
+
+                        if(month == Today.Month)
+                        {
+                            DateTime NextMonth = Today.AddMonths(1);
+                            DateTime ThirdMonth = Today.AddMonths(2);
+                            var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base' and IsActive = '1'").ToList();
+
+                            pointExpiry.MemberCountThisMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Count();
+                            pointExpiry.MemberPointsThisMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Sum(y => y.Points));
+                            pointExpiry.MemberCountNextMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Count();
+                            pointExpiry.MemberPointsNextMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Sum(y => y.Points));
+                            pointExpiry.MemberCount3rdMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Count();
+                            pointExpiry.MemberPoints3rdMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Sum(y => y.Points));
+                        }
+                        else
+                        {
+                            DateTime NextMonth = Today.AddMonths(1);
+                            DateTime ThirdMonth = Today.AddMonths(2);
+                            var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base' and IsActive = '1'").ToList();
+
+                            pointExpiry.MemberCountThisMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Count();
+                            pointExpiry.MemberPointsThisMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Sum(y => y.Points));
+                            pointExpiry.MemberCountNextMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Count();
+                            pointExpiry.MemberPointsNextMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Sum(y => y.Points));
+                            pointExpiry.MemberCount3rdMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Count();
+                            pointExpiry.MemberPoints3rdMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Sum(y => y.Points));
+                            pointExpiry.SelectedCount = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Count();
+                            pointExpiry.SelectedPoints = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Sum(y => y.Points));
+                        }
+                        
+                    }
                     else
                     {
                         pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
@@ -1069,6 +1103,44 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).ToList<PointExpiryTxn>();
+                    }
+                    else if (GroupId == "1087")
+                    {
+                        DateTime Today = DateTime.Now;
+                        int NextMonth = Today.AddMonths(1).Month;
+                        int ThirdMonth = Today.AddMonths(2).Month;
+                        var AllData = context.Database.SqlQuery<MemberListAllData>("select CurrentEnrolledOutlet,OutletName,DOJ,MobileNo,MaskedMobileNo,Name,Type,TotalTxnCount,TotalSpend,AvlPts,LasTTxnDate from View_CustDetailsWithTxnSummary");
+                        var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base'").ToList();
+
+                        var lstMobileno = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Select(y=> y.Mobileno).ToList();
+                        var lstdata = AllData.Where(x => lstMobileno.Contains(x.MobileNo)).ToList();
+                        
+                        foreach(var item in lstdata)
+                        {
+                            PointExpiryTxn lstPoint = new PointExpiryTxn();
+
+                            
+                            lstPoint.EnrolledOutlet = item.OutletName;
+                            lstPoint.MaskedMobileNo = item.MaskedMobileNo;
+                            lstPoint.MemberName = item.Name;
+                            lstPoint.TxnCount = item.TotalTxnCount;
+                            lstPoint.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                            lstPoint.AvlPoints = item.AvlPts;
+                            if(!string.IsNullOrEmpty(item.LasTTxnDate.ToString()))
+                            {
+                                lstPoint.LastTxnDate = item.LasTTxnDate.ToString();
+                            }
+                            else
+                            {
+                                lstPoint.LastTxnDate = item.DOJ.ToString();
+                            }
+                            
+                            lstPoint.PointsExpiry = item.AvlPts;
+
+
+                           pointExpiryTxn.Add(lstPoint);
+                        }
+
                     }
                     else
                     {
