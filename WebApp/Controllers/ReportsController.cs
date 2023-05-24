@@ -433,7 +433,9 @@ namespace WebApp.Controllers
                 objSum.OnlyOnce = (objSum.OnlyOnce == null ? 0 : objSum.OnlyOnce) + (item.OnlyOnce == null ? 0 : item.OnlyOnce);
                 objSum.PointsEarned = (objSum.PointsEarned == null ? 0 : objSum.PointsEarned) + (item.PointsEarned == null ? 0 : item.PointsEarned);
                 objSum.PointsBurned = (objSum.PointsBurned == null ? 0 : objSum.PointsBurned) + (item.PointsBurned == null ? 0 : item.PointsBurned);
+                item.PointsCancelled = Math.Abs(item.PointsCancelled.Value);
                 objSum.PointsCancelled = (objSum.PointsCancelled == null ? 0 : objSum.PointsCancelled) + (item.PointsCancelled == null ? 0 : item.PointsCancelled);
+                
                 objSum.PointsExpired = (objSum.PointsExpired == null ? 0 : objSum.PointsExpired) + (item.PointsExpired == null ? 0 : item.PointsExpired);
 
                 if (item.TotalMember > 0)
@@ -442,44 +444,44 @@ namespace WebApp.Controllers
                     item.OnlyOncePer = (Convert.ToDecimal(item.OnlyOnce) * 100) / Convert.ToDecimal(item.TotalMember);
                 }
             }
-            List<OutletWise> lstOutletFinal = new List<OutletWise>();
-            OutletWise objAdmin = new OutletWise();
-            objAdmin = lstOutlet.Where(x => x.OutletName.ToLower().IndexOf("admin") >= 0).FirstOrDefault();
-            if (objAdmin != null)
-            {
-                foreach (var item in lstOutlet)
-                {
-                    if (item.OutletId != objAdmin.OutletId)
-                    {
-                        lstOutletFinal.Add(item);
-                    }
-                }
-                //lstOutletFinal.Add(objAdmin);
-            }
-            else
-            {
-                lstOutletFinal = lstOutlet;
-            }
+            //List<OutletWise> lstOutletFinal = new List<OutletWise>();
+            //OutletWise objAdmin = new OutletWise();
+            //objAdmin = lstOutlet.Where(x => x.OutletName.ToLower().IndexOf("admin") >= 0).FirstOrDefault();
+            //if (objAdmin != null)
+            //{
+            //    foreach (var item in lstOutlet)
+            //    {
+            //        if (item.OutletId != objAdmin.OutletId)
+            //        {
+            //            lstOutletFinal.Add(item);
+            //        }
+            //    }
+            //    //lstOutletFinal.Add(objAdmin);
+            //}
+            //else
+            //{
+            //    lstOutletFinal = lstOutlet;
+            //}
 
-            int totalCount = lstOutletFinal.Count;
+            int totalCount = lstOutlet.Count;
             int nonActiveRed = totalCount * 30 / 100;
             int nonActiveOrange = totalCount * 45 / 100;
             int nonActiveGreen = totalCount - (nonActiveRed + nonActiveOrange);
 
-            var nonActiveRedOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Take(nonActiveRed).ToList();
-            var nonActiveOrangeOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
-            var nonActiveGreenOutlets = lstOutletFinal.OrderByDescending(x => x.NonActivePer).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+            var nonActiveRedOutlets = lstOutlet.OrderByDescending(x => x.NonActivePer).Take(nonActiveRed).ToList();
+            var nonActiveOrangeOutlets = lstOutlet.OrderByDescending(x => x.NonActivePer).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+            var nonActiveGreenOutlets = lstOutlet.OrderByDescending(x => x.NonActivePer).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
 
-            var onlyOnceRedOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Take(nonActiveRed).ToList();
-            var onlyOnceOrangeOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
-            var onlyOnceGreenOutlets = lstOutletFinal.OrderByDescending(x => x.OnlyOncePer).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+            var onlyOnceRedOutlets = lstOutlet.OrderByDescending(x => x.OnlyOncePer).Take(nonActiveRed).ToList();
+            var onlyOnceOrangeOutlets = lstOutlet.OrderByDescending(x => x.OnlyOncePer).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+            var onlyOnceGreenOutlets = lstOutlet.OrderByDescending(x => x.OnlyOncePer).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
 
-            var RedmRedOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Take(nonActiveRed).ToList();
-            var RedmOrangeOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
-            var RedmGreenOutlets = lstOutletFinal.OrderBy(x => x.RedemptionRate).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
+            var RedmRedOutlets = lstOutlet.OrderBy(x => x.RedemptionRate).Take(nonActiveRed).ToList();
+            var RedmOrangeOutlets = lstOutlet.OrderBy(x => x.RedemptionRate).Skip(nonActiveRed).Take(nonActiveOrange).ToList();
+            var RedmGreenOutlets = lstOutlet.OrderBy(x => x.RedemptionRate).Skip(nonActiveRed + nonActiveOrange).Take(nonActiveGreen).ToList();
 
 
-            foreach (var item in lstOutletFinal)
+            foreach (var item in lstOutlet)
             {
                 var outletRed = nonActiveRedOutlets.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
                 if (outletRed != null)
@@ -530,8 +532,8 @@ namespace WebApp.Controllers
                 }
             }
             objSum.OutletName = "Total";
-            lstOutletFinal.Add(objSum);
-            return PartialView("_Outletwise", lstOutletFinal);
+            lstOutlet.Add(objSum);
+            return PartialView("_Outletwise", lstOutlet);
         }
 
         [HttpPost]

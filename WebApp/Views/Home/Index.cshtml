@@ -436,7 +436,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12 col-lg-6">
+            <!--<div class="col-md-12 col-lg-6">
                 <div class="mb-3 card">
                     <div class="card-header-tab card-header-tab-animation card-header">
                         <div class="card-header-title">
@@ -453,19 +453,16 @@
                             <div class="tab-pane fade show active" id="tabs-eg-77">
                                 <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
                                     <div class="widget-chat-wrapper-outer">
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">-->
                                             @*<canvas id="cvOutlet"></canvas>*@
-                                        </div>
+                                        <!--</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-
-
+            </div>-->
             <div class="col-md-12 col-lg-6">
                 <div class="mb-3 card">
                     <div class="card-header-tab card-header-tab-animation card-header">
@@ -902,6 +899,12 @@
 
                             label: '',
                             backgroundColor: [
+                                "#fd7f6f",
+                                "#7eb0d5",
+                                "#b2e061",
+                                "#bd7ebe",
+                                "#ffb55a",
+                                "#ffee65",
                                 "#f990a7",
                                 "#aad2ed",
                                 "#9966FF",
@@ -1029,11 +1032,12 @@
                         datasets: [{
                             label: '',
                             backgroundColor: [
-                                "#f990a7",
-                                "#aad2ed",
-                                "#9966FF",
-                                "#99e5e5",
-                                "#f7bd83",
+                                "#fd7f6f",
+                                "#7eb0d5",
+                                "#b2e061",
+                                "#bd7ebe",
+                                "#ffb55a",
+                                "#ffee65",
                             ],
                             borderWidth: 2,
                             data: [response[0], response[1], response[2], response[3], response[4]]
@@ -1169,7 +1173,7 @@
                         var data = {
                             datasets: [{
                                 data: [data1, data2],
-                                backgroundColor: ["#f990a7", "#aad2ed"]
+                                backgroundColor: ["#fd7f6f", "#b2e061"]
                             }],
 
                             // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -1282,7 +1286,7 @@
                     var data = {
                         datasets: [{
                             data: [data1, data2],
-                            backgroundColor: ["#f990a7", "#aad2ed"]
+                            backgroundColor: ["#fd7f6f", "#b2e061"]
                         }],
 
                         // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -1374,7 +1378,7 @@
                     var data = {
                         datasets: [{
                             data: [data1, data2],
-                            backgroundColor: ["#f990a7", "#aad2ed"]
+                            backgroundColor: ["#fd7f6f", "#b2e061"]
                         }],
 
                         // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -1428,7 +1432,7 @@
                     var data1 = {
                         datasets: [{
                             data: [data3, data4],
-                            backgroundColor: ["#f990a7", "#aad2ed"]
+                            backgroundColor: ["#fd7f6f", "#b2e061"]
                         }],
 
                         // These labels appear in the legend and in the tooltips when hovering different arcs

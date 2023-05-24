@@ -32,5 +32,7 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string CounterId { get; set; }
+        [StringLength(50)]
+        public string OutletId { get; set; }
     }
 }

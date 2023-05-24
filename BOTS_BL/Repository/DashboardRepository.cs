@@ -431,7 +431,7 @@ namespace BOTS_BL.Repository
                     {
                         dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
                     }
-                    if (GroupId == "1087")
+                    else if (GroupId == "1087")
                     {
                         var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
                         var outlets = context.tblOutletMasters.ToList();
@@ -496,6 +496,17 @@ namespace BOTS_BL.Repository
                     {
                         dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberWebPage>();
                     }
+                    else if (GroupId == "1087")
+                    {
+                        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
+                        dashboardMemberWebPage.MemberBase = AllData.Count();
+                        dashboardMemberWebPage.ReferringBase= context.Database.SqlQuery<ExecutiveSummaryAllData>("select distinct count(ReferredByMobileNo) from tblDLCReporting").ToList().Count();
+                        dashboardMemberWebPage.ReferralGenerated = context.Database.SqlQuery<ExecutiveSummaryAllData>("select distinct count(ReferralMobileNo) from tblDLCReporting").ToList().Count();
+                        dashboardMemberWebPage.ReferralTransacted = context.tblDLCReportings.Where(x => x.ConvertedStatus.Value == true).Count();
+                        dashboardMemberWebPage.ReferralTxnCount = Convert.ToInt64(context.tblDLCReportings.Sum(x => x.ReferralTotalTxnCount));
+                        dashboardMemberWebPage.BusinessGenerated = Convert.ToInt64(context.tblDLCReportings.Sum(x => x.ReferralTotalSpend));
+                        dashboardMemberWebPage.ProfileUpdatedCount = context.tblDLCProfileUpdatedLists.Count();
+                    }
                     else
                     {
                         dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberWebPage>();
@@ -525,6 +536,16 @@ namespace BOTS_BL.Repository
                             new SqlParameter("@pi_LoginId", loginId),
                             new SqlParameter("@pi_FromDate", frmDate),
                             new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
+                    }
+                    else if (GroupId == "1087")
+                    {
+                        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
+                        objDashboardBulkUpload.TotalUpload = AllData.Where(x => x.EnrolledBy == "BulkUpload").Count();
+                        objDashboardBulkUpload.UniqueTransacted = AllData.Where(x => x.EnrolledBy == "BulkUpload" && x.TotalTxnCount == 1).Count();
+                        objDashboardBulkUpload.TransactedCount = AllData.Where(x => x.EnrolledBy == "BulkUpload").Sum(y=>y.TotalTxnCount);
+                        objDashboardBulkUpload.BusinessGenerated = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "BulkUpload").Sum(y => y.TotalSpend));
+                        objDashboardBulkUpload.PieChartYellow = objDashboardBulkUpload.TotalUpload;
+                        objDashboardBulkUpload.PieChartGreen = (objDashboardBulkUpload.UniqueTransacted * 100) / objDashboardBulkUpload.TotalUpload;
                     }
                     else
                     {
