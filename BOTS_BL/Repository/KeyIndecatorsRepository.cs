@@ -8,6 +8,7 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Web.Mvc;
+using BOTS_BL.Models.IndividualDBModels;
 
 namespace BOTS_BL.Repository
 {
@@ -15,8 +16,9 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
+        DashboardRepository DR = new DashboardRepository();
         //string connstr = CustomerConnString.ConnectionStringCustomer;
-        public OnlyOnce GetOnlyOnceData(string GroupId, string outletId, string connstr,string loginId)
+        public OnlyOnce GetOnlyOnceData(string GroupId, string outletId, string connstr, string loginId)
         {
             OnlyOnce objOnlyOnce = new OnlyOnce();
             try
@@ -26,6 +28,38 @@ namespace BOTS_BL.Repository
                     if (GroupId == "1086")
                     {
                         objOnlyOnce = context.Database.SqlQuery<OnlyOnce>("sp_BOTS_OnlyOnce @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<OnlyOnce>();
+                    }
+                    else if (GroupId == "1087")
+                    {
+                        var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
+                        if (outletId == "")
+                        {
+                            objOnlyOnce.TotalMember = AllData.Count();
+                            objOnlyOnce.OnlyOnceMember = AllData.Where(x => x.TotalTxnCount == 1).Count();
+                            objOnlyOnce.OnlyOncePercentage = Math.Round((Convert.ToDecimal(objOnlyOnce.OnlyOnceMember) * 100) / Convert.ToDecimal(objOnlyOnce.TotalMember), 2);
+
+                            var DBTotalSpend = AllData.Sum(x => x.TotalSpend);
+                            var AvgAmt = DBTotalSpend / objOnlyOnce.OnlyOnceMember;
+                            var date150 = DateTime.Today.AddDays(-150);
+                            objOnlyOnce.RecentVisitHigh = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend > AvgAmt && x.LastTxnDate >= date150).Count();
+                            objOnlyOnce.RecentVisitLow = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LastTxnDate >= date150).Count();
+                            objOnlyOnce.NotSeenHigh = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend > AvgAmt && x.LastTxnDate < date150).Count();
+                            objOnlyOnce.NotSeenLow = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LastTxnDate < date150).Count();
+                        }
+                        else
+                        {
+                            objOnlyOnce.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == outletId).Count();
+                            objOnlyOnce.OnlyOnceMember = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId).Count();
+                            objOnlyOnce.OnlyOncePercentage = Math.Round((Convert.ToDecimal(objOnlyOnce.OnlyOnceMember) * 100) / Convert.ToDecimal(objOnlyOnce.TotalMember), 2);
+
+                            var DBTotalSpend = AllData.Where(x => x.CurrentEnrolledOutlet == outletId).Sum(x => x.TotalSpend);
+                            var AvgAmt = DBTotalSpend / objOnlyOnce.OnlyOnceMember;
+                            var date150 = DateTime.Today.AddDays(-150);
+                            objOnlyOnce.RecentVisitHigh = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LastTxnDate >= date150).Count();
+                            objOnlyOnce.RecentVisitLow = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LastTxnDate >= date150).Count();
+                            objOnlyOnce.NotSeenHigh = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LastTxnDate < date150).Count();
+                            objOnlyOnce.NotSeenLow = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LastTxnDate < date150).Count();
+                        }
                     }
                     else
                     {
@@ -40,7 +74,7 @@ namespace BOTS_BL.Repository
 
             return objOnlyOnce;
         }
-        public List<OnlyOnceTxn> GetOnlyOnceTxnData(string GroupId, string outletId, string type, string connstr,string loginId)
+        public List<OnlyOnceTxn> GetOnlyOnceTxnData(string GroupId, string outletId, string type, string connstr, string loginId)
         {
             List<OnlyOnceTxn> objOnlyOnceTxn = new List<OnlyOnceTxn>();
             try
@@ -56,6 +90,88 @@ namespace BOTS_BL.Repository
                        new SqlParameter("@pi_OutletId", outletId),
                        new SqlParameter("@pi_Type", type)).ToList<OnlyOnceTxn>();
                     }
+                    else if (GroupId == "1087")
+                    {
+                        List<MemberListAllData> AllData = new List<MemberListAllData>();
+
+                        AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
+                        
+                        var onlyOnceData = AllData.Where(x => x.TotalTxnCount == 1).ToList();
+                        var DBTotalSpend = AllData.Sum(x => x.TotalSpend);
+                        var AvgAmt = DBTotalSpend / onlyOnceData.Count();
+                        var date150 = DateTime.Today.AddDays(-150);
+                        List<MemberListAllData> highRecentData = new List<MemberListAllData>();
+                        if (type == "1")
+                        {                            
+                            if (outletId == "")
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1  && x.TotalSpend > AvgAmt && x.LasTTxnDate >= date150).ToList();
+                            }
+                            else
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LasTTxnDate >= date150).ToList();
+                            }                            
+                        }
+                        if (type == "2")
+                        {                            
+                            if (outletId == "")
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LasTTxnDate >= date150).ToList();
+                            }
+                            else
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LasTTxnDate >= date150).ToList();
+                            }                            
+                        }
+                        if (type == "3")
+                        {
+                            if (outletId == "")
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend > AvgAmt && x.LasTTxnDate < date150).ToList();
+                            }
+                            else
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LasTTxnDate < date150).ToList();
+                            }
+                        }
+                        if (type == "4")
+                        {
+                            if (outletId == "")
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LasTTxnDate < date150).ToList();
+                            }
+                            else
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LasTTxnDate < date150).ToList();
+                            }
+                        }
+                        if (type == "5")
+                        {
+                            if (outletId == "")
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1).ToList();
+                            }
+                            else
+                            {
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId).ToList();
+                            }
+                        }
+                        foreach (var item in highRecentData)
+                        {
+                            OnlyOnceTxn newItem = new OnlyOnceTxn();
+                            newItem.EnrolledOutlet = item.OutletName;
+                            newItem.MobileNo = item.MobileNo;
+                            newItem.MaskedMobileNo = item.MaskedMobileNo;
+                            newItem.MemberName = item.Name;
+                            newItem.Type = item.Type;
+                            newItem.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                            newItem.TotalVisit = item.TotalTxnCount;
+                            newItem.AvlBalPoints = item.AvlPts;
+                            newItem.LastTxnDate = Convert.ToString(item.LasTTxnDate);
+
+                            objOnlyOnceTxn.Add(newItem);
+                        }
+                    }
                     else
                     {
                         objOnlyOnceTxn = context.Database.SqlQuery<OnlyOnceTxn>("sp_BOTS_OnlyOnce1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
@@ -65,7 +181,7 @@ namespace BOTS_BL.Repository
                        new SqlParameter("@pi_OutletId", outletId),
                        new SqlParameter("@pi_Type", type)).ToList<OnlyOnceTxn>();
                     }
-                   
+
                 }
             }
             catch (Exception ex)
@@ -76,7 +192,7 @@ namespace BOTS_BL.Repository
             return objOnlyOnceTxn;
         }
 
-        public NonTransactingCls GetNonTransactingData(string GroupId, string outletId, string connstr,string loginId)
+        public NonTransactingCls GetNonTransactingData(string GroupId, string outletId, string connstr, string loginId)
         {
             NonTransactingCls objNonTransacting = new NonTransactingCls();
             try
@@ -91,7 +207,7 @@ namespace BOTS_BL.Repository
                     {
                         objNonTransacting = context.Database.SqlQuery<NonTransactingCls>("sp_BOTS_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<NonTransactingCls>();
                     }
-                    
+
 
                 }
             }
@@ -103,7 +219,7 @@ namespace BOTS_BL.Repository
             return objNonTransacting;
         }
 
-        public List<NonTransactingTxn> GetNonTransactingTxnData(string GroupId, string outletId, string type, string connstr,string loginId)
+        public List<NonTransactingTxn> GetNonTransactingTxnData(string GroupId, string outletId, string type, string connstr, string loginId)
         {
             List<NonTransactingTxn> objNonTransactingTxn = new List<NonTransactingTxn>();
             try
@@ -128,7 +244,7 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_OutletId", outletId),
                         new SqlParameter("@pi_Type", type)).ToList<NonTransactingTxn>();
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -139,7 +255,7 @@ namespace BOTS_BL.Repository
             return objNonTransactingTxn;
         }
 
-        public NonRedemptionCls GetNonRedemptionData(string GroupId, string connstr,string loginId)
+        public NonRedemptionCls GetNonRedemptionData(string GroupId, string connstr, string loginId)
         {
             NonRedemptionCls objNonRedemption = new NonRedemptionCls();
             try
@@ -154,7 +270,7 @@ namespace BOTS_BL.Repository
                     {
                         objNonRedemption = context.Database.SqlQuery<NonRedemptionCls>("sp_BOTS_NonRedeeming @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<NonRedemptionCls>();
                     }
-                   
+
 
                 }
             }
@@ -191,7 +307,7 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Type", type),
                         new SqlParameter("@pi_DaysType", daysType)).ToList<NonRedemptionTxn>();
                     }
-                    
+
                 }
             }
             catch (Exception ex)
@@ -281,7 +397,7 @@ namespace BOTS_BL.Repository
             return objMemberPageRefData;
         }
 
-        public MembersInformation GetMemberMisinformationData(string GroupId, string connstr,string loginId)
+        public MembersInformation GetMemberMisinformationData(string GroupId, string connstr, string loginId)
         {
             MembersInformation objMembersInformation = new MembersInformation();
             try
@@ -302,7 +418,7 @@ namespace BOTS_BL.Repository
                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                        new SqlParameter("@pi_LoginId", "")).FirstOrDefault<MembersInformation>();
                     }
-                   
+
                 }
             }
             catch (Exception ex)
@@ -414,7 +530,7 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
-    
+
         public int GetDLCRecordCount(string GroupId)
         {
             int count = 0;
@@ -432,6 +548,6 @@ namespace BOTS_BL.Repository
             }
             return count;
         }
-    
+
     }
 }

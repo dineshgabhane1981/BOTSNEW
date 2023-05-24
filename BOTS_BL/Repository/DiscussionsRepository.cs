@@ -166,7 +166,7 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        _GroupName = _GroupDetails.GroupName;
+                        _GroupName = _GroupDetails.RetailName;
                     }
                     string Script = string.Empty;
 
@@ -462,7 +462,7 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            _GroupName = _GroupDetails.GroupName;
+                            _GroupName = _GroupDetails.RetailName;
                         }
 
                     }

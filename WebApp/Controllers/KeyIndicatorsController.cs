@@ -163,7 +163,7 @@ namespace WebApp.Controllers
             try
             {
                 objOnlyOnce = KR.GetOnlyOnceData(userDetails.GroupId, outletId, userDetails.connectionString, userDetails.LoginId);
-
+                
                 objOnlyOnce.TotalMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.TotalMember));
                 objOnlyOnce.OnlyOnceMemberStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.OnlyOnceMember));
                 objOnlyOnce.RecentVisitHighStr = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(objOnlyOnce.RecentVisitHigh));
