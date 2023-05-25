@@ -1213,11 +1213,45 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    celebrationsData = context.Database.SqlQuery<Celebrations>("sp_BOTS_Celebrate @pi_GroupId, @pi_Date, @pi_LoginId",
+                    //if (GroupId == "1086")
+                    //{
+                    //    celebrationsData = context.Database.SqlQuery<Celebrations>("sp_BOTS_Celebrate @pi_GroupId, @pi_Date, @pi_LoginId",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+
+                    //    new SqlParameter("@pi_LoginId", "")).FirstOrDefault<Celebrations>();
+                    //}
+                    //else
+                    if (GroupId == "1087")
+                    {
+                        DateTime CurrentMonth = DateTime.Now;
+                        var NextMonth = (CurrentMonth.AddMonths(1));
+                        var ThirdMonth = (CurrentMonth.AddMonths(2));
+                        var celebrationsData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
+                        celebrationsData1 = celebrationsData1.Where(x => x.DOB.HasValue).ToList();
+                        celebrationsData1 = celebrationsData1.Where(x => x.AnniversaryDate.HasValue).ToList();                        
+
+                        celebrationsData.BirthdayCountThisMonth = celebrationsData1.Where(x => x.DOB.Value.Month == CurrentMonth.Month).Count();
+                        celebrationsData.BirthdayCountNextMonth = celebrationsData1.Where(x => x.DOB.Value.Month == NextMonth.Month).Count();
+                        celebrationsData.BirthdayCount3rdMonth = celebrationsData1.Where(x => x.DOB.Value.Month == ThirdMonth.Month).Count();
+                        celebrationsData.AnniversaryCountThisMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == CurrentMonth.Month).Count();
+                        celebrationsData.AnniversaryCountNextMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == NextMonth.Month).Count();
+                        celebrationsData.AnniversaryCount3rdMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == ThirdMonth.Month).Count();
+                        var celebrationsData2 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
+                        celebrationsData.EnrollmentAnniversaryCountThisMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == CurrentMonth.Month && x.DOJ.Value.Year != CurrentMonth.Year).Count();
+                        celebrationsData.EnrollmentAnniversaryCountNextMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == NextMonth.Month && x.DOJ.Value.Year != NextMonth.Year).Count();
+                        celebrationsData.EnrollmentAnniversary3rdMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == ThirdMonth.Month && x.DOJ.Value.Year != ThirdMonth.Year).Count();
+                    
+                    }
+                    else
+                    {
+                        celebrationsData = context.Database.SqlQuery<Celebrations>("sp_BOTS_Celebrate @pi_GroupId, @pi_Date, @pi_LoginId",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
 
                         new SqlParameter("@pi_LoginId", "")).FirstOrDefault<Celebrations>();
+                    }
+                        
                 }
             }
             catch (Exception ex)
@@ -1233,12 +1267,99 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
+                    //if (GroupId == "1086")
+                    //{
+                    //    celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //      new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                    //      new SqlParameter("@pi_LoginId", ""),
+                    //    new SqlParameter("@pi_Month", month),
+                    //    new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
+                    //}
+                    if(GroupId == "1087")
+                    {
+                        DateTime Today = DateTime.Now;
+                        int Parmonth;
+                        Parmonth = 0;
+                        if (month == 1)
+                        {
+                            Parmonth = Today.Month;
+                        }
+                        else if (month == 2)
+                        {
+                            Parmonth = Today.AddMonths(1).Month;
+                        }
+                        else
+                        {
+                            Parmonth = Today.AddMonths(2).Month;
+                        }
+
+                        var celebrationTxnsData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
+                        if (type == 1)
+                        {
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOB.HasValue).ToList();
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOB.Value.Month == Parmonth).ToList();
+                            foreach (var item in celebrationTxnsData1)
+                            {
+                                CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
+                                Obj.EnrolledOutlet = item.OutletName;
+                                Obj.MaskedMobileNo = item.MobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.AvlPoints = item.AvlPts;
+                                Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
+                                Obj.CelebrationDate = Convert.ToString(item.DOB);
+                                celebrationTxnsData.Add(Obj);
+                            }
+                        }
+                        if (type == 2)
+                        {
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.AnniversaryDate.HasValue).ToList();
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.AnniversaryDate.Value.Month == Parmonth).ToList();
+                            foreach (var item in celebrationTxnsData1)
+                            {
+                                CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
+                                Obj.EnrolledOutlet = item.OutletName;
+                                Obj.MaskedMobileNo = item.MobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.AvlPoints = item.AvlPts;
+                                Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
+                                Obj.CelebrationDate = Convert.ToString(item.AnniversaryDate);
+                                celebrationTxnsData.Add(Obj);
+                            }
+                        }
+                        if (type == 3)
+                        {
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOJ.HasValue).ToList();
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOJ.Value.Month == Parmonth && x.DOJ.Value.Year != Today.Year).ToList();
+                            foreach (var item in celebrationTxnsData1)
+                            {
+                                CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
+                                Obj.EnrolledOutlet = item.OutletName;
+                                Obj.MaskedMobileNo = item.MobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.AvlPoints = item.AvlPts;
+                                Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
+                                Obj.CelebrationDate = Convert.ToString(item.DOJ);
+                                celebrationTxnsData.Add(Obj);
+                            }
+                        }
+                    }                          
+                    else
+                    {
+                        celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
                         new SqlParameter("@pi_GroupId", GroupId),
                           new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                           new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
+                    }
+                        
                 }
             }
             catch (Exception ex)
