@@ -21,7 +21,7 @@
                     <ul class="nav">
                         <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAll();" class="active nav-link">All</a></li>
                         <li class="nav-item">
-                            @Html.DropDownListFor(x => Model._181to365Days, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "nonTransOutlet", style = "margin-top:20px;" })
+                            @Html.DropDownListFor(x => Model._181to365Days, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "nonTransOutlet", style = "margin-top:9px;" })
                         </li>
                     </ul>
                 </div>
@@ -142,12 +142,12 @@
                         datasets: [{
                             label: '',
                             backgroundColor: [
-                                "#f990a7",
-                                "#aad2ed",
-                                "#9966FF",
-                                "#99e5e5",
-                                "#f7bd83",
-                                "#996600",
+                                "#fd7f6f",
+                                "#7eb0d5",
+                                "#b2e061",
+                                "#bd7ebe",
+                                "#ffb55a",
+                                "#ffee65",
                             ],
                             borderWidth: 2,
                             data: [response._Within30Days, response._31to60Days, response._61to90Days, response._91to180Days, response._181to365Days, response._MoreThanYear]

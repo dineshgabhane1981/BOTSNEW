@@ -95,25 +95,25 @@ namespace BOTS_BL.Repository
                         List<MemberListAllData> AllData = new List<MemberListAllData>();
 
                         AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
-                        
+
                         var onlyOnceData = AllData.Where(x => x.TotalTxnCount == 1).ToList();
                         var DBTotalSpend = AllData.Sum(x => x.TotalSpend);
                         var AvgAmt = DBTotalSpend / onlyOnceData.Count();
                         var date150 = DateTime.Today.AddDays(-150);
                         List<MemberListAllData> highRecentData = new List<MemberListAllData>();
                         if (type == "1")
-                        {                            
+                        {
                             if (outletId == "")
                             {
-                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1  && x.TotalSpend > AvgAmt && x.LasTTxnDate >= date150).ToList();
+                                highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend > AvgAmt && x.LasTTxnDate >= date150).ToList();
                             }
                             else
                             {
                                 highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LasTTxnDate >= date150).ToList();
-                            }                            
+                            }
                         }
                         if (type == "2")
-                        {                            
+                        {
                             if (outletId == "")
                             {
                                 highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LasTTxnDate >= date150).ToList();
@@ -121,7 +121,7 @@ namespace BOTS_BL.Repository
                             else
                             {
                                 highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LasTTxnDate >= date150).ToList();
-                            }                            
+                            }
                         }
                         if (type == "3")
                         {
@@ -203,6 +203,30 @@ namespace BOTS_BL.Repository
                     {
                         objNonTransacting = context.Database.SqlQuery<NonTransactingCls>("sp_BOTS_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<NonTransactingCls>();
                     }
+                    else if (GroupId == "1087")
+                    {
+                        List<MemberListAllData> AllData = new List<MemberListAllData>();
+
+                        AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
+                        if (outletId == "")
+                        {
+                            objNonTransacting._Within30Days = AllData.Where(x => x.LasTTxnDate >= DateTime.Today.AddDays(-30)).Count();
+                            objNonTransacting._31to60Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-30) && x.LasTTxnDate >= DateTime.Today.AddDays(-60)).Count();
+                            objNonTransacting._61to90Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-61) && x.LasTTxnDate >= DateTime.Today.AddDays(-90)).Count();
+                            objNonTransacting._91to180Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-91) && x.LasTTxnDate >= DateTime.Today.AddDays(-180)).Count();
+                            objNonTransacting._181to365Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-181) && x.LasTTxnDate >= DateTime.Today.AddDays(-365)).Count();
+                            objNonTransacting._MoreThanYear = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-365)).Count();
+                        }
+                        else
+                        {
+                            objNonTransacting._Within30Days = AllData.Where(x => x.LasTTxnDate >= DateTime.Today.AddDays(-30) && x.CurrentEnrolledOutlet == outletId).Count();
+                            objNonTransacting._31to60Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-30) && x.LasTTxnDate >= DateTime.Today.AddDays(-60) && x.CurrentEnrolledOutlet == outletId).Count();
+                            objNonTransacting._61to90Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-61) && x.LasTTxnDate >= DateTime.Today.AddDays(-90) && x.CurrentEnrolledOutlet == outletId).Count();
+                            objNonTransacting._91to180Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-91) && x.LasTTxnDate >= DateTime.Today.AddDays(-180) && x.CurrentEnrolledOutlet == outletId).Count();
+                            objNonTransacting._181to365Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-181) && x.LasTTxnDate >= DateTime.Today.AddDays(-365) && x.CurrentEnrolledOutlet == outletId).Count();
+                            objNonTransacting._MoreThanYear = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-365) && x.CurrentEnrolledOutlet == outletId).Count();
+                        }
+                    }
                     else
                     {
                         objNonTransacting = context.Database.SqlQuery<NonTransactingCls>("sp_BOTS_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<NonTransactingCls>();
@@ -235,6 +259,57 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_OutletId", outletId),
                         new SqlParameter("@pi_Type", type)).ToList<NonTransactingTxn>();
                     }
+                    else if (GroupId == "1087")
+                    {
+                        List<MemberListAllData> AllData = new List<MemberListAllData>();
+
+                        AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
+                        if (outletId != "")
+                        {
+                            if (type == "1")
+                                AllData = AllData.Where(x => x.LasTTxnDate >= DateTime.Today.AddDays(-30) && x.CurrentEnrolledOutlet == outletId).ToList();
+                            if (type == "2")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-30) && x.LasTTxnDate >= DateTime.Today.AddDays(-60) && x.CurrentEnrolledOutlet == outletId).ToList();
+                            if (type == "3")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-61) && x.LasTTxnDate >= DateTime.Today.AddDays(-90) && x.CurrentEnrolledOutlet == outletId).ToList();
+                            if (type == "4")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-91) && x.LasTTxnDate >= DateTime.Today.AddDays(-180) && x.CurrentEnrolledOutlet == outletId).ToList();
+                            if (type == "5")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-181) && x.LasTTxnDate >= DateTime.Today.AddDays(-365) && x.CurrentEnrolledOutlet == outletId).ToList();
+                            if (type == "6")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-365) && x.CurrentEnrolledOutlet == outletId).ToList();
+                        }
+                        else
+                        {
+                            if (type == "1")
+                                AllData = AllData.Where(x => x.LasTTxnDate >= DateTime.Today.AddDays(-30)).ToList();
+                            if (type == "2")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-30) && x.LasTTxnDate >= DateTime.Today.AddDays(-60)).ToList();
+                            if (type == "3")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-61) && x.LasTTxnDate >= DateTime.Today.AddDays(-90)).ToList();
+                            if (type == "4")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-91) && x.LasTTxnDate >= DateTime.Today.AddDays(-180)).ToList();
+                            if (type == "5")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-181) && x.LasTTxnDate >= DateTime.Today.AddDays(-365)).ToList();
+                            if (type == "6")
+                                AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-365)).ToList();
+                        }
+
+                        foreach (var item in AllData)
+                        {
+                            NonTransactingTxn objItem = new NonTransactingTxn();
+                            objItem.EnrolledOutlet = item.OutletName;
+                            objItem.MobileNo = item.MobileNo;
+                            objItem.MaskedMobileNo = item.MaskedMobileNo;
+                            objItem.MemberName = item.Name;
+                            objItem.Type = item.Type;
+                            objItem.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                            objItem.TotalVisit = item.TotalTxnCount;
+                            objItem.AvlBalPoints = item.AvlPts;
+                            objItem.LastTxnDate = item.LasTTxnDate.HasValue ? item.LasTTxnDate.Value.ToString("MM/dd/yyyy") : "";
+                            objNonTransactingTxn.Add(objItem);
+                        }
+                    }
                     else
                     {
                         objNonTransactingTxn = context.Database.SqlQuery<NonTransactingTxn>("sp_BOTS_NonTransacting1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
@@ -265,6 +340,36 @@ namespace BOTS_BL.Repository
                     if (GroupId == "1086")
                     {
                         objNonRedemption = context.Database.SqlQuery<NonRedemptionCls>("sp_BOTS_NonRedeeming @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<NonRedemptionCls>();
+                    }
+                    if (GroupId == "1087")
+                    {
+                        List<MemberListAllData> AllData = new List<MemberListAllData>();
+
+                        AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
+                        objNonRedemption.TotalMember = AllData.Where(x => x.EarnCount > 0).Count();
+                        objNonRedemption.UniqueRedeemedMember = AllData.Where(x => x.BurnCount > 0).Count();
+                        objNonRedemption.NeverRedeemed = AllData.Where(x => x.BurnCount == 0 && x.EarnCount > 0).Count();
+                        objNonRedemption.NeverRedeemedPercentage = (objNonRedemption.NeverRedeemed * 100) / objNonRedemption.TotalMember;
+
+                        var TotalPoints = AllData.Where(x => x.BurnCount > 0).Sum(y => y.AvlPts);
+                        var avg = TotalPoints / objNonRedemption.NeverRedeemed;
+                        var Low = avg / 3;
+                        var Medium = Low + Low;
+                        var High = avg;
+                        var last90 = DateTime.Today.AddDays(-90);
+                        var last180 = DateTime.Today.AddDays(-180);
+
+                        objNonRedemption.LessThan90DaysLow = AllData.Where(x => x.AvlPts < Low && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                        objNonRedemption.LessThan90DaysMedium = AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                        objNonRedemption.LessThan90DaysHigh = AllData.Where(x => x.AvlPts >= Medium && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+
+                        objNonRedemption.Bt90to180Low = AllData.Where(x => x.AvlPts < Low && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                        objNonRedemption.Bt90to180Medium = AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                        objNonRedemption.Bt90to180High = AllData.Where(x => x.AvlPts >= Medium && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+
+                        objNonRedemption.MoreThan180DaysLow = AllData.Where(x => x.AvlPts < Low && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                        objNonRedemption.MoreThan180DaysMedium = AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                        objNonRedemption.MoreThan180DaysHigh = AllData.Where(x => x.AvlPts >= Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
                     }
                     else
                     {
@@ -297,6 +402,88 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_LoginId", loginId),
                         new SqlParameter("@pi_Type", type),
                         new SqlParameter("@pi_DaysType", daysType)).ToList<NonRedemptionTxn>();
+                    }
+                    if (GroupId == "1087")
+                    {
+                        List<MemberListAllData> AllData = new List<MemberListAllData>();
+                        List<MemberListAllData> FilteredData = new List<MemberListAllData>();
+
+                        AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
+                        var TotalPoints = AllData.Where(x => x.BurnCount > 0).Sum(y => y.AvlPts);
+                        var NeverRedeemed = AllData.Where(x => x.BurnCount == 0 && x.EarnCount > 0).Count();
+                        var avg = TotalPoints / NeverRedeemed;
+                        var Low = avg / 3;
+                        var Medium = Low + Low;
+                        var High = avg;
+                        var last90 = DateTime.Today.AddDays(-90);
+                        var last180 = DateTime.Today.AddDays(-180);
+
+                        if (type == 1)
+                        {
+                            if (daysType == 1)
+                            {
+                                FilteredData = AllData.Where(x => x.AvlPts >= Medium && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                            if (daysType == 2)
+                            {
+                                FilteredData= AllData.Where(x => x.AvlPts >= Medium && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                            if (daysType == 3)
+                            {
+                                FilteredData = AllData.Where(x => x.AvlPts >= Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                        }
+                        if (type == 2)
+                        {
+                            if (daysType == 1)
+                            {
+                                FilteredData= AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                            if (daysType == 2)
+                            {
+                                FilteredData= AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                            if (daysType == 3)
+                            {
+                                FilteredData= AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                        }
+                        if (type == 3)
+                        {
+                            if (daysType == 1)
+                            {
+                                FilteredData = AllData.Where(x => x.AvlPts < Low && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                            if (daysType == 2)
+                            {
+                                FilteredData = AllData.Where(x => x.AvlPts < Low && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                            if (daysType == 3)
+                            {
+                                FilteredData = AllData.Where(x => x.AvlPts < Low && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                            }
+                        }
+                        if (type == 4)
+                        {
+                            FilteredData = AllData.Where(x => x.BurnCount == 0 && x.EarnCount > 0).ToList();
+                        }
+
+                        foreach(var item in FilteredData)
+                        {
+                            NonRedemptionTxn objItem = new NonRedemptionTxn();
+                            objItem.EnrolledOutlet = item.OutletName;
+                            objItem.MobileNo = item.MobileNo;
+                            objItem.MaskedMobileNo = item.MaskedMobileNo;
+                            objItem.MemberName = item.Name;
+                            objItem.Type = item.Type;
+                            objItem.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                            objItem.TotalVisit = item.TotalTxnCount;
+                            objItem.AvlBalPoints = item.AvlPts;
+                            objItem.LastTxnDate = item.LasTTxnDate.HasValue ? item.LasTTxnDate.Value.ToString("MM/dd/yyyy") : "";
+                            objNonRedemptionTxn.Add(objItem);
+                        }
+
+
                     }
                     else
                     {

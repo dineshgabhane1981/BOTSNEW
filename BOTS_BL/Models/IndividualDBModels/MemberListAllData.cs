@@ -25,6 +25,7 @@ namespace BOTS_BL.Models.IndividualDBModels
         public long AvlPts { get; set; }
         public DateTime? LasTTxnDate { get; set; }
         public string LasTTxnDateStr { get; set; }
+        public long EarnCount { get; set; }
     }
 
     public class CelebrationMemberData

@@ -1213,15 +1213,6 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    //if (GroupId == "1086")
-                    //{
-                    //    celebrationsData = context.Database.SqlQuery<Celebrations>("sp_BOTS_Celebrate @pi_GroupId, @pi_Date, @pi_LoginId",
-                    //    new SqlParameter("@pi_GroupId", GroupId),
-                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-
-                    //    new SqlParameter("@pi_LoginId", "")).FirstOrDefault<Celebrations>();
-                    //}
-                    //else
                     if (GroupId == "1087")
                     {
                         DateTime CurrentMonth = DateTime.Now;
@@ -1266,17 +1257,8 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {
-                    //if (GroupId == "1086")
-                    //{
-                    //    celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
-                    //    new SqlParameter("@pi_GroupId", GroupId),
-                    //      new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                    //      new SqlParameter("@pi_LoginId", ""),
-                    //    new SqlParameter("@pi_Month", month),
-                    //    new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
-                    //}
-                    if(GroupId == "1087")
+                {                    
+                    if (GroupId == "1087")
                     {
                         DateTime Today = DateTime.Now;
                         int Parmonth;
