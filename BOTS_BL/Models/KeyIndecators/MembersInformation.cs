@@ -31,5 +31,6 @@ namespace BOTS_BL.Models
         public long? Age36to45 { get; set; }
         public long? Age46to55 { get; set; }
         public long? Age55Above { get; set; }
+        public long? Age { get; set; }
     }
 }
