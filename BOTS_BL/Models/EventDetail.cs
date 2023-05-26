@@ -53,8 +53,11 @@ namespace BOTS_BL.Models
         public DateTime Addeddate { get; set; }
 
         [NotMapped]
-
         public string strEventdate { get; set; }
+        [NotMapped]
+        public string strEventStartdate { get; set; }
+        [NotMapped]
+        public string strEventEnddate { get; set; }
         public string BonusMessageScript { get; set; }
 
     }

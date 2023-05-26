@@ -185,6 +185,8 @@ namespace BOTS_BL.Repository
             if (obj.Addeddate != null)
             {
                 obj.strEventdate = obj.Addeddate.ToString("yyyy/MM/dd");
+                obj.strEventStartdate = obj.EventStartDate.Value.ToString("yyyy/MM/dd");
+                obj.strEventEnddate = obj.EventEndDate.Value.ToString("yyyy/MM/dd");
             }
 
             return obj;

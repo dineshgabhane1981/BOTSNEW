@@ -595,6 +595,22 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_FromDate", frmDate),
                         new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardRedemption>();
                     }
+                    if (GroupId == "1087")
+                    {
+                        using (var contextNew = new CommonDBContext())
+                        {
+                            //var DBName = contextnew.GroupDetail.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                            var DBName = "MadhusudanTextiles_New";
+
+                            objDashboardRedemption = contextNew.Database.SqlQuery<DashboardRedemption>("sp_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type,@pi_FromDate,@pi_ToDate,@pi_DBName", new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_LoginId", loginId),
+                            new SqlParameter("@pi_Type", Type),
+                            new SqlParameter("@pi_FromDate", frmDate),
+                            new SqlParameter("@pi_ToDate", toDate),
+                             new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<DashboardRedemption>();
+                        }
+                    }
                     else
                     {
                         objDashboardRedemption = context.Database.SqlQuery<DashboardRedemption>("sp_BOTS_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),

@@ -140,7 +140,13 @@ namespace WebApp.Controllers
                     }
                     ObjEventDetails.Desciption = Convert.ToString(item["Description"]);
                     ObjEventDetails.BonusMessageScript = Convert.ToString(item["Script"]);
-                    ObjEventDetails.Status = "Created";
+                    if (ObjEventDetails.EventId == 0)
+                        ObjEventDetails.Status = "Created";
+                    else
+                    {
+                        var EventData = EVR.GetEditEvents(Convert.ToString(ObjEventDetails.GroupId), Convert.ToString(ObjEventDetails.EventId), userDetails.connectionString);
+                        ObjEventDetails.Status = EventData.Status;
+                    }
                     //ObjEventDetails.EventId = Convert.ToInt32("123");
 
                     var Response = EVR.SaveEventData(ObjEventDetails, userDetails.connectionString);

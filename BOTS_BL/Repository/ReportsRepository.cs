@@ -120,7 +120,7 @@ namespace BOTS_BL.Repository
                 {
                     if (GroupId == "1087")
                     {
-                        var lstOutlet = context.tblOutletMasters.ToList();
+                        var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
                         foreach (var item in lstOutlet)
                         {
                             countriesItem.Add(new SelectListItem
@@ -132,7 +132,7 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        var lstOutlet = context.OutletDetails.ToList();
+                        var lstOutlet = context.OutletDetails.Where(x=>!x.OutletName.ToLower().Contains("admin")).ToList();
                         foreach (var item in lstOutlet)
                         {
                             countriesItem.Add(new SelectListItem

@@ -51,13 +51,13 @@
                 Event Start Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.EventStartDate, new { @class = "input100", @id = "IdEventStrDate", @onclick = "Showdatetime1();" })
+                @Html.TextBoxFor(model => model.objEvent.strEventStartdate, new { @class = "input100", @id = "IdEventStrDate", @onclick = "Showdatetime1();" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                 Event End Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.EventEndDate, new { @class = "input100", @id = "IdEventEndDate", @onclick = "Showdatetime2();" })
+                @Html.TextBoxFor(model => model.objEvent.strEventEnddate, new { @class = "input100", @id = "IdEventEndDate", @onclick = "Showdatetime2();" })
             </div>
         </div>
         <div class="row" style="margin: 0;">
@@ -68,7 +68,7 @@
                 @Html.TextBoxFor(model => model.objEvent.BonusPoints, new { @class = "input100", @id = "IdBonusPoints" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                Bonus Points Expiry In Days
+                Bonus Points Expiry (days)
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextBoxFor(model => model.objEvent.PointsExpiryDays, new { @class = "input100", @id = "IdPointsExp" })
@@ -178,7 +178,7 @@
             cuteAlert({
                 type: "error",
                 title: "Oops..",
-                message: "Please enter the Event Created Date",
+                message: "Please enter the Event Date",
                 buttonText: "Okay"
             })
         }
