@@ -1109,36 +1109,36 @@ namespace BOTS_BL.Repository
                         DateTime Today = DateTime.Now;
                         int NextMonth = Today.AddMonths(1).Month;
                         int ThirdMonth = Today.AddMonths(2).Month;
-                        var AllData = context.Database.SqlQuery<MemberListAllData>("select CurrentEnrolledOutlet,OutletName,DOJ,MobileNo,MaskedMobileNo,Name,Type,TotalTxnCount,TotalSpend,AvlPts,LasTTxnDate from View_CustDetailsWithTxnSummary");
+                        var AllData = context.Database.SqlQuery<PointsExpCustDetailList>("select C.OutletName,C.MaskedMobileNo,C.Name,C.TotalTxnCount,C.TotalSpend,C.DOJ,P.MobileNo,C.AvlPts,C.LastTxnDate,P.Points,P.EndDate from View_CustDetailsWithTxnSummary C inner join tblCustPointsMaster P on C.MobileNo = P.MobileNo where P.PointsType = 'Base'").ToList();
                         var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base'").ToList();
 
-                        var lstMobileno = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Select(y=> y.Mobileno).ToList();
+                        var lstMobileno = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Select(y => y.Mobileno).ToList();
                         var lstdata = AllData.Where(x => lstMobileno.Contains(x.MobileNo)).ToList();
-                        
-                        foreach(var item in lstdata)
+
+                        foreach (var item in lstdata)
                         {
                             PointExpiryTxn lstPoint = new PointExpiryTxn();
 
-                            
+
                             lstPoint.EnrolledOutlet = item.OutletName;
                             lstPoint.MaskedMobileNo = item.MaskedMobileNo;
                             lstPoint.MemberName = item.Name;
-                            lstPoint.TxnCount = item.TotalTxnCount;
+                            lstPoint.TxnCount = Convert.ToInt64(item.TotalTxnCount);
                             lstPoint.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                            lstPoint.AvlPoints = item.AvlPts;
-                            if(!string.IsNullOrEmpty(item.LasTTxnDate.ToString()))
+                            lstPoint.AvlPoints = Convert.ToInt64(item.AvlPts);
+                            if (!string.IsNullOrEmpty(item.LastTxnDate.ToString()))
                             {
-                                lstPoint.LastTxnDate = item.LasTTxnDate.ToString();
+                                lstPoint.LastTxnDate = item.LastTxnDate.ToString();
                             }
                             else
                             {
                                 lstPoint.LastTxnDate = item.DOJ.ToString();
                             }
-                            
-                            lstPoint.PointsExpiry = item.AvlPts;
 
+                            lstPoint.PointsExpiry = Convert.ToInt64(item.Points);
+                            lstPoint.ExpiryDate = item.EndDate.ToString();
 
-                           pointExpiryTxn.Add(lstPoint);
+                            pointExpiryTxn.Add(lstPoint);
                         }
 
                     }

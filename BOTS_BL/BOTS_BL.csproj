@@ -322,6 +322,7 @@
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
     <Compile Include="Models\IndividualDBModels\ExecutiveSummaryAllData.cs" />
     <Compile Include="Models\IndividualDBModels\MemberListAllData.cs" />
+    <Compile Include="Models\IndividualDBModels\PointsExpCustDetailList.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpMasterAllData.cs" />
     <Compile Include="Models\IndividualDBModels\tblBrandMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblBulkCustList.cs" />
