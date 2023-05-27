@@ -550,8 +550,41 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objMemberPage = context.Database.SqlQuery<MemberPage>("sp_BOTS_MemberWebPage1 @pi_GroupId, @pi_Date, @pi_LoginId",
+                    if (GroupId == "1087")
+                    {
+                        var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
+                        var ReferralBase = context.Database.SqlQuery<tblDLCReportingData>("select ReferredByMobileNo,ReferredByName,ReferredDate,ReferralMobileNo,ReferralName,ConvertedStatus,ReferralTotalTxnCount,ReferralTotalSpend from tblDLCReporting").ToList();
+
+                        objMemberPage.ReferringBase = ReferralBase.Select(x => x.ReferredByMobileNo).Distinct().Count();
+                        var TotalBase = AllData.Select(x => x.MobileNo).Count();
+                        objMemberPage.ReferringBasePercentage = ((objMemberPage.ReferringBase / TotalBase)*100);
+                        objMemberPage.RefGen = ReferralBase.Select(x => x.ReferralMobileNo).Distinct().Count();
+                        var RefCoverted = ReferralBase.Where(x => x.ConvertedStatus == true).Count();
+                        
+                        if (objMemberPage.RefGen > 0 && RefCoverted > 0)
+                        {
+                            objMemberPage.RefGenConPercentage = ((RefCoverted / objMemberPage.RefGen) * 100);
+                        }
+                        else
+                        {
+                            objMemberPage.RefGenConPercentage = 0;
+                        }
+                        objMemberPage.Con = RefCoverted;
+                        objMemberPage.NewRegistration = AllData.Where(y=>y.EnrolledBy == "DLCWalkIn" || y.EnrolledBy == "DLCScoialMedia").Select(x => x.MobileNo).Count();
+                        //objMemberPage.NewRegistration = NewRegCount;
+                        objMemberPage.RefBiz = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCReferral").Select(y => y.TotalSpend).Sum());
+                        objMemberPage.NewRegistrationBiz = Convert.ToInt64(AllData.Where(y => y.EnrolledBy == "DLCWalkIn" || y.EnrolledBy == "DLCScoialMedia").Select(x => x.TotalSpend).Sum());
+                        objMemberPage.ProfileUpdateCount = context.tblProfileUpdateMasters.Select(x => x.MobileNo).Distinct().Count();
+                        if(objMemberPage.ProfileUpdateCount > 0)
+                        {
+                            objMemberPage.ProfileUpdatePercentage = ((objMemberPage.ProfileUpdateCount / TotalBase) * 100);
+                        }
+                    }
+                    else
+                    {
+                        objMemberPage = context.Database.SqlQuery<MemberPage>("sp_BOTS_MemberWebPage1 @pi_GroupId, @pi_Date, @pi_LoginId",
                         new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<MemberPage>();
+                    }                   
                 }
             }
             catch (Exception ex)
@@ -565,15 +598,48 @@ namespace BOTS_BL.Repository
         public List<MemberPageRefData> GetMemberPageRefData(string GroupId, string type, string connstr)
         {
             List<MemberPageRefData> objMemberPageRefData = new List<MemberPageRefData>();
+
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objMemberPageRefData = context.Database.SqlQuery<MemberPageRefData>("sp_BOTS_MemberWebPage2 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type",
+                    if(GroupId == "1087")
+                    {
+                        if(type == "1")
+                        {
+                            var ListReferringBase = context.Database.SqlQuery<ListReferringBase>("select D.ReferredByMobileNo,Min(D.ReferredByName) as ReferredByName,Count(D.ReferredByMobileNo) as ReferralsGenerated,sum(D.ReferralTotalTxnCount) as ReferralTotalTxnCount,sum(D.ReferralTotalSpend) as ReferralTotalSpend from tblDLCReporting D Group by D.ReferredByMobileNo");
+                            
+                            foreach(var item in ListReferringBase)
+                            {
+                                MemberPageRefData Obj = new MemberPageRefData();
+                                Obj.MobileNo = item.ReferredByMobileNo;
+                                Obj.MemberName = item.ReferredByName;
+                                Obj.ReferralGenerated = Convert.ToInt64(item.ReferralsGenerated);
+                                Obj.ReferralTransacted = Convert.ToInt64(item.ReferralTotalTxnCount);
+                                Obj.BusinessGenerated = Convert.ToInt64(item.ReferralTotalSpend);
+                                objMemberPageRefData.Add(Obj);
+                            }
+
+                        }
+                        else if (type == "2")
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+
+                    }
+                    else
+                    {
+                        objMemberPageRefData = context.Database.SqlQuery<MemberPageRefData>("sp_BOTS_MemberWebPage2 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Type", type)).ToList<MemberPageRefData>();
+                    }
+                    
                 }
             }
             catch (Exception ex)
@@ -587,6 +653,9 @@ namespace BOTS_BL.Repository
         public MembersInformation GetMemberMisinformationData(string GroupId, string connstr, string loginId)
         {
             MembersInformation objMembersInformation = new MembersInformation();
+
+            List<CustInformatonData> LstCustInfo = new List<CustInformatonData>();
+     
             try
             {
                 using (var context = new BOTSDBContext(connstr))
@@ -597,6 +666,52 @@ namespace BOTS_BL.Repository
                        new SqlParameter("@pi_GroupId", GroupId),
                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                        new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<MembersInformation>();
+                    }
+                    else if(GroupId == "1087")
+                    {
+                        DateTime DummyDate = new DateTime(1900, 1, 1);
+                        DateTime Today = DateTime.Now;
+                        var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
+                        objMembersInformation.TotalMemberCount = AllData.Count();
+                        objMembersInformation.NameCount = AllData.Where(x=>x.Name != "Member" && x.Name.Length <= 3).Count();
+                        objMembersInformation.NameCount_Percentage = ((objMembersInformation.NameCount * 100) / objMembersInformation.TotalMemberCount);
+                        var CustAllData = context.Database.SqlQuery<CustInformatonData>("select C.MobileNo,C.DOB,C.AnniversaryDate,C.Gender,C.DOJ from View_CustDetailsMaster C").ToList();
+
+                        objMembersInformation.GenderCount = CustAllData.Where(x => x.Gender == "M" || x.Gender == "F" || x.Gender == "O").Count();
+                        objMembersInformation.GenderCount_Percentage = ((objMembersInformation.GenderCount * 100) / objMembersInformation.TotalMemberCount);                       
+                        var LstDOB = CustAllData.Where(x => x.DOB.HasValue).ToList();
+                        var LstDOA = CustAllData.Where(x => x.AnniversaryDate.HasValue).ToList();
+                        objMembersInformation.BirthDateCount = LstDOB.Where(x => x.DOB.Value != DummyDate).Count();
+                        objMembersInformation.BirthDateCount_Percentage = ((objMembersInformation.BirthDateCount * 100) / objMembersInformation.TotalMemberCount);
+                        objMembersInformation.AnniversaryDateCount = LstDOA.Where(x => x.AnniversaryDate.Value != DummyDate).Count();
+                        objMembersInformation.AnniversaryDateCount_Percentage = ((objMembersInformation.AnniversaryDateCount * 100) / objMembersInformation.TotalMemberCount);
+                        objMembersInformation.MaritalStatusCount = objMembersInformation.AnniversaryDateCount;
+                        objMembersInformation.MaritalStatusCount_Percentage = objMembersInformation.AnniversaryDateCount_Percentage;
+                        objMembersInformation.GenderSplitCount_Female = CustAllData.Where(x => x.Gender == "F").Count();
+                        //objMembersInformation.GenderSplitCount_Female = 150;
+                        objMembersInformation.GenderSplitCount_Male = CustAllData.Where(x => x.Gender == "M").Count();
+                        objMembersInformation.GenderSplitCount_Others = CustAllData.Where(x => x.Gender == "O").Count();
+                        //objMembersInformation.GenderSplitCount_Others = 100;
+                        objMembersInformation.GenderSplitCount_Null = (objMembersInformation.TotalMemberCount - objMembersInformation.GenderCount);
+                        objMembersInformation.MaritalStatusCount_M = objMembersInformation.AnniversaryDateCount;
+                        objMembersInformation.MaritalStatusCount_U  = objMembersInformation.TotalMemberCount - objMembersInformation.AnniversaryDateCount;
+                        objMembersInformation.MaritalStatusCount_Null = objMembersInformation.MaritalStatusCount_U;
+                        CustAllData = CustAllData.Where(x => x.DOB.HasValue).ToList();
+                        foreach (var item in CustAllData)
+                        {
+                            CustInformatonData Obj = new CustInformatonData();
+                            
+                            Obj.Age = (Today.Year - item.DOB.Value.Year);
+
+                            LstCustInfo.Add(Obj);
+                        }
+
+                        objMembersInformation.Age18to25 = LstCustInfo.Where(x => x.Age >= 18 && x.Age <= 25).Count();
+                        objMembersInformation.Age26to35 = LstCustInfo.Where(x => x.Age >= 26 && x.Age <= 35).Count();
+                        objMembersInformation.Age36to45 = LstCustInfo.Where(x => x.Age >= 36 && x.Age <= 45).Count();
+                        objMembersInformation.Age46to55 = LstCustInfo.Where(x => x.Age >= 46 && x.Age <= 55).Count();
+                        objMembersInformation.Age55Above = LstCustInfo.Where(x => x.Age >= 55).Count();
+
                     }
                     else
                     {
