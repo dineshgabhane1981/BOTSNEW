@@ -320,7 +320,9 @@
     <Compile Include="Models\GroupDetail.cs" />
     <Compile Include="Models\GroupWiseDetails.cs" />
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
+    <Compile Include="Models\IndividualDBModels\CustInformatonData.cs" />
     <Compile Include="Models\IndividualDBModels\ExecutiveSummaryAllData.cs" />
+    <Compile Include="Models\IndividualDBModels\ListReferringBase.cs" />
     <Compile Include="Models\IndividualDBModels\MemberListAllData.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpCustDetailList.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpMasterAllData.cs" />
@@ -348,6 +350,7 @@
     <Compile Include="Models\IndividualDBModels\tblDLCProfileUpdatedList.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCRegMemberDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCReporting.cs" />
+    <Compile Include="Models\IndividualDBModels\tblDLCReportingData.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCRuleMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCSMSWAScriptMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblErrorServerLog.cs" />
