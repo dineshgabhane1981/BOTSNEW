@@ -21,6 +21,15 @@ namespace BOTS_BL.Models
         [StringLength(500)]
         public string Name { get; set; }
 
+        [StringLength(100)]
+        public string FirstName { get; set; }
+
+        [StringLength(100)]
+        public string MiddleName { get; set; }
+
+        [StringLength(100)]
+        public string SurName { get; set; }
+
         [StringLength(20)]
         public string Gender { get; set; }
 
@@ -40,9 +49,7 @@ namespace BOTS_BL.Models
 
         [Column(TypeName = "numeric")]
         public decimal? PointsGiven { get; set; }
-
         public string Place { get; set; }
-
         public DateTime? DateOfRegistration { get; set; }
 
         [StringLength(10)]
@@ -58,6 +65,18 @@ namespace BOTS_BL.Models
         public DateTime? FirstRemDate { get; set; }
 
         public DateTime? SecondRemDate { get; set; }
+
+        [StringLength(500)]
+        public string Area { get; set; }
+
+        [StringLength(50)]
+        public string City { get; set; }
+
+        [StringLength(10)]
+        public string Pincode { get; set; }
+
+        [StringLength (50)]
+        public string State { get; set; }
 
     }
 }

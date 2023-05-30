@@ -13,6 +13,11 @@ using System.Net;
 using System.IO;
 using System.Globalization;
 using System.Data.Entity.Core.Objects;
+using Newtonsoft.Json;
+using System.Threading;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 namespace BOTS_BL.Repository
 {
@@ -195,6 +200,7 @@ namespace BOTS_BL.Repository
         public EventModuleData GetCustomerDetails(string groupId, string Mobileno, string Place, string EventId, string connectionString)
         {
             EventModuleData obj = new EventModuleData();
+            EventModuleExtraData ExtObj = new EventModuleExtraData();
             int eventId = Convert.ToInt32(EventId);
             try
             {
@@ -204,7 +210,24 @@ namespace BOTS_BL.Repository
                     var pointsexp = context.EarnRules.Select(e => e.PointsExpiryVariableDate).FirstOrDefault();
                     int PointExp = Convert.ToInt32(pointsexp);
                     obj = context.Database.SqlQuery<EventModuleData>("select C.MobileNo,C.Points,C.CustomerName,C.Gender,C.DOB,C.AnniversaryDate,C.EmailId,min(CC.Address) as Address,min(C.OldMobileno) as AlternateMobileNo, CASE WHEN Max(cast(TM.Datetime as date)) = NULL THEN Max(cast(TM.Datetime as date)) ELSE Min(C.DOJ) END as LastTxnDate,DATEADD(MONTH, @PointExp, Max(cast(TM.Datetime as date))) as PointExp from CustomerDetails C Left join TransactionMaster TM on C.MobileNo = TM.MobileNo left join CustomerChild CC on CC.MobileNo = C.MobileNo and C.Status = '00' group by C.MobileNo, C.Points, C.CustomerName, C.EnrollingOutlet, C.Gender, C.DOB, C.AnniversaryDate, C.EmailId Having C.MobileNo = @Mobileno", new SqlParameter("@Mobileno", Mobileno), new SqlParameter("@PointExp", PointExp)).FirstOrDefault();
+                    ExtObj = context.Database.SqlQuery<EventModuleExtraData>("select top(1) FirstName,MiddleName,SurName,Area,City,Pincode,State,AlternateNo from EventMemberDetails where Mobileno = @Mobileno Order by SLno desc", new SqlParameter("@Mobileno", Mobileno)).FirstOrDefault();
+                    
+                    if(ExtObj != null)
+                    {
+                        obj.FirstName = ExtObj.FirstName;
+                        obj.MiddleName = ExtObj.MiddleName;
+                        obj.SurName = ExtObj.SurName;
+                        obj.Area = ExtObj.Area;
+                        obj.City = ExtObj.City;
+                        //if (!string.IsNullOrEmpty(ExtObj.Pincode.ToString()))
+                        //{
+                            obj.Pincode = ExtObj.Pincode;
+                        //}
 
+                        obj.State = ExtObj.State;
+                        obj.AlternateMobileno = Convert.ToString(ExtObj.AlternateNo);
+                    }
+                    
                     if (statusavailable != null)
                     {
                         obj.CustomerAvailFlag = statusavailable;
@@ -243,7 +266,7 @@ namespace BOTS_BL.Repository
             return obj;
         }
 
-        public bool SaveNewMemberData(EventMemberDetail objData, CustomerDetail objCustomerDetail, CustomerChild objCustomerChild, TransactionMaster objTM, string connectionstring)
+        public bool SaveNewMemberData(EventMemberDetail objData, CustomerDetail objCustomerDetail, CustomerChild objCustomerChild, TransactionMaster objTM, string connectionstring,int GroupId)
         {
             bool result = false;
             string Message;
@@ -436,6 +459,12 @@ namespace BOTS_BL.Repository
                             }
                         }
 
+
+                        if(GroupId == 1085)// Code for Dande API
+                        {
+                            Thread _job1 = new Thread(() => SendDetailsToPOS(objData));
+                            _job1.Start();
+                        }       
                     }
                     catch (Exception ex)
                     {
@@ -444,6 +473,8 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
+
+
             return result;
         }
 
@@ -780,7 +811,153 @@ namespace BOTS_BL.Repository
             return emailId;
         }
 
+        public void SendDetailsToPOS(EventMemberDetail Obj)
+        {
+            try
+            {
+                CustomerDetailsPADM ObjPADMData = new CustomerDetailsPADM();
 
+                string result;
+                string mobileNo = Obj.Mobileno;
+                string JSONMobileno = "{\"mobileNo\":"+ mobileNo + "}";
+                string APISearchByMobileNo, AuthKey,XKey, APIAddCustomer,APIUpdateCustomer;
+                AuthKey = "jdO4jCFnTnOPA5VnQHOmgLhnTnONZeZcRnO3.jdO4EB9mgsWIg6WqNotcQHOmhMGIg6WqNotcQHOog65bV63pEXN0RXbniCSqhpSaELZnToNeReFxNrcaE4SaELZnToNcRIN6THbnD7AdhrAziKOagLAIg6WqNot6SXbniMOmXBVnTnNnQHOrfCOyWrqzBBAmhpqpNot4kV.ER3aLY96NBxUQe9tpiU8CTQf_dUyPvL1tgB24UT4n65NgyRz1V1QoSTXX1_a03lox5gyK5tIqBxr1peHQcNbNV";
+                XKey = "zVhY2RjNGFormBoWI4LWE3YmYtZmY2MzVh";
+
+                APISearchByMobileNo = "https://gds.acmepadm.com:8443/acme-document-web/doc/v1/customer/5";
+                APIAddCustomer = "https://gds.acmepadm.com:8443/acme-document-web/doc/v1/customer/1";
+                APIUpdateCustomer = "https://gds.acmepadm.com:8443/acme-document-web/doc/v1/customer/2";
+
+                var httpWebRequest = (HttpWebRequest)WebRequest.Create(APISearchByMobileNo);
+                httpWebRequest.ContentType = "application/json";
+                httpWebRequest.Accept = "application/json";
+                httpWebRequest.Headers.Add("Authorization", AuthKey);
+                httpWebRequest.Headers.Add("X-key", XKey);
+                httpWebRequest.Headers.Add("sProgramKey","1");
+
+                httpWebRequest.Method = "POST";
+                using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                {
+                    streamWriter.Write(JSONMobileno);
+                }
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    result = streamReader.ReadToEnd();
+                }
+
+                string customerCode;
+                customerCode = string.Empty;
+                var jsonObject = JObject.Parse(result);         
+                var data = (JObject)jsonObject["data"];
+                var errorCode = (string)data["errorCode"];              
+                IEnumerable<JToken> result1 = jsonObject.SelectToken("data.result");
+                if(result1 != null)
+                {
+                    foreach (JToken item in result1)
+                    {
+                        customerCode = (string)item["customerCode"];
+                    }
+
+                }
+                
+
+                if (errorCode == "0")
+                {
+                    ObjPADMData.name = Obj.Name;
+                    ObjPADMData.city = Obj.City;
+                    ObjPADMData.state = Obj.State;
+                    ObjPADMData.mobileNo = Obj.Mobileno;
+                    ObjPADMData.address1 = Obj.Address;
+                    ObjPADMData.address2 = Obj.City;
+                    ObjPADMData.area = Obj.Area;
+                    ObjPADMData.emailId = Obj.EmailId;
+                    if(!string.IsNullOrEmpty(Obj.DOB.ToString()))
+                    {
+                       ObjPADMData.birthDate = Obj.DOB.Value.ToString("dd/MM/yyyy");
+                    }
+                    if (!string.IsNullOrEmpty(Obj.DOA.ToString()))
+                    {
+                        ObjPADMData.weddingAnniversary = Obj.DOA.Value.ToString("dd/MM/yyyy");
+                    }
+                    ObjPADMData.firstName = Obj.FirstName;
+                    ObjPADMData.middleName = Obj.MiddleName;
+                    ObjPADMData.surName = Obj.SurName;
+                    ObjPADMData.customerCode = customerCode;
+                    ObjPADMData.reqFromMobApp = true;
+
+                    string stringjson = JsonConvert.SerializeObject(ObjPADMData);
+
+                    var httpWebRequest1 = (HttpWebRequest)WebRequest.Create(APIUpdateCustomer);
+                    httpWebRequest1.ContentType = "application/json";
+                    httpWebRequest1.Accept = "application/json";
+                    httpWebRequest1.Headers.Add("Authorization", AuthKey);
+                    httpWebRequest1.Headers.Add("X-key", XKey);
+                    httpWebRequest1.Headers.Add("sProgramKey", "1");
+
+                    httpWebRequest1.Method = "POST";
+                    using (var streamWriter1 = new StreamWriter(httpWebRequest1.GetRequestStream()))
+                    {
+                        streamWriter1.Write(stringjson);
+                    }
+                    var httpResponse1 = (HttpWebResponse)httpWebRequest1.GetResponse();
+                    using (var streamReader1 = new StreamReader(httpResponse1.GetResponseStream()))
+                    {
+                        result = streamReader1.ReadToEnd();
+                    }
+
+                }
+                else
+                {
+                    ObjPADMData.name = Obj.Name;
+                    ObjPADMData.city = Obj.City;
+                    ObjPADMData.state = Obj.State;
+                    ObjPADMData.mobileNo = Obj.Mobileno;
+                    ObjPADMData.address1 = Obj.Address;
+                    ObjPADMData.address2 = Obj.City;
+                    ObjPADMData.area = Obj.Area;
+                    ObjPADMData.emailId = Obj.EmailId;
+                    if (!string.IsNullOrEmpty(Obj.DOB.ToString()))
+                    {
+                        ObjPADMData.birthDate = Obj.DOB.Value.ToString("dd/MM/yyyy");
+                    }
+                    if (!string.IsNullOrEmpty(Obj.DOA.ToString()))
+                    {
+                        ObjPADMData.weddingAnniversary = Obj.DOA.Value.ToString("dd/MM/yyyy");
+                    }
+                    ObjPADMData.firstName = Obj.FirstName;
+                    ObjPADMData.middleName = Obj.MiddleName;
+                    ObjPADMData.surName = Obj.SurName;
+                    
+                    ObjPADMData.reqFromMobApp = true;
+
+                    string stringjson = JsonConvert.SerializeObject(ObjPADMData);
+
+                    var httpWebRequest1 = (HttpWebRequest)WebRequest.Create(APIAddCustomer);
+                    httpWebRequest1.ContentType = "application/json";
+                    httpWebRequest1.Accept = "application/json";
+                    httpWebRequest1.Headers.Add("Authorization", AuthKey);
+                    httpWebRequest1.Headers.Add("X-key", XKey);
+                    httpWebRequest1.Headers.Add("sProgramKey", "1");
+
+                    httpWebRequest1.Method = "POST";
+                    using (var streamWriter1 = new StreamWriter(httpWebRequest1.GetRequestStream()))
+                    {
+                        streamWriter1.Write(stringjson);
+                    }
+                    var httpResponse1 = (HttpWebResponse)httpWebRequest1.GetResponse();
+                    using (var streamReader1 = new StreamReader(httpResponse1.GetResponseStream()))
+                    {
+                        result = streamReader1.ReadToEnd();
+                    }
+
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SendDetailsToPOS");
+            }
+        }
     }
 
 }

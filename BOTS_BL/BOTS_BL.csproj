@@ -295,7 +295,9 @@
     <Compile Include="Models\EarnRule.cs" />
     <Compile Include="Models\EventDetail.cs" />
     <Compile Include="Models\EventMemberDetail.cs" />
+    <Compile Include="Models\EventModule\CustomerDetailsPADM.cs" />
     <Compile Include="Models\EventModule\EventModuleData.cs" />
+    <Compile Include="Models\EventModule\EventModuleExtraData.cs" />
     <Compile Include="Models\EventModule\EventModuleMessageData.cs" />
     <Compile Include="Models\EventModule\ReminderData.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />

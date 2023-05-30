@@ -347,7 +347,26 @@ namespace WebApp.Controllers
                     objEventDetail.EventId = Convert.ToInt32(item["EventId"]);
                     objEventDetail.Place = Convert.ToString(item["Place"]);
                     objEventDetail.Mobileno = Convert.ToString(item["Mobileno"]);
-                    objEventDetail.Name = Convert.ToString(item["Name"]);
+                    if(!string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])) && !string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
+                    {
+                        objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]) + " " + Convert.ToString(item["SurName"]);
+                    }
+                    else if (string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])) && string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
+                    {
+                        objEventDetail.Name = Convert.ToString(item["FirstName"]);
+                    }
+                    else if(string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])))
+                    {
+                        objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["SurName"]);
+                    }
+                    else if(string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
+                    {
+                        objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]);
+                    }
+                    objEventDetail.Name = Convert.ToString(item["FirstName"]) +" "+ Convert.ToString(item["MiddleName"]) +" "+ Convert.ToString(item["SurName"]);
+                    objEventDetail.FirstName = Convert.ToString(item["FirstName"]);
+                    objEventDetail.MiddleName = Convert.ToString(item["MiddleName"]);
+                    objEventDetail.SurName = Convert.ToString(item["SurName"]);
                     objEventDetail.Gender = Convert.ToString(item["Gender"]);
                     if (!string.IsNullOrEmpty(Convert.ToString(item["DOB"])))
                     {
@@ -362,12 +381,16 @@ namespace WebApp.Controllers
                     objEventDetail.Address = Convert.ToString(item["Address"]);
                     objEventDetail.AlternateNo = Convert.ToString(item["AlternateNo"]);
                     objEventDetail.DateOfRegistration = DateTime.Now;
+                    objEventDetail.Area = Convert.ToString(item["Area"]);
+                    objEventDetail.City = Convert.ToString(item["City"]);
+                    objEventDetail.Pincode = Convert.ToString(item["PinCode"]);
+                    objEventDetail.State = Convert.ToString(item["State"]);
 
                 }
                 foreach (Dictionary<string, object> item in objData)
                 {
                     objCustomerDetail.MobileNo = Convert.ToString(item["Mobileno"]);
-                    objCustomerDetail.CustomerName = Convert.ToString(item["Name"]);
+                    objCustomerDetail.CustomerName = objEventDetail.Name;
                     objCustomerDetail.CardNumber = Convert.ToString(item["Mobileno"]);
                     objCustomerDetail.EmailId = Convert.ToString(item["EmailId"]);
                     strDOB = Convert.ToString(item["DOB"]);
@@ -391,7 +414,7 @@ namespace WebApp.Controllers
                 }
 
                 var connStr = CR.GetCustomerConnString(Convert.ToString(objEventDetail.GroupId));
-                result = EVR.SaveNewMemberData(objEventDetail, objCustomerDetail, objCustomerChild, objTM, connStr);
+                result = EVR.SaveNewMemberData(objEventDetail, objCustomerDetail, objCustomerChild, objTM, connStr, objEventDetail.GroupId);
 
             }
             catch (Exception ex)

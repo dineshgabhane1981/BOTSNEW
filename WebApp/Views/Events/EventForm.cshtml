@@ -74,7 +74,7 @@
 
         <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
             <div class="row col-lg-10 col-md-10">
-                <div class="col-lg-10 col-md-10" style="margin-bottom:20px; text-align: center;"><img src="@Model.Logo" alt="Logo" width="50%" ></div>
+                <div class="col-lg-10 col-md-10" style="margin-bottom:20px; text-align: center;"><img src="@Model.Logo" alt="Logo" style="width:200px"></div>
             </div>
         </div>
         @if (ViewBag.EventEnded == "Ended")
@@ -102,67 +102,112 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card col-md-12 col-xl-5" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">
+                @*<div class="mt-5 mb-2 pr-3 pt-3 pl-3 card col-md-12 col-xl-10" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">*@
+                <div class="mb-2 pr-3 pt-3 pl-3 card" id="tblNewMemberData" style="padding-bottom: 20px; border-radius: 20px; display: none">
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium;">
-                            Member Name *
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            First Name
                         </div>
-                        <div class="col-lg-4 col-md-2">
-                            <input type="text" id="txtName" class="input100" style="font-size:medium;" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtFirstName" class="input70" style="font-size:medium;" />
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Middle Name
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtMiddleName" class="input70" style="font-size:medium;" />
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            SurName
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtSurName" class="input70" style="font-size:medium;" />
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Gender *
                         </div>
-                        <div class="col-lg-4 col-md-2">
-                            <select id="ddlGender" name="Gender" class="input100" style="font-size: medium; margin-top: 10px;">
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <select id="ddlGender" name="Gender" class="input70" style="font-size: medium; margin-top: 10px;">
                                 <option>Select</option>
                                 <option>Male</option>
                                 <option>Female</option>
                             </select>
                         </div>
                     </div>
+
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Date Of Birth *
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="dtDOB" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="dtDOB" class="input70" />
                         </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Date Of Anniversary
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="dtDOA" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="dtDOA" class="input70" />
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Address *
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Address1 *
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <textarea type="text" id="txtAddress" class="input100"></textarea>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <textarea type="text" id="txtAddress" class="input70"></textarea>
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Area *
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtArea" class="input70"/>
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            City *
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtCity" class="input70" style="font-size:medium;" />
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Pin Code *
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtPinCode" class="input70" style="font-size:medium;" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            State *
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtState" class="input70" style="font-size:medium;" />
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Email Id
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <Input type="text" id="txtEmail" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <Input type="text" id="txtEmail" class="input70" />
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Alternate Mobile No
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="txtAlternateMobileNo" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtAlternateMobileNo" class="input70" />
                         </div>
+                        @*<div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            WhatsApp No
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtWhatsAppNo" class="input70" />
+                        </div>*@
                     </div>
+                   
                     <div class="button-row mt-5" style="text-align:center;">
                         <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnNewMember" tabindex="20" Onclick="Validate()">Submit</button>
                     </div>
@@ -170,21 +215,34 @@
             </div>
 
             <div class="row justify-content-center">
-                <div class="mt-5 mb-2 pr-3 pt-3 pl-3 card  col-md-12 col-xl-5" id="tblExistingDetails" style="padding-bottom: 20px; border-radius: 20px; display: none">
+                @*<div class="mt-5 mb-2 pr-3 pt-3 pl-3 card  col-md-12 col-xl-5" id="tblExistingDetails" style="padding-bottom: 20px; border-radius: 20px; display: none">*@
+                <div class="mb-2 pr-3 pt-3 pl-3 card" id="tblExistingDetails" style="padding-bottom: 20px; border-radius: 20px; display: none">
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Member Name
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            First Name
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="txttxtName" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txttxtName" class="input70" style="font-size:medium;" />
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Middle Name
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txttxtMiddleName" class="input70" style="font-size:medium;" />
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            SurName
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txttxtSurName" class="input70" style="font-size:medium;" />
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Gender
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <select id="ddltxtGender" name="Gender" class="input100" style="font-size:medium;">
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <select id="ddltxtGender" name="Gender" class="input70" style="font-size:medium;">
                                 <option>Select</option>
                                 <option>Male</option>
                                 <option>Female</option>
@@ -192,71 +250,105 @@
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Date Of Birth
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="dtextDOB" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="dtextDOB" class="input70" />
                         </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Date Of Anniversary
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <input type="text" id="dttextDOA" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="dttextDOA" class="input70" />
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            Address
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Address1
                         </div>
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
-                            <textarea type="text" id="txtextAddress" class="input100"></textarea>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <textarea type="text" id="txtextAddress" class="input70"></textarea>
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Area
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txttxtArea" class="input70"/>
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            City
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txttxtCity" class="input70" style="font-size:medium;" />
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            Pin Code
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtPinCode2" class="input70" style="font-size:medium;" />
+                        </div>
+                    </div>
+                    <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            State
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtState2" class="input70" style="font-size:medium;" />
+                        </div>
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Email Id
                         </div>
-                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                            <Input type="text" id="txtextEmail" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <Input type="text" id="txtextEmail" class="input70" />
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Alternate Mobile No
                         </div>
-                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                            <input type="text" id="txttextAlternateMobileNo" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txttextAlternateMobileNo" class="input70" />
                         </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+                        @*<div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                            WhatsApp No
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtWhatsAppNo2" class="input70" />
+                        </div>*@
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Total Available Points
                         </div>
-                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                            <input type="text" id="txtextAvailablePoints" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="txtextAvailablePoints" class="input70" />
                         </div>
                     </div>
                     <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
+
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Last Txn Date
                         </div>
-                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                            <input type="text" id="LastTxnDate" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="LastTxnDate" class="input70" />
                         </div>
-                    </div>
-                    <div class="row" style="margin: 0;">
-                        <div class="col-lg-4 col-md-2" style="font-size: medium; margin-top: 10px;">
+                        <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                             Points Expiry Date
                         </div>
-                        <div class="col-lg-4 col-md-2" style="float:left;margin-top:10px;">
-                            <input type="text" id="PointsExpDate" class="input100" />
+                        <div class="col-sm-4" style="float:left;margin-top:10px;">
+                            <input type="text" id="PointsExpDate" class="input70" />
                         </div>
                     </div>
-                    <div class="button-row mt-5" style="text-align:center;">
-                        <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnExistMember" tabindex="20">Submit</button>
+                    @*<div class="row" style="margin: 0;">  
+                        
+                    </div>*@
+                    <div class="row" style="margin: 0;">
+                        <div class="button-row mt-5 col-sm-4" style="text-align:center;">
+                            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnExistMember" tabindex="20">Submit</button>
+                        </div>
+                        <div class="button-row mt-5 col-sm-4" style="text-align:center;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -316,7 +408,7 @@
                 buttonText: "Okay"
             })
         }
-        
+
         else {
             $("#divLoader").show();
         $.ajax({
@@ -339,8 +431,14 @@
                             cancelText: "No"
                         }).then((e) => {
                             if (e == ("confirm")) {
-                                $("#txttxtName").val(responce.CustomerName);
-
+                                if (responce.CustomerName != "") {
+                                    $("#txttxtName").val(responce.CustomerName);
+                                }
+                                else {
+                                    $("#txttxtName").val(responce.FirstName);
+                                } 
+                                $("#txttxtMiddleName").val(responce.MiddleName);
+                                $("#txttxtSurName").val(responce.SurName);
                                 if (responce.Gender == "M") {
                                     $("#ddltxtGender").val("Male");
                                 }
@@ -350,6 +448,11 @@
                                 $("#dtextDOB").val(responce.strDOB);
                                 $("#dttextDOA").val(responce.strDOA);
                                 $("#txtextAddress").val(responce.Address);
+                                $("#txttxtArea").val(responce.Area);
+                                $("#txttxtCity").val(responce.City);
+                                $("#txtPinCode2").val(responce.Pincode);
+                                $("#txtState2").val(responce.State);
+                                
                                 $("#txtextEmail").val(responce.EmailId);
                                 $("#txtextAvailablePoints").val(responce.Points);
                                 $("#LastTxnDate").val(responce.strLsttxndate);
@@ -370,7 +473,15 @@
                     }
 
                     else {
-                        $("#txttxtName").val(responce.CustomerName);
+                        if (responce.CustomerName != "") {
+                            $("#txttxtName").val(responce.CustomerName);
+                        }
+                        else {
+                            $("#txttxtName").val(responce.FirstName);
+                        }
+                       
+                        $("#txttxtMiddleName").val(responce.MiddleName);
+                        $("#txttxtSurName").val(responce.SurName);
 
                         if (responce.Gender == "M") {
                             $("#ddltxtGender").val("Male");
@@ -381,6 +492,11 @@
                         $("#dtextDOB").val(responce.strDOB);
                         $("#dttextDOA").val(responce.strDOA);
                         $("#txtextAddress").val(responce.Address);
+                        $("#txttxtArea").val(responce.Area);
+                        $("#txttxtCity").val(responce.City);
+                        $("#txtPinCode2").val(responce.Pincode);
+                        $("#txtState2").val(responce.State);
+                       
                         $("#txtextEmail").val(responce.EmailId);
                         $("#txtextAvailablePoints").val(responce.Points);
                         $("#LastTxnDate").val(responce.strLsttxndate);
@@ -413,15 +529,21 @@
     function Validate() {
 
         var MobileNo = $("#txtMobileNo").val();
-        var Name = $("#txtName").val();
+        //var Name = $("#txtName").val();
+        var FirstName = $("#txtFirstName").val();
+        var MiddleName = $("#txtMiddleName").val();
+        var SurName = $("#txtSurName").val();
         var Gender = $("#ddlGender").val();
         var DOB = $("#dtDOB").val();
         var DOA = $("#dtDOA").val();
         var EmailId = $("#txtEmail").val();
         var Address = $("#txtAddress").val();
+        var City = $("#txtCity").val();
+        var PinCode = $("#txtPinCode").val();
+        var State = $("#txtState").val();
         var AlternateMobileNo = $("#txtAlternateMobileNo").val();
 
-        if (Name == "") {
+        if (FirstName == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
@@ -459,14 +581,21 @@
             item["GroupId"] = $("#hdnGroupId").val();
             item["EventId"] = $("#hdnEventId").val();
             item["Place"] = $("#hdnPlace").val();
-            item["Name"] = Name;
-            item["Mobileno"] = MobileNo;
+            //item["Name"] = Name;
+            item["FirstName"] = FirstName;
+            item["MiddleName"] = MiddleName;
+            item["SurName"] = SurName;
             item["Gender"] = Gender;
             item["DOB"] = DOB;
             item["DOA"] = DOA;
             item["EmailId"] = EmailId;
             item["Address"] = Address;
+            item["City"] = City;
+            item["PinCode"] = PinCode;
+            item["Address"] = Address;
+            item["State"] = State;
             item["AlternateNo"] = AlternateMobileNo;
+            item["Area"] = $("#txtArea").val();
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
             $("#divLoader").show();
@@ -515,20 +644,26 @@
         if (Gender == "Select") {
             Gender = null;
         }
-
             var FilterData = [];
             item = {};
             item["GroupId"] = $("#hdnGroupId").val();
             item["EventId"] = $("#hdnEventId").val();
             item["Place"] = $("#hdnPlace").val();
-            item["Name"] = $("#txttxtName").val();
+            //item["Name"] = $("#txttxtName").val();
+            item["FirstName"] = $("#txttxtName").val();
+            item["MiddleName"] = $("#txttxtMiddleName").val();
+            item["SurName"] = $("#txttxtSurName").val();
             item["Mobileno"] = $("#txtMobileNo").val();
             item["Gender"] = Gender;
             item["DOB"] = $("#dtextDOB").val();
             item["DOA"] = $("#dttextDOA").val();
             item["EmailId"] = $("#txtextEmail").val();
             item["Address"] = $("#txtextAddress").val();
+            item["City"] = $("#txttxtCity").val(); 
+            item["PinCode"] = $("#txtPinCode2").val();
+            item["State"] = $("#txtState2").val();
             item["AlternateNo"] = $("#txttextAlternateMobileNo").val();
+            item["Area"] = $("#txttxtArea").val();
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
             $("#divLoader").show();

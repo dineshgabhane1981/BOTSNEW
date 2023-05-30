@@ -11,6 +11,9 @@ namespace BOTS_BL.Models.EventModule
     {
         public string Mobileno { get; set; }
         public string CustomerName { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string SurName { get; set; }
         public string Gender { get; set; }
         public DateTime?  DOB { get; set; }
         public DateTime? AnniversaryDate { get; set; }
@@ -19,6 +22,10 @@ namespace BOTS_BL.Models.EventModule
         public decimal Points { get; set; }
         public DateTime? LastTxnDate { get; set; }
         public DateTime? PointExp { get; set; }
+        public string Area { get; set; }
+        public string City { get; set; }
+        public string Pincode { get; set; }
+        public string State { get; set; }
 
         [NotMapped]
         public string strLsttxndate { get; set; }
