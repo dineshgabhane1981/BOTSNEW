@@ -390,7 +390,8 @@
         var GroupId = $("#hdnGroupId").val();
         var Place = $("#hdnPlace").val();
         var EventId = $("#hdnEventId").val();
-
+        
+        
         if (Mobileno == '') {
             cuteAlert({
                 type: "error",
@@ -463,6 +464,7 @@
                                 $("#txtextAvailablePoints").attr("disabled", "disabled");
                                 $("#tblExistingDetails").show();
                                 $("#tblNewMemberData").hide();
+                                $("#txtMobileNo").attr("disabled", "disabled");
                                 $("#divLoader").hide();
                             }
                             else {
@@ -507,6 +509,7 @@
                         $("#txtextAvailablePoints").attr("disabled", "disabled");
                         $("#tblExistingDetails").show();
                         $("#tblNewMemberData").hide();
+                        $("#txtMobileNo").attr("disabled", "disabled");
                         $("#divLoader").hide();
                     }
                 }
