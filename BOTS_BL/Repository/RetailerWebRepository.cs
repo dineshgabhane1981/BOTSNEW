@@ -272,13 +272,22 @@ namespace BOTS_BL.Repository
                             if (dt2.Rows.Count > 0)
                             {
                                 string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
-                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);                               
 
                                 if (SMSStatus == "1" && WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
-                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
-                                    _job.Start();
+                                    
+                                    if(groupId == "1007")
+                                    {
+                                        Thread _job1 = new Thread(() => SendBOTSVideo(dt3));
+                                        _job1.Start();
+                                    }
+                                    else
+                                    {
+                                        Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                        _job.Start();
+                                    }                                  
                                 }
                                 else if (SMSStatus == "1")
                                 {
@@ -297,12 +306,20 @@ namespace BOTS_BL.Repository
                                 else if (WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
-                                    Thread _job = new Thread(() => SendWAMessage(dt3));
-                                    _job.Start();
+                                    
+                                    if (groupId == "1007")
+                                    {
+                                        Thread _job1 = new Thread(() => SendBOTSVideo(dt3));
+                                        _job1.Start();
+                                    }
+                                    else
+                                    {
+                                        Thread _job = new Thread(() => SendWAMessage(dt3));
+                                        _job.Start();
+
+                                    }
                                 }
                             }
-
-
                         }
                         else
                         {
@@ -363,6 +380,8 @@ namespace BOTS_BL.Repository
                             R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
                             R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
 
+                            
+
                             if (dt2.Rows.Count > 0)
                             {
                                 string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
@@ -371,6 +390,7 @@ namespace BOTS_BL.Repository
                                 if (SMSStatus == "1" && WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
+
                                     Thread _job = new Thread(() => SendSMSandWA(dt3));
                                     _job.Start();
                                 }
@@ -391,6 +411,7 @@ namespace BOTS_BL.Repository
                                 else if (SMSStatus == "0" && WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
+
                                     Thread _job = new Thread(() => SendWAMessage(dt3));
                                     _job.Start();
                                 }
@@ -457,6 +478,8 @@ namespace BOTS_BL.Repository
                             R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
                             R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
 
+                            
+
                             if (dt2.Rows.Count > 0)
                             {
                                 string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
@@ -465,6 +488,7 @@ namespace BOTS_BL.Repository
                                 if (SMSStatus == "1" && WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
+
                                     Thread _job = new Thread(() => SendSMSandWA(dt3));
                                     _job.Start();
                                 }
@@ -485,6 +509,7 @@ namespace BOTS_BL.Repository
                                 else if (SMSStatus == "0" && WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
+
                                     Thread _job = new Thread(() => SendWAMessage(dt3));
                                     _job.Start();
                                 }
@@ -540,6 +565,7 @@ namespace BOTS_BL.Repository
                         daReport.Fill(retVal);
 
                         DataTable dt = retVal.Tables[0];
+
                         if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                         {
                             R.ResponseCode = "00";
@@ -550,13 +576,17 @@ namespace BOTS_BL.Repository
                             R.PointsRedeemed = Convert.ToString(dt1.Rows[0]["PointsRedeemed"]);
                             R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
 
+
                             if (dt2.Rows.Count > 0)
                             {
+                               
+
                                 string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
                                 string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
                                 if (SMSStatus == "1" && WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
+
                                     Thread _job = new Thread(() => SendSMSandWA(dt3));
                                     _job.Start();
                                 }
@@ -577,6 +607,7 @@ namespace BOTS_BL.Repository
                                 else if (SMSStatus == "0" && WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
+
                                     Thread _job = new Thread(() => SendWAMessage(dt3));
                                     _job.Start();
                                 }
@@ -929,9 +960,12 @@ namespace BOTS_BL.Repository
                                 string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
                                 string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
 
+                                
+
                                 if (SMSStatus == "1" && WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
+
                                     Thread _job = new Thread(() => SendSMSandWA(dt3));
                                     _job.Start();
                                 }
@@ -952,6 +986,7 @@ namespace BOTS_BL.Repository
                                 else if (WAStatus == "1")
                                 {
                                     DataTable dt3 = retVal.Tables[3];
+
                                     Thread _job = new Thread(() => SendWAMessage(dt3));
                                     _job.Start();
                                 }
@@ -1014,8 +1049,35 @@ namespace BOTS_BL.Repository
                                 string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
                                 string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
 
-                            }
+                                if (SMSStatus == "1" && WAStatus == "1")
+                                {
+                                    DataTable dt3 = retVal.Tables[3];
 
+                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                    _job.Start();
+                                }
+                                else if (SMSStatus == "1" && WAStatus == "0")
+                                {
+                                    DataTable dt3 = retVal.Tables[3];
+
+                                    string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
+                                    string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
+                                    string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
+                                    string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
+                                    string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
+                                    string _Url = dt3.Rows[0]["UrlOTP"].ToString();
+                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                    _job.Start();
+                                }
+                                else if (SMSStatus == "0" && WAStatus == "1")
+                                {
+                                    DataTable dt3 = retVal.Tables[3];
+
+                                    Thread _job = new Thread(() => SendWAMessage(dt3));
+                                    _job.Start();
+                                }
+                            }
                         }
                         else
                         {
@@ -1127,6 +1189,59 @@ namespace BOTS_BL.Repository
                 sbposdata.AppendFormat("&message={0}", _WAMessage);
                 sbposdata.AppendFormat("&wacheck={0}", "true");
 
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void SendBOTSVideo(DataTable dt3)
+        {
+            string responseString;
+            string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+            string _WATokenId = dt3.Rows[0]["WATokenId"].ToString();
+            string _WAMessage = dt3.Rows[0]["WhatsAppMessage"].ToString();
+            try
+            {
+
+                _WAMessage = _WAMessage.Replace("#99", "&");
+                _WAMessage = HttpUtility.UrlEncode(_WAMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat("https://bo.enotify.app/api/sendFileWithCaption?");
+                sbposdata.AppendFormat("token={0}", _WATokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _WAMessage);
+                sbposdata.AppendFormat("&link={0}", "https://blueocktopus.in/BitlyImages/BOTS_Introduction.MP4");
+                
                 string Url = sbposdata.ToString();
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
                 ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
