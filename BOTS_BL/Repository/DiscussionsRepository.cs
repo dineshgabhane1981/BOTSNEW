@@ -569,7 +569,8 @@ namespace BOTS_BL.Repository
                     objmail.subtypetext = _SubCallType.CallSubType;
                     objmail.MemberCompleted = Completedid.Members;
                     objmail.FilePath = path;
-                    objmail.GroupName = _GroupName;
+                    //objmail.GroupName = _GroupName;
+                    objmail.GroupName = _GroupDetails.GroupName;
                     objmail.id = objDiscussion.Id;
                     objmail.Description = objsubdiscussion.Description;
                     objmail.TeamName = Sendfrom.Department;
