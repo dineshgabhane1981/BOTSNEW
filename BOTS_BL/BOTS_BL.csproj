@@ -301,6 +301,7 @@
     <Compile Include="Models\EventModule\EventModuleMessageData.cs" />
     <Compile Include="Models\EventModule\ReminderData.cs" />
     <Compile Include="Models\ExecutiveSummary.cs" />
+    <Compile Include="Models\Exhibition\tblExhibitionData.cs" />
     <Compile Include="Models\FeedbackModule\DashboardNewAndExisting.cs" />
     <Compile Include="Models\FeedbackModule\FeedbackData.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_Content.cs" />
@@ -482,6 +483,7 @@
     <Compile Include="Repository\DocumentLibraryRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
     <Compile Include="Repository\EventsRepository.cs" />
+    <Compile Include="Repository\ExhibitionRepository.cs" />
     <Compile Include="Repository\FeedbackModuleRepository.cs" />
     <Compile Include="Repository\FeedBackRepository.cs" />
     <Compile Include="Repository\HeatMapsRepository.cs" />

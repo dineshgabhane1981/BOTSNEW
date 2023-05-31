@@ -488,6 +488,7 @@ namespace WebApp.Controllers.OnBoarding
                 string BillingPartner = string.Empty;
                 string Category = string.Empty;
                 string NoOfOutlets = "";
+                string BillingProduct = string.Empty;
                 foreach (var item in RetailList)
                 {
                     if (count == 1)
@@ -496,6 +497,7 @@ namespace WebApp.Controllers.OnBoarding
                         NoOfOutlets = Convert.ToString(item.NoOfEnrolled);
                         BillingPartner = item.BillingPartner;
                         Product = item.BOProduct;
+                        BillingProduct = item.BillingProduct;
                     }
                     else
                     {
@@ -503,16 +505,21 @@ namespace WebApp.Controllers.OnBoarding
                         NoOfOutlets += "," + Convert.ToString(item.NoOfEnrolled);
                         BillingPartner += "," + item.BillingPartner;
                         Product += "," + item.BOProduct;
+                        BillingProduct += "," + item.BillingProduct;
                     }
                     count++;
                 }
 
                 sb.Append("<tr>");
-                sb.Append("<td>Product:</td><td>" + Product + "</td>");
+                sb.Append("<td>BO Product:</td><td>" + Product + "</td>");
                 sb.Append("</tr>");
 
                 sb.Append("<tr>");
                 sb.Append("<td>Billing Partner:</td><td>" + BillingPartner + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Billing Product:</td><td>" + BillingProduct + "</td>");
                 sb.Append("</tr>");
 
                 sb.Append("<tr>");

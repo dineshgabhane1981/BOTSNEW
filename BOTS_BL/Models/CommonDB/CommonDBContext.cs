@@ -17,6 +17,7 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<tblExhibitionData> tblExhibitionDatas { get; set; }
         public virtual DbSet<tblEventReportEmail> tblEventReportEmails { get; set; }
         public virtual DbSet<tblDiscussionCustomerData> tblDiscussionCustomerDatas { get; set; }
         public virtual DbSet<tblDocumentType> tblDocumentTypes { get; set; }

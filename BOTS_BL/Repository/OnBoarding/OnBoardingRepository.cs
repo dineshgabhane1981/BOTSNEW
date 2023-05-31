@@ -490,8 +490,10 @@ namespace BOTS_BL.Repository
                         item1.NoOfOutlets = item.NoOfOutlets;
                         item1.NoOfEnrolled = item.NoOfEnrolled;
                         var id = Convert.ToInt32(item.BillingPartner);
+                        var BPID= Convert.ToInt32(item.BillingProduct);
                         item1.BillingPartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
                         item1.BOProduct = item.BOProduct == "1" ? "Octa Plus" : "Octa XS";
+                        item1.BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BPID).Select(y => y.BillingPartnerProductName).FirstOrDefault();
                         objData.Add(item1);
                     }
                 }

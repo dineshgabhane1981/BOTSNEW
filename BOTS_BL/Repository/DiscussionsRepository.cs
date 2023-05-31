@@ -423,7 +423,7 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone, string RequestType)
+        public bool UpdateDiscussions(string id, string Desc, string Status, string LoginId, string FollowupDate, string Reassign, string DoneFileName, string FileDone, string RequestType,string DoneNotDone)
         {
             XmlDocument doc = new XmlDocument();
             var xmlpath = ConfigurationManager.AppSettings["DiscussionScripts"].ToString();
@@ -444,28 +444,26 @@ namespace BOTS_BL.Repository
                 string _FileURL = ConfigurationManager.AppSettings["DiscussionDocumentURL"];
                 string FileLocation = _FilePath + "/" + DoneFileName;
 
-                if (FileDone != null)//(!string.IsNullOrEmpty(FileDone))
+                using (var context = new CommonDBContext())
                 {
+                    int mId = Convert.ToInt32(id);
+                    var groupId = context.BOTS_TblDiscussion.Where(x => x.Id == mId).Select(y => y.GroupId).FirstOrDefault();
+                    var gId = Convert.ToInt32(groupId);
+                    var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
 
-                    
-                    using (var context = new CommonDBContext())
+                    if (_GroupDetails == null)
                     {
-                        int mId = Convert.ToInt32(id);
-                        var groupId = context.BOTS_TblDiscussion.Where(x => x.Id == mId).Select(y => y.GroupId).FirstOrDefault();
-                        var gId = Convert.ToInt32(groupId);
-                        var _GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == gId).FirstOrDefault();
-                        
-                        if (_GroupDetails == null)
-                        {
-                            var onBoardingGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
-                            _GroupName = onBoardingGroupDetail.GroupName;
-                        }
-                        else
-                        {
-                            _GroupName = _GroupDetails.RetailName;
-                        }
-
+                        var onBoardingGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
+                        _GroupName = onBoardingGroupDetail.GroupName;
                     }
+                    else
+                    {
+                        _GroupName = _GroupDetails.RetailName;
+                    }
+                }
+                if (FileDone != null)//(!string.IsNullOrEmpty(FileDone))
+                {                   
+                   
                     var GroupFolder = _FilePath + "/" + _GroupName;
                     if (!Directory.Exists(GroupFolder))
                     {
@@ -511,6 +509,7 @@ namespace BOTS_BL.Repository
                     objsubdiscussion.UpdatedBy = LoginId;
                     objsubdiscussion.AddedDate = DateTime.Now;
                     objsubdiscussion.RequestType = RequestType;
+                    objsubdiscussion.DoneNotDone = DoneNotDone;
 
                     if (Reassign != "Please Select")
                     {
@@ -569,8 +568,7 @@ namespace BOTS_BL.Repository
                     objmail.subtypetext = _SubCallType.CallSubType;
                     objmail.MemberCompleted = Completedid.Members;
                     objmail.FilePath = path;
-                    //objmail.GroupName = _GroupName;
-                    objmail.GroupName = _GroupDetails.GroupName;
+                    objmail.GroupName = _GroupName;
                     objmail.id = objDiscussion.Id;
                     objmail.Description = objsubdiscussion.Description;
                     objmail.TeamName = Sendfrom.Department;
@@ -586,32 +584,32 @@ namespace BOTS_BL.Repository
 
                     if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
                     {
-                        if (objDiscussion.SubCallType == "27" && objsubdiscussion.Status == "Completed")
+                        if (objDiscussion.SubCallType == "27" && objsubdiscussion.Status == "Completed" && DoneNotDone=="Done")
                         {
                             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DiscussionFirstDone");
                             Script = node.InnerText;
                         }
-                        else if (objDiscussion.SubCallType == "27" && objsubdiscussion.Status != "Completed")
+                        else if (objDiscussion.SubCallType == "27" && objsubdiscussion.Status == "Completed" && DoneNotDone == "Not Done")
                         {
                             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DiscussionFirstNotDone");
                             Script = node.InnerText;
                         }
-                        else if (objDiscussion.SubCallType == "26" && objsubdiscussion.Status == "Completed")
+                        else if (objDiscussion.SubCallType == "26" && objsubdiscussion.Status == "Completed" && DoneNotDone == "Done")
                         {
                             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/IdeasCampaignDiscussionDone");
                             Script = node.InnerText;
                         }
-                        else if (objDiscussion.SubCallType == "26" && objsubdiscussion.Status != "Completed")
+                        else if (objDiscussion.SubCallType == "26" && objsubdiscussion.Status == "Completed" && DoneNotDone == "Not Done")
                         {
                             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/IdeasCampaignDiscussionNotDone");
                             Script = node.InnerText;
                         }
-                        else if (objDiscussion.SubCallType == "25" && objsubdiscussion.Status == "Completed")
+                        else if (objDiscussion.SubCallType == "25" && objsubdiscussion.Status == "Completed" && DoneNotDone == "Done")
                         {
                             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DashboardCampaignDiscussionDone");
                             Script = node.InnerText;
                         }
-                        else if (objDiscussion.SubCallType == "25" && objsubdiscussion.Status != "Completed")
+                        else if (objDiscussion.SubCallType == "25" && objsubdiscussion.Status == "Completed" && DoneNotDone == "Not Done")
                         {
                             XmlNode node = doc.DocumentElement.SelectSingleNode("/packets/DashboardCampaignDiscussionNotDone");
                             Script = node.InnerText;
@@ -681,8 +679,11 @@ namespace BOTS_BL.Repository
                             }
                             if (_WAGroupCode != null)
                             {
-                                Thread _job2 = new Thread(() => SendWAMessageUpdateHOD(ObjMsgData));
-                                _job2.Start();
+                                if (!string.IsNullOrEmpty(ObjMsgData.Message))
+                                {
+                                    Thread _job2 = new Thread(() => SendWAMessageUpdateHOD(ObjMsgData));
+                                    _job2.Start();
+                                }
                             }
                         }
                         else
@@ -2218,6 +2219,18 @@ namespace BOTS_BL.Repository
             }
             return lstCount;
         }
+
+        public BOTS_TblDiscussion GetDiscussionById(int Id)
+        {
+            BOTS_TblDiscussion objData = new BOTS_TblDiscussion();
+            using (var context = new CommonDBContext())
+            {
+                objData = context.BOTS_TblDiscussion.Where(x => x.Id == Id).FirstOrDefault();
+            }
+
+            return objData;
+        }
+
         public void SendEmail(EmailDetails Emaildata)
         {
             string responseString;
@@ -2891,7 +2904,6 @@ namespace BOTS_BL.Repository
             var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
             var PortNo = 587;
             var OpsTeam = "operations@blueocktopus.in";
-            
 
             try
             {
@@ -2966,20 +2978,16 @@ namespace BOTS_BL.Repository
                     }
                 }
             }
-
             catch (ArgumentException ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
             }
             catch (WebException ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
             }
             catch (Exception ex)
             {
-
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
 

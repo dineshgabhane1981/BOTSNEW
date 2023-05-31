@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="~/Content/style.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+@*<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />*@
+<script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+<link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+<link href="~/Content/main.css" rel="stylesheet">
+
+<style>
+    #loader {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        opacity: 1;
+        z-index: 1021;
+        background: rgba(255, 255, 255, .7);
+    }
+
+    .loader-inner {
+        width: 100px;
+        height: 100px;
+        border-radius: 100%;
+        position: relative;
+        margin: auto;
+    }
+
+        .loader-inner:before,
+        .loader-inner:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            /* border-radius: 100%;
+                border: 10px solid transparent;
+                border-top-color: darkblue;*/
+        }
+
+        .loader-inner:before {
+            z-index: 100;
+            /*background-image: url(~/Content/assets/BlueocktopusLoadingGIF.mp4);
+                animation: spinner-border 1s infinite;*/
+        }
+
+        .loader-inner:after {
+            /*border: 10px solid lightblue;*/
+        }
+</style>
+<div id="divLoader" runat="server" style="display:none">
+    <div id="loader">
+        <div class="loader-inner">
+            <img src="https://blueocktopus.in/bots/Content/assets/BlueocktopusLoadingGIF.gif" width="100px" height="100px" />
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
+    <div class="mb-2 pr-3 pt-3 pl-3 card " style="padding-bottom:20px;">
+        <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
+            <div class="row col-lg-10 col-md-10">
+                <div class="col-lg-10 col-md-10" style="margin-bottom:20px; text-align: center;"><img src="https://blueocktopus.in/Logo/BlueocktopusLogo.png" alt="Logo" width="30%"></div>
+            </div>
+        </div>
+        <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
+            <div class="row col-lg-10 col-md-10">
+                <div class="col-lg-10 col-md-10" style="margin-bottom:20px; text-align: center;"><h2>Engage, Retain & Delight your customers with our Loyalty, Retention & Analytics Platform</h2></div>
+            </div>
+        </div>
+        <div class="row col-lg-9 col-md-9 mb-2 ml-2" >
+
+            <div class="row col-lg-6 col-md-9 mb-2 ml-2" style="padding-top:20px !important;">
+                <div class="col-lg-9 col-md-9">Mobile No* <br /><input type="text" id="txtMobileNo" class="input100" /></div>
+            </div>
+
+
+            <div class="row col-lg-6 col-md-9 mb-2 ml-2">
+
+                <div class="col-lg-9 col-md-9">Name* <br /><input type="text" id="txtName" class="input100" /></div>
+            </div>
+
+
+
+            <div class="row col-lg-6 col-md-9 mb-2 ml-2">
+
+                <div class="col-lg-9 col-md-9">Business Name* <br /><input type="text" id="txtRetailName" class="input100" /></div>
+            </div>
+
+            <div class="row col-lg-6 col-md-9 mb-2 ml-2">
+
+                <div class="col-lg-9 col-md-9">City* <br /><input type="text" id="txtCity" class="input100" /></div>
+            </div>
+            <div class="row col-lg-6 col-md-9 mb-2 ml-2">
+
+                <div class="col-lg-9 col-md-9">Billing System <br /><input type="text" id="txtBillingSystem" class="input100" /></div>
+            </div>
+            <div class="row col-lg-6 col-md-9 mb-2 ml-2 " style="text-align:center; padding-bottom:10px;">
+                <button class="btn btn-primary" type="button" id="btnAdd" style="margin-left:70px;" tabindex="20" Onclick="Submit()">Submit</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+    });
+    
+    function Submit() {
+
+        var MobileNo = $("#txtMobileNo").val();
+        var Name = $("#txtName").val();
+        var RetailName = $("#txtRetailName").val();
+        var City = $("#txtCity").val();
+        var BillingSystem = $("#txtBillingSystem").val();
+       
+        if (MobileNo == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Mobile No",
+                buttonText: "Okay"
+            })
+            $("#txtMobileNo").focus();
+        }
+        else if (Name == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Customer Name",
+                buttonText: "Okay"
+            })
+        }
+        else if (RetailName == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Retail Name",
+                buttonText: "Okay"
+            })
+        }
+        else if (City == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter City",
+                buttonText: "Okay"
+            })
+        }
+        else {            
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveInquiryData", "Inquiry")',
+                data: '{MobileNo: ' + JSON.stringify(MobileNo) + ',Name: ' + JSON.stringify(Name) + ',RetailName: ' + JSON.stringify(RetailName) + ',City: ' + JSON.stringify(City) + ',BillingSystem: ' + JSON.stringify(BillingSystem) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {                    
+                    if (result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Success Title",
+                            message: "Inquiry Details saved Successfully",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            window.location.reload();
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "This Customer is already exist",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                }
+            });
+        }
+
+    }
+</script>

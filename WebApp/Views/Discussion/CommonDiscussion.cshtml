@@ -61,6 +61,7 @@
             <input type="hidden" id="hdnIdNew" name="hdnIdNew" />
             <input type="hidden" id="DoneFileName" name="DoneFileName" />
             <input type="hidden" id="DoneDocBase64" name="DoneDocBase64" />
+            <input type="hidden" id="hdnSubDiscussionId" name="hdnSubDiscussionId" />
             <b>Common Discussions</b>
 
             <div class="row" style="margin: 0;">
@@ -192,6 +193,19 @@
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 <input type="text" id="txtFollowupDateNew" class="input50" />
+            </div>
+        </div>
+        <div class="row" style="margin: 0;display:none;" id="dvDoneNotDonePopup">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Completed Status
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <select id="ddlDoneNotDoneSub" class="input100">
+                    <option>Select</option>
+                    <option>Done</option>
+                    <option>Not Done</option>
+                    <option>Reschedule</option>
+                </select>
             </div>
         </div>
 
@@ -695,12 +709,39 @@
                     console.log(result.responseText)
                 }
         });
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDiscussionById", "Discussion")',
+            data: '{Id: ' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result.SubCallType == 25 || result.SubCallType == 26 || result.SubCallType == 27) {
+                        $("#dvDoneNotDonePopup").show();
+                        $("#hdnSubDiscussionId").val(result.SubCallType);
+
+                    }
+                    else {
+                        $("#dvDoneNotDonePopup").hide();
+                        $("#hdnSubDiscussionId").val("");
+                    }
+
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                }
+        });
 
         $("#myModal").show(1000);
         $("#hdnIdNew").val(id);
     }
 
-    function UpdateStatusNew() {
+    function UpdateStatusNew() {       
+        var result = true;
         var id = $("#hdnIdNew").val();
         var Desc = $("#txtDesc").val();
         var Status = $("#ddlPopupStatus").val();
@@ -708,40 +749,56 @@
         var FileDone = $("#DoneDocBase64").val();
         var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew").val();
-        
-        if (Desc != "") {
-            alert(111)
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
-                data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) +'}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    $("#myModal").hide(1000);
-                },
-                error: function (result) {
-                    if (result.responseText == "True") {
-                        cuteAlert({
-                            type: "success",
-                            title: "Saved",
-                            message: "Status updated Successfully !!!",
-                            buttonText: "Okay"
-                        })
-                        GetData();
-                        $("#myModal").hide(1000);
-                    }
+        var SubDiscussionCallType = $("#hdnSubDiscussionId").val();
+        var DoneNotDone = $("#ddlDoneNotDoneSub option:selected").text();       
+        if (Status == "Completed") {
+            if (SubDiscussionCallType != "") {
+                if ($("#ddlDoneNotDoneSub option:selected").text() == "Select") {
+                    result = false;
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS..",
+                        message: "Please select Completed Status(Done/Not Done/Reschedule) ",
+                        buttonText: "Okay"
+                    })
                 }
-            });
+            }
         }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Required fields",
-                buttonText: "Okay"
-            })
-            $('#txtDesc').css('border-color', 'red');
+        if (result) {            
+            if (Desc != "") {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
+                    data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) + ',DoneNotDone: ' + JSON.stringify(DoneNotDone) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#myModal").hide(1000);
+                    },
+                    error: function (result) {
+                        if (result.responseText == "True") {
+                            cuteAlert({
+                                type: "success",
+                                title: "Saved",
+                                message: "Status updated Successfully !!!",
+                                buttonText: "Okay"
+                            })
+                            GetData();
+                            $("#myModal").hide(1000);
+                        }
+                    }
+                });
+            }
+            else {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please enter Required fields",
+                    buttonText: "Okay"
+                })
+                $('#txtDesc').css('border-color', 'red');
+            }
         }
     }
 

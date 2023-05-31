@@ -182,7 +182,8 @@ namespace WebApp.Controllers
                 string FileName = Obj.FileName;
                 string File = Obj.File;
                 string RequestType = Obj.RequestType;
-                status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File, RequestType);
+                string DoneNotDone = Obj.DoneNotDone;
+                status = DR.UpdateDiscussions(dId, Desc, Status, userDetails.LoginId, FollowupDate, Reassign, FileName, File, RequestType, DoneNotDone);
 
                 ModelState.Clear();
             }
@@ -344,6 +345,13 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var CustMobileNo = DR.GetDiscussionCustMobile(CustName, userDetails.GroupId);
             return new JsonResult() { Data = CustMobileNo, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetDiscussionById(string Id)
+        {
+            BOTS_TblDiscussion objDiscussionData = new BOTS_TblDiscussion();
+            objDiscussionData = DR.GetDiscussionById(Convert.ToInt32(Id));
+
+            return new JsonResult() { Data = objDiscussionData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }

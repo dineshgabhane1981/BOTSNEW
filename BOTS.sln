@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medration", "Medration\Medr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLC", "DLC\DLC.csproj", "{3F5C83FE-8E3B-4CB8-B2AB-F08648E410EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exhibition", "Exhibition\Exhibition.csproj", "{6559B60C-0389-464C-A824-9B14719C18C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{3F5C83FE-8E3B-4CB8-B2AB-F08648E410EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F5C83FE-8E3B-4CB8-B2AB-F08648E410EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F5C83FE-8E3B-4CB8-B2AB-F08648E410EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6559B60C-0389-464C-A824-9B14719C18C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6559B60C-0389-464C-A824-9B14719C18C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6559B60C-0389-464C-A824-9B14719C18C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6559B60C-0389-464C-A824-9B14719C18C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

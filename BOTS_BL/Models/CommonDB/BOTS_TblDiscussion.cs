@@ -141,6 +141,7 @@ namespace BOTS_BL.Models.CommonDB
         public string FileName { get; set; }
         public string File { get; set; }
         public string RequestType { get; set; }
+        public string DoneNotDone { get; set; }
 
 
     }

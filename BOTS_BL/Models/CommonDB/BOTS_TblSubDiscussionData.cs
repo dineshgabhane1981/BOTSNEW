@@ -38,6 +38,7 @@ namespace BOTS_BL.Models.CommonDB
         public string AttachedFile { get; set; }
         public string FileName { get; set; }
         public string RequestType { get; set; }
+        public string DoneNotDone { get; set; }
 
     }
 

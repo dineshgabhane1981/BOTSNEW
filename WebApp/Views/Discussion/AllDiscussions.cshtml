@@ -133,7 +133,7 @@
                             @Html.DropDownListFor(model => model.objDiscussion.SubCallType, new SelectList(Model.lstCallSubTypes, "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlSubCallType" })
                         </div>
                         <div id="dvDoneNotDone" style="float:left;margin-top:10px;display:none;">
-                            @Html.DropDownListFor(model => model.objDiscussion.DiscussionDoneNotDone, new SelectList(Model.DiscussionDoneNotDone(), "Value", "Text"), htmlAttributes: new { @class = "input20", @id = "ddlDiscussionStatus" })
+                            @Html.DropDownListFor(model => model.objDiscussion.DiscussionDoneNotDone, new SelectList(Model.DiscussionDoneNotDone(), "Value", "Text"), "Select", htmlAttributes: new { @class = "input20", @id = "ddlDiscussionStatus" })
                         </div>
 
                     </div>
@@ -160,7 +160,7 @@
                             No. Of Tasks
                         </div>
                         <div class="col-sm-4" style="float:left;margin-top:10px;padding-left:0px;" id="TaskCount">
-                            
+
                         </div>
                     </div>
 
@@ -218,6 +218,7 @@
             <div class="row">
                 <div class="col search-container">
                     <input type="hidden" id="hdnId" name="hdnId" />
+                    <input type="hidden" id="hdnSubDiscussionId" name="hdnSubDiscussionId" />
                 </div>
                 <div style="text-align:right;">
                     <a href="#" onclick="ShowAddDiscussion();" title="Add New Discussion">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
@@ -270,7 +271,6 @@
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 <input type="text" id="txtFollowupDateNew1" class="input50" />
-
             </div>
         </div>
         <div class="row" style="margin: 0;">
@@ -284,6 +284,20 @@
                 </select>
             </div>
         </div>
+        <div class="row" style="margin: 0;display:none;" id="dvDoneNotDonePopup">
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Completed Status
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                <select id="ddlDoneNotDoneSub" class="input100">
+                    <option>Select</option>
+                    <option>Done</option>
+                    <option>Not Done</option>
+                    <option>Reschedule</option>
+                </select>
+            </div>
+        </div>
+
 
         <div class="row justify-content-end pr-4" style="margin-top:20px;margin-right:465px;">
             <button type="button" id="btnUpdateStatus" class="btn btn-primary" style="margin-right:10px;"> Update</button>
@@ -374,12 +388,12 @@
         $("#rbtnRequest").on("click", function () {
             $("#dvPriority").show();
             $("#dvDepartMembers").show();
-            $("#dvTaskCount").hide();            
+            $("#dvTaskCount").hide();
         });
         $("#rbtnComplaint").on("click", function () {
             $("#dvPriority").show();
             $("#dvDepartMembers").show();
-            $("#dvTaskCount").hide();            
+            $("#dvTaskCount").hide();
         });
         $("#rbtnQuery").on("click", function () {
             $("#dvPriority").hide();
@@ -457,9 +471,9 @@
         //alert(111)
         $('#rbtnQuery').prop("checked", true);
         $('#rbtnWIP').prop("checked", true);
-        $('#rbtnPhone').prop("checked", true);        
+        $('#rbtnPhone').prop("checked", true);
         $('#txtSpokenTo').val('');
-        $('#txtContactNo').val('');        
+        $('#txtContactNo').val('');
         $("#ddlCustomerType").prop("selectedIndex", 0);
         $("#ddlCallType").prop("selectedIndex", 0);
         $("#ddlSubCallType").prop("selectedIndex", 0);
@@ -532,6 +546,7 @@
                 $("#dvDoneNotDone").hide();
             }
         });
+
         $('#ddlSubCallType').change(function () {
             if ($("#ddlCallType option:selected").text() == "Issue") {
                 if ($("#ddlSubCallType option:selected").text() == "Please Select") {
@@ -545,13 +560,21 @@
                 $('#ddlCallType').css('border-color', '');
             }
             if ($("#ddlSubCallType").val() == "25" || $("#ddlSubCallType").val() == "26" || $("#ddlSubCallType").val() == "27") {
+                $('#ddlSubCallType').css('border-color', '');
                 $("#dvDoneNotDone").show();
             }
             else {
                 $("#dvDoneNotDone").hide();
             }
         });
-
+        $('#ddlDiscussionStatus').change(function () {
+            if ($("#ddlDiscussionStatus option:selected").text() == "Select") {
+                $('#ddlDiscussionStatus').css('border-color', 'red');
+            }
+            else {
+                $('#ddlDiscussionStatus').css('border-color', '');
+            }
+        });
         $("#txtDesc").focusout(function () {
             if ($("#txtDesc").val() != "") {
                 $('#txtDesc').css('border-color', '');
@@ -588,6 +611,12 @@
         if ($("#ddlCallType option:selected").text() == "Please Select") {
             if ($("#ddlSubCallType option:selected").text() == "Please Select") {
                 $('#ddlSubCallType').css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        if ($("#ddlSubCallType").val() == "25" || $("#ddlSubCallType").val() == "26" || $("#ddlSubCallType").val() == "27") {
+            if ($("#ddlDiscussionStatus option:selected").text() == "Select") {
+                $('#ddlDiscussionStatus').css('border-color', 'red');
                 returnStatus = false;
             }
         }
@@ -728,13 +757,40 @@
                     console.log(result.responseText)
                 }
         });
+        $("#divLoader").show();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDiscussionById", "Discussion")',
+            data: '{Id: ' + JSON.stringify(id) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result.SubCallType == 25 || result.SubCallType == 26 || result.SubCallType == 27) {
+                        $("#dvDoneNotDonePopup").show();
+                        $("#hdnSubDiscussionId").val(result.SubCallType);
+
+                    }
+                    else {
+                        $("#dvDoneNotDonePopup").hide();
+                        $("#hdnSubDiscussionId").val("");
+                    }
+
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                }
+        });
 
         $("#myModal").show(1000);
         $("#hdnId").val(id);
 
+
     }
     function UpdateStatus() {
-
+        var result = true;
         var id = $("#hdnId").val();
         var Desc = $("#txtDesc").val();
         var Status = $("#ddlPopupStatus").val();
@@ -743,7 +799,22 @@
         var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew1").val();
         var RequestType = $("#ddlRequestType").val();
-
+        var SubDiscussionCallType = $("#hdnSubDiscussionId").val();
+       
+        if (Status == "Completed") {
+            if (SubDiscussionCallType != "") {                
+                if ($("#ddlDoneNotDoneSub option:selected").text() == "Select") {                   
+                    result = false;
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS..",
+                        message: "Please select Completed Status(Done/Not Done/Reschedule) ",
+                        buttonText: "Okay"
+                    })
+                }               
+            }
+        }
+        if (result) {
         var fileData = new FormData();
         fileData.append("dId", id);
         fileData.append("Desc", Desc);
@@ -753,6 +824,7 @@
         fileData.append("FileName", DoneFileName);
         fileData.append("File", FileDone);
         fileData.append("RequestType", RequestType);
+        fileData.append("DoneNotDone", $("#ddlDoneNotDoneSub option:selected").text());
 
         if (Desc != "") {
             $.ajax({
@@ -761,10 +833,6 @@
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data
                 data: fileData,
-                //data: '{dId: ' + JSON.stringify(id) + ',Desc: ' + JSON.stringify(Desc) + ',Status: ' + JSON.stringify(Status) + ',FollowupDate: ' + JSON.stringify(FollowupDate) + ',Reassign: ' + JSON.stringify(Reassign) + ',FileName: ' + JSON.stringify(DoneFileName) + ',File: ' + JSON.stringify(FileDone) + ',RequestType: ' + JSON.stringify(RequestType) + '}',
-                //contentType: "application/json; charset=utf-8",
-                //dataType: "json",
-
                 success: function (result) {
                     $("#myModal").hide(1000);
                 },
@@ -790,6 +858,7 @@
                 buttonText: "Okay"
             })
             $('#txtDesc').css('border-color', 'red');
+            }
         }
     }
     function ShowActivities(id) {
@@ -886,7 +955,7 @@
 
     $("#ddlDepartment").change(function () {
         var Department = $("#ddlDepartment").val();
-        
+
         if ($("#ddlDepartment option:selected").text() == "Please Select") {
             $("#dvTaskCount").hide();
         }
@@ -910,7 +979,7 @@
                     $("#ddMembers").append("<option>Please Select</option>");
                     for (item in result) {
                         $("#ddMembers").append("<option>" + result[item].Members + "</option>");
-                    }                   
+                    }
                 },
                 error: function (result) {
                     //alert(111)
@@ -950,5 +1019,5 @@
             });
         }
         });
-    
+
 </script>
