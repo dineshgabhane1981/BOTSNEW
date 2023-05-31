@@ -2882,7 +2882,7 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-        public void SendEmailForTeams(EmailDetails Emaildata)
+        public void SendEmailForTeams(EmailDetails Emaildata) // AddbyEmail
         {
             string responseString;
             var from = ConfigurationManager.AppSettings["Email"].ToString();
@@ -2890,6 +2890,7 @@ namespace BOTS_BL.Repository
             var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
             var PortNo = 587;
             var OpsTeam = "operations@blueocktopus.in";
+            
 
             try
             {
@@ -2945,6 +2946,7 @@ namespace BOTS_BL.Repository
                         mail.CC.Add(Emaildata.DepartHead);
                     }
                     mail.CC.Add(OpsTeam);
+                    mail.CC.Add(Emaildata.AddbyEmail);
                     mail.Body = str.ToString();
                     mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
