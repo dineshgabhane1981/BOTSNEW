@@ -1,3 +1,4 @@
+using Exhibition.SchedulerService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace Exhibition
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            SchedulerServiceExhibition.StartAsync().GetAwaiter().GetResult();
         }
     }
 }
