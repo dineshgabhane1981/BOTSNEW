@@ -157,7 +157,6 @@ namespace Exhibition.Controllers
             WAScript = stb.ToString();
             return WAScript;
         }
-
         public void SendScheduledMsgs()
         {
             var data = ER.GetExhibitionData();
@@ -173,7 +172,6 @@ namespace Exhibition.Controllers
             var PointExpiryData = data.Where(x => x.PointExpirySentDate == null && x.PointExpiryScriptDate < DateTime.Now).ToList();
             SendPointExpiryMsg(PointExpiryData);
         }
-
         public void SendInactiveMsg(List<tblExhibitionData> data)
         {
             foreach(var item in data)
@@ -222,7 +220,6 @@ namespace Exhibition.Controllers
                 }
             }
         }
-
         public bool SendWAMessage(string msg, string MobileNo)
         {
             bool status = false;
@@ -263,6 +260,13 @@ namespace Exhibition.Controllers
                 newexception.AddException(ex, "SendWAMessage");
             }
             return status;
+        }
+
+        public ActionResult InquiryDataCount()
+        {
+            var Count = ER.InquiryCount();
+            ViewBag.Count = Count;
+           return View(Count);
         }
 
     }

@@ -180,6 +180,7 @@
     <Content Include="Views\Inquiry\Index.cshtml" />
     <Content Include="Scripts\cute-alert-master\LICENSE" />
     <Content Include="Scripts\cute-alert-master\README.md" />
+    <Content Include="Views\InquiryDataCount.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

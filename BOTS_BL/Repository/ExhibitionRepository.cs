@@ -130,5 +130,25 @@ namespace BOTS_BL.Repository
             }
         }
 
+        public int InquiryCount()
+        {
+            int Count;
+            Count = default(int);
+
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    Count = context.tblExhibitionDatas.Count();
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "InquiryCount");
+            }
+
+            return Count;
+        }
+
     }
 }
