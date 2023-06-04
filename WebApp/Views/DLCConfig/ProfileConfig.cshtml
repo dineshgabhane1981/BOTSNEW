@@ -111,12 +111,18 @@
                 item["Slno"] = $("#hdnSlNo" + i).val();
                 item["Name"] = $("#hdnFieldName" + i).val();
                 item["IsDisplay"] = $("#chkDisplay" + i).is(":checked");
-                item["IsMandatory"] = $("#ddlMandatory" + i).val();                
+                if ($("#ddlMandatory" + i).val() == "1") {
+                    item["IsMandatory"] = true;
+                }
+                else {
+                    item["IsMandatory"] = false;
+                }
             }
             else {
                 item["Slno"] = $("#hdnSlNo" + i).val();
-                item["IsDisplay"] = 0;
-                item["IsMandatory"] = 0;
+                item["Name"] = $("#hdnFieldName" + i).val();
+                item["IsDisplay"] = false;
+                item["IsMandatory"] = false;
             }
             PrimaryData.push(item);
         }       
@@ -133,11 +139,8 @@
                         cuteAlert({
                             type: "success",
                             title: "Data Saved",
-                            message: "You have saved data",
+                            message: "Profile configuration saved successfully !!!",
                             buttonText: "Okay"
-                        }).then(() => {
-                            var urlLink = "@Url.Action("ProfileConfig", "DLCConfig")";
-                            window.location.href = urlLink;
                         })
                     }
                     else {
