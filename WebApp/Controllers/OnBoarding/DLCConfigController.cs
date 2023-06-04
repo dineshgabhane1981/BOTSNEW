@@ -45,17 +45,19 @@ namespace WebApp.Controllers.OnBoarding
         }
         public ActionResult ProfileConfig()
         {
-            DLCProfileUpdate objDLCProfUpdt = new DLCProfileUpdate();
-            DLCProfileUpdateViewModel objProfData = new DLCProfileUpdateViewModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            List<tblDLCProfileUpdateConfig> lstProfileData = new List<tblDLCProfileUpdateConfig>();
+            DLCProfileUpdateViewModel objProfileVS = new DLCProfileUpdateViewModel();
             try
             {
-                objProfData.objDLCProfUpdt = objDLCProfUpdt;
+                lstProfileData = DCR.GetProfileData(userDetails.GroupId);
+                ViewBag.Mandatory = objProfileVS.MandatoryOrNot();
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "ProfileConfig");
             }
-            return View(objProfData);
+            return View(lstProfileData);
         }
         public ActionResult SaveDashboard(string jsonData)
         {
@@ -142,6 +144,7 @@ namespace WebApp.Controllers.OnBoarding
                     objDashboard.ShowLogoToFooter = Convert.ToBoolean(item["ShowFooterImage"]);
                     objDashboard.CollectPersonalDataRandomly = Convert.ToBoolean(item["CollectInfoRendomly"]);
                     objDashboard.HeaderColor = Convert.ToString(item["HeaderColor"]);
+                    objDashboard.FontColor = Convert.ToString(item["FontColor"]);
                     objDashboard.PrefferedLanguage = Convert.ToString(item["PrefferedLanguage"]);
                     objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
                     objDashboard.AddedBy = userDetails.LoginId;
@@ -184,29 +187,21 @@ namespace WebApp.Controllers.OnBoarding
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objDashboardData = (object[])json_serializer.DeserializeObject(jsonData);
             //DataTable table = JsonConvert.DeserializeObject<DataTable>(jsonData);
+            List<tblDLCProfileUpdateConfig> lstProfileData = new List<tblDLCProfileUpdateConfig>();
             try
             {
                 foreach (Dictionary<string, object> item in objDashboardData)
                 {
-                    string Name = Convert.ToString(item["Name"]);
-                    string NameMandStat = Convert.ToString(item["NameMandStat"]);
-                    string Gender = Convert.ToString(item["Gender"]);
-                    string GenderMandStat = Convert.ToString(item["GenderMandStat"]);
-                    string BirthDate = Convert.ToString(item["BirthDate"]);
-                    string BirthMandStat = Convert.ToString(item["BirthMandStat"]);
-                    string Marrital = Convert.ToString(item["Marrital"]);
-                    string MargMandStat = Convert.ToString(item["MargMandStat"]);
-                    string Area = Convert.ToString(item["Area"]);
-                    string AreaMandStat = Convert.ToString(item["AreaMandStat"]);
-                    string City = Convert.ToString(item["City"]);
-                    string CityMandStat = Convert.ToString(item["CityMandStat"]);
-                    string Pincode = Convert.ToString(item["Pincode"]);
-                    string PinMandStat = Convert.ToString(item["PinMandStat"]);
-                    string Email = Convert.ToString(item["Email"]);
-                    string MailMandStat = Convert.ToString(item["MailMandStat"]);
+                    tblDLCProfileUpdateConfig objItem = new tblDLCProfileUpdateConfig();
+                    objItem.Slno= Convert.ToInt64(item["Slno"]);
+                    objItem.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
+                    objItem.IsMandatory = Convert.ToBoolean(item["IsMandatory"]);
+                    objItem.FieldName = Convert.ToString(item["Name"]);
+                    lstProfileData.Add(objItem);
 
-                    status = DCR.ProfileDataInsert(userDetails.GroupId, Name, NameMandStat, Gender, GenderMandStat, BirthDate, BirthMandStat, Marrital, MargMandStat, Area, AreaMandStat, City, CityMandStat, Pincode, PinMandStat, Email, MailMandStat);
+                    //status = DCR.ProfileDataInsert(userDetails.GroupId, Name, NameMandStat, Gender, GenderMandStat, BirthDate, BirthMandStat, Marrital, MargMandStat, Area, AreaMandStat, City, CityMandStat, Pincode, PinMandStat, Email, MailMandStat);
                 }
+                status = DCR.UpdateProfileData(userDetails.GroupId, lstProfileData);
 
             }
             catch (Exception ex)
@@ -250,6 +245,7 @@ namespace WebApp.Controllers.OnBoarding
         public ActionResult GenerateDLCLink()
         {
             var BaseUrl= ConfigurationManager.AppSettings["baseDLCUrl"];
+            List<DLCLinksViewModel> objData = new List<DLCLinksViewModel>();
             List<string> Urls = new List<string>(); ;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var BrandDetails = CR.GetAllBrandsByGroupId(userDetails.GroupId);
@@ -258,8 +254,10 @@ namespace WebApp.Controllers.OnBoarding
             {
                 foreach (var item in BrandDetails)
                 {
-                    var url = BaseUrl + "?data=" + common.EncryptString("BrandId=" + item.BrandId);
-                    Urls.Add(url);
+                    DLCLinksViewModel objLink = new DLCLinksViewModel();
+                    objLink.BrandName = item.BrandName;
+                    objLink.Url = BaseUrl + "?data=" + common.EncryptString("BrandId=" + item.BrandId);
+                    objData.Add(objLink);
                 }
                 ViewBag.URLs = Urls;
             }
@@ -267,7 +265,7 @@ namespace WebApp.Controllers.OnBoarding
             {
                 newexception.AddException(ex, "GenerateDLCLink");
             }
-            return View();
+            return View(objData);
         }
 
     }

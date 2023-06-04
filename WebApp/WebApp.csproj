@@ -272,6 +272,7 @@
     <Compile Include="ViewModel\DataPoint.cs" />
     <Compile Include="ViewModel\DiscussionViewModel.cs" />
     <Compile Include="ViewModel\DLCDashboardViewModel.cs" />
+    <Compile Include="ViewModel\DLCLinksViewModel.cs" />
     <Compile Include="ViewModel\DLCProfileUpdateViewModel.cs" />
     <Compile Include="ViewModel\DocumentLibraryViewModel.cs" />
     <Compile Include="ViewModel\EventViewModel.cs" />

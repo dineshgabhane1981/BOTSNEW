@@ -294,6 +294,7 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "GetOutletWiseList");
             }
+            lstOutletWise = lstOutletWise.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
             return lstOutletWise;
         }
 

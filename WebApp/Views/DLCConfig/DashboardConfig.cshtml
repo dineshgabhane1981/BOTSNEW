@@ -18,7 +18,9 @@
         <input type="hidden" id="hdnSmallBase64" />
         <input type="hidden" id="hdnMediumBase64" />
         <input type="hidden" id="hdnBigBase64" />
-        <input type="hidden" id="hdnColor" />        
+        <input type="hidden" id="hdnColor" />
+        <input type="hidden" id="hdnFontColor" />
+        
         <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
 
             <fieldset style="border-radius: 10px;">
@@ -160,6 +162,14 @@
                     </div>
                 </div>
                 <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
+                    <div class='wrap'>
+                        <h4>Choose Fore color</h4>
+                        <button id="btnColorPickerFont" style="width:100px; height:50px;cursor:pointer;" data-jscolor="{
+                    onChange: 'updateColor(this, \'#pr1\')',
+                    alpha:0.7, value:'@Model.objDLCDashboard.FontColor'}"></button><br /><br />
+                    </div>
+                </div>
+                <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
                     Select Language
                     @Html.DropDownListFor(model => model.objDLCDashboard.PrefferedLanguage, new SelectList(Model.LanguageList(), "Value", "Text", "English"), htmlAttributes: new { @class = "input50", @id = "ddlLanguage" })
                 </div>
@@ -195,6 +205,11 @@
     function rgbToHex(r, g, b) {
         var hexColor = "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
         $("#hdnColor").val(hexColor);
+        return hexColor;
+    }
+    function rgbToHexFontColor(r, g, b) {
+        var hexColor = "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        $("#hdnFontColor").val(hexColor);
         return hexColor;
     }
 
@@ -238,6 +253,12 @@
         var abc = colorValues(picker.toRGBAString())
         var color = rgbToHex(abc[0], abc[1], abc[2]);
         document.querySelector(selector).style.background = "linear-gradient(to bottom," + color +", #000000)";//picker.toRGBAString();
+
+    }
+    function updateColor(picker, selector) {
+        var abc = colorValues(picker.toRGBAString())
+        var color = rgbToHexFontColor(abc[0], abc[1], abc[2]);
+        document.querySelector(selector).style.color = color;//picker.toRGBAString();
 
     }
     jscolor.trigger('input change');
@@ -394,24 +415,17 @@
         if (data.LogoFile3 != "" && data.LogoFile3 != null) {
             $("#img3").attr('src', data.LogoFile3);
             $("#img3").show();
-        }
-        
+        }        
         $("#hdnSlNO").val(data.SlNo);
-        //alert(data.HeaderColor)
+       
         document.querySelector("#pr1").style.background = "linear-gradient(to bottom," + data.HeaderColor + ", #000000)";
         $("#hdnColor").val(data.HeaderColor);
-        ////console.log($("#btnColorPicker"));
-        //console.log($("#btnColorPicker").attr("data-jscolor"));
-        //var colorValue = "onChange: 'update(this, \'#pr1\')',alpha: 0.7, value: '" + data.HeaderColor +"'";
-        //$("#btnColorPicker").("data-jscolor", colorValue);
-        //console.log($("#btnColorPicker").attr("data-jscolor"));
 
-        
-
+        document.querySelector("#pr1").style.color = data.FontColor;
+        $("#hdnFontColor").val(data.FontColor);
     }
 
     function SaveDashboardConfig() {
-
         var PrimaryData = [];
         item = {}
         item["SlNo"] = $("#hdnSlNO").val();
@@ -482,6 +496,7 @@
             item["UseLogoSize"] = "Big";
         }
         item["HeaderColor"] = $("#hdnColor").val();
+        item["FontColor"] = $("#hdnFontColor").val();
         item["PrefferedLanguage"] = $("#ddlLanguage").val();
         PrimaryData.push(item);
 

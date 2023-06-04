@@ -1,4 +1,4 @@
-﻿@model WebApp.ViewModel.DLCProfileUpdateViewModel
+﻿@model List<BOTS_BL.Models.tblDLCProfileUpdateConfig>
 @{
     ViewBag.Title = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,80 +8,40 @@
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
         <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
             <fieldset style="border-radius: 10px;">
-                <legend style="font-size: 20px; background-color: #E5E4E2;">ProfileUpdate Config</legend>
-                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-3 col-xl-3 row">
-                        <input type="checkbox" id="Name" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Customer Name
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Profile Update Config</legend>
+                @if (Model != null)
+                {
+                    var count = 1;
 
-                    </div>
-                    <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "CustMandStat" })
-                    </div>
-
-                </div>
-                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-3 col-xl-3 row">
-                        <input type="checkbox" id="Gender" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Gender
-
-                    </div>
-                    <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "GenderMandStat" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-3 col-xl-3 row">
-                        <input type="checkbox" id="BirthDate" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Birth Date
-
-                    </div>
-                    <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "BirthMandStat" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-3 col-xl-3 row">
-                        <input type="checkbox" id="Marrital" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Marittal Status
-
-                    </div>
-                    <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "MargMandStat" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-3 col-xl-3 row">
-                        <input type="checkbox" id="Area" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Area
-
-                    </div>
-                    <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "AreaMandStat" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-3 col-xl-3 row">
-                        <input type="checkbox" id="City" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;City
-
-                    </div>
-                    <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "CityMandStat" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-3 col-xl-3 row">
-                        <input type="checkbox" id="Pincode" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Pincode
-
-                    </div>
-                    <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "PinMandStat" })
-                    </div>
-                </div>
-                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
-                    <div class="col-md-3 col-xl-3 row">
-                        <input type="checkbox" id="Email" style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp;Email
-
-                    </div>
-                    <div class="col-md-3 col-xl-3 row">
-                        @Html.DropDownListFor(model => model.objDLCProfUpdt.MandatoryOrNot, new SelectList(Model.MandatoryOrNot(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "MailMandStat" })
-                    </div>
-                </div>
+                    foreach (var item in Model)
+                    {
+                        var hdnId = "hdnSlNo" + count;
+                        var chkDisplay = "chkDisplay" + count;
+                        var ddlMandatory = "ddlMandatory" + count;
+                        var lblField = "hdnFieldName" + count;
+                        var chkchecked = "";
+                        if (item.IsDisplay)
+                        {
+                            chkchecked = "checked";
+                        }
+                        var selected = "0";
+                        if (item.IsMandatory)
+                        {
+                            selected = "1";
+                        }
+                        <input type="hidden" id="@hdnId" value="@item.Slno" />
+                        <input type="hidden" id="@lblField" value="@item.FieldName" />
+                        <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:20px !important;">
+                            <div class="col-md-3 col-xl-3 row">
+                                <input type="checkbox" id="@chkDisplay" @chkchecked style="width: 20px; height: 20px; cursor: pointer; margin-left: 10px;" /> &nbsp;&nbsp; @item.FieldName
+                            </div>
+                            <div class="col-md-3 col-xl-3 row">
+                                @Html.DropDownListFor(model => item.IsMandatory, new SelectList(ViewBag.Mandatory, "Value", "Text", @selected), htmlAttributes: new { @class = "input50", @id = @ddlMandatory })
+                            </div>
+                        </div>
+                        count++;
+                    }
+                }
             </fieldset>
         </div>
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -107,7 +67,7 @@
 
     });
     $("#btnSaveProfUpdt").on("click", function () {
-        ValidateProfUpdtConfig();
+        SaveProfileUpdtConfig();
     });
     function ValidateProfUpdtConfig() {
         var status = false;
@@ -145,76 +105,23 @@
     }
     function SaveProfileUpdtConfig() {
         var PrimaryData = [];
-        item = {}
-        if ($("#Name").is(":checked")) {
-            item["Name"] = "True";
-            item["NameMandStat"] = $("#CustMandStat option:selected").val();
-        }
-        else {
-            item["Name"] = "False";
-            item["NameMandStat"] = "0";
-        }
-        if ($("#Gender").is(":checked")) {
-            item["Gender"] = "True";
-            item["GenderMandStat"] = $("#GenderMandStat option:selected").val();
-        }
-        else {
-            item["Gender"] = "False";
-            item["GenderMandStat"] = "0";
-        }
-        if ($("#BirthDate").is(":checked")) {
-            item["BirthDate"] = "True";
-            item["BirthMandStat"] = $("#BirthMandStat option:selected").val();
-        }
-        else {
-            item["BirthDate"] = "False";
-            item["BirthMandStat"] = "0";
-        }
-        if ($("#Marrital").is(":checked")) {
-            item["Marrital"] = "True";
-            item["MargMandStat"] = $("#MargMandStat option:selected").val();
-        }
-        else {
-            item["Marrital"] = "False";
-            item["MargMandStat"] = "0";
-        }
-        if ($("#Area").is(":checked")) {
-            item["Area"] = "True";
-            item["AreaMandStat"] = $("#AreaMandStat option:selected").val();
-        }
-        else {
-            item["Area"] = "False";
-            item["AreaMandStat"] = "0";
-        }
-        if ($("#City").is(":checked")) {
-            item["City"] = "True";
-            item["CityMandStat"] = $("#CityMandStat option:selected").val();
-        }
-        else {
-            item["City"] = "False";
-            item["CityMandStat"] = "0";
-        }
-        if ($("#Pincode").is(":checked")) {
-            item["Pincode"] = "True";
-            item["PinMandStat"] = $("#PinMandStat option:selected").val();
-        }
-        else {
-            item["Pincode"] = "False";
-            item["PinMandStat"] = "0";
-        }
-        if ($("#Email").is(":checked")) {
-            item["Email"] = "True";
-            item["MailMandStat"] = $("#MailMandStat option:selected").val();
-        }
-        else {
-            item["Email"] = "False";
-            item["MailMandStat"] = "0";
-        }
-
-        PrimaryData.push(item);
-        //console.log(PrimaryData);
+        for (var i = 1; i <= 8; i++) {
+            item = {}
+            if ($("#chkDisplay" + i).is(":checked")) {
+                item["Slno"] = $("#hdnSlNo" + i).val();
+                item["Name"] = $("#hdnFieldName" + i).val();
+                item["IsDisplay"] = $("#chkDisplay" + i).is(":checked");
+                item["IsMandatory"] = $("#ddlMandatory" + i).val();                
+            }
+            else {
+                item["Slno"] = $("#hdnSlNo" + i).val();
+                item["IsDisplay"] = 0;
+                item["IsMandatory"] = 0;
+            }
+            PrimaryData.push(item);
+        }       
         var data = JSON.stringify(PrimaryData);
-        alert(data);
+        
             $.ajax({
                  type: "POST",
                  url: '@Url.Action("SaveProfileUpdate", "DLCConfig")',

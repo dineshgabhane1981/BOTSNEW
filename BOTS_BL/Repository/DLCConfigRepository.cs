@@ -52,6 +52,38 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+        public List<tblDLCProfileUpdateConfig> GetProfileData(string GroupId)
+        {
+            List<tblDLCProfileUpdateConfig> lstData = new List<tblDLCProfileUpdateConfig>();
+            string connStr = objCustRepo.GetCustomerConnString(GroupId);
+
+            using (var context = new BOTSDBContext(connStr))
+            {
+                lstData = context.tblDLCProfileUpdateConfigs.ToList();
+            }
+            return lstData;
+        }
+        public bool UpdateProfileData(string GroupId, List<tblDLCProfileUpdateConfig> objData)
+        {
+            bool status = false;
+            var connstr = objCustRepo.GetCustomerConnString(GroupId);
+            using (var context = new BOTSDBContext(connstr))
+            {
+                foreach(var item in objData)
+                {
+                    context.tblDLCProfileUpdateConfigs.AddOrUpdate(item);
+                    context.SaveChanges();
+                }
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateProfileData");
+            }
+            return status;
+
+        }
+
         public bool ProfileDataInsert(string Groupid, string Name, string NameMandStat, string Gender, string GenderMandStat, string BirthDate, string BirthMandStat, string Marrital, string MargMandStat, string Area, string AreaMandStat, string City, string CityMandStat, string Pincode, string PinMandStat, string Email, string MailMandStat)
         {
             bool status = false;
@@ -154,6 +186,7 @@ namespace BOTS_BL.Repository
                     objData.UseLogoURL = configData.UseLogoURL;
                     objData.PrefferedLanguage = configData.PrefferedLanguage;
                     objData.HeaderColor = configData.HeaderColor;
+                    objData.FontColor = configData.FontColor;
                     objData.AddedBy = userDetails.UserId;
                     objData.AddedDate = DateTime.Now;
                     context.tblDLCDashboardConfig_Publish.AddOrUpdate(objData);
@@ -281,7 +314,7 @@ namespace BOTS_BL.Repository
                     {
                         //Check whether Password is present of not
                         string Password = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).Select(y => y.Password).FirstOrDefault();
-                        if(!string.IsNullOrEmpty(Password))
+                        if (!string.IsNullOrEmpty(Password))
                         {
                             status = "Password";
                         }

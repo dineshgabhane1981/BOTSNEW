@@ -11,6 +11,7 @@ namespace WebApp.ViewModel
     public class DLCProfileUpdateViewModel
     {
         public DLCProfileUpdate objDLCProfUpdt { get; set; }
+        public List<tblDLCProfileUpdateConfig> lstDLCProfile { get; set; }
         public SelectListItem[] MandatoryOrNot()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Mandatory", Value = "1" }, new SelectListItem() { Text = "Non Mandatory", Value = "0" } };

@@ -38,6 +38,8 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string HeaderColor { get; set; }
+        [StringLength(50)]
+        public string FontColor { get; set; }
 
         [Required]
         [StringLength(50)]
