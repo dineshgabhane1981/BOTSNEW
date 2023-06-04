@@ -67,14 +67,17 @@ namespace BOTS_BL.Repository
         {
             bool status = false;
             var connstr = objCustRepo.GetCustomerConnString(GroupId);
-            using (var context = new BOTSDBContext(connstr))
+            try
             {
-                foreach(var item in objData)
+                using (var context = new BOTSDBContext(connstr))
                 {
-                    context.tblDLCProfileUpdateConfigs.AddOrUpdate(item);
-                    context.SaveChanges();
+                    foreach (var item in objData)
+                    {
+                        context.tblDLCProfileUpdateConfigs.AddOrUpdate(item);
+                        context.SaveChanges();
+                    }
+                    status = true;
                 }
-                status = true;
             }
             catch (Exception ex)
             {
