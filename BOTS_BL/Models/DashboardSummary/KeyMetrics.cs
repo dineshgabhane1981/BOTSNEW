@@ -40,4 +40,10 @@ namespace BOTS_BL.Models
         public decimal Expired { get; set; }
         public decimal Available { get; set; }
     }
+    public class KeyMetricsPointSummary
+    {
+        public string MobileNo { get; set; }
+        public decimal? PointsEarned { get; set; }
+        public decimal? PointsBurned { get; set; }
+    }
 }

@@ -1319,7 +1319,7 @@ namespace BOTS_BL.Repository
                         objData.Add(objItem);
 
                         MemberBaseAndTransaction objItem1 = new MemberBaseAndTransaction();
-                        objItem1.MemberType = "Existing Base";
+                        objItem1.MemberType = "Existing Base - Till Date";
                         objItem1.BaseCount = context.CustomerDetails.Count();
                         objItem1.TxnCount = context.TransactionMasters.Count();
                         objItem1.BizGen = context.TransactionMasters.Select(y => y.InvoiceAmt).Sum();
@@ -1395,8 +1395,12 @@ namespace BOTS_BL.Repository
                         decimal? Issued = 0;
                         decimal? Redeemed = 0;
 
-                        Issued = AllData.Sum(x => x.PointsEarned);
-                        Redeemed = AllData.Sum(x => x.PointsBurned);
+                        string query = "select TM.MobileNo,isnull(sum(TM.PointsEarned),0) as PointsEarned,isnull(sum(TM.PointsBurned),0) as PointsBurned from TransactionMaster(nolock) TM group by TM.MobileNo";
+                        var PointSummaryData = context.Database.SqlQuery<KeyMetricsPointSummary>(query).ToList();
+
+
+                        Issued = PointSummaryData.Sum(x => x.PointsEarned);
+                        Redeemed = PointSummaryData.Sum(x => x.PointsBurned);
                         if (Issued == null)
                             Issued = 0;
                         if (Redeemed == null)
