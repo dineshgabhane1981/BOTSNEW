@@ -1579,7 +1579,8 @@ namespace BOTS_BL.Repository
                                                   Status = c.Status,
                                                   AssignedMember = c.AssignedMember,
                                                   SubCallType = p.CallSubType,
-                                                  DiscussionType = c.DiscussionType
+                                                  DiscussionType = c.DiscussionType,
+                                                  DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
 
@@ -1609,7 +1610,8 @@ namespace BOTS_BL.Repository
                                                             Status = c.Status,
                                                             AssignedMember = c.AssignedMember,
                                                             SubCallType = p.CallSubType,
-                                                            DiscussionType = c.DiscussionType
+                                                            DiscussionType = c.DiscussionType,
+                                                            DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
                                                         }).OrderByDescending(x => x.AddedDate).ToList();
                             }
                             else
@@ -1639,7 +1641,8 @@ namespace BOTS_BL.Repository
                                                   Status = c.Status,
                                                   AssignedMember = c.AssignedMember,
                                                   SubCallType = p.CallSubType,
-                                                  DiscussionType = c.DiscussionType
+                                                  DiscussionType = c.DiscussionType,
+                                                  DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
                                               }).OrderByDescending(x => x.AddedDate).ToList();
 
                                 lstdiscussOnBoarding = (from c in list
@@ -1667,7 +1670,8 @@ namespace BOTS_BL.Repository
                                                             Status = c.Status,
                                                             AssignedMember = c.AssignedMember,
                                                             SubCallType = p.CallSubType,
-                                                            DiscussionType = c.DiscussionType
+                                                            DiscussionType = c.DiscussionType,
+                                                            DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
                                                         }).OrderByDescending(x => x.AddedDate).ToList();
                             }
                         }
@@ -1703,7 +1707,8 @@ namespace BOTS_BL.Repository
                                                       Status = c.Status,
                                                       AssignedMember = c.AssignedMember,
                                                       SubCallType = p.CallSubType,
-                                                      DiscussionType = c.DiscussionType
+                                                      DiscussionType = c.DiscussionType,
+                                                      DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1732,7 +1737,8 @@ namespace BOTS_BL.Repository
                                                                 Status = c.Status,
                                                                 AssignedMember = c.AssignedMember,
                                                                 SubCallType = p.CallSubType,
-                                                                DiscussionType = c.DiscussionType
+                                                                DiscussionType = c.DiscussionType,
+                                                                DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -1764,7 +1770,8 @@ namespace BOTS_BL.Repository
                                                       Status = c.Status,
                                                       AssignedMember = c.AssignedMember,
                                                       SubCallType = p.CallSubType,
-                                                      DiscussionType = c.DiscussionType
+                                                      DiscussionType = c.DiscussionType,
+                                                      DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                   }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1794,7 +1801,8 @@ namespace BOTS_BL.Repository
                                                                 Status = c.Status,
                                                                 AssignedMember = c.AssignedMember,
                                                                 SubCallType = p.CallSubType,
-                                                                DiscussionType = c.DiscussionType
+                                                                DiscussionType = c.DiscussionType,
+                                                                DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                             }).OrderByDescending(x => x.AddedDate).ToList();
                                 }
@@ -1831,7 +1839,8 @@ namespace BOTS_BL.Repository
                                                           Status = c.Status,
                                                           AssignedMember = c.AssignedMember,
                                                           SubCallType = p.CallSubType,
-                                                          DiscussionType = c.DiscussionType
+                                                          DiscussionType = c.DiscussionType,
+                                                          DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                       }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1861,7 +1870,8 @@ namespace BOTS_BL.Repository
                                                                     Status = c.Status,
                                                                     AssignedMember = c.AssignedMember,
                                                                     SubCallType = p.CallSubType,
-                                                                    DiscussionType = c.DiscussionType
+                                                                    DiscussionType = c.DiscussionType,
+                                                                    DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                                 }).OrderByDescending(x => x.AddedDate).ToList();
                                     }
@@ -1893,7 +1903,8 @@ namespace BOTS_BL.Repository
                                                           Status = c.Status,
                                                           AssignedMember = c.AssignedMember,
                                                           SubCallType = p.CallSubType,
-                                                          DiscussionType = c.DiscussionType
+                                                          DiscussionType = c.DiscussionType,
+                                                          DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                       }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1923,7 +1934,8 @@ namespace BOTS_BL.Repository
                                                                     Status = c.Status,
                                                                     AssignedMember = c.AssignedMember,
                                                                     SubCallType = p.CallSubType,
-                                                                    DiscussionType = c.DiscussionType
+                                                                    DiscussionType = c.DiscussionType,
+                                                                    DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                                 }).OrderByDescending(x => x.AddedDate).ToList();
                                     }
@@ -1957,7 +1969,8 @@ namespace BOTS_BL.Repository
                                                           Status = c.Status,
                                                           AssignedMember = c.AssignedMember,
                                                           SubCallType = p.CallSubType,
-                                                          DiscussionType = c.DiscussionType
+                                                          DiscussionType = c.DiscussionType,
+                                                          DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                       }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -1986,7 +1999,8 @@ namespace BOTS_BL.Repository
                                                                     Status = c.Status,
                                                                     AssignedMember = c.AssignedMember,
                                                                     SubCallType = p.CallSubType,
-                                                                    DiscussionType = c.DiscussionType
+                                                                    DiscussionType = c.DiscussionType,
+                                                                    DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                                 }).OrderByDescending(x => x.AddedDate).ToList();
                                     }
@@ -2017,7 +2031,8 @@ namespace BOTS_BL.Repository
                                                           Status = c.Status,
                                                           AssignedMember = c.AssignedMember,
                                                           SubCallType = p.CallSubType,
-                                                          DiscussionType = c.DiscussionType
+                                                          DiscussionType = c.DiscussionType,
+                                                          DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                       }).OrderByDescending(x => x.AddedDate).ToList();
 
@@ -2046,7 +2061,8 @@ namespace BOTS_BL.Repository
                                                                     Status = c.Status,
                                                                     AssignedMember = c.AssignedMember,
                                                                     SubCallType = p.CallSubType,
-                                                                    DiscussionType = c.DiscussionType
+                                                                    DiscussionType = c.DiscussionType,
+                                                                    DoneNotDone = c.DiscussionDoneNotDone == "1" ? "Done" : c.DiscussionDoneNotDone == "2" ? "Reschedule" : c.DiscussionDoneNotDone == "0" ? "Not Done" : ""
 
                                                                 }).OrderByDescending(x => x.AddedDate).ToList();
                                     }

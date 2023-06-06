@@ -173,6 +173,10 @@
                     Select Language
                     @Html.DropDownListFor(model => model.objDLCDashboard.PrefferedLanguage, new SelectList(Model.LanguageList(), "Value", "Text", "English"), htmlAttributes: new { @class = "input50", @id = "ddlLanguage" })
                 </div>
+                <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
+                    Select Country
+                    @Html.DropDownListFor(model => model.objDLCDashboard.CountryCode, new SelectList(Model.lstCodes, "Code", "Country", "+91"), htmlAttributes: new { @class = "input50", @id = "ddlCountryCode" })
+                </div>
             </div>
         </div>
 
@@ -389,6 +393,10 @@
 
         if (data.PrefferedLanguage != null)
             $("#ddlLanguage").val(data.PrefferedLanguage);
+
+        if (data.CountryCode != null)
+            $("#ddlCountryCode").val(data.CountryCode);
+
         if (data.ShowLogoToFooter) {
             $("#chkFooterImage").prop("checked", true);
         }
@@ -498,6 +506,9 @@
         item["HeaderColor"] = $("#hdnColor").val();
         item["FontColor"] = $("#hdnFontColor").val();
         item["PrefferedLanguage"] = $("#ddlLanguage").val();
+        item["CountryCode"] = $("#ddlCountryCode").val();
+
+        
         PrimaryData.push(item);
 
         var PrimaryDataStr = JSON.stringify(PrimaryData);

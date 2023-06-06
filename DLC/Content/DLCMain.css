@@ -11475,9 +11475,7 @@ h1, h2, h3, h4, h5,
         letter-spacing: 1px;
     }
 
-    .login-wrap p {
-        color: rgba(255, 255, 255, 0.5);
-    }
+     
 
     .login-wrap .img {
         width: 250px;
@@ -11645,7 +11643,7 @@ h1, h2, h3, h4, h5,
     }
 
     .btn.btn-primary {
-        background: #b689b0 !important;
+        background: #000080 !important;
         border: 1px solid #b689b0 !important;
         color: #fff !important;
     }

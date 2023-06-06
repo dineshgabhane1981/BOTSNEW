@@ -32,10 +32,13 @@ namespace WebApp.Controllers.OnBoarding
             tblDLCDashboardConfig objDLCDashboard = new tblDLCDashboardConfig();
             DLCDashboardViewModel objData = new DLCDashboardViewModel();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objDLCDashboard = DCR.GetDLCDashboardConfig(userDetails.GroupId);
+            
             try
             {
+                objDLCDashboard = DCR.GetDLCDashboardConfig(userDetails.GroupId);
                 objData.objDLCDashboard = objDLCDashboard;
+                objData.lstCodes= DCR.GetCountryCodes();
+
             }
             catch (Exception ex)
             {
@@ -146,6 +149,7 @@ namespace WebApp.Controllers.OnBoarding
                     objDashboard.HeaderColor = Convert.ToString(item["HeaderColor"]);
                     objDashboard.FontColor = Convert.ToString(item["FontColor"]);
                     objDashboard.PrefferedLanguage = Convert.ToString(item["PrefferedLanguage"]);
+                    objDashboard.CountryCode = Convert.ToString(item["CountryCode"]);
                     objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
                     objDashboard.AddedBy = userDetails.LoginId;
                     objDashboard.AddedDate = DateTime.Now;

@@ -291,6 +291,7 @@
     <Compile Include="Models\DLCConfig\tblDLCDashboardConfig_Publish.cs" />
     <Compile Include="Models\DLCConfig\tblDLCFrontEndPageDataNew.cs" />
     <Compile Include="Models\DLCConfig\tblDLCProfileUpdateConfig.cs" />
+    <Compile Include="Models\DLCConfig\tblDLCUserDetail.cs" />
     <Compile Include="Models\DLCCreation.cs" />
     <Compile Include="Models\DocLibraryUploadFile.cs" />
     <Compile Include="Models\EarnRule.cs" />

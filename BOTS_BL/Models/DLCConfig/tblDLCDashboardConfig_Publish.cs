@@ -37,6 +37,9 @@ namespace BOTS_BL.Models
         public string PrefferedLanguage { get; set; }
 
         [StringLength(50)]
+        public string CountryCode { get; set; }
+
+        [StringLength(50)]
         public string HeaderColor { get; set; }
         [StringLength(50)]
         public string FontColor { get; set; }

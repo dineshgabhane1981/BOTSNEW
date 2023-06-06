@@ -5,15 +5,19 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace BOTS_BL.Repository
 {
     public class DLCConfigRepository
     {
         CustomerRepository objCustRepo = new CustomerRepository();
+        DashboardRepository DR = new DashboardRepository();
         Exceptions newexception = new Exceptions();
         public bool SaveDLCDashboardConfig(string GroupId, tblDLCDashboardConfig objDashboard)
         {
@@ -188,6 +192,7 @@ namespace BOTS_BL.Repository
                     objData.UseLogo = configData.UseLogo;
                     objData.UseLogoURL = configData.UseLogoURL;
                     objData.PrefferedLanguage = configData.PrefferedLanguage;
+                    objData.CountryCode = configData.CountryCode;
                     objData.HeaderColor = configData.HeaderColor;
                     objData.FontColor = configData.FontColor;
                     objData.AddedBy = userDetails.UserId;
@@ -300,7 +305,7 @@ namespace BOTS_BL.Repository
             return lstCodes;
         }
 
-        public string CheckUserAndSendOTP(string groupId, string mobileNo, bool IsOTP)
+        public string CheckUserAndSendOTP(string groupId, string mobileNo)
         {
             string status = string.Empty;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
@@ -308,22 +313,27 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    if (IsOTP)
+                    var IsOTP = context.tblDLCDashboardConfig_Publish.Where(x => x.LoginWithOTP == "OTP").FirstOrDefault();
+                    if (IsOTP != null)
                     {
+                        var smsDetails = context.SMSDetails.FirstOrDefault();
                         //Send OTP
+                        var result = SendOTP(groupId, mobileNo, smsDetails);
                         status = "OTP";
                     }
                     else
                     {
-                        //Check whether Password is present of not
-                        string Password = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).Select(y => y.Password).FirstOrDefault();
-                        if (!string.IsNullOrEmpty(Password))
+                        var userDetails = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                        if (userDetails == null)
                         {
-                            status = "Password";
+                            var smsDetails = context.SMSDetails.FirstOrDefault();
+                            //Send OTP
+                            var result = SendOTP(groupId, mobileNo, smsDetails);
+                            status = "OTP";
                         }
                         else
                         {
-                            status = "OTP";
+                            status = "Password";
                         }
                     }
                 }
@@ -335,8 +345,140 @@ namespace BOTS_BL.Repository
 
             return status;
         }
+        public bool SendOTP(string groupId, string MobileNo, SMSDetail smsDetail)
+        {
+            bool result = false;
+            try
+            {
+                Random r = new Random();
+                int randNum = r.Next(10000);
+                string fourDigitNumber = randNum.ToString("0000");
+                var OTPstatus = InsertOTP(groupId, MobileNo, Convert.ToInt32(fourDigitNumber));
 
+                var _MobileMessage = "Dear Member, " + Convert.ToInt32(fourDigitNumber) + "  is your OTP. Sample SMS for OTP - Blue Ocktopus ";
+                var _UserName = smsDetail.OTPUserName;
+                var _Password = smsDetail.OTPPassword;
+                var _MobileNo = MobileNo;
+                var _Sender = smsDetail.SenderId;
+                var _Url = smsDetail.OTPUrl;
 
+                result = SendSMS(_MobileMessage, _UserName, _Password, _MobileNo, _Sender, _Url);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SendOTP");
+            }
 
+            return result;
+        }
+
+        public bool InsertOTP(string groupid, string mobileno, int otp)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupid);
+
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    OTPMaintenance objData = new OTPMaintenance();
+                    objData.MobileNo = mobileno;
+                    objData.Datetime = DateTime.Now;
+                    objData.CounterId = groupid;
+                    objData.OTP = Convert.ToString(otp);
+                    context.OTPMaintenances.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SendOTP");
+            }
+            return status;
+        }
+        public bool SendSMS(string _MobileMessage, string _UserName, string _Password, string _MobileNo, string _Sender, string _Url)
+        {
+            bool status = false;
+            try
+            {
+                _MobileMessage = _MobileMessage.Replace("#99", "&");
+                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                string type1 = "TEXT";
+                StringBuilder sbposdata1 = new StringBuilder();
+                sbposdata1.AppendFormat("username={0}", _UserName);
+                sbposdata1.AppendFormat("&password={0}", _Password);
+                sbposdata1.AppendFormat("&to={0}", _MobileNo);
+                sbposdata1.AppendFormat("&from={0}", _Sender);//BLUEOC
+                sbposdata1.AppendFormat("&text={0}", _MobileMessage);
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(_Url);
+                UTF8Encoding encoding1 = new UTF8Encoding();
+                byte[] data1 = encoding1.GetBytes(sbposdata1.ToString());
+                httpWReq1.Method = "POST";
+                httpWReq1.ContentType = "application/x-www-form-urlencoded";
+                httpWReq1.ContentLength = data1.Length;
+                using (Stream stream1 = httpWReq1.GetRequestStream())
+                {
+                    stream1.Write(data1, 0, data1.Length);
+                }
+                HttpWebResponse response1 = (HttpWebResponse)httpWReq1.GetResponse();
+                StreamReader reader1 = new StreamReader(response1.GetResponseStream());
+                string responseString1 = reader1.ReadToEnd();
+                reader1.Close();
+                response1.Close();
+                status = true;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SendSMS");
+            }
+            return status;
+        }
+
+        public bool CheckPasswordExist(string groupId, string mobileNo)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                var userDetails = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                if (userDetails != null)
+                {
+                    status = true;
+                }
+            }
+            return status;
+        }
+        public bool ValidateUserByPassword(string groupId, string mobileNo, string Password)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                var userDetails = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo && x.Password== Password).FirstOrDefault();
+                if (userDetails != null)
+                {
+                    status = true;
+                }
+            }
+            return status;
+        }
+
+        public bool ValidateUserByOTP(string groupId, string mobileNo, string Otp)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                var isValidOTP = context.OTPMaintenances.Where(x => x.MobileNo == mobileNo && x.OTP == Otp).FirstOrDefault();
+                if (isValidOTP != null)
+                {
+                    status = true;
+                }
+            }
+            return status;
+        }
     }
 }

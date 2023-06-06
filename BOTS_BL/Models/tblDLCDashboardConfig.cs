@@ -54,6 +54,7 @@ namespace BOTS_BL.Models
         [StringLength(250)]
         public string UseLogoURL { get; set; }
         public string PrefferedLanguage { get; set; }
+        public string CountryCode { get; set; }
         public string HeaderColor { get; set; }        
         public string FontColor { get; set; }
 

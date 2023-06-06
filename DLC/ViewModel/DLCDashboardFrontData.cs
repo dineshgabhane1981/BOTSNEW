@@ -9,7 +9,7 @@ namespace DLC.ViewModel
 {
     public class DLCDashboardFrontData
     {
-        public List<tblDLCFrontEndPageData> lstDLCFrontEndPageData { get; set; }
+        public List<tblDLCFrontEndPageDataNew> lstDLCFrontEndPageData { get; set; }
         public tblDLCDashboardConfig_Publish objDashboardConfig { get; set; }
         public string CountryCode { get; set; }
     }

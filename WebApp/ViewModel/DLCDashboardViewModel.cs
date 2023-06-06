@@ -15,6 +15,7 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Dashboard", Value = "Dashboard" }, new SelectListItem() { Text = "Update Profile", Value = "Update Profile" }, new SelectListItem() { Text = "Gift Points", Value = "Gift Points" }, new SelectListItem() { Text = "Transaction History", Value = "Transaction History" } };
         }
+        public List<tblCountyCode> lstCodes { get; set; }
         public SelectListItem[] LanguageList()
         {
             return new SelectListItem[14] { new SelectListItem() { Text = "Assamese", Value = "Assamese" },

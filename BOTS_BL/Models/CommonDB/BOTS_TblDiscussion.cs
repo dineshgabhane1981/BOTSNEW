@@ -91,6 +91,8 @@ namespace BOTS_BL.Models.CommonDB
         public int SubDiscussionCount { get; set; }
         public string DiscussionType { get; set; }
         public string Priority { get; set; }
+        public string DoneNotDone { get; set; }
+
 
     }
 

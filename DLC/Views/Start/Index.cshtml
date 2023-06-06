@@ -1,4 +1,8 @@
 ﻿@model DLC.ViewModel.DLCDashboardFrontData
+@using System.Configuration;
+@{
+    var baseURL = ConfigurationManager.AppSettings["baseDLCUrl"].ToString();
+}
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,31 +18,35 @@
 <body>
     <section class="ftco-section">
         <div class="container">
-
+            <input type="hidden" id="hdnOtpOrPassword" />
             <div class="row justify-content-center">
                 <div class="col-md-6 col-lg-4">
                     <div class="login-wrap py-5" id="dvMain">
-                        <div class="img d-flex align-items-center justify-content-center" style="background-image: url(http://localhost:57265/DLCImages/1051Small.jpg);"></div>
-                        <h3 class="text-center mb-0">Welcome</h3>
-                        <p class="text-center">
+                        <div class="img d-flex align-items-center justify-content-center" style="background-image: url(@Model.objDashboardConfig.UseLogoURL);"></div>
+                        <h3 style="text-align:center;">Welcome</h3>
+                        <p style="text-align:center;">
                             Sign-up or Log-in now and start earning tons of reward points!!! <br />
                             साईन -अप किंवा लॉगिन करा आणि भरपूर रिवॉर्ड पॉईंट्स मिळवा
                         </p>
                         <form action="#" class="login-form">
                             <div class="form-group row">
-                                @Html.DropDownListFor(model => model.CountryCode, new SelectList(ViewBag.Codes, "Code", "Code", "+91"), htmlAttributes: new { @class = "input50",@style="height:30px;margin-top:12px;", @id = "ddlCountryCode" })
+                                @Html.DropDownListFor(model => model.objDashboardConfig.CountryCode, new SelectList(ViewBag.Codes, "Code", "Code"), htmlAttributes: new { @class = "input50", @style = "height:30px;margin-top:12px;", @id = "ddlCountryCode" })
                                 <div class="icon d-flex align-items-end justify-content-end" style="margin-left:52px;padding-bottom:13px;"><span class="fa fa-mobile"></span></div>
                                 <input type="number" id="txtMobileNo" class="form-control" style="width:75%;" placeholder="Mobile Number" required>
+
+                                <input type="text" id="txtPassword" class="form-control" style="width: 75%; margin-left: 58px;display:none;" placeholder="Password" required>
+                                <input type="text" id="txtOtp" class="form-control" style="width: 75%; margin-left: 58px; display: none;" placeholder="OTP" required>
                             </div>
                             <div class="form-group">
-                                <button type="button" id="btnLogin" class="btn form-control btn-primary rounded submit px-3">Get Started</button>
+                                <button type="button" id="btnLogin" class="btn form-control btn-primary  submit px-3" style="font-weight:bold;">Get Started</button>
+                                <button type="button" id="btnSubmit" class="btn form-control btn-primary  submit px-3" style="font-weight:bold;display:none;">Login</button>
                             </div>
                         </form>
 
                     </div>
                 </div>
 
-            </div>            
+            </div>
         </div>
     </section>
 
@@ -49,13 +57,20 @@
     <script>
         $(document).ready(function () {
             var color = '@Model.objDashboardConfig.HeaderColor';
+            var fontcolor = '@Model.objDashboardConfig.FontColor';
+
             document.querySelector("#dvMain").style.background = "linear-gradient(to bottom," + color + ", #000000)";
+            document.querySelector("#dvMain").style.color = fontcolor
 
             $("#btnLogin").on("click", function () {
-                ValidateAndLogin();
+                CheckUser();
+            });
+            $("#btnSubmit").on("click", function () {
+                ValidateUser();
             });
         });
-        function ValidateAndLogin() {
+        function CheckUser() {
+            var status = true;
             if ($("#txtMobileNo").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -63,8 +78,9 @@
                     message: "Please enter mobile no",
                     buttonText: "Okay"
                 })
+                status = false;
             }
-            if (/^[6789]\d{9,9}$/.test($("#txtMobileNo").val())) {
+            else if (/^[6789]\d{9,9}$/.test($("#txtMobileNo").val())) {
             }
             else {
                 cuteAlert({
@@ -73,8 +89,101 @@
                     message: "Please enter valid mobile no",
                     buttonText: "Okay"
                 })
+                status = false;
             }
-            
+            if (status) {
+                var code = $("#ddlCountryCode").val();
+                var mobileno = $("#txtMobileNo").val();
+                var data = code + mobileno;
+                $("#divLoader").show();
+                    $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CheckandSendOTP", "Start")',
+                        data: '{MobileNo: ' + JSON.stringify(data) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            if (result == "Password") {
+                                $("#hdnOtpOrPassword").val("Password");
+                                $("#txtPassword").show();
+                                $("#txtOtp").hide();
+                                $("#btnSubmit").show();
+                                $("#btnLogin").hide();
+
+                            }
+                            if (result == "OTP") {
+                                $("#hdnOtpOrPassword").val("OTP");
+                                $("#txtPassword").hide();
+                                $("#txtOtp").show();
+                                $("#btnSubmit").show();
+                                $("#btnLogin").hide();
+                            }
+
+                            $("#divLoader").hide();
+                        },
+                        error: function (result) {
+                            alert(111)
+                            console.log(result.responseText)
+                        }
+                    });
+                $("#divLoader").show();
+            }
+
+        }
+
+        function ValidateUser() {
+            var status = true;
+            if ($("#hdnOtpOrPassword").val() == "OTP") {
+                if ($("#txtOtp").val() == "") {
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS",
+                        message: "Please enter OTP",
+                        buttonText: "Okay"
+                    })
+                    status = false;
+                }
+            }
+            if ($("#hdnOtpOrPassword").val() == "Password") {
+                if ($("#txtPassword").val() == "") {
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS",
+                        message: "Please enter Password",
+                        buttonText: "Okay"
+                    })
+                    status = false;
+                }
+            }
+            if (status) {
+                var code = $("#ddlCountryCode").val();
+                var mobileno = $("#txtMobileNo").val();
+                var data = code + mobileno;
+                var OtpOrPassword = "";
+                if ($("#hdnOtpOrPassword").val() == "Password") {
+                    OtpOrPassword = $("#txtPassword").val();
+                }
+                if ($("#hdnOtpOrPassword").val() == "OTP") {
+                    OtpOrPassword = $("#txtOtp").val();
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ValidateUser", "Start")',
+                    data: '{mobileNo: ' + JSON.stringify(data) + ',OtpOrPassword: ' + JSON.stringify(OtpOrPassword) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result)
+                        var url = '@baseURL' + result;
+                        alert(url);
+                        window.location.href = url;
+
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {                         
+                    }
+                });
+            }
         }
     </script>
 </body>
