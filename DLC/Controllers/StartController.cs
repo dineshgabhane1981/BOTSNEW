@@ -68,7 +68,6 @@ namespace DLC.Controllers
             string gId = Convert.ToString(Session["GroupId"]);
             //If OTP
             var config = DCR.GetDLCDashboardConfig(gId);
-
             
             //If Password and exist in UserDetails
             if (config.LoginWithOTP=="Password")
@@ -81,7 +80,6 @@ namespace DLC.Controllers
                     if (IsValid)
                     {
                         ActionNameFromConfig = GetRedirectActionName(config.RedirectToPage);
-                        //return RedirectToAction(ActionNameFromConfig);
                     }
                 }
                 else
@@ -102,11 +100,9 @@ namespace DLC.Controllers
                 if(IsValid)
                 {
                     //redirect to RedirectToPage
-                    ActionNameFromConfig = GetRedirectActionName(config.RedirectToPage);
-                    //return RedirectToAction(ActionNameFromConfig);
+                    ActionNameFromConfig = GetRedirectActionName(config.RedirectToPage);                    
                 }
             }
-
             return new JsonResult() { Data = ActionNameFromConfig, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -124,15 +120,13 @@ namespace DLC.Controllers
 
             return ActionName;
         }
-    
-    
+        
         public ActionResult SetPassword()
         {
-            return View();
+            DLCDashboardFrontData objData = new DLCDashboardFrontData();
+            string gId = Convert.ToString(Session["GroupId"]);
+            objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(gId);
+            return View(objData);
         }
-
-
-
-
     }
 }
