@@ -239,6 +239,14 @@
                                             </a>
                                         </li>
                                     </ul>
+                                    <ul>
+                                        <li class="@Html.IsSelected(controller: "CommonDBConfig", action: "EnableProgramme")">
+                                            <a class="@Html.IsSelected(controller: "CommonDBConfig", action: "EnableProgramme")" href="@Url.Action("EnableProgramme", "CommonDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Enable Programme
+                                            </a>
+                                        </li>
+                                    </ul>
                                 </li>
 
                             }

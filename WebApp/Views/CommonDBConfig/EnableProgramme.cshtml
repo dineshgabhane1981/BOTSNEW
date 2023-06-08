@@ -1,0 +1,283 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "EnableProgramme";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EnableProgramme</h2>
+<style>
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+    #one:checked ~ .panels #one-panel,
+    #two:checked ~ .panels #two-panel {
+        display: block
+    }
+
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+</style>
+<div class="app-main__inner">
+    <input class="radio" id="one" name="group" type="radio" checked>
+    <input class="radio" id="two" name="group" type="radio">
+
+    <div class="tabs">
+        <label class="tab" id="one-tab" for="one">Programme Enabled Groups</label>
+        <label class="tab" id="two-tab" for="two">Programme Disabled Groups</label>
+    </div>
+    <div class="panels">
+        <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="one-panel">
+            <div class="col search-container" style="margin-top:20px;">
+                <i class="fas fa-search"></i>
+                <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+            </div>
+            <div class="row mt-3 p-4" id="dvEnabledGroups">
+                <div class="table-responsive">
+                    <table class="table" id="EnabledGroupsForTable">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="text-align:left;">Group Name</th>
+                                <th scope="col" style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.lstActive != null)
+                            {
+                                foreach (var item in Model.lstActive)
+                                 {
+                            <tr>
+                                <td>@item.GroupName</td>
+                                <td style="text-align:center;"><a id="btnDisableProgramme" href="#" onclick="ShowDisableDetails(@item.GroupId);">Disable</a></td>
+                            </tr>
+                                 }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="two-panel">
+            <div class="col search-container" style="margin-top:20px;">
+                <i class="fas fa-search"></i>
+                <input class="input100" type="text" id="txtSearch1" placeholder="Search Groups..." />
+            </div>
+            <div class="row mt-3 p-4" id="dvDisabledGroups">
+                <div class="table-responsive">
+                    <table class="table" id="DisabledGroupsForTable">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="text-align:left;">Group Name</th>
+                                <th scope="col" style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.lstNotActive != null)
+                            {
+                                foreach (var item in Model.lstNotActive)
+                                  {
+                            <tr>
+                                <td>@item.GroupName</td>
+                                <td style="text-align:center;"><a id="btnEnableProgramme" href="#" onclick="ShowEnableDetails(@item.GroupId);">Enable</a></td>
+                            </tr>
+                                  }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#EnabledGroupsForTable').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
+            ]
+        });
+        $('#EnabledGroupsForTable_filter').hide();
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#EnabledGroupsForTable').DataTable();
+            table.draw();
+        });
+        $('#DisabledGroupsForTable').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
+            ]
+        });
+        $('#DisabledGroupsForTable_filter').hide();
+        $('#txtSearch1').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch1').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#DisabledGroupsForTable').DataTable();
+            table.draw();
+        });
+    });
+    function ShowDisableDetails(GroupId) {
+        var returnStatus = true;
+
+        cuteAlert({
+            type: "question",
+            title: "Confirmation",
+            message: "Do you want to Disable the Programme ?",
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                var MemberData = [];
+                item = {}
+                item["GroupId"] = GroupId;
+                MemberData.push(item);
+                var data = JSON.stringify(MemberData);
+                console.log(data)
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DisableProgrammeDetails", "CommonDBConfig")',
+                    data: '{jsonData: ' + JSON.stringify(data) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        toastr.success("Programme Disabled Successfully");
+                        window.location.reload();
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+                    }
+                })
+            }
+        })
+    }
+    function ShowEnableDetails(GroupId) {
+        var returnStatus = true;
+
+        cuteAlert({
+            type: "question",
+            title: "Confirmation",
+            message: "Do you want to Enable the Programme ?",
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                var MemberData = [];
+                item = {}
+                item["GroupId"] = GroupId;
+                MemberData.push(item);
+                var data = JSON.stringify(MemberData);
+                console.log(data)
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("EnableProgrammeDetails", "CommonDBConfig")',
+                    data: '{jsonData: ' + JSON.stringify(data) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        toastr.success("Programme Enabled Successfully");
+                        window.location.reload();
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+                    }
+                })
+            }
+        })
+    }
+</script>
+
+
