@@ -283,6 +283,7 @@
     <Compile Include="ViewModel\FeedbackDashboardViewModel.cs" />
     <Compile Include="ViewModel\FeedbackGetFeedbackViewModel.cs" />
     <Compile Include="ViewModel\GroupConfigDetailsViewModel.cs" />
+    <Compile Include="ViewModel\ProgrammeViewModel.cs" />
     <Compile Include="ViewModel\PromoCampaignViewModel.cs" />
     <Compile Include="ViewModel\TestingModuleViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
@@ -611,6 +612,7 @@
     <Content Include="Views\Events\EventDelete.cshtml" />
     <Content Include="Views\Events\_EventReport.cshtml" />
     <Content Include="Views\CommonDBConfig\ChangeCSName.cshtml" />
+    <Content Include="Views\CommonDBConfig\EnableProgramme.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
