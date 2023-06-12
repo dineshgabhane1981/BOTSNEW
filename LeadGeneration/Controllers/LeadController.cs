@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,6 +12,9 @@ using BOTS_BL.Models;
 using BOTS_BL.Models.SalesLead;
 using BOTS_BL.Repository;
 using LeadGeneration.ViewModel;
+
+using System.IO;
+using ClosedXML.Excel;
 
 namespace LeadGeneration.Controllers
 {
@@ -44,30 +49,39 @@ namespace LeadGeneration.Controllers
         {
             LeadViewModel objviewmodel = new LeadViewModel();
             SALES_tblLeads objData = new SALES_tblLeads();
+
+            objviewmodel.lstBillingPartner = CR.GetBillingPartner();
+            objviewmodel.lstcategory = CR.GetRetailCategory();           
+            objviewmodel.lstCity = CR.GetCity();
+            objviewmodel.sALES_TblLeads = objData;
+
+            List<SelectListItem> refferedname = new List<SelectListItem>();            
+            objviewmodel.lstLeadSourceNames = refferedname;
+
+            return View(objviewmodel);
+        }
+
+        public ActionResult EditLead(string leadId)
+        {
+            LeadViewModel objviewmodel = new LeadViewModel();
+            SALES_tblLeads objData = new SALES_tblLeads();
             if (!string.IsNullOrEmpty(leadId))
             {
                 objviewmodel.lstBillingPartner = CR.GetBillingPartner();
-                objviewmodel.lstcategory = CR.GetRetailCategory();
-                objviewmodel.lstStates = CR.GetStates();
+                objviewmodel.lstcategory = CR.GetRetailCategory();                
                 objviewmodel.lstCity = CR.GetCity();
                 objData = SLR.GetsalesLeadByLeadId(Convert.ToInt32(leadId));
                 if (objData.FollowupDate != null)
                     objData.FollowupDate = objData.FollowupDate.Value.Date;
                 objData.Comments = "";
                 objviewmodel.sALES_TblLeads = objData;
-            }
-            else
-            {
-                objviewmodel.lstBillingPartner = CR.GetBillingPartner();
-                objviewmodel.lstcategory = CR.GetRetailCategory();
-                objviewmodel.lstStates = CR.GetStates();
-                objviewmodel.lstCity = CR.GetCity();
-                objviewmodel.sALES_TblLeads = objData;
+
+                List<SelectListItem> refferedname = new List<SelectListItem>();               
+                objviewmodel.lstLeadSourceNames = refferedname;
             }
 
             return View(objviewmodel);
         }
-
         public ActionResult AddSalesLead(LeadViewModel objData)
         {
             int LeadId = 0;
@@ -77,12 +91,14 @@ namespace LeadGeneration.Controllers
                 objData.lstcategory = CR.GetRetailCategory();
                 objData.lstStates = CR.GetStates();
                 objData.lstCity = CR.GetCity();
+                List<SelectListItem> refferedname = new List<SelectListItem>();
+                objData.lstLeadSourceNames = refferedname;
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
-                if(objData.sALES_TblLeads.LeadId == 0)
+                if (objData.sALES_TblLeads.LeadId == 0)
                 {
                     var exist = SLR.isMobileNoExist(objData.sALES_TblLeads.MobileNo);
-                    if(exist)
+                    if (exist)
                     {
                         ViewData["Status"] = "exist";
                         return View("AddLead", objData);
@@ -97,7 +113,7 @@ namespace LeadGeneration.Controllers
                 {
                     string url = ConfigurationManager.AppSettings["BOTSURL"].ToString();
                     //string url = "https://blueocktopus.in/bots?LoginID=" + userDetails.LoginId + "&LeadId=" + objData.sALES_TblLeads.LeadId + "";
-                    url = url+"?LoginID=" + userDetails.LoginId + "";
+                    url = url + "?LoginID=" + userDetails.LoginId + "";
                     ViewData["LeadId"] = LeadId;
                     ViewData["URL"] = url;
                 }
@@ -113,7 +129,7 @@ namespace LeadGeneration.Controllers
             return View("AddLead", objData);
 
         }
-        
+
         public ActionResult GetSearchLeads(string searchData)
         {
             LeadViewModel objviewmodel = new LeadViewModel();
@@ -132,12 +148,12 @@ namespace LeadGeneration.Controllers
                     var userDetails = (CustomerLoginDetail)Session["UserSession"];
                     salesManager = userDetails.LoginId;
                 }
-                    objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]), 
-                    Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]), 
-                    Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
-                    Convert.ToString(item["BillingPartner"]), salesManager, Convert.ToString(item["LeadType"]));
+                objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]),
+                Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]),
+                Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
+                Convert.ToString(item["BillingPartner"]), salesManager, Convert.ToString(item["LeadType"]));
             }
-            
+
             return PartialView("_SearchLeadListing", objviewmodel);
         }
 
@@ -154,10 +170,10 @@ namespace LeadGeneration.Controllers
                     objviewmodel.lstsALES_TblLeads = SLR.GetSearchedLeads(Convert.ToString(item["MobileNo"]), Convert.ToString(item["BusinessName"]),
                         Convert.ToString(item["DtFrom"]), Convert.ToString(item["DtTo"]), Convert.ToString(item["LeadStatus"]),
                         Convert.ToString(item["ContactType"]), Convert.ToString(item["MeetingType"]), Convert.ToString(item["City"]),
-                        Convert.ToString(item["BillingPartner"]), Convert.ToString(item["SalesManager"]),"");
+                        Convert.ToString(item["BillingPartner"]), Convert.ToString(item["SalesManager"]), "");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "Get Lead");
             }
@@ -184,14 +200,14 @@ namespace LeadGeneration.Controllers
         public ActionResult SalesCount()
         {
             LeadViewModel objviewmodel = new LeadViewModel();
-            objviewmodel.lstSalesManager = SLR.GetSalesManager();           
+            objviewmodel.lstSalesManager = SLR.GetSalesManager();
             return View(objviewmodel);
         }
 
-        public JsonResult GetSalesCount(DateTime Fromdate,DateTime ToDate, string SalesManager)
+        public JsonResult GetSalesCount(DateTime Fromdate, DateTime ToDate, string SalesManager)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            if(userDetails.LoginType!="1" && userDetails.LoginType!="5")
+            if (userDetails.LoginType != "1" && userDetails.LoginType != "5")
             {
                 SalesManager = userDetails.LoginId;
             }
@@ -199,6 +215,126 @@ namespace LeadGeneration.Controllers
             return new JsonResult() { Data = lstsalescount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
+
+        [HttpPost]
+        public JsonResult GetRefferedName(string SourceType)
+        {
+            var lstRefferedName = SLR.GetRefferedName(SourceType);
+            return new JsonResult() { Data = lstRefferedName, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult SalesReport()
+        {
+            LeadViewModel objviewmodel = new LeadViewModel();
+            objviewmodel.lstBillingPartner = CR.GetBillingPartner();
+            objviewmodel.lstcategory = CR.GetRetailCategory();
+            objviewmodel.lstCity = CR.GetCity();
+            objviewmodel.lstSalesManager = SLR.GetSalesManager();
+            SALES_tblLeads objData = new SALES_tblLeads();
+            objviewmodel.sALES_TblLeads = objData;
+            return View(objviewmodel);
+        }
+
+        public ActionResult SalesReportData(string SalesManager,string City,string Category,string BillingPartner,string LeadSource,string LeadStatus)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstData = SLR.GetNewReport(SalesManager, City, Category, BillingPartner, LeadSource, LeadStatus, userDetails.LoginType, userDetails.UserName);
+            return PartialView("_Report", lstData);
+        }
+
+        public ActionResult SalesReportDataExport(string SalesManager, string City, string Category, string BillingPartner, string LeadSource, string LeadStatus)
+        {            
+            try
+            {
+                System.Data.DataTable table = new System.Data.DataTable();
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                var lstData = SLR.GetNewReport(SalesManager, City, Category, BillingPartner, LeadSource, LeadStatus, userDetails.LoginType, userDetails.UserName);
+                
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(NewReport));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+                foreach (NewReport item in lstData)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }               
+                table.Columns.Remove("UserName");
+                string ReportName = "SalesLeadData";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {                   
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+
+                    wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);                        
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SalesReportDataExport");
+                return null;
+            }             
+        }
+
+        public ActionResult ReferralLead()
+        {
+            LeadViewModel objviewmodel = new LeadViewModel();
+            SALES_tblLeads objData = new SALES_tblLeads();
+
+            objviewmodel.lstBillingPartner = CR.GetBillingPartner();
+            objviewmodel.lstcategory = CR.GetRetailCategory();            
+            objviewmodel.lstCity = CR.GetCity();
+            objviewmodel.lstSalesManager = SLR.GetSalesManager();
+            objviewmodel.sALES_TblLeads = objData;
+
+            List<SelectListItem> refferedname = new List<SelectListItem>();
+            objviewmodel.lstLeadSourceNames = refferedname;
+
+            return View(objviewmodel);
+        }
+
+        public ActionResult SaveReferralLead(string jsonData)
+        {
+            int status = 0;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                SALES_tblLeads objlead = new SALES_tblLeads();
+                objlead.BusinessName= Convert.ToString(item["BusinessName"]);
+                objlead.Category = Convert.ToString(item["Category"]);
+                objlead.City = Convert.ToString(item["City"]);
+                objlead.AssignedLead = Convert.ToString(item["AddedBy"]);
+                objlead.SpokeWith = Convert.ToString(item["ContactPerson"]);
+                objlead.MobileNo = Convert.ToString(item["ContactNo"]);
+                objlead.LeadSource = Convert.ToString(item["LeadSource"]);
+                objlead.LeadSourceName = Convert.ToString(item["LeadSourceName"]);
+                objlead.AddedBy = userDetails.LoginId;
+                objlead.FollowupDate = DateTime.Now.AddDays(1);
+                var exist = SLR.isMobileNoExist(objlead.MobileNo);
+                if (!exist)
+                {
+                    status = SLR.AddSalesLead(objlead);
+                }
+                else
+                {
+                    status = -1;
+                }
+            }
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
 
     }
 }

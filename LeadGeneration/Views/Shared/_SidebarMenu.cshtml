@@ -56,20 +56,20 @@
                     if (userDetails.LoginType == "1" || userDetails.LoginType == "5")
                     {
                         <li>
-                            <a href="@Url.Action("LeadTransfer", "Lead")" class="@Html.IsSelected(controller: "Lead", action: "LeadTransfer")">
+                            <a href="@Url.Action("ReferralLead", "Lead")" class="@Html.IsSelected(controller: "Lead", action: "ReferralLead")">
                                 <i class="metismenu-icon pe-7s-rocket"></i>
-                                Lead Transfer
+                                Referral Lead
                             </a>
                         </li>
                     }
                 }
                 <li>
-                    <a href="@Url.Action("SalesCount", "Lead")" class="@Html.IsSelected(controller: "Lead", action: "SalesCount")">
+                    <a href="@Url.Action("SalesReport", "Lead")" class="@Html.IsSelected(controller: "Lead", action: "SalesReport")">
                         <i class="metismenu-icon pe-7s-rocket"></i>
-                        Sales Count
+                        Sales Report
                     </a>
                 </li>
-                @if (userDetails != null)
+                @*@if (userDetails != null)
                 {
                     if (userDetails.LoginType == "1" || userDetails.LoginType == "5")
                     {
@@ -92,7 +92,7 @@
                             </a>
                         </li>
                     }
-                }
+                }*@
             </ul>
         </div>
     </div>

@@ -50,8 +50,9 @@ namespace WebApp.Controllers
 
         public ActionResult GetLiveCustomer()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             CustomerDashboardViewModel customerDashboardViewModel = new CustomerDashboardViewModel();
-            customerDashboardViewModel.customerListings = CR.GetAllCustomer();
+            customerDashboardViewModel.customerListings = CR.GetAllCustomer(userDetails.LoginId, userDetails.LoginType);
             return PartialView("_LiveCustomer", customerDashboardViewModel);
         }
 

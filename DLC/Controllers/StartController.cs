@@ -44,11 +44,14 @@ namespace DLC.Controllers
             {
                 objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(groupId);
                 objData.lstDLCFrontEndPageData = DCR.GetDLCFrontEndPageData(groupId);
-                Session["HeaderColor"] = objData.objDashboardConfig.HeaderColor;
-                Session["FontColor"] = objData.objDashboardConfig.FontColor;
-                Session["LogoUrl"] = objData.objDashboardConfig.UseLogoURL;
-                Session["LogoSize"] = objData.objDashboardConfig.UseLogo;
-                Session["GroupId"] = groupId;
+                SessionVariables objVariable = new SessionVariables();
+                objVariable.HeaderColor = objData.objDashboardConfig.HeaderColor;
+                objVariable.FontColor= objData.objDashboardConfig.HeaderColor;
+                objVariable.LogoUrl=objData.objDashboardConfig.UseLogoURL;
+                objVariable.LogoSize= objData.objDashboardConfig.UseLogo;
+                objVariable.GroupId = groupId;
+               
+                Session["SessionVariables"] = objVariable;
             }
             ViewBag.Codes = DCR.GetCountryCodes();
             return View(objData);
@@ -56,16 +59,18 @@ namespace DLC.Controllers
     
         public ActionResult CheckandSendOTP(string MobileNo)
         {
-            string OTPorPAssword = string.Empty;
-            string gId = Convert.ToString(Session["GroupId"]);
-            OTPorPAssword = DCR.CheckUserAndSendOTP(gId, MobileNo);
-            return new JsonResult() { Data = OTPorPAssword, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            string OTPorPassword = string.Empty;
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            string gId = sessionVariables.GroupId;
+            OTPorPassword = DCR.CheckUserAndSendOTP(gId, MobileNo);
+            return new JsonResult() { Data = OTPorPassword, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult ValidateUser(string mobileNo, string OtpOrPassword)
         {
             bool IsValid = false;
             string ActionNameFromConfig = string.Empty;
-            string gId = Convert.ToString(Session["GroupId"]);
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            string gId = sessionVariables.GroupId;
             //If OTP
             var config = DCR.GetDLCDashboardConfig(gId);
             
@@ -89,7 +94,7 @@ namespace DLC.Controllers
                     //Redirect to Set Password Screen
                     if (IsValid)
                     {
-                        ActionNameFromConfig = "SetPassword";
+                        ActionNameFromConfig = "Start/SetPassword";
                     }
                 }
             }
@@ -121,12 +126,24 @@ namespace DLC.Controllers
             return ActionName;
         }
         
-        public ActionResult SetPassword()
+        public ActionResult SetPassword(string mobileNo)
         {
             DLCDashboardFrontData objData = new DLCDashboardFrontData();
-            string gId = Convert.ToString(Session["GroupId"]);
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            string gId = sessionVariables.GroupId;            
+            ViewBag.MobileNo = mobileNo;
             objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(gId);
             return View(objData);
         }
+    
+        public ActionResult InsertPassword(string mobileNo,string password)
+        {
+            bool status = false;
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            string gId = sessionVariables.GroupId;
+            status = DCR.InsertPassword(mobileNo, password, gId);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+    
     }
 }

@@ -442,7 +442,7 @@ namespace WebApp.Controllers
             string status = "Report Sent";
             try
             {
-                var AllCustomer = CR.GetAllCustomer();
+                var AllCustomer = CR.GetAllCustomer("","");
                 //GeneratePDF("1051");
                 foreach (var customer in AllCustomer)
                 {

@@ -1,0 +1,279 @@
+﻿@model LeadGeneration.ViewModel.LeadViewModel
+@{
+    ViewBag.Title = "ReferralLead";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        Business Name <br /> <input id="txtbusinessnm" type="text" class="input100" />
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        Contact Person <br /> <input id="txtcontactperson" type="text" class="input100" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        Contact No <br /> <input id="txtcontactno" type="number" class="input100" />
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        Category <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Category, new SelectList(Model.lstcategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCategory" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        Lead Source <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.LeadSourceForReferral(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        Lead Source Name <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSourceName, new SelectList(Model.lstLeadSourceNames, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsourcename" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        City <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlcity" })
+                    </div>
+
+                    <div class="col-md-6 col-sm-6">
+                        Assigned to  <br />@Html.DropDownListFor(model => model.sALES_TblLeads.AddedBy, new SelectList(Model.lstSalesManager, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlAddedBy" })
+                    </div>
+                </div>
+
+                <div class="row" style="margin:25px;  text-align:center;">
+                    <button type="submit" id="btnLeadSave" class="btn btn-primary pull-right" style="margin-right:10px;" onclick="return CheckValidationAndSubmit();">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#ddlleadsource').change(function () {
+            FillRefferedName();
+        });
+        RemoveRedBorder();
+    });
+
+
+    function FillRefferedName() {
+        var selectedValue = $("#ddlleadsource").val();
+
+        if (selectedValue == "CustomerReference" || selectedValue == "billingpartner" || selectedValue == "channelpartner" || selectedValue == "employeereferral") {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetRefferedName", "Lead")',
+                    data: '{SourceType: ' + JSON.stringify(selectedValue) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        //console.log(result)
+                        $("#ddlleadsourcename").empty();
+                        $("#ddlleadsourcename").append($("<option />").val(0).text("Please Select"));
+                        $.each(result, function () {
+                            $("#ddlleadsourcename").append($("<option />").val(this.Value).text(this.Text));
+                        });
+
+                        $("#ddlleadsourcename").show();
+                    },
+                    error: function (result) {
+                        //console.log(result.responseText);
+                    }
+                });
+        }
+        else
+        {
+            $("#ddlleadsourcename").empty();
+            $("#ddlleadsourcename").append($("<option />").val(0).text("Please Select"));
+            $('#ddlleadsourcename').css('border-color', '');
+            $("#ddlleadsourcename").show();
+
+        }
+    }
+
+    function CheckValidationAndSubmit() {
+        var returnStatus = true;
+        if ($("#txtbusinessnm").val() == "") {
+            $('#txtbusinessnm').css('border-color', 'red');
+            returnStatus = false;
+        }
+
+        if ($("#ddlCategory option:selected").text() == "Please Select") {
+            $("#ddlCategory").css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#ddlcity option:selected").text() == "Please Select") {
+            $("#ddlcity").css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#ddlAddedBy option:selected").text() == "Please Select") {
+            $("#ddlAddedBy").css('border-color', 'red');
+            returnStatus = false;
+        }
+
+        if ($("#txtcontactperson").val() == "") {
+            $('#txtcontactperson').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txtcontactno").val() == "") {
+            $('#txtcontactno').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#ddlleadsource option:selected").text() == "Please Select") {
+            $("#ddlleadsource").css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#ddlleadsourcename option:selected").text() == "Please Select") {
+                $("#ddlleadsourcename").css('border-color', 'red');
+                returnStatus = false;
+
+        }
+        if (returnStatus == true) {
+            var LeadData = [];
+            item = {}
+            item["BusinessName"] = $("#txtbusinessnm").val();
+            item["Category"] = $("#ddlCategory").val();
+            item["City"] = $("#ddlcity").val();
+            item["AddedBy"] = $("#ddlAddedBy").val();
+            item["ContactPerson"] = $("#txtcontactperson").val();
+            item["ContactNo"] = $("#txtcontactno").val();
+            item["LeadSource"] = $("#ddlleadsource").val();
+            item["LeadSourceName"] = $("#ddlleadsourcename").val();
+
+            LeadData.push(item);
+            var strData = JSON.stringify(LeadData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveReferralLead", "Lead")',
+                data: '{jsonData: ' + JSON.stringify(strData) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response == -1) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Contact Number is already exist !!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else if (response == 0) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is problem in adding Lead. Please contact to Administrator !!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Lead added Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                   
+                    $("#divLoader").hide();
+                },
+                error: function (response) {                   
+                    $("#divLoader").hide();
+                }
+            });
+
+
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Required fields",
+                buttonText: "Okay"
+            })
+            return false;
+        }
+    }
+
+    function RemoveRedBorder() {
+        $("#txtbusinessnm").focusout(function () {
+            if ($("#txtbusinessnm").val() != "") {
+                $('#txtbusinessnm').css('border-color', '');
+            }
+            else {
+                $('#txtbusinessnm').css('border-color', 'red');
+            }
+        });
+        $('#ddlCategory').change(function () {
+            if ($("#ddlCategory option:selected").text() == "Please Select") {
+                $('#ddlCategory').css('border-color', 'red');
+            }
+            else {
+                $('#ddlCategory').css('border-color', '');
+            }
+        });
+        $('#ddlcity').change(function () {
+            if ($("#ddlcity option:selected").text() == "Please Select") {
+                $('#ddlcity').css('border-color', 'red');
+            }
+            else {
+                $('#ddlcity').css('border-color', '');
+            }
+        });
+        $('#ddlAddedBy').change(function () {
+            if ($("#ddlAddedBy option:selected").text() == "Please Select") {
+                $('#ddlAddedBy').css('border-color', 'red');
+            }
+            else {
+                $('#ddlAddedBy').css('border-color', '');
+            }
+        });
+        $("#txtcontactperson").focusout(function () {
+            if ($("#txtcontactperson").val() != "") {
+                $('#txtcontactperson').css('border-color', '');
+            }
+            else {
+                $('#txtcontactperson').css('border-color', 'red');
+            }
+        });
+        $("#txtcontactno").focusout(function () {
+            if ($("#txtcontactno").val() != "") {
+                $('#txtcontactno').css('border-color', '');
+            }
+            else {
+                $('#txtcontactno').css('border-color', 'red');
+            }
+        });
+
+
+        $('#ddlleadsource').change(function () {
+            if ($("#ddlleadsource option:selected").text() == "Please Select") {
+                $('#ddlleadsource').css('border-color', 'red');
+            }
+            else {
+                $('#ddlleadsource').css('border-color', '');
+            }
+        });
+
+        $('#ddlleadsourcename').change(function () {
+            if ($("#ddlleadsourcename option:selected").text() == "Please Select") {
+                $('#ddlleadsourcename').css('border-color', 'red');
+            }
+            else {
+                $('#ddlleadsourcename').css('border-color', '');
+            }
+        });
+
+    }
+
+
+</script>

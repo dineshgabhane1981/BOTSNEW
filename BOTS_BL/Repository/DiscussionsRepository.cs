@@ -154,6 +154,7 @@ namespace BOTS_BL.Repository
 
                     string _FilePath = ConfigurationManager.AppSettings["DiscussionFileUpload"];
                     string _FileURL = ConfigurationManager.AppSettings["DiscussionDocumentURL"];
+                    FileName = DateTime.Now.Day +"_"+ DateTime.Now.Month + "_" + DateTime.Now.Year + "_" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second + "_" + FileName;
                     string FileLocation = _FilePath + "/" + FileName;
 
                     int _GroupId = Convert.ToInt32(objDiscussion.GroupId);
@@ -162,11 +163,11 @@ namespace BOTS_BL.Repository
                     if (_GroupDetails == null)
                     {
                         var onBoardingGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == objDiscussion.GroupId).FirstOrDefault();
-                        _GroupName = onBoardingGroupDetail.GroupName;
+                        _GroupName = onBoardingGroupDetail.GroupName.Trim();
                     }
                     else
                     {
-                        _GroupName = _GroupDetails.RetailName;
+                        _GroupName = _GroupDetails.RetailName.Trim();
                     }
                     string Script = string.Empty;
 
@@ -442,6 +443,7 @@ namespace BOTS_BL.Repository
             {
                 string _FilePath = ConfigurationManager.AppSettings["DiscussionFileUpload"];
                 string _FileURL = ConfigurationManager.AppSettings["DiscussionDocumentURL"];
+                DoneFileName = DateTime.Now.Day + "_" + DateTime.Now.Month + "_" + DateTime.Now.Year + "_" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second + "_" + DoneFileName;
                 string FileLocation = _FilePath + "/" + DoneFileName;
 
                 using (var context = new CommonDBContext())
@@ -454,11 +456,11 @@ namespace BOTS_BL.Repository
                     if (_GroupDetails == null)
                     {
                         var onBoardingGroupDetail = context.BOTS_TblGroupMaster.Where(x => x.GroupId == groupId).FirstOrDefault();
-                        _GroupName = onBoardingGroupDetail.GroupName;
+                        _GroupName = onBoardingGroupDetail.GroupName.Trim();
                     }
                     else
                     {
-                        _GroupName = _GroupDetails.RetailName;
+                        _GroupName = _GroupDetails.RetailName.Trim();
                     }
                 }
                 if (FileDone != null)//(!string.IsNullOrEmpty(FileDone))

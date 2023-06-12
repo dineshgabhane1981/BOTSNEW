@@ -72,6 +72,8 @@ namespace BOTS_BL.Repository
                         objtbllead.Category = objlead.Category;
                         objtbllead.Product = objlead.Product;
                         objtbllead.City = objlead.City;
+                        objtbllead.LeadSource = objlead.LeadSource;
+                        objtbllead.LeadSourceName = objlead.LeadSourceName;
 
                         if (objtbllead.MeetingType == "salesdone")
                         {
@@ -800,6 +802,120 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "isMobileNoExist");
             }
             return status;
+        }
+
+        public List<SelectListItem> GetRefferedName(string SourceType)
+        {
+            List<SelectListItem> lstRefferedName = new List<SelectListItem>();           
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    if (SourceType == "CustomerReference")
+                    {
+                        var CustomerList = context.tblGroupDetails.ToList();
+                        foreach (var item in CustomerList)
+                        {
+                            lstRefferedName.Add(new SelectListItem
+                            {
+                                Text = item.GroupName,
+                                Value = item.GroupName
+                            });
+                        }
+                    }
+                    if (SourceType == "billingpartner")
+                    {
+                        var BillingPartners = context.tblBillingPartners.ToList();
+                        foreach (var item in BillingPartners)
+                        {
+                            lstRefferedName.Add(new SelectListItem
+                            {
+                                Text = item.BillingPartnerName,
+                                Value = item.BillingPartnerName
+                            });
+                        }
+                    }
+                    if (SourceType == "channelpartner")
+                    {
+                        var ChannelPartners = context.tblChannelPartners.ToList();
+                        foreach (var item in ChannelPartners)
+                        {
+                            lstRefferedName.Add(new SelectListItem
+                            {
+                                Text = item.CPartnerName,
+                                Value = Convert.ToString(item.CPId)
+                            });
+                        }
+                    }
+                    if (SourceType == "employeereferral")
+                    {
+                        var ChannelPartners = context.CustomerLoginDetails.Where(x => x.UserStatus == true && x.UserId == "1000" && x.LoginType != "5" && x.LoginType != "8" && x.LoginType != null).ToList();
+                        foreach (var item in ChannelPartners)
+                        {
+                            lstRefferedName.Add(new SelectListItem
+                            {
+                                Text = item.UserName,
+                                Value = Convert.ToString(item.LoginId)
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRefferedName");
+            }
+            lstRefferedName = lstRefferedName.OrderBy(x => x.Text).ToList();
+            return lstRefferedName;
+        }
+
+        public List<NewReport> GetNewReport(string SalesManager, string City, string Category, string BillingPartner, string LeadSource, string LeadStatus,string LoginType,string UserName)
+        {
+            List<NewReport> lstData = new List<NewReport>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    lstData = context.Database.SqlQuery<NewReport>("sp_SalesLeadReport").ToList();
+                    if (LoginType == "8")
+                    {
+                        lstData = lstData.Where(x => x.SalesManager == UserName).ToList();
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(SalesManager) && SalesManager != "Please Select")
+                        {
+                            lstData = lstData.Where(x => x.SalesManager == SalesManager).ToList();
+                        }
+                        if (!string.IsNullOrEmpty(City) && City != "Please Select")
+                        {
+                            lstData = lstData.Where(x => x.CityName == City).ToList();
+                        }
+                        if (!string.IsNullOrEmpty(Category) && Category != "Please Select")
+                        {
+                            lstData = lstData.Where(x => x.CategoryName == Category).ToList();
+                        }
+                        if (!string.IsNullOrEmpty(BillingPartner) && BillingPartner != "Please Select")
+                        {
+                            lstData = lstData.Where(x => x.BillingPartnerName == BillingPartner).ToList();
+                        }
+                        if (!string.IsNullOrEmpty(LeadSource))
+                        {
+                            lstData = lstData.Where(x => x.LeadSource == LeadSource).ToList();
+                        }
+                        if (!string.IsNullOrEmpty(LeadStatus))
+                        {
+                            lstData = lstData.Where(x => x.LeadStatus == LeadStatus).ToList();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetNewReport");
+            }
+
+            return lstData;
         }
     }
 }

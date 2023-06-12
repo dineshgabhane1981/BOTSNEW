@@ -20,6 +20,7 @@ namespace LeadGeneration.ViewModel
         public List<SelectListItem> lstCity { get; set; }
         public List<SelectListItem> lstSalesManager { get; set; }
         public List<SalesMatrix> lstsalesMatrices { get; set; }
+        public List<SelectListItem> lstLeadSourceNames { get; set; }
         public SelectListItem[] BOProducts()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Octa Plus", Value = "1" }, new SelectListItem() { Text = "Octa XS", Value = "2" } };
@@ -38,7 +39,7 @@ namespace LeadGeneration.ViewModel
         }
         public SelectListItem[] LeadSource()
         {
-            return new SelectListItem[5] { new SelectListItem() { Text = "Self", Value = "Self" }, new SelectListItem() { Text = "Telecaller", Value = "Telecaller" }, new SelectListItem() { Text = "Reference", Value = "Reference" }, new SelectListItem() { Text = "Billing Partner", Value = "billingpartner" }, new SelectListItem() { Text = "Channel Partner", Value = "channelpartner" } };
+            return new SelectListItem[6] { new SelectListItem() { Text = "Direct", Value = "Direct" }, new SelectListItem() { Text = "Telecaller", Value = "Telecaller" }, new SelectListItem() { Text = "Customer Reference", Value = "CustomerReference" }, new SelectListItem() { Text = "Billing Partner", Value = "billingpartner" }, new SelectListItem() { Text = "Channel Partner", Value = "channelpartner" }, new SelectListItem() { Text = "Employee Referral", Value = "employeereferral" } };
         }
         public SelectListItem[] CustomerType()
         {
@@ -47,6 +48,10 @@ namespace LeadGeneration.ViewModel
         public SelectListItem[] LeadType()
         {
             return new SelectListItem[3] { new SelectListItem() { Text = "Hot", Value = "Hot" }, new SelectListItem() { Text = "Warm", Value = "Warm" }, new SelectListItem() { Text = "Cold", Value = "Cold" } };
+        }
+        public SelectListItem[] LeadSourceForReferral()
+        {
+            return new SelectListItem[2] {new SelectListItem() { Text = "Customer Reference", Value = "CustomerReference" }, new SelectListItem() { Text = "Billing Partner", Value = "billingpartner" } };
         }
         public List<SelectListItem> lstMonthlist { get; set; }
         public List<SelectListItem> lstYearlist { get; set; }

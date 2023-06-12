@@ -457,7 +457,7 @@ namespace BOTS_BL.Repository
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             using (var context = new BOTSDBContext(connStr))
             {
-                var userDetails = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo && x.Password== Password).FirstOrDefault();
+                var userDetails = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo && x.Password == Password).FirstOrDefault();
                 if (userDetails != null)
                 {
                     status = true;
@@ -480,5 +480,30 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public bool InsertPassword(string mobileNo, string password, string groupId)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                try
+                {
+                    tblDLCUserDetail objData = new tblDLCUserDetail();
+                    objData.MobileNo = mobileNo;
+                    objData.Password = password;
+                    objData.AddedDate = DateTime.Now;
+                    context.tblDLCUserDetails.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    status = true;
+                }
+                catch(Exception ex)
+                {
+                    newexception.AddException(ex, "InsertPassword");
+                }
+            }
+            return status;
+        }
+
     }
 }

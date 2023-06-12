@@ -1,6 +1,6 @@
 ﻿@model LeadGeneration.ViewModel.LeadViewModel
 @{
-    ViewBag.Title = "Add Lead";
+    ViewBag.Title = "Edit Lead";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @using (Html.BeginForm("AddSalesLead", "Lead", FormMethod.Post, new { id = "frmaddlead", enctype = "multipart/form-data" }))
@@ -71,6 +71,7 @@
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Category <br />@Html.DropDownListFor(model => model.sALES_TblLeads.Category, new SelectList(Model.lstcategory, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCategory" })
+
                         </div>
                     </div>
                     <div class="row">
@@ -78,8 +79,36 @@
                             City <br />@Html.DropDownListFor(model => model.sALES_TblLeads.City, new SelectList(Model.lstCity, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCity" })
                         </div>
                         <div class="col-md-6 col-sm-6">
+                            Billing partner <br /> @Html.DropDownListFor(model => model.sALES_TblLeads.BillingPartner, new SelectList(Model.lstBillingPartner, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlBillingPartner" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            E-Commerce integration <br />
+                            @Html.RadioButtonFor(model => model.sALES_TblLeads.EcomIntegration, true, new { @id = "IsEcommerceYes" }) Yes
+                            @Html.RadioButtonFor(model => model.sALES_TblLeads.EcomIntegration, false, new { @id = "IsEcommerceNo" }) No
+                        </div>
+                        <div class="col-md-6 col-sm-6">
                             Number of outlet <br /> @Html.TextBoxFor(model => model.sALES_TblLeads.NoOfOutlet, new { @class = "input100", @oninput = "numberOnly(this.id);", @id = "txtnoofoutlet" })
                         </div>
+                    </div>                                        
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Contact type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.ContactType, new SelectList(Model.ContactType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlcontacttype" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Meeting type  <br />@Html.DropDownListFor(model => model.sALES_TblLeads.MeetingType, new SelectList(Model.MeetingType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlmeetingtype" })
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadstatus" })
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            Mobile no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @maxlength = "10", @oninput = "numberOnly(this.id);", @class = "input100", @id = "txtmobileno" })
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
@@ -88,22 +117,7 @@
                         <div class="col-md-6 col-sm-6">
                             Customer Type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.CustomerType, new SelectList(Model.CustomerType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlcustomertype" })
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            Contact no<br /> @Html.TextBoxFor(model => model.sALES_TblLeads.MobileNo, new { @maxlength = "10", @oninput = "numberOnly(this.id);", @class = "input100", @id = "txtmobileno" })
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            EmailId <br />@Html.TextBoxFor(model => model.sALES_TblLeads.EmailId, new { @class = "input100", @id = "txtemailid" })
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.LeadSource(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            Lead source Name <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSourceName, new SelectList(Model.lstLeadSourceNames, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsourcename" })
-                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
@@ -115,14 +129,20 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-sm-6">
-                            Lead status <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadStatus, new SelectList(Model.LeadStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadstatus" })
+                            Lead source <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSource, new SelectList(Model.LeadSource(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsource" })
+                        </div>
+                        <div class="col-md-6 col-sm-6" id="dvLeadSourceName">
+                            Lead source name <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadSourceName, new SelectList(Model.lstLeadSourceNames, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadsourcename" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            Lead Type <br />@Html.DropDownListFor(model => model.sALES_TblLeads.LeadType, new SelectList(Model.LeadType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlleadtype" })
                         </div>
                         <div class="col-md-6 col-sm-6">
                             Comments <br />@Html.TextAreaFor(model => model.sALES_TblLeads.Comments, new { @class = "input100", @rows = 5, @id = "txtcomment" })
                         </div>
                     </div>
-
-
                     <div class="row">
                         <div class="col-md-6 col-sm-6 pull-right mb-3 mt-3">
                             <a href="@Url.Action("Index", "Lead")" style="color:white;" title="Cancel">
@@ -130,8 +150,7 @@
                                     Cancel
                                 </button>
                             </a>
-
-                            <button type="submit" id="btnLeadSave" class="btn btn-primary pull-right" style="margin-right:10px;" onclick="return CheckValidationAndSubmit();">Save</button>
+                            <button type="submit" id="btnLeadSave" class="btn btn-primary pull-right" style="margin-right:10px;" onclick="return CheckValidationAndSubmit();">Save</button>                           
                         </div>
                     </div>
                 </div>
@@ -149,20 +168,30 @@
             var dt = $("#hdnLeadId").val();
             EnableDisableData();
         }
+
+        $('#ddlmeetingtype option').each(function (item) {
+            if ($("#hdnLeadId").val() != 0) {
+                if ($('#ddlmeetingtype').val() == '1stcall') {
+                        $("#ddlmeetingtype option[value='1stcall']").prop("disabled", true);
+                }
+                if ($('#ddlmeetingtype').val() == '1stMeeting') {
+                    $("#ddlmeetingtype option[value='1stcall']").prop("disabled", true);
+                    $("#ddlmeetingtype option[value='1stMeeting']").prop("disabled", true);
+                }
+            }
+        });
         $('#ddlleadsource').change(function () {
             FillRefferedName();
         });
+        var lsName = '@Model.sALES_TblLeads.LeadSourceName';
+        FillRefferedName(lsName);
+
+       
+       
         RemoveRedBorder();
     });
 
-    function numberOnly(id) {
-        // Get element by id which passed as parameter within HTML element event
-        var element = document.getElementById(id);
-        // This removes any other character but numbers as entered by user
-        element.value = element.value.replace(/[^0-9]/gi, "");
-    }
-
-    function FillRefferedName() {
+    function FillRefferedName(lsName) {
         var selectedValue = $("#ddlleadsource").val();
 
         if (selectedValue == "CustomerReference" || selectedValue == "billingpartner" || selectedValue == "channelpartner" || selectedValue == "employeereferral") {
@@ -180,7 +209,10 @@
                         $.each(result, function () {
                             $("#ddlleadsourcename").append($("<option />").val(this.Value).text(this.Text));
                         });
-
+                        
+                        if (lsName != null) {
+                            $("#ddlleadsourcename").val(lsName);
+                        }
                         $("#ddlleadsourcename").show();
                     },
                     error: function (result) {
@@ -193,11 +225,34 @@
             $("#ddlleadsourcename").empty();
             $("#ddlleadsourcename").append($("<option />").val(0).text("Please Select"));
             $('#ddlleadsourcename').css('border-color', '');
-            $("#ddlleadsourcename").show();
+            $("#dvLeadSourceName").hide();
 
         }
     }
+    function numberOnly(id) {
+        // Get element by id which passed as parameter within HTML element event
+        var element = document.getElementById(id);
+        // This removes any other character but numbers as entered by user
+        element.value = element.value.replace(/[^0-9]/gi, "");
+    }
 
+
+    function EnableDisableData() {
+        $("#txtbusinessnm").attr("readonly", true);
+        $('#txtbusinessnm').css('background-color', '#d3d3d3');
+        $("#ddlCategory").attr("disabled", true);
+        $('#ddlCategory').css('background-color', '#d3d3d3');        
+        $("#ddlCity").attr("disabled", true);
+        $('#ddlCity').css('background-color', '#d3d3d3');
+
+        //$("#ddlleadsource").attr("disabled", true);
+        //$('#ddlleadsource').css('background-color', '#d3d3d3');
+
+        //$("#ddlleadsourcename").attr("disabled", true);
+        //$('#ddlleadsourcename').css('background-color', '#d3d3d3');
+        
+        
+    }
 
     function RemoveRedBorder() {
         $("#txtbusinessnm").focusout(function () {
@@ -217,8 +272,14 @@
             }
         });
 
-
-
+        $("#txtnoofoutlet").focusout(function () {
+            if ($("#txtnoofoutlet").val() != "") {
+                $('#txtnoofoutlet').css('border-color', '');
+            }
+            else {
+                $('#txtnoofoutlet').css('border-color', 'red');
+            }
+        });
         $('#ddlCity').change(function () {
             if ($("#ddlCity option:selected").text() == "Please Select") {
                 $('#ddlCity').css('border-color', 'red');
@@ -227,8 +288,22 @@
                 $('#ddlCity').css('border-color', '');
             }
         });
-
-
+        $("#txtpincode").focusout(function () {
+            if ($("#txtpincode").val() != "") {
+                $('#txtpincode').css('border-color', '');
+            }
+            else {
+                $('#txtpincode').css('border-color', 'red');
+            }
+        });
+        $('#ddlcontacttype').change(function () {
+            if ($("#ddlcontacttype option:selected").text() == "Please Select") {
+                $('#ddlcontacttype').css('border-color', 'red');
+            }
+            else {
+                $('#ddlcontacttype').css('border-color', '');
+            }
+        });
         $("#txtspokenwith").focusout(function () {
             if ($("#txtspokenwith").val() != "") {
                 $('#txtspokenwith').css('border-color', '');
@@ -237,7 +312,14 @@
                 $('#txtspokenwith').css('border-color', 'red');
             }
         });
-
+        $("#txtmobileno").focusout(function () {
+            if ($("#txtmobileno").val() != "") {
+                $('#txtmobileno').css('border-color', '');
+            }
+            else {
+                $('#txtmobileno').css('border-color', 'red');
+            }
+        });
         $('#ddlleadstatus').change(function () {
             if ($("#ddlleadstatus option:selected").text() == "Please Select") {
                 $('#ddlleadstatus').css('border-color', 'red');
@@ -246,6 +328,36 @@
                 $('#ddlleadstatus').css('border-color', '');
             }
         });
+        $('#ddlmeetingtype').change(function () {
+            if ($("#ddlmeetingtype option:selected").text() == "Please Select") {
+                $('#ddlmeetingtype').css('border-color', 'red');
+            }
+            else {
+                $('#ddlmeetingtype').css('border-color', '');
+            }
+        });
+        $("#txtfollowupdt").focusout(function () {
+            if ($("#txtfollowupdt").val() != "") {
+                $('#txtfollowupdt').css('border-color', '');
+            }
+            else {
+                if ($('#ddlleadstatus').val() == "NotInterested") {
+                    $('#txtfollowupdt').css('border-color', '');
+                }
+                else {
+                    $('#txtfollowupdt').css('border-color', 'red');
+                }
+            }
+        });
+        $("#txtcomment").focusout(function () {
+            if ($("#txtcomment").val() != "") {
+                $('#txtcomment').css('border-color', '');
+            }
+            else {
+                $('#txtcomment').css('border-color', 'red');
+            }
+        });
+
         $('#ddlleadsource').change(function () {
             if ($("#ddlleadsource option:selected").text() == "Please Select") {
                 $('#ddlleadsource').css('border-color', 'red');
@@ -264,23 +376,6 @@
             }
         });
 
-        //ddlleadsourcename
-
-        $("#txtfollowupdt").focusout(function () {
-            if ($("#txtfollowupdt").val() != "") {
-                $('#txtfollowupdt').css('border-color', '');
-            }
-            else {
-                if ($('#ddlleadstatus').val() == "NotInterested") {
-                    $('#txtfollowupdt').css('border-color', '');
-                }
-                else {
-                    $('#txtfollowupdt').css('border-color', 'red');
-                }
-            }
-        });
-
-
     }
 
 
@@ -295,13 +390,48 @@
             $("#ddlCategory").css('border-color', 'red');
             returnStatus = false;
         }
+
+
+        if ($("#txtnoofoutlet").val() == "") {
+            $('#txtnoofoutlet').css('border-color', 'red');
+            returnStatus = false;
+        }
         if ($("#ddlCity option:selected").text() == "Please Select") {
             $("#ddlCity").css('border-color', 'red');
             returnStatus = false;
         }
-
+        if ($("#txtpincode").val() == "") {
+            $('#txtpincode').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#ddlcontacttype option:selected").text() == "Please Select") {
+            $("#ddlcontacttype").css('border-color', 'red');
+            returnStatus = false;
+        }
         if ($("#txtspokenwith").val() == "") {
             $('#txtspokenwith').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#txtmobileno").val() == "") {
+            $('#txtmobileno').css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#ddlleadstatus option:selected").text() == "Please Select") {
+            $("#ddlleadstatus").css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#ddlmeetingtype option:selected").text() == "Please Select") {
+            $("#ddlmeetingtype").css('border-color', 'red');
+            returnStatus = false;
+        }
+        if ($("#ddlleadstatus option:selected").text() == "Interested" || $("#ddlleadstatus option:selected").text() == "Followup" || $("#ddlleadstatus option:selected").text() == "LongFollowUp") {
+            if ($("#txtfollowupdt").val() == "") {
+                $('#txtfollowupdt').css('border-color', 'red');
+                returnStatus = false;
+            }
+        }
+        if ($("#txtcomment").val() == "") {
+            $('#txtcomment').css('border-color', 'red');
             returnStatus = false;
         }
         if ($("#ddlleadsource option:selected").text() == "Please Select") {
@@ -309,20 +439,22 @@
             returnStatus = false;
         }
         if ($("#ddlleadsource option:selected").text() != "Please Select" && $("#ddlleadsource option:selected").text() != "Direct" && $("#ddlleadsource option:selected").text() != "Telecaller") {
-            if($("#ddlleadsourcename option:selected").text() == "Please Select")
-            {
+            if ($("#ddlleadsourcename option:selected").text() == "Please Select") {
                 $("#ddlleadsourcename").css('border-color', 'red');
                 returnStatus = false;
             }
         }
-        //Dropdown of Lead Source        
-        if ($("#ddlleadstatus option:selected").text() == "Please Select") {
-            $("#ddlleadstatus").css('border-color', 'red');
-            returnStatus = false;
-        }
-        if ($("#ddlleadstatus option:selected").text() == "Interested" || $("#ddlleadstatus option:selected").text() == "Followup" || $("#ddlleadstatus option:selected").text() == "LongFollowUp") {
-            if ($("#txtfollowupdt").val() == "") {
-                $('#txtfollowupdt').css('border-color', 'red');
+
+        if ($("#hdnLeadId").val() != 0) {
+            if ($("#ddlmeetingtype option:selected").text() == "1st Call" || $("#ddlmeetingtype option:selected").text() == "1st Meeting") {
+
+                $("#ddlmeetingtype").css('border-color', 'red');
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Meeting Type should not 1st Call or 1st Meeting",
+                    buttonText: "Okay"
+                })
                 returnStatus = false;
             }
         }
