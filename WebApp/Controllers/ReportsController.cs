@@ -385,7 +385,7 @@ namespace WebApp.Controllers
             long? apts = 0;
             long btxn = 0;
             long txnCount = 0;
-            long bpts = 0;
+            decimal bpts = 0;
             long totalSpend = 0;
             foreach (var item in lstMember)
             {
@@ -1261,7 +1261,7 @@ namespace WebApp.Controllers
                 long? apts = 0;
                 long btxn = 0;
                 long txnCount = 0;
-                long bpts = 0;
+                decimal bpts = 0;
                 long totalSpend = 0;
                 foreach (var item in lstMember)
                 {

@@ -16,6 +16,7 @@ namespace DLC.Controllers
         // GET: Start
         public ActionResult Index(string data)
         {
+            var url = Request.Url.ToString();
             string brandId = string.Empty;
             string groupId = string.Empty;
             string source = string.Empty;
@@ -45,12 +46,10 @@ namespace DLC.Controllers
                 objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(groupId);
                 objData.lstDLCFrontEndPageData = DCR.GetDLCFrontEndPageData(groupId);
                 SessionVariables objVariable = new SessionVariables();
-                objVariable.HeaderColor = objData.objDashboardConfig.HeaderColor;
-                objVariable.FontColor= objData.objDashboardConfig.HeaderColor;
-                objVariable.LogoUrl=objData.objDashboardConfig.UseLogoURL;
-                objVariable.LogoSize= objData.objDashboardConfig.UseLogo;
+                objVariable.objDashboardConfig = objData.objDashboardConfig;               
                 objVariable.GroupId = groupId;
-               
+                objVariable.LoginURL = url;
+
                 Session["SessionVariables"] = objVariable;
             }
             ViewBag.Codes = DCR.GetCountryCodes();
@@ -73,9 +72,9 @@ namespace DLC.Controllers
             string gId = sessionVariables.GroupId;
             //If OTP
             var config = DCR.GetDLCDashboardConfig(gId);
-            
+
             //If Password and exist in UserDetails
-            if (config.LoginWithOTP=="Password")
+            if (config.LoginWithOTP == "Password")
             {
                 var IsExist = DCR.CheckPasswordExist(gId, mobileNo);
                 if (IsExist)
@@ -102,11 +101,16 @@ namespace DLC.Controllers
             {
                 //if Validate using OTP
                 IsValid = DCR.ValidateUserByOTP(gId, mobileNo, OtpOrPassword);
-                if(IsValid)
+                if (IsValid)
                 {
                     //redirect to RedirectToPage
-                    ActionNameFromConfig = GetRedirectActionName(config.RedirectToPage);                    
+                    ActionNameFromConfig = GetRedirectActionName(config.RedirectToPage);
                 }
+            }
+            if(!string.IsNullOrEmpty(ActionNameFromConfig))
+            {
+                sessionVariables.MobileNo = mobileNo;
+                Session["SessionVariables"] = sessionVariables;
             }
             return new JsonResult() { Data = ActionNameFromConfig, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -126,12 +130,12 @@ namespace DLC.Controllers
             return ActionName;
         }
         
-        public ActionResult SetPassword(string mobileNo)
+        public ActionResult SetPassword()
         {
             DLCDashboardFrontData objData = new DLCDashboardFrontData();
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
             string gId = sessionVariables.GroupId;            
-            ViewBag.MobileNo = mobileNo;
+            ViewBag.MobileNo = sessionVariables.MobileNo;
             objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(gId);
             return View(objData);
         }
@@ -145,5 +149,12 @@ namespace DLC.Controllers
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     
+        public ActionResult Logout()
+        {
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            Session.Abandon();
+            return Redirect(sessionVariables.LoginURL);
+            //return View();
+        }
     }
 }

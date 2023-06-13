@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DLC.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,7 @@ namespace DLC.Controllers
         // GET: Dashboard
         public ActionResult Index()
         {
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
             return View();
         }
     }

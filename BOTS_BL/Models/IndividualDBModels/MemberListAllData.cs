@@ -21,7 +21,7 @@ namespace BOTS_BL.Models.IndividualDBModels
         public long TotalTxnCount { get; set; }
         public decimal TotalSpend  { get; set; }
         public long BurnCount { get; set; }
-        public long BurnPts { get; set; }
+        public decimal BurnPts { get; set; }
         public long AvlPts { get; set; }
         public DateTime? LasTTxnDate { get; set; }
         public string LasTTxnDateStr { get; set; }

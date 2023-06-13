@@ -1,13 +1,17 @@
 ﻿@using BOTS_BL.Models;
+@using DLC.ViewModel;
 @{
-    var logoUrl = (string)Session["LogoUrl"];
-    var logoSize = (string)Session["LogoSize"];
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
+    var HeaderColor = sessionVariables.objDashboardConfig.HeaderColor;
+    var FontColor = sessionVariables.objDashboardConfig.FontColor;
 
 }
 
 <link href="~/Content/Menu.css" rel="stylesheet" />
-<div id="dvHeaderInner" style="height:120px;" class="app-header header-shadow">
-    <div id="dvHeader" style="height:120px;" class="app-header__content">
+<div id="dvHeaderInner" class="app-header header-shadow">
+    <div id="dvHeader"  class="app-header__content">
         <div class="app-header-right">
             <div class="header-btn-lg pr-0">
                 <div class="widget-content p-0">
@@ -15,39 +19,45 @@
                         <div class="widget-content-left  ml-3 header-user-info">
                             <div class="widget-heading">
                                 <!-- Navigation bar -->
-                                <header class="header" style="text-align:center;">
+                                <header class="header logocenter" style="height:175px;">
                                     <!-- Logo -->
-                                    <a href="#" class="logo" style="padding-top: 50px;">
-                                        @if (logoSize == "Small")
-                                        {
-                                            <div style="box-shadow: 2px 6px 14px rgb(0 0 0 / 50%); height: 100px !important; width: 200px !important;">
-                                                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
-                                            </div>
-                                        }
-                                        @if (logoSize == "Medium")
-                                        {
-                                            <div style="box-shadow: 2px 6px 14px rgb(0 0 0 / 50%); height: 150px !important;width:300px !important;">
-                                                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
-                                            </div>
-                                        }
-                                        @if (logoSize == "Big")
-                                        {
-                                            <div style="box-shadow: 2px 6px 14px rgb(0 0 0 / 50%); height: 200px !important; width: 400px !important;">
-                                                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
-                                            </div>
-                                        }
-                                    </a>
                                     <!-- Hamburger icon -->
                                     <input class="side-menu" type="checkbox" id="side-menu" />
                                     <label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
                                     <!-- Menu -->
                                     <nav class="nav">
                                         <ul class="menu">
-                                            <li><a href="#">Gallery</a></li>
-                                            <li><a href="#">Blog</a> </li>
-                                            <li><a href="#">About</a></li>
+                                            <li ><a href="#">Dashboard</a></li>
+                                            <li><a href="#">Store Locator</a> </li>
+                                            <li><a href="#">Refer and Earn</a></li>
+                                            <li><a href="#">Personal Details</a></li>
+                                            <li><a href="#">Transaction History</a></li>
+                                            <li><a href="#">Gift Points</a></li>
+                                            <li><a href="#">Terms and Conditions</a></li>
+                                            <li><a href="#">Optout</a></li>
+                                            <li><a href="@Url.Action("Logout", "Start")">Logout</a></li>
                                         </ul>
                                     </nav>
+                                    <a href="#" class="logo" style="cursor:unset;">
+                                        @if (logoSize == "Small")
+                                        {
+                                            <div class="logo1" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 200px !important;">
+                                                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+                                            </div>
+                                        }
+                                        @if (logoSize == "Medium")
+                                        {
+                                            <div class="logo1" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                                                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+                                            </div>
+                                        }
+                                        @if (logoSize == "Big")
+                                        {
+                                            <div class="logo1" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                                                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+                                            </div>
+                                        }
+                                    </a>
                                 </header>
                             </div>
                         </div>
@@ -58,13 +68,14 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-        var color = '@Session["HeaderColor"]';
-        console.log(color);
-        document.querySelector("#dvHeader").style.background = "linear-gradient(to bottom," + color + ", #ffffff)";//picker.toRGBAString();
-        document.querySelector("#dvHeaderInner").style.background = "linear-gradient(to bottom," + color + ", #ffffff)";//picker.toRGBAString();
-
-
+    $(document).ready(function () {       
+        var HeaderColor = '@HeaderColor';
+        var fontcolor = '@FontColor';        
+        document.querySelector("#dvHeader").style.background = "linear-gradient(to bottom," + HeaderColor + ", #000000)";//picker.toRGBAString();
+        document.querySelector("#dvHeaderInner").style.background = "linear-gradient(to bottom," + HeaderColor + ", #000000)";//picker.toRGBAString();
+        document.querySelector("#dvHeader").style.color = fontcolor;
+        document.querySelector("#dvHeaderInner").style.color = fontcolor;
+        $('a').css('color', fontcolor);
     });
 
 

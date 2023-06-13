@@ -14,8 +14,8 @@ namespace BOTS_BL.Models.IndividualDBModels
         public long TotalTxnCount { get; set; }
         public DateTime? FirstTxnDate { get; set; }
         public DateTime? LastTxnDate { get; set; }
-        public long EarnPts { get; set; }
-        public long BurnPts { get; set; }
+        public decimal EarnPts { get; set; }
+        public decimal BurnPts { get; set; }
         public decimal TotalSpend { get; set; }
         public long BurnAmtWithPts { get; set; }
         public string CurrentEnrolledOutlet { get; set; }
