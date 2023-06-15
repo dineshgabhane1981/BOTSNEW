@@ -18,7 +18,7 @@ namespace BOTS_BL.Models
         public long TotalSpend { get; set; }
         public string TotalSpendStr { get; set; }
         public long TotalBurnTxn { get; set; }
-        public decimal TotalBurnPoints { get; set; }
+        public long TotalBurnPoints { get; set; }
         public string TotalBurnPointsStr { get; set; }
         public string LastTxnDate { get; set; }
         public string EnrooledOutlet { get; set; }

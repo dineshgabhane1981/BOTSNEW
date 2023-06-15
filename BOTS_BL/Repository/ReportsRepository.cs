@@ -53,7 +53,7 @@ namespace BOTS_BL.Repository
                                 Obj.TxnCount = item.TotalTxnCount;
                                 Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
                                 Obj.TotalBurnTxn = item.BurnCount;
-                                Obj.TotalBurnPoints = item.BurnPts;
+                                Obj.TotalBurnPoints = Convert.ToInt64(item.BurnPts);
                                 Obj.AvlBalPoints = item.AvlPts;
                                 if (item.LasTTxnDate.HasValue)
                                 {
@@ -82,7 +82,7 @@ namespace BOTS_BL.Repository
                                 Obj.TxnCount = item.TotalTxnCount;
                                 Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
                                 Obj.TotalBurnTxn = item.BurnCount;
-                                Obj.TotalBurnPoints = item.BurnPts;
+                                Obj.TotalBurnPoints = Convert.ToInt64(item.BurnPts);
                                 Obj.AvlBalPoints = item.AvlPts;
                                 if (item.LasTTxnDate.HasValue)
                                 {
