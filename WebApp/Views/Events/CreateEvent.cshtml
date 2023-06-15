@@ -74,6 +74,14 @@
                 @Html.TextBoxFor(model => model.objEvent.PointsExpiryDays, new { @class = "input100", @id = "IdPointsExp" })
             </div>
         </div>
+        <div class="row" style="margin: 0;">            
+            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                Event Bonus Script
+            </div>
+            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                @Html.TextAreaFor(model => model.objEvent.BonusMessageScript, new { @class = "input100", @id = "idScript" })
+            </div>
+        </div>
         <div class="row" style="margin: 0;">
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                 First Remainder Script
@@ -82,7 +90,7 @@
                 @Html.TextAreaFor(model => model.objEvent.C1stReminderScript, new { @class = "input100", @id = "IdFirstRemaind" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                First Remd Days
+                First Remainder Days
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextBoxFor(model => model.objEvent.C1stRemBefore, new { @class = "input100", @id = "IdFirstRemdDays" })
@@ -96,9 +104,9 @@
                 @Html.TextAreaFor(model => model.objEvent.C2ndReminderScript, new { @class = "input100", @id = "IdSecondRemaind" })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                Second Remd Days
+                Second Remainder Days
             </div>
-            
+
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextBoxFor(model => model.objEvent.C2ndRemBefore, new { @class = "input100", @id = "IdSecondRemdDays" })
             </div>
@@ -109,13 +117,7 @@
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
                 @Html.TextAreaFor(model => model.objEvent.Desciption, new { @class = "input100", @id = "idDescription" })
-            </div>
-            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                Event Bonus Script
-            </div>
-            <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextAreaFor(model => model.objEvent.BonusMessageScript, new { @class = "input100", @id = "idScript" })
-            </div>
+            </div>            
         </div>
 
         <div class="row mb-2 ml-2">

@@ -123,15 +123,14 @@
                                     </ul>
                                 </li>
                             }
-                            @if (roleId == "1" || roleId == "6")
-                            {
+                            
                                 <li class="@Html.IsSelected(controller: "Discussion", action: "CommonDiscussion")">
                                     <a href="@Url.Action("CommonDiscussion", "Discussion")" class="@Html.IsSelected(controller: "Discussion", action: "CommonDiscussion")">
                                         <i class="metismenu-icon pe-7s-rocket"></i>
                                         Common Discussion
                                     </a>
                                 </li>
-                            }
+                           
 
                             <li>
                                 <a href="#">

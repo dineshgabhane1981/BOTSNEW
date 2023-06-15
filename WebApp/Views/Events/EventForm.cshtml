@@ -69,22 +69,15 @@
 
 
 
-<div class="container-fluid pt-3 pl-3 pr-3" style="margin-top:10px">
-    <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+<div class="container-fluid pl-3 pr-3">
+    <div class="mb-2 pr-3 pl-3 card" style="padding-bottom:20px;">
 
         <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
             <div class="row col-lg-10 col-md-10">
-                <div class="col-lg-10 col-md-10" style="margin-bottom:20px; text-align: center;"><img src="@Model.Logo" alt="Logo" style="width:200px"></div>
+                <div class="col-lg-10 col-md-10" style="text-align: center;"><img src="@Model.Logo" alt="Logo" style="width:60%"><br /><h4> <b> @Model.EventName</b></h4></div>
             </div>
         </div>
-        <div class="row mb-2 ml-2 justify-content-center" style="margin: 0;">
-            <div class="col-lg-2 col-md-2" style="font-size: medium;">
-                Event Name 
-            </div>
-            <div class="col-lg-4 col-md-2">
-                <span id="EventName"><b>@Model.EventName</b></span>
-            </div>
-        </div>
+      
         @if (ViewBag.EventEnded == "Ended")
         {
             <div class="row justify-content-center">
