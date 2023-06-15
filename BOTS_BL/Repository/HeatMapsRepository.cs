@@ -24,21 +24,21 @@ namespace BOTS_BL.Repository
             DBName = "MadhusudanTextiles_New";
             try
             {
-                //if(GroupId == "1087")
-                //{
-                //    using (var context = new CommonDBContext())
-                //    {
-                //        objDaywiseHourwise = context.Database.SqlQuery<DaywiseHourwise>("sp_HeatMap @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_DBName ", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId), new SqlParameter("@pi_DBName", DBName)).ToList<DaywiseHourwise>();
-                //    }
-                //}
-                //else
-                //{
+                if(GroupId == "1087")
+                {
+                    using (var context = new CommonDBContext())
+                    {
+                        objDaywiseHourwise = context.Database.SqlQuery<DaywiseHourwise>("sp_HeatMap @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_DBName ", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId), new SqlParameter("@pi_DBName", DBName)).ToList<DaywiseHourwise>();
+                    }
+                }
+                else
+                {
                     using (var context = new BOTSDBContext(connstr))
                     {
                         objDaywiseHourwise = context.Database.SqlQuery<DaywiseHourwise>("sp_BOTS_HeatMap @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).ToList<DaywiseHourwise>();
 
                     }
-                //}
+                }
                 
             }
             catch (Exception ex)

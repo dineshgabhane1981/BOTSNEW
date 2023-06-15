@@ -437,7 +437,21 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool CheckPasswordExist(string groupId, string mobileNo)
+        public tblDLCUserDetail CheckPasswordExist(string groupId, string mobileNo)
+        {
+            tblDLCUserDetail objData = new tblDLCUserDetail();
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                var userDetails = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                if (userDetails != null)
+                {
+                    objData = userDetails;
+                }
+            }
+            return objData;
+        }
+        public bool ValidateUserByPassword(string groupId, string mobileNo, string Password)
         {
             bool status = false;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
@@ -446,21 +460,8 @@ namespace BOTS_BL.Repository
                 var userDetails = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
                 if (userDetails != null)
                 {
-                    status = true;
-                }
-            }
-            return status;
-        }
-        public bool ValidateUserByPassword(string groupId, string mobileNo, string Password)
-        {
-            bool status = false;
-            string connStr = objCustRepo.GetCustomerConnString(groupId);
-            using (var context = new BOTSDBContext(connStr))
-            {
-                var userDetails = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo && x.Password == Password).FirstOrDefault();
-                if (userDetails != null)
-                {
-                    status = true;
+                    if (Password == userDetails.Password)
+                        status = true;
                 }
             }
             return status;
@@ -490,8 +491,8 @@ namespace BOTS_BL.Repository
                 try
                 {
                     tblDLCUserDetail objData = new tblDLCUserDetail();
-                    objData.MobileNo = mobileNo;
-                    objData.Password = password;
+                    objData.MobileNo = mobileNo.Trim();
+                    objData.Password = password.Trim();
                     objData.AddedDate = DateTime.Now;
                     context.tblDLCUserDetails.AddOrUpdate(objData);
                     context.SaveChanges();

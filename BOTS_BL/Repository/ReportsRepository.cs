@@ -37,66 +37,66 @@ namespace BOTS_BL.Repository
                         lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
                         new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", SearchText)).ToList<MemberList>();
                     }
-                    //else if (GroupId == "1087")
-                    //{
-                    //    if (SearchText == "")
-                    //    {
-                    //        var lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
-                    //        foreach (var item in lstTempMemberData)
-                    //        {
-                    //            MemberList Obj = new MemberList();
-                    //            Obj.EnrooledOutlet = item.OutletName;
-                    //            Obj.EnrolledDate = item.DOJ.Value.ToString("dd/MM/yyyy");
-                    //            Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //            Obj.MemberName = item.Name;
-                    //            Obj.Type = item.Type;
-                    //            Obj.TxnCount = item.TotalTxnCount;
-                    //            Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                    //            Obj.TotalBurnTxn = item.BurnCount;
-                    //            Obj.TotalBurnPoints = item.BurnPts;
-                    //            Obj.AvlBalPoints = item.AvlPts;
-                    //            if (item.LasTTxnDate.HasValue)
-                    //            {
-                    //                Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("dd/MM/yyyy");
-                    //            }
-                    //            else
-                    //            {
-                    //                Obj.LastTxnDate = item.DOJ.Value.ToString("dd/MM/yyyy");
-                    //            }
+                    else if (GroupId == "1087")
+                    {
+                        if (SearchText == "")
+                        {
+                            var lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
+                            foreach (var item in lstTempMemberData)
+                            {
+                                MemberList Obj = new MemberList();
+                                Obj.EnrooledOutlet = item.OutletName;
+                                Obj.EnrolledDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.Type = item.Type;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.TotalBurnTxn = item.BurnCount;
+                                Obj.TotalBurnPoints = item.BurnPts;
+                                Obj.AvlBalPoints = item.AvlPts;
+                                if (item.LasTTxnDate.HasValue)
+                                {
+                                    Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    Obj.LastTxnDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                }
 
-                    //            lstMember.Add(Obj);
-                    //        }
+                                lstMember.Add(Obj);
+                            }
 
-                    //    }
-                    //    else
-                    //    {
-                    //        var lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts where CurrentEnrolledOutlet = @pi_OutletId", new SqlParameter("@pi_OutletId", SearchText)).ToList();
-                    //        foreach (var item in lstTempMemberData)
-                    //        {
-                    //            MemberList Obj = new MemberList();
-                    //            Obj.EnrooledOutlet = item.OutletName;
-                    //            Obj.EnrolledDate = item.DOJ.Value.ToString("dd/MM/yyyy");
-                    //            Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //            Obj.MemberName = item.Name;
-                    //            Obj.Type = item.Type;
-                    //            Obj.TxnCount = item.TotalTxnCount;
-                    //            Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                    //            Obj.TotalBurnTxn = item.BurnCount;
-                    //            Obj.TotalBurnPoints = item.BurnPts;
-                    //            Obj.AvlBalPoints = item.AvlPts;
-                    //            if (item.LasTTxnDate.HasValue)
-                    //            {
-                    //                Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("dd/MM/yyyy");
-                    //            }
-                    //            else
-                    //            {
-                    //                Obj.LastTxnDate = item.DOJ.Value.ToString("dd/MM/yyyy");
-                    //            }
+                        }
+                        else
+                        {
+                            var lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts where CurrentEnrolledOutlet = @pi_OutletId", new SqlParameter("@pi_OutletId", SearchText)).ToList();
+                            foreach (var item in lstTempMemberData)
+                            {
+                                MemberList Obj = new MemberList();
+                                Obj.EnrooledOutlet = item.OutletName;
+                                Obj.EnrolledDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.Type = item.Type;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.TotalBurnTxn = item.BurnCount;
+                                Obj.TotalBurnPoints = item.BurnPts;
+                                Obj.AvlBalPoints = item.AvlPts;
+                                if (item.LasTTxnDate.HasValue)
+                                {
+                                    Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    Obj.LastTxnDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                }
 
-                    //            lstMember.Add(Obj);
-                    //        }
-                    //    }
-                    //}
+                                lstMember.Add(Obj);
+                            }
+                        }
+                    }
                     else
                     {
                         lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
@@ -118,20 +118,20 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    //if (GroupId == "1087")
-                    //{
-                    //    var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
-                    //    foreach (var item in lstOutlet)
-                    //    {
-                    //        countriesItem.Add(new SelectListItem
-                    //        {
-                    //            Text = item.OutletName,
-                    //            Value = Convert.ToString(item.OutletId)
-                    //        });
-                    //    }
-                    //}
-                    //else
-                    //{
+                    if (GroupId == "1087")
+                    {
+                        var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
+                        foreach (var item in lstOutlet)
+                        {
+                            countriesItem.Add(new SelectListItem
+                            {
+                                Text = item.OutletName,
+                                Value = Convert.ToString(item.OutletId)
+                            });
+                        }
+                    }
+                    else
+                    {
                         var lstOutlet = context.OutletDetails.Where(x=>!x.OutletName.ToLower().Contains("admin")).ToList();
                         foreach (var item in lstOutlet)
                         {
@@ -141,7 +141,7 @@ namespace BOTS_BL.Repository
                                 Value = Convert.ToString(item.OutletId)
                             });
                         }
-                    //}
+                    }
 
                 }
             }
@@ -223,61 +223,61 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_FromDate", FromDate),
                         new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
                     }
-                    //else if (GroupId == "1087")
-                    //{
-                    //    var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
-                    //    var lstobj = context.Database.SqlQuery<View_TxnDetailsMaster>("select * from View_TxnDetailsMaster").ToList();
-                    //    var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
-                    //    foreach(var item in lstOutlet)
-                    //    {
-                    //        OutletWise newItem = new OutletWise();
-                    //        newItem.OutletName = item.OutletName;
+                    else if (GroupId == "1087")
+                    {
+                        var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
+                        var lstobj = context.Database.SqlQuery<View_TxnDetailsMaster>("select * from View_TxnDetailsMaster").ToList();
+                        var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
+                        foreach(var item in lstOutlet)
+                        {
+                            OutletWise newItem = new OutletWise();
+                            newItem.OutletName = item.OutletName;
 
-                    //        if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
-                    //        {
-                    //            var fDate = Convert.ToDateTime(FromDate);
-                    //            var tDate = Convert.ToDateTime(ToDate);
+                            if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
+                            {
+                                var fDate = Convert.ToDateTime(FromDate);
+                                var tDate = Convert.ToDateTime(ToDate);
 
-                    //            newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                    //            newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
-                    //            newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt));
-                    //            newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt) * 100) / lstobj.Where(x=> x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(x => x.InvoiceAmt);
-                    //            newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count());
-                    //            var last90DaysDate = DateTime.Today.AddDays(-90);
-                    //            var last30DaysDate = DateTime.Today.AddDays(-30);
-                    //            newItem.NonActive = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
-                    //            var lstMobileNo = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TotalTxnCount == 1).Select(y => y.MobileNo).ToList();
-                    //            newItem.OnlyOnce = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate && lstMobileNo.Contains(x.MobileNo)).Count();
-                    //            newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned);
-                    //            newItem.PointsEarned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned));
-                    //            newItem.PointsBurned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned));
-                    //            newItem.PointsCancelled = Convert.ToInt64(context.tblSalesReturnMasters.Where(x => x.OutletId == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsRemoved));
-                    //            newItem.PointsExpired = Convert.ToInt64(context.tblExpiredPointsMasters.Where(x => x.OutletId == item.OutletId && x.ExpiredDate >= fDate && x.ExpiredDate <= tDate).Sum(y => y.ExpiredPoints));
-                    //        }
-                    //        else
-                    //        {
+                                newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                                newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
+                                newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt));
+                                newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt) * 100) / lstobj.Where(x=> x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(x => x.InvoiceAmt);
+                                newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count());
+                                var last90DaysDate = DateTime.Today.AddDays(-90);
+                                var last30DaysDate = DateTime.Today.AddDays(-30);
+                                newItem.NonActive = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
+                                var lstMobileNo = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TotalTxnCount == 1).Select(y => y.MobileNo).ToList();
+                                newItem.OnlyOnce = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate && lstMobileNo.Contains(x.MobileNo)).Count();
+                                newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned);
+                                newItem.PointsEarned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned));
+                                newItem.PointsBurned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned));
+                                newItem.PointsCancelled = Convert.ToInt64(context.tblSalesReturnMasters.Where(x => x.OutletId == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsRemoved));
+                                newItem.PointsExpired = Convert.ToInt64(context.tblExpiredPointsMasters.Where(x => x.OutletId == item.OutletId && x.ExpiredDate >= fDate && x.ExpiredDate <= tDate).Sum(y => y.ExpiredPoints));
+                            }
+                            else
+                            {
 
-                    //            newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                    //            newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                    //            newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt));
-                    //            newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt) * 100) / lstobj.Sum(x => x.InvoiceAmt);
-                    //            newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count());
-                    //            var last90DaysDate = DateTime.Today.AddDays(-90);
-                    //            var last30DaysDate = DateTime.Today.AddDays(-30);
-                    //            newItem.NonActive = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime < last90DaysDate).Count();
-                    //            var lstMobileNo = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.LastTxnDate < last30DaysDate && x.TotalTxnCount == 1).Select(y => y.MobileNo).ToList();
-                    //            newItem.OnlyOnce = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime < last30DaysDate && lstMobileNo.Contains(x.MobileNo)).Count();
-                    //            newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned);
-                    //            newItem.PointsEarned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned));
-                    //            newItem.PointsBurned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsBurned));
-                    //            newItem.PointsCancelled = Convert.ToInt64(context.tblSalesReturnMasters.Where(x => x.OutletId == item.OutletId).Sum(y => y.PointsRemoved));
-                    //            newItem.PointsExpired = Convert.ToInt64(context.tblExpiredPointsMasters.Where(x => x.OutletId == item.OutletId).Sum(y => y.ExpiredPoints));
-                    //        }
+                                newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                                newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                                newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt));
+                                newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt) * 100) / lstobj.Sum(x => x.InvoiceAmt);
+                                newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count());
+                                var last90DaysDate = DateTime.Today.AddDays(-90);
+                                var last30DaysDate = DateTime.Today.AddDays(-30);
+                                newItem.NonActive = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime < last90DaysDate).Count();
+                                var lstMobileNo = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.LastTxnDate < last30DaysDate && x.TotalTxnCount == 1).Select(y => y.MobileNo).ToList();
+                                newItem.OnlyOnce = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime < last30DaysDate && lstMobileNo.Contains(x.MobileNo)).Count();
+                                newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned);
+                                newItem.PointsEarned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned));
+                                newItem.PointsBurned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsBurned));
+                                newItem.PointsCancelled = Convert.ToInt64(context.tblSalesReturnMasters.Where(x => x.OutletId == item.OutletId).Sum(y => y.PointsRemoved));
+                                newItem.PointsExpired = Convert.ToInt64(context.tblExpiredPointsMasters.Where(x => x.OutletId == item.OutletId).Sum(y => y.ExpiredPoints));
+                            }
 
-                    //        lstOutletWise.Add(newItem);
-                    //    }
+                            lstOutletWise.Add(newItem);
+                        }
 
-                    //}
+                    }
                     else
                     {
                         lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
@@ -322,682 +322,682 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_OutletId", OutletId),
                         new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
                     }
-                    //else if (GroupId == "1087")
-                    //{
-                    //    if (DateRangeFlag == "0")
-                    //    {
-                    //        if (string.IsNullOrEmpty(OutletId))
-                    //        {
-                    //            if (EnrolmentDataFlag == "4")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "2")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Earn'").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
+                    else if (GroupId == "1087")
+                    {
+                        if (DateRangeFlag == "0")
+                        {
+                            if (string.IsNullOrEmpty(OutletId))
+                            {
+                                if (EnrolmentDataFlag == "4")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "2")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Earn'").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
 
-                    //            }
-                    //            else if (EnrolmentDataFlag == "3")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Burn'").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "5")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                }
+                                else if (EnrolmentDataFlag == "3")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Burn'").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "5")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
 
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T Group by T.MobileNo").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = "Enrolment";
-                    //                    //Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = 0;
-                    //                    //Obj.InvoiceAmtStr = "0";
-                    //                    Obj.PointsEarned = 0;
-                    //                    Obj.PointsBurned = 0;
-                    //                    Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
-                    //                    //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //        }
-                    //        else
-                    //        {
-                    //            if (EnrolmentDataFlag == "4")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where CurrentEnrolledOutlet = " + @OutletId + "", new SqlParameter("@pi_OutletId", OutletId)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "2")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Earn' and CurrentEnrolledOutlet = " + @OutletId + "", new SqlParameter("@pi_OutletId", OutletId)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T Group by T.MobileNo").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = "Enrolment";
+                                        //Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = 0;
+                                        //Obj.InvoiceAmtStr = "0";
+                                        Obj.PointsEarned = 0;
+                                        Obj.PointsBurned = 0;
+                                        Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
+                                        //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (EnrolmentDataFlag == "4")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where CurrentEnrolledOutlet = " + @OutletId + "", new SqlParameter("@pi_OutletId", OutletId)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "2")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Earn' and CurrentEnrolledOutlet = " + @OutletId + "", new SqlParameter("@pi_OutletId", OutletId)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
 
-                    //            }
-                    //            else if (EnrolmentDataFlag == "3")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Burn' and CurrentEnrolledOutlet = " + @OutletId + "", new SqlParameter("@pi_OutletId", OutletId)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "5")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                }
+                                else if (EnrolmentDataFlag == "3")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Burn' and CurrentEnrolledOutlet = " + @OutletId + "", new SqlParameter("@pi_OutletId", OutletId)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "5")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
 
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
 
-                    //            }
-                    //            else
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T Group by T.MobileNo").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = "Enrolment";
-                    //                    //Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = 0;
-                    //                    //Obj.InvoiceAmtStr = "0";
-                    //                    Obj.PointsEarned = 0;
-                    //                    Obj.PointsBurned = 0;
-                    //                    Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
-                    //                    //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
+                                }
+                                else
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T Group by T.MobileNo").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = "Enrolment";
+                                        //Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = 0;
+                                        //Obj.InvoiceAmtStr = "0";
+                                        Obj.PointsEarned = 0;
+                                        Obj.PointsBurned = 0;
+                                        Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
+                                        //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
 
-                    //        }
-                    //    }
-                    //    else if (DateRangeFlag == "1")
-                    //    {
-                    //        if (string.IsNullOrEmpty(OutletId))
-                    //        {
-                    //            if (EnrolmentDataFlag == "4")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
+                            }
+                        }
+                        else if (DateRangeFlag == "1")
+                        {
+                            if (string.IsNullOrEmpty(OutletId))
+                            {
+                                if (EnrolmentDataFlag == "4")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
 
-                    //            }
-                    //            else if (EnrolmentDataFlag == "2")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Earn' and cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
+                                }
+                                else if (EnrolmentDataFlag == "2")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Earn' and cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
 
-                    //            }
-                    //            else if (EnrolmentDataFlag == "3")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Burn' and cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "5")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster where cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                }
+                                else if (EnrolmentDataFlag == "3")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Burn' and cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "5")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster where cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
 
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T where T.DOJ between '" + Day30 + "' and '" + CurrentDate + "' and T.CurrentEnrolledOutlet = '" + @OutletId + "' and Group by T.MobileNo").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = "Enrolment";
-                    //                    //Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = 0;
-                    //                    //Obj.InvoiceAmtStr = "0";
-                    //                    Obj.PointsEarned = 0;
-                    //                    Obj.PointsBurned = 0;
-                    //                    Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
-                    //                    //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //        }
-                    //        else
-                    //        {
-                    //            if (EnrolmentDataFlag == "4")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@OutletId", @OutletId), new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T where T.DOJ between '" + Day30 + "' and '" + CurrentDate + "' and T.CurrentEnrolledOutlet = '" + @OutletId + "' and Group by T.MobileNo").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = "Enrolment";
+                                        //Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = 0;
+                                        //Obj.InvoiceAmtStr = "0";
+                                        Obj.PointsEarned = 0;
+                                        Obj.PointsBurned = 0;
+                                        Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
+                                        //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (EnrolmentDataFlag == "4")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@OutletId", @OutletId), new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
 
-                    //            }
-                    //            else if (EnrolmentDataFlag == "2")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Earn' and CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "3")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Burn' and CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "5")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster where CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                }
+                                else if (EnrolmentDataFlag == "2")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Earn' and CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "3")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Burn' and CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "5")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster where CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + Day30 + "' and '" + CurrentDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Day30", Day30), new SqlParameter("@pi_CurrentDate", CurrentDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
 
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T where T.CurrentEnrolledOutlet = '" + @OutletId + "' and  T.DOJ between '" + Day30 + "' and '" + CurrentDate + "' Group by T.MobileNo").ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = "Enrolment";
-                    //                    //Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = 0;
-                    //                    //Obj.InvoiceAmtStr = "0";
-                    //                    Obj.PointsEarned = 0;
-                    //                    Obj.PointsBurned = 0;
-                    //                    Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
-                    //                    //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //    else if (DateRangeFlag == "2")
-                    //    {
-                    //        if (string.IsNullOrEmpty(OutletId))
-                    //        {
-                    //            if (EnrolmentDataFlag == "4")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "2")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Earn' and cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "3")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Burn' and cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "5")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster where cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T where T.CurrentEnrolledOutlet = '" + @OutletId + "' and  T.DOJ between '" + Day30 + "' and '" + CurrentDate + "' Group by T.MobileNo").ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = "Enrolment";
+                                        //Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = 0;
+                                        //Obj.InvoiceAmtStr = "0";
+                                        Obj.PointsEarned = 0;
+                                        Obj.PointsBurned = 0;
+                                        Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
+                                        //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                            }
+                        }
+                        else if (DateRangeFlag == "2")
+                        {
+                            if (string.IsNullOrEmpty(OutletId))
+                            {
+                                if (EnrolmentDataFlag == "4")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "2")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Earn' and cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "3")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Burn' and cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "5")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster where cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
 
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
 
-                    //            }
-                    //            else
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T where T.DOJ between '" + FromDate + "' and '" + ToDate + "' and Group by T.MobileNo", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = "Enrolment";
-                    //                    //Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = 0;
-                    //                    //Obj.InvoiceAmtStr = "0";
-                    //                    Obj.PointsEarned = 0;
-                    //                    Obj.PointsBurned = 0;
-                    //                    Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
-                    //                    //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //        }
-                    //        else
-                    //        {
-                    //            if (EnrolmentDataFlag == "4")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where CurrentEnrolledOutlet = " + @OutletId + " and cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "2")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Earn' and CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "3")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Burn' and CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else if (EnrolmentDataFlag == "5")
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster where cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = item.TxnType;
-                    //                    Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = item.InvoiceAmt;
-                    //                    Obj.PointsEarned = item.PointsEarned;
-                    //                    Obj.PointsBurned = item.PointsBurned;
-                    //                    Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                }
+                                else
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T where T.DOJ between '" + FromDate + "' and '" + ToDate + "' and Group by T.MobileNo", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = "Enrolment";
+                                        //Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = 0;
+                                        //Obj.InvoiceAmtStr = "0";
+                                        Obj.PointsEarned = 0;
+                                        Obj.PointsBurned = 0;
+                                        Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
+                                        //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (EnrolmentDataFlag == "4")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where CurrentEnrolledOutlet = " + @OutletId + " and cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "2")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Earn' and CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "3")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT * FROM View_TxnDetailsMaster where TxnType = 'Burn' and CurrentEnrolledOutlet = " + @OutletId + " and  cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
+                                        Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else if (EnrolmentDataFlag == "5")
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT OutletName,MobileNo,MaskedMobileNo,Name,Category,TxnType,InvoiceNo,InvoiceAmt,PointsGiven as PointsEarned,PointsRemoved as PointsBurned,TxnDatetime FROM View_SalesReturnTxnDetailsMaster where cast(TxnDatetime as Date) between '" + FromDate + "' and '" + ToDate + "'", new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = item.TxnType;
+                                        Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = item.InvoiceAmt;
+                                        Obj.PointsEarned = item.PointsEarned;
+                                        Obj.PointsBurned = item.PointsBurned;
+                                        Obj.TxnDatetime = item.TxnDatetime.Value.ToString("MM/dd/yyyy");
 
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
-                    //            else
-                    //            {
-                    //                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T where T.CurrentEnrolledOutlet = '" + @OutletId + "' and  T.DOJ between '" + FromDate + "' and '" + ToDate + "' Group by T.MobileNo", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
-                    //                foreach (var item in LstTxnData)
-                    //                {
-                    //                    OutletwiseTransaction Obj = new OutletwiseTransaction();
-                    //                    Obj.OutletName = item.OutletName;
-                    //                    Obj.MobileNo = item.MobileNo;
-                    //                    Obj.MaskedMobileNo = item.MaskedMobileNo;
-                    //                    Obj.MemberName = item.Name;
-                    //                    Obj.Type = item.Category;
-                    //                    Obj.TxnType = "Enrolment";
-                    //                    //Obj.InvoiceNo = item.InvoiceNo;
-                    //                    Obj.InvoiceAmt = 0;
-                    //                    //Obj.InvoiceAmtStr = "0";
-                    //                    Obj.PointsEarned = 0;
-                    //                    Obj.PointsBurned = 0;
-                    //                    Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
-                    //                    //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
-                    //                    lstOutletWiseTransaction.Add(Obj);
-                    //                }
-                    //            }
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
+                                else
+                                {
+                                    var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT Min(T.OutletName) as OutletName ,T.MobileNo,Min(T.MaskedMobileno) as MaskedMobileno,Min(T.Name) as Name,Min(T.Category) as Category,Min(T.DOJ) as DOJ FROM View_TxnDetailsMaster T where T.CurrentEnrolledOutlet = '" + @OutletId + "' and  T.DOJ between '" + FromDate + "' and '" + ToDate + "' Group by T.MobileNo", new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_FromDate", FromDate), new SqlParameter("@pi_ToDate", ToDate)).ToList();
+                                    foreach (var item in LstTxnData)
+                                    {
+                                        OutletwiseTransaction Obj = new OutletwiseTransaction();
+                                        Obj.OutletName = item.OutletName;
+                                        Obj.MobileNo = item.MobileNo;
+                                        Obj.MaskedMobileNo = item.MaskedMobileNo;
+                                        Obj.MemberName = item.Name;
+                                        Obj.Type = item.Category;
+                                        Obj.TxnType = "Enrolment";
+                                        //Obj.InvoiceNo = item.InvoiceNo;
+                                        Obj.InvoiceAmt = 0;
+                                        //Obj.InvoiceAmtStr = "0";
+                                        Obj.PointsEarned = 0;
+                                        Obj.PointsBurned = 0;
+                                        Obj.TxnDatetime = item.DOJ.Value.ToString("MM/dd/yyyy");
+                                        //Obj.TxnUpdateDate = item.TxnReceivedDatetime.Value.ToString("MM/dd/yyyy");
+                                        lstOutletWiseTransaction.Add(Obj);
+                                    }
+                                }
 
-                    //        }
+                            }
 
-                    //    }
-                    //}
+                        }
+                    }
                     else
                     {
                         lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
@@ -1036,40 +1036,40 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
                     }
-                    //else if(GroupId == "1087")
-                    //{
-                    //    DateTime Today = DateTime.Now;
+                    else if(GroupId == "1087")
+                    {
+                        DateTime Today = DateTime.Now;
 
-                    //    if(month == Today.Month)
-                    //    {
-                    //        DateTime NextMonth = Today.AddMonths(1);
-                    //        DateTime ThirdMonth = Today.AddMonths(2);
-                    //        var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base' and IsActive = '1'").ToList();
+                        if(month == Today.Month)
+                        {
+                            DateTime NextMonth = Today.AddMonths(1);
+                            DateTime ThirdMonth = Today.AddMonths(2);
+                            var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base' and IsActive = '1'").ToList();
 
-                    //        pointExpiry.MemberCountThisMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Count();
-                    //        pointExpiry.MemberPointsThisMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Sum(y => y.Points));
-                    //        pointExpiry.MemberCountNextMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Count();
-                    //        pointExpiry.MemberPointsNextMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Sum(y => y.Points));
-                    //        pointExpiry.MemberCount3rdMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Count();
-                    //        pointExpiry.MemberPoints3rdMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Sum(y => y.Points));
-                    //    }
-                    //    else
-                    //    {
-                    //        DateTime NextMonth = Today.AddMonths(1);
-                    //        DateTime ThirdMonth = Today.AddMonths(2);
-                    //        var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base' and IsActive = '1'").ToList();
+                            pointExpiry.MemberCountThisMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Count();
+                            pointExpiry.MemberPointsThisMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Sum(y => y.Points));
+                            pointExpiry.MemberCountNextMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Count();
+                            pointExpiry.MemberPointsNextMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Sum(y => y.Points));
+                            pointExpiry.MemberCount3rdMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Count();
+                            pointExpiry.MemberPoints3rdMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Sum(y => y.Points));
+                        }
+                        else
+                        {
+                            DateTime NextMonth = Today.AddMonths(1);
+                            DateTime ThirdMonth = Today.AddMonths(2);
+                            var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base' and IsActive = '1'").ToList();
 
-                    //        pointExpiry.MemberCountThisMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Count();
-                    //        pointExpiry.MemberPointsThisMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Sum(y => y.Points));
-                    //        pointExpiry.MemberCountNextMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Count();
-                    //        pointExpiry.MemberPointsNextMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Sum(y => y.Points));
-                    //        pointExpiry.MemberCount3rdMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Count();
-                    //        pointExpiry.MemberPoints3rdMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Sum(y => y.Points));
-                    //        pointExpiry.SelectedCount = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Count();
-                    //        pointExpiry.SelectedPoints = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Sum(y => y.Points));
-                    //    }
+                            pointExpiry.MemberCountThisMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Count();
+                            pointExpiry.MemberPointsThisMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == Today.Month && x.EndDate.Value.Year == Today.Year).Sum(y => y.Points));
+                            pointExpiry.MemberCountNextMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Count();
+                            pointExpiry.MemberPointsNextMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == NextMonth.Month && x.EndDate.Value.Year == NextMonth.Year).Sum(y => y.Points));
+                            pointExpiry.MemberCount3rdMonth = lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Count();
+                            pointExpiry.MemberPoints3rdMonth = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == ThirdMonth.Month && x.EndDate.Value.Year == ThirdMonth.Year).Sum(y => y.Points));
+                            pointExpiry.SelectedCount = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Count();
+                            pointExpiry.SelectedPoints = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Sum(y => y.Points));
+                        }
                         
-                    //}
+                    }
                     else
                     {
                         pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
@@ -1105,44 +1105,44 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).ToList<PointExpiryTxn>();
                     }
-                    //else if (GroupId == "1087")
-                    //{
-                    //    DateTime Today = DateTime.Now;
-                    //    int NextMonth = Today.AddMonths(1).Month;
-                    //    int ThirdMonth = Today.AddMonths(2).Month;
-                    //    var AllData = context.Database.SqlQuery<PointsExpCustDetailList>("select C.OutletName,C.MaskedMobileNo,C.Name,C.TotalTxnCount,C.TotalSpend,C.DOJ,P.MobileNo,C.AvlPts,C.LastTxnDate,P.Points,P.EndDate from View_CustDetailsWithTxnSummary C inner join tblCustPointsMaster P on C.MobileNo = P.MobileNo where P.PointsType = 'Base'").ToList();
-                    //    var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base'").ToList();
+                    else if (GroupId == "1087")
+                    {
+                        DateTime Today = DateTime.Now;
+                        int NextMonth = Today.AddMonths(1).Month;
+                        int ThirdMonth = Today.AddMonths(2).Month;
+                        var AllData = context.Database.SqlQuery<PointsExpCustDetailList>("select C.OutletName,C.MaskedMobileNo,C.Name,C.TotalTxnCount,C.TotalSpend,C.DOJ,P.MobileNo,C.AvlPts,C.LastTxnDate,P.Points,P.EndDate from View_CustDetailsWithTxnSummary C inner join tblCustPointsMaster P on C.MobileNo = P.MobileNo where P.PointsType = 'Base'").ToList();
+                        var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base'").ToList();
 
-                    //    var lstMobileno = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Select(y => y.Mobileno).ToList();
-                    //    var lstdata = AllData.Where(x => lstMobileno.Contains(x.MobileNo)).ToList();
+                        var lstMobileno = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Select(y => y.Mobileno).ToList();
+                        var lstdata = AllData.Where(x => lstMobileno.Contains(x.MobileNo)).ToList();
 
-                    //    foreach (var item in lstdata)
-                    //    {
-                    //        PointExpiryTxn lstPoint = new PointExpiryTxn();
+                        foreach (var item in lstdata)
+                        {
+                            PointExpiryTxn lstPoint = new PointExpiryTxn();
 
 
-                    //        lstPoint.EnrolledOutlet = item.OutletName;
-                    //        lstPoint.MaskedMobileNo = item.MaskedMobileNo;
-                    //        lstPoint.MemberName = item.Name;
-                    //        lstPoint.TxnCount = Convert.ToInt64(item.TotalTxnCount);
-                    //        lstPoint.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                    //        lstPoint.AvlPoints = Convert.ToInt64(item.AvlPts);
-                    //        if (!string.IsNullOrEmpty(item.LastTxnDate.ToString()))
-                    //        {
-                    //            lstPoint.LastTxnDate = item.LastTxnDate.ToString();
-                    //        }
-                    //        else
-                    //        {
-                    //            lstPoint.LastTxnDate = item.DOJ.ToString();
-                    //        }
+                            lstPoint.EnrolledOutlet = item.OutletName;
+                            lstPoint.MaskedMobileNo = item.MaskedMobileNo;
+                            lstPoint.MemberName = item.Name;
+                            lstPoint.TxnCount = Convert.ToInt64(item.TotalTxnCount);
+                            lstPoint.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                            lstPoint.AvlPoints = Convert.ToInt64(item.AvlPts);
+                            if (!string.IsNullOrEmpty(item.LastTxnDate.ToString()))
+                            {
+                                lstPoint.LastTxnDate = item.LastTxnDate.ToString();
+                            }
+                            else
+                            {
+                                lstPoint.LastTxnDate = item.DOJ.ToString();
+                            }
 
-                    //        lstPoint.PointsExpiry = Convert.ToInt64(item.Points);
-                    //        lstPoint.ExpiryDate = item.EndDate.ToString();
+                            lstPoint.PointsExpiry = Convert.ToInt64(item.Points);
+                            lstPoint.ExpiryDate = item.EndDate.ToString();
 
-                    //        pointExpiryTxn.Add(lstPoint);
-                    //    }
+                            pointExpiryTxn.Add(lstPoint);
+                        }
 
-                    //}
+                    }
                     else
                     {
                         pointExpiryTxn = context.Database.SqlQuery<PointExpiryTxn>("sp_BOTS_PointsExpiry1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
@@ -1214,35 +1214,35 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    //if (GroupId == "1087")
-                    //{
-                    //    DateTime CurrentMonth = DateTime.Now;
-                    //    var NextMonth = (CurrentMonth.AddMonths(1));
-                    //    var ThirdMonth = (CurrentMonth.AddMonths(2));
-                    //    var celebrationsData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
-                    //    celebrationsData1 = celebrationsData1.Where(x => x.DOB.HasValue).ToList();
-                    //    celebrationsData1 = celebrationsData1.Where(x => x.AnniversaryDate.HasValue).ToList();                        
+                    if (GroupId == "1087")
+                    {
+                        DateTime CurrentMonth = DateTime.Now;
+                        var NextMonth = (CurrentMonth.AddMonths(1));
+                        var ThirdMonth = (CurrentMonth.AddMonths(2));
+                        var celebrationsData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
+                        celebrationsData1 = celebrationsData1.Where(x => x.DOB.HasValue).ToList();
+                        celebrationsData1 = celebrationsData1.Where(x => x.AnniversaryDate.HasValue).ToList();                        
 
-                    //    celebrationsData.BirthdayCountThisMonth = celebrationsData1.Where(x => x.DOB.Value.Month == CurrentMonth.Month).Count();
-                    //    celebrationsData.BirthdayCountNextMonth = celebrationsData1.Where(x => x.DOB.Value.Month == NextMonth.Month).Count();
-                    //    celebrationsData.BirthdayCount3rdMonth = celebrationsData1.Where(x => x.DOB.Value.Month == ThirdMonth.Month).Count();
-                    //    celebrationsData.AnniversaryCountThisMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == CurrentMonth.Month).Count();
-                    //    celebrationsData.AnniversaryCountNextMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == NextMonth.Month).Count();
-                    //    celebrationsData.AnniversaryCount3rdMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == ThirdMonth.Month).Count();
-                    //    var celebrationsData2 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
-                    //    celebrationsData.EnrollmentAnniversaryCountThisMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == CurrentMonth.Month && x.DOJ.Value.Year != CurrentMonth.Year).Count();
-                    //    celebrationsData.EnrollmentAnniversaryCountNextMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == NextMonth.Month && x.DOJ.Value.Year != NextMonth.Year).Count();
-                    //    celebrationsData.EnrollmentAnniversary3rdMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == ThirdMonth.Month && x.DOJ.Value.Year != ThirdMonth.Year).Count();
+                        celebrationsData.BirthdayCountThisMonth = celebrationsData1.Where(x => x.DOB.Value.Month == CurrentMonth.Month).Count();
+                        celebrationsData.BirthdayCountNextMonth = celebrationsData1.Where(x => x.DOB.Value.Month == NextMonth.Month).Count();
+                        celebrationsData.BirthdayCount3rdMonth = celebrationsData1.Where(x => x.DOB.Value.Month == ThirdMonth.Month).Count();
+                        celebrationsData.AnniversaryCountThisMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == CurrentMonth.Month).Count();
+                        celebrationsData.AnniversaryCountNextMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == NextMonth.Month).Count();
+                        celebrationsData.AnniversaryCount3rdMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == ThirdMonth.Month).Count();
+                        var celebrationsData2 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
+                        celebrationsData.EnrollmentAnniversaryCountThisMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == CurrentMonth.Month && x.DOJ.Value.Year != CurrentMonth.Year).Count();
+                        celebrationsData.EnrollmentAnniversaryCountNextMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == NextMonth.Month && x.DOJ.Value.Year != NextMonth.Year).Count();
+                        celebrationsData.EnrollmentAnniversary3rdMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == ThirdMonth.Month && x.DOJ.Value.Year != ThirdMonth.Year).Count();
                     
-                    //}
-                    //else
-                    //{
+                    }
+                    else
+                    {
                         celebrationsData = context.Database.SqlQuery<Celebrations>("sp_BOTS_Celebrate @pi_GroupId, @pi_Date, @pi_LoginId",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
 
                         new SqlParameter("@pi_LoginId", "")).FirstOrDefault<Celebrations>();
-                    //}
+                    }
                         
                 }
             }
@@ -1259,89 +1259,89 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {                    
-                    //if (GroupId == "1087")
-                    //{
-                    //    DateTime Today = DateTime.Now;
-                    //    int Parmonth;
-                    //    Parmonth = 0;
-                    //    if (month == 1)
-                    //    {
-                    //        Parmonth = Today.Month;
-                    //    }
-                    //    else if (month == 2)
-                    //    {
-                    //        Parmonth = Today.AddMonths(1).Month;
-                    //    }
-                    //    else
-                    //    {
-                    //        Parmonth = Today.AddMonths(2).Month;
-                    //    }
+                    if (GroupId == "1087")
+                    {
+                        DateTime Today = DateTime.Now;
+                        int Parmonth;
+                        Parmonth = 0;
+                        if (month == 1)
+                        {
+                            Parmonth = Today.Month;
+                        }
+                        else if (month == 2)
+                        {
+                            Parmonth = Today.AddMonths(1).Month;
+                        }
+                        else
+                        {
+                            Parmonth = Today.AddMonths(2).Month;
+                        }
 
-                    //    var celebrationTxnsData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
-                    //    if (type == 1)
-                    //    {
-                    //        celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOB.HasValue).ToList();
-                    //        celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOB.Value.Month == Parmonth).ToList();
-                    //        foreach (var item in celebrationTxnsData1)
-                    //        {
-                    //            CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
-                    //            Obj.EnrolledOutlet = item.OutletName;
-                    //            Obj.MaskedMobileNo = item.MobileNo;
-                    //            Obj.MemberName = item.Name;
-                    //            Obj.TxnCount = item.TotalTxnCount;
-                    //            Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                    //            Obj.AvlPoints = item.AvlPts;
-                    //            Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
-                    //            Obj.CelebrationDate = Convert.ToString(item.DOB);
-                    //            celebrationTxnsData.Add(Obj);
-                    //        }
-                    //    }
-                    //    if (type == 2)
-                    //    {
-                    //        celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.AnniversaryDate.HasValue).ToList();
-                    //        celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.AnniversaryDate.Value.Month == Parmonth).ToList();
-                    //        foreach (var item in celebrationTxnsData1)
-                    //        {
-                    //            CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
-                    //            Obj.EnrolledOutlet = item.OutletName;
-                    //            Obj.MaskedMobileNo = item.MobileNo;
-                    //            Obj.MemberName = item.Name;
-                    //            Obj.TxnCount = item.TotalTxnCount;
-                    //            Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                    //            Obj.AvlPoints = item.AvlPts;
-                    //            Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
-                    //            Obj.CelebrationDate = Convert.ToString(item.AnniversaryDate);
-                    //            celebrationTxnsData.Add(Obj);
-                    //        }
-                    //    }
-                    //    if (type == 3)
-                    //    {
-                    //        celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOJ.HasValue).ToList();
-                    //        celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOJ.Value.Month == Parmonth && x.DOJ.Value.Year != Today.Year).ToList();
-                    //        foreach (var item in celebrationTxnsData1)
-                    //        {
-                    //            CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
-                    //            Obj.EnrolledOutlet = item.OutletName;
-                    //            Obj.MaskedMobileNo = item.MobileNo;
-                    //            Obj.MemberName = item.Name;
-                    //            Obj.TxnCount = item.TotalTxnCount;
-                    //            Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                    //            Obj.AvlPoints = item.AvlPts;
-                    //            Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
-                    //            Obj.CelebrationDate = Convert.ToString(item.DOJ);
-                    //            celebrationTxnsData.Add(Obj);
-                    //        }
-                    //    }
-                    //}                          
-                    //else
-                    //{
+                        var celebrationTxnsData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
+                        if (type == 1)
+                        {
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOB.HasValue).ToList();
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOB.Value.Month == Parmonth).ToList();
+                            foreach (var item in celebrationTxnsData1)
+                            {
+                                CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
+                                Obj.EnrolledOutlet = item.OutletName;
+                                Obj.MaskedMobileNo = item.MobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.AvlPoints = item.AvlPts;
+                                Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
+                                Obj.CelebrationDate = Convert.ToString(item.DOB);
+                                celebrationTxnsData.Add(Obj);
+                            }
+                        }
+                        if (type == 2)
+                        {
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.AnniversaryDate.HasValue).ToList();
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.AnniversaryDate.Value.Month == Parmonth).ToList();
+                            foreach (var item in celebrationTxnsData1)
+                            {
+                                CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
+                                Obj.EnrolledOutlet = item.OutletName;
+                                Obj.MaskedMobileNo = item.MobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.AvlPoints = item.AvlPts;
+                                Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
+                                Obj.CelebrationDate = Convert.ToString(item.AnniversaryDate);
+                                celebrationTxnsData.Add(Obj);
+                            }
+                        }
+                        if (type == 3)
+                        {
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOJ.HasValue).ToList();
+                            celebrationTxnsData1 = celebrationTxnsData1.Where(x => x.DOJ.Value.Month == Parmonth && x.DOJ.Value.Year != Today.Year).ToList();
+                            foreach (var item in celebrationTxnsData1)
+                            {
+                                CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
+                                Obj.EnrolledOutlet = item.OutletName;
+                                Obj.MaskedMobileNo = item.MobileNo;
+                                Obj.MemberName = item.Name;
+                                Obj.TxnCount = item.TotalTxnCount;
+                                Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                                Obj.AvlPoints = item.AvlPts;
+                                Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
+                                Obj.CelebrationDate = Convert.ToString(item.DOJ);
+                                celebrationTxnsData.Add(Obj);
+                            }
+                        }
+                    }                          
+                    else
+                    {
                         celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
                         new SqlParameter("@pi_GroupId", GroupId),
                           new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                           new SqlParameter("@pi_LoginId", ""),
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
-                    //}
+                    }
                         
                 }
             }

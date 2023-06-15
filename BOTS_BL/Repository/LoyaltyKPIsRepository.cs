@@ -33,33 +33,33 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_FromDate", ""), 
                         new SqlParameter("@pi_ToDate", "")).FirstOrDefault<LoyaltyKPIs>();
                     }
-                    //else if(GroupId == "1087")
-                    //{
+                    else if(GroupId == "1087")
+                    {
                        
-                    //    var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
+                        var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
 
-                    //    var TotalBiz = Convert.ToInt64(AllData.Select(x => x.TotalSpend).Sum());
-                    //    var Redemption = Convert.ToInt64((AllData.Where(y=> y.BurnAmtWithPts>0).Select(x => x.BurnAmtWithPts).Sum()));
-                    //    var Referrals = Convert.ToInt64((AllData.Where(y=> y.EnrolledBy == "DLCReferral").Select(x => x.TotalSpend).Sum()));
-                    //    var Campaign = Convert.ToInt64((context.tblCampaignMasters.Select(x=> x.BusinessGenerated).Sum()));
-                    //    var SMSBlastWA = Convert.ToInt64((context.tblPromoBlastMasters.Select(x=> x.BusinessGenerated).Sum()));
-                    //    var NewMWPRegistration = Convert.ToInt64((AllData.Where(x => x.EnrolledBy == "DLCWalkIn" || x.EnrolledBy == "DLCScoialMedia").Select(y => y.TotalSpend).Sum()));
-                    //    var LoyaltyBiz = TotalBiz + Redemption + Referrals + Campaign + SMSBlastWA + NewMWPRegistration;
+                        var TotalBiz = Convert.ToInt64(AllData.Select(x => x.TotalSpend).Sum());
+                        var Redemption = Convert.ToInt64((AllData.Where(y=> y.BurnAmtWithPts>0).Select(x => x.BurnAmtWithPts).Sum()));
+                        var Referrals = Convert.ToInt64((AllData.Where(y=> y.EnrolledBy == "DLCReferral").Select(x => x.TotalSpend).Sum()));
+                        var Campaign = Convert.ToInt64((context.tblCampaignMasters.Select(x=> x.BusinessGenerated).Sum()));
+                        var SMSBlastWA = Convert.ToInt64((context.tblPromoBlastMasters.Select(x=> x.BusinessGenerated).Sum()));
+                        var NewMWPRegistration = Convert.ToInt64((AllData.Where(x => x.EnrolledBy == "DLCWalkIn" || x.EnrolledBy == "DLCScoialMedia").Select(y => y.TotalSpend).Sum()));
+                        var LoyaltyBiz = TotalBiz + Redemption + Referrals + Campaign + SMSBlastWA + NewMWPRegistration;
 
-                    //    if(TotalBiz > 0 && LoyaltyBiz > 0)
-                    //    {
-                    //        var LoyaltyToBiz = LoyaltyBiz / TotalBiz;
-                    //    }
+                        if(TotalBiz > 0 && LoyaltyBiz > 0)
+                        {
+                            var LoyaltyToBiz = LoyaltyBiz / TotalBiz;
+                        }
 
-                    //    objLoyaltyKPIs.LoyaltyBiz = LoyaltyBiz;
-                    //    objLoyaltyKPIs.TotalBiz = TotalBiz;
-                    //    objLoyaltyKPIs.Redemption = Redemption;
-                    //    objLoyaltyKPIs.Referrals = Referrals;
-                    //    objLoyaltyKPIs.Campaigns = Campaign;
-                    //    objLoyaltyKPIs.SMSBlastWA = SMSBlastWA;
-                    //    objLoyaltyKPIs.NewMWPRegistration = NewMWPRegistration;
+                        objLoyaltyKPIs.LoyaltyBiz = LoyaltyBiz;
+                        objLoyaltyKPIs.TotalBiz = TotalBiz;
+                        objLoyaltyKPIs.Redemption = Redemption;
+                        objLoyaltyKPIs.Referrals = Referrals;
+                        objLoyaltyKPIs.Campaigns = Campaign;
+                        objLoyaltyKPIs.SMSBlastWA = SMSBlastWA;
+                        objLoyaltyKPIs.NewMWPRegistration = NewMWPRegistration;
 
-                    //}
+                    }
                     else
                     {
                         objLoyaltyKPIs = context.Database.SqlQuery<LoyaltyKPIs>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year, @pi_OutletId,@pi_FromDate,@pi_ToDate",

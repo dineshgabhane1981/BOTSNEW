@@ -288,15 +288,16 @@ namespace BOTS_BL.Repository
                 List<tblGroupDetail> objGroupDetails = new List<tblGroupDetail>();
                 using (var context = new CommonDBContext())
                 {
-                    if (loginType == "7")
-                    {
-                        var assigned = context.tblRMAssigneds.Where(x => x.LoginId == loginId).Select(y => y.RMAssignedId).FirstOrDefault();
-                        objGroupDetails = context.tblGroupDetails.Where(x => x.IsActive.Value == true && x.IsLive == true && x.RMAssigned == assigned).ToList();
-                    }
-                    else
-                    {
+                    //Commented By Dinesh, Dont remove it
+                    //if (loginType == "7")
+                    //{
+                    //    var assigned = context.tblRMAssigneds.Where(x => x.LoginId == loginId).Select(y => y.RMAssignedId).FirstOrDefault();
+                    //    objGroupDetails = context.tblGroupDetails.Where(x => x.IsActive.Value == true && x.IsLive == true && x.RMAssigned == assigned).ToList();
+                    //}
+                    //else
+                    //{
                         objGroupDetails = context.tblGroupDetails.Where(x => x.IsActive.Value == true && x.IsLive == true).ToList();
-                    }
+                    //}
                     if (objGroupDetails != null)
                     {
                         foreach (var item in objGroupDetails)
@@ -361,19 +362,15 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                    if (DBDetails != null)
+                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();                    
+                    if (DBDetails != null && GroupId != "1087")
                     {
                         ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                     }
-                    //if (DBDetails != null && GroupId != "1087")
-                    //{
-                    //    ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-                    //}
-                    //if (DBDetails != null && GroupId=="1087")
-                    //{
-                    //    ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = MadhusudanTextiles_New; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-                    //}
+                    if (DBDetails != null && GroupId=="1087")
+                    {
+                        ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = MadhusudanTextiles_New; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    }
                 }
             }
             catch (Exception ex)

@@ -204,6 +204,10 @@ namespace BOTS_BL.Repository
                             objDiscussion.AttachedFile = _FileURL + _GroupName + "/" + FileName;
                         }
                     }
+                    else
+                    {
+                        objDiscussion.AttachedFile = "";
+                    }
 
                     if (objDiscussion.SubCallType != "25" && objDiscussion.SubCallType != "26" && objDiscussion.SubCallType != "27")
                     {
@@ -286,8 +290,11 @@ namespace BOTS_BL.Repository
                         objsubdiscussion.Status = objDiscussion.Status;
                         objsubdiscussion.UpdatedBy = objDiscussion.AddedBy;
                         objsubdiscussion.ReassignedMember = objDiscussion.AssignedMember;
-                        objsubdiscussion.AttachedFile = _FileURL + _GroupName + "/" + FileName;
-                        objsubdiscussion.FileName = FileName;
+                        if (!string.IsNullOrEmpty(objDiscussion.AttachedFile))
+                        {
+                            objsubdiscussion.AttachedFile = _FileURL + _GroupName + "/" + FileName;
+                            objsubdiscussion.FileName = FileName;
+                        }
                         context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                         context.SaveChanges();
                     }
