@@ -189,6 +189,7 @@ namespace WebApp.Controllers
             objdata.Logo = EVR.GetLogo(groupId);
             var connStr = CR.GetCustomerConnString(groupId);
             var eventDetails = EVR.GetEditEvents(groupId, eventId, connStr);
+            objdata.EventName = eventDetails.EventName;
             if (eventDetails.EventStartDate.Value > DateTime.Now)
             {
                 ViewBag.EventStarted = "Not Started";

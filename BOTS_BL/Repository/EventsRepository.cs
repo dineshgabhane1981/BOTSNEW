@@ -846,32 +846,38 @@ namespace BOTS_BL.Repository
                     result = streamReader.ReadToEnd();
                 }
 
-                string customerCode;
-                customerCode = string.Empty;
+                //string customerCode, city, state, address1, address2, area, emailId, firstName, middleName, surName;
+                //customerCode = string.Empty;
                 var jsonObject = JObject.Parse(result);         
                 var data = (JObject)jsonObject["data"];
                 var errorCode = (string)data["errorCode"];              
                 IEnumerable<JToken> result1 = jsonObject.SelectToken("data.result");
-                if(result1 != null)
-                {
-                    foreach (JToken item in result1)
-                    {
-                        customerCode = (string)item["customerCode"];
-                    }
-
-                }
                 
 
                 if (errorCode == "0")
                 {
-                    ObjPADMData.name = Obj.Name;
-                    ObjPADMData.city = Obj.City;
-                    ObjPADMData.state = Obj.State;
-                    ObjPADMData.mobileNo = Obj.Mobileno;
-                    ObjPADMData.address1 = Obj.Address;
-                    ObjPADMData.address2 = Obj.City;
-                    ObjPADMData.area = Obj.Area;
-                    ObjPADMData.emailId = Obj.EmailId;
+
+                    if (result1 != null)
+                    {
+                        foreach (JToken item in result1)
+                        {
+                            ObjPADMData.customerCode = (string)item["customerCode"];
+                            ObjPADMData.city = (string)item["city"];
+                            ObjPADMData.state = (string)item["state"];
+                            ObjPADMData.mobileNo = (string)item["mobileNo"];
+                            ObjPADMData.address1 = (string)item["address1"];
+                            ObjPADMData.address2 = (string)item["address2"];
+                            ObjPADMData.area = (string)item["area"];
+                            ObjPADMData.emailId = (string)item["emailId"];
+                            ObjPADMData.firstName = (string)item["firstName"];
+                            ObjPADMData.middleName = (string)item["middleName"];
+                            ObjPADMData.surName = (string)item["surName"];
+                        }
+
+                    }
+                    ObjPADMData.name = ObjPADMData.firstName + " " + ObjPADMData.middleName + " " + ObjPADMData.surName;
+                    //ObjPADMData.name = Obj.Name;
+                    
                     if(!string.IsNullOrEmpty(Obj.DOB.ToString()))
                     {
                        ObjPADMData.birthDate = Obj.DOB.Value.ToString("dd/MM/yyyy");
@@ -880,10 +886,8 @@ namespace BOTS_BL.Repository
                     {
                         ObjPADMData.weddingAnniversary = Obj.DOA.Value.ToString("dd/MM/yyyy");
                     }
-                    ObjPADMData.firstName = Obj.FirstName;
-                    ObjPADMData.middleName = Obj.MiddleName;
-                    ObjPADMData.surName = Obj.SurName;
-                    ObjPADMData.customerCode = customerCode;
+                    
+                    //ObjPADMData.customerCode = customerCode;
                     ObjPADMData.reqFromMobApp = true;
 
                     string stringjson = JsonConvert.SerializeObject(ObjPADMData);
