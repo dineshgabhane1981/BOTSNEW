@@ -1,4 +1,5 @@
 ﻿using BOTS_BL;
+using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using System;
 using System.Collections.Generic;
@@ -68,5 +69,20 @@ namespace WebApp.Controllers.ITCS
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult ChangeWAScript()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
+        }
+        public ActionResult GetWAScripts(int GroupId,string GroupName,string MessageType)
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objWhatsAppSMSMaster = ITCSR.GetWAScripts(GroupId,GroupName,MessageType);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+
+        
+        
     }
 }

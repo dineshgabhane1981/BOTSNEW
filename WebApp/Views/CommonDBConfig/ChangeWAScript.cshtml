@@ -1,0 +1,88 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "ChangeWAScript";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ChangeWAScript</h2>
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
+                <input type="hidden" id="hdnGroupId" />
+                <div class="col-lg-3 col-md-3 ">
+                    <b>Group Name</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvMessage">
+                <div class="col-md-3 col-xl-3">
+                    <b>Message Type</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.Message, new SelectList(Model.MessageType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlMessageType" })
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
+                <div class="col-md-3 col-xl-3">
+                    @*<input type="number" id="txtMobileNo" class="input100" maxlength="10" style="font-size:medium;" />*@
+                    <button class="btn btn-primary ml-auto mt-3" type="button" title="GO" id="btnGo" tabindex="20" style="margin-bottom:20px;">GO</button>
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvScript" >
+                <div class="col-md-3 col-xl-3">
+                    <b>Script</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.TextAreaFor(model => model.objWhatsAppSMSMaster.SMS, new { @class = "input100", @id = "txtScript" })
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvCustomer">
+                <div class="col-md-3 col-xl-3">
+                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnupdate" tabindex="20">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#btnGo').on("click", function () {
+            GetWAScripts();
+        });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+    });
+    function GetWAScripts() {
+        if ($('#ddlGroupDetails').val() == "" ) {
+            toastr.error('Please Select Group');
+            return false
+        }
+        if ($('#ddlMessageType').val() == "" ) {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var GroupId = $('#ddlGroupDetails').val();
+        var GroupName = $("#ddlGroupDetails option:selected").text();
+        
+        alert(GroupId)
+        alert(GroupName)
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetWAScripts", "CommonDBConfig")',
+            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',GroupName: ' + JSON.stringify(GroupName) + ',MessageType: ' + JSON.stringify($('#ddlMessageType').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                //if (result.GroupID != null) {
+                //    $("#Script").text(result.);
+                //    item["GroupID"] = $("#hdnGroupId").val();
+                //}
+            }
+        });
+    }
+
+</script>

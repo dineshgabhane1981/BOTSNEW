@@ -1,9 +1,11 @@
 ﻿using BOTS_BL.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace BOTS_BL.Repository
 {
@@ -106,5 +108,73 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public List<SelectListItem> GetGroupDetails()
+        {
+            List<SelectListItem> lstGroupDetails = new List<SelectListItem>();
+            List<tblGroupDetail> GroupDetails = new List<tblGroupDetail>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    GroupDetails = context.tblGroupDetails.Where(x => x.IsActive == true).ToList();
+                }
+                foreach (var item in GroupDetails)
+                {
+                    lstGroupDetails.Add(new SelectListItem
+                    {
+                        Text = item.GroupName,
+                        Value = Convert.ToString(item.GroupId)
+                    });
+                }
+                lstGroupDetails = lstGroupDetails.OrderBy(x => x.Text).ToList();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
+            }
+            return lstGroupDetails;
+        }
+        public WhatsAppSMSMaster GetWAScripts(int GroupId, string GroupName, string MessageType)
+        {
+            WhatsAppSMSMaster obj = new WhatsAppSMSMaster();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                using (var context = new BOTSDBContext())
+                {
+                    //obj = context.WhatsAppSMSMasters.Where(x=> x.MessageId == MessageType).FirstOrDefault();
+
+                    if (MessageType == "Enrollment")
+                    {
+                        Id = "100";
+                    }
+                    else if (MessageType == "Earn")
+                    {
+                        Id = "101";
+                    }
+                    else if (MessageType == "Burn")
+                    {
+                        Id = "102";
+                    }
+                    else if (MessageType == "Cancel")
+                    {
+                        Id = "103";
+                    }
+                    obj = context.WhatsAppSMSMasters.Where(x => x.MessageId == Id && x.SMS == "SMS").FirstOrDefault();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetWAScripts");
+            }
+            return obj;
+           
+        }
+        
     }
 }
