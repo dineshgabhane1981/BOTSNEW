@@ -65,9 +65,6 @@
         }
         var GroupId = $('#ddlGroupDetails').val();
         var GroupName = $("#ddlGroupDetails option:selected").text();
-        
-        alert(GroupId)
-        alert(GroupName)
 
         $("#divLoader").show();
         $.ajax({
@@ -77,11 +74,16 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
-                //if (result.GroupID != null) {
-                //    $("#Script").text(result.);
-                //    item["GroupID"] = $("#hdnGroupId").val();
-                //}
+                
+                if (result.objWhatsAppSMSMaster != null) {
+                    
+                    $("#txtScript").text(result.objWhatsAppSMSMaster.SMS);
+                    
+                    $("#divLoader").hide();
+                }
+
             }
+            
         });
     }
 

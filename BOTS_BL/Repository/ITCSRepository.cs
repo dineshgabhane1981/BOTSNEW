@@ -12,6 +12,7 @@ namespace BOTS_BL.Repository
     public class ITCSRepository
     {
         Exceptions newexception = new Exceptions();
+        CustomerRepository CR = new CustomerRepository();
         public List<tblGroupDetail> GetNeverOptForGroups(bool status)
         {
             List<tblGroupDetail> lstData = new List<tblGroupDetail>();
@@ -144,7 +145,8 @@ namespace BOTS_BL.Repository
             Script = string.Empty;
             try
             {
-                using (var context = new BOTSDBContext())
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
                 {
                     //obj = context.WhatsAppSMSMasters.Where(x=> x.MessageId == MessageType).FirstOrDefault();
 
@@ -164,7 +166,7 @@ namespace BOTS_BL.Repository
                     {
                         Id = "103";
                     }
-                    obj = context.WhatsAppSMSMasters.Where(x => x.MessageId == Id && x.SMS == "SMS").FirstOrDefault();
+                    obj = context.WhatsAppSMSMasters.Where(x => x.MessageId == Id).FirstOrDefault();
 
                 }
             }
