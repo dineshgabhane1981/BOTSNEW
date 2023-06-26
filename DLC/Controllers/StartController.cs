@@ -64,7 +64,7 @@ namespace DLC.Controllers
             OTPorPassword = DCR.CheckUserAndSendOTP(gId, MobileNo);
             return new JsonResult() { Data = OTPorPassword, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult ValidateUser(string mobileNo, string OtpOrPassword)
+        public ActionResult ValidateUser(string mobileno, string code, string OtpOrPassword)
         {
             bool IsValid = false;
             string ActionNameFromConfig = string.Empty;
@@ -76,10 +76,12 @@ namespace DLC.Controllers
             //If Password and exist in UserDetails
             if (config.LoginWithOTP == "Password")
             {
-                var IsExist = DCR.CheckPasswordExist(gId, mobileNo);
-                if (IsExist)
+                var custDetails = DCR.CheckPasswordExist(gId, code + mobileno);
+                if (custDetails !=null)
                 {
-                    IsValid = DCR.ValidateUserByPassword(gId, mobileNo, OtpOrPassword);
+                    Hash objHash = new Hash();
+                    IsValid = objHash.VerifyHashedPassword(custDetails.Password, OtpOrPassword);
+                    //IsValid = DCR.ValidateUserByPassword(gId, mobileNo, OtpOrPassword);
                     //redirect to RedirectToPage
                     if (IsValid)
                     {
@@ -89,7 +91,7 @@ namespace DLC.Controllers
                 else
                 {
                     //If Password but not exist in UserDetails
-                    IsValid = DCR.ValidateUserByOTP(gId, mobileNo, OtpOrPassword);
+                    IsValid = DCR.ValidateUserByOTP(gId, code + mobileno, OtpOrPassword);
                     //Redirect to Set Password Screen
                     if (IsValid)
                     {
@@ -100,7 +102,7 @@ namespace DLC.Controllers
             else
             {
                 //if Validate using OTP
-                IsValid = DCR.ValidateUserByOTP(gId, mobileNo, OtpOrPassword);
+                IsValid = DCR.ValidateUserByOTP(gId, code + mobileno, OtpOrPassword);
                 if (IsValid)
                 {
                     //redirect to RedirectToPage
@@ -109,7 +111,8 @@ namespace DLC.Controllers
             }
             if(!string.IsNullOrEmpty(ActionNameFromConfig))
             {
-                sessionVariables.MobileNo = mobileNo;
+                sessionVariables.CountryCode = code;
+                sessionVariables.MobileNo = mobileno;
                 Session["SessionVariables"] = sessionVariables;
             }
             return new JsonResult() { Data = ActionNameFromConfig, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -134,8 +137,8 @@ namespace DLC.Controllers
         {
             DLCDashboardFrontData objData = new DLCDashboardFrontData();
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
-            string gId = sessionVariables.GroupId;            
-            ViewBag.MobileNo = sessionVariables.MobileNo;
+            string gId = sessionVariables.GroupId;
+            ViewBag.MobileNo = sessionVariables.CountryCode + sessionVariables.MobileNo;
             objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(gId);
             return View(objData);
         }
@@ -143,6 +146,8 @@ namespace DLC.Controllers
         public ActionResult InsertPassword(string mobileNo,string password)
         {
             bool status = false;
+            Hash objHash = new Hash();
+            password = objHash.HashPassword(password);
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
             string gId = sessionVariables.GroupId;
             status = DCR.InsertPassword(mobileNo, password, gId);

@@ -704,7 +704,7 @@ namespace WebApp.Controllers.OnBoarding
                 mail.To.Add(objData.bots_TblGroupMaster.OwnerEmailId);
                 mail.CC.Add("dinesh@blueocktopus.in");
                 mail.CC.Add("jacqueline@blueocktopus.in");
-                mail.CC.Add("mahavir@blueocktopus.in");
+                mail.CC.Add("priya@blueocktopus.in");
 
                 System.Net.Mail.Attachment attachment;
                 attachment = new System.Net.Mail.Attachment(path);

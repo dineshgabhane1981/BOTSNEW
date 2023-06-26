@@ -42,6 +42,7 @@ namespace WebApp.Controllers
         {
             EventViewModel objData = new EventViewModel();
             EventDetail objEvent = new EventDetail();
+            objEvent.strEventdate = DateTime.Now.ToString("MM/dd/yyyy");
             objData.objEvent = objEvent;
             return View(objData);
         }

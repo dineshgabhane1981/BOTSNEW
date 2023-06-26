@@ -22,13 +22,13 @@
                 Event Name
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.EventName, new { @class = "input100", @id = "IdEventName" })
+                @Html.TextBoxFor(model => model.objEvent.EventName, new { @class = "input100", @id = "IdEventName", tabindex = 1 })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                 Event Created Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.strEventdate, new { @class = "input100", @id = "IdEventDate" })
+                @Html.TextBoxFor(model => model.objEvent.strEventdate, new { @class = "input100", @id = "IdEventDate", tabindex = 2 })
             </div>
         </div>
 
@@ -37,13 +37,13 @@
                 Event Place
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.Place, new { @class = "input100", @id = "IdEventPlace" })
+                @Html.TextBoxFor(model => model.objEvent.Place, new { @class = "input100", @id = "IdEventPlace", tabindex = 3 })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                 Event Type
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.DropDownListFor(model => model.objEvent.EventType, new SelectList(Model.EventType(), "Value", "Text"), "Please Select", new { @class = "input100", @id = "ddlIdEventType" })
+                @Html.DropDownListFor(model => model.objEvent.EventType, new SelectList(Model.EventType(), "Value", "Text"), "Please Select", new { @class = "input100", @id = "ddlIdEventType", tabindex = 4 })
             </div>
         </div>
         <div class="row" style="margin: 0;">
@@ -51,13 +51,13 @@
                 Event Start Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.strEventStartdate, new { @class = "input100", @id = "IdEventStrDate", @onclick = "Showdatetime1();" })
+                @Html.TextBoxFor(model => model.objEvent.strEventStartdate, new { @class = "input100", @id = "IdEventStrDate", @onclick = "Showdatetime1();", tabindex = 5 })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                 Event End Date
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.strEventEnddate, new { @class = "input100", @id = "IdEventEndDate", @onclick = "Showdatetime2();" })
+                @Html.TextBoxFor(model => model.objEvent.strEventEnddate, new { @class = "input100", @id = "IdEventEndDate", @onclick = "Showdatetime2();", tabindex = 6 })
             </div>
         </div>
         <div class="row" style="margin: 0;">
@@ -65,13 +65,13 @@
                 Bonus Points
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.BonusPoints, new { @class = "input100", @id = "IdBonusPoints" })
+                @Html.TextBoxFor(model => model.objEvent.BonusPoints, new { @class = "input100", @id = "IdBonusPoints", tabindex = 7 })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                 Bonus Points Expiry (days)
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.PointsExpiryDays, new { @class = "input100", @id = "IdPointsExp" })
+                @Html.TextBoxFor(model => model.objEvent.PointsExpiryDays, new { @class = "input100", @id = "IdPointsExp", tabindex = 8 })
             </div>
         </div>
         <div class="row" style="margin: 0;">            
@@ -79,36 +79,36 @@
                 Event Bonus Script
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextAreaFor(model => model.objEvent.BonusMessageScript, new { @class = "input100", @id = "idScript" })
+                @Html.TextAreaFor(model => model.objEvent.BonusMessageScript, new { @class = "input100", @id = "idScript", tabindex = 9 })
             </div>
         </div>
         <div class="row" style="margin: 0;">
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                First Remainder Script
+                First Reminder Script
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextAreaFor(model => model.objEvent.C1stReminderScript, new { @class = "input100", @id = "IdFirstRemaind" })
+                @Html.TextAreaFor(model => model.objEvent.C1stReminderScript, new { @class = "input100", @id = "IdFirstRemaind", tabindex = 10 })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                First Remainder Days
+                First Reminder Days
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.C1stRemBefore, new { @class = "input100", @id = "IdFirstRemdDays" })
+                @Html.TextBoxFor(model => model.objEvent.C1stRemBefore, new { @class = "input100", @id = "IdFirstRemdDays", tabindex = 11 })
             </div>
         </div>
         <div class="row" style="margin: 0;">
             <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                Second Remainder Script
+                Second Reminder Script
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextAreaFor(model => model.objEvent.C2ndReminderScript, new { @class = "input100", @id = "IdSecondRemaind" })
+                @Html.TextAreaFor(model => model.objEvent.C2ndReminderScript, new { @class = "input100", @id = "IdSecondRemaind", tabindex = 12 })
             </div>
             <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                Second Remainder Days
+                Second Reminder Days
             </div>
 
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextBoxFor(model => model.objEvent.C2ndRemBefore, new { @class = "input100", @id = "IdSecondRemdDays" })
+                @Html.TextBoxFor(model => model.objEvent.C2ndRemBefore, new { @class = "input100", @id = "IdSecondRemdDays", tabindex = 13 })
             </div>
         </div>
         <div class="row" style="margin: 0;">
@@ -116,14 +116,14 @@
                 Description
             </div>
             <div class="col-sm-4" style="float:left;margin-top:10px;">
-                @Html.TextAreaFor(model => model.objEvent.Desciption, new { @class = "input100", @id = "idDescription" })
+                @Html.TextAreaFor(model => model.objEvent.Desciption, new { @class = "input100", @id = "idDescription", tabindex = 14 })
             </div>            
         </div>
 
         <div class="row mb-2 ml-2">
             <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
-                <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" Onclick="Validation()"><b>Submit</b></button>
-                <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" Onclick="ResetForm()"><b>Cancel</b></button>
+                <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" tabindex="15" Onclick="Validation()"><b>Submit</b></button>
+                <button type="button" id="btnDownload" style="margin-left:15px;" class="btn btn-primary" tabindex="16" Onclick="ResetForm()"><b>Cancel</b></button>
             </div>
         </div>
     </div>

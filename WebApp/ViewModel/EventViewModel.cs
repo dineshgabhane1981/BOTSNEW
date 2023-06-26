@@ -25,7 +25,7 @@ namespace WebApp.ViewModel
 
         public SelectListItem[] EventType()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Type1", Value = "Type1" }, new SelectListItem() { Text = "Type2", Value = "Type2" } };
+            return new SelectListItem[5] { new SelectListItem() { Text = "Corporate", Value = "Corporate" }, new SelectListItem() { Text = "Society", Value = "Society" }, new SelectListItem() { Text = "Door-to-Door", Value = "Door-to-Door" }, new SelectListItem() { Text = "Sponsorship", Value = "Sponsorship" }, new SelectListItem() { Text = "In-House", Value = "In-House" } };
         }
     }
 

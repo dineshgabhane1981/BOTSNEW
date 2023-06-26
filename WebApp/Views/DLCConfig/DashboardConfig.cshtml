@@ -60,19 +60,19 @@
                     </div>
                 </div>
                 <div class="col-md-11 col-xl-11 row mt-4 pb-3" style="padding-right: 7px !important; padding-left: 7px !important;">
-                    <div class="col-md-2 col-xl-2" style="padding-top:30px;">
-                        <b>Extra Widget1</b>
+                    <div class="col-md-2 col-xl-3" style="padding-top:30px;">
+                        <input type="checkbox" id="chkExtraWidget1" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />  <b>Extra Widget1</b>
                     </div>
                     <div class="col-md-5 col-xl-5">
-                        Widget Text1  <input type="text" class="input100" id="txtExtraWidgetText1" />
+                         Widget Text1  <input type="text" class="input100" id="txtExtraWidgetText1" />
                     </div>
                     <div class="col-md-4 col-xl-4">
                         Widget Points1  <input type="number" class="input50" id="txtExtraWidgetPoints1" />
                     </div>
                 </div>
                 <div class="col-md-11 col-xl-11 row mt-4 pb-3" style="padding-right: 7px !important; padding-left: 7px !important;">
-                    <div class="col-md-2 col-xl-2" style="padding-top:30px;">
-                        <b>Extra Widget2</b>
+                    <div class="col-md-2 col-xl-3" style="padding-top:30px;">
+                        <input type="checkbox" id="chkExtraWidget2" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> <b>Extra Widget2</b>
                     </div>
                     <div class="col-md-5 col-xl-5">
                         Widget Text2  <input type="text" class="input100" id="txtExtraWidgetText2" />
@@ -82,8 +82,8 @@
                     </div>
                 </div>
                 <div class="col-md-11 col-xl-11 row mt-4 pb-3" style="padding-right: 7px !important; padding-left: 7px !important;">
-                    <div class="col-md-2 col-xl-2" style="padding-top:30px;">
-                        <b>Extra Widget3</b>
+                    <div class="col-md-2 col-xl-3" style="padding-top:30px;">
+                        <input type="checkbox" id="chkExtraWidget3" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> <b>Extra Widget3</b>
                     </div>
                     <div class="col-md-5 col-xl-5">
                         Widget Text3  <input type="text" class="input100" id="txtExtraWidgetText3" />
@@ -380,6 +380,15 @@
         if (data.AddGiftPoints) {
             $("#chkGiftYourPoints").prop("checked", true);
         }
+        if (data.IsExtraWidgetText1) {
+            $("#chkExtraWidget1").prop("checked", true);
+        }
+        if (data.IsExtraWidgetText2) {
+            $("#chkExtraWidget2").prop("checked", true);
+        }
+        if (data.IsExtraWidgetText3) {
+            $("#chkExtraWidget3").prop("checked", true);
+        }
         $("#txtPersonalDetailsPoints").val(data.PersonalDetailsPoints);
         $("#txtReferFriendPoints").val(data.ReferPoints);
         $("#txtGiftPoints").val(data.GiftPoints);
@@ -470,6 +479,24 @@
         else {
             item["AddGiftPoints"] = false;
             item["GiftPoints"] = 0;
+        }
+        if ($("#chkExtraWidget1").is(":checked")) {
+            item["IsExtraWidgetText1"] = true;
+        }
+        else {
+            item["IsExtraWidgetText1"] = false;           
+        }
+        if ($("#chkExtraWidget2").is(":checked")) {
+            item["IsExtraWidgetText2"] = true;
+        }
+        else {
+            item["IsExtraWidgetText2"] = false;
+        }
+        if ($("#chkExtraWidget3").is(":checked")) {
+            item["IsExtraWidgetText3"] = true;
+        }
+        else {
+            item["IsExtraWidgetText3"] = false;
         }
         item["ExtraWidgetText1"] = $("#txtExtraWidgetText1").val();
         item["ExtraWidgetPoints1"] = $("#txtExtraWidgetPoints1").val();

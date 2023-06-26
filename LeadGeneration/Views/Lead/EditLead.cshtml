@@ -240,10 +240,10 @@
     function EnableDisableData() {
         $("#txtbusinessnm").attr("readonly", true);
         $('#txtbusinessnm').css('background-color', '#d3d3d3');
-        $("#ddlCategory").attr("disabled", true);
-        $('#ddlCategory').css('background-color', '#d3d3d3');        
-        $("#ddlCity").attr("disabled", true);
-        $('#ddlCity').css('background-color', '#d3d3d3');
+        //$("#ddlCategory").attr("disabled", true);
+        //$('#ddlCategory').css('background-color', '#d3d3d3');        
+        //$("#ddlCity").attr("disabled", true);
+        //$('#ddlCity').css('background-color', '#d3d3d3');
 
         //$("#ddlleadsource").attr("disabled", true);
         //$('#ddlleadsource').css('background-color', '#d3d3d3');
@@ -445,19 +445,19 @@
             }
         }
 
-        if ($("#hdnLeadId").val() != 0) {
-            if ($("#ddlmeetingtype option:selected").text() == "1st Call" || $("#ddlmeetingtype option:selected").text() == "1st Meeting") {
+        //if ($("#hdnLeadId").val() != 0) {
+        //    if ($("#ddlmeetingtype option:selected").text() == "1st Call" || $("#ddlmeetingtype option:selected").text() == "1st Meeting") {
 
-                $("#ddlmeetingtype").css('border-color', 'red');
-                cuteAlert({
-                    type: "error",
-                    title: "Oops..",
-                    message: "Meeting Type should not 1st Call or 1st Meeting",
-                    buttonText: "Okay"
-                })
-                returnStatus = false;
-            }
-        }
+        //        $("#ddlmeetingtype").css('border-color', 'red');
+        //        cuteAlert({
+        //            type: "error",
+        //            title: "Oops..",
+        //            message: "Meeting Type should not 1st Call or 1st Meeting",
+        //            buttonText: "Okay"
+        //        })
+        //        returnStatus = false;
+        //    }
+        //}
 
         if (returnStatus == true) {
             return true;

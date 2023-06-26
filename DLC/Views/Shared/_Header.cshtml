@@ -10,7 +10,7 @@
 }
 
 <link href="~/Content/Menu.css" rel="stylesheet" />
-<div id="dvHeaderInner" class="app-header header-shadow">
+<div id="dvHeaderInner" class="app-header header-shadow" style="position:relative;z-index:9999;">
     <div id="dvHeader"  class="app-header__content">
         <div class="app-header-right">
             <div class="header-btn-lg pr-0">
@@ -25,39 +25,39 @@
                                     <input class="side-menu" type="checkbox" id="side-menu" />
                                     <label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
                                     <!-- Menu -->
-                                    <nav class="nav">
+                                    <nav class="nav" style="z-index:9999;">
                                         <ul class="menu">
-                                            <li ><a href="#">Dashboard</a></li>
-                                            <li><a href="#">Store Locator</a> </li>
-                                            <li><a href="#">Refer and Earn</a></li>
-                                            <li><a href="#">Personal Details</a></li>
-                                            <li><a href="#">Transaction History</a></li>
-                                            <li><a href="#">Gift Points</a></li>
-                                            <li><a href="#">Terms and Conditions</a></li>
-                                            <li><a href="#">Optout</a></li>
-                                            <li><a href="@Url.Action("Logout", "Start")">Logout</a></li>
+                                            <li><a class="menulink" href="@Url.Action("Index", "Dashboard")">Dashboard</a></li>
+                                            <li><a class="menulink" href="@Url.Action("Index", "Store")">Store Locator</a> </li>
+                                            <li><a class="menulink" href="@Url.Action("Index", "ReferEarn")">Refer and Earn</a></li>
+                                            <li><a class="menulink" href="@Url.Action("Index", "PersonalDetails")">Personal Details</a></li>
+                                            <li><a class="menulink" href="@Url.Action("Index", "TransactionHistory")">Transaction History</a></li>
+                                            <li><a class="menulink" href="@Url.Action("Index", "GiftPoints")">Gift Points</a></li>
+                                            <li><a class="menulink" href="@Url.Action("Index", "Terms")">Terms and Conditions</a></li>
+                                            <li><a class="menulink" href="@Url.Action("Index", "Optout")">Optout</a></li>
+                                            <li><a class="menulink" href="@Url.Action("Logout", "Start")">Logout</a></li>
                                         </ul>
                                     </nav>
-                                    <a href="#" class="logo" style="cursor:unset;">
+                                   
                                         @if (logoSize == "Small")
                                         {
-                                            <div class="logo1" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 200px !important;">
+                                            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 200px !important;">
                                                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
                                             </div>
                                         }
                                         @if (logoSize == "Medium")
                                         {
-                                            <div class="logo1" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                                            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
                                                 <img id="imgLogo" src="@logoUrl" width="300" height="150" />
                                             </div>
                                         }
                                         @if (logoSize == "Big")
                                         {
-                                            <div class="logo1" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                                            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
                                                 <img id="imgLogo" src="@logoUrl" width="400" height="200" />
                                             </div>
                                         }
-                                    </a>
+                                    
                                 </header>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
         document.querySelector("#dvHeaderInner").style.background = "linear-gradient(to bottom," + HeaderColor + ", #000000)";//picker.toRGBAString();
         document.querySelector("#dvHeader").style.color = fontcolor;
         document.querySelector("#dvHeaderInner").style.color = fontcolor;
-        $('a').css('color', fontcolor);
+        $('.menulink').css('color', fontcolor);
     });
 
 

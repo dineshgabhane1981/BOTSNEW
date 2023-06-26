@@ -1,14 +1,130 @@
-﻿
+﻿@model DLC.ViewModel.DashboardViewModel
+@using BOTS_BL.Models;
+@using DLC.ViewModel;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var HeaderColor = sessionVariables.objDashboardConfig.HeaderColor;
+    var FontColor = sessionVariables.objDashboardConfig.FontColor;
+    var url = "https://maps.google.com/maps?q=";
+    url = url + Model.dLCDashboardContent.OutletLatitude + "," + Model.dLCDashboardContent.OutletLongitude;
+    url = url + "&z=12 &output=embed";
 }
 
 <div class="app-main__inner">
-    <div class="row mb-3 pt-3 pl-3 pr-3 card">
-        <div class="col-md-12 col-lg-12" style="padding-bottom: 10px;margin-top:5px;">
-            sdasdfas fsdf s
+    <div class="row mb-3 pl-3 pr-3 card  pt-5">
+        <div class="col-md-12 col-lg-12 row  pt-5" style="padding-bottom: 10px;margin-top:5px;">
+            <div class="col-md-12 col-lg-4 mr-5 row  dashboardBox">
+                <div class="col-md-6 col-lg-12 row"><b>@Model.dLCDashboardContent.EarnPoints</b> <div style="padding-left:5px;"> Your earned pts </div> <div style="text-align:right;"> <a href="@Url.Action("Index", "TransactionHistory")" class="anchor">Transaction History</a> </div></div>
+            </div>
+            <div class="col-md-12 col-lg-4  mr-0 row dashboardBox">
+                <div class="col-md-6 col-lg-12 row"> Earn &nbsp;&nbsp; <b>@Model.dLCDashboardContent.EarnPercentage% &nbsp;&nbsp;</b> on every purchases <a href="@Url.Action("Index", "Store")" class="anchor">Stores</a> </div>
+            </div>
         </div>
+        @*<div class="col-md-12 col-lg-10  mr-1 row dashboardBox">
+                <div class="col-md-6 col-lg-12 row"> <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.7820765148153!2d73.8974296!3d18.5387475!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c1412ca5144d%3A0x169720f80e0e4178!2sMadhuban!5e0!3m2!1sen!2sin!4v1687263720170!5m2!1sen!2sin" width="1000" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> </div>
+            </div>*@
+    <div class="col-md-12 col-lg-12 row  pt-2" style="padding-bottom: 10px;margin-top:5px;">
+        <div class="col-md-12 col-lg-3  pt-2">
+            <div>@Model.dLCDashboardContent.OutletAddress</div>
+            <iframe id="iFrameMap" allowfullscreen="" frameborder="0" height="80%" width="100%" src="@url" ></iframe>
+        </div>
+        <div class="col-md-12 col-lg-9 row  pt-2" style="padding-bottom: 10px;margin-top:5px;">
+            @if (Model.objDashboardConfig.AddPersonalDetails)
+            {
+
+                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
+                    <a href="@Url.Action("Index", "PersonalDetails")">
+                        <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
+                            <div style="width: 25%;"></div>
+                            <div class="circle" style="width: 50%; border: 1px solid @HeaderColor; color: @FontColor; background: linear-gradient(to bottom, @HeaderColor, #000000);">@Model.objDashboardConfig.PersonalDetailsPoints</div>
+                            <div style="width:25%;"></div>
+                            <div class="WidgetText" style="font-size:20px;margin-top:30px;">Add Personal Details & get <b style="font-size:22px;"> @Model.objDashboardConfig.PersonalDetailsPoints </b> bonus points</div>
+                        </div>
+
+                    </a>
+                </div>
+
+            }
+            @if (Model.objDashboardConfig.AddReferFriend)
+            {
+                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
+                    <a href="@Url.Action("Index", "ReferEarn")">
+                        <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
+                            <div style="width: 25%;"></div>
+                            <div class="circle" style="border: 1px solid @HeaderColor; color:@FontColor; background:linear-gradient(to bottom,@HeaderColor, #000000);">@Model.objDashboardConfig.ReferPoints</div>
+                            <div style="width:25%;"></div>
+                            <div class="WidgetText" style="font-size:20px;margin-top:30px;">Refer a friend & get <b style="font-size:22px;"> @Model.objDashboardConfig.ReferPoints </b> bonus points</div>
+                        </div>
+                    </a>
+                </div>
+            }
+            @if (Model.objDashboardConfig.AddGiftPoints)
+            {
+                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
+                    <a href="@Url.Action("Index", "GiftPoints")">
+                        <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
+                            <div style="width: 25%;"></div>
+                            <div class="circle" style="border: 1px solid @HeaderColor; color:@FontColor; background:linear-gradient(to bottom,@HeaderColor, #000000);">@Model.objDashboardConfig.GiftPoints</div>
+                            <div style="width:25%;"></div>
+                            <div class="WidgetText" style="font-size:20px;margin-top:30px;">Gift your points & get <b style="font-size:22px;"> @Model.objDashboardConfig.GiftPoints </b> more rewards</div>
+                        </div>
+                    </a>
+                </div>
+            }
+            @if (Model.objDashboardConfig.IsExtraWidgetText1)
+            {
+                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
+                    <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
+                        <div style="width: 25%;"></div>
+                        <div class="circle" style="border: 1px solid @HeaderColor; color:@FontColor; background:linear-gradient(to bottom,@HeaderColor, #000000);">@Model.objDashboardConfig.ExtraWidgetPoints1</div>
+                        <div style="width:25%;"></div>
+                        <div class="WidgetText" style="font-size:20px;margin-top:30px;">@Model.objDashboardConfig.ExtraWidgetText1</div>
+                    </div>
+                </div>
+            }
+            @if (Model.objDashboardConfig.IsExtraWidgetText2)
+            {
+                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
+                    <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
+                        <div style="width: 25%;"></div>
+                        <div class="circle" style="border: 1px solid @HeaderColor; color:@FontColor; background:linear-gradient(to bottom,@HeaderColor, #000000);">@Model.objDashboardConfig.ExtraWidgetPoints2</div>
+                        <div style="width:25%;"></div>
+                        <div class="WidgetText" style="font-size:20px;margin-top:30px;">@Model.objDashboardConfig.ExtraWidgetText2</div>
+                    </div>
+                </div>
+            }
+            @if (Model.objDashboardConfig.IsExtraWidgetText3)
+            {
+                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
+                    <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
+                        <div style="width: 25%;"></div>
+                        <div class="circle" style="width: 50%; border: 1px solid @HeaderColor; color: @FontColor; background: linear-gradient(to bottom, @HeaderColor, #000000);">@Model.objDashboardConfig.ExtraWidgetPoints3</div>
+                        <div style="width:25%;"></div>
+                        <div class="WidgetText" style="font-size:20px;margin-top:30px;">@Model.objDashboardConfig.ExtraWidgetText3</div>
+                    </div>
+                </div>
+            }
+        </div>
+
+
+    </div>
     </div>
 </div>
+<script src="https://maps.googleapis.com/maps/api/js"></script>
+
+<script>
+    $(document).ready(function () {
+       // var url = https://maps.google.com/maps?q=18.610982, 73.789113&amp;z=12&amp;output=embed;
+
+        @*var url = "https://maps.google.com/maps?q=";
+        url = url + '@Model.dLCDashboardContent.OutletLatitude' + ',' + '@Model.dLCDashboardContent.OutletLongitude';
+        url = url + '&amp; z=12 &amp; output=embed';
+        alert(url);
+        $("#iFrameMap").attr('src', url);*@
+    });
+
+</script>
 

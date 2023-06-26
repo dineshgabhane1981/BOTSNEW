@@ -191,6 +191,22 @@ namespace BOTS_BL.Repository
                     objData.CollectPersonalDataRandomly = configData.CollectPersonalDataRandomly;
                     objData.UseLogo = configData.UseLogo;
                     objData.UseLogoURL = configData.UseLogoURL;
+                    objData.PersonalDetailsPoints = configData.PersonalDetailsPoints;
+                    objData.ReferPoints = configData.ReferPoints;
+                    objData.GiftPoints = configData.GiftPoints;
+
+                    objData.IsExtraWidgetText1 = configData.IsExtraWidgetText1;
+                    objData.ExtraWidgetText1 = configData.ExtraWidgetText1;
+                    objData.ExtraWidgetPoints1 = configData.ExtraWidgetPoints1;
+
+                    objData.IsExtraWidgetText2 = configData.IsExtraWidgetText2;
+                    objData.ExtraWidgetText2 = configData.ExtraWidgetText2;
+                    objData.ExtraWidgetPoints2 = configData.ExtraWidgetPoints2;
+
+                    objData.IsExtraWidgetText3 = configData.IsExtraWidgetText3;
+                    objData.ExtraWidgetText3 = configData.ExtraWidgetText3;
+                    objData.ExtraWidgetPoints3 = configData.ExtraWidgetPoints3;
+
                     objData.PrefferedLanguage = configData.PrefferedLanguage;
                     objData.CountryCode = configData.CountryCode;
                     objData.HeaderColor = configData.HeaderColor;
@@ -498,13 +514,82 @@ namespace BOTS_BL.Repository
                     context.SaveChanges();
                     status = true;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     newexception.AddException(ex, "InsertPassword");
                 }
             }
             return status;
         }
+
+        public DLCDashboardContent GetDLCDashboardContent(string groupid, string mobileno)
+        {
+            DLCDashboardContent objData = new DLCDashboardContent();
+            string connStr = objCustRepo.GetCustomerConnString(groupid);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                try
+                {
+                    objData.EarnPoints = context.CustomerDetails.Where(x => x.MobileNo == mobileno).Select(y => y.Points).FirstOrDefault();
+                    objData.EarnPercentage = context.EarnRules.Select(x => x.PointsPrecentage).FirstOrDefault();
+                    objData.PointsToRS = context.EarnRules.Select(x => x.PointsAllocation).FirstOrDefault();
+                    var outletDetails = context.OutletDetails.FirstOrDefault();
+                    objData.OutletName = outletDetails.OutletName;
+                    objData.OutletAddress = outletDetails.Address;
+                    objData.OutletLongitude = outletDetails.Longitude;
+                    objData.OutletLatitude = outletDetails.Latitude;
+                    var optout = context.CustomerDetails.Where(x => x.MobileNo == mobileno).Select(y => y.IsSMS).FirstOrDefault();
+                    if (optout.HasValue)
+                    {
+                        if (optout.Value)
+                        {
+                            objData.IsOptout = true;
+                        }
+                        else
+                        {
+                            objData.IsOptout = false;
+                        }
+                    }
+                    else
+                    {
+                        objData.IsOptout = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GetDLCDashboardContent");
+                }
+            }
+
+            return objData;
+        }
+
+        public bool UpdateOptout(string groupId, string mobileNo, bool optout)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                try
+                {
+                    var custDetails = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                    if(custDetails!=null)
+                    {
+                        custDetails.IsSMS = optout;
+                        context.CustomerDetails.AddOrUpdate(custDetails);
+                        context.SaveChanges();
+                        status = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "UpdateOptout" + groupId);
+                }
+            }
+
+            return status;
+        }
+
 
     }
 }

@@ -132,6 +132,10 @@ namespace WebApp.Controllers.OnBoarding
                     objDashboard.AddGiftPoints = Convert.ToBoolean(item["AddGiftPoints"]);
                     objDashboard.GiftPoints = Convert.ToInt32(item["GiftPoints"]);
 
+                    objDashboard.IsExtraWidgetText1 = Convert.ToBoolean(item["IsExtraWidgetText1"]);
+                    objDashboard.IsExtraWidgetText2 = Convert.ToBoolean(item["IsExtraWidgetText2"]);
+                    objDashboard.IsExtraWidgetText3 = Convert.ToBoolean(item["IsExtraWidgetText3"]);
+
                     objDashboard.ExtraWidgetText1 = Convert.ToString(item["ExtraWidgetText1"]);
                     if (!string.IsNullOrEmpty(Convert.ToString(item["ExtraWidgetPoints1"])))
                         objDashboard.ExtraWidgetPoints1 = Convert.ToInt32(item["ExtraWidgetPoints1"]);

@@ -1,0 +1,67 @@
+﻿@model BOTS_BL.Models.DLCDashboardContent
+@using System.Globalization
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pl-3 pr-3 card col-md-12 col-lg-12 row  pt-5">
+        <div class="col-md-12 col-lg-12 pt-5" style="padding-bottom: 10px;margin-top:5px;width:80%;">
+            <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+
+                <div class="col-md-12 col-lg-12 alignment">
+                    <i class="fas fa-user-circle" style="font-size:30px;"></i> My Account <br />
+                    <span class="pl-4"> (@Model.MobileNo)</span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;text-align:center;">
+                <div class="col-md-6 col-lg-5 dashboardBox">My Points: <b> @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints)) </b></div>
+                <div class="col-md-6 col-lg-5 dashboardBox">My Cash: <b> @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.EarnPoints * Model.PointsToRS)))</b></div>
+            </div>
+            <div class="col-md-12 col-lg-12 alignment" style="padding-bottom: 10px; margin-top: 5px;">
+                <div class="optoutCHK">
+                    @Html.CheckBoxFor(model => model.IsOptout, new { @id = "chkOptout", @style = "cursor: pointer;margin-right:5px;" })
+                    @*<input type="checkbox" id="chkOptout" style="cursor: pointer;margin-right:5px;" />*@
+                    <span><label for="chkOptout" style="cursor: pointer;"> I do not want to receive any promotions SMS & WhatsApp</label></span>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12" style="padding-bottom: 10px; margin-top: 5px;text-align:center;">
+                <button type="button" id="btnLogin" class="btn form-control btn-primary  submit px-3 optoutbtn" onclick="UpdateOptout();" style="font-weight:bold;">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function UpdateOptout() {
+        var optout = false;
+        if ($("#chkOptout").is(":checked")) {
+            optout = true;
+        }
+
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateOptout", "Optout")',
+                data: '{IsOptout: ' + JSON.stringify(optout) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {                    
+                    console.log(result);
+                    if (result == true) {
+                        toastr.success('You will not receive any promotions SMS & WhatsApp');
+                    }
+                    else {
+                        toastr.error('There is some problem in updating your choice. Plz contact Administrator');
+                    }
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {                    
+                    console.log(result.responseText)
+                }
+            });
+
+    }
+</script>

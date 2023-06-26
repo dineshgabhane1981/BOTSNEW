@@ -286,6 +286,7 @@
     <Compile Include="Models\DBContext.cs" />
     <Compile Include="Models\DiscussionReport.cs" />
     <Compile Include="Models\DLCConfig\DLCDashboard.cs" />
+    <Compile Include="Models\DLCConfig\DLCDashboardContent.cs" />
     <Compile Include="Models\DLCConfig\DLCProfileUpdate.cs" />
     <Compile Include="Models\DLCConfig\tblCountyCode.cs" />
     <Compile Include="Models\DLCConfig\tblDLCDashboardConfig_Publish.cs" />

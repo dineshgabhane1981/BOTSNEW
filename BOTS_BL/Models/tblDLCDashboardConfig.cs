@@ -30,15 +30,17 @@ namespace BOTS_BL.Models
         public int? ReferPoints { get; set; }
 
         public int? GiftPoints { get; set; }
-
+        public bool IsExtraWidgetText1 { get; set; }
         [StringLength(250)]
         public string ExtraWidgetText1 { get; set; }
 
         public int? ExtraWidgetPoints1 { get; set; }
+        public bool IsExtraWidgetText2 { get; set; }
         [StringLength(250)]
         public string ExtraWidgetText2 { get; set; }
 
         public int? ExtraWidgetPoints2 { get; set; }
+        public bool IsExtraWidgetText3 { get; set; }
         [StringLength(250)]
         public string ExtraWidgetText3 { get; set; }
 

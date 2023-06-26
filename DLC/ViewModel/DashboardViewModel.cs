@@ -3,15 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace DLC.ViewModel
 {
-    public class SessionVariables
+    public class DashboardViewModel
     {
-        public string CountryCode { get; set; }
-        public string MobileNo { get; set; }        
-        public string GroupId { get; set; }
-        public string LoginURL { get; set; }
         public tblDLCDashboardConfig_Publish objDashboardConfig { get; set; }
+        public DLCDashboardContent dLCDashboardContent { get; set; }
     }
 }

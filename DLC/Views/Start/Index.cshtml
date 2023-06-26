@@ -12,8 +12,8 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="~/Content/DLCMain.css" rel="stylesheet" />
-    <script src="~/Content/cute-alert-master/cute-alert.js"></script>
-    <link href="~/Content/cute-alert-master/style-alert.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
 </head>
 <body>
     <section class="ftco-section">
@@ -26,7 +26,7 @@
                         <h3 style="text-align:center;">Welcome</h3>
                         <p style="text-align:center;">
                             Sign-up or Log-in now and start earning tons of reward points!!! <br />
-                            साईन -अप किंवा लॉगिन करा आणि भरपूर रिवॉर्ड पॉईंट्स मिळवा
+                            @*साईन -अप किंवा लॉगिन करा आणि भरपूर रिवॉर्ड पॉईंट्स मिळवा*@
                         </p>
                         <form action="#" class="login-form">
                             <div class="form-group row">
@@ -42,11 +42,18 @@
                                 <button type="button" id="btnSubmit" class="btn form-control btn-primary  submit px-3" style="font-weight:bold;display:none;">Login</button>
                             </div>
                         </form>
-
                     </div>
                 </div>
-
             </div>
+            @if (Model.objDashboardConfig.ShowLogoToFooter)
+            {
+                <div class="row justify-content-center" style="margin-top: 20px;">
+                    <div class="col-md-8 col-lg-4" style="text-align: center; font-size: 18px; line-height: 21px; color: #6f7880; font-weight: bold; margin-bottom: 3px; ">
+                        Powered By <br />
+                        <img src="~/Content/assets/images/Blue-Ocktopus-TLC_white.jpg" width="150" />
+                    </div>
+                </div>
+            }
         </div>
     </section>
 
@@ -71,24 +78,14 @@
         });
         function CheckUser() {
             var status = true;
-            if ($("#txtMobileNo").val() == "") {
-                cuteAlert({
-                    type: "error",
-                    title: "OOPS",
-                    message: "Please enter mobile no",
-                    buttonText: "Okay"
-                })
+            if ($("#txtMobileNo").val() == "") {                
+                toastr.error('Please enter mobile no');
                 status = false;
             }
             else if (/^[6789]\d{9,9}$/.test($("#txtMobileNo").val())) {
             }
             else {
-                cuteAlert({
-                    type: "error",
-                    title: "OOPS",
-                    message: "Please enter valid mobile no",
-                    buttonText: "Okay"
-                })
+                toastr.error('Please enter valid mobile no');
                 status = false;
             }
             if (status) {
@@ -134,24 +131,14 @@
         function ValidateUser() {
             var status = true;
             if ($("#hdnOtpOrPassword").val() == "OTP") {
-                if ($("#txtOtp").val() == "") {
-                    cuteAlert({
-                        type: "error",
-                        title: "OOPS",
-                        message: "Please enter OTP",
-                        buttonText: "Okay"
-                    })
+                if ($("#txtOtp").val() == "") {                   
+                    toastr.error('Please enter OTP');
                     status = false;
                 }
             }
             if ($("#hdnOtpOrPassword").val() == "Password") {
-                if ($("#txtPassword").val() == "") {
-                    cuteAlert({
-                        type: "error",
-                        title: "OOPS",
-                        message: "Please enter Password",
-                        buttonText: "Okay"
-                    })
+                if ($("#txtPassword").val() == "") {                    
+                    toastr.error('Please enter Password');
                     status = false;
                 }
             }
@@ -169,17 +156,17 @@
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("ValidateUser", "Start")',
-                    data: '{mobileNo: ' + JSON.stringify(data) + ',OtpOrPassword: ' + JSON.stringify(OtpOrPassword) + '}',
+                    data: '{mobileno: ' + JSON.stringify(mobileno) + ',code: ' + JSON.stringify(code) + ',OtpOrPassword: ' + JSON.stringify(OtpOrPassword) + '}',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
                         console.log(result)
-                        var url = '@baseURL' + result;                        
+                        var url = '@baseURL' + result;
                         window.location.href = url;
 
                         $("#divLoader").hide();
                     },
-                    error: function (result) {                         
+                    error: function (result) {
                     }
                 });
             }
