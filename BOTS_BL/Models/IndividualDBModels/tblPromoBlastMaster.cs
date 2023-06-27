@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models
+namespace BOTS_BL.Models.IndividualDBModels
 {
     using System;
     using System.Collections.Generic;
@@ -21,11 +21,16 @@ namespace BOTS_BL.Models
         [Column(TypeName = "date")]
         public DateTime? EndDate { get; set; }
 
+        [Column(TypeName = "numeric")]
+        public decimal? BonusPoints { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? MinInvAmt { get; set; }
+
         [StringLength(200)]
         public string CampaignStatus { get; set; }
 
-        [StringLength(50)]
-        public string BackEndStatus { get; set; }
+        public bool? BackEndStatus { get; set; }
 
         public DateTime? Datetime { get; set; }
 
@@ -43,6 +48,12 @@ namespace BOTS_BL.Models
         [Column(TypeName = "numeric")]
         public decimal? Conversion { get; set; }
 
+        [Column(TypeName = "numeric")]
+        public decimal? TotalBonusPointsIssued { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? TotalBonusPointsRedeemed { get; set; }
         public long? TotalCustCount { get; set; }
+        public string CommunicationMode { get; set; }
     }
 }
