@@ -230,6 +230,7 @@
     <Compile Include="Models\CommonDB\GroupConfig.cs" />
     <Compile Include="Models\CommonDB\GroupDetail.cs" />
     <Compile Include="Models\CommonDB\ListOfGroup.cs" />
+    <Compile Include="Models\CommonDB\MaskingOTPResponse.cs" />
     <Compile Include="Models\CommonDB\MobileAppCommSecurityKey.cs" />
     <Compile Include="Models\CommonDB\MobileAppOnceInMonthData.cs" />
     <Compile Include="Models\CommonDB\MonthlyReport.cs" />

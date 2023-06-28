@@ -12,8 +12,13 @@
                 @Html.RadioButtonFor(model => model.IsMasked, true, new { @id = "IsMasked1" }) Masked &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 @Html.RadioButtonFor(model => model.IsMasked, false, new { @id = "IsMasked0" }) Unmasked
                 <br /><br />
-                <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="SaveMasked();">
-                    Save
+                <input type="text" class="input50" id="txtOTP" placeholder="Enter otp received" style="display:none" />
+                <input type="text"  id="txtOTPhdn" placeholder="Enter otp received" hidden/>
+                <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSendOTP" onclick="SendOTP();">
+                    Send OTP
+                </button>
+                <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnConfirm" onclick="SaveMasked();" style="display:none">
+                    Confirm
                 </button>
                 <br /><br />
             </div>
@@ -23,12 +28,13 @@
 </div>
 <script>
     function SaveMasked() {
-        var value = true;
-        if ($("#IsMasked0").is(":checked")) {
-            value = false;
-        }
-        $("#divLoader").show();
-         $.ajax({
+        if ($("#txtOTPhdn").val() == $("#txtOTP").val()) {
+            var value = true;
+            if ($("#IsMasked0").is(":checked")) {
+                value = false;
+            }
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateMasked", "DashBoardCustomerLogin")',
                 data: '{value: ' + JSON.stringify(value) + '}',
@@ -42,6 +48,12 @@
                             message: "Setting Saved Successfully !!!",
                             buttonText: "Okay"
                         })
+                        $("#IsMasked1").attr('disabled', false);
+                        $("#IsMasked0").attr('disabled', false);
+                        $("#txtOTP").hide();
+                        $("#btnConfirm").hide();
+                        $("#btnSendOTP").show();
+
                     }
                     else {
                         cuteAlert({
@@ -58,7 +70,56 @@
                     $("#divLoader").hide();
                 }
             });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "OTP Entered is wrong",
+                buttonText: "Okay"
+            })
+        }
 
+    }
+
+    function SendOTP() {
+        $("#txtOTP").val('');
+        $("#txtOTP").show();
+        $("#btnConfirm").show();
+        $("#btnSendOTP").hide();
+        $("#IsMasked1").attr('disabled', true);
+        $("#IsMasked0").attr('disabled', true);
+        $("#divLoader").show();
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendOTP", "DashBoardCustomerLogin")',
+                //data: '{value: ' + JSON.stringify(value) + '}',
+                //contentType: "application/json; charset=utf-8",
+                dataType: "json",
+            success: function (result) {
+                console.log(result);
+                /*if (result.status == true && result.smsstatus == true)*/ // use if code hosted in server 
+                  if (result.status == true)
+                  {
+                        $("#txtOTPhdn").val(result.OTP);
+                       
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Something went Wrong...",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+
+                },
+                error: function (result) {
+                    $("#divLoader").hide();
+                }
+            });
     }
 
 </script>

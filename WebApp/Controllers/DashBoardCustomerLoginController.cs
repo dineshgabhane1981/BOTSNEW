@@ -17,6 +17,7 @@ namespace WebApp.Controllers
         DashBoardCustomerLoginRepository DR = new DashBoardCustomerLoginRepository();
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
+        
         public ActionResult Index()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -58,6 +59,7 @@ namespace WebApp.Controllers
             var lstSubCallType = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             return new JsonResult() { Data = lstSubCallType, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
         [HttpPost]
         public bool AddCustomerLogin(string Jsondata)
         {
@@ -107,6 +109,16 @@ namespace WebApp.Controllers
             return Json(objdashboard, JsonRequestBehavior.AllowGet);
 
 
+        }
+
+        [HttpPost]
+        public ActionResult SendOTP()
+        {
+            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            var Data = DR.SendOTP(userDetails.GroupId);
+            return Json(Data, JsonRequestBehavior.AllowGet);
         }
     }
 }
