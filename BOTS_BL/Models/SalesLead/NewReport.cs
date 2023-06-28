@@ -21,6 +21,8 @@ namespace BOTS_BL.Models.SalesLead
         public string LeadId { get; set; }
         public string Comments { get; set; }
         public string FollowUpDate { get; set; }
+        public string Spokewith { get; set; }
+        public string MobileNo { get; set; }
 
     }
 }

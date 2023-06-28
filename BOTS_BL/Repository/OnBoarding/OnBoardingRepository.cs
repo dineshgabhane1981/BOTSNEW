@@ -243,7 +243,7 @@ namespace BOTS_BL.Repository
                         else
                             objItem.IsIntroCall = false;
 
-                        if(!string.IsNullOrEmpty(item.AssignedCS))
+                        if (!string.IsNullOrEmpty(item.AssignedCS))
                         {
                             objItem.CSAssigned = context.CustomerLoginDetails.Where(x => x.LoginId == item.AssignedCS).Select(y => y.UserName).FirstOrDefault();
                         }
@@ -263,9 +263,9 @@ namespace BOTS_BL.Repository
         {
             BOTS_TblGroupMaster objData = new BOTS_TblGroupMaster();
             try
-            { 
-               using (var context = new CommonDBContext())
-                 {
+            {
+                using (var context = new CommonDBContext())
+                {
                     objData = context.BOTS_TblGroupMaster.Where(x => x.GroupId == GroupId).FirstOrDefault();
                     var cityId = Convert.ToInt32(objData.City);
                     objData.CityName = context.tblCities.Where(x => x.CityId == cityId).Select(y => y.CityName).FirstOrDefault();
@@ -275,7 +275,7 @@ namespace BOTS_BL.Repository
                     objData.AssignedCSName = context.tblRMAssigneds.Where(x => x.LoginId == objData.AssignedCS).Select(y => y.RMAssignedName).FirstOrDefault();
                     var SourceType = Convert.ToInt32(objData.Referredby);
                     objData.SourceTypeName = context.tblSourceTypes.Where(x => x.SourceTypeId == SourceType).Select(y => y.SourceTypeName).FirstOrDefault();
-                 }
+                }
             }
             catch (Exception ex)
             {
@@ -287,12 +287,12 @@ namespace BOTS_BL.Repository
         public BOTS_TblDealDetails GetDealMasterDetails(string GroupId)
         {
             BOTS_TblDealDetails objData = new BOTS_TblDealDetails();
-            try 
-            { 
-            using (var context = new CommonDBContext())
-               {
-                objData = context.BOTS_TblDealDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-               }
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblDealDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
             }
             catch (Exception ex)
             {
@@ -306,11 +306,11 @@ namespace BOTS_BL.Repository
         {
             BOTS_TblPaymentDetails objData = new BOTS_TblPaymentDetails();
             try
-            {            
-               using (var context = new CommonDBContext())
-                 {
-                   objData = context.BOTS_TblPaymentDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                 }
+            {
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblPaymentDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
             }
             catch (Exception ex)
             {
@@ -322,24 +322,24 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblRetailMaster> GetRetailDetails(string GroupId)
         {
             List<BOTS_TblRetailMaster> objData = new List<BOTS_TblRetailMaster>();
-            try 
-              { 
+            try
+            {
                 using (var context = new CommonDBContext())
                 {
-                  objData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
-                  foreach (var item in objData)
-                   {
-                     if (!string.IsNullOrEmpty(item.BillingPartner))
-                       {
-                           var BillingPartner = Convert.ToInt32(item.BillingPartner);
-                           item.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
-                       }
-                         if (!string.IsNullOrEmpty(item.BillingProduct))
-                           {
-                             var BillingProduct = Convert.ToInt32(item.BillingProduct);
-                             item.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
-                           }
-                   }
+                    objData = context.BOTS_TblRetailMaster.Where(x => x.GroupId == GroupId).ToList();
+                    foreach (var item in objData)
+                    {
+                        if (!string.IsNullOrEmpty(item.BillingPartner))
+                        {
+                            var BillingPartner = Convert.ToInt32(item.BillingPartner);
+                            item.BillingPartnerName = context.tblBillingPartners.Where(x => x.BillingPartnerId == BillingPartner).Select(y => y.BillingPartnerName).FirstOrDefault();
+                        }
+                        if (!string.IsNullOrEmpty(item.BillingProduct))
+                        {
+                            var BillingProduct = Convert.ToInt32(item.BillingProduct);
+                            item.BillingProductName = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BillingProduct).Select(y => y.BillingPartnerProductName).FirstOrDefault();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -353,12 +353,12 @@ namespace BOTS_BL.Repository
         public List<BOTS_TblOutletMaster> GetOutletDetails(string GroupId)
         {
             List<BOTS_TblOutletMaster> objData = new List<BOTS_TblOutletMaster>();
-            try 
-            { 
-                using (var context = new CommonDBContext())
+            try
             {
-                objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
-            }
+                using (var context = new CommonDBContext())
+                {
+                    objData = context.BOTS_TblOutletMaster.Where(x => x.GroupId == GroupId).ToList();
+                }
             }
             catch (Exception ex)
             {
@@ -490,7 +490,7 @@ namespace BOTS_BL.Repository
                         item1.NoOfOutlets = item.NoOfOutlets;
                         item1.NoOfEnrolled = item.NoOfEnrolled;
                         var id = Convert.ToInt32(item.BillingPartner);
-                        var BPID= Convert.ToInt32(item.BillingProduct);
+                        var BPID = Convert.ToInt32(item.BillingProduct);
                         item1.BillingPartner = context.tblBillingPartners.Where(x => x.BillingPartnerId == id).Select(y => y.BillingPartnerName).FirstOrDefault();
                         item1.BOProduct = item.BOProduct == "1" ? "Octa Plus" : "Octa XS";
                         item1.BillingProduct = context.BOTS_TblBillingPartnerProduct.Where(x => x.BillingPartnerProductId == BPID).Select(y => y.BillingPartnerProductName).FirstOrDefault();
@@ -504,7 +504,26 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
-
+        public string GetEmailAssignedCS(string assignedCS)
+        {
+            string email = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                email = context.CustomerLoginDetails.Where(x => x.LoginId == assignedCS).Select(y => y.EmailId).FirstOrDefault();
+            }
+            return email;
+        }
+        public string GetEmailSourceBy(string Id)
+        {
+            string email = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                var SourcedbyId = Convert.ToInt32(Id);
+                var loginId = context.tblSourcedBies.Where(x => x.SourcedbyId == SourcedbyId).Select(y => y.LoginId).FirstOrDefault();
+                email = context.CustomerLoginDetails.Where(x => x.LoginId == loginId).Select(y => y.EmailId).FirstOrDefault();
+            }
+            return email;
+        }
         public List<string> GetAllInternalEmailIds()
         {
             List<string> lstEmails = new List<string>();
@@ -2559,7 +2578,7 @@ namespace BOTS_BL.Repository
                     SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
                     using (cmdReport)
                     {
-                        
+
                         SqlParameter param1 = new SqlParameter("pi_Date", DateTime.Today.ToString("yyyy-MM-dd"));
                         SqlParameter param2 = new SqlParameter("pi_LiveGroupName", DBName);
                         SqlParameter param3 = new SqlParameter("pi_LiveDBName", DBName);
@@ -2918,6 +2937,6 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
-        
+
     }
 }

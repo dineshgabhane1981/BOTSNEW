@@ -22,6 +22,8 @@ namespace BOTS_BL.Models.CommonDB
         public DateTime? CreatedDate { get; set; }
 
         public bool? IsActive { get; set; }
+        [StringLength(50)]
+        public string LoginId { get; set; }
     }
 
     public class SourcedDetails

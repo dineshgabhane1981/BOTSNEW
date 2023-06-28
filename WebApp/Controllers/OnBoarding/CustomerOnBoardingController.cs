@@ -702,10 +702,17 @@ namespace WebApp.Controllers.OnBoarding
                 mail.From = fromMail;
 
                 mail.To.Add(objData.bots_TblGroupMaster.OwnerEmailId);
-                mail.CC.Add("dinesh@blueocktopus.in");
-                mail.CC.Add("jacqueline@blueocktopus.in");
-                mail.CC.Add("priya@blueocktopus.in");
-
+                string assignedCSEmail = OBR.GetEmailAssignedCS(objData.bots_TblGroupMaster.AssignedCS);
+                string SourceEmail = OBR.GetEmailSourceBy(objData.bots_TblGroupMaster.SourcedBy);
+                mail.CC.Add(assignedCSEmail);
+                mail.CC.Add(SourceEmail);
+                var CCEmails = ConfigurationManager.AppSettings["EmailsForOnboarding"].ToString();
+                var CCEmailAll = CCEmails.Split(',');
+                foreach(var item in CCEmailAll)
+                {
+                    mail.CC.Add(item);
+                }
+                
                 System.Net.Mail.Attachment attachment;
                 attachment = new System.Net.Mail.Attachment(path);
                 mail.Attachments.Add(attachment);

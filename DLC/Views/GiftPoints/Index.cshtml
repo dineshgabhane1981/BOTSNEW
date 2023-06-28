@@ -1,8 +1,215 @@
-﻿
+﻿@model BOTS_BL.Models.DLCDashboardContent
+@using System.Globalization
+@using BOTS_BL.Models;
+@using DLC.ViewModel;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];    
 }
 
-<h2>Index</h2>
+<style>
+    .flex-wrapper {
+        display: flex;
+        flex-flow: row nowrap;
+    }
 
+    .single-chart {
+        width: 30%;
+        justify-content: space-around;
+    }
+
+    .circular-chart {
+        display: block;
+        margin: 10px auto;
+        max-width: 80%;
+        max-height: 200px;
+    }
+
+    .circle-bg {
+        fill: none;
+        stroke: #eee;
+        stroke-width: 3.8;
+    }
+
+    .circle {
+        fill: none;
+        stroke-width: 3;
+        stroke-linecap: round;
+        animation: progress 1s ease-out forwards;
+    }
+
+    .circular-chart.orange .circle {
+        stroke: #ff9f00;
+        stroke-width: 3;
+        transition: 1s linear 0s;
+    }
+
+    .circular-chart.green .circle {
+        stroke: #4CC790;
+        stroke-width: 3;
+        transition: 1s linear 0s;
+    }
+
+    .circular-chart.blue .circle {
+        stroke: @sessionVariables.objDashboardConfig.HeaderColor;       
+        stroke-width: 3;
+        transition: 1s linear 0s;
+    }
+
+    .percentage {
+        fill: #666;
+        font-family: sans-serif;
+        font-size: 0.5em;
+        text-anchor: middle;
+    }
+
+    .caption {
+        fill: #666;
+        font-family: sans-serif;
+        font-size: 0.2em;
+        text-anchor: middle;
+    }
+</style>
+<div class="app-main__inner">
+    <div class="m-5 pl-3 pr-3 card col-md-11 col-lg-11 pt-5">
+        <h3>Gift a Point</h3>
+        <div class="col-md-12 col-lg-12 row " style="margin-top:5px;">
+            <div class="col-md-12 col-lg-4 pt-3">
+                <input type="text" class="input100" id="txtRecipientName" placeholder="Recipient Name" />
+            </div>
+            <div class="col-md-12 col-lg-4 pt-3">
+                <input type="number" class="input100" id="txtRecipientNo" placeholder="Mobile Number" />
+            </div>
+            <div class="col-md-12 col-lg-4 pt-3">
+                <input type="number" class="input40" id="txtGiftPoints" placeholder="Gift Points" />
+                <span id="spnRS"></span>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 pt-3 row " style="margin-top:5px;">
+            <div class="single-chart">
+                <svg viewBox="0 0 42 42" class="circular-chart">
+                    <path class="circle-bg" d="M18 2.0845  a 15.9155 15.9155 0 0 1 0 31.831  a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path class="circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <text x="18" y="20.35" class="percentage" id="txtTotalPoints">@Convert.ToInt32(Model.EarnPoints)</text>
+                    <text x="18" y="40" class="caption">Your Total points</text>
+                </svg>
+
+            </div>
+            <div class="single-chart">
+                <svg viewBox="0 0 42 42" class="circular-chart blue">
+                    <path class="circle-bg" d="M18 2.0845  a 15.9155 15.9155 0 0 1 0 31.831  a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <text x="18" y="20.35" class="percentage" id="txtRedemablePoints">@Convert.ToInt32(Model.EarnPoints)</text>
+                    <text x="18" y="40" class="caption">You can gift upto @Convert.ToInt32(Model.EarnPoints) points</text>
+                </svg>
+            </div>
+            <div class="single-chart">
+                <svg viewBox="0 0 42 42" class="circular-chart blue">
+                    <path class="circle-bg" d="M18 2.0845  a 15.9155 15.9155 0 0 1 0 31.831  a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path class="circle dummyClass" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <text x="18" y="20.35" class="percentage" id="txtRemainingPoints">0</text>
+                    <text x="18" y="40" class="caption">Balance points after gifting</text>
+                </svg>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 pt-3" style="margin-top:5px;">
+            <div class="optoutCHK ml-2">
+                <input type="checkbox" id="chkTerms" style="cursor: pointer; margin-right: 5px;" />
+                <span><label for="chkTerms" style="cursor: pointer;"> I agree to the Gift-a-Points TnC</label></span>
+            </div>            
+        </div>
+        <div class="col-md-12 col-lg-12" style="text-align:center;">
+            <button id="btnGiftPoints" class="btn form-control btn-primary  submit px-3" onclick="SendGift();" style="font-weight:bold;width:20%;">Send Gift</button>
+        </div>
+            <div class="col-md-12 col-lg-12 pt-3" style="margin-top:5px;">
+                <i>
+                    <b>Note:</b>
+                    Promotional points are not eligible for gifting. Only points earned from transaction will be available for gifting purpose
+                </i>
+            </div>
+        </div>
+    </div>
+<script>
+    $(document).ready(function () {       
+        $("#spnRS").text("(Rs. 0)");
+        $("#txtGiftPoints").keyup(function () {
+            var points = $("#txtGiftPoints").val();
+            var totalPoints = '@Convert.ToInt32(Model.EarnPoints)';
+            var pointsToRS = '@Model.PointsToRS';
+            var rsOfPts = Math.round(points * pointsToRS);
+            $("#spnRS").text("(Rs. "+rsOfPts+")");
+            var per = Math.round((points * 100) / totalPoints);
+            var cords = per + ", 100";
+            var remainingpts = totalPoints - points;
+            if (parseInt(points) > parseInt(totalPoints)) {
+                remainingpts = 0;
+                $("#txtGiftPoints").val(parseInt(totalPoints));
+            }
+            $("#txtRemainingPoints").text(remainingpts);
+            $(".dummyClass").attr("stroke-dasharray", cords);
+        });       
+    });
+    function SendGift() {
+        var status = true;
+        if ($("#txtRecipientName").val() == "") {
+            toastr.error('Please enter Recipient Name');
+            $("#txtRecipientName").focus();
+            status = false;
+            return false;
+        }
+        if ($("#txtRecipientNo").val() == "") {
+            toastr.error('Please enter Mobile No');
+            $("#txtRecipientNo").focus();
+            status = false;
+            return false;
+        }
+        if (/^[6789]\d{9,9}$/.test($("#txtRecipientNo").val())) {
+        }
+        else {
+            toastr.error('Please enter valid Mobile No');
+            status = false;
+            return false;
+        }
+        if ($("#txtGiftPoints").val() == "" || $("#txtGiftPoints").val() == "0") {
+            toastr.error('Please enter Gift Points');
+            $("#txtGiftPoints").focus();
+            status = false;
+            return false;
+        }
+        if ($("#chkTerms").is(":checked")) {
+        }
+        else {
+            toastr.error('Please enter TnC');
+            status = false;
+            return false;
+        }
+        if (status) {           
+            $("#divLoader").show();
+              $.ajax({
+                type: "POST",
+                url: '@Url.Action("GiveGiftPoints", "GiftPoints")',
+                  data: '{RecipientName: ' + JSON.stringify($("#txtRecipientName").val()) + ',RecipientNo: ' + JSON.stringify($("#txtRecipientNo").val()) + ',GiftPoints: ' + JSON.stringify($("#txtGiftPoints").val()) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                  success: function (result) {
+                      if (result == true) {
+                          toastr.success('Points Gifted Successfully !!!');
+                          setTimeout(myStopFunction, 2000);
+                      }
+                      else {
+                          toastr.error('There is problem in gifting points. Please contact your Administrator !!!');
+                      }
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {                        
+                        console.log(result.responseText)
+                    }
+                });
+        }
+    }
+    function myStopFunction() {        
+        window.location.reload();
+    }
+</script>

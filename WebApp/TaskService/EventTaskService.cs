@@ -22,14 +22,14 @@ namespace WebApp.EventTaskService
                     try
                     {
                         //string path = "E:\\Projects\\Sample.txt";
-                        string path = "C:\\DashboardJobLog.txt";
+                        string path = "C:\\EventsJobLog.txt";
                         //string path = "E:\\DashboardJobLog.txt";
                         using (StreamWriter writer = new StreamWriter(path, true))
                         {
                             writer.WriteLine("Report Generation Started");
                             writer.Close();
-                            WebRequest request = HttpWebRequest.Create("http://localhost:57265/Events/GenerateEventReports");
-                            //WebRequest request = HttpWebRequest.Create("https://blueocktopus.in/bots/Events/GenerateEventReports");
+                            //WebRequest request = HttpWebRequest.Create("http://localhost:57265/Events/GenerateEventReports");
+                            WebRequest request = HttpWebRequest.Create("https://blueocktopus.in/bots/Events/GenerateEventReports");
                             request.Timeout = 6000000;
                             WebResponse response = request.GetResponse();
                             StreamReader reader = new StreamReader(response.GetResponseStream());

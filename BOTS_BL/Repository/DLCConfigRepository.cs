@@ -590,6 +590,31 @@ namespace BOTS_BL.Repository
             return status;
         }
 
+        public bool GiveGiftPoints(string MobileNo,string BrandId,string RecipientName, string RecipientNo, string GiftPoints,string groupId)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                try
+                {
+                   var result = context.Database.SqlQuery<SPResponse>("MWP_GiftingPoints @pi_MobileNo, @pi_BrandId, @pi_Datetime, @pi_GiftingPersonMobileNo, @pi_GiftingPersonName, @pi_GiftingPoints",
+                              new SqlParameter("@pi_MobileNo", MobileNo),
+                              new SqlParameter("@pi_BrandId", BrandId),
+                              new SqlParameter("@pi_Datetime", DateTime.Now),
+                              new SqlParameter("@pi_GiftingPersonMobileNo", RecipientNo),
+                              new SqlParameter("@pi_GiftingPersonName", RecipientName),
+                              new SqlParameter("@pi_GiftingPoints", GiftPoints)).FirstOrDefault<SPResponse>();
+                    if (result.ResponseCode == "0")
+                        status = true;
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GiveGiftPoints" + groupId);
+                }
+            }
+            return status;
+        }
 
     }
 }

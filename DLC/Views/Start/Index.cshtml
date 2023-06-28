@@ -30,7 +30,7 @@
                         </p>
                         <form action="#" class="login-form">
                             <div class="form-group row">
-                                @Html.DropDownListFor(model => model.objDashboardConfig.CountryCode, new SelectList(ViewBag.Codes, "Code", "Code"), htmlAttributes: new { @class = "input50", @style = "height:30px;margin-top:12px;", @id = "ddlCountryCode" })
+                                @Html.DropDownListFor(model => model.objDashboardConfig.CountryCode, new SelectList(ViewBag.Codes, "Code", "Code"), htmlAttributes: new { @class = "input15", @style = "height:30px;margin-top:15px;", @id = "ddlCountryCode" })
                                 <div class="icon d-flex align-items-end justify-content-end" style="margin-left:52px;padding-bottom:13px;"><span class="fa fa-mobile"></span></div>
                                 <input type="number" id="txtMobileNo" class="form-control" style="width:75%;" placeholder="Mobile Number" required>
 

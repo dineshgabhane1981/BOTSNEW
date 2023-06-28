@@ -23,6 +23,7 @@ namespace BOTS_BL.Repository
     public class ReportsRepository
     {
         DashboardRepository DR = new DashboardRepository();
+        CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         //string connstr = CustomerConnString.ConnectionStringCustomer;
         public List<MemberList> GetMemberList(string GroupId, string SearchText, string connstr, string loginId)
@@ -132,7 +133,7 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        var lstOutlet = context.OutletDetails.Where(x=>!x.OutletName.ToLower().Contains("admin")).ToList();
+                        var lstOutlet = context.OutletDetails.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
                         foreach (var item in lstOutlet)
                         {
                             countriesItem.Add(new SelectListItem
@@ -228,7 +229,7 @@ namespace BOTS_BL.Repository
                         var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
                         var lstobj = context.Database.SqlQuery<View_TxnDetailsMaster>("select * from View_TxnDetailsMaster").ToList();
                         var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
-                        foreach(var item in lstOutlet)
+                        foreach (var item in lstOutlet)
                         {
                             OutletWise newItem = new OutletWise();
                             newItem.OutletName = item.OutletName;
@@ -241,7 +242,7 @@ namespace BOTS_BL.Repository
                                 newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
                                 newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
                                 newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt));
-                                newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt) * 100) / lstobj.Where(x=> x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(x => x.InvoiceAmt);
+                                newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt) * 100) / lstobj.Where(x => x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(x => x.InvoiceAmt);
                                 newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count());
                                 var last90DaysDate = DateTime.Today.AddDays(-90);
                                 var last30DaysDate = DateTime.Today.AddDays(-30);
@@ -1036,11 +1037,11 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
                     }
-                    else if(GroupId == "1087")
+                    else if (GroupId == "1087")
                     {
                         DateTime Today = DateTime.Now;
 
-                        if(month == Today.Month)
+                        if (month == Today.Month)
                         {
                             DateTime NextMonth = Today.AddMonths(1);
                             DateTime ThirdMonth = Today.AddMonths(2);
@@ -1068,7 +1069,7 @@ namespace BOTS_BL.Repository
                             pointExpiry.SelectedCount = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Count();
                             pointExpiry.SelectedPoints = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Sum(y => y.Points));
                         }
-                        
+
                     }
                     else
                     {
@@ -1207,6 +1208,28 @@ namespace BOTS_BL.Repository
             }
             return memberSearch;
         }
+        public List<MemberSearchTxn> GetDLCMeamberTransactionHistory(string GroupId, string MobileNo)
+        {
+            List<MemberSearchTxn> lstMemberSearchTxn = new List<MemberSearchTxn>();
+            try
+            {
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    lstMemberSearchTxn = context.Database.SqlQuery<MemberSearchTxn>("sp_BOTS_MemberSearch1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_SearchData", MobileNo)).ToList<MemberSearchTxn>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCMeamberTransactionHistory");
+            }
+            lstMemberSearchTxn = lstMemberSearchTxn.OrderByDescending(x => x.TxnDatetime).ToList();
+            return lstMemberSearchTxn;
+        }
         public Celebrations GetCelebrationsData(string GroupId, string connstr)
         {
             Celebrations celebrationsData = new Celebrations();
@@ -1221,7 +1244,7 @@ namespace BOTS_BL.Repository
                         var ThirdMonth = (CurrentMonth.AddMonths(2));
                         var celebrationsData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
                         celebrationsData1 = celebrationsData1.Where(x => x.DOB.HasValue).ToList();
-                        celebrationsData1 = celebrationsData1.Where(x => x.AnniversaryDate.HasValue).ToList();                        
+                        celebrationsData1 = celebrationsData1.Where(x => x.AnniversaryDate.HasValue).ToList();
 
                         celebrationsData.BirthdayCountThisMonth = celebrationsData1.Where(x => x.DOB.Value.Month == CurrentMonth.Month).Count();
                         celebrationsData.BirthdayCountNextMonth = celebrationsData1.Where(x => x.DOB.Value.Month == NextMonth.Month).Count();
@@ -1233,7 +1256,7 @@ namespace BOTS_BL.Repository
                         celebrationsData.EnrollmentAnniversaryCountThisMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == CurrentMonth.Month && x.DOJ.Value.Year != CurrentMonth.Year).Count();
                         celebrationsData.EnrollmentAnniversaryCountNextMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == NextMonth.Month && x.DOJ.Value.Year != NextMonth.Year).Count();
                         celebrationsData.EnrollmentAnniversary3rdMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == ThirdMonth.Month && x.DOJ.Value.Year != ThirdMonth.Year).Count();
-                    
+
                     }
                     else
                     {
@@ -1243,7 +1266,7 @@ namespace BOTS_BL.Repository
 
                         new SqlParameter("@pi_LoginId", "")).FirstOrDefault<Celebrations>();
                     }
-                        
+
                 }
             }
             catch (Exception ex)
@@ -1258,7 +1281,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {                    
+                {
                     if (GroupId == "1087")
                     {
                         DateTime Today = DateTime.Now;
@@ -1332,7 +1355,7 @@ namespace BOTS_BL.Repository
                                 celebrationTxnsData.Add(Obj);
                             }
                         }
-                    }                          
+                    }
                     else
                     {
                         celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
@@ -1342,7 +1365,7 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
                     }
-                        
+
                 }
             }
             catch (Exception ex)

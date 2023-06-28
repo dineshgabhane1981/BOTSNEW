@@ -1,8 +1,65 @@
-﻿
+﻿@model List<BOTS_BL.Models.MemberSearchTxn>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="app-main__inner">
+    <div class="m-5 pl-3 pr-3 card col-md-11 col-lg-11 pt-5">
+        <h3>Transaction History</h3>
+
+        <div class="table-responsive">
+            <table class="table" id="memberSearchTable">
+                <thead>
+                    <tr>
+                        <th scope="col">Invoice No</th>
+                        <th scope="col">Invoice Amount</th>
+                        <th scope="col">Txn Type</th>
+                        <th scope="col">Points Earned</th>
+                        <th scope="col">Points Burned</th>
+                        <th scope="col">Txn Datetime</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.InvoiceNo</td>
+                                @if (item.InvoiceAmt.HasValue)
+                                {
+                                    <td>@item.InvoiceAmt</td>
+                                }
+                                else
+                                {
+                                    <td>0.00</td>
+                                }
+
+                                <td>@item.TxnType</td>
+                                @if (item.PointsEarned.HasValue)
+                                {
+                                    <td>@item.PointsEarned</td>
+                                }
+                                else
+                                {
+                                    <td>0.00</td>
+                                }
+                                @if (item.PointsBurned.HasValue)
+                                {
+                                    <td>@item.PointsBurned</td>
+                                }
+                                else
+                                {
+                                    <td>0.00</td>
+                                }
+                                <td>@item.TxnDatetime</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 

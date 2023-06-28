@@ -7,7 +7,7 @@ namespace WebApp.EventTaskService
 {
     public class EventSchedulerService
     {
-        private static readonly string ScheduleCronExpression = ConfigurationManager.AppSettings["SchedularService"];
+        private static readonly string ScheduleCronExpression = ConfigurationManager.AppSettings["EventSchedularService"];
         public static async System.Threading.Tasks.Task StartAsync()
         {
             try

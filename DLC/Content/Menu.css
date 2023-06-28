@@ -227,7 +227,7 @@ ul {
     width: 100%;
     /*transition: width 3s, height 3s, transform 3s;*/
     color: black;
-    text-shadow: 2px 2px 5px black;
+    text-shadow: 2px 2px 5px grey;
 }
 
     .WidgetText:hover {

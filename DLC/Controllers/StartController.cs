@@ -48,6 +48,7 @@ namespace DLC.Controllers
                 SessionVariables objVariable = new SessionVariables();
                 objVariable.objDashboardConfig = objData.objDashboardConfig;               
                 objVariable.GroupId = groupId;
+                objVariable.BrandId = brandId;
                 objVariable.LoginURL = url;
 
                 Session["SessionVariables"] = objVariable;

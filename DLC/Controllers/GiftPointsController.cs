@@ -1,4 +1,8 @@
-﻿using System;
+﻿using BOTS_BL;
+using BOTS_BL.Models;
+using BOTS_BL.Repository;
+using DLC.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,10 +12,23 @@ namespace DLC.Controllers
 {
     public class GiftPointsController : Controller
     {
+        DLCConfigRepository DCR = new DLCConfigRepository();
+        Exceptions newexception = new Exceptions();
         // GET: GiftPoints
         public ActionResult Index()
         {
-            return View();
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            DLCDashboardContent objData = new DLCDashboardContent();
+            objData = DCR.GetDLCDashboardContent(sessionVariables.GroupId, sessionVariables.MobileNo);
+            objData.MobileNo = sessionVariables.MobileNo;
+            return View(objData);
+        }
+        public ActionResult GiveGiftPoints(string RecipientName,string RecipientNo,string GiftPoints)
+        {
+            bool status = false;
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            status = DCR.GiveGiftPoints(sessionVariables.MobileNo, sessionVariables.BrandId, RecipientName, RecipientNo, GiftPoints, sessionVariables.GroupId);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }
