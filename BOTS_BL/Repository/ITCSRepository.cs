@@ -177,6 +177,55 @@ namespace BOTS_BL.Repository
             return obj;
            
         }
-        
+
+        public bool SaveScripts (int GroupId, string Script,string MessageType)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            WhatsAppSMSMaster obj1 = new WhatsAppSMSMaster();
+            WhatsAppSMSMaster objWhatsAppSMSMaster = new WhatsAppSMSMaster();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+
+                {
+                    if (MessageType == "Enrollment")
+                    {
+                        Id = "100";
+                    }
+                    else if (MessageType == "Earn")
+                    {
+                        Id = "101";
+                    }
+                    else if (MessageType == "Burn")
+                    {
+                        Id = "102";
+                    }
+                    else if (MessageType == "Cancel")
+                    {
+                        Id = "103";
+                    }
+                    var Script1 = context.WhatsAppSMSMasters.Where(x => x.MessageId == Id).FirstOrDefault();
+                    obj1.SMS = Script;
+                    obj1.SlNo = Convert.ToInt64(Script1.SlNo);
+                    obj1.MessageId = Convert.ToString(Script1.MessageId);
+                    obj1.OutletId= Convert.ToString(Script1.OutletId);
+                    obj1.TokenId = Convert.ToString(Script1.TokenId);
+                    obj1.BrandId = Convert.ToString(Script1.BrandId);
+                   
+                    context.WhatsAppSMSMasters.AddOrUpdate(obj1);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveScripts");
+            }
+            return result;
+        }           
+
     }
 }

@@ -14,6 +14,7 @@ namespace WebApp.Controllers.ITCS
     public class CommonDBConfigController : Controller
     {
         ITCSRepository ITCSR = new ITCSRepository();
+        CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         // GET: CommonDBConfig
         public ActionResult ChangeCSName()
@@ -22,6 +23,7 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult EnableProgramme()
         {
+            //var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
             objData.lstNotActive = ITCSR.GetNeverOptForGroups(false);
             objData.lstActive = ITCSR.GetNeverOptForGroups(true);
@@ -82,7 +84,22 @@ namespace WebApp.Controllers.ITCS
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
 
-        
-        
+        public ActionResult SaveScripts (int GroupId, string Script, string MessageType)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            tblGroupDetail objtblGroupDetail = new tblGroupDetail();
+            WhatsAppSMSMaster objWhatsAppSMSMaster = new WhatsAppSMSMaster();           
+            try
+            {               
+                result = ITCSR.SaveScripts(GroupId, Script,MessageType);                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveScripts");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }
