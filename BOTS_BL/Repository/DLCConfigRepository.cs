@@ -234,30 +234,23 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    SqlConnection _Con = new SqlConnection(connstr);
-                    DataSet retVal = new DataSet();
-                    SqlCommand cmdReport = new SqlCommand("sp_DLCProfileUpdatePublish", _Con);
-                    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
-
-                    using (cmdReport)
+                    var publishedData = context.tblDLCProfileUpdateConfig_Publish.ToList();
+                    foreach (var item in publishedData)
                     {
-                        SqlParameter param1 = new SqlParameter("pi_Groupid", Groupid);
-
-                        cmdReport.CommandType = CommandType.StoredProcedure;
-                        cmdReport.Parameters.Add(param1);
-
-                        daReport.Fill(retVal);
-
-                        DataTable dt = retVal.Tables[0];
-                        if (Convert.ToString(dt.Rows[0]["Result"]) == "1")
-                        {
-                            status = true;
-                        }
-                        else
-                        {
-                            status = false;
-                        }
+                        context.tblDLCProfileUpdateConfig_Publish.Remove(item);
+                        context.SaveChanges();
                     }
+                    var profileData = context.tblDLCProfileUpdateConfigs.ToList();
+                    foreach(var item in profileData)
+                    {
+                        tblDLCProfileUpdateConfig_Publish newItem = new tblDLCProfileUpdateConfig_Publish();
+                        newItem.FieldName = item.FieldName;
+                        newItem.DisplayStatus = item.IsDisplay;
+                        newItem.MandStatus = item.IsMandatory;
+                        context.tblDLCProfileUpdateConfig_Publish.Add(newItem);
+                        context.SaveChanges();
+                    }
+                    status = true;
                 }
             }
 
@@ -279,6 +272,24 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connStr))
                 {
                     objData = context.tblDLCDashboardConfig_Publish.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetPublishDLCDashboardConfig");
+            }
+            return objData;
+        }
+
+        public List<tblDLCProfileUpdateConfig_Publish> GetPublishDLCProfileConfig(string groupId)
+        {
+            List<tblDLCProfileUpdateConfig_Publish> objData = new List<tblDLCProfileUpdateConfig_Publish>();
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objData = context.tblDLCProfileUpdateConfig_Publish.ToList();
                 }
             }
             catch (Exception ex)
@@ -616,5 +627,69 @@ namespace BOTS_BL.Repository
             return status;
         }
 
+        public bool DLCReferFriend(string groupId,string MobileNo,string BrandId,string firstMobileNo,string firstName, string secondMobileNo, string secondName, string thirdMobileNo, string thirdName)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                try
+                {
+                    var result = context.Database.SqlQuery<SPResponse>("MWP_Refer @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
+                        "@pi_1stMobileNo, @pi_1stName, @pi_2ndMobileNo,@pi_2ndName,@pi_3rdMobileNo,@pi_3rdName",
+                                  new SqlParameter("@pi_MobileNo", MobileNo),
+                                  new SqlParameter("@pi_BrandId", BrandId),
+                                  new SqlParameter("@pi_Datetime", DateTime.Now),
+                                  new SqlParameter("@pi_1stMobileNo", firstMobileNo),
+                                  new SqlParameter("@pi_1stName", firstName),
+                                  new SqlParameter("@pi_2ndMobileNo", secondMobileNo),
+                                  new SqlParameter("@pi_2ndName", secondName),
+                                  new SqlParameter("@pi_3rdMobileNo", thirdMobileNo),
+                                  new SqlParameter("@pi_3rdName", thirdName)).FirstOrDefault<SPResponse>();
+                    if (result.ResponseCode == "0")
+                        status = true;
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "DLCReferFriend" + groupId);
+                }
+            }
+            return status;
+        }
+
+        public List<MWP_TNC> GetTNC(string groupId)
+        {
+            List<MWP_TNC> lstData = new List<MWP_TNC>();
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                try
+                {
+                    lstData = context.MWP_TNC.ToList();
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GetTNC" + groupId);
+                }
+                return lstData;
+            }
+        }
+        public List<MWP_ReferTNC> GetMWPReferTNC(string groupId)
+        {
+            List<MWP_ReferTNC> lstData = new List<MWP_ReferTNC>();
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                try
+                {
+                    lstData = context.MWP_ReferTNC.ToList();
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GetMWPReferTNC " + groupId);
+                }
+                return lstData;
+            }
+        }
     }
 }

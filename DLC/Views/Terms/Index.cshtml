@@ -1,4 +1,4 @@
-﻿
+﻿@model List<BOTS_BL.Models.MWP_TNC>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,18 +10,10 @@
         <h3>Terms and Conditions</h3>
         <div class="col-md-12 col-lg-12 pt-5" style="padding-bottom: 10px;margin-top:5px;">
             <ol>
-                <li>Program membership is purely on a voluntary basis</li>
-                <li>Member’s mobile number will serve as a unique identification number for the Program and shall be used to access the program and / or transact with the program to earn and redeem Loyalty Points</li>
-                <li>While making purchases at the any of the Program outlets, the member should provide their mobile number to the cashier before the billing to ensure crediting loyalty points in the membership account. Similarly, members will have to intimate their option to redeem their loyalty points against purchase of products and services before the billing is done. In order to redeem, an OTP (one time password) will be sent to the member’s registered mobile number to successfully complete the redemption transaction. Member will require to retain the same mobile number given at the time of registration or shall remain solely responsible for updating any change in their mobile number beforehand to avoid non-execution of the redemption transaction</li>
-                <li>The Program reserves the right to change, cancel and modify the terms & conditions, Loyalty Points structure</li>
-                <li>The Loyalty Points will have a certain validity, post which they will expire. The validity of the Loyalty points may change and will be governed by the Program</li>
-                <li>Program Loyalty points cannot be purchased or redeemed for cash and cannot be transferred</li>
-                <li>In event of any government taxies or levies, loyalty points will be computed basis gross purchase amount excluding taxes</li>
-                <li>On registering for the Program, member gives the right to communicate any special offers, updates and account activity details through email, SMS, phone calls, direct mail and other means of communication and over-rules existing do-not-disturb activation</li>
-                <li>The Program is not valid for the Program Owner's staff unless specially approved</li>
-                <li>The Program will have limited liability to the member, only to the extent of the value of loyalty points available in the credit of the member’s account</li>
-                <li>The Program reserves the right to refuse to award loyalty points or redeem accumulated loyalty points, for any breach of these conditions or failure to pay for purchases</li>
-                <li>In the event of a dispute between member and the Program with regard to or in relation to any aspect of the Program, the decision of the Program Owner shall be deemed final and binding</li>
+                @foreach (var item in Model)
+                {
+                    <li>@item.MWP_TNC1</li>
+                }
             </ol>
         </div>
     </div>

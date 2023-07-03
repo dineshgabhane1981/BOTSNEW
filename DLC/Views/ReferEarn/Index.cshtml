@@ -1,0 +1,135 @@
+﻿@model List<BOTS_BL.Models.MWP_ReferTNC>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row m-5 pl-3 pr-3 card col-md-11 col-lg-11 row  pt-5">
+        <h3>Refer your Friends</h3>
+        <div class="col-md-10 col-lg-10 pt-1 dashboardBox row" style="padding-bottom: 10px;" id="dvRefer1">
+            <div class="col-md-10 col-lg-6">
+                <input type="text" id="txtFriendName1" class="input100" placeholder="Friend Name" />
+            </div>
+            <div class="col-md-10 col-lg-6">
+                <input type="number" id="txtFriendMobile1" class="input100" placeholder="Mobile No" />
+            </div>
+        </div>
+        <div class="col-md-10 col-lg-10 pt-1 dashboardBox row" style="padding-bottom: 10px;" id="dvRefer2">
+            <div class="col-md-10 col-lg-6">
+                <input type="text" id="txtFriendName2" class="input100" placeholder="Friend Name" />
+            </div>
+            <div class="col-md-10 col-lg-6">
+                <input type="number" id="txtFriendMobile2" class="input100" placeholder="Mobile No" />
+            </div>
+        </div>
+        <div class="col-md-10 col-lg-10 pt-1 dashboardBox row" style="padding-bottom: 10px;" id="dvRefer3">
+            <div class="col-md-10 col-lg-6">
+                <input type="text" id="txtFriendName3" class="input100" placeholder="Friend Name" />
+            </div>
+            <div class="col-md-10 col-lg-6">
+                <input type="number" id="txtFriendMobile3" class="input100" placeholder="Mobile No" />
+            </div>
+        </div>
+        <div class="col-md-10 col-lg-10 pt-3" style="padding-bottom: 10px; text-align: center;">
+            <button id="btnGiftPoints" class="btn form-control btn-primary  submit px-3" onclick="SendReference();" style="font-weight:bold;width:200px;">Send Reference</button>
+        </div>
+    </div>
+    <div class="m-5 pl-3 pr-3 col-md-11 col-lg-11 note-section">
+        <h6><i><b>Key Points</b></i></h6>
+        <ol>
+            @foreach(var item in Model)
+            {
+                <li>@item.MWP_ReferTNC1</li>
+            }
+        </ol>
+    </div>
+</div>
+    <script>
+    function SendReference() {
+        var status = true;
+        var FriendName1 = $("#txtFriendName1").val();
+        var FriendName2 = $("#txtFriendName2").val();
+        var FriendName3 = $("#txtFriendName3").val();
+        var FriendMobile1 = $("#txtFriendMobile1").val();
+        var FriendMobile2 = $("#txtFriendMobile2").val();
+        var FriendMobile3 = $("#txtFriendMobile3").val();
+        if (FriendName1 == "" && FriendName2 == "" && FriendName3 == "" && FriendMobile1 == "" && FriendMobile2 == "" && FriendMobile3 == "") {
+            toastr.error('Atleast one Friend name and mobile no need to provide');
+            $("#txtFriendName1").focus();
+            status = false;
+        }
+        if (FriendName1 != "") {
+            if (FriendMobile1 == "") {
+                toastr.error('please provide mobile no');
+                $("#txtFriendMobile1").focus();
+                status = false;
+            }
+            else if (/^[6789]\d{9,9}$/.test(FriendMobile1)) {
+            }
+            else {
+                toastr.error('Please enter valid Mobile No');
+                status = false;
+                $("#txtFriendMobile1").focus();
+                return false;
+            }
+        }
+        if (FriendName2 != "") {
+            if (FriendMobile2 == "") {
+                toastr.error('please provide mobile no');
+                $("#txtFriendMobile2").focus();
+                status = false;
+            }
+            else if (/^[6789]\d{9,9}$/.test(FriendMobile2)) {
+            }
+            else {
+                toastr.error('Please enter valid Mobile No');
+                status = false;
+                $("#txtFriendMobile2").focus();
+                return false;
+            }
+        }
+        if (FriendName3 != "") {
+            if (FriendMobile3 == "") {
+                toastr.error('please provide mobile no');
+                $("#txtFriendMobile3").focus();
+                status = false;
+            }
+            else if (/^[6789]\d{9,9}$/.test(FriendMobile3)) {
+            }
+            else {
+                toastr.error('Please enter valid Mobile No');
+                status = false;
+                $("#txtFriendMobile3").focus();
+                return false;
+            }
+        }
+        if (status) {
+            alert(111)
+             $("#divLoader").show();
+              $.ajax({
+                type: "POST",
+                url: '@Url.Action("DLCReferFriend", "ReferEarn")',
+                  data: '{FirstName: ' + JSON.stringify(FriendName1) + ',FirstMobile: ' + JSON.stringify(FriendMobile1) + ',SecondName: ' + JSON.stringify(FriendName2) + ',SecondMobile: ' + JSON.stringify(FriendMobile2) + ',ThirdName: ' + JSON.stringify(FriendName3) + ',ThirdMobile: ' + JSON.stringify(FriendMobile3) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                  success: function (result) {
+                      if (result == true) {
+                          toastr.success('Reference sent Successfully !!!');
+                          setTimeout(myStopFunction, 2000);
+                      }
+                      else {
+                          toastr.error('There is problem in gifting points. Please contact your Administrator !!!');
+                      }
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+                    }
+                });
+        }
+    }
+    function myStopFunction() {
+        window.location.reload();
+    }
+    </script>

@@ -197,8 +197,8 @@ ul {
     padding: 10px !important;
     margin-left: 55px;
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px;
+    border-radius: 5px;
+    box-shadow: 2px 1px 7px rgba(0, 0, 0, 0.4);
 }
 .anchor {
     padding-left:55px;
@@ -267,3 +267,11 @@ ul {
         display: block;
         overflow: auto;
     }
+
+.note-section {
+    margin-top: 20px;
+    background: #f1f0f0;
+    padding: 10px;
+    font-style: italic;
+    font-size: 12px;
+}

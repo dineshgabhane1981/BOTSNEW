@@ -15,7 +15,7 @@ namespace DLC.Controllers
         DLCConfigRepository DCR = new DLCConfigRepository();
         // GET: Start
         public ActionResult Index(string data)
-        {
+        {           
             var url = Request.Url.ToString();
             string brandId = string.Empty;
             string groupId = string.Empty;
@@ -40,10 +40,18 @@ namespace DLC.Controllers
                     }
                 }
             }
+            else
+            {
+                return View("UnauthorizedURL");
+            }
             DLCDashboardFrontData objData = new DLCDashboardFrontData();
             if (!string.IsNullOrEmpty(groupId))
             {
                 objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(groupId);
+                if(objData.objDashboardConfig==null)
+                {
+                    return View("UnauthorizedURL");
+                }
                 objData.lstDLCFrontEndPageData = DCR.GetDLCFrontEndPageData(groupId);
                 SessionVariables objVariable = new SessionVariables();
                 objVariable.objDashboardConfig = objData.objDashboardConfig;               

@@ -121,7 +121,7 @@
             </div>            
         </div>
         <div class="col-md-12 col-lg-12" style="text-align:center;">
-            <button id="btnGiftPoints" class="btn form-control btn-primary  submit px-3" onclick="SendGift();" style="font-weight:bold;width:20%;">Send Gift</button>
+            <button id="btnGiftPoints" class="btn form-control btn-primary  submit px-3" onclick="SendGift();" style="font-weight:bold;width:200px;">Send Gift</button>
         </div>
             <div class="col-md-12 col-lg-12 pt-3" style="margin-top:5px;">
                 <i>
@@ -181,7 +181,7 @@
         if ($("#chkTerms").is(":checked")) {
         }
         else {
-            toastr.error('Please enter TnC');
+            toastr.warning('Please accept the Gift-a-Points TnC to continue!!!!');
             status = false;
             return false;
         }

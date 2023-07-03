@@ -365,10 +365,12 @@ namespace BOTS_BL.Repository
                     var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();                    
                     if (DBDetails != null && GroupId != "1087")
                     {
+                        newexception.AddDummyException("111");
                         ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                     }
                     if (DBDetails != null && GroupId=="1087")
                     {
+                        newexception.AddDummyException("222");
                         ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = MadhusudanTextiles_New; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                     }
                 }

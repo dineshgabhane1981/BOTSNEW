@@ -151,6 +151,8 @@
     <Content Include="Content\assets\images\avatars\9.jpg" />
     <Content Include="Content\assets\images\Blue-Ocktopus-TLC_white.jpg" />
     <Content Include="Content\assets\images\card-bg.png" />
+    <Content Include="Content\assets\images\close.jpg" />
+    <Content Include="Content\assets\images\close.png" />
     <Content Include="Content\assets\images\CustomerLogo\images.png" />
     <Content Include="Content\assets\images\dashboard.jpg" />
     <Content Include="Content\assets\images\delete.png" />
@@ -290,6 +292,8 @@
     <Content Include="Views\Terms\Index.cshtml" />
     <Content Include="Views\Optout\Index.cshtml" />
     <Content Include="Views\PersonalDetails\Index.cshtml" />
+    <Content Include="Views\ReferEarn\Index.cshtml" />
+    <Content Include="Views\Start\UnauthorizedURL.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -300,7 +304,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\ReferEarn\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

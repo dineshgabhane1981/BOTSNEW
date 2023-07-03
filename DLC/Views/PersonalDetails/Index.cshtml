@@ -1,8 +1,27 @@
-﻿
+﻿@model List<BOTS_BL.Models.tblDLCProfileUpdateConfig_Publish>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="app-main__inner">
+    <div class="row m-5 pl-3 pr-3 card col-md-11 col-lg-11 row  pt-5">
+        <h4>Profile Update</h4>
+        <div class="col-md-12 col-lg-12" style="padding-bottom: 10px;margin-top:5px;">
+            @foreach (var item in Model)
+            {
+                if (item.DisplayStatus)
+                {
+                    var id = "txt" + item.FieldName;
+                    <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+                        <div class="col-md-2 col-lg-2"> @item.FieldName </div>
+                        <div class="col-md-10 col-lg-5">
+                            <input type="text" id="@id" class="input100" />
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
 

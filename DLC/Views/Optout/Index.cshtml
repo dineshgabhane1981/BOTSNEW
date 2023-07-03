@@ -50,7 +50,10 @@
                 success: function (result) {                    
                     console.log(result);
                     if (result == true) {
-                        toastr.success('You will not receive any promotions SMS & WhatsApp');
+                        if (optout)
+                            toastr.success('You will not receive any promotions SMS & WhatsApp');
+                        else
+                            toastr.success('You will receive all promotions SMS & WhatsApp');
                     }
                     else {
                         toastr.error('There is some problem in updating your choice. Plz contact Administrator');
