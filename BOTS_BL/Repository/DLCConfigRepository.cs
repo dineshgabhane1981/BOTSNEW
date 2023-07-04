@@ -241,7 +241,7 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                     }
                     var profileData = context.tblDLCProfileUpdateConfigs.ToList();
-                    foreach(var item in profileData)
+                    foreach (var item in profileData)
                     {
                         tblDLCProfileUpdateConfig_Publish newItem = new tblDLCProfileUpdateConfig_Publish();
                         newItem.FieldName = item.FieldName;
@@ -584,7 +584,7 @@ namespace BOTS_BL.Repository
                 try
                 {
                     var custDetails = context.CustomerDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
-                    if(custDetails!=null)
+                    if (custDetails != null)
                     {
                         custDetails.IsSMS = optout;
                         context.CustomerDetails.AddOrUpdate(custDetails);
@@ -601,7 +601,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool GiveGiftPoints(string MobileNo,string BrandId,string RecipientName, string RecipientNo, string GiftPoints,string groupId)
+        public bool GiveGiftPoints(string MobileNo, string BrandId, string RecipientName, string RecipientNo, string GiftPoints, string groupId)
         {
             bool status = false;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
@@ -609,13 +609,13 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                   var result = context.Database.SqlQuery<SPResponse>("MWP_GiftingPoints @pi_MobileNo, @pi_BrandId, @pi_Datetime, @pi_GiftingPersonMobileNo, @pi_GiftingPersonName, @pi_GiftingPoints",
-                              new SqlParameter("@pi_MobileNo", MobileNo),
-                              new SqlParameter("@pi_BrandId", BrandId),
-                              new SqlParameter("@pi_Datetime", DateTime.Now),
-                              new SqlParameter("@pi_GiftingPersonMobileNo", RecipientNo),
-                              new SqlParameter("@pi_GiftingPersonName", RecipientName),
-                              new SqlParameter("@pi_GiftingPoints", GiftPoints)).FirstOrDefault<SPResponse>();
+                    var result = context.Database.SqlQuery<SPResponse>("MWP_GiftingPoints @pi_MobileNo, @pi_BrandId, @pi_Datetime, @pi_GiftingPersonMobileNo, @pi_GiftingPersonName, @pi_GiftingPoints",
+                               new SqlParameter("@pi_MobileNo", MobileNo),
+                               new SqlParameter("@pi_BrandId", BrandId),
+                               new SqlParameter("@pi_Datetime", DateTime.Now),
+                               new SqlParameter("@pi_GiftingPersonMobileNo", RecipientNo),
+                               new SqlParameter("@pi_GiftingPersonName", RecipientName),
+                               new SqlParameter("@pi_GiftingPoints", GiftPoints)).FirstOrDefault<SPResponse>();
                     if (result.ResponseCode == "0")
                         status = true;
                 }
@@ -627,7 +627,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool DLCReferFriend(string groupId,string MobileNo,string BrandId,string firstMobileNo,string firstName, string secondMobileNo, string secondName, string thirdMobileNo, string thirdName)
+        public bool DLCReferFriend(string groupId, string MobileNo, string BrandId, string firstMobileNo, string firstName, string secondMobileNo, string secondName, string thirdMobileNo, string thirdName)
         {
             bool status = false;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
@@ -691,5 +691,86 @@ namespace BOTS_BL.Repository
                 return lstData;
             }
         }
+
+        public bool UpdateDLCProfileData(string groupId, DLCProfileData objData)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            using (var context = new BOTSDBContext(connStr))
+            {
+                try
+                {
+                    var customerData = context.CustomerDetails.Where(x => x.MobileNo == objData.MobileNo).FirstOrDefault();
+                    if(!string.IsNullOrEmpty(objData.Name))
+                    {
+                        customerData.CustomerName = objData.Name;
+                    }
+                    if (!string.IsNullOrEmpty(objData.Gender))
+                    {
+                        customerData.Gender = objData.Gender;
+                    }
+                    if (!string.IsNullOrEmpty(objData.DateOfBirth))
+                    {
+                        customerData.DOB = Convert.ToDateTime(objData.DateOfBirth);
+                    }
+                    if (!string.IsNullOrEmpty(objData.MaritalStatus))
+                    {
+                        customerData.MaritalStatus = objData.MaritalStatus;
+                    }
+                    if (!string.IsNullOrEmpty(objData.Email))
+                    {
+                        customerData.EmailId = objData.Email;
+                    }
+                    context.CustomerDetails.AddOrUpdate(customerData);
+                    context.SaveChanges();
+
+                    var customerChildData = context.CustomerChilds.Where(x => x.MobileNo == objData.MobileNo).FirstOrDefault();
+                    if(customerChildData!=null)
+                    {
+                        if (!string.IsNullOrEmpty(objData.Area))
+                        {
+                            customerChildData.Area = objData.Area;
+                        }
+                        if (!string.IsNullOrEmpty(objData.City))
+                        {
+                            customerChildData.City = objData.City;
+                        }                        
+                        if (!string.IsNullOrEmpty(objData.Pincode))
+                        {
+                            customerChildData.Pincode = objData.Pincode;
+                        }
+                        context.CustomerChilds.AddOrUpdate(customerChildData);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        CustomerChild objChild = new CustomerChild();
+                        objChild.MobileNo = objData.MobileNo;
+                        objChild.CustomerId = customerData.CustomerId;
+                        if (!string.IsNullOrEmpty(objData.Area))
+                        {
+                            customerChildData.Area = objData.Area;
+                        }
+                        if (!string.IsNullOrEmpty(objData.City))
+                        {
+                            customerChildData.City = objData.City;
+                        }
+                        if (!string.IsNullOrEmpty(objData.Pincode))
+                        {
+                            customerChildData.Pincode = objData.Pincode;
+                        }
+                        context.CustomerChilds.AddOrUpdate(customerChildData);
+                        context.SaveChanges();
+                    }
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "UpdateDLCProfileData" + groupId);
+                }
+            }
+            return status;
+        }
+
     }
 }

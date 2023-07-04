@@ -264,6 +264,7 @@
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\DLCDashboardFrontData.cs" />
     <Compile Include="ViewModel\SessionVariables.cs" />
+    <Compile Include="ViewModel\UpdateProfileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

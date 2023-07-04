@@ -1,4 +1,4 @@
-﻿@model List<BOTS_BL.Models.tblDLCProfileUpdateConfig_Publish>
+﻿@model DLC.ViewModel.UpdateProfileViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,20 +8,152 @@
     <div class="row m-5 pl-3 pr-3 card col-md-11 col-lg-11 row  pt-5">
         <h4>Profile Update</h4>
         <div class="col-md-12 col-lg-12" style="padding-bottom: 10px;margin-top:5px;">
-            @foreach (var item in Model)
+            @foreach (var item in Model.lstProfileData)
             {
                 if (item.DisplayStatus)
                 {
-                    var id = "txt" + item.FieldName;
-                    <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
-                        <div class="col-md-2 col-lg-2"> @item.FieldName </div>
-                        <div class="col-md-10 col-lg-5">
-                            <input type="text" id="@id" class="input100" />
+                    var mandatory = "";
+                    if (item.MandStatus)
+                    {
+                        mandatory = "*";
+                    }
+                    if (item.FieldName == "DateOfBirth")
+                    {
+                        var id = "txt" + item.FieldName;
+                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
+                            <div class="col-md-10 col-lg-5">
+                                <input type="date" id="@id" class="input100" />
+                            </div>
                         </div>
-                    </div>
+                    }
+                    else if (item.FieldName == "Gender")
+                    {
+                        var id = "ddl" + item.FieldName;
+                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
+                            <div class="col-md-10 col-lg-5">
+                                @Html.DropDownListFor(model => model.dummyGender, new SelectList(Model.Gender(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = @id })
+
+
+                            </div>
+                        </div>
+                    }
+                    else if (item.FieldName == "MaritalStatus")
+                    {
+                        var id = "ddl" + item.FieldName;
+                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
+                            <div class="col-md-10 col-lg-5">
+                                @Html.DropDownListFor(model => model.dummyMaritalStatus, new SelectList(Model.MaritalStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = @id })
+                            </div>
+                        </div>
+                    }
+                    else if (item.FieldName == "City")
+                    {
+                        @*var id = "ddl" + item.FieldName;
+                            <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+                                <div class="col-md-2 col-lg-2"> @item.FieldName </div>
+                                <div class="col-md-10 col-lg-5">
+                                    <input type="text" id="@id" class="input100" />
+                                </div>
+                            </div>*@
+                    }
+                    else if (item.FieldName == "Pincode")
+                    {
+                        var id = "txt" + item.FieldName;
+                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
+                            <div class="col-md-10 col-lg-5">
+                                <input type="number" id="@id" class="input100" />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        var id = "txt" + item.FieldName;
+                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
+                            <div class="col-md-10 col-lg-5">
+                                <input type="text" id="@id" class="input100" />
+                            </div>
+                        </div>
+                    }
                 }
             }
         </div>
+        <div class="col-md-10 col-lg-10 pt-3" style="padding-bottom: 10px; text-align: center;">
+            <button id="btnUpdateProfile" class="btn form-control btn-primary  submit px-3" onclick="UpdateProfile();" style="font-weight:bold;width:200px;">Update</button>
+        </div>
     </div>
 </div>
+<script>
+    function UpdateProfile() {
+        var status = true;
+        //var model = JSON.parse(@Model.lstProfileData);
+        var model = @Html.Raw(Json.Encode(Model.lstProfileData));
+        console.log(model)
+        $.map(model, function (item) {
+            if (item.DisplayStatus) {
+                if (item.MandStatus) {
+                    if (item.FieldName == "Gender" || item.FieldName == "MaritalStatus") {
+                        if ($("#ddl" + item.FieldName).val() == "Please Select" || $("#ddl" + item.FieldName).val() == "") {
+                            toastr.error('please select ' + item.FieldName);
+                            status = false;
+                            return false;
+                        }
+                    }
+                    else {
+                        if ($("#txt" + item.FieldName).val() == "Please Select" || $("#txt" + item.FieldName).val() == "") {
+                            toastr.error('please enter ' + item.FieldName);
+                            status = false;
+                            return false;
+                        }
+                    }
+                }
+            }
+        });
+        if (status) {
+            alert(777);
+            var profileData = [];
+            optionItem = {}
+            $.map(model, function (item) {                
+                optionItem[item.FieldName] = "";
+                if (item.DisplayStatus) {
+                    if (item.FieldName == "Gender" || item.FieldName == "MaritalStatus") {
+                        optionItem[item.FieldName] = $("#ddl" + item.FieldName).val();
+                    }
+                    else {
+                        optionItem[item.FieldName] = $("#txt" + item.FieldName).val();
+                    }
+                }                
+            });
+            profileData.push(optionItem);
+            console.log(profileData);
+            var profileDataStr = JSON.stringify(profileData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateProfileData", "PersonalDetails")',
+                data: '{jsonData: ' + JSON.stringify(profileDataStr) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result == true) {
+                        toastr.success('Profile updated successfully !!!');
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('There is problem in updating the profile. Please contact Administrator !!!');
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
 
+                }
+            });
+
+        }
+    }
+</script>
