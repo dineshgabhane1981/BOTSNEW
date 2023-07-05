@@ -47,8 +47,6 @@
 </div>
 <script>
     function GetDLCDetails(SourceId) {
-        //alert("111");
-        //alert(SourceId);
         var Id = SourceId;
         $("#divLoader").show();
         $.ajax({
@@ -59,18 +57,15 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-               alert("333")
                 $("#dvDLCDetailed").html(response);
                 $("#dvDLCDetailed").show(1000);
                 $("#divLoader").hide();
             },
             failure: function (response) {
-                alert(111)
                 $("#divLoader").hide();
             },
             error: function (response) {
-                console.log(response)
-                alert(222)
+                
                 $("#dvDLCDetailed").html(response.responseText);
                 $("#dvDLCDetailed").show(1000);
                 $("#divLoader").hide();
