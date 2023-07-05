@@ -15,9 +15,9 @@ namespace BOTS_BL.Models
         public string ReferralName { get; set; }
         public decimal? ReferralBonusPoints { get; set; }
         public Int64? ReferralTotalTxnCount { get; set; }
-        public decimal? ReferralTotalSpend { get; set; }
+        public Int64? ReferralTotalSpend { get; set; }
         public decimal? BonusPointsRedeemed { get; set; }
-        public Int64? BonusPointsExpired { get; set; }       
+        public decimal? BonusPointsExpired { get; set; }       
 
     }
 }

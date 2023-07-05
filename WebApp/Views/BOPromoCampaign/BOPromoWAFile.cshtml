@@ -1,0 +1,243 @@
+﻿<div class="app-main__inner">
+    <div class="container-fluid pt-3 pl-3 pr-3">
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+                <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+                    WA Message Balance :
+                </div>
+                <div>
+                    <span id="Balance">@((ViewBag.Balance))</span>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-4" style="text-align: right;">
+                    <a id="ImgAdd" href="#" onclick="Add();" title="Add New Msg">  <img src="~/Content/assets/images/details_open.png" width="25" height="25" /></a>
+                    <a id="ImgRemove" href="#" onclick="Remove();" title="Remove New Msg" style="display: none">  <img src="~/Content/assets/images/details_close.png" width="25" height="25" /></a>
+                </div>
+            </div>
+            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+                <div class="row mt-2">
+                    <div class="col-sm-2">
+                        <B>File 1</B>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="file" id="FileUpload1" style="margin-left: 30px; text-align: left;" />
+                        <input type="button" id="btnUpload1" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+                    </div>
+                    <div class="col-sm-4" style="margin: 20px; display: none" id="UploadImglink">
+                        <span id="WAText">Upload Img Link:</span>
+                        <a id="a" href="#" target="_blank"><span id="WAUploadImg1"></span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; display:none" id="secondMgs">
+                <div class="row mt-2">
+                    <div class="col-sm-2">
+                        <B>File 2</B>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="file" id="FileUpload2" style="margin-left: 30px; text-align: left;" />
+                        <input type="button" id="btnUpload2" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+                    </div>
+                    <div class="col-sm-4" style="margin: 20px; display: none" id="UploadImglink2">
+                        <span id="WAText">Upload Img Link:</span>
+                        <a id="a1" href="#" target="_blank"><span id="WAUploadImg2"></span></a>
+                    </div>
+                </div>
+            </div>
+            
+                <div class="row mt-2">
+                    <div class="col-sm-4" id="divTestMsgBtn">
+                        <div class="button">
+                            <button type="button" id="BtnSendMsgTest" style="margin-left:25px;" class="btn btn-primary" onclick="WASendSMSValidate();"><b>Send Test Message</b></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-4" id="divSendMsg">
+                        <div class="button">
+                            <button type="button" id="BtnSendMsg" style="margin-left:25px;" class="btn btn-success" onclick="WASendSMSValidate();"><b>Send Message</b></button>
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+</div>
+<script>
+    function Add() {
+        $("#ImgAdd").hide();
+        $("#ImgRemove").show();
+        $("#secondMgs").show();
+    }
+    function Remove() {
+        $("#ImgRemove").hide();
+        $("#ImgAdd").show();
+        $("#secondMgs").hide();
+    }
+
+    $("#btnUpload1").click(function () {
+       
+        UploadData1();
+    });
+
+    $("#btnUpload2").click(function () {
+        
+        UploadData2();
+    });
+
+    function UploadData1() {
+
+            if (window.FormData !== undefined) {
+                var fileUpload = $("#FileUpload1").get(0);
+
+                var files = fileUpload.files;
+                if (files.length > 0) {
+                    var fileData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    //fileData.append("groupId", $('#hdnGroupID').val());
+
+                        $("#divLoader").show();
+                        $.ajax({
+                            url: '@Url.Action("UploadData", "Campaigns")',
+                            type: "POST",
+                            contentType: false, // Not to set any content header
+                            processData: false, // Not to process data
+                            data: fileData,
+                            success: function (result) {
+                                var res = result[0].ResponseCode;
+                                var Uri = result[0].Url;
+
+                                if (res == "00") {
+                                    var code = result[0].Url;
+                                    cuteAlert({
+                                        type: "success",
+                                        title: "Uploaded",
+                                        message: "Data Uploaded Successfully!",
+                                        buttonText: "Okay"
+                                    })
+
+                                    $("#divLoader").hide();
+                                    $("#WAUploadImg1").text(code);
+                                    $("#a").attr("href", Uri);
+                                    $("#UploadImglink").show();
+                                }
+                                else {
+                                    cuteAlert({
+                                        type: "error",
+                                        title: "Oops..",
+                                        message: "There is some problem in uploading data",
+                                        buttonText: "Okay"
+                                    })
+                                    $("#divLoader").hide();
+                                }
+                                //alert(result);
+                            },
+                            error: function (err) {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is some problem in uploading data",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                                //alert(err.statusText);
+                            }
+                        });
+                    }
+
+
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Please select file to upload",
+                        buttonText: "Okay"
+                    })
+                }
+        }
+    }
+
+    function UploadData2() {
+
+            if (window.FormData !== undefined) {
+                var fileUpload = $("#FileUpload2").get(0);
+
+                var files = fileUpload.files;
+                if (files.length > 0) {
+                    var fileData = new FormData();
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+                    //fileData.append("groupId", $('#hdnGroupID').val());
+
+                        $("#divLoader").show();
+                        $.ajax({
+                            url: '@Url.Action("UploadData", "Campaigns")',
+                            type: "POST",
+                            contentType: false, // Not to set any content header
+                            processData: false, // Not to process data
+                            data: fileData,
+                            success: function (result) {
+                                var res = result[0].ResponseCode;
+                                var Uri = result[0].Url;
+
+                                if (res == "00") {
+                                    var code = result[0].Url;
+                                    cuteAlert({
+                                        type: "success",
+                                        title: "Uploaded",
+                                        message: "Data Uploaded Successfully!",
+                                        buttonText: "Okay"
+                                    })
+
+                                    $("#divLoader").hide();
+                                    $("#WAUploadImg2").text(code);
+                                    $("#a1").attr("href", Uri);
+                                    $("#UploadImglink2").show();
+                                }
+                                else {
+                                    cuteAlert({
+                                        type: "error",
+                                        title: "Oops..",
+                                        message: "There is some problem in uploading data",
+                                        buttonText: "Okay"
+                                    })
+                                    $("#divLoader").hide();
+                                }
+                                //alert(result);
+                            },
+                            error: function (err) {
+                                cuteAlert({
+                                    type: "error",
+                                    title: "Oops..",
+                                    message: "There is some problem in uploading data",
+                                    buttonText: "Okay"
+                                })
+                                $("#divLoader").hide();
+                                //alert(err.statusText);
+                            }
+                        });
+                    }
+
+
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Please select file to upload",
+                        buttonText: "Okay"
+                    })
+                }
+        }
+    }
+
+</script>

@@ -1,0 +1,84 @@
+﻿@model List<BOTS_BL.Models.Reports.DLCNewReg>
+@using System.Globalization
+@{
+    ViewBag.Title = "DLCNewReg";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="table-responsive">
+            <div style="font-size:18px;color:blue;font-weight:bold;">Summary</div>
+            <table class="table" id="tblCampaignSummary">
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Source Creation Date</th>
+                        <th>Source Description</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Unique Reg Count</th>
+                        <th>Total Txn Count</th>
+                        <th>Business Generated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><a href="#" onclick="GetDLCDetails(@item.Source);" class="login" title="DLC Source">@item.Source</a></td>
+                            <td>@item.SourceCreatedDate</td>
+                            <td>@item.SourceDesc</td>
+                            <td>@item.StartDate</td>
+                            <td>@item.EndDate</td>
+                            <td>@item.UniqueRegCount</td>
+                            <td>@item.TotalTxnCount</td>
+                            <td>@item.BusinessGenerated</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom: 20px; display: none;" id="dvDLCDetailed">
+
+    </div>
+</div>
+<script>
+    function GetDLCDetails(SourceId) {
+        //alert("111");
+        //alert(SourceId);
+        var Id = SourceId;
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DLCDetail", "DLCReporting")',
+            data: '{SourceId: ' + JSON.stringify(Id) + '}',
+            
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+               alert("333")
+                $("#dvDLCDetailed").html(response);
+                $("#dvDLCDetailed").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                alert(111)
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                console.log(response)
+                alert(222)
+                $("#dvDLCDetailed").html(response.responseText);
+                $("#dvDLCDetailed").show(1000);
+                $("#divLoader").hide();
+       
+            }
+            //error: (error) => {
+            //    console.log(JSON.stringify(error));
+            //}
+        });
+    }
+</script>

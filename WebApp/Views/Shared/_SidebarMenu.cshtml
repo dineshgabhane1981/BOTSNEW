@@ -123,14 +123,14 @@
                                     </ul>
                                 </li>
                             }
-                            
-                                <li class="@Html.IsSelected(controller: "Discussion", action: "CommonDiscussion")">
-                                    <a href="@Url.Action("CommonDiscussion", "Discussion")" class="@Html.IsSelected(controller: "Discussion", action: "CommonDiscussion")">
-                                        <i class="metismenu-icon pe-7s-rocket"></i>
-                                        Common Discussion
-                                    </a>
-                                </li>
-                           
+
+                            <li class="@Html.IsSelected(controller: "Discussion", action: "CommonDiscussion")">
+                                <a href="@Url.Action("CommonDiscussion", "Discussion")" class="@Html.IsSelected(controller: "Discussion", action: "CommonDiscussion")">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>
+                                    Common Discussion
+                                </a>
+                            </li>
+
 
                             <li>
                                 <a href="#">
@@ -260,8 +260,8 @@
                             }
                             @if (roleId == "1" || roleId == "6")
                             {
-                                <li class="@Html.IsSelected(controller: "BOPromoCampaign", action: "GroupList")">
-                                    <a href="@Url.Action("GroupList", "BOPromoCampaign")" class="@Html.IsSelected(controller: "BOPromoCampaign", action: "GroupList")">
+                                <li class="@Html.IsSelected(controller: "BOPromoCampaign", action: "Index")">
+                                    <a href="@Url.Action("Index", "BOPromoCampaign")" class="@Html.IsSelected(controller: "BOPromoCampaign", action: "Index")">
                                         <i class="metismenu-icon pe-7s-car"></i>
                                         Knowledge Series
 
@@ -366,11 +366,17 @@
                                 </a>
                             </li>
                             <li class="@Html.IsSelected(controller: "DLCReporting", action: "Index")">
-                                    <a class="@Html.IsSelected(controller: "DLCReporting", action: "Index")" href="@Url.Action("Index", "DLCReporting")">
-                                        <i class="metismenu-icon"></i>
-                                        DLC Reporting
-                                    </a>
-                                </li>
+                                <a class="@Html.IsSelected(controller: "DLCReporting", action: "Index")" href="@Url.Action("Index", "DLCReporting")">
+                                    <i class="metismenu-icon"></i>
+                                    DLC Reporting
+                                </a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "DLCReporting", action: "DLCNewReg")">
+                                <a class="@Html.IsSelected(controller: "DLCReporting", action: "DLCNewReg")" href="@Url.Action("DLCNewReg", "DLCReporting")">
+                                    <i class="metismenu-icon"></i>
+                                    DLC New Registration
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>

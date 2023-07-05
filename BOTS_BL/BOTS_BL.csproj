@@ -446,6 +446,8 @@
     <Compile Include="Models\OutletDetail.cs" />
     <Compile Include="Models\ProfilePage.cs" />
     <Compile Include="Models\Reports\Celebrations.cs" />
+    <Compile Include="Models\Reports\DLCNewReg.cs" />
+    <Compile Include="Models\Reports\DLCNewRegDetail.cs" />
     <Compile Include="Models\Reports\DLCReporting.cs" />
     <Compile Include="Models\Reports\MemberList.cs" />
     <Compile Include="Models\Reports\MemberSearch.cs" />

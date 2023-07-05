@@ -1,0 +1,82 @@
+﻿@model List<BOTS_BL.Models.Reports.DLCNewRegDetail>
+@using System.Globalization
+
+<div class="app-main__inner">
+    <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        @foreach (var item in Model)
+        {
+            <div><p><span ><b>Source Creation :</b>  @item.SourceCreation.ToString("dd-MMM-yyyy") <b> | Source Description :</b>   @item.SourceDescription<b> | Start Date :</b>  @item.StartDate.ToString("dd-MMM-yyyy")<b> | End Date :</b> @item.EndDate.ToString("dd-MMM-yyyy")</span> </p></div>
+        }
+
+        <div class="table-responsive">
+            <table class="table" id="tblDLCDetail">
+                <thead>
+                    <tr>
+                        <th>MobileNo</th>
+                        <th>Member Name</th>
+                        <th>Type</th>
+                        <th>Bonus Points Issued</th>
+                        <th>Reg Date</th>
+                        <th>1st TxnDate</th>
+                        <th>TxnAfterDays</th>
+                        <th>Total Txn Count</th>
+                        <th>Business Generated</th>
+                        <th>Points Redeemed</th>
+                        <th>Points Expired</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.MobileNo</td>
+                            <td>@item.Name</td>
+                            <td>@item.MemberType</td>
+                            <td>@item.BonusPointsIssued</td>
+                            <td>@item.RegDate</td>
+                            <td>@item.FirstTxnDateAfterReg</td>
+                            <td>@item.TxnAfterDays</td>
+                            <td>@item.TotalTxnCount</td>
+                            <td>@item.BusinessGenerated</td>
+                            <td>@item.PointsRedeemed</td>
+                            <td>@item.PointsExpired</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblDLCDetail').DataTable();
+        table1.destroy();
+        var table = $('#tblDLCDetail').DataTable({
+            "bAutoWidth": false,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "Member Name" },
+                { data: "Type" },
+                { data: "Bonus Points Issued" },
+                { data: "Reg Date" },
+                { data: "1st TxnDate" },
+                { data: "TxnAfterDays" },
+                { data: "Total Txn Count" },
+                { data: "Business Generated" },
+                { data: "Points Redeemed" },
+                { data: "Points Expired" }
+            ]
+        });
+        $('#tblCampaignDetails_filter').hide();
+
+        var table = $('#tblDLCDetail').DataTable();
+        table.draw();
+    });
+</script>
