@@ -6,8 +6,9 @@
 }
 
 <div class="app-main__inner">
-    <div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">
-        <div class="row" style="display:flex;">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        @*<div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">*@
+        <div class="row" style="display:none;">
             <div class="col-md-6 col-xl-6">
                 <table border="1" cellpadding="5" cellspacing="5">
                     <tr>
@@ -29,10 +30,10 @@
                                 @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueMember))
                             </td>
                             <td>
-                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueTxn))                                
+                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueTxn))
                             </td>
                             <td>
-                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TotalAmt))                                
+                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TotalAmt))
                             </td>
                         </tr>
                     }
@@ -52,24 +53,29 @@
                     </tr>
                     @foreach (var item in Model.lstBottom5Value)
                     {
-                <tr>
-                    <td>@item.ProductCode</td>
-                    <td>@item.ProductName</td>
-                    <td>
-                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueMember))
-                    </td>
-                    <td>
-                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueTxn))
-                    </td>
-                    <td>
-                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TotalAmt))
-                    </td>
-                </tr>
+                        <tr>
+                            <td>@item.ProductCode</td>
+                            <td>@item.ProductName</td>
+                            <td>
+                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueMember))
+                            </td>
+                            <td>
+                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.UniqueTxn))
+                            </td>
+                            <td>
+                                @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TotalAmt))
+                            </td>
+                        </tr>
                     }
                 </table>
             </div>
         </div>
+        <div style="margin-bottom:15px;margin-top:15px;">
+            <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass"> Product Performance
+            <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass"> Product Analytics
+        </div>
     </div>
+
 </div>
 
 
