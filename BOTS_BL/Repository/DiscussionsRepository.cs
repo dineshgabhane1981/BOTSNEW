@@ -393,7 +393,7 @@ namespace BOTS_BL.Repository
                     {
                         if (objDiscussion.DiscussionType != "Query")
                         {
-                            Thread _job1 = new Thread(() => SendEmailOnlyHOD(ObjEmailData));
+                            Thread _job1 = new Thread(() => SendEmailOnlyHOD(ObjEmailData, objDiscussion));
                             _job1.Start();
                         }
                     }
@@ -660,7 +660,7 @@ namespace BOTS_BL.Repository
                         {
                             if (objDiscussion.DiscussionType != "Query")
                             {
-                                Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail));
+                                Thread _job1 = new Thread(() => SendEmailCompleteOnlyHOD(objmail, objDiscussion));
                                 _job1.Start();
                             }
                             if (_WAGroupCode != null)
@@ -673,7 +673,7 @@ namespace BOTS_BL.Repository
                         { 
                             if (objDiscussion.DiscussionType != "Query")
                             {
-                                Thread _job1 = new Thread(() => SendEmailComplete(objmail));
+                                Thread _job1 = new Thread(() => SendEmailComplete(objmail, objDiscussion));
                                 _job1.Start();
                             }
                         }
@@ -684,7 +684,7 @@ namespace BOTS_BL.Repository
                         {
                             if (objDiscussion.DiscussionType != "Query")
                             {
-                                Thread _job1 = new Thread(() => SendEmailUpdateOnlyHOD(objmail));
+                                Thread _job1 = new Thread(() => SendEmailUpdateOnlyHOD(objmail, objDiscussion));
                                 _job1.Start();
                             }
                             if (_WAGroupCode != null)
@@ -702,7 +702,7 @@ namespace BOTS_BL.Repository
                             {
                                 if (objDiscussion.DiscussionType != "Query")
                                 {
-                                    Thread _job1 = new Thread(() => SendEmailUpdate(objmail));
+                                    Thread _job1 = new Thread(() => SendEmailUpdate(objmail, objDiscussion));
                                     _job1.Start();
                                 }
                             }
@@ -2352,7 +2352,7 @@ namespace BOTS_BL.Repository
             }
 
         }
-        public void SendEmailOnlyHOD(EmailDetails Emaildata)
+        public void SendEmailOnlyHOD(EmailDetails Emaildata, BOTS_TblDiscussion objDiscussion)
         {
             string responseString;
             var from = ConfigurationManager.AppSettings["Email"].ToString();
@@ -2372,7 +2372,7 @@ namespace BOTS_BL.Repository
 
                     str.Append("<tr>");
                     str.Append("<td>&nbsp;</td>");
-                    str.Append("</tr>");
+                    str.Append("</tr>");                    
 
                     str.Append("<tr>");
                     str.AppendLine("<td>I have raised a ticket for - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext + "</td>");
@@ -2430,7 +2430,7 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-        public void SendEmailUpdate(EmailDetails Emaildata)
+        public void SendEmailUpdate(EmailDetails Emaildata, BOTS_TblDiscussion objDiscussion)
         {
             string responseString;
             var from = ConfigurationManager.AppSettings["Email"].ToString();
@@ -2455,6 +2455,11 @@ namespace BOTS_BL.Repository
 
                     str.Append("<tr>");
                     str.AppendLine("<td>You have a task assigned from - " + Emaildata.Addby + " with <b> priority " + Emaildata.Priority + "</b></td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td><b>Ticket Raised for : </b>" + objDiscussion.Description + "</td>");
                     str.AppendLine("</br>");
                     str.Append("</tr>");
 
@@ -2514,7 +2519,7 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-        public void SendEmailComplete(EmailDetails Emaildata)
+        public void SendEmailComplete(EmailDetails Emaildata, BOTS_TblDiscussion objDiscussion)
         {
             string responseString;
             var from = ConfigurationManager.AppSettings["Email"].ToString();
@@ -2538,6 +2543,11 @@ namespace BOTS_BL.Repository
 
                     str.Append("<tr>");
                     str.AppendLine("<td>Your assigned task is Completed by " + Emaildata.MemberCompleted + "</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td><b>Ticket Raised for : </b>" + objDiscussion.Description + "</td>");
                     str.AppendLine("</br>");
                     str.Append("</tr>");
 
@@ -2654,7 +2664,7 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-        public void SendEmailUpdateOnlyHOD(EmailDetails Emaildata)
+        public void SendEmailUpdateOnlyHOD(EmailDetails Emaildata, BOTS_TblDiscussion objDiscussion)
         {
             string responseString;
             var from = ConfigurationManager.AppSettings["Email"].ToString();
@@ -2678,6 +2688,11 @@ namespace BOTS_BL.Repository
 
                     str.Append("<tr>");
                     str.AppendLine("<td>I have rescheduled task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext + "</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td><b>Ticket Raised for : </b>" + objDiscussion.Description + "</td>");
                     str.AppendLine("</br>");
                     str.Append("</tr>");
 
@@ -2841,7 +2856,7 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-        public void SendEmailCompleteOnlyHOD(EmailDetails Emaildata)
+        public void SendEmailCompleteOnlyHOD(EmailDetails Emaildata, BOTS_TblDiscussion objDiscussion)
         {
             string responseString;
             var from = ConfigurationManager.AppSettings["Email"].ToString();
@@ -2865,6 +2880,11 @@ namespace BOTS_BL.Repository
 
                     str.Append("<tr>");
                     str.AppendLine("<td>Completed the task of - : " + Emaildata.GroupName + " : " + Emaildata.CallTypetext + " : " + Emaildata.subtypetext + "</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td><b>Ticket Raised for : </b>" + objDiscussion.Description + "</td>");
                     str.AppendLine("</br>");
                     str.Append("</tr>");
 
