@@ -15,5 +15,11 @@ namespace BOTS_BL.Models
         public string FieldName { get; set; }        
         public bool DisplayStatus { get; set; }        
         public bool MandStatus { get; set; }
+
+        [NotMapped]
+        public string Value { get; set; }
+        [NotMapped]
+        public DateTime? DOBValue { get; set; }
+
     }
 }

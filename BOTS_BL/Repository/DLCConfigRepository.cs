@@ -281,7 +281,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public List<tblDLCProfileUpdateConfig_Publish> GetPublishDLCProfileConfig(string groupId)
+        public List<tblDLCProfileUpdateConfig_Publish> GetPublishDLCProfileConfig(string groupId, string MobileNo)
         {
             List<tblDLCProfileUpdateConfig_Publish> objData = new List<tblDLCProfileUpdateConfig_Publish>();
             string connStr = objCustRepo.GetCustomerConnString(groupId);
@@ -290,6 +290,30 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connStr))
                 {
                     objData = context.tblDLCProfileUpdateConfig_Publish.ToList();
+                    var custData = context.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    var childData = context.CustomerChilds.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    foreach (var item in objData)
+                    {
+                        if (item.FieldName == "Name")
+                            item.Value = custData.CustomerName;
+                        if (item.FieldName == "Gender")
+                            item.Value = custData.Gender;
+                        if (item.FieldName == "DateOfBirth")
+                        {
+                            if (custData.DOB.HasValue)
+                                item.Value = custData.DOB.Value.ToString("yyyy/MM/dd");
+                        }
+                        if (item.FieldName == "MaritalStatus")
+                            item.Value = custData.MaritalStatus;
+                        if (item.FieldName == "Email")
+                            item.Value = custData.EmailId;
+                        if (item.FieldName == "Area")
+                            item.Value = childData.Area;
+                        if (item.FieldName == "City")
+                            item.Value = childData.City;
+                        if (item.FieldName == "Pincode")
+                            item.Value = childData.Pincode;
+                    }
                 }
             }
             catch (Exception ex)
@@ -700,69 +724,29 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    var customerData = context.CustomerDetails.Where(x => x.MobileNo == objData.MobileNo).FirstOrDefault();
-                    if(!string.IsNullOrEmpty(objData.Name))
-                    {
-                        customerData.CustomerName = objData.Name;
-                    }
-                    if (!string.IsNullOrEmpty(objData.Gender))
-                    {
-                        customerData.Gender = objData.Gender;
-                    }
-                    if (!string.IsNullOrEmpty(objData.DateOfBirth))
-                    {
-                        customerData.DOB = Convert.ToDateTime(objData.DateOfBirth);
-                    }
-                    if (!string.IsNullOrEmpty(objData.MaritalStatus))
-                    {
-                        customerData.MaritalStatus = objData.MaritalStatus;
-                    }
-                    if (!string.IsNullOrEmpty(objData.Email))
-                    {
-                        customerData.EmailId = objData.Email;
-                    }
-                    context.CustomerDetails.AddOrUpdate(customerData);
-                    context.SaveChanges();
-
-                    var customerChildData = context.CustomerChilds.Where(x => x.MobileNo == objData.MobileNo).FirstOrDefault();
-                    if(customerChildData!=null)
-                    {
-                        if (!string.IsNullOrEmpty(objData.Area))
-                        {
-                            customerChildData.Area = objData.Area;
-                        }
-                        if (!string.IsNullOrEmpty(objData.City))
-                        {
-                            customerChildData.City = objData.City;
-                        }                        
-                        if (!string.IsNullOrEmpty(objData.Pincode))
-                        {
-                            customerChildData.Pincode = objData.Pincode;
-                        }
-                        context.CustomerChilds.AddOrUpdate(customerChildData);
-                        context.SaveChanges();
-                    }
-                    else
-                    {
-                        CustomerChild objChild = new CustomerChild();
-                        objChild.MobileNo = objData.MobileNo;
-                        objChild.CustomerId = customerData.CustomerId;
-                        if (!string.IsNullOrEmpty(objData.Area))
-                        {
-                            customerChildData.Area = objData.Area;
-                        }
-                        if (!string.IsNullOrEmpty(objData.City))
-                        {
-                            customerChildData.City = objData.City;
-                        }
-                        if (!string.IsNullOrEmpty(objData.Pincode))
-                        {
-                            customerChildData.Pincode = objData.Pincode;
-                        }
-                        context.CustomerChilds.AddOrUpdate(customerChildData);
-                        context.SaveChanges();
-                    }
-                    status = true;
+                    var result = context.Database.SqlQuery<SPResponse>("MWP_ProfileUpdate @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
+                       "@pi_Name, @pi_Gender, @pi_DOB, @pi_Email, @pi_Pincode, @pi_MaritalStatus, @pi_AnniversaryDate, @pi_Address, @pi_ChildCount, " +
+                       "@pi_Child1DOB, @pi_Child2DOB, @pi_Child3DOB ,@pi_City, @pi_LanguagePreferred, @pi_Religion",
+                                 new SqlParameter("@pi_MobileNo", objData.MobileNo),
+                                 new SqlParameter("@pi_BrandId", objData.BrandId),
+                                 new SqlParameter("@pi_Datetime", DateTime.Now),
+                                 new SqlParameter("@pi_Name", objData.Name),
+                                 new SqlParameter("@pi_Gender", objData.Gender),
+                                 new SqlParameter("@pi_DOB", objData.DateOfBirth),
+                                 new SqlParameter("@pi_Email", objData.Email),
+                                 new SqlParameter("@pi_Pincode", objData.Pincode),
+                                 new SqlParameter("@pi_MaritalStatus", objData.MaritalStatus),
+                                 new SqlParameter("@pi_AnniversaryDate", ""),
+                                 new SqlParameter("@pi_Address", objData.Area),
+                                 new SqlParameter("@pi_ChildCount", ""),
+                                 new SqlParameter("@pi_Child1DOB", ""),
+                                 new SqlParameter("@pi_Child2DOB", ""),
+                                 new SqlParameter("@pi_Child3DOB", ""),
+                                 new SqlParameter("@pi_City", objData.City == null ? "" : objData.City),
+                                 new SqlParameter("@pi_LanguagePreferred", ""),
+                                 new SqlParameter("@pi_Religion", "")).FirstOrDefault<SPResponse>();
+                    if (result.ResponseCode == "0")
+                        status = true;
                 }
                 catch (Exception ex)
                 {

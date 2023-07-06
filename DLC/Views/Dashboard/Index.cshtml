@@ -17,10 +17,10 @@
     <div class="m-5 pl-3 pr-3 card col-md-11 col-lg-11 pt-5">
         <div class="col-md-12 col-lg-12 row  pt-5" style="padding-bottom: 10px;margin-top:5px;">
             <div class="col-md-12 col-lg-5 mr-5 row  dashboardBox">
-                <div class="col-md-6 col-lg-12 row"><b>@Model.dLCDashboardContent.EarnPoints</b> <div style="padding-left:5px;"> Your earned pts </div> <div style="text-align:right;"> <a href="@Url.Action("Index", "TransactionHistory")" class="anchor">Transaction History</a> </div></div>
+                <div class="col-md-6 col-lg-12 row"><b>@Model.dLCDashboardContent.EarnPoints</b> <div style="padding-left:8px;margin-right:70px;"> Your earned pts </div> <div style="text-align:right;"> <a href="@Url.Action("Index", "TransactionHistory")" class="anchor">Transaction History</a> </div></div>
             </div>
             <div class="col-md-12 col-lg-5  mr-0 row dashboardBox">
-                <div class="col-md-6 col-lg-12 row"> Earn &nbsp;&nbsp; <b>@Model.dLCDashboardContent.EarnPercentage% &nbsp;&nbsp;</b> on every purchases <a href="@Url.Action("Index", "Store")" class="anchor">Stores</a> </div>
+                <div class="col-md-6 col-lg-12 row"><div style="padding-left:8px;margin-right:70px;"> Earn &nbsp;&nbsp; <b>@Model.dLCDashboardContent.EarnPercentage% &nbsp;&nbsp;</b> on every purchases</div> <a href="@Url.Action("Index", "Store")" class="anchor">Stores</a> </div>
             </div>
         </div>       
     <div class="col-md-12 col-lg-12 row  pt-2" style="padding-bottom: 10px;margin-top:5px;">
@@ -36,7 +36,7 @@
                     <a href="@Url.Action("Index", "PersonalDetails")">
                         <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
                             <div style="width: 25%;"></div>
-                            <div class="circle" style="width: 50%; border: 1px solid @HeaderColor; color: @FontColor; background: linear-gradient(to bottom, @HeaderColor, #000000);">@Model.objDashboardConfig.PersonalDetailsPoints</div>
+                            <div class="circle" style="border: 1px solid @HeaderColor; color: @FontColor; background: linear-gradient(to bottom, @HeaderColor, #000000);">@Model.objDashboardConfig.PersonalDetailsPoints</div>
                             <div style="width:25%;"></div>
                             <div class="WidgetText" style="font-size:16px;margin-top:30px;">Add Personal Details & get <b style="font-size:22px;"> @Model.objDashboardConfig.PersonalDetailsPoints </b> bonus points</div>
                         </div>

@@ -12,6 +12,7 @@ namespace DLC.ViewModel
         public List<tblDLCProfileUpdateConfig_Publish> lstProfileData { get; set; }
         public string dummyGender { get; set; }
         public string dummyMaritalStatus { get; set; }
+        public DateTime? dummyDOB { get; set; }
         public SelectListItem[] Gender()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Male", Value = "M" }, new SelectListItem() { Text = "Female", Value = "F" } };

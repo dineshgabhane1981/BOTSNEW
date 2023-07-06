@@ -21,7 +21,10 @@ namespace DLC.Controllers
         {
             UpdateProfileViewModel objData = new UpdateProfileViewModel();
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
-            objData.lstProfileData = DCR.GetPublishDLCProfileConfig(sessionVariables.GroupId);
+            objData.lstProfileData = DCR.GetPublishDLCProfileConfig(sessionVariables.GroupId, sessionVariables.MobileNo);
+            objData.dummyGender = objData.lstProfileData.Where(x => x.FieldName == "Gender").Select(y => y.Value).FirstOrDefault();
+            objData.dummyMaritalStatus= objData.lstProfileData.Where(x => x.FieldName == "MaritalStatus").Select(y => y.Value).FirstOrDefault();
+            objData.dummyDOB = objData.lstProfileData.Where(x => x.FieldName == "DateOfBirth").Select(y => y.DOBValue).FirstOrDefault();
             return View(objData);
         }
 
@@ -34,6 +37,7 @@ namespace DLC.Controllers
             object[] objProfileData = (object[])json_serializer.DeserializeObject(jsonData);
             DLCProfileData objData = new DLCProfileData();
             objData.MobileNo = sessionVariables.MobileNo;
+            objData.BrandId = sessionVariables.BrandId;
             try
             {
                 foreach (Dictionary<string, object> item in objProfileData)
