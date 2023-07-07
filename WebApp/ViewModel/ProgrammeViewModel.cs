@@ -14,9 +14,13 @@ namespace WebApp.ViewModel
         public List<tblGroupDetail> lstNotActive { get; set; }
 
         public List<SelectListItem> lstGroupDetails { get; set; }
-
+       
+       
         public tblGroupDetail tblGroupDetails { get; set; }
+           
         public string Message { get; set; }
+        
+        
         public SelectListItem[] MessageType()
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Enrollment", Value = "Enrollment" }, new SelectListItem() { Text = "Earn", Value = "Earn" }, new SelectListItem() { Text = "Burn", Value = "Burn" }, new SelectListItem() { Text = "Cancel", Value = "Cancel" } };

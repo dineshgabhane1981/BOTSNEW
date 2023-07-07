@@ -254,6 +254,12 @@
                                                 Change WA Script
                                             </a>
                                         </li>
+                                        <li class="@Html.IsSelected(controller: "CommonDBConfig", action: "DisableSMS")">
+                                            <a class="@Html.IsSelected(controller: "CommonDBConfig", action: "DisableSMS")" href="@Url.Action("DisableSMS", "CommonDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Disable Promotional SMS
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
 

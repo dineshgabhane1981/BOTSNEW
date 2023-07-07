@@ -1,4 +1,5 @@
 ﻿using BOTS_BL.Models;
+using BOTS_BL.Models.RetailerWeb;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
@@ -136,6 +137,7 @@ namespace BOTS_BL.Repository
             }
             return lstGroupDetails;
         }
+      
         public WhatsAppSMSMaster GetWAScripts(int GroupId, string GroupName, string MessageType)
         {
             WhatsAppSMSMaster obj = new WhatsAppSMSMaster();
@@ -225,7 +227,60 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "SaveScripts");
             }
             return result;
-        }           
+        }
+        public MemberData GetChangeNameByMobileNo(string GroupId, string searchData)
+        {
+            MemberData objMemberData = new MemberData();
+            try
+            {
+                CustomerDetail objCustomerDetail = new CustomerDetail();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == searchData && x.Status == "00").FirstOrDefault();
+                }
+                if (objCustomerDetail != null)
+                {
+                    objMemberData.MemberName = objCustomerDetail.CustomerName;
+                    objMemberData.MobileNo = objCustomerDetail.MobileNo;
+
+                    //using (var contextNew = new BOTSDBContext(connStr))
+                    //{
+                    //    objMemberData.EnrolledOutletName = contextNew.OutletDetails.Where(x => x.OutletId == objCustomerDetail.EnrollingOutlet).Select(y => y.OutletName).FirstOrDefault();
+                    //}
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetChangeNameByMobileNo");
+            }
+            return objMemberData;
+        }
+        public bool DisablePromotionalSMS(string GroupId,string MobileNo)
+        {
+            bool status = false;
+            try
+            {
+                CustomerDetail objCustomerDetail = new CustomerDetail();
+                GroupDetail obj1 = new GroupDetail();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();                    
+                    objCustomerDetail.IsSMS = false;
+                    
+                    contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
+                    contextNew.SaveChanges();
+                    status = true;
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DisablePromotionalSMS");
+            }
+            return status;
+        }
 
     }
 }

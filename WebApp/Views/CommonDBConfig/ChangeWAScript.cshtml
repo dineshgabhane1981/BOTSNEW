@@ -17,6 +17,7 @@
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
             </div>
+            
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvMessage">
                 <div class="col-md-3 col-xl-3">
                     <b>Message Type</b>
@@ -31,7 +32,7 @@
                     <button class="btn btn-primary ml-auto mt-3" type="button" title="GO" id="btnGo" tabindex="20" style="margin-bottom:20px;">GO</button>
                 </div>
             </div>
-            <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-2" id="dvScript" >
+            <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-2" id="dvScript">
                 <div class="col-md-3 col-xl-3">
                     <b>Script</b>
                 </div>
