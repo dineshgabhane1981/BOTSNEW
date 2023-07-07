@@ -1,0 +1,162 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "DisableSMS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>DisableSMS</h2>
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
+                <input type="hidden" id="hdnGroupId" />
+                <div class="col-lg-3 col-md-3 ">
+                    <b>Group Name</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
+                <div class="col-lg-3 col-md-3 ">
+                    <b>Mobile No</b>
+                </div>
+                <div style="margin-left:15px;">
+                    <input type="number" id="txtMobileNo" class="input50" />
+                </div>
+            </div>
+            <div style="margin-left:50px;">
+                <button type="button" id="btnSearchMember1" style="margin-left:130px;" class="btn btn-primary">Go</button>
+            </div>
+            <div class="col-md-12 col-lg-12" style="padding-left: 0px !important;margin-top:30px;margin-left:80px;display:none;" id="dvMemberDetails">
+                <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px;">Member Name</td>
+                            <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="padding:10px;">Mobile No</td>
+                            <td style="padding:10px;"><span id="spnMobileno"></span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvCustomer" style="display:none;">
+                <div class="col-md-3 col-xl-3" style="margin-left:120px;">
+                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnDisable" tabindex="20">Disable</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#btnSearchMember1').on("click", function () {
+                GetChangeNameData();
+        });
+
+        $('#btnDisable').on("click", function () {
+            DisablePromotionalSMS();
+        });
+        $("#btnSearchMember1").on("click", function () {
+            $("#dvMemberDetails").show();
+            $("#dvCustomer").show();
+
+        });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+
+
+    });
+    function GetChangeNameData() {
+        if ($('#ddlGroupDetails').val() == "") {
+            toastr.error('Please Select Group');
+            return false
+        }
+        if ($('#txtMobileNo').val() == "") {
+            toastr.error('Please Enter Mobile No');
+            return false
+        }
+        var GroupId = $('#ddlGroupDetails').val();
+        var GroupName = $("#ddlGroupDetails option:selected").text();
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetChangeNameData", "IndividualDBConfig")',
+            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',GroupName: ' + JSON.stringify(GroupName) + ',MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                $("#spnMemberName").text(result.MemberName);
+                $("#spnMobileno").text(result.MobileNo);
+
+                }
+                else {
+                toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                $("#spnMemberName").text("");
+                $("#spnMobileno").text("");
+
+                }
+                $("#divLoader").hide();
+                },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+
+        });
+    }
+    function DisablePromotionalSMS() {
+
+        cuteAlert({
+            type: "question",
+            title: "Confirmation",
+            message: "Do you want to disable promotional SMS?",
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                var MemberData = [];
+                var GroupId = $('#ddlGroupDetails').val();
+                var GroupName = $("#ddlGroupDetails option:selected").text();
+                item = {}
+                item["GroupID"] = $("#ddlGroupDetails").val();
+                item["MobileNo"] = $("#txtMobileNo").val();
+
+
+                MemberData.push(item);
+                var data = JSON.stringify(MemberData);
+                console.log(data)
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DisablePromotionalSMS", "IndividualDBConfig")',
+                    data: '{jsonData: ' + JSON.stringify(data) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        toastr.success("Promotional SMS Disabled Successfully");
+                        window.location.reload();
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+
+
+                    }
+                });
+            }
+        })
+
+
+    }
+
+</script>
+
+
