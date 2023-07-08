@@ -20,7 +20,10 @@ namespace WebApp.Controllers.ITCS
         // GET: CommonDBConfig
         public ActionResult ChangeCSName()
         {
-            return View();
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            objData.lstRMAssigned = ITCSR.GetRMAssignedList();
+            return View(objData);
         }
         public ActionResult EnableProgramme()
         {
@@ -72,6 +75,51 @@ namespace WebApp.Controllers.ITCS
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        
+
+        public ActionResult GetCSNameData(string GroupId)
+        {
+            GroupData objCustomerDetail = new GroupData();
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                if (!string.IsNullOrEmpty(GroupId))
+                {
+                    objCustomerDetail = ITCSR.GetCSNameByGroupId(GroupId);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCSNameData");
+            }
+            return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveCSName(string jsonData)
+        {
+            var result = false;
+            string GroupId, RMAssignedId;
+            GroupId = string.Empty;
+            RMAssignedId = string.Empty;
+            try
+            {
+
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    RMAssignedId = Convert.ToString(item["RMAssignedID"]);
+
+                }
+                result = ITCSR.SaveCSData(GroupId, RMAssignedId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCSName");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }

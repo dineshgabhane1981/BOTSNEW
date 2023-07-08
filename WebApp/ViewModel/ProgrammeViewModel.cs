@@ -1,4 +1,5 @@
 ﻿using BOTS_BL.Models;
+using BOTS_BL.Models.CommonDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,12 @@ namespace WebApp.ViewModel
         public List<tblGroupDetail> lstNotActive { get; set; }
 
         public List<SelectListItem> lstGroupDetails { get; set; }
-       
-       
+        public List<SelectListItem> lstRMAssigned { get; set; }
+
+
         public tblGroupDetail tblGroupDetails { get; set; }
-           
+        public tblRMAssigned tblRMAssigned { get; set; }
+
         public string Message { get; set; }
         
         

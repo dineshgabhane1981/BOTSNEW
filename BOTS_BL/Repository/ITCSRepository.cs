@@ -1,8 +1,10 @@
 ﻿using BOTS_BL.Models;
+using BOTS_BL.Models.CommonDB;
 using BOTS_BL.Models.RetailerWeb;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -282,5 +284,83 @@ namespace BOTS_BL.Repository
             return status;
         }
 
+        public GroupData GetCSNameByGroupId(string GroupId)
+        {
+            GroupData objMemberData = new GroupData();
+            try
+            {
+                tblGroupDetail objCustomerDetail = new tblGroupDetail();
+                string CSName = string.Empty; 
+                int varid = Convert.ToInt32(GroupId);
+                using (var context = new CommonDBContext())
+                {
+                    //objCustomerDetail = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
+                    objMemberData = context.Database.SqlQuery<GroupData>("select TR.RMAssignedName from tblGroupDetails TG inner join tblRMAssigned TR on TG.RMAssigned=TR.RMAssignedId where TG.GroupId = @Groupid", new SqlParameter("@Groupid", varid)).FirstOrDefault();
+                }
+               //if (objCustomerDetail != null)
+               //   {
+               //         objMemberData.CSName = objCustomerDetail.RMAssigned;
+               //   }
+                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCSNameByGroupId");
+            }
+            return objMemberData;
+        }
+        public List<SelectListItem> GetRMAssignedList()
+        {
+            List<SelectListItem> lstRMAssigned = new List<SelectListItem>();
+            List<tblRMAssigned> GroupDetails = new List<tblRMAssigned>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    GroupDetails = context.tblRMAssigneds.Where(x => x.IsActive == true).ToList();
+                }
+                foreach (var item in GroupDetails)
+                {
+                    lstRMAssigned.Add(new SelectListItem
+                    {
+                        Text = item.RMAssignedName,
+                        Value = Convert.ToString(item.RMAssignedId)
+                    });
+                }
+                lstRMAssigned = lstRMAssigned.OrderBy(x => x.Text).ToList();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
+            }
+            return lstRMAssigned;
+        }
+
+        public bool SaveCSData(string GroupId, string RMAssignedId)
+        {
+            bool status = false;
+
+            try
+            {
+                tblGroupDetail objCustomerDetail = new tblGroupDetail();
+                tblRMAssigned obj = new tblRMAssigned();
+                int varid = Convert.ToInt32(GroupId);
+                int CSId = Convert.ToInt32(RMAssignedId);
+                using (var context = new CommonDBContext())
+                {
+                    objCustomerDetail = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
+                    objCustomerDetail.RMAssigned = CSId;
+
+                    context.tblGroupDetails.AddOrUpdate(objCustomerDetail);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCSData");
+            }
+            return status;
+        }
     }
 }

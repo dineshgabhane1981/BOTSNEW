@@ -16,4 +16,11 @@ namespace BOTS_BL.Models
         public string EnrolledOn { get; set; }      
         public string CustomerId { get; set; }
     }
+
+    public class GroupData
+    {
+        //public string GroupId { get; set; }
+        public string RMAssignedName { get; set; }
+    }
+
 }
