@@ -15,7 +15,7 @@ namespace DLC.Controllers
         DLCConfigRepository DCR = new DLCConfigRepository();
         // GET: Start
         public ActionResult Index(string data)
-        {           
+        {
             var url = Request.Url.ToString();
             string brandId = string.Empty;
             string groupId = string.Empty;
@@ -36,7 +36,7 @@ namespace DLC.Controllers
                     if (item.Contains("Source"))
                     {
                         var sourceData = item.Split('=');
-                        source = sourceData[1];                    
+                        source = sourceData[1];
                     }
                 }
             }
@@ -48,13 +48,13 @@ namespace DLC.Controllers
             if (!string.IsNullOrEmpty(groupId))
             {
                 objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(groupId);
-                if(objData.objDashboardConfig==null)
+                if (objData.objDashboardConfig == null)
                 {
                     return View("UnauthorizedURL");
                 }
                 objData.lstDLCFrontEndPageData = DCR.GetDLCFrontEndPageData(groupId);
                 SessionVariables objVariable = new SessionVariables();
-                objVariable.objDashboardConfig = objData.objDashboardConfig;               
+                objVariable.objDashboardConfig = objData.objDashboardConfig;
                 objVariable.GroupId = groupId;
                 objVariable.BrandId = brandId;
                 objVariable.LoginURL = url;
@@ -64,13 +64,15 @@ namespace DLC.Controllers
             ViewBag.Codes = DCR.GetCountryCodes();
             return View(objData);
         }
-    
+
         public ActionResult CheckandSendOTP(string MobileNo)
         {
             string OTPorPassword = string.Empty;
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
             string gId = sessionVariables.GroupId;
             OTPorPassword = DCR.CheckUserAndSendOTP(gId, MobileNo);
+            sessionVariables.MobileNo = MobileNo;
+            Session["SessionVariables"] = sessionVariables;
             return new JsonResult() { Data = OTPorPassword, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult ValidateUser(string mobileno, string code, string OtpOrPassword)
@@ -86,7 +88,7 @@ namespace DLC.Controllers
             if (config.LoginWithOTP == "Password")
             {
                 var custDetails = DCR.CheckPasswordExist(gId, code + mobileno);
-                if (custDetails !=null)
+                if (custDetails.SlNo != 0)
                 {
                     Hash objHash = new Hash();
                     IsValid = objHash.VerifyHashedPassword(custDetails.Password, OtpOrPassword);
@@ -118,8 +120,9 @@ namespace DLC.Controllers
                     ActionNameFromConfig = GetRedirectActionName(config.RedirectToPage);
                 }
             }
-            if(!string.IsNullOrEmpty(ActionNameFromConfig))
+            if (!string.IsNullOrEmpty(ActionNameFromConfig))
             {
+                var status = DCR.RegisterCustomer(gId, mobileno, code);
                 sessionVariables.CountryCode = code;
                 sessionVariables.MobileNo = mobileno;
                 Session["SessionVariables"] = sessionVariables;
@@ -141,7 +144,7 @@ namespace DLC.Controllers
 
             return ActionName;
         }
-        
+
         public ActionResult SetPassword()
         {
             DLCDashboardFrontData objData = new DLCDashboardFrontData();
@@ -151,8 +154,28 @@ namespace DLC.Controllers
             objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(gId);
             return View(objData);
         }
-    
-        public ActionResult InsertPassword(string mobileNo,string password)
+
+        public ActionResult ResetPassword()
+        {
+            DLCDashboardFrontData objData = new DLCDashboardFrontData();
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            string gId = sessionVariables.GroupId;
+            ViewBag.MobileNo = sessionVariables.CountryCode + sessionVariables.MobileNo;
+            objData.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(gId);
+            var smsdetails = DCR.GetSMSDetails(gId);
+            var status = DCR.SendOTP(gId, ViewBag.MobileNo, smsdetails);
+            return View(objData);
+        }
+        public ActionResult VerifyOTP(string otp)
+        {
+            bool status = false;
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            string gId = sessionVariables.GroupId;
+            status = DCR.ValidateUserByOTP(gId, sessionVariables.MobileNo, otp);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult InsertPassword(string mobileNo, string password)
         {
             bool status = false;
             Hash objHash = new Hash();
@@ -162,7 +185,15 @@ namespace DLC.Controllers
             status = DCR.InsertPassword(mobileNo, password, gId);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-    
+        public ActionResult ResentOTP(string mobileNo)
+        {
+            bool status = false;
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            string gId = sessionVariables.GroupId;
+            var smsdetails = DCR.GetSMSDetails(gId);
+            status = DCR.SendOTP(gId, mobileNo, smsdetails);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
         public ActionResult Logout()
         {
             var sessionVariables = (SessionVariables)Session["SessionVariables"];

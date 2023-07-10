@@ -29,66 +29,66 @@
         }*@
     @if (level == "02")
     {
-        string VWADate = ""; string RenewDate = "";
-        if (Model.VerifiedWARenewalDate != "")
-        {
-            var Date = DateTime.Parse(Model.VerifiedWARenewalDate);
-            VWADate = Date.ToString("yyyy-MM-dd");
-        }
-        else
-        {
-            VWADate = (Model.VerifiedWARenewalDate).ToString();
-        }
+        @*string VWADate = ""; string RenewDate = "";
+             if (Model.VerifiedWARenewalDate != "")
+             {
+                 var Date = DateTime.Parse(Model.VerifiedWARenewalDate);
+                 VWADate = Date.ToString("yyyy-MM-dd");
+             }
+             else
+             {
+                 VWADate = (Model.VerifiedWARenewalDate).ToString();
+             }
 
-        if (Model.RenewDate != "")
-        {
-            var RDate = DateTime.Parse(Model.RenewDate);
-            RenewDate = RDate.ToString("yyyy-MM-dd");
-        }
-        else
-        {
-            RenewDate = (Model.RenewDate).ToString();
-        }
-        @*<div class="row">
-            @if (!string.IsNullOrEmpty(VWADate))
-            {
+             if (Model.RenewDate != "")
+             {
+                 var RDate = DateTime.Parse(Model.RenewDate);
+                 RenewDate = RDate.ToString("yyyy-MM-dd");
+             }
+             else
+             {
+                 RenewDate = (Model.RenewDate).ToString();
+             }
+            <div class="row">
+                 @if (!string.IsNullOrEmpty(VWADate))
+                 {
 
 
-                <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content bg-love-kiss">
-                        <div class="widget-content-wrapper text-white">
-                            <div class="widget-content-left">
-                                <div class="widget-heading">
-                                    Renewal Date:
-                                </div>
+                     <div class="col-md-6 col-xl-4">
+                         <div class="card mb-3 widget-content bg-love-kiss">
+                             <div class="widget-content-wrapper text-white">
+                                 <div class="widget-content-left">
+                                     <div class="widget-heading">
+                                         Renewal Date:
+                                     </div>
 
-                            </div>
-                            <div class="widget-content-right">
-                                <div class="widget-numbers text-white"><span id="spnRenewalDate">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", RenewDate)</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-            @if (!string.IsNullOrEmpty(RenewDate))
-            {
-                <div class="col-md-6 col-xl-4">
-                    <div class="card mb-3 widget-content bg-midnight-bloom">
-                        <div class="widget-content-wrapper text-white">
-                            <div class="widget-content-left">
-                                <div class="widget-heading">
-                                    Verified WA <br /> Renewal Date:
-                                </div>
+                                 </div>
+                                 <div class="widget-content-right">
+                                     <div class="widget-numbers text-white"><span id="spnRenewalDate">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", RenewDate)</span></div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 }
+                 @if (!string.IsNullOrEmpty(RenewDate))
+                 {
+                     <div class="col-md-6 col-xl-4">
+                         <div class="card mb-3 widget-content bg-midnight-bloom">
+                             <div class="widget-content-wrapper text-white">
+                                 <div class="widget-content-left">
+                                     <div class="widget-heading">
+                                         Verified WA <br /> Renewal Date:
+                                     </div>
 
-                            </div>
-                            <div class="widget-content-right">
-                                <div class="widget-numbers text-white"><span id="spnVWARenewalDate">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", VWADate)</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>*@
+                                 </div>
+                                 <div class="widget-content-right">
+                                     <div class="widget-numbers text-white"><span id="spnVWARenewalDate">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", VWADate)</span></div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 }
+             </div>*@
         <div class="row">
             <div class="col-md-12 col-lg-12">
                 <div class="mb-3 card">
@@ -454,8 +454,8 @@
                                 <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
                                     <div class="widget-chat-wrapper-outer">
                                         <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">-->
-                                            @*<canvas id="cvOutlet"></canvas>*@
-                                        <!--</div>
+            @*<canvas id="cvOutlet"></canvas>*@
+            <!--</div>
                                     </div>
                                 </div>
                             </div>

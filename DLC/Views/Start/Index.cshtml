@@ -36,17 +36,19 @@
                                 <input type="number" id="txtMobileNo" class="form-control" style="width:75%;" placeholder="Mobile Number" required>
 
                                 <input type="password" id="txtPassword" class="form-control" style="width: 75%; margin-left: 58px;display:none;" placeholder="Password" required>
+                                <a href="@Url.Action("ResetPassword", "Start")" id="lnkForgotPassword" style="display:none;margin-left:60px;"> Forgor Password</a>
+
                                 <input type="password" id="txtOtp" class="form-control" style="width: 75%; margin-left: 58px; display: none;" placeholder="OTP" required>
-                                
-                                    <div class="optoutCHK mt-4" id="dvTNC" style="display:none;">
-                                        <input type="checkbox" id="chkTerms" style="cursor: pointer; margin-right: 5px;height:15px;width:15px;" />
-                                        <span><label for="chkTerms" style="cursor: pointer;"> I agree to the Brand Loyalty Terms & Conditions</label></span>
-                                    </div>
-                                
+                                <button class="btn form-control btn-primary1" id="btnResend" onclick="ResendOTP();" style="width:90%;margin-top:10px;margin-left:13px;display:none;">Resend OTP</button>
+                                <div class="optoutCHK mt-4" id="dvTNC" style="display:none;">
+                                    <input type="checkbox" id="chkTerms" style="cursor: pointer; margin-right: 5px;height:15px;width:15px;" />
+                                    <span><label for="chkTerms" style="cursor: pointer;"> I agree to the Brand Loyalty Terms & Conditions</label></span>
+                                </div>
+
                             </div>
                             <div class="form-group">
-                                <button type="button" id="btnLogin" class="btn form-control btn-primary  submit px-3" style="font-weight:bold;">Get Started</button>
-                                <button type="button" id="btnSubmit" class="btn form-control btn-primary  submit px-3" style="font-weight:bold;display:none;">Login</button>
+                                <button type="button" id="btnLogin" class="btn form-control btn-primary1  submit px-3" style="font-weight:bold;">Get Started</button>
+                                <button type="button" id="btnSubmit" class="btn form-control btn-primary1  submit px-3" style="font-weight:bold;display:none;">Login</button>
                             </div>
                         </form>
                     </div>
@@ -64,7 +66,7 @@
         </div>
     </section>
 
-    
+
     <script src="~/Content/popper.js"></script>
     <script src="~/Content/bootstrap.min.js"></script>
     <script src="~/Content/main.js"></script>
@@ -85,7 +87,7 @@
         });
         function CheckUser() {
             var status = true;
-            if ($("#txtMobileNo").val() == "") {                
+            if ($("#txtMobileNo").val() == "") {
                 toastr.error('Please enter mobile no');
                 status = false;
             }
@@ -113,8 +115,10 @@
                                 $("#txtOtp").hide();
                                 $("#btnSubmit").show();
                                 $("#btnLogin").hide();
+                                $("#btnResend").hide();
+                                $("#lnkForgotPassword").show();
                                 $("#dvTNC").show();
-                                
+
 
                             }
                             if (result == "OTP") {
@@ -123,6 +127,9 @@
                                 $("#txtOtp").show();
                                 $("#btnSubmit").show();
                                 $("#btnLogin").hide();
+                                $("#btnResend").show();
+                                $("#lnkForgotPassword").hide();
+
                                 $("#dvTNC").show();
                             }
 
@@ -133,7 +140,7 @@
                             console.log(result.responseText)
                         }
                     });
-                $("#divLoader").show();
+                $("#divLoader").hide();
             }
 
         }
@@ -141,13 +148,13 @@
         function ValidateUser() {
             var status = true;
             if ($("#hdnOtpOrPassword").val() == "OTP") {
-                if ($("#txtOtp").val() == "") {                   
+                if ($("#txtOtp").val() == "") {
                     toastr.error('Please enter OTP');
                     status = false;
                 }
             }
             if ($("#hdnOtpOrPassword").val() == "Password") {
-                if ($("#txtPassword").val() == "") {                    
+                if ($("#txtPassword").val() == "") {
                     toastr.error('Please enter Password');
                     status = false;
                 }
@@ -178,8 +185,10 @@
                     dataType: "json",
                     success: function (result) {
                         console.log(result)
-                        var url = '@baseURL' + result;
-                        window.location.href = url;
+                        if (result != "" || result != null) {
+                            var url = '@baseURL' + result;
+                            window.location.href = url;
+                        }
 
                         $("#divLoader").hide();
                     },
@@ -188,6 +197,36 @@
                 });
             }
         }
+
+        function ResendOTP() {
+            var code = $("#ddlCountryCode").val();
+            var mobileno = $("#txtMobileNo").val();
+            var data = code + mobileno;
+            $("#divLoader").show();
+                 $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("ResentOTP", "Start")',
+                     data: '{mobileNo: ' + JSON.stringify(data) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            if (result) {
+                                toastr.success('OTP resent successfully !!!');
+                            }
+                            else
+                            {
+                                toastr.error('There is problem while sending OTP !!!');
+                            }
+                            $("#divLoader").hide();
+                        },
+                        error: function (result) {                            
+                            console.log(result.responseText)
+                        }
+                 });
+            $("#divLoader").hide();
+        }
+
+
     </script>
 </body>
 </html>

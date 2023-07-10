@@ -396,6 +396,25 @@ namespace BOTS_BL.Repository
 
             return status;
         }
+
+        public SMSDetail GetSMSDetails(string groupid)
+        {
+            SMSDetail smsDetails = new SMSDetail();
+            try
+            {
+                string connStr = objCustRepo.GetCustomerConnString(groupid);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    smsDetails = context.SMSDetails.FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetSMSDetails");
+            }
+
+            return smsDetails;
+        }
         public bool SendOTP(string groupId, string MobileNo, SMSDetail smsDetail)
         {
             bool result = false;
@@ -527,8 +546,42 @@ namespace BOTS_BL.Repository
                 var isValidOTP = context.OTPMaintenances.Where(x => x.MobileNo == mobileNo && x.OTP == Otp).FirstOrDefault();
                 if (isValidOTP != null)
                 {
+                    //Add Customer
                     status = true;
                 }
+            }
+            return status;
+        }
+
+        public bool RegisterCustomer(string groupId, string mobileNo,string countryCode)
+        {
+            bool status = false;
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    CustomerDetail objCust = new CustomerDetail();
+                    var outletId = context.OutletDetails.Where(x => x.OutletName.ToLower().Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
+                    var customerId = context.CustomerDetails.OrderByDescending(x => x.SlNo).Select(y => y.CustomerId).FirstOrDefault();
+                    var newcustId = Convert.ToInt64(customerId) + 1;
+                    objCust.CustomerId = Convert.ToString(newcustId);
+                    objCust.MobileNo = mobileNo;
+                    objCust.DOJ = DateTime.Now;
+                    objCust.EnrollingOutlet = outletId;
+                    objCust.MemberGroupId = "1000";
+                    objCust.CustomerThrough = "6";
+                    objCust.Status = "00";
+                    objCust.CustomerName = "Member";
+                    objCust.Points = 0;
+                    context.CustomerDetails.AddOrUpdate(objCust);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "RegisterCustomer "+ groupId);
             }
             return status;
         }
@@ -541,12 +594,23 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    tblDLCUserDetail objData = new tblDLCUserDetail();
-                    objData.MobileNo = mobileNo.Trim();
-                    objData.Password = password.Trim();
-                    objData.AddedDate = DateTime.Now;
-                    context.tblDLCUserDetails.AddOrUpdate(objData);
-                    context.SaveChanges();
+                    var userdetail = context.tblDLCUserDetails.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                    if (userdetail != null)
+                    {
+                        userdetail.Password = password.Trim();
+                        userdetail.UpdatedDate = DateTime.Now;
+                        context.tblDLCUserDetails.AddOrUpdate(userdetail);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        tblDLCUserDetail objData = new tblDLCUserDetail();
+                        objData.MobileNo = mobileNo.Trim();
+                        objData.Password = password.Trim();
+                        objData.AddedDate = DateTime.Now;
+                        context.tblDLCUserDetails.AddOrUpdate(objData);
+                        context.SaveChanges();
+                    }
                     status = true;
                 }
                 catch (Exception ex)

@@ -297,6 +297,7 @@
     <Content Include="Views\PersonalDetails\Index.cshtml" />
     <Content Include="Views\ReferEarn\Index.cshtml" />
     <Content Include="Views\Start\UnauthorizedURL.cshtml" />
+    <Content Include="Views\Start\ResetPassword.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

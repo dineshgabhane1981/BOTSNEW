@@ -84,7 +84,7 @@
                     Raise by
                 </div>
                 <div class="col-sm-4" style="float:left;margin-top:10px;">
-                    @if (userDetails.LoginType == "7")
+                    @if (userDetails.LoginType == "7" || userDetails.LoginType == "10")
                     {
                         @Html.DropDownList("RaisedBy", new SelectList(ViewBag.lstRMAssigned, "Value", "Text"), htmlAttributes: new { @class = "input100", @disabled = "disabled", @id = "ddlRaisedBy" })
                     }
@@ -519,7 +519,7 @@
             $("#dvDiscussionData" + id).hide(1000);
             $("#trActivities" + id).hide(1000);
 
-            $("#imgExpand" + id).attr("src", "/Content/assets/images/details_open.png");
+            $("#imgExpand" + id).attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_open.png");
         }
         else {
             $("#divLoader").show();
@@ -578,12 +578,12 @@
             console.log(htmlStr);
             //$('tr[id^="trActivities"]').hide(1000);
             //$('div[id^="dvDiscussionData"]').hide(1000);
-            $('[id^="imgExpand"]').attr("src", "../Content/assets/images/details_open.png");
+            $('[id^="imgExpand"]').attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_open.png");
 
             $("#trActivities" + id).show(1000);
 
             $("#dvDiscussionData" + id).show(1000);
-            $("#imgExpand" + id).attr("src", "../Content/assets/images/details_close.png");
+            $("#imgExpand" + id).attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_close.png");
         }
         else {
             cuteAlert({
@@ -601,7 +601,7 @@
             $("#dvFollowupData" + id).hide(1000);
             $("#trFollowUpActivities" + id).hide(1000);
 
-            $("#imgExpandFollowup" + id).attr("src", "/Content/assets/images/details_open.png");
+            $("#imgExpandFollowup" + id).attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_open.png");
         }
         else {
             $("#divLoader").show();
@@ -658,11 +658,11 @@
             htmlStr += "</table>";
             $("#dvFollowupData" + id).html(htmlStr);
 
-            $('[id^="imgExpandFollowup"]').attr("src", "../Content/assets/images/details_open.png");
+            $('[id^="imgExpandFollowup"]').attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_open.png");
             $("#trFollowUpActivities" + id).show(1000);
 
             $("#dvFollowupData" + id).show(1000);
-            $("#imgExpandFollowup" + id).attr("src", "../Content/assets/images/details_close.png");
+            $("#imgExpandFollowup" + id).attr("src", "https://blueocktopus.in/bots/Content/assets/images/details_close.png");
         }
         else {
             cuteAlert({
