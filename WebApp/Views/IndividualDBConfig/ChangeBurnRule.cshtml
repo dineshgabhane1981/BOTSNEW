@@ -4,8 +4,6 @@
     //Layout = "~/Views/Shared/_SidebarMenu.cshtml";
 }
 
-<h2>ChangeBurnRule</h2>
-
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -17,49 +15,49 @@
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
                 <div style="margin-left:50px;">
-                    <button type="button" id="btnGO" style="margin-left:130px;" class="btn btn-primary">Go</button>
+                    <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
                 </div>
             </div>
             <div class="mb-2 pr-3 pt-3 pl-3" id="dvDetails" style="display: none;">
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Burn Min Txn Amount
+                        Min Txn Amount
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objBurnData.BurnMinTxnAmt, new { @class = "input100", @id = "txtBurnMinTxnAmt", tabindex = 1 })
+                        @Html.TextBoxFor(model => model.objBurnData.BurnMinTxnAmt, new { @class = "input50", @id = "txtBurnMinTxnAmt", tabindex = 1 })
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Min Redemption Points
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objBurnData.MinRedemptionPts, new { @class = "input100", @id = "txtMinRedemptionPts", tabindex = 2 })
+                        @Html.TextBoxFor(model => model.objBurnData.MinRedemptionPts, new { @class = "input50", @id = "txtMinRedemptionPts", tabindex = 2 })
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Min Redemption Points First Time
+                        Min Points First Time
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objBurnData.MinRedemptionPtsFirstTime, new { @class = "input100", @id = "txtMinRedemptionPtsFirstTime", tabindex = 3 })
+                        @Html.TextBoxFor(model => model.objBurnData.MinRedemptionPtsFirstTime, new { @class = "input50", @id = "txtMinRedemptionPtsFirstTime", tabindex = 3 })
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Burn Invoice Amt Percentage
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objBurnData.BurnInvoiceAmtPercentage, new { @class = "input100", @id = "txtBurnInvoiceAmtPercentage", tabindex = 4 })
+                        @Html.TextBoxFor(model => model.objBurnData.BurnInvoiceAmtPercentage, new { @class = "input50", @id = "txtBurnInvoiceAmtPercentage", tabindex = 4 })
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Burn DBPoints Percentage
+                        Burn Points Percentage
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objBurnData.BurnDBPointsPercentage, new { @class = "input100", @id = "txtBurnDBPointsPercentage", tabindex = 5 })
-                    </div>                    
+                        @Html.TextBoxFor(model => model.objBurnData.BurnDBPointsPercentage, new { @class = "input50", @id = "txtBurnDBPointsPercentage", tabindex = 5 })
+                    </div>
                 </div>
                 <div class="row mb-2 ml-2">
                     <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
-                        <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" tabindex="15" Onclick="SaveBurnData()"><b>Save</b></button>
+                        <button type="button" id="btnSave" style="margin-left:500px;" class="btn btn-primary" tabindex="15" Onclick="SaveBurnData()"><b>Update</b></button>
                     </div>
                 </div>
             </div>
@@ -71,7 +69,7 @@
     $(document).ready(function () {
         $('#btnGO').on("click", function () {
             GetBurnRule();
-        });       
+        });
     });
 
     function GetBurnRule() {
@@ -91,11 +89,11 @@
             success: function (result) {
                 if (result.objBurnData != null) {
 
-                    $("#txtBurnMinTxnAmt").text(result.objBurnData.BurnMinTxnAmt);
-                    $("#txtMinRedemptionPts").text(result.objBurnData.MinRedemptionPts);
-                    $("#txtMinRedemptionPtsFirstTime").text(result.objBurnData.MinRedemptionPtsFirstTime);
-                    $("#txtBurnInvoiceAmtPercentage").text(result.objBurnData.BurnInvoiceAmtPercentage);
-                    $("#txtBurnDBPointsPercentage").text(result.objBurnData.BurnDBPointsPercentage);
+                    $("#txtBurnMinTxnAmt").val(result.objBurnData.BurnMinTxnAmt);
+                    $("#txtMinRedemptionPts").val(result.objBurnData.MinRedemptionPts);
+                    $("#txtMinRedemptionPtsFirstTime").val(result.objBurnData.MinRedemptionPtsFirstTime);
+                    $("#txtBurnInvoiceAmtPercentage").val(result.objBurnData.BurnInvoiceAmtPercentage);
+                    $("#txtBurnDBPointsPercentage").val(result.objBurnData.BurnDBPointsPercentage);
                     $("#dvDetails").show();
                     $("#divLoader").hide();
                 }
@@ -124,6 +122,47 @@
         var BurnInvoiceAmtPercentage = $("#txtBurnInvoiceAmtPercentage").val();
         var BurnDBPointsPercentage = $("#txtBurnDBPointsPercentage").val();
 
+        if (BurnMinTxnAmt == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Min Txn Amt",
+                buttonText: "Okay"
+            })
+        }
+        else if (MinRedemptionPts == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Min Redemption Points",
+                buttonText: "Okay"
+            })
+        }
+        if (MinRedemptionPtsFirstTime == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Min Points First Time",
+                buttonText: "Okay"
+            })
+        }
+        else if (BurnInvoiceAmtPercentage == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Burn Invoice Amt Percentage",
+                buttonText: "Okay"
+            })
+        }
+        if (BurnDBPointsPercentage == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Burn Points Percentage",
+                buttonText: "Okay"
+            })
+        }
+        else
         {
             var FilterData = [];
             item = {};
@@ -150,7 +189,7 @@
                           cuteAlert({
                               type: "success",
                               title: "Success Title",
-                              message: "Burn Saved Successfully",
+                              message: "Rule Updated Successfully",
                               buttonText: "Okay"
                           })
 
