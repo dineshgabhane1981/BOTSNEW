@@ -152,6 +152,48 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult ChangeEarnRule()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
+
+        }
+        public ActionResult GetEarnRule(string GroupId)
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objEarndata = ITCSR.GetEarnRule(GroupId);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveEarnRule(string jsonData)
+        {
+            tblRuleMaster objtblRuleMaster = new tblRuleMaster();
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string GroupId = userDetails.GroupId;
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    objtblRuleMaster.GroupId = Convert.ToString(item["GroupId"]);
+                    objtblRuleMaster.EarnMinTxnAmt = Convert.ToDecimal(item["EarnMinTxnAmt"]);
+                    objtblRuleMaster.PointsExpiryMonths = Convert.ToInt32(item["PointsExpiryMonths"]);
+                    objtblRuleMaster.PointsPercentage = Convert.ToDecimal(item["PointsPercentage"]);
+                    objtblRuleMaster.PointsAllocation = Convert.ToDecimal(item["PointsAllocation"]);
+                }
+                var connectionString = CR.GetCustomerConnString(Convert.ToString(objtblRuleMaster.GroupId));
+                var Response = ITCSR.SaveEarnRule(objtblRuleMaster, connectionString);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveEarnRule");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
     }
 }

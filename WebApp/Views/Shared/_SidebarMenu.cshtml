@@ -259,7 +259,13 @@
                                                 <i class="metismenu-icon"></i>
                                                 Disable Promotional SMS
                                             </a>
-                                        </li>                                        
+                                        </li> 
+                                        <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")">
+                                            <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")" href="@Url.Action("ChangeEarnRule", "IndividualDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Change Earn Rule
+                                            </a>
+                                        </li>
                                         <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")">
                                             <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")" href="@Url.Action("ChangeBurnRule", "IndividualDBConfig")">
                                                 <i class="metismenu-icon"></i>

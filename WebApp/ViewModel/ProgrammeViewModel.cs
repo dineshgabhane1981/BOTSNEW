@@ -31,8 +31,13 @@ namespace WebApp.ViewModel
         public WhatsAppSMSMaster objWhatsAppSMSMaster { get; set; }
         public GroupDetails objGroupDetail { get; set; }
         public string Script { get; set; }
-        public DemographicData objDemographicData { get; set; }
-
+        //public DemographicData objDemographicData { get; set; }
+        public tblRuleMaster objtblRuleMaster { get; set; }
+        public Earndata objEarndata { get; set; }
+        public string TxnAmt { get; set; }
+        public string RevolvingExpiry { get; set; }
+        public string Percentage { get; set; }
+        public string PointsInRs { get; set; }
         public BurnData objBurnData { get; set; }
     }
 }

@@ -1,0 +1,161 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "ChangeEarnRule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ChangeEarnRule</h2>
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" style="margin-left:20px;" id="dvGroup">
+                <input type="hidden" id="hdnGroupId" />
+                <div class="col-lg-3 col-md-3">
+                    <b>Group Name</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                </div>
+                <div style="margin-left:50px;margin-top:5px;">
+                    <button type="button" id="btnSearchMember1" style="margin-left:70px;" class="btn btn-primary">Go</button>
+                </div>
+            </div>
+            <div style="display:none;" id="dvRules">
+                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:50px;" id="dvTxnAmt">
+                    <div class="col-lg-3 col-md-3">
+                        TxnAmt
+                        @Html.TextBoxFor(model => model.objtblRuleMaster.EarnMinTxnAmt, new { @class = "input50", @id = "txtTxnAmt" })
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        RevolvingExpiry
+                        @Html.TextBoxFor(model => model.objtblRuleMaster.PointsExpiryMonths, new { @class = "input50", @id = "txtRevolvingExpiry" })
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:50px;margin-top:10px;" id="dvRevolvingExpiry">
+                    <div class="col-lg-3 col-md-3">
+                        Percentage
+                        @Html.TextBoxFor(model => model.objtblRuleMaster.PointsPercentage, new { @class = "input50", @id = "txtPercentage" })
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        PointsInRs
+                        @Html.TextBoxFor(model => model.objtblRuleMaster.PointsAllocation, new { @class = "input50", @id = "txtPointsInRs" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" style="display:none;"  id="dvCustomer">
+                <div class="col-md-3 col-xl-3" style="margin-left:200px;">
+                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSave" tabindex="20">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#btnSearchMember1').on("click", function () {
+            GetEarnRule();
+        });
+
+        $("#btnSearchMember1").on("click", function () {
+            $("#dvRules").show();
+            /*$("#dvRevolvingExpiry").show();*/
+            $("#dvCustomer").show();
+
+        });
+        $('#btnSave').on("click", function () {
+            SaveEarnRule();
+        });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+
+    });
+    function GetEarnRule() {
+        if ($('#ddlGroupDetails').val() == "") {
+            toastr.error('Please Select Group');
+            return false
+        }
+
+        var GroupId = $('#ddlGroupDetails').val();
+        var GroupName = $("#ddlGroupDetails option:selected").text();
+        /*alert(GroupId)*/
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetEarnRule", "IndividualDBConfig")',
+            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                console.log(result.objEarndata);
+                if (result.objEarndata != null) {
+                    //alert(result.objEarndata.MinTxnAmt);
+                    //alert(result.objEarndata.PointsExpiryVariableDate);
+                    //alert(result.objEarndata.PointsAllocation);
+                    //alert(result.objEarndata.PointsPrecentage);
+                    $("#txtTxnAmt").val(result.objEarndata.EarnMinTxnAmt);
+                    $("#txtRevolvingExpiry").val(result.objEarndata.PointsExpiryMonths);
+                    $("#txtPointsInRs").val(result.objEarndata.PointsAllocation);
+                    $("#txtPercentage").val(result.objEarndata.PointsPercentage);
+                    $("#divLoader").hide();
+                }
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
+    }
+    function SaveEarnRule() {
+        var GroupId = $('#ddlGroupDetails').val();
+        var EarnMinTxnAmt = $("#txtTxnAmt").val();
+        var PointsExpiryMonths = $("#txtRevolvingExpiry").val();
+        var PointsPercentage = $("#txtPercentage").val();
+        var PointsAllocation = $("#txtPointsInRs").val();
+        var FilterData = [];
+        item = {};
+        item["GroupId"] = GroupId;
+        item["EarnMinTxnAmt"] = EarnMinTxnAmt;
+        item["PointsExpiryMonths"] = PointsExpiryMonths;
+        item["PointsPercentage"] = PointsPercentage;
+        item["PointsAllocation"] = PointsAllocation;
+        FilterData.push(item);
+
+        var data = JSON.stringify(FilterData);
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveEarnRule", "IndividualDBConfig")',
+            data: '{jsonData: ' + JSON.stringify(data) + ',GroupId: ' + JSON.stringify(GroupId) + ', TxnAmt: ' + JSON.stringify($("#txtTxnAmt").val()) + ', RevolvingExpiry: ' + JSON.stringify($("#txtRevolvingExpiry").val()) + ',Percentage: ' + JSON.stringify($("#txtPercentage").val()) + ',PointsInRs: ' + JSON.stringify($("#txtPointsInRs").val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Earn Rule Changed Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeEarnRule", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+</script>
+

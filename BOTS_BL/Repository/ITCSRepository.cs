@@ -418,6 +418,66 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+        public Earndata GetEarnRule(string GroupId)
+        {
+            Earndata obj = new Earndata();
+            try
+            {
+
+                tblRuleMaster objtblRuleMaster = new tblRuleMaster();
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                //int varid = Convert.ToInt32(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objtblRuleMaster = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+                if (objtblRuleMaster != null)
+                {
+                    obj.EarnMinTxnAmt = objtblRuleMaster.EarnMinTxnAmt;
+                    obj.PointsExpiryMonths = objtblRuleMaster.PointsExpiryMonths;
+                    obj.PointsAllocation = objtblRuleMaster.PointsAllocation;
+                    obj.PointsPercentage = objtblRuleMaster.PointsPercentage;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetEarnRule");
+            }
+            return obj;
+
+        }
+        public bool SaveEarnRule(tblRuleMaster ObjEarn, string connectionstring)
+        {
+            bool status = false;
+            try
+            {
+                tblRuleMaster objCustomerDetail = new tblRuleMaster();
+                //BrandDetail obj = new BrandDetail();
+                using (var context = new BOTSDBContext(connectionstring))
+                {
+                    objCustomerDetail = context.tblRuleMasters.Where(x => x.GroupId == ObjEarn.GroupId).FirstOrDefault();
+                    //obj = context.BrandDetails.Where(x => x.GroupId == ObjGroup.GroupId).FirstOrDefault();
+                    if (objCustomerDetail != null)
+                    {
+                        objCustomerDetail.GroupId = ObjEarn.GroupId;
+                        objCustomerDetail.EarnMinTxnAmt = ObjEarn.EarnMinTxnAmt;
+                        objCustomerDetail.PointsExpiryMonths = ObjEarn.PointsExpiryMonths;
+                        objCustomerDetail.PointsPercentage = ObjEarn.PointsPercentage;
+                        objCustomerDetail.PointsAllocation = ObjEarn.PointsAllocation;
+                    }
+
+                    context.tblRuleMasters.AddOrUpdate(objCustomerDetail);
+
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveEarnRule");
+            }
+            return status;
+        }
 
     }
 
