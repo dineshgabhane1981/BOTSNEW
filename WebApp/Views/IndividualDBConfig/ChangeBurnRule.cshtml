@@ -71,10 +71,7 @@
     $(document).ready(function () {
         $('#btnGO').on("click", function () {
             GetBurnRule();
-        });
-        $("#btnGO").on("click", function () {
-            $("#dvDetails").show();
-        });
+        });       
     });
 
     function GetBurnRule() {
@@ -99,7 +96,7 @@
                     $("#txtMinRedemptionPtsFirstTime").text(result.objBurnData.MinRedemptionPtsFirstTime);
                     $("#txtBurnInvoiceAmtPercentage").text(result.objBurnData.BurnInvoiceAmtPercentage);
                     $("#txtBurnDBPointsPercentage").text(result.objBurnData.BurnDBPointsPercentage);
-
+                    $("#dvDetails").show();
                     $("#divLoader").hide();
                 }
 
