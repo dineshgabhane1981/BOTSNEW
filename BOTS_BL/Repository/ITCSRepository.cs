@@ -235,21 +235,16 @@ namespace BOTS_BL.Repository
             MemberData objMemberData = new MemberData();
             try
             {
-                CustomerDetail objCustomerDetail = new CustomerDetail();
+                tblCustDetailsMaster objtblCustDetailsMaster = new tblCustDetailsMaster();
                 string connStr = CR.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == searchData && x.Status == "00").FirstOrDefault();
+                    objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == searchData && x.IsActive == true).FirstOrDefault();
                 }
-                if (objCustomerDetail != null)
+                if (objtblCustDetailsMaster != null)
                 {
-                    objMemberData.MemberName = objCustomerDetail.CustomerName;
-                    objMemberData.MobileNo = objCustomerDetail.MobileNo;
-
-                    //using (var contextNew = new BOTSDBContext(connStr))
-                    //{
-                    //    objMemberData.EnrolledOutletName = contextNew.OutletDetails.Where(x => x.OutletId == objCustomerDetail.EnrollingOutlet).Select(y => y.OutletName).FirstOrDefault();
-                    //}
+                    objMemberData.MemberName = objtblCustDetailsMaster.Name;
+                    objMemberData.MobileNo = objtblCustDetailsMaster.MobileNo;
                 }
             }
             catch (Exception ex)
@@ -263,15 +258,15 @@ namespace BOTS_BL.Repository
             bool status = false;
             try
             {
-                CustomerDetail objCustomerDetail = new CustomerDetail();
-                GroupDetail obj1 = new GroupDetail();
+                tblCustDetailsMaster objtblCustDetailsMaster = new tblCustDetailsMaster();
+                tblGroupMaster obj1 = new tblGroupMaster();
                 string connStr = CR.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();                    
-                    objCustomerDetail.IsSMS = false;
+                    objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    objtblCustDetailsMaster.DisableSMSWAPromo = true;
                     
-                    contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
+                    contextNew.tblCustDetailsMasters.AddOrUpdate(objtblCustDetailsMaster);
                     contextNew.SaveChanges();
                     status = true;
                 }

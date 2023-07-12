@@ -22,6 +22,13 @@ namespace BOTS_BL.Models
         //public string GroupId { get; set; }
         public string RMAssignedName { get; set; }
     }
+    public class Earndata
+    {   
+        public decimal? EarnMinTxnAmt { get; set; }
+        public int? PointsExpiryMonths { get; set; }
+        public decimal? PointsAllocation { get; set; }
+        public decimal? PointsPercentage { get; set; }
+    }
     public class BurnData
     {
         public string GroupId { get; set; }

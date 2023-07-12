@@ -53,7 +53,7 @@ namespace BOTS_BL.Models
 
         public bool? DisableTxn { get; set; }
 
-        public bool? DisableSMSWA { get; set; }
+        public bool? DisableSMSWAPromo { get; set; }
 
         [StringLength(50)]
         public string EnrolledBy { get; set; }
@@ -63,5 +63,6 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string CurrentEnrolledOutlet { get; set; }
+        public bool? DisableSMSWATxn { get; set; }
     }
 }
