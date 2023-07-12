@@ -195,5 +195,9 @@ namespace WebApp.Controllers.ITCS
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult ExtendPointsExpiry()
+        {
+            return View();
+        }
     }
 }

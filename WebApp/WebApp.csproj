@@ -625,6 +625,8 @@
     <Content Include="Views\IndividualDBConfig\DisableSMS.cshtml" />
     <Content Include="Views\IndividualDBConfig\ChangeDemographicDetails.cshtml" />
     <Content Include="Views\IndividualDBConfig\ChangeBurnRule.cshtml" />
+    <Content Include="Views\IndividualDBConfig\ExtendPointsExpiry.cshtml" />
+    <Content Include="Views\IndividualDBConfig\ChangeEarnRule.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

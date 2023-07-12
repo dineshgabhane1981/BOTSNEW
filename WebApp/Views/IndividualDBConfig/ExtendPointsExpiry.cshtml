@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Extend Points Expiry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3 ml-5">
+            <div class="col-md-6 col-xl-6 row">
+                <input type="radio" id="rdnBase" checked name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:100px;">Base</div> &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnCampaign" name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Campaign</div>
+            </div>
+            <div id="dvBase" class="col-md-6 col-xl-6 row mt-5">
+                <input type="radio" id="rdnBaseCust" checked name="ptsbase" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:25px;">Search Customer</div> &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnBaseRange" name="ptsbase" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Search Date Range</div>
+            </div>
+            <div id="dvCust" class="col-md-6 col-xl-6 row mt-5">
+                <input type="number" id="txtMobileNo" class="input100" placeholder="Please enter mobile Number" /> <button id="btnSearchCustomer" class="btn btn-primary login-btn" style="margin-left:30px;">Show</button>
+                <div id="dvSearchCustSection" class="col-md-6 col-xl-6 mt-4" style="display:none;">afasdfs</div>
+            </div>
+            <div id="dvRange" class="col-md-6 col-xl-6 row mt-5" style="display:none;">Range</div>
+
+
+            <div id="dvCampaign" class="mt-5" style="display:none;">Campaign</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnSearchCustomer").click(function () {
+            GetCustomerDetails();
+        });
+    });
+
+    $("#rdnBase").change(function () {
+        $("#dvBase").show();
+        $("#dvCust").show();
+        $("#dvRange").hide();
+        $("#dvCampaign").hide();
+    });
+    $("#rdnCampaign").change(function () {
+        $("#dvCampaign").show();
+        $("#dvBase").hide();
+        $("#dvCust").hide();
+        $("#dvRange").hide();
+    });
+    $("#rdnBaseCust").change(function () {
+        $("#dvCust").show();
+        $("#dvRange").hide();
+    });
+    $("#rdnBaseRange").change(function () {
+        $("#dvRange").show();
+        $("#dvCust").hide();
+    });
+
+    function GetCustomerDetails() {
+        $("#dvSearchCustSection").show(1000);
+    }
+</script>
