@@ -252,6 +252,7 @@
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
     <Compile Include="Models\CommonDB\tblChannelPartner.cs" />
     <Compile Include="Models\CommonDB\tblCity.cs" />
+    <Compile Include="Models\CommonDB\tblDatabaseDetail.cs" />
     <Compile Include="Models\CommonDB\tblDepartMember.cs" />
     <Compile Include="Models\CommonDB\tblDiscussionCustomerData.cs" />
     <Compile Include="Models\CommonDB\tblDocumentsLibrary.cs" />
@@ -651,9 +652,6 @@
     <Content Include="bin\Release\System.Web.WebPages.Razor.dll" />
     <Content Include="bin\Release\System.Web.WebPages.Razor.xml" />
     <Content Include="bin\Release\System.Web.WebPages.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\AWSSDK.S3.3.7.106.1\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
