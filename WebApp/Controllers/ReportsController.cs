@@ -372,16 +372,31 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetMemberDataResult(string SearchText)
+        public JsonResult GetMemberDataResult(string jsonData)
         {
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-
-            if (SearchText.Equals("All"))
-            {
-                SearchText = "";
-            }
             List<MemberList> lstMember = new List<MemberList>();
-            lstMember = RR.GetMemberList(userDetails.GroupId, SearchText, userDetails.connectionString, userDetails.LoginId);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            foreach (Dictionary<string, object> item in objData)
+            {
+                string OutletId = Convert.ToString(item["OutletId"]);
+                if (OutletId.Equals("All"))
+                {
+                    OutletId = "";
+                }
+                string fromDate = Convert.ToString(item["FrmDate"]);
+                string ToDate = Convert.ToString(item["ToDate"]);
+                string FrmPts = Convert.ToString(item["FrmPts"]);
+                string ToPts = Convert.ToString(item["ToPts"]);
+                string FrmSpend = Convert.ToString(item["FrmSpend"]);
+                string ToSpend = Convert.ToString(item["ToSpend"]);
+
+                lstMember = RR.GetMemberList(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId, fromDate, ToDate, FrmPts,
+                    ToPts, FrmSpend, ToSpend);
+            }
+
             long? apts = 0;
             long btxn = 0;
             long txnCount = 0;
@@ -411,6 +426,103 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult ExportToExcelMemberList(string outletId, string fromDate, string toDate, string frmPts, string toPts, string frmSpends, string toSpends)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+                List<MemberList> lstMember = new List<MemberList>();
+                lstMember = RR.GetMemberList(userDetails.GroupId, outletId, userDetails.connectionString, userDetails.LoginId, fromDate, toDate, frmPts, toPts, frmSpends, toSpends);
+
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(MemberList));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (MemberList item in lstMember)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+                foreach (DataRow dr in table.Rows)
+                {
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
+                    {
+                        dr["TotalSpendStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalSpend"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["AvlBalPoints"])))
+                    {
+                        dr["AvlBalPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["AvlBalPoints"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalBurnPoints"])))
+                    {
+                        dr["TotalBurnPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["TotalBurnPoints"]));
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(dr["EnrolledDate"])))
+                    {
+                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                        dr["EnrolledDate"] = DateTime.ParseExact(Convert.ToString(dr["EnrolledDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    }
+                }
+
+                table.Columns.Remove("TotalSpend");
+                table.Columns.Remove("AvlBalPoints");
+                table.Columns.Remove("TotalBurnPoints");
+                table.Columns.Remove("txnDate");
+                table.Columns["TotalSpendStr"].ColumnName = "TotalSpend";
+                table.Columns["AvlBalPointsStr"].ColumnName = "AvlBalPoints";
+                table.Columns["TotalBurnPointsStr"].ColumnName = "TotalBurnPoints";
+
+                table.Columns.Remove("MaskedMobileNo");
+
+
+                string ReportName = "MemberData";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    table.TableName = ReportName;
+
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Member Data";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "Filter";
+
+                    worksheet.Cell(5, 1).InsertTable(table);
+                    //wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ExportToProfitableCustomers");
+                return null;
+            }
+
+
+        }
+
         public ActionResult GetOutletWiseResult(string DateRangeFlag, string fromDate, string toDate)
         {
             string loginId = string.Empty;
@@ -436,7 +548,7 @@ namespace WebApp.Controllers
                 if (item.PointsCancelled.HasValue)
                     item.PointsCancelled = Math.Abs(item.PointsCancelled.Value);
                 objSum.PointsCancelled = (objSum.PointsCancelled == null ? 0 : objSum.PointsCancelled) + (item.PointsCancelled == null ? 0 : item.PointsCancelled);
-                
+
                 objSum.PointsExpired = (objSum.PointsExpired == null ? 0 : objSum.PointsExpired) + (item.PointsExpired == null ? 0 : item.PointsExpired);
 
                 if (item.TotalMember > 0)
@@ -702,7 +814,7 @@ namespace WebApp.Controllers
                             subTime = Convert.ToString(dr["TxnDatetime"]).Substring(11, 8);
                         var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                        
+
                         if (subTime == "")
                             dr["TxnDatetime"] = convertedDate;
                         else
@@ -1063,11 +1175,11 @@ namespace WebApp.Controllers
 
         public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName, string EmailId)
         {
-            
+
             System.Data.DataTable table = new System.Data.DataTable();
             try
             {
-               
+
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 List<CelebrationsMoreDetails> objCelebrationsMoreDetails = new List<CelebrationsMoreDetails>();
                 objCelebrationsMoreDetails = RR.GetCelebrationsTxnData(userDetails.GroupId, month, type, userDetails.connectionString);
@@ -1076,7 +1188,7 @@ namespace WebApp.Controllers
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
-                
+
                 foreach (CelebrationsMoreDetails item in objCelebrationsMoreDetails)
                 {
                     DataRow row = table.NewRow();
@@ -1085,7 +1197,7 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                
+
                 if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")
                 {
                     table.Columns.Remove("MaskedMobileNo");
@@ -1103,7 +1215,7 @@ namespace WebApp.Controllers
                         table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                     }
                 }
-               
+
                 foreach (DataRow dr in table.Rows)
                 {
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["TotalSpend"])))
@@ -1127,7 +1239,7 @@ namespace WebApp.Controllers
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
-                
+
                 table.Columns.Remove("TotalSpend");
                 table.Columns.Remove("AvlPoints");
                 table.Columns.Remove("PointsExpiry");
@@ -1139,7 +1251,7 @@ namespace WebApp.Controllers
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {
-                   
+
                     //excelSheet.Name
                     table.TableName = ReportName;
                     IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
@@ -1178,25 +1290,25 @@ namespace WebApp.Controllers
                     }
                     worksheet.Cell(6, 1).InsertTable(table);
                     //wb.Worksheets.Add(table);
-                    
+
                     using (MemoryStream stream = new MemoryStream())
                     {
-                        
+
                         wb.SaveAs(stream);
-                        
+
                         if (EmailId != "")
                         {
-                            
+
                             RR.email_send(EmailId, ReportName, stream.ToArray(), userDetails.EmailId);
 
                         }
-                        
+
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 newexception.AddException(ex, "ExportToExcelCelebrations");
                 return null;
             }
@@ -1239,7 +1351,7 @@ namespace WebApp.Controllers
             List<MemberList> lstMember = new List<MemberList>();
             try
             {
-                lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString, userDetails.LoginId);
+                lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString, userDetails.LoginId, "", "", "", "", "", "");
                 int CountNumber = Convert.ToInt32(Count);
                 if (CountOrBusiness == "Count")
                 {
@@ -1301,7 +1413,7 @@ namespace WebApp.Controllers
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
                 List<MemberList> lstMember = new List<MemberList>();
-                lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString, userDetails.LoginId);
+                lstMember = RR.GetMemberList(userDetails.GroupId, "", userDetails.connectionString, userDetails.LoginId, "", "", "", "", "", "");
                 int CountNumber = Convert.ToInt32(Count);
                 if (CountOrBusiness == "Count")
                 {
