@@ -297,10 +297,7 @@ namespace BOTS_BL.Repository
                     //objCustomerDetail = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
                     objMemberData = context.Database.SqlQuery<GroupData>("select TR.RMAssignedName from tblGroupDetails TG inner join tblRMAssigned TR on TG.RMAssigned=TR.RMAssignedId where TG.GroupId = @Groupid", new SqlParameter("@Groupid", varid)).FirstOrDefault();
                 }
-               //if (objCustomerDetail != null)
-               //   {
-               //         objMemberData.CSName = objCustomerDetail.RMAssigned;
-               //   }
+               
                 
             }
             catch (Exception ex)
@@ -362,5 +359,66 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+        public BurnData GetBurnRule(string GroupId)
+        {
+            BurnData objMemberData = new BurnData();
+            try
+            {
+                tblRuleMaster objCustomerDetail = new tblRuleMaster();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objCustomerDetail = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+                if (objCustomerDetail != null)
+                {
+                    objMemberData.GroupId = objCustomerDetail.GroupId;
+                    objMemberData.BurnMinTxnAmt = objCustomerDetail.BurnMinTxnAmt;
+                    objMemberData.MinRedemptionPts = objCustomerDetail.MinRedemptionPts;
+                    objMemberData.MinRedemptionPtsFirstTime = objCustomerDetail.MinRedemptionPtsFirstTime;
+                    objMemberData.BurnInvoiceAmtPercentage = objCustomerDetail.BurnInvoiceAmtPercentage;
+                    objMemberData.BurnDBPointsPercentage = objCustomerDetail.BurnDBPointsPercentage;                    
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBurnRule");
+            }
+            return objMemberData;
+        }
+        public bool SaveBurnRule(tblRuleMaster ObjRuleMaster, string connectionstring)
+        {
+            bool status = false;
+            try
+            {
+                tblRuleMaster objRule = new tblRuleMaster();               
+                using (var context = new BOTSDBContext(connectionstring))
+                {
+                    objRule = context.tblRuleMasters.Where(x => x.GroupId == ObjRuleMaster.GroupId).FirstOrDefault();
+                    
+                    if (objRule != null)
+                    {
+                        objRule.BurnMinTxnAmt = ObjRuleMaster.BurnMinTxnAmt;
+                        objRule.MinRedemptionPts = ObjRuleMaster.MinRedemptionPts;
+                        objRule.MinRedemptionPtsFirstTime = ObjRuleMaster.MinRedemptionPtsFirstTime;
+                        objRule.BurnInvoiceAmtPercentage = ObjRuleMaster.BurnInvoiceAmtPercentage;
+                        objRule.BurnDBPointsPercentage = ObjRuleMaster.BurnDBPointsPercentage;
+                    }
+                    
+                    context.tblRuleMasters.AddOrUpdate(objRule);                    
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveBurnRule");
+
+            }
+            return status;
+        }
+
     }
+
 }

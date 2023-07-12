@@ -1,0 +1,241 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "ChangeDemographicDetails";
+    //Layout = "~/Views/Shared/_SidebarMenu.cshtml";
+}
+
+<h2>Change Demographic Details</h2>
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">                
+                <div class="col-lg-3 col-md-3 ">
+                    <b>Group Name</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                </div>
+                <div style="margin-left:50px;">
+                    <button type="button" id="btnGO" style="margin-left:130px;" class="btn btn-primary">Go</button>
+                </div>
+            </div>
+            <div class="mb-2 pr-3 pt-3 pl-3" id="dvDetails" style="display: none;">
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Retail Name
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.objDemographicData.GroupName, new { @class = "input100", @id = "txtGroupName", tabindex = 1 })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Authorized Person
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.objDemographicData.AuthorisedPerson, new { @class = "input100", @id = "txtAuthorisedPerson", tabindex = 2 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Contact No
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.objDemographicData.ContactNo, new { @class = "input100", @id = "txtContactNo", tabindex = 3 })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        EmailId
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.objDemographicData.EmailId, new { @class = "input100", @id = "txtEmailId", tabindex = 4 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Address
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.objDemographicData.Address, new { @class = "input100", @id = "txtAddress", tabindex = 5 })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        PinCode
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextAreaFor(model => model.objDemographicData.PinCode, new { @class = "input100", @id = "txtPinCode", tabindex = 6 })
+                    </div>
+                </div>
+                <div class="row mb-2 ml-2">
+                    <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
+                        <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" tabindex="15" Onclick="SaveDemographicData()"><b>Save</b></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#btnGO').on("click", function () {
+            GetDemographicDetails();
+        });
+        $("#btnGO").on("click", function () {
+            $("#dvDetails").show();
+        });
+
+    });
+    function GetDemographicDetails() {
+        if ($('#ddlGroupDetails').val() == "" ) {
+            toastr.error('Please Select Group');
+            return false
+        }
+        var GroupId = $('#ddlGroupDetails').val();
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDemographicDetails", "IndividualDBConfig")',
+            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objDemographicData != null) {
+
+                    $("#txtGroupName").text(result.objDemographicData.GroupName);
+                    $("#txtAuthorisedPerson").text(result.objDemographicData.AuthorisedPerson);
+                    $("#txtContactNo").text(result.objDemographicData.ContactNo);
+                    $("#txtEmailId").text(result.objDemographicData.EmailId);
+                    $("#txtAddress").text(result.objDemographicData.Address);
+                    $("#txtPinCode").text(result.objDemographicData.PinCode);
+
+                    $("#divLoader").hide();
+                }
+
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveDemographicData() {
+        if ($('#ddlGroupDetails').val() == "") {
+            toastr.error('Please Select Group');
+            return false
+        }
+
+        var GroupId = $('#ddlGroupDetails').val();
+        alert(GroupId)
+
+        var GroupName = $("#txtGroupName").val();
+        var AuthorisedPerson = $("#txtAuthorisedPerson").val();
+        var ContactNo = $("#txtContactNo").val();
+        var EmailId = $("#txtEmailId").val();
+        var Address = $("#txtAddress").val();
+        var PinCode = $("#txtPinCode").val();
+
+        if (GroupName == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Group Name",
+                buttonText: "Okay"
+            })
+        }
+        else if (AuthorisedPerson == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Authorised Person",
+                buttonText: "Okay"
+            })
+        }
+        else if (ContactNo == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Contact No",
+                buttonText: "Okay"
+            })
+        }
+        else if (EmailId == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the EmailId",
+                buttonText: "Okay"
+            })
+        }
+        else if (Address == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Event Address",
+                buttonText: "Okay"
+            })
+        }
+        else if (PinCode == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the PinCode",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            var FilterData = [];
+            item = {};
+            item["GroupName"] = GroupName;
+            item["GroupId"] = GroupId;
+            item["AuthorisedPerson"] = AuthorisedPerson;
+            item["ContactNo"] = ContactNo;
+            item["EmailId"] = EmailId;
+            item["Address"] = Address;
+            item["PinCode"] = PinCode;
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+
+            $("#divLoader").show();
+
+               $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("SaveDemographicDetails", "IndividualDBConfig")',
+                   data: '{jsonData: ' + JSON.stringify(data) + '}',
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (result) {
+                      console.log(result)
+                      if (result = true) {
+                          cuteAlert({
+                              type: "success",
+                              title: "Success Title",
+                              message: "Data Saved Successfully",
+                              buttonText: "Okay"
+                          })
+
+                        $("#divLoader").hide();
+                      }
+                      else {
+                          cuteAlert({
+                              type: "error",
+                              title: "Oops..",
+                              message: "couldn't Save Data",
+                              buttonText: "Okay"
+                          })
+                      }
+
+                    $("#divLoader").hide();
+                  },
+                   error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+                   }
+          });
+
+    }
+
+}
+
+
+</script>

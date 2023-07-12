@@ -22,5 +22,15 @@ namespace BOTS_BL.Models
         //public string GroupId { get; set; }
         public string RMAssignedName { get; set; }
     }
+    public class BurnData
+    {
+        public string GroupId { get; set; }
+        public decimal? BurnMinTxnAmt { get; set; }
+        public decimal? MinRedemptionPts { get; set; }
+        public decimal? MinRedemptionPtsFirstTime { get; set; }
+        public decimal? BurnInvoiceAmtPercentage { get; set; }
+        public decimal? BurnDBPointsPercentage { get; set; }
+        
+    }
 
 }

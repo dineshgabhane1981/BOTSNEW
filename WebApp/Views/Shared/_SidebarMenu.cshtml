@@ -259,10 +259,15 @@
                                                 <i class="metismenu-icon"></i>
                                                 Disable Promotional SMS
                                             </a>
+                                        </li>                                        
+                                        <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")">
+                                            <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")" href="@Url.Action("ChangeBurnRule", "IndividualDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Change Burn Rule
+                                            </a>
                                         </li>
                                     </ul>
                                 </li>
-
                             }
                             @if (roleId == "1" || roleId == "6")
                             {

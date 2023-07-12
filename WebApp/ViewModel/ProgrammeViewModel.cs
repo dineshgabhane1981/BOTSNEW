@@ -29,6 +29,10 @@ namespace WebApp.ViewModel
             return new SelectListItem[4] { new SelectListItem() { Text = "Enrollment", Value = "Enrollment" }, new SelectListItem() { Text = "Earn", Value = "Earn" }, new SelectListItem() { Text = "Burn", Value = "Burn" }, new SelectListItem() { Text = "Cancel", Value = "Cancel" } };
         }
         public WhatsAppSMSMaster objWhatsAppSMSMaster { get; set; }
+        public GroupDetails objGroupDetail { get; set; }
         public string Script { get; set; }
+        public DemographicData objDemographicData { get; set; }
+
+        public BurnData objBurnData { get; set; }
     }
 }

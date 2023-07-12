@@ -104,5 +104,54 @@ namespace WebApp.Controllers.ITCS
             return Json(result, JsonRequestBehavior.AllowGet);
 
         }
+
+        public ActionResult ChangeBurnRule()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
+        }
+        public ActionResult GetBurnRule(string GroupId)
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objBurnData = ITCSR.GetBurnRule(GroupId);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SaveBurnRule(string jsonData)
+        {
+            tblRuleMaster objRuleMaster = new tblRuleMaster();
+            
+            bool status = false;
+            //var connectionString = CR.GetCustomerConnString(jsonData);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string GroupId = userDetails.GroupId;
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    objRuleMaster.GroupId = Convert.ToString(item["GroupId"]);
+                    objRuleMaster.BurnMinTxnAmt = Convert.ToDecimal(item["BurnMinTxnAmt"]);
+                    objRuleMaster.MinRedemptionPts = Convert.ToDecimal(item["MinRedemptionPts"]);
+                    objRuleMaster.MinRedemptionPtsFirstTime = Convert.ToDecimal(item["MinRedemptionPtsFirstTime"]);
+                    objRuleMaster.BurnInvoiceAmtPercentage = Convert.ToDecimal(item["BurnInvoiceAmtPercentage"]);
+                    objRuleMaster.BurnDBPointsPercentage = Convert.ToDecimal(item["BurnDBPointsPercentage"]);
+                   
+                }
+                
+                var connectionString = CR.GetCustomerConnString(objRuleMaster.GroupId);
+                var Response = ITCSR.SaveBurnRule(objRuleMaster, connectionString);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDemographicDetails");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
     }
 }
