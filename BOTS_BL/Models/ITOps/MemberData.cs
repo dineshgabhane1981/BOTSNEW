@@ -15,6 +15,8 @@ namespace BOTS_BL.Models
         public string EnrolledOutletName { get; set; }
         public string EnrolledOn { get; set; }      
         public string CustomerId { get; set; }
+        public bool DisableSMSWAPromo { get; set; }
+        public bool DisableSMSWATxn { get; set; }
     }
 
     public class GroupData

@@ -81,6 +81,7 @@ namespace WebApp.Controllers.ITCS
             string GroupId, MobileNo;
             GroupId = string.Empty;
             MobileNo = string.Empty;
+            bool DisableSMSWAPromo = default;
             try
             {
 
@@ -91,10 +92,11 @@ namespace WebApp.Controllers.ITCS
                 {
                     GroupId = Convert.ToString(item["GroupID"]);
                     MobileNo = Convert.ToString(item["MobileNo"]);
+                    DisableSMSWAPromo = Convert.ToBoolean(item["DisableSMSWAPromo"]);
 
                 }
 
-                result = ITCSR.DisablePromotionalSMS(GroupId, MobileNo);
+                result = ITCSR.DisablePromotionalSMS(GroupId, MobileNo, DisableSMSWAPromo);
 
             }
             catch (Exception ex)
@@ -104,7 +106,40 @@ namespace WebApp.Controllers.ITCS
             return Json(result, JsonRequestBehavior.AllowGet);
 
         }
+        public ActionResult DisableTransactions()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
+        }
+        public ActionResult BlockTransaction(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var result = false;
+            string GroupId, MobileNo;
+            GroupId = string.Empty;
+            MobileNo = string.Empty;
+            bool DisableSMSWATxn = default;
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    DisableSMSWATxn = Convert.ToBoolean(item["DisableSMSWATxn"]);
+                }
 
+                result = ITCSR.BlockTransaction(GroupId, MobileNo, DisableSMSWATxn);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "BlockTransaction");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult ChangeBurnRule()
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();

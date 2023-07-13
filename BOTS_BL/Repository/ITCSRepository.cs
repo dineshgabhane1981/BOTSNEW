@@ -245,6 +245,8 @@ namespace BOTS_BL.Repository
                 {
                     objMemberData.MemberName = objtblCustDetailsMaster.Name;
                     objMemberData.MobileNo = objtblCustDetailsMaster.MobileNo;
+                    objMemberData.DisableSMSWAPromo = Convert.ToBoolean(objtblCustDetailsMaster.DisableSMSWAPromo);
+                    objMemberData.DisableSMSWATxn = Convert.ToBoolean(objtblCustDetailsMaster.DisableSMSWATxn);
                 }
             }
             catch (Exception ex)
@@ -253,7 +255,7 @@ namespace BOTS_BL.Repository
             }
             return objMemberData;
         }
-        public bool DisablePromotionalSMS(string GroupId,string MobileNo)
+        public bool DisablePromotionalSMS(string GroupId,string MobileNo,bool DisableSMSWAPromo)
         {
             bool status = false;
             try
@@ -264,7 +266,7 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                    objtblCustDetailsMaster.DisableSMSWAPromo = true;
+                    objtblCustDetailsMaster.DisableSMSWAPromo = DisableSMSWAPromo;
                     
                     contextNew.tblCustDetailsMasters.AddOrUpdate(objtblCustDetailsMaster);
                     contextNew.SaveChanges();
@@ -278,7 +280,31 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+        public bool BlockTransaction(string GroupId, string MobileNo,bool DisableSMSWATxn)
+        {
+            bool status = false;
+            try
+            {
+                tblCustDetailsMaster objtblCustDetailsMaster = new tblCustDetailsMaster();
+                tblGroupMaster obj1 = new tblGroupMaster();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    objtblCustDetailsMaster.DisableSMSWATxn = DisableSMSWATxn;
 
+                    contextNew.tblCustDetailsMasters.AddOrUpdate(objtblCustDetailsMaster);
+                    contextNew.SaveChanges();
+                    status = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "BlockTransaction");
+            }
+            return status;
+        }
         public GroupData GetCSNameByGroupId(string GroupId)
         {
             GroupData objMemberData = new GroupData();
