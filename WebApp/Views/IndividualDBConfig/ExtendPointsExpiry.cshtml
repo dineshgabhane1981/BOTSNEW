@@ -1,4 +1,4 @@
-﻿
+﻿@model WebApp.ViewModel.ProgrammeViewModel
 @{
     ViewBag.Title = "Extend Points Expiry";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,23 +6,58 @@
 
 <div class="app-main__inner">
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3 ml-5">
-            <div class="col-md-6 col-xl-6 row">
-                <input type="radio" id="rdnBase" checked name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:100px;">Base</div> &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdnCampaign" name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Campaign</div>
+        <div class="container-fluid pt-3 pr-3 pb-3 ml-5">
+            <div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvGroup">
+                <input type="hidden" id="hdnGroupId" />
+                <div class="col-lg-3 col-md-3">
+                    <b>Group Name</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                </div>
+                <div style="margin-left:50px;margin-top:5px;">
+                    <button type="button" id="btnShow" style="margin-left:70px;" class="btn btn-primary">Go</button>
+                </div>
             </div>
-            <div id="dvBase" class="col-md-6 col-xl-6 row mt-5">
-                <input type="radio" id="rdnBaseCust" checked name="ptsbase" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:25px;">Search Customer</div> &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rdnBaseRange" name="ptsbase" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Search Date Range</div>
-            </div>
-            <div id="dvCust" class="col-md-6 col-xl-6 row mt-5">
-                <input type="number" id="txtMobileNo" class="input100" placeholder="Please enter mobile Number" /> <button id="btnSearchCustomer" class="btn btn-primary login-btn" style="margin-left:30px;">Show</button>
-                <div id="dvSearchCustSection" class="col-md-6 col-xl-6 mt-4" style="display:none;">afasdfs</div>
-            </div>
-            <div id="dvRange" class="col-md-6 col-xl-6 row mt-5" style="display:none;">Range</div>
+            <div id="dvMainSection" style="display:none;">
+                <div class="col-md-6 col-xl-6 row">
+                    <input type="radio" id="rdnBase" checked name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:100px;">Base</div> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnCampaign" name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Campaign</div>
+                </div>
+                <div id="dvBase" class="col-md-6 col-xl-6 row mt-5">
+                    <input type="radio" id="rdnBaseCust" checked name="ptsbase" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:25px;">Search Customer</div> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnBaseRange" name="ptsbase" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Search Date Range</div>
+                </div>
+                <div id="dvCust" class="col-md-6 col-xl-6 row mt-5">
+                    <input type="number" id="txtMobileNo" class="input100" placeholder="Please enter mobile Number" /> <button id="btnSearchCustomer" class="btn btn-primary login-btn" style="margin-left:30px;">Show</button>
+                    <div id="dvSearchCustSection" class="col-md-6 col-xl-6 mt-4" style="display:none;">
+                        <table border="1" cellpadding="10" cellspacing="10">
+                            <tr>
+                                <td>Mobile No</td>
+                                <td><span id="spnMobileNo"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Customer Name</td>
+                                <td><span id="spnCustName"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Points</td>
+                                <td><span id="spnPoints"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Expiry Date</td>
+                                <td><span id="spnExpiryDate"></span></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+                <div id="dvRange" class="col-md-6 col-xl-6 row mt-5" style="display:none;">Range</div>
 
 
-            <div id="dvCampaign" class="mt-5" style="display:none;">Campaign</div>
+                <div id="dvCampaign" class="mt-5" style="display:none;">Campaign</div>
+
+            </div>
         </div>
     </div>
 </div>
@@ -31,6 +66,9 @@
     $(document).ready(function () {
         $("#btnSearchCustomer").click(function () {
             GetCustomerDetails();
+        });
+        $("#btnShow").click(function () {
+            $("#dvMainSection").show(1000);
         });
     });
 
@@ -54,8 +92,36 @@
         $("#dvRange").show();
         $("#dvCust").hide();
     });
-
+    
     function GetCustomerDetails() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPointExpiryDetails", "IndividualDBConfig")',
+            data: '{mobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+
+                if (result != null) {
+                    $("#spnMobileNo").text(result.MobileNo);
+                    $("#spnCustName").text(result.CustName);
+                    $("#spnPoints").text(result.Points);
+                    $("#spnExpiryDate").text(result.EndDate);
+                    $("#divLoader").hide();
+                }
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
+
+
+
         $("#dvSearchCustSection").show(1000);
     }
 </script>

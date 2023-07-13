@@ -10188,7 +10188,9 @@ a, button, .btn {
 
     .app-sidebar .scrollbar-sidebar {
         z-index: 15;
-        width: 100%
+        width: 100%;
+        overflow-y:scroll;
+        
     }
 
     .app-sidebar .app-sidebar-bg {

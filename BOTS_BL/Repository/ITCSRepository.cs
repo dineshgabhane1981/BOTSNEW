@@ -500,6 +500,28 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-    }
+        public PointExpiryDummyModel GetPointExpiryDetails(string groupid, string mobileNo)
+        {
+            PointExpiryDummyModel objData = new PointExpiryDummyModel();
+            var connStr = CR.GetCustomerConnString(groupid);
 
+            using (var context = new BOTSDBContext(connStr))
+            {
+                var pointExpiryData = context.tblCustPointsMasters.Where(x => x.MobileNo == mobileNo && x.PointsType == "Base").FirstOrDefault();
+                if (pointExpiryData != null)
+                {
+                    objData.MobileNo = pointExpiryData.MobileNo;
+                    objData.Points = pointExpiryData.Points;
+                    objData.EndDate = pointExpiryData.EndDate.Value.ToString("MM/dd/yyyy");
+
+                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                    objData.CustName = custDetails.Name;
+                }
+            }
+
+            return objData;
+        }
+    }
 }
+
+

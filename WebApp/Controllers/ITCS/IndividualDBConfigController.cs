@@ -232,7 +232,19 @@ namespace WebApp.Controllers.ITCS
 
         public ActionResult ExtendPointsExpiry()
         {
-            return View();
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
         }
+        public ActionResult GetPointExpiryDetails(string mobileNo, string groupId)
+        {
+            PointExpiryDummyModel objPointsExpiry = new PointExpiryDummyModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objPointsExpiry = ITCSR.GetPointExpiryDetails(groupId, mobileNo);
+            return new JsonResult() { Data = objPointsExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
+
     }
 }
