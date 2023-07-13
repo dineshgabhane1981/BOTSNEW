@@ -4,48 +4,43 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ChangeCSName</h2>
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
                 <div class="col-lg-3 col-md-3 ">
-                    <b>Group Name</b>
+                    <b >Group Name</b>
                 </div>
                 <div class="col-md-3 col-xl-3">
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
-                <div style="margin-left:50px;">
-                    <button type="button" id="btnGO" style="margin-left:130px;" class="btn btn-primary">Go</button>
+                <div style="margin-left:50px; margin-top:5px;">
+                    <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
                 </div>
-                <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" style="padding-left: 0px !important;margin-top:30px;display:none;" id="dvMemberDetails">
-                    <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
-                        <div class="col-lg-4 col-md-4 ">
-                            <b>Existing CS Name</b>
-                        </div>
-                        <div class="col-md-4 col-xl-4">
-                            <span style="color:black;" id="spnCSName"></span>
-                        </div>
-                        <div>
-
-                        </div>
-                    </div>
-                    <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
-                        <div class="col-lg-3 col-md-3 ">
-                            <b>CS Name</b>
-                        </div>
-                        <div class="col-md-3 col-xl-3">
-                            @Html.DropDownListFor(model => model.tblRMAssigned.RMAssignedName, new SelectList(Model.lstRMAssigned, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlRMAssigned" })
-                        </div>
-                        <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
-                            <div>
-                                <button type="button" id="btnSave" class="btn btn-primary" Onclick="SaveCSName()"><b>Save</b></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+            <div class="mb-2 pr-3 pt-3 pl-3 " id="dvMemberDetails" style="display: none;">
+                <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 150px; margin-bottom: 30px;">
+                            <b style="margin-left:30px;">Existing CS Name</b>
+                        </div>
+                        <div class="col-sm-4" style="float: left; margin-bottom: 30px; margin-left: 45px;">
+                            @Html.TextBoxFor(model => model.tblGroupDetails.RMAssigned, new { @class = "input50", @id = "txtRMAssigned", ReadOnly = "true", tabindex = 1 })
+                        </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px; margin-right:80px;">
+                             <b>CS Name</b>
+                        </div>
+                        <div class="col-sm-4" style="float: left; margin-top: 10px;">
+                             @Html.DropDownListFor(model => model.tblRMAssigned.RMAssignedName, new SelectList(Model.lstRMAssigned, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlRMAssigned" })
+                        </div>
+                </div>
+                <div class="row mb-2 ml-2">
+                        <div class="col-md-3 col-xl-6" style="margin-left: 270px; margin-top: 20px; ">
+                                <button type="button" id="btnSave" class="btn btn-primary" Onclick="SaveCSName()"><b>Update</b></button>
+                        </div>
+                </div>                        
+            </div>                
         </div>
     </div>
 </div>
@@ -55,9 +50,9 @@
         $('#btnGO').on("click", function () {
             GetCSNameChange();
         });
-        $("#btnGO").on("click", function () {
-            $("#dvMemberDetails").show();
-        });       
+        //$("#btnGO").on("click", function () {
+        //    $("#dvMemberDetails").show();
+        //});       
     });
 
     function GetCSNameChange() {
@@ -78,8 +73,8 @@
             dataType: "json",
             success: function (result) {
                 if (result.RMAssignedName != null) {
-                    $("#spnCSName").text(result.RMAssignedName);
-
+                    $("#txtRMAssigned").val(result.RMAssignedName);
+                    $("#dvMemberDetails").show();
                     $("#divLoader").hide();
                 }
             }
@@ -87,6 +82,15 @@
     }
 
     function SaveCSName() {
+        if ($('#ddlRMAssigned').val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please select CS Name",
+                buttonText: "Okay"
+            })
+        }
+        else {
 
         cuteAlert({
             type: "question",
@@ -115,8 +119,27 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                        toastr.success("Assigned CS Changed Successfully");
-                        window.location.reload();
+                        console.log(result)
+                        if (result = true) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Success Title",
+                                message: "Assigned CS Changed Successfully",
+                                buttonText: "Okay"
+                            }).then(() => {
+                                window.location.reload();                                
+                            })                                                      
+                            $("#divLoader").hide();                            
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "couldn't Save Data",
+                                buttonText: "Okay"
+                            })
+                        }
+
                         $("#divLoader").hide();
                     },
                     error: function (result) {
@@ -125,7 +148,7 @@
                 });
             }
         })
-
-
     }
+
+}
 </script>
