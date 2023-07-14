@@ -247,6 +247,8 @@ namespace BOTS_BL.Repository
                 {
                     objMemberData.MemberName = objtblCustDetailsMaster.Name;
                     objMemberData.MobileNo = objtblCustDetailsMaster.MobileNo;
+                    objMemberData.DisableSMSWAPromo = Convert.ToBoolean(objtblCustDetailsMaster.DisableSMSWAPromo);
+                    objMemberData.DisableSMSWATxn = Convert.ToBoolean(objtblCustDetailsMaster.DisableSMSWATxn);
                 }
             }
             catch (Exception ex)
@@ -602,36 +604,36 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public List<MemberData> GetTierList(string GroupId)
-        {
-            List<MemberData> lstTiers = new List<MemberData>();
-            List<tblCustDetailsMaster> lstTempMemberData = new List<tblCustDetailsMaster>();
-            try
-            {
-                var connStr = CR.GetCustomerConnString((GroupId));
-                using (var contextNew = new BOTSDBContext(connStr))
-                {
-                    var MemberList = contextNew.Database.SqlQuery<tblCustDetailsMaster>("select * from tblCustDetailsMaster").ToList();
+        //public List<MemberData> GetTierList(string GroupId)
+        //{
+        //    List<MemberData> lstTiers = new List<MemberData>();
+        //    List<tblCustDetailsMaster> lstTempMemberData = new List<tblCustDetailsMaster>();
+        //    try
+        //    {
+        //        var connStr = CR.GetCustomerConnString((GroupId));
+        //        using (var contextNew = new BOTSDBContext(connStr))
+        //        {
+        //            var MemberList = contextNew.Database.SqlQuery<tblCustDetailsMaster>("select * from tblCustDetailsMaster").ToList();
 
-                    foreach (var item in MemberList)
-                    {
-                        MemberData Obj = new MemberData();
-                        Obj.MobileNo = item.MobileNo;
-                        Obj.MemberName = item.Name;
-                        Obj.EnrolledOn = item.DOJ.Value.ToString("dd/MM/yyyy");
-                        Obj.Tier = item.Tier;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "GetMemberList");
-            }
+        //            foreach (var item in MemberList)
+        //            {
+        //                MemberData Obj = new MemberData();
+        //                Obj.MobileNo = item.MobileNo;
+        //                Obj.MemberName = item.Name;
+        //                Obj.EnrolledOn = item.DOJ.Value.ToString("dd/MM/yyyy");
+        //                Obj.Tier = item.Tier;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        newexception.AddException(ex, "GetMemberList");
+        //    }
 
-            lstTiers = lstTiers.OrderBy(x => x.Tier).ToList();
+        //    lstTiers = lstTiers.OrderBy(x => x.Tier).ToList();
 
-            return lstTiers;
-        }
+        //    return lstTiers;
+        //}
     }
 
 }
