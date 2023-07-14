@@ -81,6 +81,7 @@ namespace WebApp.Controllers.ITCS
             string GroupId, MobileNo;
             GroupId = string.Empty;
             MobileNo = string.Empty;
+            bool DisableSMSWAPromo = default;
             try
             {
 
@@ -91,10 +92,11 @@ namespace WebApp.Controllers.ITCS
                 {
                     GroupId = Convert.ToString(item["GroupID"]);
                     MobileNo = Convert.ToString(item["MobileNo"]);
+                    DisableSMSWAPromo = Convert.ToBoolean(item["DisableSMSWAPromo"]);
 
                 }
 
-                result = ITCSR.DisablePromotionalSMS(GroupId, MobileNo);
+                result = ITCSR.DisablePromotionalSMS(GroupId, MobileNo, DisableSMSWAPromo);
 
             }
             catch (Exception ex)
@@ -103,6 +105,40 @@ namespace WebApp.Controllers.ITCS
             }
             return Json(result, JsonRequestBehavior.AllowGet);
 
+        }
+        public ActionResult DisableTransactions()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
+        }
+        public ActionResult BlockTransaction(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var result = false;
+            string GroupId, MobileNo;
+            GroupId = string.Empty;
+            MobileNo = string.Empty;
+            bool DisableSMSWATxn = default;
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    DisableSMSWATxn = Convert.ToBoolean(item["DisableSMSWATxn"]);
+                }
+
+                result = ITCSR.BlockTransaction(GroupId, MobileNo, DisableSMSWATxn);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "BlockTransaction");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ChangeBurnRule()
@@ -121,7 +157,7 @@ namespace WebApp.Controllers.ITCS
         public ActionResult SaveBurnRule(string jsonData)
         {
             tblRuleMaster objRuleMaster = new tblRuleMaster();
-            
+
             bool status = false;
             //var connectionString = CR.GetCustomerConnString(jsonData);
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -139,9 +175,9 @@ namespace WebApp.Controllers.ITCS
                     objRuleMaster.MinRedemptionPtsFirstTime = Convert.ToDecimal(item["MinRedemptionPtsFirstTime"]);
                     objRuleMaster.BurnInvoiceAmtPercentage = Convert.ToDecimal(item["BurnInvoiceAmtPercentage"]);
                     objRuleMaster.BurnDBPointsPercentage = Convert.ToDecimal(item["BurnDBPointsPercentage"]);
-                   
+
                 }
-                
+
                 var connectionString = CR.GetCustomerConnString(objRuleMaster.GroupId);
                 var Response = ITCSR.SaveBurnRule(objRuleMaster, connectionString);
 
@@ -194,10 +230,18 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         public ActionResult ExtendPointsExpiry()
         {
-            return View();
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
+        }
+        public ActionResult GetPointExpiryDetails(string mobileNo, string groupId)
+        {
+            PointExpiryDummyModel objPointsExpiry = new PointExpiryDummyModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objPointsExpiry = ITCSR.GetPointExpiryDetails(groupId, mobileNo);
+            return new JsonResult() { Data = objPointsExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult ChangeRedeemptionOTP()
         {

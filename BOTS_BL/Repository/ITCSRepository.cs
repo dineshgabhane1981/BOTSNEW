@@ -255,7 +255,7 @@ namespace BOTS_BL.Repository
             }
             return objMemberData;
         }
-        public bool DisablePromotionalSMS(string GroupId,string MobileNo)
+        public bool DisablePromotionalSMS(string GroupId, string MobileNo, bool DisableSMSWAPromo)
         {
             bool status = false;
             try
@@ -266,13 +266,13 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                    objtblCustDetailsMaster.DisableSMSWAPromo = true;
-                    
+                    objtblCustDetailsMaster.DisableSMSWAPromo = DisableSMSWAPromo;
+
                     contextNew.tblCustDetailsMasters.AddOrUpdate(objtblCustDetailsMaster);
                     contextNew.SaveChanges();
                     status = true;
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -475,6 +475,52 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+        public PointExpiryDummyModel GetPointExpiryDetails(string groupid, string mobileNo)
+        {
+            PointExpiryDummyModel objData = new PointExpiryDummyModel();
+            var connStr = CR.GetCustomerConnString(groupid);
+
+            using (var context = new BOTSDBContext(connStr))
+            {
+                var pointExpiryData = context.tblCustPointsMasters.Where(x => x.MobileNo == mobileNo && x.PointsType == "Base").FirstOrDefault();
+                if (pointExpiryData != null)
+                {
+                    objData.MobileNo = pointExpiryData.MobileNo;
+                    objData.Points = pointExpiryData.Points;
+                    objData.EndDate = pointExpiryData.EndDate.Value.ToString("MM/dd/yyyy");
+
+                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                    objData.CustName = custDetails.Name;
+                }
+            }
+
+            return objData;
+        }
+        public bool BlockTransaction(string GroupId, string MobileNo, bool DisableSMSWATxn)
+        {
+            bool status = false;
+            try
+            {
+                tblCustDetailsMaster objtblCustDetailsMaster = new tblCustDetailsMaster();
+                tblGroupMaster obj1 = new tblGroupMaster();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    objtblCustDetailsMaster.DisableSMSWATxn = DisableSMSWATxn;
+
+                    contextNew.tblCustDetailsMasters.AddOrUpdate(objtblCustDetailsMaster);
+                    contextNew.SaveChanges();
+                    status = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "BlockTransaction");
+            }
+            return status;
+        }
         public List<SelectListItem> GetOutlet(string GroupId)
         {
             List<SelectListItem> lstOutlets = new List<SelectListItem>();
@@ -554,6 +600,37 @@ namespace BOTS_BL.Repository
 
             }
             return status;
+        }
+
+        public List<MemberData> GetTierList(string GroupId)
+        {
+            List<MemberData> lstTiers = new List<MemberData>();
+            List<tblCustDetailsMaster> lstTempMemberData = new List<tblCustDetailsMaster>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    var MemberList = contextNew.Database.SqlQuery<tblCustDetailsMaster>("select * from tblCustDetailsMaster").ToList();
+
+                    foreach (var item in MemberList)
+                    {
+                        MemberData Obj = new MemberData();
+                        Obj.MobileNo = item.MobileNo;
+                        Obj.MemberName = item.Name;
+                        Obj.EnrolledOn = item.DOJ.Value.ToString("dd/MM/yyyy");
+                        Obj.Tier = item.Tier;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMemberList");
+            }
+
+            lstTiers = lstTiers.OrderBy(x => x.Tier).ToList();
+
+            return lstTiers;
         }
     }
 
