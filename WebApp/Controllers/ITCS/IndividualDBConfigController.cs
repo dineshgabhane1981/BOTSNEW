@@ -288,5 +288,14 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+    
+        public ActionResult UpdateExpiryPointsDate(string mobileNo, string groupId,string expiryDate)
+        {
+            bool status = false;
+            status = ITCSR.UpdateExpiryPointsDate(mobileNo, groupId, expiryDate);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
     }
 }

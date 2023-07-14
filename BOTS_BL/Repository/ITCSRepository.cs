@@ -634,6 +634,31 @@ namespace BOTS_BL.Repository
 
         //    return lstTiers;
         //}
+
+        public bool UpdateExpiryPointsDate(string mobileNo, string groupId, string expiryDate)
+        {
+            bool result = false;
+            try
+            {
+                var connStr = CR.GetCustomerConnString((groupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var pointExpiryData = context.tblCustPointsMasters.Where(x => x.MobileNo == mobileNo && x.PointsType == "Base").FirstOrDefault();
+                    if (pointExpiryData != null)
+                    {
+                        pointExpiryData.EndDate = Convert.ToDateTime(expiryDate);
+                        context.tblCustPointsMasters.AddOrUpdate(pointExpiryData);
+                        context.SaveChanges();
+                        result = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateExpiryPointsDate");
+            }
+            return result;
+        }
     }
 
 }

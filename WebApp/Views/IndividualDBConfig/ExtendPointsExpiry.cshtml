@@ -31,7 +31,7 @@
                 <div id="dvCust" class="col-md-6 col-xl-6 row mt-5">
                     <input type="number" id="txtMobileNo" class="input100" placeholder="Please enter mobile Number" /> <button id="btnSearchCustomer" class="btn btn-primary login-btn" style="margin-left:30px;">Show</button>
                     <div id="dvSearchCustSection" class="col-md-6 col-xl-6 mt-4" style="display:none;">
-                        <table border="1" cellpadding="10" cellspacing="10">
+                        <table border="1" cellpadding="10" cellspacing="10" width="400px">
                             <tr>
                                 <td>Mobile No</td>
                                 <td><span id="spnMobileNo"></span></td>
@@ -49,10 +49,27 @@
                                 <td><span id="spnExpiryDate"></span></td>
                             </tr>
                         </table>
-
+                        <table width="400px" border="1" cellpadding="10" cellspacing="10">
+                            <tr>
+                                <td>New Expiry Date</td>
+                                <td><input id="txtExpiryDate" class="input50" /></td>
+                                <td><button type="button" id="btnUpdateSingleMember" class="btn btn-primary">Update</button></td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-                <div id="dvRange" class="col-md-6 col-xl-6 row mt-5" style="display:none;">Range</div>
+                <div id="dvRange" class="col-md-6 col-xl-12 row mt-5" style="display:none;">
+                    Date Range:
+                    <div class="col-md-3 col-xl-3">
+                        <input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        <input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
+                    </div>
+                    <div class="col-md-3 col-xl-2">
+                        <button type="button" id="btnShowRange" class="btn btn-primary">Show</button>
+                    </div>
+                </div>
 
 
                 <div id="dvCampaign" class="mt-5" style="display:none;">Campaign</div>
@@ -61,16 +78,66 @@
         </div>
     </div>
 </div>
-
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 <script>
     $(document).ready(function () {
         $("#btnSearchCustomer").click(function () {
             GetCustomerDetails();
         });
+        $("#btnShowRange").click(function () {
+            GetRangeCustomerDetails();
+        });
         $("#btnShow").click(function () {
             $("#dvMainSection").show(1000);
         });
+        $("#btnUpdateSingleMember").click(function () {
+            UpdateExpiryPointsDate();
+        });
+        $("#txtExpiryDate").datepicker({
+            dateFormat: "yy-mm-dd",
+        });
+        $("#dtFrom").datepicker({
+            dateFormat: "yy-mm-dd",
+        });
+        $("#dtTo").datepicker({
+            dateFormat: "yy-mm-dd",
+        });
     });
+
+    function UpdateExpiryPointsDate() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateExpiryPointsDate", "IndividualDBConfig")',
+             data: '{mobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',expiryDate: ' + JSON.stringify($('#txtExpiryDate').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+             success: function (result) {
+                 console.log(result);
+                 if (result) {
+                     cuteAlert({
+                        type: "success",
+                        title: "Update",
+                        message: "Point Expiry date extended Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                     $("#divLoader").hide();
+                 }
+             },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
+    }
 
     $("#rdnBase").change(function () {
         $("#dvBase").show();
@@ -92,7 +159,7 @@
         $("#dvRange").show();
         $("#dvCust").hide();
     });
-    
+
     function GetCustomerDetails() {
         $("#divLoader").show();
         $.ajax({
@@ -119,9 +186,9 @@
 
             }
         });
-
-
-
         $("#dvSearchCustSection").show(1000);
+    }
+    function GetRangeCustomerDetails() {
+
     }
 </script>
