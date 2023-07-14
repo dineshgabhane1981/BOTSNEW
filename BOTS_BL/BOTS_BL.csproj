@@ -221,6 +221,7 @@
     <Compile Include="Models\CommonDB\CustomerConnString.cs" />
     <Compile Include="Models\CommonDB\CustomerListing.cs" />
     <Compile Include="Models\CommonDB\CustomerLoginDetail.cs" />
+    <Compile Include="Models\CommonDB\DailyActivityAllGroup.cs" />
     <Compile Include="Models\CommonDB\DailyReport.cs" />
     <Compile Include="Models\CommonDB\DailySM.cs" />
     <Compile Include="Models\CommonDB\DailyWhatsAppSM.cs" />

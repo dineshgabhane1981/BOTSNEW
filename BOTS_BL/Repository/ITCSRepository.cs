@@ -245,8 +245,6 @@ namespace BOTS_BL.Repository
                 {
                     objMemberData.MemberName = objtblCustDetailsMaster.Name;
                     objMemberData.MobileNo = objtblCustDetailsMaster.MobileNo;
-                    objMemberData.DisableSMSWAPromo = Convert.ToBoolean(objtblCustDetailsMaster.DisableSMSWAPromo);
-                    objMemberData.DisableSMSWATxn = Convert.ToBoolean(objtblCustDetailsMaster.DisableSMSWATxn);
                 }
             }
             catch (Exception ex)
@@ -255,7 +253,7 @@ namespace BOTS_BL.Repository
             }
             return objMemberData;
         }
-        public bool DisablePromotionalSMS(string GroupId,string MobileNo,bool DisableSMSWAPromo)
+        public bool DisablePromotionalSMS(string GroupId,string MobileNo)
         {
             bool status = false;
             try
@@ -266,7 +264,7 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                    objtblCustDetailsMaster.DisableSMSWAPromo = DisableSMSWAPromo;
+                    objtblCustDetailsMaster.DisableSMSWAPromo = true;
                     
                     contextNew.tblCustDetailsMasters.AddOrUpdate(objtblCustDetailsMaster);
                     contextNew.SaveChanges();
@@ -280,31 +278,7 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-        public bool BlockTransaction(string GroupId, string MobileNo,bool DisableSMSWATxn)
-        {
-            bool status = false;
-            try
-            {
-                tblCustDetailsMaster objtblCustDetailsMaster = new tblCustDetailsMaster();
-                tblGroupMaster obj1 = new tblGroupMaster();
-                string connStr = CR.GetCustomerConnString(GroupId);
-                using (var contextNew = new BOTSDBContext(connStr))
-                {
-                    objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                    objtblCustDetailsMaster.DisableSMSWATxn = DisableSMSWATxn;
 
-                    contextNew.tblCustDetailsMasters.AddOrUpdate(objtblCustDetailsMaster);
-                    contextNew.SaveChanges();
-                    status = true;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "BlockTransaction");
-            }
-            return status;
-        }
         public GroupData GetCSNameByGroupId(string GroupId)
         {
             GroupData objMemberData = new GroupData();
@@ -499,29 +473,86 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
-        public PointExpiryDummyModel GetPointExpiryDetails(string groupid, string mobileNo)
+        public List<SelectListItem> GetOutlet(string GroupId)
         {
-            PointExpiryDummyModel objData = new PointExpiryDummyModel();
-            var connStr = CR.GetCustomerConnString(groupid);
-
-            using (var context = new BOTSDBContext(connStr))
+            List<SelectListItem> lstOutlets = new List<SelectListItem>();
+            try
             {
-                var pointExpiryData = context.tblCustPointsMasters.Where(x => x.MobileNo == mobileNo && x.PointsType == "Base").FirstOrDefault();
-                if (pointExpiryData != null)
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objData.MobileNo = pointExpiryData.MobileNo;
-                    objData.Points = pointExpiryData.Points;
-                    objData.EndDate = pointExpiryData.EndDate.Value.ToString("MM/dd/yyyy");
+                    var Outlets = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId).ToList();
 
-                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
-                    objData.CustName = custDetails.Name;
+                    foreach (var item in Outlets)
+                    {
+                        lstOutlets.Add(new SelectListItem
+                        {
+                            Text = item.OutletName,
+                            Value = Convert.ToString(item.OutletId)
+                        });
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutlet");
+            }
 
-            return objData;
+            lstOutlets = lstOutlets.OrderBy(x => x.Text).ToList();
+
+            return lstOutlets;
+        }
+        public OTPData GetDefaultOTP(string OutletId, string GroupId)
+        {
+            OTPData objOTPData = new OTPData();
+            try
+            {
+                tblOutletMaster objOutletMaster = new tblOutletMaster();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objOutletMaster = contextNew.tblOutletMasters.Where(x => x.OutletId == OutletId).FirstOrDefault();
+                }
+                if (objOutletMaster != null)
+                {
+                    objOTPData.GroupId = objOutletMaster.GroupId;
+                    objOTPData.OutletId = objOutletMaster.OutletId;
+                    objOTPData.OTP = objOutletMaster.DefaultOTP;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDefaultOTP");
+            }
+            return objOTPData;
+        }
+        public bool SaveDefaultOTP(tblOutletMaster ObjOutletMaster, string connectionstring)
+        {
+            bool status = false;
+            try
+            {
+                tblOutletMaster objOutlet = new tblOutletMaster();
+                using (var context = new BOTSDBContext(connectionstring))
+                {
+                    objOutlet = context.tblOutletMasters.Where(x => x.OutletId == ObjOutletMaster.OutletId).FirstOrDefault();
+
+                    if (objOutlet != null)
+                    {
+                        objOutlet.DefaultOTP = ObjOutletMaster.DefaultOTP;
+                    }
+
+                    context.tblOutletMasters.AddOrUpdate(objOutlet);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDefaultOTP");
+
+            }
+            return status;
         }
     }
+
 }
-
-

@@ -284,6 +284,12 @@
                                                 Point Expiry
                                             </a>
                                         </li>
+                                        <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeRedeemptionOTP")">
+                                            <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeRedeemptionOTP")" href="@Url.Action("ChangeRedeemptionOTP", "IndividualDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Redeemption OTP
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             }

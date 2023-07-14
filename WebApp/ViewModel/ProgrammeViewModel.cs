@@ -16,11 +16,11 @@ namespace WebApp.ViewModel
 
         public List<SelectListItem> lstGroupDetails { get; set; }
         public List<SelectListItem> lstRMAssigned { get; set; }
-
+        public List<SelectListItem> lstOutletDetails { get; set; }
 
         public tblGroupDetail tblGroupDetails { get; set; }
         public tblRMAssigned tblRMAssigned { get; set; }
-
+        public tblOutletMaster tblOutletMaster { get; set; }
         public string Message { get; set; }
         
         
@@ -39,5 +39,6 @@ namespace WebApp.ViewModel
         public string Percentage { get; set; }
         public string PointsInRs { get; set; }
         public BurnData objBurnData { get; set; }
+        public OTPData objOTPData { get; set; }
     }
 }

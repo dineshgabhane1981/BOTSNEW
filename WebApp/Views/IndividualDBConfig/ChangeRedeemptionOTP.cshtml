@@ -1,0 +1,194 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "ChangeRedeemptionOTP";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <b>Group Name</b>
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <b>Outlet Name</b>
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.tblOutletMaster.OutletName, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutletMaster" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
+                    </div>
+                </div>
+                <div class="mb-2 pr-3 pt-3 pl-3" id="dvDetails" style="display: none;">
+                    <div class="row" style="margin-right:30px;">
+                        <div style="float: left; text-align: right; width: 90px; margin-top: 10px;">
+                            Default OTP
+                        </div>
+                        <div class="col-sm-4" style="float:left;margin-top:10px; margin-left:10px;">
+                            @Html.TextBoxFor(model => model.objOTPData.OTP, new { @class = "input50", @id = "txtOTP", tabindex = 1 })
+                        </div>                        
+                        <div style="float: left; width: 100px; margin-top: 15px;">
+                            <button type="button" id="btnSave" style="margin-left:100px;" class="btn btn-primary" tabindex="15" Onclick="SaveDefaultOTP()"><b>Update</b></button>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#btnGO').on("click", function () {
+            GetDefaultOTP();
+        });
+
+        $('#ddlGroupDetails').change(function () {
+
+            if ($("#ddlGroupDetails option:selected").text() != "Please Select") {
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
+                    //url: "/Discussion/GetSubCallTypes",
+                    data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlOutletMaster").empty();
+                        $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+                        $.each(result, function () {
+                            $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        $("#divLoader").hide();
+                    }
+                });
+               
+            }
+            else {
+                $("#ddlOutletMaster").empty();
+                $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+            }
+        });
+    });
+
+    function GetDefaultOTP() {
+        if ($('#ddlGroupDetails').val() == "" ) {
+            toastr.error('Please Select Group');
+            return false
+        }
+        if ($('#ddlOutletMaster').val() == "") {
+            toastr.error('Please Select Outlet');
+            return false
+        }
+        var GroupId = $('#ddlGroupDetails').val();
+            var OutletId = $('#ddlOutletMaster').val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDefaultOTP", "IndividualDBConfig")',
+            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objOTPData != null) {
+
+                    $("#txtOTP").val(result.objOTPData.OTP);
+                    $("#dvDetails").show();
+                    $("#divLoader").hide();
+                }
+
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveDefaultOTP() {
+        if ($('#ddlGroupDetails').val() == "") {
+            toastr.error('Please Select Group');
+            return false
+        }
+        if ($('#ddlOutletMaster').val() == "") {
+            toastr.error('Please Select Group');
+            return false
+        }
+
+        var GroupId = $('#ddlGroupDetails').val();
+        var OutletId = $('#ddlOutletMaster').val();       
+        var DefaultOTP = $("#txtOTP").val();
+
+        if (DefaultOTP == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the OTP",
+                buttonText: "Okay"
+            })
+        }                
+        else
+        {
+            var FilterData = [];
+            item = {};
+            item["GroupId"] = GroupId;
+            item["OutletId"] = OutletId;
+            item["DefaultOTP"] = DefaultOTP;
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+
+            $("#divLoader").show();
+            $.ajax({
+                  type: "POST",
+                  url: '@Url.Action("SaveDefaultOTP", "IndividualDBConfig")',
+                   data: '{jsonData: ' + JSON.stringify(data) + '}',
+                  contentType: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (result) {
+                      console.log(result)
+                      if (result = true) {
+                          cuteAlert({
+                              type: "success",
+                              title: "Success Title",
+                              message: "OTP Updated Successfully",
+                              buttonText: "Okay"
+                          })
+
+                        $("#divLoader").hide();
+                      }
+                      else {
+                          cuteAlert({
+                              type: "error",
+                              title: "Oops..",
+                              message: "couldn't Save Data",
+                              buttonText: "Okay"
+                          })
+                      }
+
+                    $("#divLoader").hide();
+                 },
+                   error: function (result) {
+                    //alert(111)
+                    console.log(result.responseText)
+            }
+        });
+    }
+}
+
+</script>

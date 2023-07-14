@@ -41,5 +41,11 @@ namespace BOTS_BL.Models
         public decimal? BurnDBPointsPercentage { get; set; }
         
     }
+    public class OTPData
+    {
+        public string GroupId { get; set; }
+        public string OutletId { get; set; }
+        public string OTP { get; set; }
+    }
 
 }
