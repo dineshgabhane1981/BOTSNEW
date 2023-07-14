@@ -27,7 +27,6 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult EnableProgramme()
         {
-            //var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
             objData.lstNotActive = ITCSR.GetNeverOptForGroups(false);
             objData.lstActive = ITCSR.GetNeverOptForGroups(true);

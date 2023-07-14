@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>EnableProgramme</h2>
 <style>
     h2 {
         color: #000;
@@ -77,14 +76,14 @@
     <input class="radio" id="two" name="group" type="radio">
 
     <div class="tabs">
-        <label class="tab" id="one-tab" for="one">Programme Enabled Groups</label>
-        <label class="tab" id="two-tab" for="two">Programme Disabled Groups</label>
+        <label class="tab" id="one-tab" for="one">Program Enabled Groups</label>
+        <label class="tab" id="two-tab" for="two">Program Disabled Groups</label>
     </div>
     <div class="panels">
         <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="one-panel">
             <div class="col search-container" style="margin-top:20px;">
                 <i class="fas fa-search"></i>
-                <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                <input class="input100" type="text" id="txtSearch" placeholder="Search Groups..." />
             </div>
             <div class="row mt-3 p-4" id="dvEnabledGroups">
                 <div class="table-responsive">
@@ -212,7 +211,7 @@
         cuteAlert({
             type: "question",
             title: "Confirmation",
-            message: "Do you want to Disable the Programme ?",
+            message: "Do you want to Disable the Program ?",
             confirmText: "Yes",
             cancelText: "No"
         }).then((e) => {
@@ -231,8 +230,15 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                        toastr.success("Programme Disabled Successfully");
-                        window.location.reload();
+                        cuteAlert({
+                            type: "success",
+                            title: "Success",
+                            message: "Program Disabled Successfully",
+                            buttonText: "Okay"
+                        }).then(() => {
+                             var urlLink = "@Url.Action("EnableProgramme", "CommonDBConfig")";
+                             window.location.href = urlLink;
+                        });
                         $("#divLoader").hide();
                     },
                     error: function (result) {
@@ -248,7 +254,7 @@
         cuteAlert({
             type: "question",
             title: "Confirmation",
-            message: "Do you want to Enable the Programme ?",
+            message: "Do you want to Enable the Program ?",
             confirmText: "Yes",
             cancelText: "No"
         }).then((e) => {
@@ -267,8 +273,15 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                        toastr.success("Programme Enabled Successfully");
-                        window.location.reload();
+                        cuteAlert({
+                            type: "success",
+                            title: "Success",
+                            message: "Program Enabled Successfully",
+                            buttonText: "Okay"
+                        }).then(() => {
+                             var urlLink = "@Url.Action("EnableProgramme", "CommonDBConfig")";
+                             window.location.href = urlLink;
+                        });
                         $("#divLoader").hide();
                     },
                     error: function (result) {

@@ -43,7 +43,8 @@ namespace BOTS_BL.Repository
             {
                 {
                     tblGroupDetail obj = new tblGroupDetail();
-                    GroupDetail obj1 = new GroupDetail();
+                    DailyActivityAllGroup obj1 = new DailyActivityAllGroup();
+                    tblDatabaseDetail objtblDatabaseDetail = new tblDatabaseDetail();
                     int varid = Convert.ToInt32(GroupId);
                     using (var context = new CommonDBContext())
                     {
@@ -55,15 +56,15 @@ namespace BOTS_BL.Repository
                         status = true;
 
                         
-                        var groupdetails = context.GroupDetail.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                        if(groupdetails.ActiveStatus == "Yes")
-                        {
-                            groupdetails.ActiveStatus = "No";
-                        }
-                        else
-                        {
-                            groupdetails.ActiveStatus = "No";
-                        }
+                        var DatabaseDetail = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                        DatabaseDetail.IsActive = false;
+
+                        context.SaveChanges();
+                        status = true;
+
+                        var DailyActivityGroup = context.DailyActivityAllGroups.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                        DailyActivityGroup.IsActive = false;
+
                         context.SaveChanges();
                         status = true;
                     }
@@ -82,7 +83,8 @@ namespace BOTS_BL.Repository
             {
                 {
                     tblGroupDetail obj = new tblGroupDetail();
-                    GroupDetail obj1 = new GroupDetail();
+                    DailyActivityAllGroup obj1 = new DailyActivityAllGroup();
+                    tblDatabaseDetail objtblDatabaseDetail = new tblDatabaseDetail();
                     int varid = Convert.ToInt32(GroupId);
                     using (var context = new CommonDBContext())
                     {
@@ -92,15 +94,15 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                         status = true;
 
-                        var groupdetails = context.GroupDetail.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                        if (groupdetails.ActiveStatus == "No")
-                        {
-                            groupdetails.ActiveStatus = "Yes";
-                        }
-                        else
-                        {
-                            groupdetails.ActiveStatus = "Yes";
-                        }
+                        var DatabaseDetail = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                        DatabaseDetail.IsActive = true;
+
+                        context.SaveChanges();
+                        status = true;
+
+                        var DailyActivityGroup = context.DailyActivityAllGroups.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                        DailyActivityGroup.IsActive = true;
+
                         context.SaveChanges();
                         status = true;
                     }
