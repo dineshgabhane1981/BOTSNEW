@@ -739,8 +739,7 @@ namespace BOTS_BL.Repository
                         var TDate = Convert.ToDateTime(toDate);
                         objData = objData.Where(x => x.EDate <= TDate).ToList();
                     }
-
-                    foreach(var item in objData)
+                    foreach (var item in objData)
                     {
                         var custItem = context.tblCustPointsMasters.Where(x => x.MobileNo == item.MobileNo).FirstOrDefault();
                         custItem.EndDate = Convert.ToDateTime(updateDate);
@@ -756,6 +755,76 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-    }
 
+        public List<tblCampaignMaster> GetCampaignList(string groupid)
+        {
+            List<tblCampaignMaster> lstData = new List<tblCampaignMaster>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((groupid));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    lstData = context.tblCampaignMasters.Where(x => x.CampaignStatus != "Completed").ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCampaignList");
+            }
+            return lstData;
+        }
+
+        public PointExpiryCampaignDetails GetCamaignPointExpiryDetails(string groupid, string campaignName)
+        {
+            PointExpiryCampaignDetails objData = new PointExpiryCampaignDetails();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((groupid));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var CampaignData = context.tblCampaignMasters.Where(x => x.CampaignName == campaignName).FirstOrDefault();
+                    objData.EndDate = CampaignData.EndDate.Value.ToString("MM/dd/yyyy");
+                    objData.CampaignStatus = CampaignData.CampaignStatus;
+                    var count = context.tblCustPointsMasters.Where(x => x.PointsDesc == CampaignData.CampaignName).Count();
+                    objData.NoOfUsers = count;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCamaignPointExpiryDetails");
+            }
+            return objData;
+        }
+
+        public bool UpdateCammpaignExpiryDate(string groupid, string campaignName, string updatedDate)
+        {
+            bool result = false;
+            List<PointExpiryDummyModel> objData = new List<PointExpiryDummyModel>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((groupid));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var cData = context.tblCampaignMasters.Where(x => x.CampaignName == campaignName).FirstOrDefault();
+                    var expiryData = context.tblCustPointsMasters.Where(x => x.PointsDesc == campaignName).ToList();
+                    cData.EndDate = Convert.ToDateTime(updatedDate);
+                    context.tblCampaignMasters.AddOrUpdate(cData);
+                    context.SaveChanges();
+
+                    foreach(var item in expiryData)
+                    {
+                        item.EndDate= Convert.ToDateTime(updatedDate);
+                        context.tblCustPointsMasters.AddOrUpdate(item);
+                        context.SaveChanges();
+                    }
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCamaignPointExpiryDetails");
+            }
+            return result;
+        }
+    }
 }

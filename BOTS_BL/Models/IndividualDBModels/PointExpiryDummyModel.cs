@@ -14,4 +14,10 @@ namespace BOTS_BL.Models
         public DateTime? EDate { get; set; }
         public decimal? Points { get; set; }        
     }
+    public class PointExpiryCampaignDetails
+    {
+        public string EndDate { get; set; }
+        public int NoOfUsers { get; set; }
+        public string CampaignStatus { get; set; }
+    }
 }

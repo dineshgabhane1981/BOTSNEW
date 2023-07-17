@@ -29,9 +29,8 @@ namespace BOTS_BL.Models
 
         [StringLength(200)]
         public string CampaignStatus { get; set; }
-
-        [StringLength(50)]
-        public string BackEndStatus { get; set; }
+        
+        public bool? BackEndStatus { get; set; }
 
         public DateTime? Datetime { get; set; }
 

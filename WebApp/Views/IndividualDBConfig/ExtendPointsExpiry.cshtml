@@ -9,14 +9,14 @@
         <div class="container-fluid pt-3 pr-3 pb-3 ml-5">
             <div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvGroup">
                 <input type="hidden" id="hdnGroupId" />
-                <div class="col-lg-3 col-md-3">
+                <div class="col-lg-3 col-md-3" style="text-align:end;">
                     <b>Group Name</b>
                 </div>
                 <div class="col-md-3 col-xl-3">
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
-                <div style="margin-left:50px;margin-top:5px;">
-                    <button type="button" id="btnShow" style="margin-left:70px;" class="btn btn-primary">Go</button>
+                <div style="margin-top:5px;">
+                    <button type="button" id="btnShow" style="margin-left:40px;" class="btn btn-primary">Go</button>
                 </div>
             </div>
             <div id="dvMainSection" style="display:none;">
@@ -71,16 +71,39 @@
                     </div>
                     <div id="dvSearchCust" class="col-md-6 col-xl-10 mt-4" style="display:none;">
                         <b>Customer Count: <span id="spnCustNo"></span></b>
-                        <div class="mt-3" >Update Expiry Date: <input id="txtUpdateRange" placeholder="Update Date" readonly class="input50" /> <button type="button" id="btnUpdateRange" class="btn btn-primary">Update</button></div>
+                        <div class="mt-3">Update Expiry Date: <input id="txtUpdateRange" placeholder="Update Date" readonly class="input50" /> <button type="button" id="btnUpdateRange" class="btn btn-primary">Update</button></div>
                         <div id="dvSearchCustDateRange" class="col-md-6 col-xl-10 mt-4">
                         </div>
                     </div>
                 </div>
 
-
-                    <div id="dvCampaign" class="mt-5" style="display:none;">Campaign</div>
-
+                <div id="dvCampaign" class="mt-5" style="display:none;">
+                    <div id="dvCampaignList" class="col-md-6 col-xl-10 mt-4 row">
+                        Campaigns 
+                        <select id="ddlCampaigns" class="input100">
+                            <option value="0">Please Select</option>
+                        </select>
+                    </div>
+                    <div id="dvCampaignDataDetails" class="mt-4" style="display:none;">
+                        <table border="1" cellpadding="10" cellspacing="10">
+                            <tr>
+                                <td>Campaign Status</td>
+                                <td><span id="spnCampaignStatus"></span></td>
+                            </tr>
+                            <tr>
+                                <td>No Of Users</td>
+                                <td><span id="spnNoOfUsers"></span></td>
+                            </tr>
+                            <tr>
+                                <td>End Date</td>
+                                <td><span id="spnEndDate"></span></td>
+                            </tr>
+                        </table>
+                        <div class="mt-3">Update Expiry Date: <input id="txtUpdateCampaignExpiry" placeholder="Update Date" readonly class="input50" /> <button type="button" id="btnUpdateCampaignExpiry" class="btn btn-primary">Update</button></div>
+                    </div>
                 </div>
+
+            </div>
         </div>
     </div>
 </div>
@@ -91,13 +114,44 @@
 <script>
     $(document).ready(function () {
         $("#btnSearchCustomer").click(function () {
-            GetCustomerDetails();
+            if ($("#txtMobileNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile no",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                GetCustomerDetails();
+            }
+            
         });
         $("#btnShowRange").click(function () {
-            GetRangeCustomerDetails();
+            if ($("#dtFrom").val() == "" && $("#dtTo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select date",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                GetRangeCustomerDetails();
+            }
         });
         $("#btnShow").click(function () {
-            $("#dvMainSection").show(1000);
+            if ($("#ddlGroupDetails").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Group",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                $("#dvMainSection").show(1000);
+            }
         });
         $("#btnUpdateRange").click(function () {
             if ($("#txtUpdateRange").val() == "") {
@@ -115,6 +169,19 @@
         $("#btnUpdateSingleMember").click(function () {
             UpdateExpiryPointsDate();
         });
+        $("#btnUpdateCampaignExpiry").click(function () {
+            if ($("#txtUpdateRange").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Date to update",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                UpdateCampaignExpiry();
+            }           
+        });
         $("#txtExpiryDate").datepicker({
             dateFormat: "yy-mm-dd",
         });
@@ -127,9 +194,21 @@
         $("#txtUpdateRange").datepicker({
             dateFormat: "yy-mm-dd",
         });
+        $("#txtUpdateCampaignExpiry").datepicker({
+            dateFormat: "yy-mm-dd",
+        });        
     });
 
-
+    $("#ddlCampaigns").change(function () {
+        if ($("#ddlCampaigns").val() != "0") {
+            GetCampaignDetails();
+            $("#dvCampaignDataDetails").show(1000);
+        }
+        else {
+            $("#dvCampaignDataDetails").empty();
+            $("#dvCampaignDataDetails").hide();
+        }
+    });
 
     $("#rdnBase").change(function () {
         $("#dvBase").show();
@@ -137,16 +216,20 @@
         $("#dvRange").hide();
         $("#dvCampaign").hide();
     });
+
     $("#rdnCampaign").change(function () {
         $("#dvCampaign").show();
         $("#dvBase").hide();
         $("#dvCust").hide();
         $("#dvRange").hide();
+        GetCampaings();
     });
+
     $("#rdnBaseCust").change(function () {
         $("#dvCust").show();
         $("#dvRange").hide();
     });
+
     $("#rdnBaseRange").change(function () {
         $("#dvRange").show();
         $("#dvCust").hide();
@@ -181,7 +264,7 @@
         $("#dvSearchCustSection").show(1000);
     }
 
-     function UpdateExpiryPointsDate() {
+    function UpdateExpiryPointsDate() {
         $("#divLoader").show();
          $.ajax({
             type: "POST",
@@ -283,5 +366,85 @@
         });
     }
 
+    function GetCampaings() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignList", "IndividualDBConfig")',
+            data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                result.forEach(function (e, i) {
+                    $('#ddlCampaigns').append($('<option></option>').val(e.CampaignName).text(e.CampaignName));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
+    }
+
+    function GetCampaignDetails() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignDetails", "IndividualDBConfig")',
+            data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',campaignName: ' + JSON.stringify($('#ddlCampaigns').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                $("#spnCampaignStatus").text(result.CampaignStatus);
+                $("#spnNoOfUsers").text(result.NoOfUsers);
+                $("#spnEndDate").text(result.EndDate);
+                $("#dvCampaignDataDetails").show(1000);
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
+    }
+
+    function UpdateCampaignExpiry() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateCampaignDetails", "IndividualDBConfig")',
+             data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',campaignName: ' + JSON.stringify($('#ddlCampaigns').val()) + ',updateDate: ' + JSON.stringify($('#txtUpdateCampaignExpiry').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+             success: function (result) {
+                 console.log(result);
+                 if (result) {
+                     cuteAlert({
+                        type: "success",
+                        title: "Update",
+                        message: "Point Expiry dates extended Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                     $("#divLoader").hide();
+                 }
+             },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
+    }
 
 </script>

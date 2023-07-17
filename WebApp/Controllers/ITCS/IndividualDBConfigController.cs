@@ -233,7 +233,7 @@ namespace WebApp.Controllers.ITCS
         public ActionResult ExtendPointsExpiry()
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();            
             return View(objData);
         }
         public ActionResult GetPointExpiryDetails(string mobileNo, string groupId)
@@ -287,8 +287,7 @@ namespace WebApp.Controllers.ITCS
                 newexception.AddException(ex, "SaveDefaultOTP");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-        }
-    
+        }    
         public ActionResult UpdateExpiryPointsDate(string mobileNo, string groupId,string expiryDate)
         {
             bool status = false;
@@ -307,7 +306,22 @@ namespace WebApp.Controllers.ITCS
             status = ITCSR.UpdateExpiryPointsRangeDate(groupId, fromDate, toDate, updateDate);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
+        public ActionResult GetCampaignList(string groupId)
+        {
+            var lstData = ITCSR.GetCampaignList(groupId);
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetCampaignDetails(string groupId,string campaignName)
+        {
+            var objDataNew = ITCSR.GetCamaignPointExpiryDetails(groupId, campaignName);
+            return new JsonResult() { Data = objDataNew, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult UpdateCampaignDetails(string groupId,string campaignName,string updateDate)
+        {
+            bool status = false;
+            status = ITCSR.UpdateCammpaignExpiryDate(groupId, campaignName, updateDate);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
     }
 }

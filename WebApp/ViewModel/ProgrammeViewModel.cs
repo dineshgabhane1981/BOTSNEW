@@ -17,7 +17,8 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstGroupDetails { get; set; }
         public List<SelectListItem> lstRMAssigned { get; set; }
         public List<SelectListItem> lstOutletDetails { get; set; }
-
+        public List<tblCampaignMaster> lstCampaigns { get; set; }
+        public int campaignId { get; set; }
         public tblGroupDetail tblGroupDetails { get; set; }
         public tblRMAssigned tblRMAssigned { get; set; }
         public tblOutletMaster tblOutletMaster { get; set; }
