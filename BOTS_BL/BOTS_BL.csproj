@@ -36,10 +36,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.Core.3.7.107.8\lib\net45\AWSSDK.Core.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.Core.3.7.105.21\lib\net35\AWSSDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.S3.3.7.106.1\lib\net45\AWSSDK.S3.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.S3.3.7.103.29\lib\net45\AWSSDK.S3.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.15.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
@@ -447,6 +449,8 @@
     <Compile Include="Models\OnBoarding\RetailDetails.cs" />
     <Compile Include="Models\OnBoarding\SMSTemplate.cs" />
     <Compile Include="Models\OutletDetail.cs" />
+    <Compile Include="Models\ProductDetailsMaster.cs" />
+    <Compile Include="Models\ProductMaster.cs" />
     <Compile Include="Models\ProfilePage.cs" />
     <Compile Include="Models\Reports\Celebrations.cs" />
     <Compile Include="Models\Reports\DLCNewReg.cs" />
@@ -458,6 +462,7 @@
     <Compile Include="Models\Reports\OutletWise.cs" />
     <Compile Include="Models\Reports\OutletwiseTransaction.cs" />
     <Compile Include="Models\Reports\PointExpiryTmp.cs" />
+    <Compile Include="Models\Reports\ProductAnalytics.cs" />
     <Compile Include="Models\Reports\ReportFilterCount.cs" />
     <Compile Include="Models\RetailerWeb\CustomerDetails.cs" />
     <Compile Include="Models\SalesLead\NewReport.cs" />
@@ -476,6 +481,7 @@
     <Compile Include="Models\tblNPCCategory.cs" />
     <Compile Include="Models\tblNPCDetail.cs" />
     <Compile Include="Models\tblNPCSubCategory.cs" />
+    <Compile Include="Models\tblProductMaster.cs" />
     <Compile Include="Models\tblStandardRulesSetting.cs" />
     <Compile Include="Models\tblUniquePoint.cs" />
     <Compile Include="Models\TelecallerReport.cs" />

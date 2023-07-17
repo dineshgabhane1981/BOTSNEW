@@ -362,7 +362,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();                    
+                    //var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault(); 
                     if (DBDetails != null && GroupId != "1087")
                     {
                         newexception.AddDummyException("111");

@@ -1,0 +1,77 @@
+﻿@model WebApp.ViewModel.OtherReportProductwiseViewModel
+@using System.Globalization
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table" id="tblProdAnalyticFilter">
+                    <thead>
+                        <tr>
+                            <th>Outlet</th>
+                            <th>Mobile Number</th>
+                            <th>Member Name</th>
+                            <th>Total Visits</th>
+                            <th>Total Spends</th>
+                            <th>Last Txn Date </th>
+                            <th>Total Txns</th>
+                            <th>Total Quantity</th>
+                            <th>Total Amount</th>
+                            <th>Last Sold Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.lstProdAnaltic)
+                        {
+                            <tr>
+                                <td>@item.OutletId</td>
+                                <td>@item.Mobileno</td>
+                                <td>@item.Name</td>
+                                <td>@item.TotalSpends</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var table1 = $('#tblProdAnalyticFilter').DataTable();
+        table1.destroy();
+        var table = $('#tblProdAnalyticFilter').DataTable({
+
+            "bAutoWidth": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            //"columns": [
+            //    { data: "MobileNo" },
+            //    { data: "Member Name" },
+            //    { data: "Type" },
+            //    { data: "Bonus Points Issued" },
+            //    { data: "Reg Date" },
+            //    { data: "1st TxnDate" },
+            //    { data: "TxnAfterDays" },
+            //    { data: "Total Txn Count" },
+            //    { data: "Business Generated" },
+            //    { data: "Points Redeemed" },
+            //    { data: "Points Expired" }
+            //]
+        });
+        //$('#tblCampaignDetails_filter').hide();
+
+        var table = $('#tblProdAnalyticFilter').DataTable();
+        table.draw();
+    });
+</script>

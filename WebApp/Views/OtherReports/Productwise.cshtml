@@ -5,6 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .vl {
+        border-left: 2px solid green;
+        height: 200px;
+    }
+</style>
 <div class="app-main__inner">
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
         @*<div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">*@
@@ -70,12 +76,778 @@
                 </table>
             </div>
         </div>
-        <div style="margin-bottom:15px;margin-top:15px;">
-            <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass"> Product Performance
-            <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass"> Product Analytics
+        @*<div style="margin-bottom:15px;margin-top:15px;">
+                <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass"> Product Performance
+                <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass"> Product Analytics
+            </div>*@
+        @*<div class="row mb-3 pt-3 pl-3 pr-3 card">*@
+        <div class="row mt-3">
+            <div class="col-md-3 col-xl-3">
+                <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass"> Product Performance
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass"> Product Analytics
+            </div>
+        </div>
+        @*</div>*@
+
+    </div>
+    @*<div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdPerformance">
+            <div class="row mb-3">
+                <div class="col-md-3 col-xl-3">
+                    From Date <br /><input type="text" class="input50" placeholder="From Date" id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    To Date <br /><input type="text" class="input50" placeholder="To Date" id="dtTo" />
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    Select Outlet :  @Html.DropDownListFor(x => Model.lstOutletdetails, new SelectList(Model.lstOutletdetails, "Value", "Text"), "All", htmlAttributes: new { @class = "input70", @id = "OutletList" })
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:30px;" class="btn btn-primary"><b>FILTER</b></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="table-responsive">
+                    <table class="table" id="tblProductDetail">
+                        <thead>
+                            <tr>
+                                <th>Category Code</th>
+                                <th>Category Name</th>
+                                <th>Sub-Category Code</th>
+                                <th>Sub-Category Name</th>
+                                <th>Product Code</th>
+                                <th>Product Name</th>
+                                <th>Unique Members</th>
+                                <th>Total Txns</th>
+                                <th>Total Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Last Sold Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.lstProductReport)
+                            {
+                                <tr>
+                                    <td>@item.ProductCategoryCode</td>
+                                    <td>@item.ProductCategoryName</td>
+                                    <td>@item.ProductSubCategoryCode</td>
+                                    <td>@item.ProductSubCategoryName</td>
+                                    <td>@item.Productcode</td>
+                                    <td>@item.ProductName</td>
+                                    <td>@item.UniqueMember</td>
+                                    <td>@item.TotalTxn</td>
+                                    <td>@item.TotalQuantity</td>
+                                    <td>@item.TotalAmount.ToString("#,##0")</td>
+                                    <td>@item.LastPurchasedate.ToString("yyyy/MM/dd")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>*@
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdAnalytics" style="display:none">
+        <div class="row mb-3">
+            <div class="col-sm-10">
+                <p><b>PRODUCT ANALYTICS (SELL THE RIGHT PRODUCT TO THE RIGHT CUSTOMER)</b></p>
+            </div>
+        </div>
+        @*<div class="row mb-3">
+            <div class="col-md-4 col-xl-4">
+                <input id="rbtnNeverPurchase1" name="itemPurchased1" type="radio" checked class="rbtnClass"> Never Purchased
+                <input id="rbtnPurchase1" name="itemPurchased1" type="radio" class="rbtnClass"> Purchased
+            </div>
+
+            <div class="col-md-4 col-xl-4">
+                <input id="rbtnPurchase2" name="itemPurchased2" type="radio" checked class="rbtnClass"> Also, Purchased
+                <input id="rbtnNeverPurchase2" name="itemPurchased2" type="radio" class="rbtnClass"> Never Purchased
+            </div>
+
+            <div class="col-md-4 col-xl-4">
+
+            </div>
+        </div>*@
+        
+    <div class="row mb-3">
+        <div class="col-xl-3">
+            <div class="row">
+                <div class="col-xl-4">
+
+                </div>
+                <div class="col-xl-5">
+                    <div class="form-check">
+                        @*<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">*@
+                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 15px">
+                            Filter : 1
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3">
+            <div class="row">
+
+                <div class="col-xl-4">
+
+                </div>
+                <div class="col-xl-5">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="checkFilter2">
+                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 15px">
+                            Filter : 2
+                        </label>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="col-xl-3">
+            <div class="row">
+                <div class="col-xl-6">
+
+                </div>
+                <div class="col-xl-5">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="checkFilter3">
+                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 15px">
+                            Filter : 3
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+        <div class="row mb-3">
 
+            <div class="col-xl-3" id="divFilter1">
+                
+                <div class="row mt-4">
+                    <div class="col-xl-10">
+                        <input id="rbtnNeverPurchase1" name="itemPurchased1" type="radio" checked class="rbtnClass"> Never Purchased
+                        <input id="rbtnPurchase1" name="itemPurchased1" type="radio" class="rbtnClass"> Purchased
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-xl-4">
+                        Select Category :
+                    </div>
+                    <div class="col-xl-3">
+                        @Html.DropDownListFor(x => Model.lstCategoryCode, new SelectList(Model.lstCategoryCode, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ProdCategoryCode1" })
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-xl-4">
+                        Select Sub Category :
+                    </div>
+                    <div class="col-xl-3">
+                        @Html.DropDownListFor(x => Model.lstSubCategoryCode, new SelectList(Model.lstSubCategoryCode, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "SubCategoryCode1"})
+
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-xl-4">
+                        Select Product :
+                    </div>
+                    <div class="col-xl-3">
+                        @*@Html.DropDownListFor(x => Model.lstOutletdetails, new SelectList(Model.lstOutletdetails, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "OutletList" })*@
+                        @*@Html.ListBoxFor(x => Model.SelectedProdIds, new SelectList(Model.ProductIds, "Value", "Text"), new { @class = "input50", @id = "ProductList", multiple = "multiple", STYLE = "width: 350px" })*@
+                        @Html.ListBoxFor(x => x.SelectedProdIds, new SelectList(Model.ProductIds, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ProductList1"})
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3" id="divFilter2" style="display:none">
+                @*border-right:1px solid blue;*@
+
+                <div class="row mt-4">
+                    <div class="col-xl-12">
+                        <input id="rbtnPurchase2" name="itemPurchased2" type="radio" class="rbtnClass"> Also, Purchased
+                        <input id="rbtnNeverPurchase2" name="itemPurchased2" type="radio" class="rbtnClass"> Never Purchased
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-xl-4">
+                        Select Category :
+                    </div>
+                    <div class="col-xl-3">
+                        @Html.DropDownListFor(x => Model.lstCategoryCode, new SelectList(Model.lstCategoryCode, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ProdCategoryCode2" })
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-xl-4">
+                        Select Sub Category :
+                    </div>
+                    <div class="col-xl-3">
+                        @Html.DropDownListFor(x => Model.lstSubCategoryCode, new SelectList(Model.lstSubCategoryCode, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "SubCategoryCode2" })
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-xl-4">
+                        Select Product :
+                    </div>
+                    <div class="col-xl-2">
+                        @*@Html.DropDownListFor(x => Model.lstOutletdetails, new SelectList(Model.lstOutletdetails, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "OutletList" })*@
+                        @Html.ListBoxFor(x => x.SelectedProdIds, new SelectList(Model.ProductIds, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ProductList2" })
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-xl-5" id="divFilter3" style="display:none">
+                
+                <div class="row mb-2 mt-4" id="divDateRange" style="display:none">
+                    <div class="col-xl-3">Date range of purchase</div>
+                    <div class="col-xl-5"><input type="text" class="input50" placeholder="From Date" id="dtFrom3" /></div>
+                    <div class="col-xl-3"><input type="text" class="input50" placeholder="To Date" id="dtTo3" /></div>
+                </div>
+                <div class="row mb-2" id="divNotPurchased" style="display:none">
+                    <div class="col-xl-3">Not purchased since</div>
+                    <div class="col-xl-5">
+                        <input type="text" class="input50" placeholder="Date" id="NotPurchaseDate" />
+                    </div>
+                    <div class="col-xl-3 "></div>
+                </div>
+                <div class="row mb-2" id="divAmountSpend" style="display:none">
+                    <div class="col-xl-3">Amount Spent for Purchase</div>
+                    <div class="col-xl-5"><input type="text" class="input50" placeholder="From" id="FromAmount" /></div>
+                    <div class="col-xl-3"><input type="text" class="input50" placeholder="To" id="ToAmount" /></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-xl-3">Select Outlet</div>
+                    <div class="col-xl-5">
+                        @*<input type="text" class="input50" placeholder="Select Outlet" id="OutletId" />*@
+                        @Html.ListBoxFor(x => x.SelectedOutletIds, new SelectList(Model.lstOutletdetails, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "FilterOutletId" })
+                    </div>
+                    <div class="col-xl-3"></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-xl-5">
+                        <button type="button" id="btnFilterProdAnalytics" style="margin-left:17px;margin-top:30px;" class="btn btn-primary input50"><b>FILTER</b></button>
+                    </div>
+                    <div class="col-xl-3"></div>
+                    <div class="col-xl-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdAnalFilterTble" style="display:none">
+
+    </div>
 </div>
+<script>
+    var tblFilterData = [];
+    var Input;
+    $(document).ready(function () {
+       /* $('#ProductList').multiselect();*/
 
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $('#dtFrom').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-10:+1"
+
+        })
+        $('#dtTo').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-10:+1"
+        })
+        $('#dtFrom3').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-10:+1"
+        })
+        $('#dtTo3').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "-10:+1"
+        })
+
+        var table1 = $('#tblProductDetail').DataTable();
+        table1.destroy();
+        var table = $('#tblProductDetail').DataTable({
+            "bAutoWidth": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+        });
+
+        var table = $('#tblProductDetail').DataTable();
+        table.draw();
+    });
+
+        $("#rbtnProductPerformance").click(function () {
+            $("#divProdPerformance").show();
+            $("#divProdAnalytics").hide();
+        });
+        $("#rbtnProductAnalytics").click(function () {
+            $("#divProdAnalytics").show();
+            $("#divProdPerformance").hide();
+        });
+
+    $("#rbtnNeverPurchase1").click(function () {     
+        $("#divDateRange").hide();
+        $("#divNotPurchased").hide();
+        $("#divAmountSpend").hide();
+    });
+    $("#rbtnNeverPurchase2").click(function () {       
+        $("#divDateRange").hide();
+        $("#divNotPurchased").hide();
+        $("#divAmountSpend").hide();
+    });
+    $("#rbtnPurchase1").click(function () {
+        if ($("#rbtnPurchase2").is(':checked')) {
+            $("#divDateRange").show();
+            $("#divNotPurchased").show();
+            $("#divAmountSpend").show();
+        }
+    });
+    $("#rbtnPurchase2").click(function () {
+        if ($("#rbtnPurchase1").is(':checked')) {
+            $("#divDateRange").show();
+            $("#divNotPurchased").show();
+            $("#divAmountSpend").show();
+        }
+    });
+
+
+    $("#btnFilter").click(function () {
+        var flag = 0;
+        var Fromdte = $("#dtFrom").val();
+        var Todte = $("#dtTo").val();
+        var OutletId = $("#OutletList option:selected").val()
+
+        if ((Fromdte.length != 0 && Todte.length != 0)) {
+            flag = 1;
+        }
+        else if (Fromdte.length == 0 && Todte.length == 0) {
+            flag = 1;
+        }
+
+        if (flag == 1) {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ProductDataWithFilter", "OtherReports")',
+                data: '{Fromdte: ' + JSON.stringify(Fromdte) + ',Todte: ' + JSON.stringify(Todte) + ',OutletId: ' + JSON.stringify(OutletId) +'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    tblFilterData.length = 0;
+
+                    $.map(response.lstProductReport, function (item) {
+                        optionItem = {}
+                        optionItem["ProductCategoryCode"] = item.ProductCategoryCode;
+                        optionItem["ProductCategoryName"] = item.ProductCategoryName;
+                        optionItem["ProductSubCategoryCode"] = item.ProductSubCategoryCode;
+                        optionItem["ProductSubCategoryName"] = item.ProductSubCategoryName;
+                        optionItem["Productcode"] = item.Productcode;
+                        optionItem["ProductName"] = item.ProductName;
+                        optionItem["UniqueMember"] = item.UniqueMember;
+                        optionItem["TotalTxn"] = item.TotalTxn;
+                        optionItem["TotalQuantity"] = item.TotalQuantity;
+                        optionItem["TotalAmount"] = (item.TotalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        optionItem["LastPurchasedate"] = moment(item.LastPurchasedate).format("yyyy/MM/DD");
+
+                        tblFilterData.push(optionItem);
+                    });
+                    console.log(tblFilterData);
+                    DrawtblFilterData();
+                    $("#divLoader").hide();
+                    //console.log(response);
+                    //console.log(tblFilterData);
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                //error: (error) => {
+                //    console.log(JSON.stringify(error));
+                //}
+            });
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Date Iput: Error",
+                message: "Select From Date and To Date",
+                buttonText: "Okay"
+            })
+        }
+
+    });
+
+    $("#btnFilterProdAnalytics").click(function () {
+        var Dateflag = 0;
+        var Amountflag = 0;
+        var dtFrom3 = $("#dtFrom3").val();
+        var Todte3 = $("#dtTo3").val();
+
+        var CategoryCode1 = $("#ProdCategoryCode1").val();
+        var SubCategoryCode1 = $("#SubCategoryCode1").val();
+        var ProdCode1 = $("#ProductList1").val();
+        var CategoryCode2 = $("#ProdCategoryCode2").val();
+        var SubCategoryCode2 = $("#SubCategoryCode2").val();
+        var ProdCode2 = $("#ProductList2").val();
+
+        var NotPurchasedSince = $("#NotPurchaseDate").val();
+        var AmountSpentFrom = $("#FromAmount").val();
+        var AmountSpentTo = $("#ToAmount").val();
+        let OutletIdList = $("#FilterOutletId").val();
+
+        var PurchaseFiter1 = $('input[id="rbtnNeverPurchase1"]:checked').val();
+        var PurchaseFiter2 = $('input[id="rbtnNeverPurchase2"]:checked').val();
+
+        const LstOutlet = GenerateWhereClause(OutletIdList);
+        const LstProd1 = GenerateProdWhereClause(ProdCode1);
+        const LstProd2 = GenerateProdWhereClause(ProdCode2);
+
+        if (PurchaseFiter1) {
+            PurchaseFiter1 = 0;
+        }
+        else {
+            PurchaseFiter1 = 1;
+        }
+        if (PurchaseFiter2) {
+            PurchaseFiter2 = 0;
+        }
+        else {
+            PurchaseFiter2 = 1;
+        }
+
+        if ((dtFrom3.length != 0 && Todte3.length != 0)) {
+            Dateflag = 1;
+        }
+        else if (dtFrom3.length == 0 && Todte3.length == 0) {
+            Dateflag = 1;
+        }
+        if ((AmountSpentFrom.length != 0 && AmountSpentTo.length != 0)) {
+            Amountflag = 1;
+        }
+        else if (AmountSpentFrom.length == 0 && AmountSpentTo.length == 0) {
+            Amountflag = 1;
+        }
+
+        if ((AmountSpentFrom.length == 0 && AmountSpentTo.length == 0)) {
+            AmountSpentFrom = 0;
+            AmountSpentTo = 0;
+        }
+
+
+        var FilterData = [];
+        item = {};
+        item["PurchaseFiter1"] = PurchaseFiter1;
+        item["PurchaseFiter2"] = PurchaseFiter2;
+        item["dtFrom3"] = dtFrom3;
+        item["Todte3"] = Todte3;
+        item["CategoryCode1"] = CategoryCode1;
+        item["SubCategoryCode1"] = SubCategoryCode1;
+        item["LstProd1"] = LstProd1;
+        item["CategoryCode2"] = CategoryCode2;
+        item["SubCategoryCode2"] = SubCategoryCode2;
+        item["LstProd2"] = LstProd2;
+        item["NotPurchasedSince"] = NotPurchasedSince;
+        item["AmountSpentFrom"] = AmountSpentFrom;
+        item["AmountSpentTo"] = AmountSpentTo;
+        item["LstOutlet"] = LstOutlet;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        if (Dateflag == 0) {
+            cuteAlert({
+                type: "error",
+                title: "Date Iput: Error",
+                message: "Select From Date and To Date",
+                buttonText: "Okay"
+            })
+        }
+        else if (Amountflag == 0)
+        {
+           cuteAlert({
+              type: "error",
+               title: "AmountSpent: Error",
+               message: "Select Amount Spent Both Fields",
+              buttonText: "Okay"
+           })
+        }
+        else {
+
+           $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ProductAnalyticFilter", "OtherReports")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $("#divProdAnalFilterTble").html(response);
+                    $("#divProdAnalFilterTble").show(1000);
+                    $("#divLoader").hide();
+                    //console.log(response);
+                    //console.log(tblFilterData);
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#divProdAnalFilterTble").html(response.responseText);
+                    $("#divProdAnalFilterTble").show(1000);
+                    $("#divLoader").hide();
+                    
+                }
+                //error: (error) => {
+                //    console.log(JSON.stringify(error));
+                //}
+            });
+
+        }
+
+    });
+
+    function DrawtblFilterData() {
+        var table1 = $('#tblProductDetail').DataTable();
+        table1.destroy();
+        var table = $('#tblProductDetail').DataTable({
+            "data": tblFilterData,
+            "bAutoWidth": true,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "ProductCategoryCode" },
+                { data: "ProductCategoryName" },
+                { data: "ProductSubCategoryCode" },
+                { data: "ProductSubCategoryName" },
+                { data: "Productcode" },
+                { data: "ProductName" },
+                { data: "UniqueMember" },
+                { data: "TotalTxn" },
+                { data: "TotalQuantity" },
+                { data: "TotalAmount" },
+                { data: "LastPurchasedate" }
+            ]
+        });
+        //$('#tblCampaignSummary_filter').hide();
+
+        var table = $('#tblProductDetail').DataTable();
+        table.draw();
+    }
+
+    $("#ProdCategoryCode1").change(function () {
+        $("#divLoader").show();
+        
+        var Categorycode = $("#ProdCategoryCode1").val();
+       
+        var FilterData = [];
+        item = {};
+        item["Categorycode"] = Categorycode;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSubCategoryCode", "OtherReports")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $("#SubCategoryCode1").empty();
+                    $("#SubCategoryCode1").append("<option>All</option>");
+                    /*$("#SubCategoryCode1").prop("disabled", false);*/
+                    $.each(response, function () {
+                        $("#SubCategoryCode1").append($("<option />").val(this.Value).text(this.Text));
+                    });
+
+
+                    //console.log(tblFilterData);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            });
+
+    });
+
+    $("#ProdCategoryCode2").change(function () {
+        $("#divLoader").show();
+        var Categorycode = $("#ProdCategoryCode2").val();
+
+        var FilterData = [];
+        item = {};
+        item["Categorycode"] = Categorycode;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSubCategoryCode", "OtherReports")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $("#SubCategoryCode2").empty();
+                    $("#SubCategoryCode2").append("<option>All</option>");
+                    /*$("#SubCategoryCode2").prop("disabled", false);*/
+                    $.each(response, function () {
+                        $("#SubCategoryCode2").append($("<option />").val(this.Value).text(this.Text));
+                    });
+
+
+                    //console.log(tblFilterData);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            });
+
+    });
+
+    $("#SubCategoryCode1").change(function () {
+        $("#divLoader").show();
+        var SubCategorycode = $("#SubCategoryCode1").val();
+
+        var FilterData = [];
+        item = {};
+        item["SubCategorycode"] = SubCategorycode;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetProductCode", "OtherReports")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $("#ProductList1").empty();
+                    $("#ProductList1").append("<option>All</option>");
+                    /*$("#ProductList1").prop("disabled", false);*/
+                    $.each(response, function () {
+                        $("#ProductList1").append($("<option />").val(this.Value).text(this.Text));
+                    });
+
+
+                    //console.log(tblFilterData);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            });
+
+    });
+
+    $("#SubCategoryCode2").change(function () {
+        $("#divLoader").show();
+        var SubCategorycode = $("#SubCategoryCode2").val();
+
+        var FilterData = [];
+        item = {};
+        item["SubCategorycode"] = SubCategorycode;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetProductCode", "OtherReports")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $("#ProductList2").empty();
+                    $("#ProductList2").append("<option>All</option>");
+                    /*$("#ProductList2").prop("disabled", false);*/
+                    $.each(response, function () {
+                        $("#ProductList2").append($("<option />").val(this.Value).text(this.Text));
+                    });
+
+
+                    //console.log(tblFilterData);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            });
+
+    });
+
+    $("#checkFilter2").change(function () {
+        if ($("#checkFilter2").is(':checked')) {
+            $("#divFilter1").css('border-right', '1px solid blue');
+            $("#divFilter2").show();
+        }
+        else {
+            $("#divFilter1").css('border-right', '');
+            $("#divFilter2").hide();
+        }
+        
+    });
+    $("#checkFilter3").change(function () {
+        if ($("#checkFilter3").is(':checked')) {
+            $("#divFilter2").css('border-right', '1px solid blue');
+            $("#divFilter3").show();
+        }
+        else {
+            $("#divFilter2").css('border-right', '');
+            $("#divFilter3").hide();
+        }
+        
+    });
+
+
+
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/moment.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/GenerateWhereClause.js"></script>
+<script src="~/Scripts/GenerateProdWhereClause.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.2/js/bootstrap-multiselect.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.2/css/bootstrap-multiselect.css" rel="stylesheet" />*@
 

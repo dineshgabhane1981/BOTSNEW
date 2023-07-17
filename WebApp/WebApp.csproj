@@ -467,6 +467,8 @@
     <Content Include="Scripts\datetimepicker-master\tests\tests\init.js" />
     <Content Include="Scripts\datetimepicker-master\tests\tests\methods.js" />
     <Content Include="Scripts\datetimepicker-master\tests\tests\options.js" />
+    <Content Include="Scripts\GenerateProdWhereClause.js" />
+    <Content Include="Scripts\GenerateWhereClause.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -478,6 +480,8 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\jscolor.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\rainbowvis.js" />
     <Content Include="Views\DashBoardCustomerLogin\Index.cshtml" />
     <Content Include="Views\DashBoardCustomerLogin\_DashboardCustomerloginList.cshtml" />
@@ -628,6 +632,8 @@
     <Content Include="Views\IndividualDBConfig\ExtendPointsExpiry.cshtml" />
     <Content Include="Views\IndividualDBConfig\ChangeEarnRule.cshtml" />
     <Content Include="Views\IndividualDBConfig\DisableTransactions.cshtml" />
+    <Content Include="Views\OtherReports\_ProdAnalyticFilter.cshtml" />
+    <Content Include="Scripts\moment.min.js.map" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

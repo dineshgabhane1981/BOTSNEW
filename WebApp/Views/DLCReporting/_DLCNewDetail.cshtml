@@ -1,11 +1,27 @@
 ﻿@model List<BOTS_BL.Models.Reports.DLCNewRegDetail>
 @using System.Globalization
 
+@{var count = 1;}
 <div class="app-main__inner">
     <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+
+
+
+
         @foreach (var item in Model)
         {
-            <div><p><span ><b>Source Creation :</b>  @item.SourceCreation.ToString("dd-MMM-yyyy") <b> | Source Description :</b>   @item.SourceDescription<b> | Start Date :</b>  @item.StartDate.ToString("dd-MMM-yyyy")<b> | End Date :</b> @item.EndDate.ToString("dd-MMM-yyyy")</span> </p></div>
+            if (count == 1)
+            {
+                if (@item.SourceCreation.HasValue)
+                {
+                    <div><p><span><b>Source Creation :</b>  @item.SourceCreation.Value.ToString("dd-MMM-yyyy") <b> | Source Description :</b>   @item.SourceDescription<b> | Start Date :</b>  @item.StartDate.Value.ToString("dd-MMM-yyyy")<b> | End Date :</b> @item.EndDate.Value.ToString("dd-MMM-yyyy")</span> </p></div>
+                }
+                else
+                {
+                    <div><p><span><b>Source Creation :</b>  @item.SourceCreation <b> | Source Description :</b>   @item.SourceDescription<b> | Start Date :</b>  @item.StartDate<b> | End Date :</b> @item.EndDate</span> </p></div>
+                }
+            }
+            count = count + 1;
         }
 
         <div class="table-responsive">
@@ -33,7 +49,15 @@
                             <td>@item.Name</td>
                             <td>@item.MemberType</td>
                             <td>@item.BonusPointsIssued</td>
+                            @if(item.RegDate.HasValue)
+                            {
+                            <td>@item.RegDate.Value.ToString("yyyy/MM/dd")</td>
+                            }
+                            else
+                            {
                             <td>@item.RegDate</td>
+                            }
+
                             <td>@item.FirstTxnDateAfterReg</td>
                             <td>@item.TxnAfterDays</td>
                             <td>@item.TotalTxnCount</td>
@@ -59,22 +83,22 @@
             "info": false,
             "bFilter": false,
             "pageLength": 25,
-            "pagingType": "simple_numbers",
-            "columns": [
-                { data: "MobileNo" },
-                { data: "Member Name" },
-                { data: "Type" },
-                { data: "Bonus Points Issued" },
-                { data: "Reg Date" },
-                { data: "1st TxnDate" },
-                { data: "TxnAfterDays" },
-                { data: "Total Txn Count" },
-                { data: "Business Generated" },
-                { data: "Points Redeemed" },
-                { data: "Points Expired" }
-            ]
+            "pagingType": "simple_numbers"
+            //"columns": [
+            //    { data: "MobileNo" },
+            //    { data: "Member Name" },
+            //    { data: "Type" },
+            //    { data: "Bonus Points Issued" },
+            //    { data: "Reg Date" },
+            //    { data: "1st TxnDate" },
+            //    { data: "TxnAfterDays" },
+            //    { data: "Total Txn Count" },
+            //    { data: "Business Generated" },
+            //    { data: "Points Redeemed" },
+            //    { data: "Points Expired" }
+            //]
         });
-        $('#tblCampaignDetails_filter').hide();
+        //$('#tblCampaignDetails_filter').hide();
 
         var table = $('#tblDLCDetail').DataTable();
         table.draw();

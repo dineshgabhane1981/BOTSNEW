@@ -20,6 +20,8 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<tblProductMaster> tblProductMasters { get; set; }
+        public virtual DbSet<ProductMaster> ProductMasters { get; set; }
         public virtual DbSet<tblDLCProfileUpdateConfig_Publish> tblDLCProfileUpdateConfig_Publish { get; set; }
         public virtual DbSet<MWP_ReferTNC> MWP_ReferTNC { get; set; }
         public virtual DbSet<MWP_TNC> MWP_TNC { get; set; }
