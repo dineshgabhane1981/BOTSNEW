@@ -69,12 +69,18 @@
                     <div class="col-md-3 col-xl-2">
                         <button type="button" id="btnShowRange" class="btn btn-primary">Show</button>
                     </div>
+                    <div id="dvSearchCust" class="col-md-6 col-xl-10 mt-4" style="display:none;">
+                        <b>Customer Count: <span id="spnCustNo"></span></b>
+                        <div class="mt-3" >Update Expiry Date: <input id="txtUpdateRange" placeholder="Update Date" readonly class="input50" /> <button type="button" id="btnUpdateRange" class="btn btn-primary">Update</button></div>
+                        <div id="dvSearchCustDateRange" class="col-md-6 col-xl-10 mt-4">
+                        </div>
+                    </div>
                 </div>
 
 
-                <div id="dvCampaign" class="mt-5" style="display:none;">Campaign</div>
+                    <div id="dvCampaign" class="mt-5" style="display:none;">Campaign</div>
 
-            </div>
+                </div>
         </div>
     </div>
 </div>
@@ -93,6 +99,19 @@
         $("#btnShow").click(function () {
             $("#dvMainSection").show(1000);
         });
+        $("#btnUpdateRange").click(function () {
+            if ($("#txtUpdateRange").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Date to update",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                UpdateExpiryPointsDateRange();
+            }
+        });
         $("#btnUpdateSingleMember").click(function () {
             UpdateExpiryPointsDate();
         });
@@ -105,39 +124,12 @@
         $("#dtTo").datepicker({
             dateFormat: "yy-mm-dd",
         });
+        $("#txtUpdateRange").datepicker({
+            dateFormat: "yy-mm-dd",
+        });
     });
 
-    function UpdateExpiryPointsDate() {
-        $("#divLoader").show();
-         $.ajax({
-            type: "POST",
-            url: '@Url.Action("UpdateExpiryPointsDate", "IndividualDBConfig")',
-             data: '{mobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',expiryDate: ' + JSON.stringify($('#txtExpiryDate').val()) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-             success: function (result) {
-                 console.log(result);
-                 if (result) {
-                     cuteAlert({
-                        type: "success",
-                        title: "Update",
-                        message: "Point Expiry date extended Successfully",
-                        buttonText: "Okay"
-                    }).then(() => {
-                        var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
-                        window.location.href = urlLink;
-                    });
-                     $("#divLoader").hide();
-                 }
-             },
-            error: function (result) {
-                alert("222");
-                console.log(result.responseText)
-                $("#divLoader").hide();
 
-            }
-        });
-    }
 
     $("#rdnBase").change(function () {
         $("#dvBase").show();
@@ -188,7 +180,108 @@
         });
         $("#dvSearchCustSection").show(1000);
     }
-    function GetRangeCustomerDetails() {
 
+     function UpdateExpiryPointsDate() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateExpiryPointsDate", "IndividualDBConfig")',
+             data: '{mobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',expiryDate: ' + JSON.stringify($('#txtExpiryDate').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+             success: function (result) {
+                 console.log(result);
+                 if (result) {
+                     cuteAlert({
+                        type: "success",
+                        title: "Update",
+                        message: "Point Expiry date extended Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                     $("#divLoader").hide();
+                 }
+             },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
     }
+
+    function GetRangeCustomerDetails() {
+         $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetExpiryDataByDateRange", "IndividualDBConfig")',
+            data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',fromDate: ' + JSON.stringify($('#dtFrom').val()) + ',toDate: ' + JSON.stringify($('#dtTo').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                $("#spnCustNo").text(result.length);
+                var htmlStr = "<table border=\"2\" cellpadding=\"10\" cellspacing=\"10\" style=\"margin-left: 11px;\" class=\"table\">";
+                htmlStr += "<th scope=\"col\">Mobile No</th>";
+                htmlStr += "<th scope=\"col\">Customer Name</th>";
+                htmlStr += "<th scope=\"col\">Points</th>";
+                htmlStr += "<th scope=\"col\">Expiry Date</th>";
+                htmlStr += "</tr>";
+                $.map(result, function (item) {
+                    htmlStr += "<td>" + item.MobileNo + "</td>";
+                    htmlStr += "<td>" + item.CustName + "</td>";
+                    htmlStr += "<td>" + item.Points + "</td>";
+                    htmlStr += "<td>" + item.EndDate + "</td>";
+                    htmlStr += "</tr>"
+                });
+                htmlStr += "</table>";
+                $("#dvSearchCustDateRange").html(htmlStr);
+                $("#dvSearchCust").show(1000);
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
+    }
+
+    function UpdateExpiryPointsDateRange() {
+        $("#divLoader").show();
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateExpiryPointsRangeDate", "IndividualDBConfig")',
+             data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',fromDate: ' + JSON.stringify($('#dtFrom').val()) + ',toDate: ' + JSON.stringify($('#dtTo').val()) + ',updateDate: ' + JSON.stringify($('#txtUpdateRange').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+             success: function (result) {
+                 console.log(result);
+                 if (result) {
+                     cuteAlert({
+                        type: "success",
+                        title: "Update",
+                        message: "Point Expiry dates extended Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                     $("#divLoader").hide();
+                 }
+             },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+
+            }
+        });
+    }
+
+
 </script>

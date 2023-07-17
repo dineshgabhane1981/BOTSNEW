@@ -17,6 +17,7 @@ namespace BOTS_BL.Models
         public string CustomerId { get; set; }
         public bool DisableSMSWAPromo { get; set; }
         public bool DisableSMSWATxn { get; set; }
+        public string Tier { get; set; }
     }
 
     public class GroupData

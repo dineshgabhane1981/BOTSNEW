@@ -51,11 +51,11 @@ namespace BOTS_BL.Repository
                         var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
                         groupDetail.IsActive = false;
                         groupDetail.IsLive = false;
-                        
+
                         context.SaveChanges();
                         status = true;
 
-                        
+
                         var DatabaseDetail = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
                         DatabaseDetail.IsActive = false;
 
@@ -141,7 +141,7 @@ namespace BOTS_BL.Repository
             }
             return lstGroupDetails;
         }
-      
+
         public WhatsAppSMSMaster GetWAScripts(int GroupId, string GroupName, string MessageType)
         {
             WhatsAppSMSMaster obj = new WhatsAppSMSMaster();
@@ -181,10 +181,10 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "GetWAScripts");
             }
             return obj;
-           
+
         }
 
-        public bool SaveScripts (int GroupId, string Script,string MessageType)
+        public bool SaveScripts(int GroupId, string Script, string MessageType)
         {
             bool result = false;
             string Id;
@@ -218,10 +218,10 @@ namespace BOTS_BL.Repository
                     obj1.SMS = Script;
                     obj1.SlNo = Convert.ToInt64(Script1.SlNo);
                     obj1.MessageId = Convert.ToString(Script1.MessageId);
-                    obj1.OutletId= Convert.ToString(Script1.OutletId);
+                    obj1.OutletId = Convert.ToString(Script1.OutletId);
                     obj1.TokenId = Convert.ToString(Script1.TokenId);
                     obj1.BrandId = Convert.ToString(Script1.BrandId);
-                   
+
                     context.WhatsAppSMSMasters.AddOrUpdate(obj1);
                     context.SaveChanges();
                 }
@@ -289,15 +289,15 @@ namespace BOTS_BL.Repository
             try
             {
                 tblGroupDetail objCustomerDetail = new tblGroupDetail();
-                string CSName = string.Empty; 
+                string CSName = string.Empty;
                 int varid = Convert.ToInt32(GroupId);
                 using (var context = new CommonDBContext())
                 {
                     //objCustomerDetail = context.tblGroupDetails.Where(x => x.GroupId == varid).FirstOrDefault();
                     objMemberData = context.Database.SqlQuery<GroupData>("select TR.RMAssignedName from tblGroupDetails TG inner join tblRMAssigned TR on TG.RMAssigned=TR.RMAssignedId where TG.GroupId = @Groupid", new SqlParameter("@Groupid", varid)).FirstOrDefault();
                 }
-               
-                
+
+
             }
             catch (Exception ex)
             {
@@ -377,7 +377,7 @@ namespace BOTS_BL.Repository
                     objMemberData.MinRedemptionPts = objCustomerDetail.MinRedemptionPts;
                     objMemberData.MinRedemptionPtsFirstTime = objCustomerDetail.MinRedemptionPtsFirstTime;
                     objMemberData.BurnInvoiceAmtPercentage = objCustomerDetail.BurnInvoiceAmtPercentage;
-                    objMemberData.BurnDBPointsPercentage = objCustomerDetail.BurnDBPointsPercentage;                    
+                    objMemberData.BurnDBPointsPercentage = objCustomerDetail.BurnDBPointsPercentage;
                 }
             }
             catch (Exception ex)
@@ -391,11 +391,11 @@ namespace BOTS_BL.Repository
             bool status = false;
             try
             {
-                tblRuleMaster objRule = new tblRuleMaster();               
+                tblRuleMaster objRule = new tblRuleMaster();
                 using (var context = new BOTSDBContext(connectionstring))
                 {
                     objRule = context.tblRuleMasters.Where(x => x.GroupId == ObjRuleMaster.GroupId).FirstOrDefault();
-                    
+
                     if (objRule != null)
                     {
                         objRule.BurnMinTxnAmt = ObjRuleMaster.BurnMinTxnAmt;
@@ -404,8 +404,8 @@ namespace BOTS_BL.Repository
                         objRule.BurnInvoiceAmtPercentage = ObjRuleMaster.BurnInvoiceAmtPercentage;
                         objRule.BurnDBPointsPercentage = ObjRuleMaster.BurnDBPointsPercentage;
                     }
-                    
-                    context.tblRuleMasters.AddOrUpdate(objRule);                    
+
+                    context.tblRuleMasters.AddOrUpdate(objRule);
                     context.SaveChanges();
                     status = true;
                 }
@@ -656,6 +656,103 @@ namespace BOTS_BL.Repository
             catch (Exception ex)
             {
                 newexception.AddException(ex, "UpdateExpiryPointsDate");
+            }
+            return result;
+        }
+
+        public List<PointExpiryDummyModel> GetPointExpiryDateRange(string groupid, string fromDate, string toDate)
+        {
+            List<PointExpiryDummyModel> objData = new List<PointExpiryDummyModel>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((groupid));
+                using (var context = new BOTSDBContext(connStr))
+                {
+
+                    objData = (from c in context.tblCustPointsMasters
+                               join gd in context.tblCustDetailsMasters on c.MobileNo equals gd.MobileNo
+                               select new PointExpiryDummyModel
+                               {
+                                   MobileNo = c.MobileNo,
+                                   CustName = gd.Name,
+                                   EDate = c.EndDate,
+                                   EndDate = c.EndDate.ToString(),
+                                   Points = c.Points
+                               }).OrderByDescending(x => x.EndDate).ToList();
+                    if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                    {
+                        var FDate = Convert.ToDateTime(fromDate);
+                        var TDate = Convert.ToDateTime(toDate);
+                        objData = objData.Where(x => x.EDate >= FDate && x.EDate <= TDate).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(fromDate))
+                    {
+                        var FDate = Convert.ToDateTime(fromDate);
+                        objData = objData.Where(x => x.EDate >= FDate).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(toDate))
+                    {
+                        var TDate = Convert.ToDateTime(toDate);
+                        objData = objData.Where(x => x.EDate <= TDate).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateExpiryPointsDate");
+            }
+            return objData;
+        }
+
+        public bool UpdateExpiryPointsRangeDate(string groupid, string fromDate, string toDate, string updateDate)
+        {
+            bool result = false;
+            List<PointExpiryDummyModel> objData = new List<PointExpiryDummyModel>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((groupid));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objData = (from c in context.tblCustPointsMasters
+                               join gd in context.tblCustDetailsMasters on c.MobileNo equals gd.MobileNo
+                               select new PointExpiryDummyModel
+                               {
+                                   MobileNo = c.MobileNo,
+                                   CustName = gd.Name,
+                                   EDate = c.EndDate,
+                                   EndDate = c.EndDate.ToString(),
+                                   Points = c.Points
+                               }).OrderByDescending(x => x.EndDate).ToList();
+                    if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                    {
+                        var FDate = Convert.ToDateTime(fromDate);
+                        var TDate = Convert.ToDateTime(toDate);
+                        objData = objData.Where(x => x.EDate >= FDate && x.EDate <= TDate).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(fromDate))
+                    {
+                        var FDate = Convert.ToDateTime(fromDate);
+                        objData = objData.Where(x => x.EDate >= FDate).ToList();
+                    }
+                    else if (!string.IsNullOrEmpty(toDate))
+                    {
+                        var TDate = Convert.ToDateTime(toDate);
+                        objData = objData.Where(x => x.EDate <= TDate).ToList();
+                    }
+
+                    foreach(var item in objData)
+                    {
+                        var custItem = context.tblCustPointsMasters.Where(x => x.MobileNo == item.MobileNo).FirstOrDefault();
+                        custItem.EndDate = Convert.ToDateTime(updateDate);
+                        context.tblCustPointsMasters.AddOrUpdate(custItem);
+                        context.SaveChanges();
+                    }
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateExpiryPointsRangeDate");
             }
             return result;
         }

@@ -295,6 +295,18 @@ namespace WebApp.Controllers.ITCS
             status = ITCSR.UpdateExpiryPointsDate(mobileNo, groupId, expiryDate);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult GetExpiryDataByDateRange(string groupId, string fromDate,string toDate)
+        {
+            List<PointExpiryDummyModel> lstData = new List<PointExpiryDummyModel>();
+            lstData = ITCSR.GetPointExpiryDateRange(groupId, fromDate, toDate);
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult UpdateExpiryPointsRangeDate(string groupId, string fromDate, string toDate, string updateDate)
+        {
+            bool status = false;
+            status = ITCSR.UpdateExpiryPointsRangeDate(groupId, fromDate, toDate, updateDate);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
 
     }

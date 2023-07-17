@@ -11,6 +11,7 @@ namespace BOTS_BL.Models
         public string MobileNo { get; set; }
         public string CustName { get; set; }
         public string EndDate  { get; set; }
+        public DateTime? EDate { get; set; }
         public decimal? Points { get; set; }        
     }
 }
