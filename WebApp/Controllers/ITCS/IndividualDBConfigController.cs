@@ -27,21 +27,21 @@ namespace WebApp.Controllers.ITCS
             objData.lstGroupDetails = ITCSR.GetGroupDetails();
             return View(objData);
         }
-        public ActionResult GetWAScripts(int GroupId, string GroupName, string MessageType)
+        public ActionResult GetWAScripts(int GroupId, string GroupName, string OutletId, string OutletName, string MessageType)
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.objWhatsAppSMSMaster = ITCSR.GetWAScripts(GroupId, GroupName, MessageType);
+            objData.objSMSWhatsAppScriptMaster = ITCSR.GetWAScripts(GroupId, GroupName, OutletId, OutletName, MessageType);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SaveScripts(int GroupId, string Script, string MessageType)
+        public ActionResult SaveScripts(int GroupId, int OutletId, string Script, string MessageType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             tblGroupDetail objtblGroupDetail = new tblGroupDetail();
-            WhatsAppSMSMaster objWhatsAppSMSMaster = new WhatsAppSMSMaster();
+            tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
             try
             {
-                result = ITCSR.SaveScripts(GroupId, Script, MessageType);
+                result = ITCSR.SaveScripts(GroupId, OutletId, Script, MessageType);
             }
             catch (Exception ex)
             {

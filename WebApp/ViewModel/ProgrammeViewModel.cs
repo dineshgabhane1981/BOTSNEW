@@ -23,13 +23,13 @@ namespace WebApp.ViewModel
         public tblRMAssigned tblRMAssigned { get; set; }
         public tblOutletMaster tblOutletMaster { get; set; }
         public string Message { get; set; }
-        
-        
+        public List<SelectListItem> lstOutletMaster { get; set; }
+
         public SelectListItem[] MessageType()
         {
-            return new SelectListItem[4] { new SelectListItem() { Text = "Enrollment", Value = "Enrollment" }, new SelectListItem() { Text = "Earn", Value = "Earn" }, new SelectListItem() { Text = "Burn", Value = "Burn" }, new SelectListItem() { Text = "Cancel", Value = "Cancel" } };
+            return new SelectListItem[6] { new SelectListItem() { Text = "Enrollment", Value = "Enrollment" }, new SelectListItem() { Text = "Earn", Value = "Earn" }, new SelectListItem() { Text = "Burn", Value = "Burn" }, new SelectListItem() { Text = "CancelEarn", Value = "CancelEarn" }, new SelectListItem() { Text = "CancelBurn", Value = "CancelBurn" }, new SelectListItem() { Text = "OTP", Value = "OTP" } };
         }
-        public WhatsAppSMSMaster objWhatsAppSMSMaster { get; set; }
+        public tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster { get; set; }
         public GroupDetails objGroupDetail { get; set; }
         public string Script { get; set; }
         //public DemographicData objDemographicData { get; set; }

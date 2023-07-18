@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ChangeWAScript</h2>
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -17,7 +16,14 @@
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
             </div>
-
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
+                <div class="col-lg-3 col-md-3 ">
+                    <b>Outlet Name</b>
+                </div>
+                <div class="col-lg-3 col-md-3 ">
+                    @Html.DropDownListFor(model => model.tblOutletMaster.OutletName, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutletMaster" })
+                </div>
+            </div>
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvMessage">
                 <div class="col-md-3 col-xl-3">
                     <b>Message Type</b>
@@ -27,22 +33,19 @@
                 </div>
             </div>
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
-                <div class="col-md-3 col-xl-3">
-                    @*<input type="number" id="txtMobileNo" class="input100" maxlength="10" style="font-size:medium;" />*@
-                    <button class="btn btn-primary ml-auto mt-3" type="button" title="GO" id="btnGo" tabindex="20" style="margin-bottom:20px;">GO</button>
+                <div class="col-md-3 col-xl-3" style="margin-left:120px;">
+                    <button class="btn btn-primary ml-auto mt-3" type="button" title="GO" id="btnShow" style="margin-bottom:20px;">Show</button>
                 </div>
             </div>
-            <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-2" id="dvScript">
+            <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-2" id="dvScript" style="display:none;">
                 <div class="col-md-3 col-xl-3">
                     <b>Script</b>
                 </div>
-                <div class="col-md-3 col-xl-3">
-                    @Html.TextAreaFor(model => model.objWhatsAppSMSMaster.SMS, new { @class = "input100", @id = "txtScript" })
+                <div style="margin-left:80px;">
+                     @Html.TextAreaFor(model => model.objSMSWhatsAppScriptMaster.WhatsAppScript, new { @id = "txtScript",@class="input150", @rows=10 })
                 </div>
-            </div>
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvCustomer">
-                <div class="col-md-3 col-xl-3">
-                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSave" tabindex="20">Save</button>
+                <div class="col-md-3 col-xl-3" style="margin-left:120px;">
+                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnUpdate">Update</button>
                 </div>
             </div>
         </div>
@@ -50,17 +53,50 @@
 </div>
 <script>
     $(document).ready(function () {
-        $('#btnGo').on("click", function () {
+        $('#btnShow').on("click", function () {
             GetWAScripts();
         });
-        $('#btnSave').on("click", function () {
+        $('#btnUpdate').on("click", function () {
             SaveScripts();
+        });
+        $('#ddlGroupDetails').change(function () {
+            if ($("#ddlGroupDetails option:selected").text() != "Please Select") {
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
+                    data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlOutletMaster").empty();
+                        $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+                        $.each(result, function () {
+                            $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        $("#divLoader").hide();
+                    }
+                });
+            }
+            else {
+                $("#ddlOutletMaster").empty();
+                $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+            }
         });
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
+
     function GetWAScripts() {
         if ($('#ddlGroupDetails').val() == "" ) {
             toastr.error('Please Select Group');
+            return false
+        }
+        if ($('#ddlOutletMaster').val() == "") {
+            toastr.error('Please Select Outlet');
             return false
         }
         if ($('#ddlMessageType').val() == "" ) {
@@ -69,29 +105,28 @@
         }
         var GroupId = $('#ddlGroupDetails').val();
         var GroupName = $("#ddlGroupDetails option:selected").text();
+        var OutletId = $('#ddlOutletMaster').val();
+        var OutletName = $("#ddlOutletMaster option:selected").text();
 
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetWAScripts", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',GroupName: ' + JSON.stringify(GroupName) + ',MessageType: ' + JSON.stringify($('#ddlMessageType').val()) + '}',
+            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',GroupName: ' + JSON.stringify(GroupName) + ',OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + ',OutletName: ' + JSON.stringify(OutletName) + ',MessageType: ' + JSON.stringify($('#ddlMessageType').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
-
-                if (result.objWhatsAppSMSMaster != null) {
-
-                    $("#txtScript").text(result.objWhatsAppSMSMaster.SMS);
-
+                if (result.objSMSWhatsAppScriptMaster != null) {
+                    $("#dvScript").show();
+                    $("#txtScript").text(result.objSMSWhatsAppScriptMaster.WhatsAppScript);
                     $("#divLoader").hide();
                 }
-
             }
-
         });
     }
     function SaveScripts() {
         var GroupId = $('#ddlGroupDetails').val();
+        var OutletId = $('#ddlOutletMaster').val();
         var MessageType = $("#ddlMessageType option:selected").text();
         var Script = $("#txtScript").val();
 
@@ -99,7 +134,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("SaveScripts", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify(GroupId) + ', Script: ' + JSON.stringify(Script) + ', MessageType: ' + JSON.stringify($('#ddlMessageType option:selected').val()) +'}',
+            data: '{GroupId: ' + JSON.stringify(GroupId) + ', OutletId: ' + JSON.stringify(OutletId) + ', Script: ' + JSON.stringify(Script) + ', MessageType: ' + JSON.stringify($('#ddlMessageType option:selected').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {

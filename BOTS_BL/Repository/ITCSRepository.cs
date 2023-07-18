@@ -142,9 +142,9 @@ namespace BOTS_BL.Repository
             return lstGroupDetails;
         }
 
-        public WhatsAppSMSMaster GetWAScripts(int GroupId, string GroupName, string MessageType)
+        public tblSMSWhatsAppScriptMaster GetWAScripts(int GroupId, string GroupName, string OutletId, string OutletName, string MessageType)
         {
-            WhatsAppSMSMaster obj = new WhatsAppSMSMaster();
+            tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
             string Id;
             string Script;
             Id = string.Empty;
@@ -154,8 +154,6 @@ namespace BOTS_BL.Repository
                 var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    //obj = context.WhatsAppSMSMasters.Where(x=> x.MessageId == MessageType).FirstOrDefault();
-
                     if (MessageType == "Enrollment")
                     {
                         Id = "100";
@@ -168,11 +166,19 @@ namespace BOTS_BL.Repository
                     {
                         Id = "102";
                     }
-                    else if (MessageType == "Cancel")
+                    else if (MessageType == "CancelEarn")
                     {
                         Id = "103";
                     }
-                    obj = context.WhatsAppSMSMasters.Where(x => x.MessageId == Id).FirstOrDefault();
+                    else if (MessageType == "CancelBurn")
+                    {
+                        Id = "104";
+                    }
+                    else if (MessageType == "OTP")
+                    {
+                        Id = "105";
+                    }
+                    objSMSWhatsAppScriptMaster = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id).FirstOrDefault();
 
                 }
             }
@@ -180,18 +186,18 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "GetWAScripts");
             }
-            return obj;
+            return objSMSWhatsAppScriptMaster;
 
         }
 
-        public bool SaveScripts(int GroupId, string Script, string MessageType)
+        public bool SaveScripts(int GroupId, int OutletId, string Script, string MessageType)
         {
             bool result = false;
             string Id;
             Id = string.Empty;
             tblGroupDetail obj = new tblGroupDetail();
-            WhatsAppSMSMaster obj1 = new WhatsAppSMSMaster();
-            WhatsAppSMSMaster objWhatsAppSMSMaster = new WhatsAppSMSMaster();
+            tblSMSWhatsAppScriptMaster obj1 = new tblSMSWhatsAppScriptMaster();
+            tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
             try
             {
                 var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
@@ -210,19 +216,27 @@ namespace BOTS_BL.Repository
                     {
                         Id = "102";
                     }
-                    else if (MessageType == "Cancel")
+                    else if (MessageType == "CancelEarn")
                     {
                         Id = "103";
                     }
-                    var Script1 = context.WhatsAppSMSMasters.Where(x => x.MessageId == Id).FirstOrDefault();
-                    obj1.SMS = Script;
+                    else if (MessageType == "CancelBurn")
+                    {
+                        Id = "104";
+                    }
+                    else if (MessageType == "OTP")
+                    {
+                        Id = "105";
+                    }
+                    var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id).FirstOrDefault();
+                    obj1.WhatsAppScript = Script;
                     obj1.SlNo = Convert.ToInt64(Script1.SlNo);
-                    obj1.MessageId = Convert.ToString(Script1.MessageId);
+                    obj1.Id = Convert.ToString(Script1.Id);
                     obj1.OutletId = Convert.ToString(Script1.OutletId);
-                    obj1.TokenId = Convert.ToString(Script1.TokenId);
-                    obj1.BrandId = Convert.ToString(Script1.BrandId);
+                    obj1.MessageType = Convert.ToString(Script1.MessageType);
+                    
 
-                    context.WhatsAppSMSMasters.AddOrUpdate(obj1);
+                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(obj1);
                     context.SaveChanges();
                 }
             }
