@@ -29,7 +29,7 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[6] { new SelectListItem() { Text = "Enrollment", Value = "Enrollment" }, new SelectListItem() { Text = "Earn", Value = "Earn" }, new SelectListItem() { Text = "Burn", Value = "Burn" }, new SelectListItem() { Text = "CancelEarn", Value = "CancelEarn" }, new SelectListItem() { Text = "CancelBurn", Value = "CancelBurn" }, new SelectListItem() { Text = "OTP", Value = "OTP" } };
         }
-        public tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster { get; set; }
+        public tblSMSWhatsAppScriptMaster  objSMSWhatsAppScriptMaster { get; set; }
         public GroupDetails objGroupDetail { get; set; }
         public string Script { get; set; }
         //public DemographicData objDemographicData { get; set; }
