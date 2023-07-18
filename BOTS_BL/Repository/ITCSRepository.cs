@@ -190,7 +190,7 @@ namespace BOTS_BL.Repository
 
         }
 
-        public bool SaveScripts(int GroupId, int OutletId, string Script, string MessageType)
+        public bool SaveScripts(int GroupId, int OutletId, string Script,  string MessageType)
         {
             bool result = false;
             string Id;
