@@ -843,5 +843,34 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+
+        public bool UpdateCelebrationData(string groupId, string mobileNo, string custName, string DOB, string DOA)
+        {
+            bool result = false;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(groupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                    if (!string.IsNullOrEmpty(custName))
+                        custDetails.Name = custName;
+                    if (!string.IsNullOrEmpty(Convert.ToString(DOB)))
+                        custDetails.DOB = Convert.ToDateTime(DOB);
+                    if (!string.IsNullOrEmpty(Convert.ToString(DOA)))
+                        custDetails.AnniversaryDate = Convert.ToDateTime(DOA);
+
+                    context.tblCustDetailsMasters.AddOrUpdate(custDetails);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateCelebrationData");
+            }
+
+            return result;
+        }
     }
 }

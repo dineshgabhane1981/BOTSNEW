@@ -1,0 +1,124 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "Upload Celebration";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <input type="hidden" id="hdnuploadDocBase64" />
+    <input type="hidden" id="hdnFileName" />
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pr-3 pb-3 ml-5">
+            <div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvGroup">
+                <input type="hidden" id="hdnGroupId" />
+                <div class="col-lg-3 col-md-3" style="text-align:end;">
+                    <b>Group Name</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                </div>
+                <div style="margin-top:5px;">
+                    <button type="button" id="btnShow" style="margin-left:40px;" class="btn btn-primary">Go</button>
+                </div>
+            </div>
+            <div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvMainSection" style="display:none;">
+                <input type="file" id="fileUpload1" />
+                <button type="button" id="btnUpload" class="btn btn-primary">Upload</button>
+                <div class="ml-5"> <a href="~/Downloads/CelebrationUploadFile.xlsx" target="_blank">Download Sample File</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        //document.getElementById("fileUpload").addEventListener('change', handleFileSelectCelebration, false);
+
+
+        $("#btnShow").click(function () {
+            if ($("#ddlGroupDetails").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Group",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                $("#dvMainSection").show(1000);
+            }
+        });
+
+        $("#btnUpload").click(function () {
+            UploadDocuments();
+        });
+    });
+
+    function handleFileSelectCelebration(evt) {
+        var id = evt.currentTarget.id;
+        var qId = id.substring(4, id.length);
+        var f = evt.target.files[0];
+        var Name = evt.target.files[0].name;
+        var reader = new FileReader();
+        reader.onload = (function (theFile) {
+            return function (e) {
+                var binaryData = e.target.result;
+                var base64String = window.btoa(binaryData);
+                $("#hdnuploadDocBase64").val(base64String);
+                $("#hdnFileName").val(Name);
+            };
+        })(f);
+        reader.readAsBinaryString(f);
+    }
+
+    function UploadDocuments() {
+        if (window.FormData !== undefined) {
+            var fileUpload = $("#fileUpload1").get(0);
+
+            var files = fileUpload.files;
+            if (files.length > 0) {
+                var fileData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                fileData.append("groupId", $('#ddlGroupDetails').val());
+        $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UploadDocument", "IndividualDBConfig")',
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function (result) {
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Update",
+                            message: "Celebration data uploaded Successfully",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
+                            window.location.href = urlLink;
+                        });
+                        
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS..",
+                            message: "There is problem in uploading celebration data",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(111)
+                    console.log(result.responseText)
+                }
+            });
+
+            }
+        }
+    }
+
+</script>

@@ -266,6 +266,7 @@
     <Compile Include="TaskService\TaskService.cs" />
     <Compile Include="ViewModel\BrandAndOutletViewModel.cs" />
     <Compile Include="ViewModel\CancelTxnViewModel.cs" />
+    <Compile Include="ViewModel\CelebrationFileUpload.cs" />
     <Compile Include="ViewModel\CommunicationConfigViewModel.cs" />
     <Compile Include="ViewModel\CreateOwnReportViewModel.cs" />
     <Compile Include="ViewModel\CSWiseDataViewModel.cs" />
@@ -439,6 +440,7 @@
     <Content Include="Scripts\datetimepicker-master\README.md" />
     <Content Include="Scripts\datetimepicker-master\yarn.lock" />
     <Content Include="DiscussionFileUpload\podar pathardi list.xlsx" />
+    <Content Include="Downloads\CelebrationUploadFile.xlsx" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\datetimepicker-master\build\jquery.datetimepicker.full.js" />
     <Content Include="Scripts\datetimepicker-master\build\jquery.datetimepicker.full.min.js" />
@@ -634,6 +636,7 @@
     <Content Include="Views\IndividualDBConfig\DisableTransactions.cshtml" />
     <Content Include="Views\OtherReports\_ProdAnalyticFilter.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
+    <Content Include="Views\IndividualDBConfig\UploadCelebrationData.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -786,6 +789,7 @@
   <ItemGroup>
     <Folder Include="App_Browsers\" />
     <Folder Include="App_Data\" />
+    <Folder Include="CampaignFileUpload\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="DashboardReports\" />
     <Folder Include="DLCImages\" />

@@ -51,7 +51,7 @@
                             <th style="background-color: #1D65A6;" width="25%">Member Type</th>
                             <th style="background-color: #1D65A6;" width="25%">Base Count</th>
                             <th style="background-color: #1D65A6;" width="25%">Txn Count</th>
-                            <th style="background-color: #1D65A6;" width="25%">Biz Gen (Rs.)</th>
+                            @*<th style="background-color: #1D65A6;" width="25%">Biz Gen (Rs.)</th>*@
                         </tr>
                         @foreach (var item in Model.lstMemberBaseAndTransaction)
                         {
@@ -59,7 +59,7 @@
                                 <td width="25%">@item.MemberType</td>
                                 <td width="25%">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BaseCount))</td>
                                 <td width="25%">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TxnCount))</td>
-                                <td width="25%">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BizGen))</td>
+                                @*<td width="25%">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.BizGen))</td>*@
                             </tr>
                         }
                     </table>
@@ -78,17 +78,18 @@
 
         <table cellpadding="5" cellspacing="5" class="col-lg-12 col-md-12">
             <tr style="color: white;">
-                <td width="30%" style="background-color: #b2e061; padding: 15px; ">
-                    <b><u>Total Biz (Rs.) </u></b> <br /> <b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objTotalStats.TotalBiz))</b>
+                <td width="30%" style="padding: 15px; ">
+                    @*<b><u>Total Biz (Rs.) </u></b> <br /> <b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objTotalStats.TotalBiz))</b>*@
                 </td>
                 <td width="5%"></td>
                 <td width="30%" style="background-color: #ffb55a; padding: 15px;">
-                    <b><u>Loyalty Biz (Rs.)</u></b> <br /><b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objTotalStats.LoyaltyBiz)) </b>
-                </td>
-                <td width="5%"></td>
-                <td width="30%" style="background-color: #c86558; padding: 15px; ">
                     <b><u> Loyalty % to Total Biz</u></b> <br />
                     <b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objTotalStats.LoyaltyPercentage))% </b>
+                </td>
+                <td width="5%"></td>
+                <td width="30%" style="padding: 15px; ">
+                    @*<b><u> Loyalty % to Total Biz</u></b> <br />
+                    <b style="font-size:20px;"> @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objTotalStats.LoyaltyPercentage))% </b>*@
                 </td>
             </tr>
         </table>

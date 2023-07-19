@@ -427,15 +427,23 @@
                  console.log(result);
                  if (result) {
                      cuteAlert({
-                        type: "success",
-                        title: "Update",
-                        message: "Point Expiry dates extended Successfully",
-                        buttonText: "Okay"
-                    }).then(() => {
-                        var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
-                        window.location.href = urlLink;
-                    });
+                         type: "success",
+                         title: "Update",
+                         message: "Point Expiry dates extended Successfully",
+                         buttonText: "Okay"
+                     }).then(() => {
+                         var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
+                         window.location.href = urlLink;
+                     });
                      $("#divLoader").hide();
+                 }
+                 else {
+                     cuteAlert({
+                         type: "error",
+                         title: "OOPS...",
+                         message: "There is some problem while updating Point Expiry dates",
+                         buttonText: "Okay"
+                     })
                  }
              },
             error: function (result) {
