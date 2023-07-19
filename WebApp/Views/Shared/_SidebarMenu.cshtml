@@ -296,6 +296,12 @@
                                                 Redeemption OTP
                                             </a>
                                         </li>
+                                        <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "SlabWiseReport")">
+                                            <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "SlabWiseReport")" href="@Url.Action("SlabWiseReport", "IndividualDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Slab Wise
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             }

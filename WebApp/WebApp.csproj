@@ -637,6 +637,9 @@
     <Content Include="Views\OtherReports\_ProdAnalyticFilter.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Views\IndividualDBConfig\UploadCelebrationData.cshtml" />
+    <Content Include="Views\IndividualDBConfig\_Slabwise.cshtml" />
+    <Content Include="Views\IndividualDBConfig\ChangeRedeemptionOTP.cshtml" />
+    <Content Include="Views\IndividualDBConfig\SlabWiseReport.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

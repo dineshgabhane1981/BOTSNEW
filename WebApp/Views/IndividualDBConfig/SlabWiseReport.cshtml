@@ -1,0 +1,114 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "SlabWiseReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvGroup">
+                <div class="row col-sm-12" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <b>Group Name</b>
+                    </div>
+                    <div class="col-sm-3" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                    </div>
+                
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <b>Slab</b>
+                    </div>
+                    <div class="col-sm-3" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.tblCustDetailsMaster.Tier, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlTier" })
+                    </div>
+                
+                    <div class="col-sm-3" style="float:left;margin-top:10px;">
+                        <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
+                    </div>
+                </div>
+            </div>
+            <div id="dvData"></div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#btnGO').on("click", function () {
+            GetSlabWiseReport();
+        });
+        var GroupId = 0;
+        var Tier = 0;
+        $('#ddlGroupDetails').change(function () {
+
+            if ($("#ddlGroupDetails option:selected").text() != "Please Select") {
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetTierList", "IndividualDBConfig")',
+                    //url: "/Discussion/GetSubCallTypes",
+                    data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlTier").empty();
+                        $("#ddlTier").append($("<option />").val("").text("Please Select"));
+                        $.each(result, function () {
+                            $("#ddlTier").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        $("#divLoader").hide();
+                    }
+                });
+
+            }
+            else {
+                $("#ddlTier").empty();
+                $("#ddlTier").append($("<option />").val("").text("Please Select"));
+            }
+        });       
+    });
+
+    function GetSlabWiseReport() {
+        if ($('#ddlGroupDetails').val() == "" ) {
+            toastr.error('Please Select Group');
+            return false
+        }
+        if ($('#ddlTier').val() == "" ) {
+            toastr.error('Please select Slab');
+            return false
+        }
+        var GroupId = $('#ddlGroupDetails').val();
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSlabWiseReport", "IndividualDBConfig")',
+            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',Tier: ' + JSON.stringify($('#ddlTier').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {alert(111)
+                console.log(result)
+                $("#dvData").html(result);              
+                $("#divLoader").hide();
+            },            
+            failure: function (result) {
+                alert(222)
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+               
+                $("#dvData").html(result.responseText);
+                $("#divLoader").hide();
+            }
+
+        });
+    }
+</script>
+
+
+
+

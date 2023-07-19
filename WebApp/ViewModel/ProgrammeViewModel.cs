@@ -42,5 +42,9 @@ namespace WebApp.ViewModel
         public bool Revolving { get; set; }
         public BurnData objBurnData { get; set; }
         public OTPData objOTPData { get; set; }
+        public List<tblCustDetailsMaster> lstMember { get; set; }
+        public List<SelectListItem> lstTierDetails { get; set; }
+        public tblCustDetailsMaster tblCustDetailsMaster { get; set; }
+        public MemberData objMemberData { get; set; }
     }
 }

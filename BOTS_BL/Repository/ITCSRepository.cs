@@ -620,38 +620,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
-        //public List<MemberData> GetTierList(string GroupId)
-        //{
-        //    List<MemberData> lstTiers = new List<MemberData>();
-        //    List<tblCustDetailsMaster> lstTempMemberData = new List<tblCustDetailsMaster>();
-        //    try
-        //    {
-        //        var connStr = CR.GetCustomerConnString((GroupId));
-        //        using (var contextNew = new BOTSDBContext(connStr))
-        //        {
-        //            var MemberList = contextNew.Database.SqlQuery<tblCustDetailsMaster>("select * from tblCustDetailsMaster").ToList();
-
-        //            foreach (var item in MemberList)
-        //            {
-        //                MemberData Obj = new MemberData();
-        //                Obj.MobileNo = item.MobileNo;
-        //                Obj.MemberName = item.Name;
-        //                Obj.EnrolledOn = item.DOJ.Value.ToString("dd/MM/yyyy");
-        //                Obj.Tier = item.Tier;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        newexception.AddException(ex, "GetMemberList");
-        //    }
-
-        //    lstTiers = lstTiers.OrderBy(x => x.Tier).ToList();
-
-        //    return lstTiers;
-        //}
-
         public bool UpdateExpiryPointsDate(string mobileNo, string groupId, string expiryDate)
         {
             bool result = false;
@@ -871,6 +839,61 @@ namespace BOTS_BL.Repository
             }
 
             return result;
+        }
+        public List<SelectListItem> GetTierList(string GroupId)
+        {
+            List<SelectListItem> lstTier = new List<SelectListItem>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    var MemberList = contextNew.Database.SqlQuery<string>("select distinct Tier from tblCustDetailsMaster").ToList();
+
+                    foreach (var item in MemberList)
+                    {
+                        lstTier.Add(new SelectListItem
+                        {
+                            Text = item,
+                            Value = Convert.ToString(item)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetTierList");
+            }
+
+            lstTier = lstTier.OrderBy(x => x.Text).ToList();
+
+            return lstTier;
+        }
+        public List<tblCustDetailsMaster> GetSlabWiseReport(string GroupId, string Tier)
+        {
+            List<tblCustDetailsMaster> lstMember = new List<tblCustDetailsMaster>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    lstMember = contextNew.tblCustDetailsMasters.Where(x => x.Tier == Tier).ToList();
+
+                    foreach (var item in lstMember)
+                    {
+                        MemberData Obj = new MemberData();
+                        Obj.MobileNo = item.MobileNo;
+                        Obj.MemberName = item.Name;
+                        Obj.Tier = item.Tier;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetTierList");
+            }
+
+            return lstMember;
         }
     }
 }
