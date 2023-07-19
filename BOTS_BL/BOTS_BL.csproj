@@ -448,6 +448,7 @@
     <Compile Include="Models\OnBoarding\OnBoardingListing.cs" />
     <Compile Include="Models\OnBoarding\RetailDetails.cs" />
     <Compile Include="Models\OnBoarding\SMSTemplate.cs" />
+    <Compile Include="Models\OTPGroupDetails.cs" />
     <Compile Include="Models\OutletDetail.cs" />
     <Compile Include="Models\ProductDetailsMaster.cs" />
     <Compile Include="Models\ProductMaster.cs" />
