@@ -31,6 +31,7 @@ namespace BOTS_BL.Models
         public int? PointsExpiryMonths { get; set; }
         public decimal? PointsAllocation { get; set; }
         public decimal? PointsPercentage { get; set; }
+        public bool Revolving { get; set; }
     }
     public class BurnData
     {

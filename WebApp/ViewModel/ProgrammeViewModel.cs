@@ -39,6 +39,7 @@ namespace WebApp.ViewModel
         public string RevolvingExpiry { get; set; }
         public string Percentage { get; set; }
         public string PointsInRs { get; set; }
+        public bool Revolving { get; set; }
         public BurnData objBurnData { get; set; }
         public OTPData objOTPData { get; set; }
     }

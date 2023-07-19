@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ChangeEarnRule</h2>
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -17,36 +16,42 @@
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
                 <div style="margin-left:50px;margin-top:5px;">
-                    <button type="button" id="btnSearchMember1" style="margin-left:70px;" class="btn btn-primary">Go</button>
+                    <button type="button" id="btnSearchMember1" style="margin-left:70px;" class="btn btn-primary">Show</button>
                 </div>
             </div>
             <div style="display:none;" id="dvRules">
-                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:50px;" id="dvTxnAmt">
+                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:80px;" id="dvTxnAmt">
                     <div class="col-lg-3 col-md-3">
-                        TxnAmt
+                        <b>Txn Amt</b>
                         @Html.TextBoxFor(model => model.objtblRuleMaster.EarnMinTxnAmt, new { @class = "input50", @id = "txtTxnAmt" })
                     </div>
                     <div class="col-lg-3 col-md-3">
-                        RevolvingExpiry
+                        <b>Revolving Expiry Months</b>
                         @Html.TextBoxFor(model => model.objtblRuleMaster.PointsExpiryMonths, new { @class = "input50", @id = "txtRevolvingExpiry" })
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:50px;margin-top:10px;" id="dvRevolvingExpiry">
+                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:80px;margin-top:10px;" id="dvRevolvingExpiry">
                     <div class="col-lg-3 col-md-3">
-                        Percentage
+                        <b>Percentage</b>
                         @Html.TextBoxFor(model => model.objtblRuleMaster.PointsPercentage, new { @class = "input50", @id = "txtPercentage" })
                     </div>
                     <div class="col-md-3 col-xl-3">
-                        PointsInRs
+                        <b>Points In Rs</b>
                         @Html.TextBoxFor(model => model.objtblRuleMaster.PointsAllocation, new { @class = "input50", @id = "txtPointsInRs" })
                     </div>
                 </div>
-            </div>
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" style="display:none;"  id="dvCustomer">
-                <div class="col-md-3 col-xl-3" style="margin-left:200px;">
-                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnSave" tabindex="20">Save</button>
+                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:95px;margin-top:10px;" id="dvRevolving">
+                    <div>
+                        <b>Revolving</b>
+                    </div>
+                    <div style="margin-left:20px;">
+                        <input type="checkbox" id="chkRevolving" style="cursor: pointer; margin-right: 5px;width:25px;height:25px;margin-top:5px;" />
+                    </div>
                 </div>
-            </div>
+                <div class="col-md-3 col-xl-3" style="margin-left:280px;">
+                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnUpdate" tabindex="20">Update</button>
+                </div>
+            </div>           
         </div>
     </div>
 </div>
@@ -55,14 +60,7 @@
         $('#btnSearchMember1').on("click", function () {
             GetEarnRule();
         });
-
-        $("#btnSearchMember1").on("click", function () {
-            $("#dvRules").show();
-            /*$("#dvRevolvingExpiry").show();*/
-            $("#dvCustomer").show();
-
-        });
-        $('#btnSave').on("click", function () {
+        $('#btnUpdate').on("click", function () {
             SaveEarnRule();
         });
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
@@ -88,14 +86,22 @@
                 console.log(result);
                 console.log(result.objEarndata);
                 if (result.objEarndata != null) {
+                    $("#dvRules").show();
                     //alert(result.objEarndata.MinTxnAmt);
                     //alert(result.objEarndata.PointsExpiryVariableDate);
                     //alert(result.objEarndata.PointsAllocation);
                     //alert(result.objEarndata.PointsPrecentage);
+                    /*alert(result.objEarndata.Revolving);*/
+                    //if (result.Revolving) {
+                    //    $("#chkRevolving").prop("checked", true)
+                    //}
                     $("#txtTxnAmt").val(result.objEarndata.EarnMinTxnAmt);
                     $("#txtRevolvingExpiry").val(result.objEarndata.PointsExpiryMonths);
                     $("#txtPointsInRs").val(result.objEarndata.PointsAllocation);
                     $("#txtPercentage").val(result.objEarndata.PointsPercentage);
+                    if (result.objEarndata.Revolving) {
+                        $("#chkRevolving").prop("checked", true)
+                    }
                     $("#divLoader").hide();
                 }
             },
@@ -113,6 +119,7 @@
         var PointsExpiryMonths = $("#txtRevolvingExpiry").val();
         var PointsPercentage = $("#txtPercentage").val();
         var PointsAllocation = $("#txtPointsInRs").val();
+        var Revolving = $("chkRevolving").val();
         var FilterData = [];
         item = {};
         item["GroupId"] = GroupId;
@@ -120,6 +127,14 @@
         item["PointsExpiryMonths"] = PointsExpiryMonths;
         item["PointsPercentage"] = PointsPercentage;
         item["PointsAllocation"] = PointsAllocation;
+        if ($("#chkRevolving").is(":checked")) {
+            Revolving = true;
+        }
+        else {
+            Revolving = false;
+        }
+        item["Revolving"] = Revolving;
+
         FilterData.push(item);
 
         var data = JSON.stringify(FilterData);
@@ -149,7 +164,7 @@
                     cuteAlert({
                         type: "error",
                         title: "Oops..",
-                        message: "Error in Saving Script",
+                        message: "Error in Changing Rule",
                         buttonText: "Okay"
                     })
                 }

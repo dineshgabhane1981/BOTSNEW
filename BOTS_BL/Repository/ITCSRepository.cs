@@ -442,7 +442,7 @@ namespace BOTS_BL.Repository
                 //int varid = Convert.ToInt32(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objtblRuleMaster = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    objtblRuleMaster = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault(); 
                 }
                 if (objtblRuleMaster != null)
                 {
@@ -450,6 +450,8 @@ namespace BOTS_BL.Repository
                     obj.PointsExpiryMonths = objtblRuleMaster.PointsExpiryMonths;
                     obj.PointsAllocation = objtblRuleMaster.PointsAllocation;
                     obj.PointsPercentage = objtblRuleMaster.PointsPercentage;
+                    obj.Revolving = Convert.ToBoolean(objtblRuleMaster.Revolving);
+                    
                 }
             }
             catch (Exception ex)
@@ -477,6 +479,7 @@ namespace BOTS_BL.Repository
                         objCustomerDetail.PointsExpiryMonths = ObjEarn.PointsExpiryMonths;
                         objCustomerDetail.PointsPercentage = ObjEarn.PointsPercentage;
                         objCustomerDetail.PointsAllocation = ObjEarn.PointsAllocation;
+                        objCustomerDetail.Revolving = ObjEarn.Revolving;
                     }
 
                     context.tblRuleMasters.AddOrUpdate(objCustomerDetail);

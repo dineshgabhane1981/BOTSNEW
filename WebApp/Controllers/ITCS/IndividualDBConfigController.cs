@@ -205,6 +205,7 @@ namespace WebApp.Controllers.ITCS
         {
             tblRuleMaster objtblRuleMaster = new tblRuleMaster();
             bool status = false;
+            bool Revolving = default;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             string GroupId = userDetails.GroupId;
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -219,6 +220,7 @@ namespace WebApp.Controllers.ITCS
                     objtblRuleMaster.PointsExpiryMonths = Convert.ToInt32(item["PointsExpiryMonths"]);
                     objtblRuleMaster.PointsPercentage = Convert.ToDecimal(item["PointsPercentage"]);
                     objtblRuleMaster.PointsAllocation = Convert.ToDecimal(item["PointsAllocation"]);
+                    objtblRuleMaster.Revolving = Convert.ToBoolean(item["Revolving"]);
                 }
                 var connectionString = CR.GetCustomerConnString(Convert.ToString(objtblRuleMaster.GroupId));
                 var Response = ITCSR.SaveEarnRule(objtblRuleMaster, connectionString);
