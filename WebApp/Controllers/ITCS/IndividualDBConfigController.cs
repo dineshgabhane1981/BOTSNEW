@@ -1,8 +1,12 @@
 ﻿using BOTS_BL;
 using BOTS_BL.Models;
 using BOTS_BL.Repository;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -340,6 +344,73 @@ namespace WebApp.Controllers.ITCS
             ProgrammeViewModel objData = new ProgrammeViewModel();
             objData.lstMember = ITCSR.GetSlabWiseReport(GroupId, Tier);
             return PartialView("_Slabwise", objData);
+        }
+        public ActionResult ExportToExcelSlabMemberList(string GroupId,string Tier)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+                List<tblCustDetailsMaster> lstMember = new List<tblCustDetailsMaster>();
+                lstMember = ITCSR.GetSlabWiseReport(GroupId, Tier);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(tblCustDetailsMaster));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (tblCustDetailsMaster item in lstMember)
+                {
+                    DataRow row = table.NewRow();                                  
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+
+                table.Columns.Remove("Id");
+                table.Columns.Remove("DOB");
+                table.Columns.Remove("Email");
+                table.Columns.Remove("AnniversaryDate");
+                table.Columns.Remove("Category");
+                table.Columns.Remove("CardNo");
+                table.Columns.Remove("Gender");
+                table.Columns.Remove("EnrolledBy");
+                table.Columns.Remove("CountryCode");
+                table.Columns.Remove("CurrentEnrolledOutlet");
+                table.Columns.Remove("DisableSMSWATxn");
+                table.Columns.Remove("EnrolledOutlet");
+                table.Columns.Remove("DOJ");
+                table.Columns.Remove("IsActive");
+                table.Columns.Remove("DisableTxn");
+                table.Columns.Remove("DisableSMSWAPromo");
+                string ReportName = "MemberData";
+                    string fileName = "BOTS_" + ReportName + ".xlsx";
+                    using (XLWorkbook wb = new XLWorkbook())
+                    {                       
+                        table.TableName = ReportName;
+
+                        IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                        worksheet.Cell(1, 1).Value = "Report Name";
+                        worksheet.Cell(1, 2).Value = "Member Data";
+                        worksheet.Cell(2, 1).Value = "Date";
+                        worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                        worksheet.Cell(3, 1).Value = "Filter";
+
+                        worksheet.Cell(5, 1).InsertTable(table);                        
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            wb.SaveAs(stream);
+
+                            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                        }
+                    }                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ExportToExcelSlabMemberList");
+                return null;
+            }
         }
     }
 }

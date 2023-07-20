@@ -10,7 +10,15 @@
                 </div>
             </div>
             <div class="row mt-3" id="dvActivityData">
-
+                <div class="col text-right" id="dvexcel">
+                    <ul class="list-inline progress-list mt-2">
+                        <li class="list-inline-item">
+                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                <i class="fas fa-file-export"></i> Export
+                            </button>
+                        </li>
+                    </ul>
+                </div>
                 <div class="table-responsive">
                     <table class="table" id="slabTable">
                         <thead>

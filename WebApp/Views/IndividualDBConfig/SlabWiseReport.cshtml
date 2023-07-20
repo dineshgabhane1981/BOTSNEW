@@ -14,21 +14,20 @@
                     </div>
                     <div class="col-sm-3" style="float:left;margin-top:10px;">
                         @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                    </div>
-                
+                    </div>                
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         <b>Slab</b>
                     </div>
                     <div class="col-sm-3" style="float:left;margin-top:10px;">
                         @Html.DropDownListFor(model => model.tblCustDetailsMaster.Tier, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlTier" })
-                    </div>
-                
+                    </div>                
                     <div class="col-sm-3" style="float:left;margin-top:10px;">
                         <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
                     </div>
                 </div>
             </div>
-            <div id="dvData"></div>
+            <div id="dvData">                
+            </div>
         </div>
     </div>
 </div>
@@ -63,13 +62,12 @@
                         $("#divLoader").hide();
                     }
                 });
-
             }
             else {
                 $("#ddlTier").empty();
                 $("#ddlTier").append($("<option />").val("").text("Please Select"));
             }
-        });       
+        });
     });
 
     function GetSlabWiseReport() {
@@ -92,20 +90,29 @@
             dataType: "json",
             success: function (result) {alert(111)
                 console.log(result)
-                $("#dvData").html(result);              
+                $("#dvexcel").show();
+                $("#dvData").html(result);
                 $("#divLoader").hide();
-            },            
+            },
             failure: function (result) {
                 alert(222)
                 $("#divLoader").hide();
             },
             error: function (result) {
-               
+
                 $("#dvData").html(result.responseText);
                 $("#divLoader").hide();
             }
 
         });
+    }
+    function ExportDataExcel() {
+
+        var urlLink = "@Url.Action("ExportToExcelSlabMemberList", "IndividualDBConfig")";
+        urlLink = urlLink + "?groupId=" + $('#ddlGroupDetails').val() + "&Tier=" + $('#ddlTier').val() + "";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
     }
 </script>
 
