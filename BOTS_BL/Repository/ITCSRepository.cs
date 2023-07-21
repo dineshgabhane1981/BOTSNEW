@@ -895,59 +895,74 @@ namespace BOTS_BL.Repository
 
             return lstMember;
         }
-        public DemographicData GetDemographicDetails(string GroupId)
+        public DemographicData GetDemographicDetails(string GroupId, string OutletId)
         {
-            DemographicData objMemberData = new DemographicData();
+            DemographicData objDemoData = new DemographicData();
             try
             {
                 tblGroupOwnerInfo objCustomerDetail = new tblGroupOwnerInfo();
+                tblOutletMaster objOutletMaster = new tblOutletMaster();
                 string connStr = CR.GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     objCustomerDetail = contextNew.tblGroupOwnerInfoes.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    objOutletMaster = contextNew.tblOutletMasters.Where(x => x.OutletId == OutletId).FirstOrDefault();
                 }
                 if (objCustomerDetail != null)
                 {
-                    objMemberData.GroupId = objCustomerDetail.GroupId;
-                    objMemberData.MobileNo = objCustomerDetail.MobileNo;
-                    objMemberData.AlternateNo = objCustomerDetail.AlternateNo;
-                    objMemberData.Email = objCustomerDetail.Email;
-                    objMemberData.Address = objCustomerDetail.Address;
-                    objMemberData.DOB = Convert.ToString(objCustomerDetail.DOB);
-                    objMemberData.DOA = Convert.ToString(objCustomerDetail.DOA);
-                    objMemberData.Gender = objCustomerDetail.Gender;
-                    objMemberData.Name = objCustomerDetail.Name;
+                    objDemoData.GroupId = objCustomerDetail.GroupId;
+                    objDemoData.MobileNo = objCustomerDetail.MobileNo;
+                    objDemoData.AlternateNo = objCustomerDetail.AlternateNo;
+                    objDemoData.Email = objCustomerDetail.Email;
+                    objDemoData.Address = objCustomerDetail.Address;
+                    objDemoData.DOB = Convert.ToString(objCustomerDetail.DOB);
+                    objDemoData.DOA = Convert.ToString(objCustomerDetail.DOA);
+                    objDemoData.Gender = objCustomerDetail.Gender;
+                    objDemoData.Name = objCustomerDetail.Name;
                 }
+                if (objOutletMaster != null)
+                {
+                    objDemoData.StoreAnniversary = Convert.ToString(objOutletMaster.StoreAnniversaryDate);
+                }
+
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "GetDemographicDetails");
             }
-            return objMemberData;
+            return objDemoData;
         }
 
-        public bool SaveDemographicDetails(tblGroupOwnerInfo ObjGroup, string connectionstring)
+        public bool SaveDemographicDetails(tblGroupOwnerInfo ObjGroup,tblOutletMaster objOutletMaster, string connectionstring)
         {
             bool status = false;
             try
             {
-                tblGroupOwnerInfo objCustomerDetail = new tblGroupOwnerInfo();                
+                tblGroupOwnerInfo objGroupOwnerInfo = new tblGroupOwnerInfo();
+                tblOutletMaster objOutlet = new tblOutletMaster();
                 using (var context = new BOTSDBContext(connectionstring))
                 {
-                    objCustomerDetail = context.tblGroupOwnerInfoes.Where(x => x.GroupId == ObjGroup.GroupId).FirstOrDefault();                    
-                    if (objCustomerDetail != null)
+                    objGroupOwnerInfo = context.tblGroupOwnerInfoes.Where(x => x.GroupId == ObjGroup.GroupId).FirstOrDefault();
+                    objOutlet = context.tblOutletMasters.Where(x => x.OutletId == objOutletMaster.OutletId).FirstOrDefault();
+
+                    if (objGroupOwnerInfo != null)
                     {
-                        objCustomerDetail.MobileNo = ObjGroup.MobileNo;
-                        objCustomerDetail.AlternateNo = ObjGroup.AlternateNo;
-                        objCustomerDetail.Email = ObjGroup.Email;
-                        objCustomerDetail.Address = ObjGroup.Address;
-                        objCustomerDetail.DOB = ObjGroup.DOB;
-                        objCustomerDetail.DOA = ObjGroup.DOA;
-                        objCustomerDetail.Gender = ObjGroup.Gender;
-                        objCustomerDetail.Name = ObjGroup.Name;
+                        objGroupOwnerInfo.MobileNo = ObjGroup.MobileNo;
+                        objGroupOwnerInfo.AlternateNo = ObjGroup.AlternateNo;
+                        objGroupOwnerInfo.Email = ObjGroup.Email;
+                        objGroupOwnerInfo.Address = ObjGroup.Address;
+                        objGroupOwnerInfo.DOB = ObjGroup.DOB;
+                        objGroupOwnerInfo.DOA = ObjGroup.DOA;
+                        objGroupOwnerInfo.Gender = ObjGroup.Gender;
+                        objGroupOwnerInfo.Name = ObjGroup.Name;
                     }
-                    
-                    context.tblGroupOwnerInfoes.AddOrUpdate(objCustomerDetail);                    
+                    if (objOutlet != null)
+                    {
+                        objOutlet.StoreAnniversaryDate = objOutletMaster.StoreAnniversaryDate;
+                    }
+
+                    context.tblGroupOwnerInfoes.AddOrUpdate(objGroupOwnerInfo);
+                    context.tblOutletMasters.AddOrUpdate(objOutlet);
                     context.SaveChanges();
                     status = true;
                 }

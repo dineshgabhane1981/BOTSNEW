@@ -7,14 +7,27 @@
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
-                <div class="col-lg-3 col-md-3 ">
-                    <b>Group Name</b>
+
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <b>Group Name</b>
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                    </div>
                 </div>
-                <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <b>Outlet Name</b>
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.tblOutletMaster.OutletName, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutletMaster" })
+                    </div>
                 </div>
-                <div style="margin-left:50px;">
-                    <button type="button" id="btnGO" style="margin-right:30px; margin-top:5px;" class="btn btn-primary">Show</button>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
+                    </div>
                 </div>
             </div>
             <div class="mb-2 pr-3 pt-3 pl-3" id="dvDetails" style="display: none;">
@@ -74,6 +87,14 @@
                         @Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 6 })
                     </div>
                 </div>
+                <div class="row" style="margin: 0;">                    
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Store Anniversary
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.objDemographicData.StoreAnniversary, new { @class = "input100", @id = "txtStoreAnniversary", tabindex = 6 })
+                    </div>
+                </div>
                 <div class="row mb-2 ml-2">
                     <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
                         <button type="button" id="btnSave" style="margin-left:795px;" class="btn btn-primary" tabindex="15" Onclick="SaveDemographicData()"><b>Update</b></button>
@@ -88,9 +109,6 @@
         $('#btnGO').on("click", function () {
             GetDemographicDetails();
         });
-        //$("#btnGO").on("click", function () {
-        //    $("#dvDetails").show();
-        //});
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
         $('#txtDOB').datepicker({
@@ -103,12 +121,51 @@
             changeYear: true,
             yearRange: "0:+10"
         })
+        $('#txtStoreAnniversary').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "0:+10"
+        })
+        $('#ddlGroupDetails').change(function () {
 
+            if ($("#ddlGroupDetails option:selected").text() != "Please Select") {
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
+                    //url: "/Discussion/GetSubCallTypes",
+                    data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        $("#ddlOutletMaster").empty();
+                        $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+                        $.each(result, function () {
+                            $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                        $("#divLoader").hide();
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        $("#divLoader").hide();
+                    }
+                });
+
+            }
+            else {
+                $("#ddlOutletMaster").empty();
+                $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+            }
+        });
 
     });
     function GetDemographicDetails() {
         if ($('#ddlGroupDetails').val() == "" ) {
             toastr.error('Please Select Group');
+            return false
+        }
+        if ($('#ddlOutletMaster').val() == "") {
+            toastr.error('Please Select Outlet');
             return false
         }
         var GroupId = $('#ddlGroupDetails').val();
@@ -117,7 +174,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetDemographicDetails", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -130,9 +187,10 @@
                     $("#txtDOB").val(result.objDemographicData.DOB);
                     $("#txtDOA").val(result.objDemographicData.DOA);
                     $("#txtGender").val(result.objDemographicData.Gender);
-                    $("#txtName").val(result.objDemographicData.Name);
-                    $("#dvDetails").show();
+                    $("#txtName").val(result.objDemographicData.Name); 
+                    $("#txtStoreAnniversary").val(result.objDemographicData.StoreAnniversary);
 
+                    $("#dvDetails").show();
                     $("#divLoader").hide();
                 }
 
@@ -150,9 +208,13 @@
             toastr.error('Please Select Group');
             return false
         }
+        if ($('#ddlOutletMaster').val() == "") {
+            toastr.error('Please Select Group');
+            return false
+        }
 
-        var GroupId = $('#ddlGroupDetails').val();        
-
+        var GroupId = $('#ddlGroupDetails').val();
+        var OutletId = $('#ddlOutletMaster').val();
         var MobileNo = $("#txtMobileNo").val();
         var AlternateNo = $("#txtAlternateNo").val();
         var Email = $("#txtEmail").val();
@@ -161,6 +223,7 @@
         var DOA = $("#txtDOA").val();
         var Gender = $("#txtGender").val();
         var Name = $("#txtName").val();
+        var StoreAnniversary = $("#txtStoreAnniversary").val();
 
         if (MobileNo == "") {
             cuteAlert({
@@ -231,6 +294,7 @@
             item = {};
             item["MobileNo"] = MobileNo;
             item["GroupId"] = GroupId;
+            item["OutletId"] = OutletId;
             item["AlternateNo"] = AlternateNo;
             item["Email"] = Email;
             item["Address"] = Address;
@@ -238,6 +302,7 @@
             item["DOA"] = DOA;
             item["Gender"] = Gender;
             item["Name"] = Name;
+            item["StoreAnniversary"] = StoreAnniversary;
 
             FilterData.push(item);
             var data = JSON.stringify(FilterData);

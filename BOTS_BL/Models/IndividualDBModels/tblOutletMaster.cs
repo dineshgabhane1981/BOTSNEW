@@ -56,5 +56,6 @@ namespace BOTS_BL.Models
 
         [Column(TypeName = "date")]
         public DateTime? LiveDate { get; set; }
+        public DateTime? StoreAnniversaryDate { get; set; }
     }
 }

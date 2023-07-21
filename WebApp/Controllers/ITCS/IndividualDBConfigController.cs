@@ -418,15 +418,16 @@ namespace WebApp.Controllers.ITCS
             objData.lstGroupDetails = ITCSR.GetGroupDetails();
             return View(objData);
         }
-        public ActionResult GetDemographicDetails(string GroupId)
+        public ActionResult GetDemographicDetails(string GroupId,string OutletId)
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.objDemographicData = ITCSR.GetDemographicDetails(GroupId);
+            objData.objDemographicData = ITCSR.GetDemographicDetails(GroupId, OutletId);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SaveDemographicDetails(string jsonData)
         {
-            tblGroupOwnerInfo objGroupDetail = new tblGroupOwnerInfo();            
+            tblGroupOwnerInfo objGroupOwnerInfo = new tblGroupOwnerInfo();
+            tblOutletMaster objOutletMaster = new tblOutletMaster();
             bool status = false;
             
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -438,18 +439,21 @@ namespace WebApp.Controllers.ITCS
             {
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    objGroupDetail.GroupId = Convert.ToString(item["GroupId"]);
-                    objGroupDetail.MobileNo = Convert.ToString(item["MobileNo"]);
-                    objGroupDetail.AlternateNo = Convert.ToString(item["AlternateNo"]);
-                    objGroupDetail.Email = Convert.ToString(item["Email"]);
-                    objGroupDetail.Address = Convert.ToString(item["Address"]);
-                    objGroupDetail.DOB = Convert.ToDateTime(item["DOB"]);
-                    objGroupDetail.DOA = Convert.ToDateTime(item["DOA"]);
-                    objGroupDetail.Gender = Convert.ToString(item["Gender"]);
-                    objGroupDetail.Name = Convert.ToString(item["Name"]);
+                    objGroupOwnerInfo.GroupId = Convert.ToString(item["GroupId"]);                    
+                    objGroupOwnerInfo.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objGroupOwnerInfo.AlternateNo = Convert.ToString(item["AlternateNo"]);
+                    objGroupOwnerInfo.Email = Convert.ToString(item["Email"]);
+                    objGroupOwnerInfo.Address = Convert.ToString(item["Address"]);
+                    objGroupOwnerInfo.DOB = Convert.ToDateTime(item["DOB"]);
+                    objGroupOwnerInfo.DOA = Convert.ToDateTime(item["DOA"]);
+                    objGroupOwnerInfo.Gender = Convert.ToString(item["Gender"]);
+                    objGroupOwnerInfo.Name = Convert.ToString(item["Name"]);
+
+                    objOutletMaster.OutletId = Convert.ToString(item["OutletId"]);
+                    objOutletMaster.StoreAnniversaryDate = Convert.ToDateTime(item["StoreAnniversary"]);
                 }                
-                var connectionString = CR.GetCustomerConnString(objGroupDetail.GroupId);
-                var Response = ITCSR.SaveDemographicDetails(objGroupDetail, connectionString);
+                var connectionString = CR.GetCustomerConnString(objGroupOwnerInfo.GroupId);
+                var Response = ITCSR.SaveDemographicDetails(objGroupOwnerInfo, objOutletMaster, connectionString);
 
             }
             catch (Exception ex)
@@ -458,8 +462,6 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
-
     }
 
 }
