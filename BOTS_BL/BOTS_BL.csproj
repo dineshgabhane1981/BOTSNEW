@@ -251,6 +251,7 @@
     <Compile Include="Models\CommonDB\SMSGatewayMaster.cs" />
     <Compile Include="Models\CommonDB\SMSWABalanceData.cs" />
     <Compile Include="Models\CommonDB\tblAudit.cs" />
+    <Compile Include="Models\CommonDB\tblAuditC.cs" />
     <Compile Include="Models\CommonDB\tblAWSAccessDetail.cs" />
     <Compile Include="Models\CommonDB\tblBillingPartner.cs" />
     <Compile Include="Models\CommonDB\tblChannelPartner.cs" />

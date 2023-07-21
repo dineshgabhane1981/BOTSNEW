@@ -142,7 +142,7 @@ namespace BOTS_BL.Repository
             return lstGroupDetails;
         }
 
-        public tblSMSWhatsAppScriptMaster GetWAScripts(int GroupId, string GroupName, string OutletId, string OutletName, string MessageType)
+        public tblSMSWhatsAppScriptMaster GetWAScripts(int GroupId, string OutletId, string MessageType)
         {
             tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
             string Id;
@@ -190,13 +190,12 @@ namespace BOTS_BL.Repository
 
         }
 
-        public bool SaveScripts(int GroupId, int OutletId, string Script,  string MessageType)
+        public bool SaveScripts(int GroupId, int OutletId, string Script, string MessageType)
         {
             bool result = false;
             string Id;
             Id = string.Empty;
-            tblGroupDetail obj = new tblGroupDetail();
-            tblSMSWhatsAppScriptMaster obj1 = new tblSMSWhatsAppScriptMaster();
+            tblGroupDetail obj = new tblGroupDetail();            
             tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
             try
             {
@@ -229,14 +228,8 @@ namespace BOTS_BL.Repository
                         Id = "105";
                     }
                     var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id).FirstOrDefault();
-                    obj1.WhatsAppScript = Script;
-                    obj1.SlNo = Convert.ToInt64(Script1.SlNo);
-                    obj1.Id = Convert.ToString(Script1.Id);
-                    obj1.OutletId = Convert.ToString(Script1.OutletId);
-                    obj1.MessageType = Convert.ToString(Script1.MessageType);
-                    
-
-                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(obj1);
+                    Script1.WhatsAppScript = Script;
+                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                     context.SaveChanges();
                 }
             }
@@ -442,7 +435,7 @@ namespace BOTS_BL.Repository
                 //int varid = Convert.ToInt32(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objtblRuleMaster = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault(); 
+                    objtblRuleMaster = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
                 }
                 if (objtblRuleMaster != null)
                 {
@@ -451,7 +444,7 @@ namespace BOTS_BL.Repository
                     obj.PointsAllocation = objtblRuleMaster.PointsAllocation;
                     obj.PointsPercentage = objtblRuleMaster.PointsPercentage;
                     obj.Revolving = Convert.ToBoolean(objtblRuleMaster.Revolving);
-                    
+
                 }
             }
             catch (Exception ex)
@@ -796,9 +789,9 @@ namespace BOTS_BL.Repository
                     context.tblCampaignMasters.AddOrUpdate(cData);
                     context.SaveChanges();
 
-                    foreach(var item in expiryData)
+                    foreach (var item in expiryData)
                     {
-                        item.EndDate= Convert.ToDateTime(updatedDate);
+                        item.EndDate = Convert.ToDateTime(updatedDate);
                         context.tblCustPointsMasters.AddOrUpdate(item);
                         context.SaveChanges();
                     }
@@ -933,7 +926,7 @@ namespace BOTS_BL.Repository
             return objDemoData;
         }
 
-        public bool SaveDemographicDetails(tblGroupOwnerInfo ObjGroup,tblOutletMaster objOutletMaster, string connectionstring)
+        public bool SaveDemographicDetails(tblGroupOwnerInfo ObjGroup, tblOutletMaster objOutletMaster, string connectionstring)
         {
             bool status = false;
             try
@@ -973,6 +966,15 @@ namespace BOTS_BL.Repository
 
             }
             return status;
+        }
+
+        public void AddCSLog(tblAuditC objData)
+        {
+            using (var context = new CommonDBContext())
+            {
+                context.tblAuditCS.Add(objData);
+                context.SaveChanges();
+            }
         }
     }
 }

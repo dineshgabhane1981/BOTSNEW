@@ -7,7 +7,7 @@
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
+            @*<div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
                 <input type="hidden" id="hdnGroupId" />
                 <div class="col-lg-3 col-md-3 ">
                     <b>Group Name</b>
@@ -15,7 +15,7 @@
                 <div class="col-md-3 col-xl-3">
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
-            </div>
+            </div>*@
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
                 <div class="col-lg-3 col-md-3 ">
                     <b>Outlet Name</b>
@@ -53,48 +53,40 @@
 </div>
 <script>
     $(document).ready(function () {
+        GetOutlets();
         $('#btnShow').on("click", function () {
             GetWAScripts();
         });
         $('#btnUpdate').on("click", function () {
             SaveScripts();
         });
-        $('#ddlGroupDetails').change(function () {
-            if ($("#ddlGroupDetails option:selected").text() != "Please Select") {
-                $("#divLoader").show();
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
-                    data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        $("#ddlOutletMaster").empty();
-                        $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
-                        $.each(result, function () {
-                            $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
-                        });
-                        $("#divLoader").hide();
-                    },
-                    error: function (result) {
-                        console.log(result.responseText);
-                        $("#divLoader").hide();
-                    }
-                });
-            }
-            else {
-                $("#ddlOutletMaster").empty();
-                $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
-            }
-        });
-        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+        function GetOutlets() {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
+                /*data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',*/
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#ddlOutletMaster").empty();
+                    $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+                    $.each(result, function () {
+                        $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
+                    });
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+
+        }
     });
 
-    function GetWAScripts() {
-        if ($('#ddlGroupDetails').val() == "" ) {
-            toastr.error('Please Select Group');
-            return false
-        }
+    function GetWAScripts() {        
         if ($('#ddlOutletMaster').val() == "") {
             toastr.error('Please Select Outlet');
             return false
@@ -102,17 +94,13 @@
         if ($('#ddlMessageType').val() == "" ) {
             toastr.error('Please select Message Type');
             return false
-        }
-        var GroupId = $('#ddlGroupDetails').val();
-        var GroupName = $("#ddlGroupDetails option:selected").text();
-        var OutletId = $('#ddlOutletMaster').val();
-        var OutletName = $("#ddlOutletMaster option:selected").text();
+        }        
 
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetWAScripts", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',GroupName: ' + JSON.stringify(GroupName) + ',OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + ',OutletName: ' + JSON.stringify(OutletName) + ',MessageType: ' + JSON.stringify($('#ddlMessageType').val()) + '}',
+            data: '{OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + ',MessageType: ' + JSON.stringify($('#ddlMessageType').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -124,17 +112,16 @@
             }
         });
     }
-    function SaveScripts() {
-        var GroupId = $('#ddlGroupDetails').val();
+    function SaveScripts() {        
         var OutletId = $('#ddlOutletMaster').val();
-        var MessageType = $("#ddlMessageType option:selected").text();
         var Script = $("#txtScript").val();
+        var MassageType = $('#ddlMessageType option:selected').val();
 
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("SaveScripts", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify(GroupId) + ', OutletId: ' + JSON.stringify(OutletId) + ', Script: ' + JSON.stringify(Script) + ', MessageType: ' + JSON.stringify($('#ddlMessageType option:selected').val()) + '}',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ', Script: ' + JSON.stringify(Script) + ', MessageType: ' + JSON.stringify(MassageType) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {

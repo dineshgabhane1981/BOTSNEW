@@ -1240,17 +1240,21 @@ namespace BOTS_BL.Repository
         }
         public List<MemberSearchTxn> GetDLCMeamberTransactionHistory(string GroupId, string MobileNo)
         {
+            string DBName = String.Empty;
             List<MemberSearchTxn> lstMemberSearchTxn = new List<MemberSearchTxn>();
             try
             {
                 string connStr = CR.GetCustomerConnString(GroupId);
-                using (var context = new BOTSDBContext(connStr))
+                using (var context = new CommonDBContext())
                 {
-                    lstMemberSearchTxn = context.Database.SqlQuery<MemberSearchTxn>("sp_BOTS_MemberSearch1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
+                    DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                    
+                    lstMemberSearchTxn = context.Database.SqlQuery<MemberSearchTxn>("sp_BOTS_MemberSearch1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData,@pi_DBName",
                         new SqlParameter("@pi_GroupId", GroupId),
                         new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                         new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_SearchData", MobileNo)).ToList<MemberSearchTxn>();
+                        new SqlParameter("@pi_SearchData", MobileNo),
+                        new SqlParameter("@pi_DBName", DBName)).ToList<MemberSearchTxn>();
                 }
             }
             catch (Exception ex)

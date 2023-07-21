@@ -27,25 +27,29 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult ChangeWAScript()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            ProgrammeViewModel objData = new ProgrammeViewModel();            
             return View(objData);
         }
-        public ActionResult GetWAScripts(int GroupId, string GroupName, string OutletId, string OutletName, string MessageType)
+        public ActionResult GetWAScripts(string OutletId, string MessageType)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.objSMSWhatsAppScriptMaster = ITCSR.GetWAScripts(GroupId, GroupName, OutletId, OutletName, MessageType);
+            objData.objSMSWhatsAppScriptMaster = ITCSR.GetWAScripts(Convert.ToInt32(userDetails.GroupId), OutletId, MessageType);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SaveScripts(int GroupId, int OutletId, string Script, string MessageType)
+        public ActionResult SaveScripts(int OutletId, string Script, string MessageType)
         {
             bool result = false;
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            tblGroupDetail objtblGroupDetail = new tblGroupDetail();
-            tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];           
             try
             {
-                result = ITCSR.SaveScripts(GroupId, OutletId, Script, MessageType);
+                result = ITCSR.SaveScripts(Convert.ToInt32(userDetails.GroupId), OutletId, Script, MessageType);
+                tblAuditC objData = new tblAuditC();
+                objData.GroupId = Convert.ToString(userDetails.GroupId);
+                objData.RequestedFor = "Change WA Script";
+                objData.RequestedBy = userDetails.UserName;
+                objData.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(objData);
             }
             catch (Exception ex)
             {
@@ -255,9 +259,10 @@ namespace WebApp.Controllers.ITCS
             objData.lstGroupDetails = ITCSR.GetGroupDetails();
             return View(objData);
         }
-        public JsonResult GetOutlet(string GroupId)
+        public JsonResult GetOutlet()
         {
-            var lstOutletDetails = ITCSR.GetOutlet(GroupId);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstOutletDetails = ITCSR.GetOutlet(userDetails.GroupId);
             return new JsonResult() { Data = lstOutletDetails, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult GetDefaultOTP(string OutletId, string GroupId)
