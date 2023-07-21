@@ -49,5 +49,18 @@ namespace BOTS_BL.Models
         public string OutletId { get; set; }
         public string OTP { get; set; }
     }
+    public class DemographicData
+    {
+        public string GroupId { get; set; }
+        public string MobileNo { get; set; }
+        public string AlternateNo { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string DOB { get; set; }
+        public string DOA { get; set; }
+        public string Gender { get; set; }
+        public string Name { get; set; }
+        public string StoreAnniversary { get; set; }        
+    }
 
 }

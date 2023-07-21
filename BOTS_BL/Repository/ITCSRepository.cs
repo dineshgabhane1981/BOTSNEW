@@ -895,5 +895,69 @@ namespace BOTS_BL.Repository
 
             return lstMember;
         }
+        public DemographicData GetDemographicDetails(string GroupId)
+        {
+            DemographicData objMemberData = new DemographicData();
+            try
+            {
+                tblGroupOwnerInfo objCustomerDetail = new tblGroupOwnerInfo();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objCustomerDetail = contextNew.tblGroupOwnerInfoes.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                }
+                if (objCustomerDetail != null)
+                {
+                    objMemberData.GroupId = objCustomerDetail.GroupId;
+                    objMemberData.MobileNo = objCustomerDetail.MobileNo;
+                    objMemberData.AlternateNo = objCustomerDetail.AlternateNo;
+                    objMemberData.Email = objCustomerDetail.Email;
+                    objMemberData.Address = objCustomerDetail.Address;
+                    objMemberData.DOB = Convert.ToString(objCustomerDetail.DOB);
+                    objMemberData.DOA = Convert.ToString(objCustomerDetail.DOA);
+                    objMemberData.Gender = objCustomerDetail.Gender;
+                    objMemberData.Name = objCustomerDetail.Name;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDemographicDetails");
+            }
+            return objMemberData;
+        }
+
+        public bool SaveDemographicDetails(tblGroupOwnerInfo ObjGroup, string connectionstring)
+        {
+            bool status = false;
+            try
+            {
+                tblGroupOwnerInfo objCustomerDetail = new tblGroupOwnerInfo();                
+                using (var context = new BOTSDBContext(connectionstring))
+                {
+                    objCustomerDetail = context.tblGroupOwnerInfoes.Where(x => x.GroupId == ObjGroup.GroupId).FirstOrDefault();                    
+                    if (objCustomerDetail != null)
+                    {
+                        objCustomerDetail.MobileNo = ObjGroup.MobileNo;
+                        objCustomerDetail.AlternateNo = ObjGroup.AlternateNo;
+                        objCustomerDetail.Email = ObjGroup.Email;
+                        objCustomerDetail.Address = ObjGroup.Address;
+                        objCustomerDetail.DOB = ObjGroup.DOB;
+                        objCustomerDetail.DOA = ObjGroup.DOA;
+                        objCustomerDetail.Gender = ObjGroup.Gender;
+                        objCustomerDetail.Name = ObjGroup.Name;
+                    }
+                    
+                    context.tblGroupOwnerInfoes.AddOrUpdate(objCustomerDetail);                    
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDemographicDetails");
+
+            }
+            return status;
+        }
     }
 }

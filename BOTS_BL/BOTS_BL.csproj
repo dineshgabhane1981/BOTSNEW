@@ -478,6 +478,7 @@
     <Compile Include="Models\tblDLCDashboardConfig.cs" />
     <Compile Include="Models\tblEmployee.cs" />
     <Compile Include="Models\tblFranchiseeEnquiry.cs" />
+    <Compile Include="Models\tblGroupOwnerInfo.cs" />
     <Compile Include="Models\tblLoginLog.cs" />
     <Compile Include="Models\tblNPCCategory.cs" />
     <Compile Include="Models\tblNPCDetail.cs" />

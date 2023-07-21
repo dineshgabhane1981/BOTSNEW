@@ -412,5 +412,54 @@ namespace WebApp.Controllers.ITCS
                 return null;
             }
         }
+        public ActionResult ChangeDemographicDetails()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
+        }
+        public ActionResult GetDemographicDetails(string GroupId)
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objDemographicData = ITCSR.GetDemographicDetails(GroupId);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveDemographicDetails(string jsonData)
+        {
+            tblGroupOwnerInfo objGroupDetail = new tblGroupOwnerInfo();            
+            bool status = false;
+            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            string GroupId = userDetails.GroupId;
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    objGroupDetail.GroupId = Convert.ToString(item["GroupId"]);
+                    objGroupDetail.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objGroupDetail.AlternateNo = Convert.ToString(item["AlternateNo"]);
+                    objGroupDetail.Email = Convert.ToString(item["Email"]);
+                    objGroupDetail.Address = Convert.ToString(item["Address"]);
+                    objGroupDetail.DOB = Convert.ToDateTime(item["DOB"]);
+                    objGroupDetail.DOA = Convert.ToDateTime(item["DOA"]);
+                    objGroupDetail.Gender = Convert.ToString(item["Gender"]);
+                    objGroupDetail.Name = Convert.ToString(item["Name"]);
+                }                
+                var connectionString = CR.GetCustomerConnString(objGroupDetail.GroupId);
+                var Response = ITCSR.SaveDemographicDetails(objGroupDetail, connectionString);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDemographicDetails");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
     }
+
 }

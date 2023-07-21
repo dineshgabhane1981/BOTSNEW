@@ -3,13 +3,10 @@
     ViewBag.Title = "ChangeDemographicDetails";
     //Layout = "~/Views/Shared/_SidebarMenu.cshtml";
 }
-
-<h2>Change Demographic Details</h2>
-
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">                
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
                 <div class="col-lg-3 col-md-3 ">
                     <b>Group Name</b>
                 </div>
@@ -17,55 +14,69 @@
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
                 <div style="margin-left:50px;">
-                    <button type="button" id="btnGO" style="margin-left:130px;" class="btn btn-primary">Go</button>
+                    <button type="button" id="btnGO" style="margin-right:30px; margin-top:5px;" class="btn btn-primary">Show</button>
                 </div>
             </div>
             <div class="mb-2 pr-3 pt-3 pl-3" id="dvDetails" style="display: none;">
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Retail Name
+                        Mobile No
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objDemographicData.GroupName, new { @class = "input100", @id = "txtGroupName", tabindex = 1 })
+                        @Html.TextBoxFor(model => model.objDemographicData.MobileNo, new { @class = "input100", @id = "txtMobileNo", tabindex = 1 })
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        Authorized Person
+                        Alternate No
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objDemographicData.AuthorisedPerson, new { @class = "input100", @id = "txtAuthorisedPerson", tabindex = 2 })
+                        @Html.TextBoxFor(model => model.objDemographicData.AlternateNo, new { @class = "input100", @id = "txtAlternateNo", tabindex = 2 })
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        Contact No
+                        Email Id
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objDemographicData.ContactNo, new { @class = "input100", @id = "txtContactNo", tabindex = 3 })
+                        @Html.TextBoxFor(model => model.objDemographicData.Email, new { @class = "input100", @id = "txtEmail", tabindex = 3 })
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        EmailId
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objDemographicData.EmailId, new { @class = "input100", @id = "txtEmailId", tabindex = 4 })
-                    </div>
-                </div>
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         Address
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objDemographicData.Address, new { @class = "input100", @id = "txtAddress", tabindex = 5 })
+                        @Html.TextBoxFor(model => model.objDemographicData.Address, new { @class = "input100", @id = "txtAddress", tabindex = 4 })
                     </div>
-                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
-                        PinCode
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        DOB
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextAreaFor(model => model.objDemographicData.PinCode, new { @class = "input100", @id = "txtPinCode", tabindex = 6 })
+                        @Html.TextBoxFor(model => model.objDemographicData.DOB, new { @class = "input100", @id = "txtDOB", tabindex = 3 })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Anniversary Date
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.objDemographicData.DOA, new { @class = "input100", @id = "txtDOA", tabindex = 4 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Gender
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 5 })
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Name
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 6 })
                     </div>
                 </div>
                 <div class="row mb-2 ml-2">
                     <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
-                        <button type="button" id="btnSave" style="margin-left:25px;" class="btn btn-primary" tabindex="15" Onclick="SaveDemographicData()"><b>Save</b></button>
+                        <button type="button" id="btnSave" style="margin-left:795px;" class="btn btn-primary" tabindex="15" Onclick="SaveDemographicData()"><b>Update</b></button>
                     </div>
                 </div>
             </div>
@@ -77,9 +88,22 @@
         $('#btnGO').on("click", function () {
             GetDemographicDetails();
         });
-        $("#btnGO").on("click", function () {
-            $("#dvDetails").show();
-        });
+        //$("#btnGO").on("click", function () {
+        //    $("#dvDetails").show();
+        //});
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+
+        $('#txtDOB').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "0:+10"
+        })
+        $('#txtDOA').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: "0:+10"
+        })
+
 
     });
     function GetDemographicDetails() {
@@ -99,12 +123,15 @@
             success: function (result) {
                 if (result.objDemographicData != null) {
 
-                    $("#txtGroupName").text(result.objDemographicData.GroupName);
-                    $("#txtAuthorisedPerson").text(result.objDemographicData.AuthorisedPerson);
-                    $("#txtContactNo").text(result.objDemographicData.ContactNo);
-                    $("#txtEmailId").text(result.objDemographicData.EmailId);
-                    $("#txtAddress").text(result.objDemographicData.Address);
-                    $("#txtPinCode").text(result.objDemographicData.PinCode);
+                    $("#txtMobileNo").val(result.objDemographicData.MobileNo);
+                    $("#txtAlternateNo").val(result.objDemographicData.AlternateNo);
+                    $("#txtEmail").val(result.objDemographicData.Email);
+                    $("#txtAddress").val(result.objDemographicData.Address);
+                    $("#txtDOB").val(result.objDemographicData.DOB);
+                    $("#txtDOA").val(result.objDemographicData.DOA);
+                    $("#txtGender").val(result.objDemographicData.Gender);
+                    $("#txtName").val(result.objDemographicData.Name);
+                    $("#dvDetails").show();
 
                     $("#divLoader").hide();
                 }
@@ -124,45 +151,46 @@
             return false
         }
 
-        var GroupId = $('#ddlGroupDetails').val();
-        alert(GroupId)
+        var GroupId = $('#ddlGroupDetails').val();        
 
-        var GroupName = $("#txtGroupName").val();
-        var AuthorisedPerson = $("#txtAuthorisedPerson").val();
-        var ContactNo = $("#txtContactNo").val();
-        var EmailId = $("#txtEmailId").val();
+        var MobileNo = $("#txtMobileNo").val();
+        var AlternateNo = $("#txtAlternateNo").val();
+        var Email = $("#txtEmail").val();
         var Address = $("#txtAddress").val();
-        var PinCode = $("#txtPinCode").val();
+        var DOB = $("#txtDOB").val();
+        var DOA = $("#txtDOA").val();
+        var Gender = $("#txtGender").val();
+        var Name = $("#txtName").val();
 
-        if (GroupName == "") {
+        if (MobileNo == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
-                message: "Please enter the Group Name",
+                message: "Please enter the Mobile No",
                 buttonText: "Okay"
             })
         }
-        else if (AuthorisedPerson == "") {
+        else if (AlternateNo == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
-                message: "Please enter the Authorised Person",
+                message: "Please enter the Alternate No",
                 buttonText: "Okay"
             })
         }
-        else if (ContactNo == "") {
+        else if (Email == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
-                message: "Please enter the Contact No",
+                message: "Please enter the Email Id",
                 buttonText: "Okay"
             })
         }
-        else if (EmailId == "") {
+        else if (DOB == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
-                message: "Please enter the EmailId",
+                message: "Please enter the DOB",
                 buttonText: "Okay"
             })
         }
@@ -174,24 +202,42 @@
                 buttonText: "Okay"
             })
         }
-        else if (PinCode == "") {
+        else if (DOA == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
-                message: "Please enter the PinCode",
+                message: "Please enter the Anniversary Date",
+                buttonText: "Okay"
+            })
+        }
+        else if (Gender == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Gender",
+                buttonText: "Okay"
+            })
+        }
+        else if (Name == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Name",
                 buttonText: "Okay"
             })
         }
         else {
             var FilterData = [];
             item = {};
-            item["GroupName"] = GroupName;
+            item["MobileNo"] = MobileNo;
             item["GroupId"] = GroupId;
-            item["AuthorisedPerson"] = AuthorisedPerson;
-            item["ContactNo"] = ContactNo;
-            item["EmailId"] = EmailId;
+            item["AlternateNo"] = AlternateNo;
+            item["Email"] = Email;
             item["Address"] = Address;
-            item["PinCode"] = PinCode;
+            item["DOB"] = DOB;
+            item["DOA"] = DOA;
+            item["Gender"] = Gender;
+            item["Name"] = Name;
 
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
@@ -230,7 +276,7 @@
                    error: function (result) {
                     //alert(111)
                     console.log(result.responseText)
-                   }
+               }
           });
 
     }
@@ -239,3 +285,7 @@
 
 
 </script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />

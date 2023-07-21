@@ -302,6 +302,12 @@
                                                 Slab Wise
                                             </a>
                                         </li>
+                                        <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")">
+                                            <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")" href="@Url.Action("ChangeDemographicDetails", "IndividualDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Change Demographic Data
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             }
