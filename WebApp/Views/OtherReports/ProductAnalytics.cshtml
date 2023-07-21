@@ -1,0 +1,155 @@
+﻿@model WebApp.ViewModel.OtherReportProductwiseViewModel
+@using System.Globalization
+@{
+    ViewBag.Title = "ProductAnalytics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+
+
+    #one:checked ~ .panels #one-panel,
+    #two:checked ~ .panels #two-panel {
+        display: block
+    }
+
+
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 65px; /* Location of the box */
+        left: 120px;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 75%;
+        border-radius: 25px;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+</style>
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="row mt-3">
+            <div class="col-md-3 col-xl-3">
+                <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass"> Product Performance
+            </div>
+            <div class="col-md-3 col-xl-3">
+                <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass"> Product Analytics
+            </div>
+        </div>
+    </div>
+
+    <input class="radio" id="one" name="group" type="radio" checked>
+    <input class="radio" id="two" name="group" type="radio">
+    <div class="tabs">
+        <label class="tab" id="one-tab" for="one">High Selling Products</label>
+        <label class="tab" id="two-tab" for="two">Low Selling Products</label>
+    </div>
+    <div class="panels">
+        <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="one-panel">
+            <div id="dvLiveCustomer">
+                @Html.Partial("~/Views/OtherReports/_HighSellingProduct.cshtml", Model)
+            </div>
+        </div>
+
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
+            <div id="dvOnboardingCust">
+                @Html.Partial("~/Views/OtherReports/_LowSellingProduct.cshtml", Model)
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+
+</script>

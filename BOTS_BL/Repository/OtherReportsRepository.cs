@@ -91,7 +91,7 @@ namespace BOTS_BL.Repository
             {
                 using(var context = new BOTSDBContext(connstr))
                 {
-                    objProdData = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc").ToList();
+                    objProdData = context.Database.SqlQuery<ProductWisePerformance>("select top(25) T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc").ToList();
                 }
             }
             catch(Exception ex)
@@ -139,7 +139,7 @@ namespace BOTS_BL.Repository
             return ObjBtmSold;
         }
 
-        public List<ProductWisePerformance> GetProductDetailFilter(string GroupId, string connstr, string FromDate, string ToDate, string OutletId)
+        public List<ProductWisePerformance> GetProductDetailFilter(string GroupId, string connstr, string FromDate, string ToDate, string OutletId, string stmtflag)
         {
             List<ProductWisePerformance> Obj = new List<ProductWisePerformance>();
             List<ProductWisePerformance> Obj1 = new List<ProductWisePerformance>();
@@ -152,22 +152,44 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    if(string.IsNullOrEmpty(FromDate) && string.IsNullOrEmpty(ToDate) && string.IsNullOrEmpty(OutletId))
+                    if (stmtflag == "0")
                     {
-                        Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint)) desc,count(P.Productcode) desc").ToList();
+                        if (string.IsNullOrEmpty(FromDate) && string.IsNullOrEmpty(ToDate) && string.IsNullOrEmpty(OutletId))
+                        {
+                            Obj = context.Database.SqlQuery<ProductWisePerformance>("select top (25) T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint)) desc,count(P.Productcode) desc").ToList();
+                        }
+                        else if (FromDate != "" && OutletId != "" && ToDate != "")
+                        {
+                            Obj = context.Database.SqlQuery<ProductWisePerformance>("select top (25) T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where (cast(T.TxnDatetime as date) between @FromDate and @ToDate) and T.OutletId = @Outlet Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@FromDate", FromDate), new SqlParameter("@ToDate", ToDate), new SqlParameter("@Outlet", OutletId)).ToList();
+                        }
+                        else if (FromDate != "" && string.IsNullOrEmpty(OutletId) && ToDate != "")
+                        {
+                            Obj = context.Database.SqlQuery<ProductWisePerformance>("select top (25) T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from  View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where (cast(T.TxnDatetime as date) between @FromDate and @ToDate) Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@FromDate", FromDate), new SqlParameter("@ToDate", ToDate)).ToList();
+                        }
+                        else if (string.IsNullOrEmpty(FromDate) && string.IsNullOrEmpty(ToDate) && OutletId != "")
+                        {
+                            Obj = context.Database.SqlQuery<ProductWisePerformance>("select top (25) T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where T.OutletId = @Outlet Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@Outlet", OutletId)).ToList();
+                        }
                     }
-                    else if(FromDate != "" && OutletId != "" && ToDate != "")
+                    else
                     {
-                        Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where (cast(T.TxnDatetime as date) between @FromDate and @ToDate) and T.OutletId = @Outlet Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@FromDate", FromDate), new SqlParameter("@ToDate", ToDate), new SqlParameter("@Outlet", OutletId)).ToList();
-                    }
-                    else if(FromDate != "" && string.IsNullOrEmpty(OutletId) && ToDate != "")
-                    {
-                        Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from  View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where (cast(T.TxnDatetime as date) between @FromDate and @ToDate) Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@FromDate", FromDate), new SqlParameter("@ToDate", ToDate)).ToList();
-                    }
-                    else if(string.IsNullOrEmpty(FromDate) && string.IsNullOrEmpty(ToDate) && OutletId != "")
-                    {
-                        Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where T.OutletId = @Outlet Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@Outlet", OutletId)).ToList();
-                    }
+                        if (string.IsNullOrEmpty(FromDate) && string.IsNullOrEmpty(ToDate) && string.IsNullOrEmpty(OutletId))
+                        {
+                            Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint)) desc,count(P.Productcode) desc").ToList();
+                        }
+                        else if (FromDate != "" && OutletId != "" && ToDate != "")
+                        {
+                            Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where (cast(T.TxnDatetime as date) between @FromDate and @ToDate) and T.OutletId = @Outlet Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@FromDate", FromDate), new SqlParameter("@ToDate", ToDate), new SqlParameter("@Outlet", OutletId)).ToList();
+                        }
+                        else if (FromDate != "" && string.IsNullOrEmpty(OutletId) && ToDate != "")
+                        {
+                            Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from  View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where (cast(T.TxnDatetime as date) between @FromDate and @ToDate) Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@FromDate", FromDate), new SqlParameter("@ToDate", ToDate)).ToList();
+                        }
+                        else if (string.IsNullOrEmpty(FromDate) && string.IsNullOrEmpty(ToDate) && OutletId != "")
+                        {
+                            Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where T.OutletId = @Outlet Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@Outlet", OutletId)).ToList();
+                        }
+                    }                  
                     
                 }
             }
@@ -333,16 +355,36 @@ namespace BOTS_BL.Repository
 
             return ObjSubCategoryCode;
         }
-        public List<ProductAnalytics> GetProductAnalyticFilter(string GroupId, string connstr, Int16 PurchaseFiter1, Int16 PurchaseFiter2, string dtFrom3, string Todte3, string CategoryCode1, string SubCategoryCode1, string LstProd1, string CategoryCode2, string SubCategoryCode2, string LstProd2, string NotPurchasedSince, Int32 AmountSpentFrom, Int32 AmountSpentTo, string LstOutlet)
+        public List<ProductAnalytics> GetProductAnalyticFilter(string GroupId, string connstr, Int16 PurchaseFiter1, Int16 PurchaseFiter2, string dtFrom3, string Todte3, string CategoryCode1, string SubCategoryCode1, string LstProd1, string CategoryCode2, string SubCategoryCode2, string LstProd2, string NotPurchasedSince, Int32 AmountSpentFrom, Int32 AmountSpentTo, string LstOutlet,string LstProdCodeCount1,string LstProdCodeCount2,string LstOutletCount)
         {
             List<ProductAnalytics> Obj = new List<ProductAnalytics>();
-            //List<ProductDetailsMaster> objProd = new List<ProductDetailsMaster>();
+            string StrdtFrom3, StrTodte3;
+            StrdtFrom3 = string.Empty;
+            StrTodte3 = string.Empty;
+
+            if (string.IsNullOrEmpty(dtFrom3))
+            {
+                
+            }
+            else
+            {
+                StrdtFrom3 = Convert.ToDateTime(dtFrom3).ToString("yyyy-MM-dd");
+            }
+            if (string.IsNullOrEmpty(Todte3))
+            {
+                
+            }
+            else
+            {
+                StrTodte3 = Convert.ToDateTime(Todte3).ToString("yyyy-MM-dd");
+            }
+
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    Obj = context.Database.SqlQuery<ProductAnalytics>("sp_ProductAnalyticsFilter @pi_AmountSpentFrom,@pi_AmountSpentTo,@pi_CategoryCode1,@pi_CategoryCode2,@pi_LstOutlet,@pi_LstProd1,@pi_LstProd2,@pi_NotPurchasedSince,@pi_PurchaseFiter1,@pi_PurchaseFiter2,@pi_SubCategoryCode1,@pi_SubCategoryCode2,@pi_Todte3,@pi_dtFrom3", 
-                        new SqlParameter("@pi_AmountSpentFrom", AmountSpentFrom), new SqlParameter("@pi_AmountSpentTo", AmountSpentTo), new SqlParameter("@pi_CategoryCode1", CategoryCode1), new SqlParameter("@pi_CategoryCode2", CategoryCode2), new SqlParameter("@pi_LstOutlet", LstOutlet), new SqlParameter("@pi_LstProd1", LstProd1), new SqlParameter("@pi_LstProd2", LstProd2), new SqlParameter("@pi_NotPurchasedSince", NotPurchasedSince), new SqlParameter("@pi_PurchaseFiter1", PurchaseFiter1), new SqlParameter("@pi_PurchaseFiter2", PurchaseFiter2), new SqlParameter("@pi_SubCategoryCode1", SubCategoryCode1), new SqlParameter("@pi_SubCategoryCode2", SubCategoryCode2), new SqlParameter("@pi_Todte3", Todte3), new SqlParameter("@pi_dtFrom3", dtFrom3)).ToList();
+                    Obj = context.Database.SqlQuery<ProductAnalytics>("sp_ProductAnalyticsFilter @pi_AmountSpentFrom,@pi_AmountSpentTo,@pi_CategoryCode1,@pi_CategoryCode2,@pi_LstOutlet,@pi_LstProd1,@pi_LstProd2,@pi_NotPurchasedSince,@pi_PurchaseFiter1,@pi_PurchaseFiter2,@pi_SubCategoryCode1,@pi_SubCategoryCode2,@pi_Todte3,@pi_dtFrom3,@pi_LstProdCodeCount1,@pi_LstProdCodeCount2,@pi_LstOutletCount", 
+                        new SqlParameter("@pi_AmountSpentFrom", AmountSpentFrom), new SqlParameter("@pi_AmountSpentTo", AmountSpentTo), new SqlParameter("@pi_CategoryCode1", CategoryCode1), new SqlParameter("@pi_CategoryCode2", CategoryCode2), new SqlParameter("@pi_LstOutlet", LstOutlet), new SqlParameter("@pi_LstProd1", LstProd1), new SqlParameter("@pi_LstProd2", LstProd2), new SqlParameter("@pi_NotPurchasedSince", NotPurchasedSince), new SqlParameter("@pi_PurchaseFiter1", PurchaseFiter1), new SqlParameter("@pi_PurchaseFiter2", PurchaseFiter2), new SqlParameter("@pi_SubCategoryCode1", SubCategoryCode1), new SqlParameter("@pi_SubCategoryCode2", SubCategoryCode2), new SqlParameter("@pi_Todte3", StrTodte3), new SqlParameter("@pi_dtFrom3", StrdtFrom3), new SqlParameter("@pi_LstProdCodeCount1", LstProdCodeCount1), new SqlParameter("@pi_LstProdCodeCount2", LstProdCodeCount2), new SqlParameter("@pi_LstOutletCount", LstOutletCount)).ToList();
                 }
             }
             catch (Exception ex)

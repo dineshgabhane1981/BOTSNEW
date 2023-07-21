@@ -8,32 +8,26 @@
                 <table class="table" id="tblProdAnalyticFilter">
                     <thead>
                         <tr>
-                            <th>Outlet</th>
+                            <th>Outlet Enrolled</th>
                             <th>Mobile Number</th>
                             <th>Member Name</th>
                             <th>Total Visits</th>
                             <th>Total Spends</th>
                             <th>Last Txn Date </th>
-                            <th>Total Txns</th>
-                            <th>Total Quantity</th>
-                            <th>Total Amount</th>
-                            <th>Last Sold Date</th>
+                            <th>Last TxnDate of Seclection</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model.lstProdAnaltic)
                         {
                             <tr>
-                                <td>@item.OutletId</td>
+                                <td>@item.OutletEnrolled</td>
                                 <td>@item.Mobileno</td>
                                 <td>@item.Name</td>
-                                <td>@item.TotalSpends</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>@item.TotalVisits</td>
+                                <td>@item.TotalSpend</td>
+                                <td>@item.LastTxnDate</td>
+                                <td>@item.LastTxnDateofSeclection</td>
                             </tr>
                         }
                     </tbody>

@@ -46,5 +46,10 @@ namespace BOTS_BL.Models.CommonDB
         public bool? BalanceEnquiryFlag { get; set; }
 
         public bool? BulkUploadTxnFlag { get; set; }
+
+        public bool? WAReport { get; set; }
+
+        [StringLength(50)]
+        public string BillingPartner { get; set; }
     }
 }

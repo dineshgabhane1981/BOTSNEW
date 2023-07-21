@@ -149,7 +149,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    if (GroupId == "1087")
+                    if (GroupId == "1087"|| GroupId == "1002")
                     {
                         var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
                         foreach (var item in lstOutlet)

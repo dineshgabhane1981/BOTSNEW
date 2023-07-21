@@ -83,17 +83,17 @@
         @*<div class="row mb-3 pt-3 pl-3 pr-3 card">*@
         <div class="row mt-3">
             <div class="col-md-3 col-xl-3">
-                <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass"> Product Performance
+                <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Product Performance
             </div>
             <div class="col-md-3 col-xl-3">
-                <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass"> Product Analytics
+                <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Product Analytics
             </div>
         </div>
         @*</div>*@
 
     </div>
-    @*<div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdPerformance">
-            <div class="row mb-3">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdPerformance">
+            <div class="row">
                 <div class="col-md-3 col-xl-3">
                     From Date <br /><input type="text" class="input50" placeholder="From Date" id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
@@ -104,9 +104,26 @@
                     Select Outlet :  @Html.DropDownListFor(x => Model.lstOutletdetails, new SelectList(Model.lstOutletdetails, "Value", "Text"), "All", htmlAttributes: new { @class = "input70", @id = "OutletList" })
                 </div>
                 <div class="col-md-3 col-xl-3">
-                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:30px;" class="btn btn-primary"><b>FILTER</b></button>
+                   
                 </div>
             </div>
+            <div class="row mb-3">
+                <div class="col-md-3 col-xl-3">
+                    <input id="rbtnMiniStatement" name="Statement" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Mini Statement
+                    <input id="rbtnStatementAll" name="Statement" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> ALL
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <button type="button" id="btnFilter" style="margin-left:17px;margin-top:5px;" class="btn btn-primary"><b>FILTER</b></button>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    
+                </div>
+               
+            </div>
+
             <div class="row">
                 <div class="table-responsive">
                     <table class="table" id="tblProductDetail">
@@ -146,7 +163,7 @@
                     </table>
                 </div>
             </div>
-        </div>*@
+        </div>
     <div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdAnalytics" style="display:none">
         <div class="row mb-3">
             <div class="col-sm-10">
@@ -178,7 +195,7 @@
                 <div class="col-xl-5">
                     <div class="form-check">
                         @*<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">*@
-                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 15px">
+                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
                             Filter : 1
                         </label>
                     </div>
@@ -191,10 +208,10 @@
                 <div class="col-xl-4">
 
                 </div>
-                <div class="col-xl-5">
+                <div class="col-xl-7">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="checkFilter2">
-                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 15px">
+                        <input class="form-check-input" type="checkbox" value="" id="checkFilter2" style="width:20px;height:20px;cursor:pointer;">&nbsp;
+                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
                             Filter : 2
                         </label>
                     </div>
@@ -205,13 +222,13 @@
         </div>
         <div class="col-xl-3">
             <div class="row">
-                <div class="col-xl-6">
+                <div class="col-xl-5">
 
                 </div>
-                <div class="col-xl-5">
+                <div class="col-xl-7">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="checkFilter3">
-                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 15px">
+                        <input class="form-check-input" type="checkbox" value="" id="checkFilter3" style="width:20px;height:20px;cursor:pointer;">&nbsp;
+                        <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
                             Filter : 3
                         </label>
                     </div>
@@ -224,9 +241,9 @@
             <div class="col-xl-3" id="divFilter1">
                 
                 <div class="row mt-4">
-                    <div class="col-xl-10">
-                        <input id="rbtnNeverPurchase1" name="itemPurchased1" type="radio" checked class="rbtnClass"> Never Purchased
-                        <input id="rbtnPurchase1" name="itemPurchased1" type="radio" class="rbtnClass"> Purchased
+                    <div class="col-xl-12">
+                        <input id="rbtnNeverPurchase1" name="itemPurchased1" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Never Purchased
+                        <input id="rbtnPurchase1" name="itemPurchased1" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Purchased
                     </div>
                 </div>
                 <div class="row mt-4">
@@ -258,13 +275,13 @@
                 </div>
             </div>
 
-            <div class="col-xl-3" id="divFilter2" style="display:none">
+            <div class="col-xl-3" id="divFilter2" style="visibility: hidden;">
                 @*border-right:1px solid blue;*@
 
                 <div class="row mt-4">
                     <div class="col-xl-12">
-                        <input id="rbtnPurchase2" name="itemPurchased2" type="radio" class="rbtnClass"> Also, Purchased
-                        <input id="rbtnNeverPurchase2" name="itemPurchased2" type="radio" class="rbtnClass"> Never Purchased
+                        <input id="rbtnPurchase2" name="itemPurchased2" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Also, Purchased
+                        <input id="rbtnNeverPurchase2" name="itemPurchased2" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Never Purchased
                     </div>
                 </div>
                 <div class="row mt-4">
@@ -295,21 +312,21 @@
                 </div>
             </div>
 
-            <div class="col-xl-5" id="divFilter3" style="display:none">
+            <div class="col-xl-5" id="divFilter3" style="visibility: hidden;">
                 
-                <div class="row mb-2 mt-4" id="divDateRange" style="display:none">
+                <div class="row mb-2 mt-4" id="divDateRange" style="visibility: hidden;">
                     <div class="col-xl-3">Date range of purchase</div>
                     <div class="col-xl-5"><input type="text" class="input50" placeholder="From Date" id="dtFrom3" /></div>
                     <div class="col-xl-3"><input type="text" class="input50" placeholder="To Date" id="dtTo3" /></div>
                 </div>
-                <div class="row mb-2" id="divNotPurchased" style="display:none">
+                <div class="row mb-2" id="divNotPurchased" style="visibility: hidden;">
                     <div class="col-xl-3">Not purchased since</div>
                     <div class="col-xl-5">
                         <input type="text" class="input50" placeholder="Date" id="NotPurchaseDate" />
                     </div>
                     <div class="col-xl-3 "></div>
                 </div>
-                <div class="row mb-2" id="divAmountSpend" style="display:none">
+                <div class="row mb-2" id="divAmountSpend" style="visibility: hidden;">
                     <div class="col-xl-3">Amount Spent for Purchase</div>
                     <div class="col-xl-5"><input type="text" class="input50" placeholder="From" id="FromAmount" /></div>
                     <div class="col-xl-3"><input type="text" class="input50" placeholder="To" id="ToAmount" /></div>
@@ -381,37 +398,46 @@
         table.draw();
     });
 
-        $("#rbtnProductPerformance").click(function () {
+    $("#rbtnProductPerformance").click(function () {
             $("#divProdPerformance").show();
             $("#divProdAnalytics").hide();
         });
-        $("#rbtnProductAnalytics").click(function () {
+    $("#rbtnProductAnalytics").click(function () {
             $("#divProdAnalytics").show();
             $("#divProdPerformance").hide();
         });
 
     $("#rbtnNeverPurchase1").click(function () {     
-        $("#divDateRange").hide();
-        $("#divNotPurchased").hide();
-        $("#divAmountSpend").hide();
+        $("#divDateRange").css('visibility', 'hidden');
+        $("#divNotPurchased").css('visibility', 'hidden');
+        $("#divAmountSpend").css('visibility', 'hidden');
     });
     $("#rbtnNeverPurchase2").click(function () {       
-        $("#divDateRange").hide();
-        $("#divNotPurchased").hide();
-        $("#divAmountSpend").hide();
+        $("#divDateRange").css('visibility', 'hidden');
+        $("#divNotPurchased").css('visibility', 'hidden');
+        $("#divAmountSpend").css('visibility', 'hidden');
     });
     $("#rbtnPurchase1").click(function () {
-        if ($("#rbtnPurchase2").is(':checked')) {
-            $("#divDateRange").show();
-            $("#divNotPurchased").show();
-            $("#divAmountSpend").show();
+        if ($("#checkFilter2").is(':checked')) {
+
+            if ($("#rbtnPurchase2").is(':checked')) {
+                $("#divDateRange").css('visibility', 'visible');
+                $("#divNotPurchased").css('visibility', 'visible');
+                $("#divAmountSpend").css('visibility', 'visible');
+            }
         }
+        if ($("#checkFilter3").is(':checked')){
+            $("#divDateRange").css('visibility', 'visible');
+            $("#divNotPurchased").css('visibility', 'visible');
+            $("#divAmountSpend").css('visibility', 'visible');
+        }
+        
     });
     $("#rbtnPurchase2").click(function () {
         if ($("#rbtnPurchase1").is(':checked')) {
-            $("#divDateRange").show();
-            $("#divNotPurchased").show();
-            $("#divAmountSpend").show();
+            $("#divDateRange").css('visibility', 'visible');
+            $("#divNotPurchased").css('visibility', 'visible');
+            $("#divAmountSpend").css('visibility', 'visible');
         }
     });
 
@@ -421,6 +447,14 @@
         var Fromdte = $("#dtFrom").val();
         var Todte = $("#dtTo").val();
         var OutletId = $("#OutletList option:selected").val()
+
+        if ($("#rbtnMiniStatement").is(':checked')) {
+            var stmtflag = 0
+        }
+        else {
+            var stmtflag = 1
+        }
+            
 
         if ((Fromdte.length != 0 && Todte.length != 0)) {
             flag = 1;
@@ -435,7 +469,7 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("ProductDataWithFilter", "OtherReports")',
-                data: '{Fromdte: ' + JSON.stringify(Fromdte) + ',Todte: ' + JSON.stringify(Todte) + ',OutletId: ' + JSON.stringify(OutletId) +'}',
+                data: '{Fromdte: ' + JSON.stringify(Fromdte) + ',Todte: ' + JSON.stringify(Todte) + ',OutletId: ' + JSON.stringify(OutletId) + ',stmtflag: ' + JSON.stringify(stmtflag) +'}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -490,6 +524,8 @@
         var Amountflag = 0;
         var dtFrom3 = $("#dtFrom3").val();
         var Todte3 = $("#dtTo3").val();
+        var LstProdCodeCount1 = 0;
+        var LstProdCodeCount2 = 0;
 
         var CategoryCode1 = $("#ProdCategoryCode1").val();
         var SubCategoryCode1 = $("#SubCategoryCode1").val();
@@ -506,6 +542,24 @@
         var PurchaseFiter1 = $('input[id="rbtnNeverPurchase1"]:checked').val();
         var PurchaseFiter2 = $('input[id="rbtnNeverPurchase2"]:checked').val();
 
+        var L1, L2;
+
+        const Str1 = (JSON.stringify(ProdCode1)).split(',');
+        var ProdCount1 = Str1.length;
+        const Str2 = (JSON.stringify(ProdCode2)).split(',');
+        var ProdCount2 = Str2.length;
+        const Str3 = (JSON.stringify(OutletIdList)).split(',');
+        var LstOutletCount = Str3.length;
+        
+        if (ProdCode1 == "") {
+            ProdCount1 = 0
+        }
+        if (ProdCode2 == "") {
+            ProdCount2 = 0
+        }
+        if (OutletIdList == "") {
+            LstOutletCount = 0
+        }
         const LstOutlet = GenerateWhereClause(OutletIdList);
         const LstProd1 = GenerateProdWhereClause(ProdCode1);
         const LstProd2 = GenerateProdWhereClause(ProdCode2);
@@ -516,11 +570,21 @@
         else {
             PurchaseFiter1 = 1;
         }
-        if (PurchaseFiter2) {
-            PurchaseFiter2 = 0;
+
+        if ($("#checkFilter2").is(':checked')) {
+            
+            if (PurchaseFiter2 == null) {
+                PurchaseFiter2 = 2;
+            }
+            else if (PurchaseFiter2) {
+                PurchaseFiter2 = 0;
+            }
+            else {                
+                PurchaseFiter2 = 1;
+            }
         }
         else {
-            PurchaseFiter2 = 1;
+            PurchaseFiter2 = 2;
         }
 
         if ((dtFrom3.length != 0 && Todte3.length != 0)) {
@@ -558,6 +622,9 @@
         item["AmountSpentFrom"] = AmountSpentFrom;
         item["AmountSpentTo"] = AmountSpentTo;
         item["LstOutlet"] = LstOutlet;
+        item["LstProdCodeCount1"] = ProdCount1;
+        item["LstProdCodeCount2"] = ProdCount2;
+        item["LstOutletCount"] = LstOutletCount;
 
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
@@ -817,22 +884,33 @@
     $("#checkFilter2").change(function () {
         if ($("#checkFilter2").is(':checked')) {
             $("#divFilter1").css('border-right', '1px solid blue');
-            $("#divFilter2").show();
+            //$("#divFilter2").show();
+            $("#divFilter2").css('visibility', 'visible');
         }
         else {
             $("#divFilter1").css('border-right', '');
-            $("#divFilter2").hide();
-        }
-        
+            //$("#divFilter2").hide();
+            $("#divFilter2").css('visibility', 'hidden');
+        }       
     });
     $("#checkFilter3").change(function () {
         if ($("#checkFilter3").is(':checked')) {
-            $("#divFilter2").css('border-right', '1px solid blue');
-            $("#divFilter3").show();
+            if ($("#rbtnPurchase1").is(':checked')){
+                $("#divFilter2").css('border-right', '1px solid blue');
+                $("#divDateRange").css('visibility', 'visible');
+                $("#divNotPurchased").css('visibility', 'visible');
+                $("#divAmountSpend").css('visibility', 'visible');
+                $("#divFilter3").css('visibility', 'visible');
+            }
+            $("#divFilter3").css('visibility', 'visible');
         }
         else {
             $("#divFilter2").css('border-right', '');
-            $("#divFilter3").hide();
+            /*$("#divFilter3").hide();*/
+            $("#divDateRange").css('visibility', 'hidden');
+            $("#divNotPurchased").css('visibility', 'hidden');
+            $("#divAmountSpend").css('visibility', 'hidden');
+            $("#divFilter3").css('visibility', 'hidden');
         }
         
     });
