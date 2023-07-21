@@ -431,8 +431,7 @@ namespace BOTS_BL.Repository
             {
 
                 tblRuleMaster objtblRuleMaster = new tblRuleMaster();
-                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
-                //int varid = Convert.ToInt32(GroupId);
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));                
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     objtblRuleMaster = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
@@ -459,12 +458,10 @@ namespace BOTS_BL.Repository
             bool status = false;
             try
             {
-                tblRuleMaster objCustomerDetail = new tblRuleMaster();
-                //BrandDetail obj = new BrandDetail();
+                tblRuleMaster objCustomerDetail = new tblRuleMaster();                
                 using (var context = new BOTSDBContext(connectionstring))
                 {
-                    objCustomerDetail = context.tblRuleMasters.Where(x => x.GroupId == ObjEarn.GroupId).FirstOrDefault();
-                    //obj = context.BrandDetails.Where(x => x.GroupId == ObjGroup.GroupId).FirstOrDefault();
+                    objCustomerDetail = context.tblRuleMasters.Where(x => x.GroupId == ObjEarn.GroupId).FirstOrDefault();                   
                     if (objCustomerDetail != null)
                     {
                         objCustomerDetail.GroupId = ObjEarn.GroupId;
@@ -476,7 +473,6 @@ namespace BOTS_BL.Repository
                     }
 
                     context.tblRuleMasters.AddOrUpdate(objCustomerDetail);
-
                     context.SaveChanges();
                     status = true;
                 }

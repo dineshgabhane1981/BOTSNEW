@@ -207,32 +207,30 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult ChangeEarnRule()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            ProgrammeViewModel objData = new ProgrammeViewModel();            
             return View(objData);
 
         }
-        public ActionResult GetEarnRule(string GroupId)
+        public ActionResult GetEarnRule()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.objEarndata = ITCSR.GetEarnRule(GroupId);
+            objData.objEarndata = ITCSR.GetEarnRule(userDetails.GroupId);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SaveEarnRule(string jsonData)
         {
             tblRuleMaster objtblRuleMaster = new tblRuleMaster();
-            bool status = false;
-            bool Revolving = default;
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            string GroupId = userDetails.GroupId;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            bool status = false;          
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];                        
             try
             {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    objtblRuleMaster.GroupId = Convert.ToString(item["GroupId"]);
+                    objtblRuleMaster.GroupId = userDetails.GroupId;
                     objtblRuleMaster.EarnMinTxnAmt = Convert.ToDecimal(item["EarnMinTxnAmt"]);
                     objtblRuleMaster.PointsExpiryMonths = Convert.ToInt32(item["PointsExpiryMonths"]);
                     objtblRuleMaster.PointsPercentage = Convert.ToDecimal(item["PointsPercentage"]);
@@ -241,7 +239,12 @@ namespace WebApp.Controllers.ITCS
                 }
                 var connectionString = CR.GetCustomerConnString(Convert.ToString(objtblRuleMaster.GroupId));
                 var Response = ITCSR.SaveEarnRule(objtblRuleMaster, connectionString);
-
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Change Earn Rule";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
             }
             catch (Exception ex)
             {
