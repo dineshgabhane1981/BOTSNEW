@@ -6,19 +6,8 @@
 
 <div class="app-main__inner">
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
-                <div class="col-lg-3 col-md-3 ">
-                    <b>Group Name</b>
-                </div>
-                <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                </div>
-                <div style="margin-left:50px;">
-                    <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
-                </div>
-            </div>
-            <div class="mb-2 pr-3 pt-3 pl-3" id="dvDetails" style="display: none;">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">            
+            <div class="mb-2 pr-3 pt-3 pl-3" id="dvDetails">
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         Min Txn Amount
@@ -57,7 +46,7 @@
                 </div>
                 <div class="row mb-2 ml-2">
                     <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
-                        <button type="button" id="btnSave" style="margin-left:500px;" class="btn btn-primary" tabindex="15" Onclick="SaveBurnData()"><b>Update</b></button>
+                        <button type="button" id="btnSave" style="margin-left:660px;" class="btn btn-primary" tabindex="15" Onclick="SaveBurnData()"><b>Update</b></button>
                     </div>
                 </div>
             </div>
@@ -66,24 +55,15 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
-        $('#btnGO').on("click", function () {
-            GetBurnRule();
-        });
+    $(document).ready(function () {        
+            GetBurnRule();        
     });
 
-    function GetBurnRule() {
-        if ($('#ddlGroupDetails').val() == "" ) {
-            toastr.error('Please Select Group');
-            return false
-        }
-        var GroupId = $('#ddlGroupDetails').val();
-
+    function GetBurnRule() {      
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetBurnRule", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+            url: '@Url.Action("GetBurnRule", "IndividualDBConfig")',            
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -107,15 +87,7 @@
         });
     }
 
-    function SaveBurnData() {
-        if ($('#ddlGroupDetails').val() == "") {
-            toastr.error('Please Select Group');
-            return false
-        }
-
-        var GroupId = $('#ddlGroupDetails').val();
-        alert(GroupId)
-
+    function SaveBurnData() {       
         var BurnMinTxnAmt = $("#txtBurnMinTxnAmt").val();
         var MinRedemptionPts = $("#txtMinRedemptionPts").val();
         var MinRedemptionPtsFirstTime = $("#txtMinRedemptionPtsFirstTime").val();
@@ -165,8 +137,7 @@
         else
         {
             var FilterData = [];
-            item = {};
-            item["GroupId"] = GroupId;
+            item = {};            
             item["BurnMinTxnAmt"] = BurnMinTxnAmt;
             item["MinRedemptionPts"] = MinRedemptionPts;
             item["MinRedemptionPtsFirstTime"] = MinRedemptionPtsFirstTime;
@@ -206,8 +177,7 @@
 
                     $("#divLoader").hide();
                  },
-                   error: function (result) {
-                    //alert(111)
+                   error: function (result) {                    
                     console.log(result.responseText)
             }
         });

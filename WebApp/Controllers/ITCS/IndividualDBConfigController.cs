@@ -160,14 +160,14 @@ namespace WebApp.Controllers.ITCS
 
         public ActionResult ChangeBurnRule()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            ProgrammeViewModel objData = new ProgrammeViewModel();            
             return View(objData);
         }
-        public ActionResult GetBurnRule(string GroupId)
+        public ActionResult GetBurnRule()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.objBurnData = ITCSR.GetBurnRule(GroupId);
+            objData.objBurnData = ITCSR.GetBurnRule(userDetails.GroupId);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
 
@@ -175,18 +175,17 @@ namespace WebApp.Controllers.ITCS
         {
             tblRuleMaster objRuleMaster = new tblRuleMaster();
 
-            bool status = false;
-            //var connectionString = CR.GetCustomerConnString(jsonData);
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            string GroupId = userDetails.GroupId;
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
-            json_serializer.MaxJsonLength = int.MaxValue;
-            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            bool status = false;            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
+            
             try
             {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    objRuleMaster.GroupId = Convert.ToString(item["GroupId"]);
+                    objRuleMaster.GroupId = userDetails.GroupId;
                     objRuleMaster.BurnMinTxnAmt = Convert.ToDecimal(item["BurnMinTxnAmt"]);
                     objRuleMaster.MinRedemptionPts = Convert.ToDecimal(item["MinRedemptionPts"]);
                     objRuleMaster.MinRedemptionPtsFirstTime = Convert.ToDecimal(item["MinRedemptionPtsFirstTime"]);
@@ -197,7 +196,12 @@ namespace WebApp.Controllers.ITCS
 
                 var connectionString = CR.GetCustomerConnString(objRuleMaster.GroupId);
                 var Response = ITCSR.SaveBurnRule(objRuleMaster, connectionString);
-
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Change Burn Rule";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
             }
             catch (Exception ex)
             {
