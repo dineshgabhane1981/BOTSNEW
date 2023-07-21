@@ -6,16 +6,7 @@
 
 <div class="app-main__inner">
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
-                <input type="hidden" id="hdnGroupId" />
-                <div class="col-lg-3 col-md-3 ">
-                    <b>Group Name</b>
-                </div>
-                <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                </div>
-            </div>
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">            
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
                 <div class="col-lg-3 col-md-3 ">
                     <b>Mobile No</b>
@@ -59,25 +50,19 @@
         $('#btnUpdate').on("click", function () {
             DisablePromotionalSMS();
         });
-        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+        @*$("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));*@
     });
-    function GetChangeNameData() {
-        if ($('#ddlGroupDetails').val() == "") {
-            toastr.error('Please Select Group');
-            return false
-        }
+    function GetChangeNameData() {        
         if ($('#txtMobileNo').val() == "") {
             toastr.error('Please Enter Mobile No');
             return false
         }
-        var GroupId = $('#ddlGroupDetails').val();
-        var GroupName = $("#ddlGroupDetails option:selected").text();
-
+        
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetChangeNameData", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',GroupName: ' + JSON.stringify(GroupName) + ',MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + '}',
+            data: '{MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -123,8 +108,7 @@
                 var MemberData = [];
                 var GroupId = $('#ddlGroupDetails').val();
                 var GroupName = $("#ddlGroupDetails option:selected").text();
-                item = {}
-                item["GroupID"] = $("#ddlGroupDetails").val();
+                item = {}                
                 item["MobileNo"] = $("#txtMobileNo").val();
                 if ($("#chkMsg").is(":checked")) {
                     DisableSMSWAPromo = true;

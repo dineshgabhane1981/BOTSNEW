@@ -59,20 +59,19 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult DisableSMS()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            ProgrammeViewModel objData = new ProgrammeViewModel();            
             return View(objData);
 
         }
-        public ActionResult GetChangeNameData(string MobileNo, string GroupId)
+        public ActionResult GetChangeNameData(string MobileNo)
         {
-            MemberData objCustomerDetail = new MemberData();
-            var groupId = (string)Session["GroupId"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            MemberData objCustomerDetail = new MemberData();            
             try
             {
                 if (!string.IsNullOrEmpty(MobileNo))
                 {
-                    objCustomerDetail = ITCSR.GetChangeNameByMobileNo(GroupId, MobileNo);
+                    objCustomerDetail = ITCSR.GetChangeNameByMobileNo(userDetails.GroupId, MobileNo);
                 }
 
             }
@@ -98,14 +97,19 @@ namespace WebApp.Controllers.ITCS
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    GroupId = Convert.ToString(item["GroupID"]);
+                    GroupId = userDetails.GroupId;
                     MobileNo = Convert.ToString(item["MobileNo"]);
                     DisableSMSWAPromo = Convert.ToBoolean(item["DisableSMSWAPromo"]);
 
                 }
 
                 result = ITCSR.DisablePromotionalSMS(GroupId, MobileNo, DisableSMSWAPromo);
-
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Disable WaPromo -" + MobileNo;
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
             }
             catch (Exception ex)
             {
