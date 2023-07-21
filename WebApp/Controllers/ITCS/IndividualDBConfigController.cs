@@ -120,8 +120,7 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult DisableTransactions()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            ProgrammeViewModel objData = new ProgrammeViewModel();            
             return View(objData);
         }
         public ActionResult BlockTransaction(string jsonData)
@@ -139,12 +138,18 @@ namespace WebApp.Controllers.ITCS
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    GroupId = Convert.ToString(item["GroupID"]);
+                    GroupId = userDetails.GroupId;
                     MobileNo = Convert.ToString(item["MobileNo"]);
                     DisableSMSWATxn = Convert.ToBoolean(item["DisableSMSWATxn"]);
                 }
 
                 result = ITCSR.BlockTransaction(GroupId, MobileNo, DisableSMSWATxn);
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Disable Txn -" + MobileNo;
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
             }
             catch (Exception ex)
             {
