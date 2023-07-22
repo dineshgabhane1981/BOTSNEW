@@ -9,6 +9,10 @@ using WebApp.ViewModel;
 using BOTS_BL;
 using System.Web.Script.Serialization;
 using BOTS_BL.Models.Reports;
+using System.ComponentModel;
+using System.Data;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace WebApp.Controllers
 {
@@ -230,6 +234,153 @@ namespace WebApp.Controllers
             }
 
             return new JsonResult() { Data = obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult ExportToExcelProductwise(string Fromdte, string Todte, string OutletId, string stmtflag)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            OtherReportProductwiseViewModel objData = new OtherReportProductwiseViewModel();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+                List<tblCustDetailsMaster> lstMember = new List<tblCustDetailsMaster>();
+                objData.lstProductReport = ORR.GetProductDetailFilter(userDetails.GroupId, userDetails.connectionString, Fromdte, Todte, OutletId, stmtflag);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(ProductWisePerformance));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (ProductWisePerformance item in objData.lstProductReport)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+
+                //table.Columns.Remove("Id");
+                //table.Columns.Remove("DOB");
+                //table.Columns.Remove("Email");
+                //table.Columns.Remove("AnniversaryDate");
+                //table.Columns.Remove("Category");
+                //table.Columns.Remove("CardNo");
+                //table.Columns.Remove("Gender");
+                //table.Columns.Remove("EnrolledBy");
+                //table.Columns.Remove("CountryCode");
+                //table.Columns.Remove("CurrentEnrolledOutlet");
+                //table.Columns.Remove("DisableSMSWATxn");
+                //table.Columns.Remove("EnrolledOutlet");
+                //table.Columns.Remove("DOJ");
+                //table.Columns.Remove("IsActive");
+                //table.Columns.Remove("DisableTxn");
+                //table.Columns.Remove("DisableSMSWAPromo");
+                string ReportName = "ProductPerformanceData";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    table.TableName = ReportName;
+
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Product Performance Data";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "Filter";
+
+                    worksheet.Cell(5, 1).InsertTable(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+
+
+
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "ExportDataExcel");
+                return null;
+
+            }
+
+        }
+
+        public ActionResult ExportToExcelProductAnalytics(Int16 PurchaseFiter1, Int16 PurchaseFiter2, string dtFrom3, string Todte3, string CategoryCode1, string SubCategoryCode1, string LstProd1, string CategoryCode2, string SubCategoryCode2, string LstProd2, string NotPurchasedSince, Int32 AmountSpentFrom, Int32 AmountSpentTo, string LstOutlet, string LstProdCodeCount1, string LstProdCodeCount2, string LstOutletCount)
+        {
+            System.Data.DataTable table = new System.Data.DataTable();
+            OtherReportProductwiseViewModel objData = new OtherReportProductwiseViewModel();
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+                //List<tblCustDetailsMaster> lstMember = new List<tblCustDetailsMaster>();
+                objData.lstProdAnaltic = ORR.GetProductAnalyticFilter(userDetails.GroupId, userDetails.connectionString, PurchaseFiter1, PurchaseFiter2, dtFrom3, Todte3, CategoryCode1, SubCategoryCode1, LstProd1, CategoryCode2, SubCategoryCode2, LstProd2, NotPurchasedSince, AmountSpentFrom, AmountSpentTo, LstOutlet, LstProdCodeCount1, LstProdCodeCount2, LstOutletCount);
+
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(ProductAnalytics));
+                foreach (PropertyDescriptor prop in properties)
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+                foreach (ProductAnalytics item in objData.lstProdAnaltic)
+                {
+                    DataRow row = table.NewRow();
+                    foreach (PropertyDescriptor prop in properties)
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+
+                    table.Rows.Add(row);
+                }
+
+                //table.Columns.Remove("Id");
+                //table.Columns.Remove("DOB");
+                //table.Columns.Remove("Email");
+                //table.Columns.Remove("AnniversaryDate");
+                //table.Columns.Remove("Category");
+                //table.Columns.Remove("CardNo");
+                //table.Columns.Remove("Gender");
+                //table.Columns.Remove("EnrolledBy");
+                //table.Columns.Remove("CountryCode");
+                //table.Columns.Remove("CurrentEnrolledOutlet");
+                //table.Columns.Remove("DisableSMSWATxn");
+                //table.Columns.Remove("EnrolledOutlet");
+                //table.Columns.Remove("DOJ");
+                //table.Columns.Remove("IsActive");
+                //table.Columns.Remove("DisableTxn");
+                //table.Columns.Remove("DisableSMSWAPromo");
+                string ReportName = "ProductAnalyticsData";
+                string fileName = "BOTS_" + ReportName + ".xlsx";
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+                    table.TableName = ReportName;
+
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Product Analytics Data";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "Filter";
+
+                    worksheet.Cell(5, 1).InsertTable(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+
+                        return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ExportToExcelProductAnalytics");
+                return null;
+
+            }
         }
 
     }
