@@ -32,9 +32,7 @@
             GetSlabWiseReport();
         });
         
-        function GetTiers() {
-
-            if ($("#ddlGroupDetails option:selected").text() != "Please Select") {
+        function GetTiers() {            
                 $("#divLoader").show();
                 $.ajax({
                     type: "POST",
@@ -53,12 +51,7 @@
                         console.log(result.responseText);
                         $("#divLoader").hide();
                     }
-                });
-            }
-            else {
-                $("#ddlTier").empty();
-                $("#ddlTier").append($("<option />").val("").text("Please Select"));
-            }
+                });                        
         }
     });
 
