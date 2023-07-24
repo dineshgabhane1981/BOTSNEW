@@ -13,17 +13,17 @@
         <div class="col-lg-12 row">
             <div class="col-lg-6 row">
                 <div class="col-md-3 col-xl-3" style="padding-top:12px;">
-                    Select Outlet :
+                    Select Outlet
                 </div>
                 <div class="col-md-3 col-xl-8">
                     @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
                 </div>
             </div>
             <div class="col-lg-6 row">
-                <div class="col-md-3 col-xl-3" style="padding-top:12px;">
-                    Last txn date:
+                <div class="col-md-3 col-xl-3" style="padding-top:12px;text-align:end;">
+                    Last txn date
                 </div>
-                <div class="col-md-3 col-xl-4">
+                <div class="col-md-3 col-xl-5">
                     <input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="col-md-3 col-xl-4">
@@ -34,9 +34,9 @@
         <div class="col-lg-12 row">
             <div class="col-lg-6 row">
                 <div class="col-md-3 col-xl-3" style="padding-top:12px;">
-                    Available points
+                    Available Points
                 </div>
-                <div class="col-md-3 col-xl-4">
+                <div class="col-md-3 col-xl-5">
                     <input type="number" class="input50" placeholder="Min" id="frmPts" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="col-md-3 col-xl-4">
@@ -44,10 +44,10 @@
                 </div>
             </div>
             <div class="col-lg-6 row">
-                <div class="col-md-3 col-xl-3" style="padding-top:12px;">
+                <div class="col-md-3 col-xl-3" style="padding-top: 12px; text-align: end;">
                     Total Spend
                 </div>
-                <div class="col-md-3 col-xl-4">
+                <div class="col-md-3 col-xl-5">
                     <input type="number" class="input50" placeholder="Min" id="frmSpend" />&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="col-md-3 col-xl-4">
