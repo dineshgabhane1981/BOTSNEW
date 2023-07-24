@@ -5,7 +5,9 @@ using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
+using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -521,6 +523,58 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        public ActionResult UploadCelebrationData(string groupid)
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            return View(objData);
+        }
+        public bool UploadDocument(string groupId)
+        {
+            bool status = false;
+            DataSet ds = new DataSet();
+            HttpPostedFileBase files = Request.Files[0];
+            string fileName = Request.Files[0].FileName;
+            var path = ConfigurationManager.AppSettings["CampaignFileUpload"].ToString();
+            System.IO.FileInfo file = new System.IO.FileInfo(path);
+            var fullFilePath = path + "/" + "_" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + fileName;
+            files.SaveAs(fullFilePath);
+            var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+            using (OleDbConnection connExcel = new OleDbConnection(conString))
+            {
+                using (OleDbCommand cmdExcel = new OleDbCommand())
+                {
+                    using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                    {
+                        cmdExcel.Connection = connExcel;
+                        //Get the name of First Sheet.
+                        connExcel.Open();
+                        DataTable dtExcelSchema;
+                        dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                        string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                        connExcel.Close();
+
+                        //Read Data from First Sheet.
+                        connExcel.Open();
+                        cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                        odaExcel.SelectCommand = cmdExcel;
+                        odaExcel.Fill(ds);
+                        connExcel.Close();
+                    }
+                }
+            }
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
+                {
+                    status = ITCSR.UpdateCelebrationData(groupId, Convert.ToString(dr["MobileNo"]), Convert.ToString(dr["CustomerName"]), Convert.ToString(dr["DOB"]), Convert.ToString(dr["DOA"]));
+                }
+            }
+            return status;
+        }
+
     }
 
 }
