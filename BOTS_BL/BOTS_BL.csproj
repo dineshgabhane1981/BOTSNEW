@@ -511,6 +511,7 @@
     <Compile Include="Repository\FeedBackRepository.cs" />
     <Compile Include="Repository\HeatMapsRepository.cs" />
     <Compile Include="Repository\ITCSRepository.cs" />
+    <Compile Include="Repository\ITOPSNEWRepository.cs" />
     <Compile Include="Repository\ITOpsRepository.cs" />
     <Compile Include="Repository\KeyIndecatorsRepository.cs" />
     <Compile Include="Repository\LeadReportsRepository.cs" />
