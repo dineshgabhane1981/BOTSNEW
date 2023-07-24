@@ -309,7 +309,7 @@ namespace WebApp.Controllers.ITCS
                 var Response = ITCSR.SaveDefaultOTP(objOutletMaster, connectionString);
                 tblAuditC obj = new tblAuditC();
                 obj.GroupId = Convert.ToString(userDetails.GroupId);
-                obj.RequestedFor = "Change Redeemption OTP";
+                obj.RequestedFor = "Change Redeemption OTPm";
                 obj.RequestedBy = userDetails.UserName;
                 obj.RequestedDate = DateTime.Now;
                 ITCSR.AddCSLog(obj);
@@ -396,21 +396,22 @@ namespace WebApp.Controllers.ITCS
         public ActionResult SlabWiseReport()
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
             return View(objData);
         }
-        public JsonResult GetTierList(string GroupId)
+        public JsonResult GetTierList()
         {
-            var lstTierDetails = ITCSR.GetTierList(GroupId);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstTierDetails = ITCSR.GetTierList(userDetails.GroupId);
             return new JsonResult() { Data = lstTierDetails, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult GetSlabWiseReport(string GroupId, string Tier)
+        public ActionResult GetSlabWiseReport(string Tier)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstMember = ITCSR.GetSlabWiseReport(GroupId, Tier);
+            objData.lstMember = ITCSR.GetSlabWiseReport(userDetails.GroupId, Tier);
             return PartialView("_Slabwise", objData);
         }
-        public ActionResult ExportToExcelSlabMemberList(string GroupId,string Tier)
+        public ActionResult ExportToExcelSlabMemberList(string Tier)
         {
             System.Data.DataTable table = new System.Data.DataTable();
             try
@@ -418,7 +419,7 @@ namespace WebApp.Controllers.ITCS
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
                 List<tblCustDetailsMaster> lstMember = new List<tblCustDetailsMaster>();
-                lstMember = ITCSR.GetSlabWiseReport(GroupId, Tier);
+                lstMember = ITCSR.GetSlabWiseReport(userDetails.GroupId, Tier);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(tblCustDetailsMaster));
                 foreach (PropertyDescriptor prop in properties)

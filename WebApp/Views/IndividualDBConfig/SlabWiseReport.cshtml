@@ -8,20 +8,14 @@
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvGroup">
-                <div class="row col-sm-12" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        <b>Group Name</b>
-                    </div>
-                    <div class="col-sm-3" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                    </div>                
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                <div class="row col-sm-12" style="margin: 0;">                                  
+                    <div style="float: left; text-align: center; width: 100px; margin-top: 10px;">
                         <b>Slab</b>
                     </div>
                     <div class="col-sm-3" style="float:left;margin-top:10px;">
                         @Html.DropDownListFor(model => model.tblCustDetailsMaster.Tier, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlTier" })
                     </div>                
-                    <div class="col-sm-3" style="float:left;margin-top:10px;">
+                    <div class="col-sm-3" style="float:left;margin-top:15px;">
                         <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
                     </div>
                 </div>
@@ -33,20 +27,18 @@
 </div>
 <script>
     $(document).ready(function () {
+        GetTiers();
         $('#btnGO').on("click", function () {
             GetSlabWiseReport();
         });
-        var GroupId = 0;
-        var Tier = 0;
-        $('#ddlGroupDetails').change(function () {
+        
+        function GetTiers() {
 
             if ($("#ddlGroupDetails option:selected").text() != "Please Select") {
                 $("#divLoader").show();
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("GetTierList", "IndividualDBConfig")',
-                    //url: "/Discussion/GetSubCallTypes",
-                    data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',
+                    url: '@Url.Action("GetTierList", "IndividualDBConfig")',                    
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
@@ -67,25 +59,19 @@
                 $("#ddlTier").empty();
                 $("#ddlTier").append($("<option />").val("").text("Please Select"));
             }
-        });
+        }
     });
 
-    function GetSlabWiseReport() {
-        if ($('#ddlGroupDetails').val() == "" ) {
-            toastr.error('Please Select Group');
-            return false
-        }
+    function GetSlabWiseReport() {       
         if ($('#ddlTier').val() == "" ) {
             toastr.error('Please select Slab');
             return false
-        }
-        var GroupId = $('#ddlGroupDetails').val();
-
+        }        
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetSlabWiseReport", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',Tier: ' + JSON.stringify($('#ddlTier').val()) + '}',
+            data: '{Tier: ' + JSON.stringify($('#ddlTier').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {alert(111)
@@ -109,7 +95,7 @@
     function ExportDataExcel() {
 
         var urlLink = "@Url.Action("ExportToExcelSlabMemberList", "IndividualDBConfig")";
-        urlLink = urlLink + "?groupId=" + $('#ddlGroupDetails').val() + "&Tier=" + $('#ddlTier').val() + "";
+        urlLink = urlLink + "?groupId=" + "&Tier=" + $('#ddlTier').val() + "";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();
