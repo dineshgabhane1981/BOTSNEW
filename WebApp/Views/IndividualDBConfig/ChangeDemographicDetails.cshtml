@@ -6,16 +6,7 @@
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
-
-                <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
-                        <b>Group Name</b>
-                    </div>
-                    <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                    </div>
-                </div>
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">                
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         <b>Outlet Name</b>
@@ -64,13 +55,13 @@
                         DOB
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.objDemographicData.DOB, new { @class = "input100", @id = "txtDOB", tabindex = 3 })
+                        @Html.TextBoxFor(model => model.objDemographicData.DOB, new { @class = "input100", @id = "txtDOB", tabindex = 5 })
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Anniversary Date
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.objDemographicData.DOA, new { @class = "input100", @id = "txtDOA", tabindex = 4 })
+                        @Html.TextBoxFor(model => model.objDemographicData.DOA, new { @class = "input100", @id = "txtDOA", tabindex = 6 })
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -78,13 +69,13 @@
                         Gender
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 5 })
+                        @Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Name
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 6 })
+                        @Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">                    
@@ -92,7 +83,7 @@
                         Store Anniversary
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        @Html.TextBoxFor(model => model.objDemographicData.StoreAnniversary, new { @class = "input100", @id = "txtStoreAnniversary", tabindex = 6 })
+                        @Html.TextBoxFor(model => model.objDemographicData.StoreAnniversary, new { @class = "input100", @id = "txtStoreAnniversary", tabindex = 9 })
                     </div>
                 </div>
                 <div class="row mb-2 ml-2">
@@ -106,11 +97,10 @@
 </div>
 <script>
     $(document).ready(function () {
+        GetOutlets();
         $('#btnGO').on("click", function () {
             GetDemographicDetails();
-        });
-        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-
+        });        
         $('#txtDOB').datepicker({
             changeMonth: true,
             changeYear: true,
@@ -126,15 +116,11 @@
             changeYear: true,
             yearRange: "0:+10"
         })
-        $('#ddlGroupDetails').change(function () {
-
-            if ($("#ddlGroupDetails option:selected").text() != "Please Select") {
+        function GetOutlets() {            
                 $("#divLoader").show();
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
-                    //url: "/Discussion/GetSubCallTypes",
-                    data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',
+                    url: '@Url.Action("GetOutlet", "IndividualDBConfig")',                    
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
@@ -149,32 +135,20 @@
                         console.log(result.responseText);
                         $("#divLoader").hide();
                     }
-                });
-
-            }
-            else {
-                $("#ddlOutletMaster").empty();
-                $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
-            }
-        });
-
-    });
-    function GetDemographicDetails() {
-        if ($('#ddlGroupDetails').val() == "" ) {
-            toastr.error('Please Select Group');
-            return false
+                });                        
         }
+    });
+    function GetDemographicDetails() {       
         if ($('#ddlOutletMaster').val() == "") {
             toastr.error('Please Select Outlet');
             return false
-        }
-        var GroupId = $('#ddlGroupDetails').val();
+        }       
 
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetDemographicDetails", "IndividualDBConfig")',
-            data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + '}',
+            data: '{OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -204,16 +178,11 @@
     }
 
     function SaveDemographicData() {
-        if ($('#ddlGroupDetails').val() == "") {
-            toastr.error('Please Select Group');
-            return false
-        }
         if ($('#ddlOutletMaster').val() == "") {
             toastr.error('Please Select Group');
             return false
         }
-
-        var GroupId = $('#ddlGroupDetails').val();
+        
         var OutletId = $('#ddlOutletMaster').val();
         var MobileNo = $("#txtMobileNo").val();
         var AlternateNo = $("#txtAlternateNo").val();
@@ -293,7 +262,7 @@
             var FilterData = [];
             item = {};
             item["MobileNo"] = MobileNo;
-            item["GroupId"] = GroupId;
+            /*item["GroupId"] = GroupId;*/
             item["OutletId"] = OutletId;
             item["AlternateNo"] = AlternateNo;
             item["Email"] = Email;
@@ -343,11 +312,8 @@
                     console.log(result.responseText)
                }
           });
-
     }
-
 }
-
 
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>

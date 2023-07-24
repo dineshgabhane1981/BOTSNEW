@@ -480,14 +480,14 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult ChangeDemographicDetails()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            ProgrammeViewModel objData = new ProgrammeViewModel();           
             return View(objData);
         }
-        public ActionResult GetDemographicDetails(string GroupId,string OutletId)
+        public ActionResult GetDemographicDetails(string OutletId)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.objDemographicData = ITCSR.GetDemographicDetails(GroupId, OutletId);
+            objData.objDemographicData = ITCSR.GetDemographicDetails(userDetails.GroupId, OutletId);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SaveDemographicDetails(string jsonData)
@@ -496,8 +496,7 @@ namespace WebApp.Controllers.ITCS
             tblOutletMaster objOutletMaster = new tblOutletMaster();
             bool status = false;
             
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            string GroupId = userDetails.GroupId;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];           
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -505,7 +504,7 @@ namespace WebApp.Controllers.ITCS
             {
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    objGroupOwnerInfo.GroupId = Convert.ToString(item["GroupId"]);                    
+                    objGroupOwnerInfo.GroupId = userDetails.GroupId;                    
                     objGroupOwnerInfo.MobileNo = Convert.ToString(item["MobileNo"]);
                     objGroupOwnerInfo.AlternateNo = Convert.ToString(item["AlternateNo"]);
                     objGroupOwnerInfo.Email = Convert.ToString(item["Email"]);
@@ -520,6 +519,12 @@ namespace WebApp.Controllers.ITCS
                 }                
                 var connectionString = CR.GetCustomerConnString(objGroupOwnerInfo.GroupId);
                 var Response = ITCSR.SaveDemographicDetails(objGroupOwnerInfo, objOutletMaster, connectionString);
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Change Demographic Details";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
 
             }
             catch (Exception ex)
