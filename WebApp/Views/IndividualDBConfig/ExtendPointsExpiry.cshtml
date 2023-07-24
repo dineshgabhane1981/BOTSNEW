@@ -7,7 +7,7 @@
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pr-3 pb-3 ml-5">
-            <div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvGroup">
+            @*<div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvGroup">
                 <input type="hidden" id="hdnGroupId" />
                 <div class="col-lg-3 col-md-3" style="text-align:end;">
                     <b>Group Name</b>
@@ -18,8 +18,8 @@
                 <div style="margin-top:5px;">
                     <button type="button" id="btnShow" style="margin-left:40px;" class="btn btn-primary">Go</button>
                 </div>
-            </div>
-            <div id="dvMainSection" style="display:none;">
+            </div>*@
+            <div id="dvMainSection" @*style="display:none;"*@>
                 <div class="col-md-6 col-xl-6 row">
                     <input type="radio" id="rdnBase" checked name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:100px;">Base</div> &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnCampaign" name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Campaign</div>
@@ -140,19 +140,19 @@
                 GetRangeCustomerDetails();
             }
         });
-        $("#btnShow").click(function () {
-            if ($("#ddlGroupDetails").val() == "") {
-                cuteAlert({
-                    type: "error",
-                    title: "OOPS...",
-                    message: "Please select Group",
-                    buttonText: "Okay"
-                })
-            }
-            else {
-                $("#dvMainSection").show(1000);
-            }
-        });
+        //$("#btnShow").click(function () {
+        //    if ($("#ddlGroupDetails").val() == "") {
+        //        cuteAlert({
+        //            type: "error",
+        //            title: "OOPS...",
+        //            message: "Please select Group",
+        //            buttonText: "Okay"
+        //        })
+        //    }
+        //    else {
+        //        $("#dvMainSection").show(1000);
+        //    }
+        //});
         $("#btnUpdateRange").click(function () {
             if ($("#txtUpdateRange").val() == "") {
                 cuteAlert({
@@ -170,7 +170,7 @@
             UpdateExpiryPointsDate();
         });
         $("#btnUpdateCampaignExpiry").click(function () {
-            if ($("#txtUpdateRange").val() == "") {
+            if ($("#txtUpdateCampaignExpiry").val() == "") {
                 cuteAlert({
                     type: "error",
                     title: "OOPS...",
@@ -240,7 +240,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetPointExpiryDetails", "IndividualDBConfig")',
-            data: '{mobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+            data: '{mobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -269,7 +269,7 @@
          $.ajax({
             type: "POST",
             url: '@Url.Action("UpdateExpiryPointsDate", "IndividualDBConfig")',
-             data: '{mobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',expiryDate: ' + JSON.stringify($('#txtExpiryDate').val()) + '}',
+             data: '{mobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',expiryDate: ' + JSON.stringify($('#txtExpiryDate').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
              success: function (result) {
@@ -301,7 +301,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetExpiryDataByDateRange", "IndividualDBConfig")',
-            data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',fromDate: ' + JSON.stringify($('#dtFrom').val()) + ',toDate: ' + JSON.stringify($('#dtTo').val()) + '}',
+            data: '{fromDate: ' + JSON.stringify($('#dtFrom').val()) + ',toDate: ' + JSON.stringify($('#dtTo').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -339,7 +339,7 @@
          $.ajax({
             type: "POST",
             url: '@Url.Action("UpdateExpiryPointsRangeDate", "IndividualDBConfig")',
-             data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',fromDate: ' + JSON.stringify($('#dtFrom').val()) + ',toDate: ' + JSON.stringify($('#dtTo').val()) + ',updateDate: ' + JSON.stringify($('#txtUpdateRange').val()) + '}',
+             data: '{fromDate: ' + JSON.stringify($('#dtFrom').val()) + ',toDate: ' + JSON.stringify($('#dtTo').val()) + ',updateDate: ' + JSON.stringify($('#txtUpdateRange').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
              success: function (result) {
@@ -371,7 +371,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCampaignList", "IndividualDBConfig")',
-            data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+            /*data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',*/
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -395,7 +395,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCampaignDetails", "IndividualDBConfig")',
-            data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',campaignName: ' + JSON.stringify($('#ddlCampaigns').val()) + '}',
+            data: '{campaignName: ' + JSON.stringify($('#ddlCampaigns').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -420,7 +420,7 @@
          $.ajax({
             type: "POST",
             url: '@Url.Action("UpdateCampaignDetails", "IndividualDBConfig")',
-             data: '{groupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',campaignName: ' + JSON.stringify($('#ddlCampaigns').val()) + ',updateDate: ' + JSON.stringify($('#txtUpdateCampaignExpiry').val()) + '}',
+             data: '{campaignName: ' + JSON.stringify($('#ddlCampaigns').val()) + ',updateDate: ' + JSON.stringify($('#txtUpdateCampaignExpiry').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
              success: function (result) {

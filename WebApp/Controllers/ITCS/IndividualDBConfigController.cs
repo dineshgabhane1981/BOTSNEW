@@ -205,7 +205,7 @@ namespace WebApp.Controllers.ITCS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "SaveDemographicDetails");
+                newexception.AddException(ex, "SaveBurnRule");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -258,15 +258,14 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult ExtendPointsExpiry()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();            
+            ProgrammeViewModel objData = new ProgrammeViewModel();                       
             return View(objData);
         }
-        public ActionResult GetPointExpiryDetails(string mobileNo, string groupId)
+        public ActionResult GetPointExpiryDetails(string mobileNo)
         {
             PointExpiryDummyModel objPointsExpiry = new PointExpiryDummyModel();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objPointsExpiry = ITCSR.GetPointExpiryDetails(groupId, mobileNo);
+            objPointsExpiry = ITCSR.GetPointExpiryDetails(userDetails.GroupId, mobileNo);
             return new JsonResult() { Data = objPointsExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult ChangeRedeemptionOTP()
@@ -315,38 +314,77 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }    
-        public ActionResult UpdateExpiryPointsDate(string mobileNo, string groupId,string expiryDate)
+        public ActionResult UpdateExpiryPointsDate(string mobileNo,string expiryDate)
         {
             bool status = false;
-            status = ITCSR.UpdateExpiryPointsDate(mobileNo, groupId, expiryDate);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                status = ITCSR.UpdateExpiryPointsDate(mobileNo, userDetails.GroupId, expiryDate);
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Update Expiry Points Date -" + mobileNo;
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateExpiryPointsDate");
+            }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult GetExpiryDataByDateRange(string groupId, string fromDate,string toDate)
+        public ActionResult GetExpiryDataByDateRange(string fromDate,string toDate)
         {
             List<PointExpiryDummyModel> lstData = new List<PointExpiryDummyModel>();
-            lstData = ITCSR.GetPointExpiryDateRange(groupId, fromDate, toDate);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            lstData = ITCSR.GetPointExpiryDateRange(userDetails.GroupId, fromDate, toDate);
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult UpdateExpiryPointsRangeDate(string groupId, string fromDate, string toDate, string updateDate)
+        public ActionResult UpdateExpiryPointsRangeDate(string fromDate, string toDate, string updateDate)
         {
             bool status = false;
-            status = ITCSR.UpdateExpiryPointsRangeDate(groupId, fromDate, toDate, updateDate);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                status = ITCSR.UpdateExpiryPointsRangeDate(userDetails.GroupId, fromDate, toDate, updateDate);
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Update Expiry Points Range Date ";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateExpiryPointsRangeDate");
+            }
+
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult GetCampaignList(string groupId)
+        public ActionResult GetCampaignList()
         {
-            var lstData = ITCSR.GetCampaignList(groupId);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstData = ITCSR.GetCampaignList(userDetails.GroupId);
             return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult GetCampaignDetails(string groupId,string campaignName)
+        public ActionResult GetCampaignDetails(string campaignName)
         {
-            var objDataNew = ITCSR.GetCamaignPointExpiryDetails(groupId, campaignName);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var objDataNew = ITCSR.GetCamaignPointExpiryDetails(userDetails.GroupId, campaignName);
             return new JsonResult() { Data = objDataNew, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult UpdateCampaignDetails(string groupId,string campaignName,string updateDate)
+        public ActionResult UpdateCampaignDetails(string campaignName,string updateDate)
         {
             bool status = false;
-            status = ITCSR.UpdateCammpaignExpiryDate(groupId, campaignName, updateDate);
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            status = ITCSR.UpdateCammpaignExpiryDate(userDetails.GroupId, campaignName, updateDate);
+            tblAuditC obj = new tblAuditC();
+            obj.GroupId = Convert.ToString(userDetails.GroupId);
+            obj.RequestedFor = "Update Campaign Details -" + campaignName;
+            obj.RequestedBy = userDetails.UserName;
+            obj.RequestedDate = DateTime.Now;
+            ITCSR.AddCSLog(obj);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public ActionResult SlabWiseReport()
