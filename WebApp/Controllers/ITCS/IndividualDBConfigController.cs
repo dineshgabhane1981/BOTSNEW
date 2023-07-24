@@ -272,8 +272,7 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult ChangeRedeemptionOTP()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            ProgrammeViewModel objData = new ProgrammeViewModel();            
             return View(objData);
         }
         public JsonResult GetOutlet()
@@ -282,20 +281,19 @@ namespace WebApp.Controllers.ITCS
             var lstOutletDetails = ITCSR.GetOutlet(userDetails.GroupId);
             return new JsonResult() { Data = lstOutletDetails, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult GetDefaultOTP(string OutletId, string GroupId)
+        public ActionResult GetDefaultOTP(string OutletId)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.objOTPData = ITCSR.GetDefaultOTP(OutletId, GroupId);
+            objData.objOTPData = ITCSR.GetDefaultOTP(OutletId, userDetails.GroupId);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SaveDefaultOTP(string jsonData)
         {
             tblOutletMaster objOutletMaster = new tblOutletMaster();
 
-            bool status = false;
-            //var connectionString = CR.GetCustomerConnString(jsonData);
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            string GroupId = userDetails.GroupId;
+            bool status = false;            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -303,12 +301,18 @@ namespace WebApp.Controllers.ITCS
             {
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    objOutletMaster.GroupId = Convert.ToString(item["GroupId"]);
+                    objOutletMaster.GroupId = userDetails.GroupId;
                     objOutletMaster.OutletId = Convert.ToString(item["OutletId"]);
                     objOutletMaster.DefaultOTP = Convert.ToString(item["DefaultOTP"]);
                 }
-                var connectionString = CR.GetCustomerConnString(objOutletMaster.GroupId);
+                var connectionString = CR.GetCustomerConnString(userDetails.GroupId);
                 var Response = ITCSR.SaveDefaultOTP(objOutletMaster, connectionString);
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Change Redeemption OTP";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
             }
             catch (Exception ex)
             {
