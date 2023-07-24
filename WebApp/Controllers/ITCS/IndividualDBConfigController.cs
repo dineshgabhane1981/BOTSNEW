@@ -524,13 +524,12 @@ namespace WebApp.Controllers.ITCS
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public ActionResult UploadCelebrationData(string groupid)
+        public ActionResult UploadCelebrationData()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            ProgrammeViewModel objData = new ProgrammeViewModel();            
             return View(objData);
         }
-        public bool UploadDocument(string groupId)
+        public bool UploadDocument()
         {
             bool status = false;
             DataSet ds = new DataSet();
@@ -567,9 +566,16 @@ namespace WebApp.Controllers.ITCS
             }
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
                 {
-                    status = ITCSR.UpdateCelebrationData(groupId, Convert.ToString(dr["MobileNo"]), Convert.ToString(dr["CustomerName"]), Convert.ToString(dr["DOB"]), Convert.ToString(dr["DOA"]));
+                    status = ITCSR.UpdateCelebrationData(userDetails.GroupId, Convert.ToString(dr["MobileNo"]), Convert.ToString(dr["CustomerName"]), Convert.ToString(dr["DOB"]), Convert.ToString(dr["DOA"]));
+                    tblAuditC obj = new tblAuditC();
+                    obj.GroupId = Convert.ToString(userDetails.GroupId);
+                    obj.RequestedFor = "Upload Celebration Data";
+                    obj.RequestedBy = userDetails.UserName;
+                    obj.RequestedDate = DateTime.Now;
+                    ITCSR.AddCSLog(obj);
                 }
             }
             return status;

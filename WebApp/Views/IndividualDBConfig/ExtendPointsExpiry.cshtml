@@ -6,20 +6,8 @@
 
 <div class="app-main__inner">
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pr-3 pb-3 ml-5">
-            @*<div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvGroup">
-                <input type="hidden" id="hdnGroupId" />
-                <div class="col-lg-3 col-md-3" style="text-align:end;">
-                    <b>Group Name</b>
-                </div>
-                <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                </div>
-                <div style="margin-top:5px;">
-                    <button type="button" id="btnShow" style="margin-left:40px;" class="btn btn-primary">Go</button>
-                </div>
-            </div>*@
-            <div id="dvMainSection" @*style="display:none;"*@>
+        <div class="container-fluid pt-3 pr-3 pb-3 ml-5">            
+            <div id="dvMainSection">
                 <div class="col-md-6 col-xl-6 row">
                     <input type="radio" id="rdnBase" checked name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:100px;">Base</div> &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnCampaign" name="ptsexpiry" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Campaign</div>
@@ -139,20 +127,7 @@
             else {
                 GetRangeCustomerDetails();
             }
-        });
-        //$("#btnShow").click(function () {
-        //    if ($("#ddlGroupDetails").val() == "") {
-        //        cuteAlert({
-        //            type: "error",
-        //            title: "OOPS...",
-        //            message: "Please select Group",
-        //            buttonText: "Okay"
-        //        })
-        //    }
-        //    else {
-        //        $("#dvMainSection").show(1000);
-        //    }
-        //});
+        });        
         $("#btnUpdateRange").click(function () {
             if ($("#txtUpdateRange").val() == "") {
                 cuteAlert({
