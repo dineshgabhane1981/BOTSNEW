@@ -619,18 +619,20 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public bool ChangeSMSDetails(string GroupId, string CustomerId, bool Disable, tblAudit objAudit)
+        public bool ChangeSMSDetails(string GroupId, string MobileNo, bool Disable, tblAudit objAudit)
         {
             bool status = false;
             try
             {
+                tblCustDetailsMaster objCustDetail = new tblCustDetailsMaster();
                 string connStr =  GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var objCustomer = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                    objCustomer.IsSMS = Disable;
+                    //var objCustomer = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
+                    objCustDetail = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    objCustDetail.DisableSMSWAPromo = Disable;
 
-                    contextNew.CustomerDetails.AddOrUpdate(objCustomer);
+                    contextNew.tblCustDetailsMasters.AddOrUpdate(objCustDetail);
                     contextNew.SaveChanges();
                     status = true;
                 }

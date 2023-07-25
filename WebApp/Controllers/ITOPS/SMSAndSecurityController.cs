@@ -18,6 +18,8 @@ namespace WebApp.Controllers.ITOPS
         ITOpsRepository ITOPS = new ITOpsRepository();
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
+        ITOPSNEWRepository NewITOPS = new ITOPSNEWRepository();
+
         Exceptions newexception = new Exceptions();
         // GET: SMSAndSecurity
         public ActionResult Index()
@@ -42,7 +44,6 @@ namespace WebApp.Controllers.ITOPS
             return View();
             
         }
-
         public ActionResult SecurityKey()
         {
             var groupId = Convert.ToString(Session["GroupId"]);
@@ -65,7 +66,6 @@ namespace WebApp.Controllers.ITOPS
 
             return View();
         }
-
         public ActionResult GetChangeNameData(string MobileNo, string CardNo)
         {
             var GroupId = (string)Session["GroupId"];
@@ -89,7 +89,6 @@ namespace WebApp.Controllers.ITOPS
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
-
         public bool ChangeSMSDetails(string jsonData)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -149,7 +148,6 @@ namespace WebApp.Controllers.ITOPS
             }
             return result;
         }
-
         public void SendEmail(string GroupId, string Subject, string EmailBody)
         {
             var senderEmail = System.Configuration.ConfigurationManager.AppSettings["Email"];
@@ -184,7 +182,6 @@ namespace WebApp.Controllers.ITOPS
                 }
             }
         }
-
         public ActionResult GetLoginIdByOutlets(int outletId)
         {
             var GroupId = (string)Session["GroupId"];
@@ -202,7 +199,6 @@ namespace WebApp.Controllers.ITOPS
 
             return Json(objreset, JsonRequestBehavior.AllowGet);
         }
-
         [HttpPost]
         public ActionResult GetOutletByBrandId(string BrandId)
         {
@@ -228,6 +224,113 @@ namespace WebApp.Controllers.ITOPS
             return result;
         }
 
+        ///////////// ITOPS New //////////
+
+        public ActionResult IndexNew(string groupId)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(groupId))
+                {
+                    CommonFunctions common = new CommonFunctions();
+                    groupId = common.DecryptString(groupId);
+                    Session["GroupId"] = groupId;
+                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    userDetails.GroupId = groupId;
+                    userDetails.connectionString = NewITOPS.GetCustomerConnString(groupId);
+                    userDetails.CustomerName = objCustRepo.GetCustomerName(groupId);
+                    Session["UserSession"] = userDetails;
+                    Session["buttons"] = "ITOPS";
+                    ViewBag.GroupId = groupId;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "IndexNew");
+            }
+            return View();
+        }
+        public ActionResult GetChangeNameDataNew(string MobileNo, string CardNo)
+        {
+            MemberData objCustomerDetail = new MemberData();
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = NewITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = NewITOPS.GetChangeNameByCardNo(groupId, CardNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetChangeNameDataNew");
+            }
+            return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
+        }
+        public bool ChangeSMSDetailsNew(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            bool result = false;
+            string GroupId = "";
+
+            try
+            {
+                GroupId = (string)Session["GroupId"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
+
+                string MobileNo = string.Empty;
+                bool DisableSMS = false;
+
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+
+                    MobileNo = Convert.ToString(item["CustomerId"]);
+                    string Disable = Convert.ToString(item["Disable"]);
+                    if (Disable == "1")
+                        DisableSMS = true;
+
+                    objAudit.RequestedFor = "Change SMS setting";
+                    objAudit.RequestedEntity = "Change SMS setting for - " + MobileNo;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
+
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+
+                }
+
+                result = NewITOPS.ChangeSMSDetails(GroupId, MobileNo, DisableSMS, objAudit);
+                if (result)
+                {
+                    var subject = "New Customer Added with Mobile No  - " + MobileNo;
+                    var body = "New Customer Added with Mobile No - " + MobileNo;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(GroupId, subject, body);
+                }
+                if (Convert.ToBoolean(IsSMS))
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ChangeSMSDetails");
+            }
+            return result;
+        }
 
     }
 }
