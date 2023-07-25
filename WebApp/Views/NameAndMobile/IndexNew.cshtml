@@ -1,8 +1,9 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "IndexNew";
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
+
 <div class="app-main__inner">
     <div class="mb-3 card" style="padding-top:20px;">
         <div class="content">
@@ -144,7 +145,6 @@
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
     });
 
-
     function GetChangeNameData() {
         if ($('#txtMobileNo').val() == "" && $('#txtCardNo').val() == "") {
             toastr.error('Please enter Mobile Number OR Card Number');
@@ -157,7 +157,7 @@
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetChangeNameData", "NameAndMobile")',
+            url: '@Url.Action("GetChangeNameDataNew", "NameAndMobile")',
             data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',MobileNo: ' + JSON.stringify($('#txtMobileNo').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -170,7 +170,7 @@
             $("#spnPtBalance").text(result.PointsBalance);
             $("#spnEnrolledOutlet").text(result.EnrolledOutletName);
             $("#spnEnrolledOn").text(result.EnrolledOn);
-            $("#hdnCustomerId").val(result.CustomerId);
+                $("#hdnCustomerId").val(result.MobileNo);
 
             $('#txtFirstName').val("");
             $('#txtLastName').val("");
@@ -246,7 +246,7 @@
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("ChangeMemberName", "NameAndMobile")',//"/ITOperations/ChangeMemberName",
+                url: '@Url.Action("ChangeMemberNameNew", "NameAndMobile")',//"/ITOperations/ChangeMemberName",
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -276,3 +276,4 @@
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
 <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+

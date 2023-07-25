@@ -20,6 +20,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<View_ITOPSCustData> View_ITOPSCustData { get; set; }
         public virtual DbSet<tblGroupOwnerInfo> tblGroupOwnerInfoes { get; set; }
         public virtual DbSet<tblProductMaster> tblProductMasters { get; set; }
         public virtual DbSet<ProductMaster> ProductMasters { get; set; }

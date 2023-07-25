@@ -57,15 +57,13 @@
 
 
     #one:checked ~ .panels #one-panel,
-    #two:checked ~ .panels #two-panel,
-    #three:checked ~ .panels #three-panel {
+    #two:checked ~ .panels #two-panel {
         display: block
     }
 
 
     #one:checked ~ .tabs #one-tab,
-    #two:checked ~ .tabs #two-tab,
-    #three:checked ~ .tabs #three-tab {
+    #two:checked ~ .tabs #two-tab {
         background: #fff !important;
         color: #000;
         border-top: 3px solid #fff;
@@ -123,11 +121,11 @@
 
     <input class="radio" id="one" name="group" type="radio" checked>
     <input class="radio" id="two" name="group" type="radio">
-    <input class="radio" id="three" name="group" type="radio">
+    @*<input class="radio" id="three" name="group" type="radio">*@
     <div class="tabs">
         <label class="tab" id="one-tab" for="one">WA Text Message</label>
-        <label class="tab" id="two-tab" for="two">WA File Message</label>
-        <label class="tab" id="three-tab" for="three">WA FileWithCaption Message</label>
+        <label class="tab" id="two-tab" for="two">WA File and Caption Message</label>
+        @*<label class="tab" id="three-tab" for="three">WA FileWithCaption Message</label>*@
     </div>
     <div class="panels">
         <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="one-panel">
@@ -143,11 +141,11 @@
             </div>
         </div>
 
-        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="three-panel">
+        @*<div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="three-panel">
             <div id="FileWithCaptionMessage">
                 @Html.Partial("BOPromoWAFileCaption")
             </div>
-        </div>
+        </div>*@
 
     </div>
 </div>

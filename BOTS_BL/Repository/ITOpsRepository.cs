@@ -374,10 +374,6 @@ namespace BOTS_BL.Repository
 
             return result;
         }
-        //public SPResponse AddRedeemPointsData(string groupId, string mobileNo, string outletId, DateTime dateTime, DateTime now, string invoiceNumber, string invoiceAmount, decimal v1, string v2, string txnType, string v3, tblAudit objAudit)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public SPResponse AddRedeemPointsData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, decimal Points, string IsSMS, string TxnType,string PartialEarnPoints, tblAudit objAudit)
         {

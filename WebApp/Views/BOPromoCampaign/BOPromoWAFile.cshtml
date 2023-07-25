@@ -1,73 +1,145 @@
-﻿<div class="app-main__inner">
+﻿@model BOTS_BL.Models.CommonDB.BOPromoRetailCategory
+<style>
+    img {
+        max-width: 180px;
+    }
+
+    /*input[type=file] {
+        padding: 10px;
+        background: #2d2d2d;
+    }*/
+</style>
+<div class="app-main__inner">
     <div class="container-fluid pt-3 pl-3 pr-3">
         <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
             <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
                 <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
-                    WA Message Balance :
+                    <b>WA Message Balance :</b>
                 </div>
                 <div>
                     <span id="Balance">@((ViewBag.Balance))</span>
                 </div>
             </div>
+            <div class="row mt-5" style="margin-top: 20px; margin-left: 10px;">
+                <div class="col-md-2 col-xl-2 ml-3">
+                    <input id="rbtnAll" name="Type" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> ALL
+                </div>
+                <div class="col-md-2 col-xl-2 ">
+                    <input id="rbtnCategory" name="Type" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Retail Category
+                </div>
+                <div class="col-md-3 col-xl-3" id="ddlCategoryList"style="visibility: hidden;">
+                      @Html.DropDownListFor(x => Model.lstRetailCategory, new SelectList(Model.lstRetailCategory, "Value", "Text"), "Category", htmlAttributes: new { @class = "input50", @id = "LstRetailCategory" })
+                </div>
+                <div class="col-md-3 col-xl-3 ">
+                    <b>Cutomer Count :</b>
+                    <span id="CustCount">@((ViewBag.GroupCount))</span>
+                </div>
+            </div>
+            <input type="text" id="hdnFile1" hidden />
+            <input type="text" id="hdntextCaption1" hidden />
+            <input type="text" id="hdnFile2" hidden />
+            <input type="text" id="hdntextCaption2" hidden />
+        </div>
+        @*<div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">*@
+        <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+            <div class="col-sm-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="CaptionCheck1" style="width: 15px; height: 15px; cursor: pointer;">&nbsp;
+                    <label class="form-check-label" for="CaptionCheck1" style="font-size: 15px">
+                        Add Caption
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4" style="text-align: right;">
+                <a id="ImgAdd" href="#" onclick="Add();" title="Add New Msg">  <img src="~/Content/assets/images/details_open.png" width="25" height="25" /></a>
+                <a id="ImgRemove" href="#" onclick="Remove();" title="Remove New Msg" style="display: none">  <img src="~/Content/assets/images/details_close.png" width="25" height="25" /></a>
+            </div>
         </div>
         <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-            <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+            <div class="row mt-2">
+                <div class="col-sm-1">
+                    <B>File 1</B>
+                </div>
+                <div class="col-sm-5">
+                    <input type="file" id="FileUpload1" style="margin-left: 30px; text-align: left;" />
+                    <input type="button" id="btnUpload1" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+                </div>
+                <div class="col-sm-5" style="display: none" id="UploadImglink">
+                    @*<span id="WAText">Upload Img Link:</span>*@
+                    <a id="a" href="#" target="_blank"><span id="WAUploadImg1"></span></a>
+                    @*<img id="Image1" src="" alt="Image11" />*@
+                </div>
+            </div>
+            <div class="row mt-5" id="Caption1" style="display: none">
+                <div class="col-sm-2">
+                    <b>Caption</b>
+                </div>
                 <div class="col-sm-4">
+                    <textarea class="form-control" id="textCaption1" rows="3" maxlength="10000" placeholder="Enter Caption"></textarea>
                 </div>
-                <div class="col-sm-4">
-                </div>
-                <div class="col-sm-4" style="text-align: right;">
-                    <a id="ImgAdd" href="#" onclick="Add();" title="Add New Msg">  <img src="~/Content/assets/images/details_open.png" width="25" height="25" /></a>
-                    <a id="ImgRemove" href="#" onclick="Remove();" title="Remove New Msg" style="display: none">  <img src="~/Content/assets/images/details_close.png" width="25" height="25" /></a>
+                <div class="col-sm-6">
                 </div>
             </div>
-            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-                <div class="row mt-2">
-                    <div class="col-sm-2">
-                        <B>File 1</B>
-                    </div>
-                    <div class="col-sm-6">
-                        <input type="file" id="FileUpload1" style="margin-left: 30px; text-align: left;" />
-                        <input type="button" id="btnUpload1" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
-                    </div>
-                    <div class="col-sm-4" style="margin: 20px; display: none" id="UploadImglink">
-                        <span id="WAText">Upload Img Link:</span>
-                        <a id="a" href="#" target="_blank"><span id="WAUploadImg1"></span></a>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; display:none" id="secondMgs">
-                <div class="row mt-2">
-                    <div class="col-sm-2">
-                        <B>File 2</B>
-                    </div>
-                    <div class="col-sm-6">
-                        <input type="file" id="FileUpload2" style="margin-left: 30px; text-align: left;" />
-                        <input type="button" id="btnUpload2" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
-                    </div>
-                    <div class="col-sm-4" style="margin: 20px; display: none" id="UploadImglink2">
-                        <span id="WAText">Upload Img Link:</span>
-                        <a id="a1" href="#" target="_blank"><span id="WAUploadImg2"></span></a>
-                    </div>
-                </div>
-            </div>
-            
-                <div class="row mt-2">
-                    <div class="col-sm-4" id="divTestMsgBtn">
-                        <div class="button">
-                            <button type="button" id="BtnSendMsgTest" style="margin-left:25px;" class="btn btn-primary" onclick="WASendSMSValidate();"><b>Send Test Message</b></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-sm-4" id="divSendMsg">
-                        <div class="button">
-                            <button type="button" id="BtnSendMsg" style="margin-left:25px;" class="btn btn-success" onclick="WASendSMSValidate();"><b>Send Message</b></button>
-                        </div>
-                    </div>
-                </div>
-            
         </div>
+        <div class="row mt-2" style="margin-top: 20px; margin-left: 10px; display:none" id="secondCaption">
+            <div class="col-sm-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="CaptionCheck2" style="width: 15px; height: 15px; cursor: pointer;">&nbsp;
+                    <label class="form-check-label" for="CaptionCheck2" style="font-size: 15px">
+                        Add Caption
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; display:none" id="secondMgs">
+            <div class="row mt-2">
+                <div class="col-sm-1">
+                    <B>File 2</B>
+                </div>
+                <div class="col-sm-5">
+                    <input type="file" id="FileUpload2" style="margin-left: 30px; text-align: left;" />
+                    <input type="button" id="btnUpload2" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+                </div>
+                <div class="col-sm-5" style="margin: 20px; display: none" id="UploadImglink2">
+                    @*<span id="WAText">Upload Img Link:</span>*@
+                    <a id="a1" href="#" target="_blank"><span id="WAUploadImg2"></span></a>
+                    @*<img id="Image2" src="" alt="Image22" />*@
+                </div>
+            </div>
+            <div class="row mt-5" id="Caption2" style="display: none">
+                <div class="col-sm-2">
+                    <b>Caption</b>
+                </div>
+                <div class="col-sm-4">
+                    <textarea class="form-control" id="textCaption2" rows="3" maxlength="10000" placeholder="Enter Caption"></textarea>
+                </div>
+                <div class="col-sm-6">
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-sm-4" id="divTestMsgBtn">
+                <div class="button">
+                    <button type="button" id="BtnSendMsgTest" style="margin-left:25px;" class="btn btn-primary"><b>Send Test Message</b></button>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-sm-4" id="divSendMsg">
+                <div class="button">
+                    <button type="button" id="BtnSendMsg" style="margin-left:25px;" class="btn btn-success"><b>Send Message</b></button>
+                </div>
+            </div>
+        </div>
+
+        @*</div>*@
     </div>
 </div>
 <script>
@@ -75,20 +147,83 @@
         $("#ImgAdd").hide();
         $("#ImgRemove").show();
         $("#secondMgs").show();
+        $("#secondCaption").show();
     }
     function Remove() {
         $("#ImgRemove").hide();
         $("#ImgAdd").show();
         $("#secondMgs").hide();
+        $("#secondCaption").hide();
     }
+    $("#rbtnAll").change(function () {
+        /*$("#ddlCategoryList").hide();*/
+        $("#ddlCategoryList").css('visibility', 'hidden');
+
+    });
+    $("#rbtnCategory").change(function () {
+       /* $("#ddlCategoryList").show();*/
+        $("#ddlCategoryList").css('visibility', 'visible');
+    });
+
+    $("#CaptionCheck1").change(function () {
+        if ($("#CaptionCheck1").is(':checked')) {
+            $("#Caption1").show();
+        }
+        else {
+            $("#Caption1").hide();
+        }
+    });
+    $("#CaptionCheck2").change(function () {
+        if ($("#CaptionCheck2").is(':checked')) {
+            $("#Caption2").show();
+        }
+        else {
+            $("#Caption2").hide();
+        }
+    });
+
+    $("#LstRetailCategory").change(function () {
+        $("#divLoader").show();
+        
+        var RetailCategoryId = $("#LstRetailCategory").val();
+
+        var FilterData = [];
+        item = {};
+        item["RetailCategoryId"] = RetailCategoryId;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetGroupList", "BOPromoCampaign")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != '') {
+                        $("#CustCount").text(response);
+                    }
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            });
+    });
 
     $("#btnUpload1").click(function () {
-       
         UploadData1();
     });
 
     $("#btnUpload2").click(function () {
-        
         UploadData2();
     });
 
@@ -96,7 +231,7 @@
 
             if (window.FormData !== undefined) {
                 var fileUpload = $("#FileUpload1").get(0);
-
+                $("#hdnFile1").val($("#FileUpload1").val());
                 var files = fileUpload.files;
                 if (files.length > 0) {
                     var fileData = new FormData();
@@ -107,7 +242,7 @@
 
                         $("#divLoader").show();
                         $.ajax({
-                            url: '@Url.Action("UploadData", "Campaigns")',
+                            url: '@Url.Action("UploadData", "BOPromoCampaign")',
                             type: "POST",
                             contentType: false, // Not to set any content header
                             processData: false, // Not to process data
@@ -118,6 +253,7 @@
 
                                 if (res == "00") {
                                     var code = result[0].Url;
+                                    $("#hdnFile1").val(code);
                                     cuteAlert({
                                         type: "success",
                                         title: "Uploaded",
@@ -127,7 +263,9 @@
 
                                     $("#divLoader").hide();
                                     $("#WAUploadImg1").text(code);
-                                    $("#a").attr("href", Uri);
+                                     $("#a").attr("href", Uri);
+                                    /*$("#Image1").attr("src", Uri);*/
+
                                     $("#UploadImglink").show();
                                 }
                                 else {
@@ -170,7 +308,7 @@
 
             if (window.FormData !== undefined) {
                 var fileUpload = $("#FileUpload2").get(0);
-
+                $("#hdnFile2").val($("#FileUpload2").val());
                 var files = fileUpload.files;
                 if (files.length > 0) {
                     var fileData = new FormData();
@@ -181,7 +319,7 @@
 
                         $("#divLoader").show();
                         $.ajax({
-                            url: '@Url.Action("UploadData", "Campaigns")',
+                            url: '@Url.Action("UploadData", "BOPromoCampaign")',
                             type: "POST",
                             contentType: false, // Not to set any content header
                             processData: false, // Not to process data
@@ -192,6 +330,7 @@
 
                                 if (res == "00") {
                                     var code = result[0].Url;
+                                    $("#hdnFile2").val(code);
                                     cuteAlert({
                                         type: "success",
                                         title: "Uploaded",
@@ -202,6 +341,7 @@
                                     $("#divLoader").hide();
                                     $("#WAUploadImg2").text(code);
                                     $("#a1").attr("href", Uri);
+                                    /*$("#Image2").attr("src", Uri);*/
                                     $("#UploadImglink2").show();
                                 }
                                 else {
@@ -239,5 +379,124 @@
                 }
         }
     }
+
+    $("#BtnSendMsgTest").click(function () {
+        alert("111");
+        $("#hdntextCaption1").val($("#textCaption1").val());
+        $("#hdntextCaption2").val($("#textCaption2").val());
+
+        var File1 = $("#hdnFile1").val();
+        var File2 = $("#hdnFile2").val();
+        var Text1 = $("#hdntextCaption1").val();
+        var Text2 = $("#hdntextCaption2").val();
+        var flag = 0;
+
+        if ($("#CaptionCheck1").is(':checked')) {
+            alert("Inside 1st If")
+            if (Text1.length == 0) {
+                flag = 1;
+            }
+        }
+        if ($("#CaptionCheck2").is(':checked')) {
+            alert("Inside 2nd If")
+            if (Text2.length == 0) {
+                flag = 2;
+            }
+            else if (File2.length == 0) {
+                flag = 3;
+            }
+        }
+        if (File1.length == 0) {
+                flag = 4;
+        }
+
+        if ($("#secondCaption").is(':visible')) {
+            alert("111")
+            if (File2.length == 0) {
+                flag = 3;
+            }
+        }
+        alert("File1 " + File1);
+
+        alert("flag " + flag);
+        if (flag == 0) {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendTestMessage", "BOPromoCampaign")',
+                data: '{File1: ' + JSON.stringify(File1) + ',Text1: ' + JSON.stringify(Text1) + ',File2: ' + JSON.stringify(File2) + ',Text2: ' + JSON.stringify(Text2) +'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.ResponseCode == "00") {
+                        $("#divLoader").hide();
+                        cuteAlert({
+                            type: "success",
+                            title: "Message Scheduled",
+                            message: "Test Messsage Scheduled please check",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("Index", "BOPromoCampaign")";
+                            window.location.href = urlLink;
+                        })
+
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Test Message Not Send",
+                            message: "Some thing went wrong....",
+                            buttonText: "Okay"
+                        })
+                    }
+
+
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                //error: (error) => {
+                //    console.log(JSON.stringify(error));
+                //}
+            });
+        }
+        else if (flag == 1) {
+            cuteAlert({
+                type: "error",
+                title: "Caption 1 NOT Entered",
+                message: "Please enter caption",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 2) {
+            cuteAlert({
+                type: "error",
+                title: "Caption 2 NOT Entered",
+                message: "Please enter caption",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 3) {
+            cuteAlert({
+                type: "error",
+                title: "File 2 Not Uploaded",
+                message: "Please upload file",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 4) {
+            cuteAlert({
+                type: "error",
+                title: "File 1 Not Uploaded",
+                message: "Please upload file",
+                buttonText: "Okay"
+            })
+        }
+    });
 
 </script>

@@ -66,24 +66,17 @@ namespace BOTS_BL.Repository
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == searchData && x.Status == "00").FirstOrDefault();
-                }
-                if (objCustomerDetail != null)
-                {
-                    objMemberData.MemberName = objCustomerDetail.CustomerName;
-                    objMemberData.MobileNo = objCustomerDetail.MobileNo;
-                    objMemberData.OldMobileNo = objCustomerDetail.OldMobileNo;
-                    objMemberData.CardNo = objCustomerDetail.CardNumber;
-                    objMemberData.PointsBalance = objCustomerDetail.Points;
-                    objMemberData.CustomerId = objCustomerDetail.CustomerId;
-                    if (objCustomerDetail.DOJ.HasValue)
-                    {
-                        objMemberData.EnrolledOn = objCustomerDetail.DOJ.Value.ToString("dd/MM/yyyy");
-                    }
+                    //objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == searchData && x.Status == "00").FirstOrDefault();
+                    var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == searchData).FirstOrDefault();
 
-                    using (var contextNew = new BOTSDBContext(connStr))
+                    if (CustData != null)
                     {
-                        objMemberData.EnrolledOutletName = contextNew.OutletDetails.Where(x => x.OutletId == objCustomerDetail.EnrollingOutlet).Select(y => y.OutletName).FirstOrDefault();
+                        objMemberData.MemberName = CustData.CustomerName;
+                        objMemberData.MobileNo = CustData.MobileNo;
+                        objMemberData.CardNo = CustData.CardNo;
+                        objMemberData.PointsBalance = CustData.Points;
+                        objMemberData.EnrolledOn = CustData.DOJ.Value.ToString("dd/MM/yyyy");
+                        objMemberData.EnrolledOutletName = CustData.EnrolledOutlet;
                     }
                 }
             }
@@ -102,23 +95,17 @@ namespace BOTS_BL.Repository
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CardNumber == searchData && x.Status == "00").FirstOrDefault();
-                }
-                if (objCustomerDetail != null)
-                {
-                    objMemberData.MemberName = objCustomerDetail.CustomerName;
-                    objMemberData.MobileNo = objCustomerDetail.MobileNo;
-                    objMemberData.CardNo = objCustomerDetail.CardNumber;
-                    objMemberData.PointsBalance = objCustomerDetail.Points;
-                    objMemberData.CustomerId = objCustomerDetail.CustomerId;
-                    if (objCustomerDetail.DOJ.HasValue)
-                    {
-                        objMemberData.EnrolledOn = objCustomerDetail.DOJ.Value.ToString("dd/MM/yyyy");
-                    }
+                    //objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CardNumber == searchData && x.Status == "00").FirstOrDefault();
+                    var CustData = contextNew.View_ITOPSCustData.Where(x => x.CardNo == searchData).FirstOrDefault();
 
-                    using (var contextNew = new BOTSDBContext(connStr))
+                    if(CustData != null)
                     {
-                        objMemberData.EnrolledOutletName = contextNew.OutletDetails.Where(x => x.OutletId == objCustomerDetail.EnrollingOutlet).Select(y => y.OutletName).FirstOrDefault();
+                        objMemberData.MemberName = CustData.CustomerName;
+                        objMemberData.MobileNo = CustData.MobileNo;
+                        objMemberData.CardNo = CustData.CardNo;
+                        objMemberData.PointsBalance = CustData.Points;
+                        objMemberData.EnrolledOn = CustData.DOJ.Value.ToString("dd/MM/yyyy");
+                        objMemberData.EnrolledOutletName = CustData.EnrolledOutlet;
                     }
                 }
             }
@@ -153,19 +140,26 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool UpdateNameOfMember(string GroupId, string CustomerId, string Name, tblAudit objAudit)
+        public bool UpdateNameOfMember(string GroupId, string MobileNo, string Name, tblAudit objAudit)
         {
             bool status = false;
             try
             {
-                CustomerDetail objCustomerDetail = new CustomerDetail();
+                //CustomerDetail objCustomerDetail = new CustomerDetail();
+                tblCustInfo objCustomerDetail = new tblCustInfo();
+                tblCustDetailsMaster objCustDetail = new tblCustDetailsMaster();
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                    objCustomerDetail.CustomerName = Name;
+                    //objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
+                    objCustomerDetail = contextNew.tblCustInfoes.Where(x=> x.MobileNo == MobileNo).FirstOrDefault();
+                    objCustDetail = contextNew.tblCustDetailsMasters.Where(x=> x.MobileNo == MobileNo).FirstOrDefault();
 
-                    contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
+                    objCustomerDetail.Name = Name;                 
+                    objCustDetail.Name = Name;
+                   
+                    contextNew.tblCustInfoes.AddOrUpdate(objCustomerDetail);
+                    contextNew.tblCustDetailsMasters.AddOrUpdate(objCustDetail);
                     contextNew.SaveChanges();
 
                     status = true;

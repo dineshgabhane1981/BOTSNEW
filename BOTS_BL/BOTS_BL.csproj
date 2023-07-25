@@ -212,6 +212,7 @@
     <Compile Include="Models\ChitaleModel\Top5LostParticipants.cs" />
     <Compile Include="Models\ChitaleModel\TransactionMaster.cs" />
     <Compile Include="Models\CityWiseData.cs" />
+    <Compile Include="Models\CommonDB\BOPromoRetailCategory.cs" />
     <Compile Include="Models\CommonDB\BOTS_TblBillingPartnerProduct.cs" />
     <Compile Include="Models\CommonDB\BOTS_TblCallSubTypes.cs" />
     <Compile Include="Models\CommonDB\BOTS_TblCallTypes.cs" />
@@ -396,6 +397,7 @@
     <Compile Include="Models\IndividualDBModels\tblTxnProDetailsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblTxnProDetailsMaster_Clone.cs" />
     <Compile Include="Models\IndividualDBModels\TransactionSummaryData.cs" />
+    <Compile Include="Models\IndividualDBModels\View_ITOPSCustData.cs" />
     <Compile Include="Models\IndividualDBModels\View_TxnDetailsMaster.cs" />
     <Compile Include="Models\ITOps\CancelTxnModel.cs" />
     <Compile Include="Models\ITOps\CustomerDetail.cs" />
