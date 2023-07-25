@@ -41,5 +41,8 @@ namespace BOTS_BL.Models.CommonDB
 
         [StringLength(100)]
         public string GroupCode { get; set; }
+
+        [StringLength(1)]
+        public string Status { get; set; }
     }
 }
