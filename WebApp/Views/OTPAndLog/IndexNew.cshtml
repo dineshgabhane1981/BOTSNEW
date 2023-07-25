@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "IndexNew";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top: 20px;">
+        <div class="content">
+            <!--content inner-->
+
+            <div class="container overflow-hidden">
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec10" data-animation="scaleIn">
+                    <h4 class="multisteps-form__title" style="color:blue;">OTP</h4><br />
+                    <div class="multisteps-form__content">
+                        <div>
+                            <meta name="viewport" content="width=device-width, initial-scaled=1.0">
+                            <input type="hidden" id="hdnGroupId" />
+                            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                            <input type="number" id="txtMobileNoOTP" class="input50" />
+                            <button type="button" id="btnGetOTP" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                        </div>
+
+                        <div>
+                            <br />
+                            <table border="1" cellpadding="5" cellspacing="5" id="tblOTPDetails">
+                                <tr position: absolute top: -9999px; left: -9998px;>
+                                    <th style="padding:10px;text-align:center;">Outlet Name</th>
+                                    <th style="padding:10px;text-align:center;">Datetime</th>
+                                    <th style="padding:10px;text-align:center;">OTP</th>
+                                </tr>
+                                <tr border: 1px solid #ccc;>
+                                    <td style="padding:10px;"><span id="spnOutletNameOTP"></span></td>
+                                    <td style="padding:10px;"><span id="spnDateTimeOTP"></span></td>
+                                    <td style="padding:10px;"><b><span id="spnOTP"></span></b></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+    $('#btnotp').on("click", function () {
+        GetClearAllTab();
+    });
+    $('#btnGetOTP').on("click", function () {
+        GetOTPData();
+    });
+       $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+
+    });
+    function GetOTPData() {
+        if ($('#txtMobileNoOTP').val() == "") {
+            toastr.error('Please enter Mobile Number');
+            $('#txtMobileNoOTP').focus();
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOTPDataNew", "OTPAndLog")',//"/ITOperations/GetOTPData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',MobileNo: ' + JSON.stringify($('#txtMobileNoOTP').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MobileNo != null) {
+                    $("#spnOutletNameOTP").text(result.EnrolledOutletName);
+                    $("#spnDateTimeOTP").text(result.EnrolledOn);
+                    $("#spnOTP").text(result.MobileNo);
+
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnOutletNameOTP").text("");
+                    $("#spnDateTimeOTP").text("");
+                    $("#spnOTP").text("");
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+

@@ -334,7 +334,61 @@ namespace WebApp.Controllers.ITOPS
             }
             return result;
         }
+        public ActionResult ChangeMemberMobileNew(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            SPResponse result = new SPResponse();
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                bool IsSMS = false;
 
+                string CustomerId = string.Empty;
+                string MobileNo = string.Empty;
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    var GroupId = (string)Session["GroupId"];
+                    CustomerId = Convert.ToString(item["CustomerId"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+
+                    objAudit.GroupId = groupId;
+                    objAudit.RequestedFor = "Mobile Number Change";
+                    objAudit.RequestedEntity = "CustomerId - " + CustomerId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
+                }
+
+                result = ITOPS.UpdateMobileOfMember(groupId, CustomerId, MobileNo, objAudit);
+                if (result.ResponseCode == "00")
+                {
+                    var subject = "Customer Mobile Number changed for CustomerId - " + CustomerId;
+                    var body = "Customer Mobile Number changed for CustomerId - " + CustomerId;
+                    body += "<br/><br/> Regards <br/> Blue Ocktopus Team";
+
+                    SendEmail(groupId, subject, body);
+                }
+
+                if (IsSMS)
+                {
+                    //Logic to send SMS to Customer whose Name is changed
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ChangeMemberMobile");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
 

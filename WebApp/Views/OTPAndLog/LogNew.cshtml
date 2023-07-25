@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "LogNew";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <!--content inner-->
+
+            <div class="container overflow-hidden">
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec3" data-animation="scaleIn">
+                    <h4 class="multisteps-form__title" style="color:blue;">Transaction Log Details</h4><br />
+
+                    <div class="multisteps-form__content">
+                        <div>
+                            <input type="hidden" id="hdnGroupId" />
+                            <label style="padding-right:5px;padding-top:10px;">Enter Mobile No</label>
+                            <input type="number" id="txtMobileNo2" class="input50" />
+                            <button type="button" id="btnGetLog" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                        </div>
+                        <div>
+                            <label style="padding-right:5px;padding-top:10px;display:none;" id="LblTxnLog">Transaction Log Details</label>
+                            <div class="row mt-3" id="dvTLog">
+                                <div class="table-responsive">
+                                    <table class="table" id="logTable" style="display:none;">
+                                        <thead style="text-align:center;">
+                                            <tr>
+                                                <th scope="col">Log Date</th>
+                                                <th scope="col">Log</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="text-align:center;">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/scriptSteps.js"></script>
+<script type="text/javascript">
+    var tableData = [];
+    var tableLogData = [];
+
+    $(document).ready(function () {
+
+        $('#btnGetLog').on("click", function () {
+            GetLogData();
+        });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+
+    });
+    function GetLogData() {
+        var val = $("#txtMobileNo2").val()
+        if (val == "") {
+            toastr.error('Please enter Mobile Number or Invoice Number');
+            return false;
+        }
+
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetTxnLogDataNew", "OTPAndLog")',//"/OTPAndLogController/GetTxnLogData",
+            data: '{search: ' + JSON.stringify(val) + ', GroupId:' + $("#hdnGroupId").val() + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                if (result != null) {
+                    tableLogData.length = 0;
+                    $.map(result, function (item) {
+                        optionItem = {}
+                        optionItem["Datetime"] = item.datetimestr;
+                        optionItem["ReceivedData"] = item.ReceivedData;
+                        tableLogData.push(optionItem);
+                    });
+                    $("#LblTxnLog").show();
+                    $("#logTable").show();
+                    console.log(tableLogData)
+                    DrawTableLog();
+
+
+                } else {
+                    toastr.error('Log are not present');
+
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function DrawTableLog() {
+            var table1 = $('#logTable').DataTable();
+            table1.destroy();
+
+            var table = $('#logTable').DataTable({
+                "data": tableLogData,
+                "paging": true,
+                "ordering": false,
+                "info": true,
+                "bFilter": false,
+                "pageLength": 10,
+                "pagingType": "simple_numbers",
+                "columns": [
+                    { data: "Datetime" },
+                    /*{ data: "ReceivedData" }*/
+                    {
+                        "mData": "ReceivedData",
+                        "mRender": function (data, type, row) {
+
+                            return '<textarea rows="4" cols="90" >' + data + '</textarea>';
+                        }
+                    },
+                ],
+
+            });
+ }
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+

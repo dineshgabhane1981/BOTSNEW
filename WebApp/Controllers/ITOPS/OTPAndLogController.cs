@@ -10,6 +10,7 @@ using BOTS_BL;
 using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using WebApp.App_Start;
+using BOTS_BL.Models.IndividualDBModels;
 
 namespace WebApp.Controllers.ITOPS
 {
@@ -19,7 +20,8 @@ namespace WebApp.Controllers.ITOPS
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
-        
+        ITOPSNEWRepository NewITOPS = new ITOPSNEWRepository();
+
         // GET: EarnBurn
         string groupId;
         public ActionResult Index()
@@ -94,5 +96,82 @@ namespace WebApp.Controllers.ITOPS
             return Json(lstLogDetails, JsonRequestBehavior.AllowGet);
 
         }
+
+        #region ITOPSNew
+
+        public ActionResult IndexNew()
+        {
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Index");
+            }
+            return View();
+        }
+
+        public ActionResult LogNew()
+        {
+            try
+            {
+                CommonFunctions common = new CommonFunctions();
+                //groupId = common.DecryptString(groupId);
+                groupId = Session["GroupId"].ToString();
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                var lstOutlet = RR.GetOutletList(groupId, connStr);
+                var lstBrand = RR.GetBrandList(groupId, connStr);
+                var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
+                ViewBag.OutletList = lstOutlet;
+                ViewBag.BranchList = lstBrand;
+                ViewBag.GroupId = groupId;
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Log");
+            }
+
+            return View();
+        }
+
+        public ActionResult GetOTPDataNew(string MobileNo)
+        {
+            MemberData objCustomerDetail = new MemberData();
+            try
+            {
+                var GroupId = (string)Session["GroupId"];
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = NewITOPS.GetOTPData(GroupId, MobileNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOTPData");
+            }
+
+            return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult GetTxnLogDataNew(string GroupId, string search)
+        {
+            List<tblLogDetail> lstLogDetails = new List<tblLogDetail>();
+            ITOpsRepository ITOPS = new ITOpsRepository();
+            try
+            {
+                lstLogDetails = NewITOPS.GetLogDetails(search, GroupId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetTxnLogData");
+            }
+            return Json(lstLogDetails, JsonRequestBehavior.AllowGet);
+
+        }
+
+        #endregion
     }
 }

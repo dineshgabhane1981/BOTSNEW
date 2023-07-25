@@ -374,6 +374,7 @@
     <Compile Include="Models\IndividualDBModels\tblGroupMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblInActiveMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblInActiveMemberDetail.cs" />
+    <Compile Include="Models\IndividualDBModels\tblLogDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblOTPDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblOutletMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblPointsExpiryMaster.cs" />

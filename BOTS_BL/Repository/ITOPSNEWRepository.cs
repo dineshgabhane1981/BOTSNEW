@@ -13,6 +13,7 @@ using System.Threading;
 using System.Data;
 using System.Web;
 using System.Net;
+using BOTS_BL.Models.IndividualDBModels;
 
 namespace BOTS_BL.Repository
 {
@@ -619,20 +620,18 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public bool ChangeSMSDetails(string GroupId, string MobileNo, bool Disable, tblAudit objAudit)
+        public bool ChangeSMSDetails(string GroupId, string CustomerId, bool Disable, tblAudit objAudit)
         {
             bool status = false;
             try
             {
-                tblCustDetailsMaster objCustDetail = new tblCustDetailsMaster();
                 string connStr =  GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    //var objCustomer = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                    objCustDetail = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                    objCustDetail.DisableSMSWAPromo = Disable;
+                    var objCustomer = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
+                    objCustomer.IsSMS = Disable;
 
-                    contextNew.tblCustDetailsMasters.AddOrUpdate(objCustDetail);
+                    contextNew.CustomerDetails.AddOrUpdate(objCustomer);
                     contextNew.SaveChanges();
                     status = true;
                 }
@@ -655,23 +654,21 @@ namespace BOTS_BL.Repository
             try
             {
                 CustomerDetail objCustomerDetail = new CustomerDetail();
-                OTPMaintenance objOTP = new OTPMaintenance();
-                string connStr =  GetCustomerConnString(GroupId);
+                //OTPMaintenance objOTP = new OTPMaintenance();
+                tblOTPDetail objOTP = new tblOTPDetail();
+                string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objOTP = contextNew.OTPMaintenances.Where(x => x.MobileNo == MobileNo).OrderByDescending(y => y.Datetime).FirstOrDefault();
-                }
-                if (objOTP != null)
-                {
-
-                    objMemberData.MobileNo = objOTP.OTP;
-                    objMemberData.EnrolledOn = Convert.ToString(objOTP.Datetime);
-                    var OutletId = objOTP.CounterId.Substring(0, objOTP.CounterId.Length - 2);
-                    using (var contextNew = new BOTSDBContext(connStr))
+                    //objOTP = contextNew.OTPMaintenances.Where(x => x.MobileNo == MobileNo).OrderByDescending(y => y.Datetime).FirstOrDefault();
+                    objOTP = contextNew.tblOTPDetails.Where(x => x.MobileNo == MobileNo).OrderByDescending(y => y.Datetime).FirstOrDefault();
+                    if (objOTP != null)
                     {
-                        objMemberData.EnrolledOutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
+                        objMemberData.MobileNo = objOTP.OTP;
+                        objMemberData.EnrolledOn = Convert.ToString(objOTP.Datetime);
+                        objMemberData.EnrolledOutletName = objOTP.OutletName;
                     }
                 }
+
             }
             catch (Exception ex)
             {
@@ -679,7 +676,6 @@ namespace BOTS_BL.Repository
             }
             return objMemberData;
         }
-
         public CancelTxnModel GetTransactionByInvoiceNo(string GroupId, string InvoiceNo)
         {
             CancelTxnModel objReturn = new CancelTxnModel();
@@ -897,22 +893,24 @@ namespace BOTS_BL.Repository
 
         }
 
-        public List<LogDetailsRW> GetLogDetails(string search, string GroupId)
+        public List<tblLogDetail> GetLogDetails(string search, string GroupId)
         {
-            List<LogDetailsRW> lstLogDetails = new List<LogDetailsRW>();
-            string connStr =  GetCustomerConnString(GroupId);
+            //List<LogDetailsRW> lstLogDetails1 = new List<LogDetailsRW>();
+            List<tblLogDetail> lstLogDetails = new List<tblLogDetail>();
+            string connStr = GetCustomerConnString(GroupId);
             try
             {
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     contextNew.Database.CommandTimeout = 300;
-                    lstLogDetails = contextNew.LogDetailsRWs.Where(x => x.ReceivedData.Contains(search)).ToList();
+                    //lstLogDetails = contextNew.LogDetailsRWs.Where(x => x.ReceivedData.Contains(search)).ToList();
+                    lstLogDetails = contextNew.tblLogDetails.Where(x => x.ReceivedData.Contains(search)).ToList();
                 }
                 foreach (var item in lstLogDetails)
                 {
-                    item.datetimestr = item.Datetime.Value.ToString("MM/dd/yyyy");
+                    item.datetimestr = item.ServerDatetime.Value.ToString("MM/dd/yyyy");
                 }
-                lstLogDetails = lstLogDetails.OrderByDescending(x => x.Datetime).ToList();
+                lstLogDetails = lstLogDetails.OrderByDescending(x => x.SlNo).ToList();
             }
             catch (Exception ex)
             {
