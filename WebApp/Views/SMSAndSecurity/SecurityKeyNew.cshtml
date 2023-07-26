@@ -1,0 +1,223 @@
+﻿
+@{
+    ViewBag.Title = "SecurityKeyNew";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <!--content inner-->
+
+            <div class="container overflow-hidden">
+
+
+                <!--Reset Security Key-->
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec9" data-animation="scaleIn">
+                    <h4 class="multisteps-form__title" style="color:blue;">Reset Security Key</h4><br />
+                    <div class="multisteps-form__content" style="display:flex;">
+                        <div class="multisteps-form__content">
+                            <div>
+                                <meta name="viewport" content="width=device-width, initial-scaled=1.0">
+                                <input type="hidden" id="hdnGroupId" />
+                                <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;">
+                                    <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; float: left;" display:flex; height:auto !important;margin-top:50px;">
+                                        <table border="1" cellpadding="5" cellspacing="5">
+                                            <tr position: absolute top: -9999px; left: -9998px;>
+                                            </tr>
+                                            <tr border: 1px solid #ccc;>
+                                                <td style="padding:10px;">Select Brand</td>
+                                                <td style="padding:10px;width:200px;">
+                                                    @Html.DropDownList("Brand", new SelectList(ViewBag.BranchList, "Value", "Text"), "Select Brand", htmlAttributes: new { onchange = "GetOutletList(this.value);", @class = "input50", @id = "ddlBranchList" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding:10px;">Select Outlet</td>
+                                                <td style="padding:10px;width:300px;">
+                                                    <select id="ddlOutletListby" class="input50" onchange="OnChangeResetKey(this.value);">
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;" row mt-3" id="dvActivityData1" height:800px;">
+                                        <div class="table-responsive">
+                                            <table class="table" id="activityTable1">
+                                                <thead style="text-align:center;">
+                                                    <tr>
+                                                        <th scope="col">LoginId</th>
+                                                        <th scope="col">SecurityKey</th>
+                                                        <th scope="col">Reset</th>
+                                                    </tr>
+                                                </thead>
+                                                
+                                                <tbody style="text-align:center;">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        </>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var tableData = [];
+    $(document).ready(function () {
+    $('#btnresetseckey').on("click", function () {
+        GetClearAllTab();
+    });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+    });
+    function OnChangeResetKey(val) {
+        //alert(val);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLoginIdByOutletsNew", "SMSAndSecurity")',//"/ITOperations/GetChangeNameData",
+            data: '{outletId: ' + JSON.stringify(val) +'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result.lstloginid != null) {
+                    if (result.lstloginid.length > 0) {
+                        tableData.length = 0;
+                        $.map(result.lstloginid, function (item) {                            
+                            optionItem = {}
+                            optionItem["LoginId"] = item.CounterId;
+                            optionItem["SecurityKey"] = item.securitykey;
+                            optionItem["Reset"] = "<input type='button' id='" + item.CounterId + "' onclick='UpdateSecurityKey(" + item.CounterId + ")' value='Reset'>";                           
+                            tableData.push(optionItem);
+                        });
+                        DrawTable1();
+                    }
+                    else {
+                        toastr.error('Login Ids are not present');
+                   }
+                }
+                else {
+                    toastr.error('Login Ids are not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+    function GetOutletList(brandId) {
+        $("#divLoader").show();
+        $("#ddlOutletListby").empty();
+        var ddlCustomers = $("#ddlOutletListby");
+
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOutletNew", "SMSAndSecurity")',//"/ITOperations/GetChangeNameData",
+            data: '{BrandId: ' + JSON.stringify(brandId) + '}',
+            contentType: "application/json; charset=utf-8",
+             dataType: "json",
+             success: function (result) {
+                 // alert(result);
+                 var data = result;
+                 if (data != null) {
+                     var optionhtml1 = '<option value="' +
+                         0 + '">' + "--Select Outlet--" + '</option>';
+                     ddlCustomers.append(optionhtml1);
+                     $.each(data, function (i) {
+                         var optionhtml = '<option value="' +
+                             data[i].Value + '">' + data[i].Text + '</option>';
+                         console.log(optionhtml);
+                         ddlCustomers.append(optionhtml);
+                     });
+                 }
+                 else {
+                     toastr.error('OutLets are not present');
+                     $('#ddlBranchList').prop('selectedIndex', 0);
+                     $('#ddlOutletListby').prop('selectedIndex', 0);
+
+                 }
+                 $("#divLoader").hide();
+             },
+             error: function (result) {
+                 console.log(result.responseText)
+                 $("#divLoader").hide();
+             }
+         });
+
+    }
+    function UpdateSecurityKey(id) {
+      //  alert(id);
+        $("#divLoader").show();
+         $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateSecurityKeyNew", "SMSAndSecurity")',//"/ITOperations/DeleteTransaction",
+             data: '{CounterId: ' + id + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Security Key Updated Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("SecurityKeyNew", "SMSAndSecurity")";
+                        window.location.href = urlLink;
+                    });                        
+                        $("#dvActivityData1").hide();
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while updating data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+    }
+    function DrawTable1() {
+        console.log(tableData);
+        var table1 = $('#activityTable1').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable1').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "LoginId" },
+                { data: "SecurityKey" },
+                { data: "Reset" }
+              ]
+            
+        });
+        
+        var table = $('#activityTable1').DataTable();
+        table.draw();
+
+    }
+
+</script>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+

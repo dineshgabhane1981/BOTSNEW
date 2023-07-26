@@ -19,6 +19,7 @@ namespace WebApp.Controllers.ITOPS
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
         ITOPSNEWRepository NewITOPS = new ITOPSNEWRepository();
+        ITCSRepository ITCSR = new ITCSRepository();
 
         Exceptions newexception = new Exceptions();
         // GET: SMSAndSecurity
@@ -331,6 +332,67 @@ namespace WebApp.Controllers.ITOPS
             }
             return result;
         }
+        public ActionResult SecurityKeyNew()
+        {
+            var groupId = Convert.ToString(Session["GroupId"]);
+            try
+            {
 
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                var lstOutlet = NewITOPS.GetOutlet(groupId);
+                var lstBrand = NewITOPS.GetBrandList(groupId);
+                var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
+                ViewBag.OutletList = lstOutlet;
+                ViewBag.BranchList = lstBrand;
+                ViewBag.GroupId = groupId;
+                ViewBag.GroupName = GroupDetails.RetailName;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SecurityKeyNew");
+            }
+
+            return View();
+        }
+        public ActionResult GetLoginIdByOutletsNew(string outletId)
+        {
+            var GroupId = (string)Session["GroupId"];
+            SPResponse result = new SPResponse();
+            ResetSecurityKey objreset = new ResetSecurityKey();
+            try
+            {
+                objreset.lstloginid = NewITOPS.GetLoginIdByOutlet(GroupId, outletId);
+            }
+            catch (Exception ex)
+            {
+
+                newexception.AddException(ex, "GetLoginIdByOutletsNew");
+            }
+
+            return Json(objreset, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetOutletNew()
+        {
+            var GroupId = (string)Session["GroupId"];
+            string connStr = objCustRepo.GetCustomerConnString(GroupId);
+            SPResponse result = new SPResponse();
+            var lstoutletlist =NewITOPS.GetOutlet(GroupId);
+            ViewBag.OutletListByBrand = lstoutletlist;
+            return Json(lstoutletlist, JsonRequestBehavior.AllowGet);
+        }
+        public bool UpdateSecurityKeyNew(string CounterId)
+        {
+            var GroupId = (string)Session["GroupId"];
+            bool result = false;
+            try
+            {
+                result = NewITOPS.UpdateSecurityKey(GroupId, CounterId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateSecurityKeyNew");
+            }
+            return result;
+        }
     }
 }

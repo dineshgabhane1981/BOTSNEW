@@ -121,14 +121,23 @@ namespace BOTS_BL.Repository
             bool result = false;
             try
             {
-                StoreDetail objstore = new StoreDetail();
+                tblStoreMaster objstore = new tblStoreMaster();
+                tblLoginDetail objLogin = new tblLoginDetail();
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objstore = contextNew.StoreDetails.Where(x => x.CounterId == counterId).FirstOrDefault();
-                    objstore.Status = "01";
-
-                    contextNew.StoreDetails.AddOrUpdate(objstore);
+                    objstore = contextNew.tblStoreMasters.Where(x => x.CounterId == counterId).FirstOrDefault();
+                    objLogin = contextNew.tblLoginDetails.Where(x => x.LoginId == counterId).FirstOrDefault();
+                    if (objstore != null)
+                    {
+                        objstore.IsActive = false;
+                    }
+                    if (objLogin != null)
+                    {
+                        objLogin.Password = "123";
+                    }                    
+                    contextNew.tblStoreMasters.AddOrUpdate(objstore);
+                    contextNew.tblLoginDetails.AddOrUpdate(objLogin);
                     contextNew.SaveChanges();
 
                     result = true;
@@ -870,20 +879,17 @@ namespace BOTS_BL.Repository
 
         }
 
-        public List<LoginIdByOutlet> GetLoginIdByOutlet(string GroupId, int outletId)
+        public List<LoginIdByOutlet> GetLoginIdByOutlet(string GroupId, string outletId)
         {
             List<LoginIdByOutlet> loginidbyoutlet = new List<LoginIdByOutlet>();
 
             try
             {
-                string connStr =  GetCustomerConnString(GroupId);
+                string connStr = GetCustomerConnString(GroupId);
                 using (var context = new BOTSDBContext(connStr))
-                {
-                    loginidbyoutlet = context.Database.SqlQuery<LoginIdByOutlet>("sp_GetLoginIdByOutlet @outletId",
-                        // new SqlParameter("@groupId", GroupId),                       
-                        new SqlParameter("@outletId", outletId)).ToList<LoginIdByOutlet>();
+                {                    
+                    loginidbyoutlet = context.Database.SqlQuery<LoginIdByOutlet>("select distinct S.CounterId,S.securitykey from tblStoreMaster S inner join tblOutletMaster o on s.OutletId = @outletId where s.CounterId In(select LoginId from tblLoginDetails where LevelIndicator= 05)", new SqlParameter("@outletId", outletId)).ToList<LoginIdByOutlet>();
                 }
-
             }
             catch (Exception ex)
             {
@@ -1229,6 +1235,63 @@ namespace BOTS_BL.Repository
             return status;
         }
 
+        public List<SelectListItem> GetBrandList(string GroupId)
+        {
+            List<SelectListItem> lstBrands = new List<SelectListItem>();
+            try
+            {
+                var connStr = GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    var Brands = contextNew.tblBrandMasters.Where(x => x.GroupId == GroupId).ToList();
 
+                    foreach (var item in Brands)
+                    {
+                        lstBrands.Add(new SelectListItem
+                        {
+                            Text = item.BrandName,
+                            Value = Convert.ToString(item.BrandId)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutlet");
+            }
+
+            lstBrands = lstBrands.OrderBy(x => x.Text).ToList();
+
+            return lstBrands;
+        }
+        public List<SelectListItem> GetOutlet(string GroupId)
+        {
+            List<SelectListItem> lstOutlets = new List<SelectListItem>();
+            try
+            {
+                var connStr = GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    var Outlets = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId).ToList();
+
+                    foreach (var item in Outlets)
+                    {
+                        lstOutlets.Add(new SelectListItem
+                        {
+                            Text = item.OutletName,
+                            Value = Convert.ToString(item.OutletId)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutlet");
+            }
+
+            lstOutlets = lstOutlets.OrderBy(x => x.Text).ToList();
+
+            return lstOutlets;
+        }
     }
 }
