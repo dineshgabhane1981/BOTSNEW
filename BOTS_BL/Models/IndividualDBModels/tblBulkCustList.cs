@@ -27,8 +27,8 @@ namespace BOTS_BL.Models
         [Column(TypeName = "numeric")]
         public decimal? BonusPoints { get; set; }
 
-        public bool? DisableStatus { get; set; }
-
+        //public bool? DisableStatus { get; set; }
+        public bool? IsActive { get; set; }
         public bool? ConvertedStatus { get; set; }
     }
 }

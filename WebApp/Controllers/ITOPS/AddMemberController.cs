@@ -22,9 +22,10 @@ namespace WebApp.Controllers.ITOPS
     public class AddMemberController : Controller
     {
         // GET: AddMember
-
+        ITOPSNEWRepository NewITOPS = new ITOPSNEWRepository();
         ITOpsRepository ITOPS = new ITOpsRepository();
         ReportsRepository RR = new ReportsRepository();
+        ITCSRepository ITCSR = new ITCSRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         public ActionResult Index()
@@ -358,6 +359,246 @@ namespace WebApp.Controllers.ITOPS
             }
         }
 
+        public ActionResult IndexNew()
+        {
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Index");
+            }
+            return View();
+        }
+        public ActionResult BulkImportNew()
+        {
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                var lstOutlet = ITCSR.GetOutlet(groupId);
+                var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
+                ViewBag.OutletList = lstOutlet;
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "BulkImport");
+            }
+            return View();
+        }
 
+        [HttpPost]
+        public ActionResult AddSingleMemberNew(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            SPResponse result = new SPResponse();
+            string GroupId = "";
+
+            try
+            {
+                var groupId = (string)Session["GroupId"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                tblCustDetailsMaster objCustomer = new tblCustDetailsMaster();
+                tblCustInfo objcustInfo = new tblCustInfo();
+                tblCustTxnSummaryMaster objtblCustTxn = new tblCustTxnSummaryMaster();
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+
+                    //GroupId = Convert.ToString(item["GroupID"]);
+                    objCustomer.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objCustomer.CardNo = Convert.ToString(item["CardNo"]);
+                    objCustomer.Name = Convert.ToString(item["FullName"]);
+                    objCustomer.Gender = Convert.ToString(item["Gender"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["BirthDay"])))
+                    {
+                        objCustomer.DOB = Convert.ToDateTime(item["BirthDay"]);
+                    }
+                    objCustomer.EnrolledBy = Convert.ToString(item["Source"]);
+                    objCustomer.EnrolledOutlet = Convert.ToString(item["OutletId"]);
+                    objCustomer.Tier = "Base";
+                    objCustomer.DOJ = DateTime.Now;
+                    objCustomer.IsActive= true;
+                    objCustomer.DisableTxn = false;
+                    objCustomer.DisableSMSWAPromo = false;
+                    objCustomer.CountryCode = "91";
+                    objCustomer.CurrentEnrolledOutlet = Convert.ToString(item["OutletId"]);
+                    objCustomer.DisableSMSWATxn = false;
+
+                    objAudit.GroupId = groupId;
+
+                    objAudit.RequestedFor = "User Added";
+                    objAudit.RequestedEntity = "User Added - " + objCustomer.MobileNo;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedDate"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
+
+                }
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    objcustInfo.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objcustInfo.Name = Convert.ToString(item["FullName"]);
+                }
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    objtblCustTxn.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objtblCustTxn.TotalSpend = 0;
+                    objtblCustTxn.TotalTxnCount = 0;
+                    objtblCustTxn.EarnCount = 0;
+                    objtblCustTxn.BurnCount = 0;
+                    objtblCustTxn.SalesReturnCount = 0;
+                    objtblCustTxn.SalesReturnAmt = 0;
+                    objtblCustTxn.BurnAmtWithPts = 0;
+                    objtblCustTxn.BurnAmtWithoutPts = 0;
+                    objtblCustTxn.BurnPts = 0;
+                    objtblCustTxn.EarnPts = 0;
+                    objtblCustTxn.SalesReturnPtsGiven = 0;
+                    objtblCustTxn.SalesReturnPtsRemoved = 0;
+                    
+                }
+                result = NewITOPS.AddSingleCustomerData(groupId, objCustomer, objcustInfo, objtblCustTxn, objAudit);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddSingleMember");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddBulkMemberDataNew(HttpPostedFileBase file, string OutletId,string Source)
+        {
+            tblCustDetailsMaster objCustomer = new tblCustDetailsMaster();
+            tblCustInfo objcustInfo = new tblCustInfo();
+            tblCustTxnSummaryMaster objtblCustTxn = new tblCustTxnSummaryMaster();
+            tblBulkCustList objtblBulkCust = new tblBulkCustList();
+
+            SPResponse result = new SPResponse();
+            string GroupId = "";
+            try
+            {
+                
+                var groupId = (string)Session["GroupId"];
+                using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
+                {
+
+                    IXLWorksheet workSheet = workBook.Worksheet(1);
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("CustomerName", typeof(string));
+                    dt.Columns.Add("MobileNo", typeof(string));
+
+                    foreach (IXLRow row in workSheet.Rows())
+                    {
+                        int i = 0;
+                        DataRow toInsert = dt.NewRow();
+                        foreach (IXLCell cell in row.Cells(1, dt.Columns.Count))
+                        {
+                            try
+                            {
+                                toInsert[i] = cell.Value.ToString();
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                            i++;
+                        }
+                        dt.Rows.Add(toInsert);
+
+                    }
+                    if (dt.Rows.Count > 0)
+                    {
+                        int TotalRows = 0;
+                        int index = 0;
+                        int invalid = 0;
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
+                            {
+                                Regex regex = new Regex(@"[0-9]{10}");
+                                Match match = regex.Match(Convert.ToString(dr["MobileNo"]));
+                                if (match.Success)
+                                {
+                                    objCustomer.Name = Convert.ToString(dr["CustomerName"]);
+                                    objCustomer.MobileNo = Convert.ToString(dr["MobileNo"]);
+                                    objCustomer.Tier = "Base";
+                                    objCustomer.DOJ = DateTime.Now;
+                                    objCustomer.IsActive = true;
+                                    objCustomer.DisableTxn = false;
+                                    objCustomer.DisableSMSWAPromo = false;
+                                    objCustomer.CountryCode = "91";
+                                    objCustomer.DisableSMSWATxn = false;
+                                    objCustomer.EnrolledOutlet = OutletId;
+                                    objCustomer.EnrolledBy = Source;
+                                    objCustomer.CurrentEnrolledOutlet = Source;
+
+                                    objcustInfo.Name = Convert.ToString(dr["CustomerName"]);
+                                    objcustInfo.MobileNo = Convert.ToString(dr["MobileNo"]);
+
+                                    objtblCustTxn.MobileNo = Convert.ToString(dr["MobileNo"]);
+                                    objtblCustTxn.TotalSpend = 0;
+                                    objtblCustTxn.TotalTxnCount = 0;
+                                    objtblCustTxn.EarnCount = 0;
+                                    objtblCustTxn.BurnCount = 0;
+                                    objtblCustTxn.SalesReturnCount = 0;
+                                    objtblCustTxn.SalesReturnAmt = 0;
+                                    objtblCustTxn.BurnAmtWithPts = 0;
+                                    objtblCustTxn.BurnAmtWithoutPts = 0;
+                                    objtblCustTxn.BurnPts = 0;
+                                    objtblCustTxn.EarnPts = 0;
+                                    objtblCustTxn.SalesReturnPtsGiven = 0;
+                                    objtblCustTxn.SalesReturnPtsRemoved = 0;
+
+                                    objtblBulkCust.MobileNo = Convert.ToString(dr["MobileNo"]);
+                                    objtblBulkCust.CustName = Convert.ToString(dr["CustomerName"]);
+                                    objtblBulkCust.EnrolledOutlet = OutletId;
+                                    objtblBulkCust.EnrolledDate = DateTime.Now;
+                                    objtblBulkCust.BonusPoints = 0;
+                                    objtblBulkCust.IsActive = true;
+                                    objtblBulkCust.ConvertedStatus = false;
+
+                                    result = NewITOPS.AddBulkCustomerData(groupId, objCustomer, objcustInfo, objtblCustTxn, objtblBulkCust);
+                                    if (result.ResponseCode == "00")
+                                    {
+                                        TotalRows++;
+                                    }
+
+                                    if (result.ResponseCode == "01")
+                                    {
+                                        index++;
+
+                                    }
+                                }
+                                else
+                                {
+                                    invalid++;
+
+                                }
+                            }
+                        }                        
+                        result.ResponseSucessCount = TotalRows.ToString();
+                        result.ResponseFailCount = index.ToString();
+                        //result.ResponseInValidFormatCount = invalid.ToString();
+                    }
+
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddBulkMemberData");
+                result.ResponseCode = "-1";
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }                  
     }
 }

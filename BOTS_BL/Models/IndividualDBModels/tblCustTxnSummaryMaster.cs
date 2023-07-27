@@ -45,5 +45,7 @@ namespace BOTS_BL.Models
         public long? BurnPts { get; set; }
 
         public long? EarnPts { get; set; }
+        public long? SalesReturnPtsGiven { get; set; }
+        public long ? SalesReturnPtsRemoved { get; set; }
     }
 }
