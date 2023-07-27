@@ -16,6 +16,7 @@ namespace WebApp.Controllers.ITOPS
         CustomerRepository objCustRepo = new CustomerRepository();
         ITOpsRepository ITOPS = new ITOpsRepository();
         Exceptions newexception = new Exceptions();
+        ITOPSNEWRepository NewITOPS = new ITOPSNEWRepository();
         // GET: Member
         public ActionResult Index(string groupId)
         {
@@ -117,6 +118,70 @@ namespace WebApp.Controllers.ITOPS
         {
             var result = false;
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        ///////////// ITOPS New //////////
+        public ActionResult DeleteUserNew()
+        {
+            var groupId = (string)Session["GroupId"];
+            ViewBag.GroupId = groupId;
+            return View();
+        }
+        public ActionResult GetChangeNameDataNew(string MobileNo, string CardNo)
+        {
+            MemberData objCustomerDetail = new MemberData();
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objCustomerDetail = NewITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = NewITOPS.GetChangeNameByCardNo(groupId, CardNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetChangeNameDataNew");
+            }
+            return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult DeleteUserDetailsNew(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var result = false;
+            string GroupId, MobileNo;
+            GroupId = string.Empty;
+            MobileNo = string.Empty;            
+            try
+            {
+
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();                
+
+                foreach (Dictionary<string, object> item in objData)
+                {                    
+                    GroupId = Convert.ToString(item["GroupID"]);
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    objAudit.GroupId = GroupId;
+                    objAudit.RequestedFor = "Delete User";
+                    objAudit.RequestedEntity = "CustomerId - " + MobileNo;                    
+                    objAudit.RequestedOn = DateTime.Now;
+                    objAudit.AddedBy = userDetails.LoginId;                    
+                }
+
+                result = NewITOPS.DeleteUser(GroupId, MobileNo, objAudit);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DeleteUserDetailsNew");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+
         }
     }
 }

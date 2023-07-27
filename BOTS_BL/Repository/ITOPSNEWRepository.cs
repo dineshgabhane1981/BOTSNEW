@@ -1223,70 +1223,20 @@ namespace BOTS_BL.Repository
             }
         }
 
-        public bool DeleteUser(string GroupId, string MobileNo, string CustomerId, tblAudit objAudit)
+        public bool DeleteUser(string GroupId, string MobileNo, tblAudit objAudit)
         {
             bool status = false;
             try
             {
-                CustomerDetail objCustomerDetail = new CustomerDetail();
-                List<TransactionMaster> lstTransactionMaster = new List<TransactionMaster>();
-                List<PointsExpiry> lstPointExpiry = new List<PointsExpiry>();
+                tblCustDetailsMaster objCustDetail = new tblCustDetailsMaster();                
                 string connStr =  GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                    objCustomerDetail.Status = "01";
-                    objCustomerDetail.IsSMS = false;
+                    objCustDetail = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    objCustDetail.IsActive = false;
 
-                    contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
-                    contextNew.SaveChanges();
-
-                    var TM2 = contextNew.TransactionMasters.Where(x => x.MobileNo == MobileNo).ToList();
-                    foreach (var item in TM2)
-                    {
-                        TransactionMaster objTransactionMaster = new TransactionMaster();
-                        objTransactionMaster.SlNo = item.SlNo;
-                        objTransactionMaster.CounterId = item.CounterId;
-                        objTransactionMaster.MobileNo = item.MobileNo;
-                        objTransactionMaster.Datetime = item.Datetime;
-                        objTransactionMaster.TransType = item.TransType;
-                        objTransactionMaster.TransSource = item.TransSource;
-                        objTransactionMaster.InvoiceNo = item.InvoiceNo;
-                        objTransactionMaster.InvoiceAmt = item.InvoiceAmt;
-                        objTransactionMaster.CustomerId = item.CustomerId;
-                        objTransactionMaster.PointsEarned = item.PointsEarned;
-                        objTransactionMaster.PointsBurned = item.PointsBurned;
-                        objTransactionMaster.CampaignPoints = item.CampaignPoints;
-                        objTransactionMaster.TxnAmt = item.TxnAmt;
-                        objTransactionMaster.CustomerPoints = item.CustomerPoints;
-                        objTransactionMaster.Synchronization = item.Synchronization;
-                        objTransactionMaster.SyncDatetime = item.SyncDatetime;
-                        objTransactionMaster.Status = "09";
-                        contextNew.TransactionMasters.AddOrUpdate(objTransactionMaster);
-                        contextNew.SaveChanges();
-                    }
-
-                    var PM2 = contextNew.PointsExpiries.Where(x => x.MobileNo == MobileNo && x.Status == "00").ToList();
-                    foreach (var item in PM2)
-                    {
-                        PointsExpiry objPointsExpiry = new PointsExpiry();
-                        objPointsExpiry.SlNo = item.SlNo;
-                        objPointsExpiry.MobileNo = item.MobileNo;
-                        objPointsExpiry.CounterId = item.CounterId;
-                        objPointsExpiry.EarnDate = item.EarnDate;
-                        objPointsExpiry.Points = item.Points;
-                        objPointsExpiry.ExpiryDate = item.ExpiryDate;
-                        objPointsExpiry.BurnDate = item.BurnDate;
-                        objPointsExpiry.InvoiceNo = item.InvoiceNo;
-                        objPointsExpiry.TransRefNo = item.TransRefNo;
-                        objPointsExpiry.OriginalInvoiceNo = item.OriginalInvoiceNo;
-                        objPointsExpiry.GroupId = item.GroupId;
-                        objPointsExpiry.Datetime = item.Datetime;
-                        objPointsExpiry.CustomerId = item.CustomerId;
-                        objPointsExpiry.Status = "01";
-                        contextNew.PointsExpiries.AddOrUpdate(objPointsExpiry);
-                        contextNew.SaveChanges();
-                    }
+                    contextNew.tblCustDetailsMasters.AddOrUpdate(objCustDetail);
+                    contextNew.SaveChanges();                    
                     status = true;
 
                 }
