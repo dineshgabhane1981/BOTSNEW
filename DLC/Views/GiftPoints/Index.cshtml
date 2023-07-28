@@ -6,7 +6,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var sessionVariables = (SessionVariables)Session["SessionVariables"];    
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
 }
 
 <style>
@@ -53,7 +53,7 @@
     }
 
     .circular-chart.blue .circle {
-        stroke: @sessionVariables.objDashboardConfig.HeaderColor;       
+        stroke: @sessionVariables.objDashboardConfig.HeaderColor;
         stroke-width: 3;
         transition: 1s linear 0s;
     }
@@ -118,21 +118,21 @@
             <div class="optoutCHK ml-2">
                 <input type="checkbox" id="chkTerms" style="cursor: pointer; margin-right: 5px;" />
                 <span><label for="chkTerms" style="cursor: pointer;"> I agree to the Gift-a-Points TnC</label></span>
-            </div>            
+            </div>
         </div>
         <div class="col-md-12 col-lg-12" style="text-align:center;">
             <button id="btnGiftPoints" class="btn form-control btn-primary  submit px-3" onclick="SendGift();" style="font-weight:bold;width:200px;">Send Gift</button>
         </div>
-            <div class="col-md-12 col-lg-12 pt-3" style="margin-top:5px;">
-                <i>
-                    <b>Note:</b>
-                    Promotional points are not eligible for gifting. Only points earned from transaction will be available for gifting purpose
-                </i>
-            </div>
+        <div class="col-md-12 col-lg-12 pt-3" style="margin-top:5px;">
+            <i>
+                <b>Note:</b>
+                Promotional points are not eligible for gifting. Only points earned from transaction will be available for gifting purpose
+            </i>
         </div>
     </div>
+</div>
 <script>
-    $(document).ready(function () {       
+    $(document).ready(function () {
         $("#spnRS").text("(Rs. 0)");
         $("#txtGiftPoints").keyup(function () {
             var points = $("#txtGiftPoints").val();
@@ -149,7 +149,7 @@
             }
             $("#txtRemainingPoints").text(remainingpts);
             $(".dummyClass").attr("stroke-dasharray", cords);
-        });       
+        });
     });
     function SendGift() {
         var status = true;
@@ -185,7 +185,7 @@
             status = false;
             return false;
         }
-        if (status) {           
+        if (status) {
             $("#divLoader").show();
               $.ajax({
                 type: "POST",
@@ -194,22 +194,23 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                   success: function (result) {
-                      if (result == true) {
-                          toastr.success('Points Gifted Successfully !!!');
+                      console.log(result)
+                      if (result.ResponseCode == "1") {
+                          toastr.success("Points Gifted Successfully !!!");
                           setTimeout(myStopFunction, 2000);
                       }
                       else {
-                          toastr.error('There is problem in gifting points. Please contact your Administrator !!!');
+                          toastr.error(result.ResponseMessage);
                       }
                         $("#divLoader").hide();
                     },
-                    error: function (result) {                        
+                    error: function (result) {
                         console.log(result.responseText)
                     }
                 });
         }
     }
-    function myStopFunction() {        
+    function myStopFunction() {
         window.location.reload();
     }
 </script>

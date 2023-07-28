@@ -1,4 +1,4 @@
-﻿@model List<BOTS_BL.Models.MWP_TNC>
+﻿@model List<BOTS_BL.Models.tblDLCFrontEndPageDataTNC>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,7 +12,7 @@
             <ol>
                 @foreach (var item in Model)
                 {
-                    <li>@item.MWP_TNC1</li>
+                    <li>@item.MWP_TNC</li>
                 }
             </ol>
         </div>

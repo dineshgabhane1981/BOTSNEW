@@ -256,7 +256,7 @@ namespace WebApp.Controllers.OnBoarding
             List<DLCLinksViewModel> objData = new List<DLCLinksViewModel>();
             List<string> Urls = new List<string>(); ;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var BrandDetails = CR.GetAllBrandsByGroupId(userDetails.GroupId);
+            var BrandDetails = DCR.GetBrandsByGroupId(userDetails.GroupId);
             //ViewBag.URLs = BrandDetails;
             try
             {

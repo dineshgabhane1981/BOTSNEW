@@ -1,62 +1,16 @@
 ﻿@model List<BOTS_BL.Models.MemberList>
-@using BOTS_BL.Models;  
 @{
     ViewBag.Title = "Member List";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var userDetails = (CustomerLoginDetail)Session["UserSession"];
-    var logintype = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
 
-        <div class="col-lg-12 row">
-            <div class="col-lg-6 row">
-                <div class="col-md-3 col-xl-3" style="padding-top:12px;">
-                    Select Outlet
-                </div>
-                <div class="col-md-3 col-xl-8">
-                    @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
-                </div>
-            </div>
-            <div class="col-lg-6 row">
-                <div class="col-md-3 col-xl-3" style="padding-top:12px;text-align:end;">
-                    Last txn date
-                </div>
-                <div class="col-md-3 col-xl-5">
-                    <input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-                <div class="col-md-3 col-xl-4">
-                    <input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-12 row">
-            <div class="col-lg-6 row">
-                <div class="col-md-3 col-xl-3" style="padding-top:12px;">
-                    Available Points
-                </div>
-                <div class="col-md-3 col-xl-5">
-                    <input type="number" class="input50" placeholder="Min" id="frmPts" />&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-                <div class="col-md-3 col-xl-4">
-                    <input type="number" class="input50" placeholder="Max" id="toPts" />
-                </div>
-            </div>
-            <div class="col-lg-6 row">
-                <div class="col-md-3 col-xl-3" style="padding-top: 12px; text-align: end;">
-                    Total Spend
-                </div>
-                <div class="col-md-3 col-xl-5">
-                    <input type="number" class="input50" placeholder="Min" id="frmSpend" />&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-                <div class="col-md-3 col-xl-4">
-                    <input type="number" class="input50" placeholder="Max" id="toSpend" />
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-12" style="text-align:end;">
-            <button id="btnFilter" class="btn btn-primary login-btn" style="margin-right:100px;">Filter</button>
+        <div class="col-sm-6">
+            Select Outlet :
+            @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+
         </div>
         <br />
     </div>
@@ -67,18 +21,6 @@
                     <div class="col search-container">
                         <i class="fas fa-search"></i>
                         <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
-                    </div>
-                    <div class="col text-right">
-                        <ul class="list-inline progress-list mt-2">
-                            <li class="list-inline-item">                                
-                                @if (logintype == "1" || logintype == "7" || logintype == "6")
-                                {
-                                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
-                                        <i class="fas fa-file-export"></i> Export
-                                    </button>
-                                }
-                            </li>
-                        </ul>
                     </div>
                 </div>
                 <div class="row mt-3" id="dvActivityData">
@@ -110,21 +52,8 @@
     </div>
 </div>
 <script type="text/JavaScript" src=" https://MomentJS.com/downloads/moment.js"></script>
-<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 <script>
     var tableData = [];
-    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
-    $("#dtFrom").datepicker({
-        dateFormat: "yy-mm-dd",
-        maxDate: today,
-    });
-    $("#dtTo").datepicker({
-        dateFormat: "yy-mm-dd",
-        maxDate: today,
-    });
     $(document).ready(function () {
         $.fn.dataTable.moment = function (format, locale) {
             var types = $.fn.dataTable.ext.type;
@@ -144,30 +73,21 @@
 
         $.fn.dataTable.moment('DD/MM/YYYY');
         LoadMemberData();
-        //$("#OutletList").on("change", function () {
-        //    LoadMemberData();
-        //});
-        $("#btnFilter").click(function () {
+        $("#OutletList").on("change", function () {
             LoadMemberData();
+
         });
     });
 
     function LoadMemberData() {
+        $("#divLoader").show();
         var searchData = [];
-        var item={}
+        var item = {}
         item["OutletId"] = $("#OutletList").val();
-        item["FrmDate"] = $("#dtFrom").val();
-        item["ToDate"] = $("#dtTo").val();
-        item["FrmPts"] = $("#frmPts").val();
-        item["ToPts"] = $("#toPts").val();
-        item["FrmSpend"] = $("#frmSpend").val();
-        item["ToSpend"] = $("#toSpend").val();
         searchData.push(item);
 
         var data = JSON.stringify(searchData);
-
-        $("#divLoader").show();
-
+        var SearchText = JSON.stringify($("#OutletList").val());
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetMemberDataResult", "Reports")',
@@ -348,15 +268,6 @@
         });
     }
 
-    function ExportDataExcel() {
-
-       var urlLink = "@Url.Action("ExportToExcelMemberList", "Reports")";
-        urlLink = urlLink + "?outletId=" + $("#OutletList").val() + "&fromDate=" + $("#dtFrom").val() + "&toDate=" + $("#dtTo").val() + "&frmPts=" + $("#frmPts").val() + "&toPts=" + $("#toPts").val() + "&frmSpends=" + $("#frmSpend").val() + "&toSpends=" + $("#toSpend").val() + "";
-        console.log(urlLink);
-        window.location.href = urlLink;
-        $("#divLoader").hide();
-        $("#txtemailsend").val('');
-    }
 </script>
 
 

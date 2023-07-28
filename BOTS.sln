@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLC", "DLC\DLC.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exhibition", "Exhibition\Exhibition.csproj", "{6559B60C-0389-464C-A824-9B14719C18C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GinesysRedeemption", "GinesysRedeemption\GinesysRedeemption.csproj", "{60A4D2E6-8C4E-4AE4-884A-AC076BC60040}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -101,6 +103,10 @@ Global
 		{6559B60C-0389-464C-A824-9B14719C18C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6559B60C-0389-464C-A824-9B14719C18C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6559B60C-0389-464C-A824-9B14719C18C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60A4D2E6-8C4E-4AE4-884A-AC076BC60040}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60A4D2E6-8C4E-4AE4-884A-AC076BC60040}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60A4D2E6-8C4E-4AE4-884A-AC076BC60040}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60A4D2E6-8C4E-4AE4-884A-AC076BC60040}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

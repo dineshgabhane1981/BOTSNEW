@@ -635,7 +635,6 @@
     <Content Include="Views\IndividualDBConfig\ChangeEarnRule.cshtml" />
     <Content Include="Views\IndividualDBConfig\DisableTransactions.cshtml" />
     <Content Include="Views\OtherReports\_ProdAnalyticFilter.cshtml" />
-    <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Views\IndividualDBConfig\UploadCelebrationData.cshtml" />
     <Content Include="Views\IndividualDBConfig\_Slabwise.cshtml" />
     <Content Include="Views\IndividualDBConfig\ChangeRedeemptionOTP.cshtml" />

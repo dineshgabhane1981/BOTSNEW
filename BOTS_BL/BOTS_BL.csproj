@@ -327,6 +327,7 @@
     <Compile Include="Models\FeedbackModule\Feedback_Questions.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_Report.cs" />
     <Compile Include="Models\FeedbackModule\Feedback_SMSNumbers.cs" />
+    <Compile Include="Models\FeedbackModule\Model1.cs" />
     <Compile Include="Models\FeedBack\FeedBackMaster.cs" />
     <Compile Include="Models\FeedBack\FeedBackMobileMaster.cs" />
     <Compile Include="Models\FeedBack\FeedBackQuestionMaster.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
     <Compile Include="Models\IndividualDBModels\CustInformatonData.cs" />
     <Compile Include="Models\IndividualDBModels\ExecutiveSummaryAllData.cs" />
+    <Compile Include="Models\IndividualDBModels\GinesysRedeemModel.cs" />
     <Compile Include="Models\IndividualDBModels\ListReferringBase.cs" />
     <Compile Include="Models\IndividualDBModels\MemberListAllData.cs" />
     <Compile Include="Models\IndividualDBModels\PointExpiryDummyModel.cs" />
@@ -513,6 +515,7 @@
     <Compile Include="Repository\ExhibitionRepository.cs" />
     <Compile Include="Repository\FeedbackModuleRepository.cs" />
     <Compile Include="Repository\FeedBackRepository.cs" />
+    <Compile Include="Repository\GinesysRedeemptionRepository.cs" />
     <Compile Include="Repository\HeatMapsRepository.cs" />
     <Compile Include="Repository\ITCSRepository.cs" />
     <Compile Include="Repository\ITOPSNEWRepository.cs" />

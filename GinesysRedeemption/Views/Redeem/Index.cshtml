@@ -1,0 +1,28 @@
+﻿@model BOTS_BL.Models.GinesysRedeemModel
+@{
+    ViewBag.Title = "Index";
+    var value = Math.Round(Model.Points.Value * Model.PointsValue.Value, 2);
+}
+
+<h3>Redeem Loyalty</h3>
+<div class="col-md-12 col-lg-12">
+    <table cellpadding="10" cellspacing="10" style="background-color: #FAF9F6; " width="90%">
+        <tr>
+            <td>Customer Name</td>
+            <td><b>@Model.CustomerName</b></td>
+        </tr>
+        <tr>
+            <td>Invoice Amount</td>
+            <td>@Model.InvoiceAmount</td>
+        </tr>
+        <tr>
+            <td>Mobile No</td>
+            <td>@Model.MobileNo</td>
+        </tr>
+    </table>
+    <div class="col-md-12 col-lg-12" style="background-color:#fff;width:90%;text-align:center;padding-top:20px;">
+        Customer has a reward balance of <b>&#8377;@value, (@Model.Points)</b> Points 
+        <div style="padding:10px;"><input type="number" class="input50" id="txtPoints" /><button class="btn btn-primary" style="margin-left:10px;">Apply</button></div>
+    </div>
+</div>
+

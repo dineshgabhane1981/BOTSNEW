@@ -136,7 +136,7 @@ namespace DLC.Controllers
             if (pageName == "Dashboard")
                 ActionName = "Dashboard";
             if (pageName == "Update Profile")
-                ActionName = "UpdateProfile";
+                ActionName = "PersonalDetails";
             if (pageName == "Gift Points")
                 ActionName = "GiftPoints";
             if (pageName == "Transaction History")

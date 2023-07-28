@@ -24,10 +24,9 @@ namespace DLC.Controllers
             return View(objData);
         }
         public ActionResult GiveGiftPoints(string RecipientName,string RecipientNo,string GiftPoints)
-        {
-            bool status = false;
+        {           
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
-            status = DCR.GiveGiftPoints(sessionVariables.MobileNo, sessionVariables.BrandId, RecipientName, RecipientNo, GiftPoints, sessionVariables.GroupId);
+            var status = DCR.GiveGiftPoints(sessionVariables.MobileNo, sessionVariables.BrandId, RecipientName, RecipientNo, GiftPoints, sessionVariables.GroupId);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

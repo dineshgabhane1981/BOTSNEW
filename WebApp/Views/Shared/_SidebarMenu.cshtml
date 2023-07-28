@@ -558,8 +558,8 @@
                             <ul>
                                 @if (userDetails.GroupId != "1013")
                                 {
-                                    <li class="@Html.IsSelected(controller: "Feedback", action: "Dashboard")">
-                                        <a href="@Url.Action("Dashboard", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Dashboard")">
+                                    <li class="@Html.IsSelected(controller: "Feedback", action: "Dashboard,CreateFeedback")">
+                                        <a href="@Url.Action("Dashboard", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Dashboard,CreateFeedback")">
                                             <i class="metismenu-icon pe-7s-rocket"></i>
                                             Dashboard
                                         </a>

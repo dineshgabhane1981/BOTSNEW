@@ -381,17 +381,35 @@ namespace WebApp.Controllers
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in objData)
             {
+                string fromDate = string.Empty;
+                string ToDate = string.Empty;
+                string FrmPts = string.Empty;
+                string ToPts = string.Empty;
+                string FrmSpend = string.Empty;
+                string ToSpend = string.Empty;
+
                 string OutletId = Convert.ToString(item["OutletId"]);
                 if (OutletId.Equals("All"))
                 {
                     OutletId = "";
                 }
-                string fromDate = Convert.ToString(item["FrmDate"]);
-                string ToDate = Convert.ToString(item["ToDate"]);
-                string FrmPts = Convert.ToString(item["FrmPts"]);
-                string ToPts = Convert.ToString(item["ToPts"]);
-                string FrmSpend = Convert.ToString(item["FrmSpend"]);
-                string ToSpend = Convert.ToString(item["ToSpend"]);
+                //if (!string.IsNullOrEmpty(Convert.ToString(item["FrmDate"])))
+                //    fromDate = Convert.ToString(item["FrmDate"]);
+
+                //if (!string.IsNullOrEmpty(Convert.ToString(item["ToDate"])))
+                //    ToDate = Convert.ToString(item["ToDate"]);
+
+                //if (!string.IsNullOrEmpty(Convert.ToString(item["FrmPts"])))
+                //    FrmPts = Convert.ToString(item["FrmPts"]);
+
+                //if (!string.IsNullOrEmpty(Convert.ToString(item["ToPts"])))
+                //    ToPts = Convert.ToString(item["ToPts"]);
+
+                //if (!string.IsNullOrEmpty(Convert.ToString(item["FrmSpend"])))
+                //    FrmSpend = Convert.ToString(item["FrmSpend"]);
+
+                //if (!string.IsNullOrEmpty(Convert.ToString(item["ToSpend"])))
+                //    ToSpend = Convert.ToString(item["ToSpend"]);
 
                 lstMember = RR.GetMemberList(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId, fromDate, ToDate, FrmPts,
                     ToPts, FrmSpend, ToSpend);

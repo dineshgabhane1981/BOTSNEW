@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models
+namespace BOTS_BL.Models.FeedbackModule
 {
     using System;
     using System.Collections.Generic;

@@ -14,7 +14,7 @@ namespace WebApp.ViewModel
         public string dept { get; set; }
         public SelectListItem[] Departments()
         {
-            return new SelectListItem[3] { new SelectListItem() { Text = "HR", Value = "HR" }, new SelectListItem() { Text = "Sales", Value = "Sales" }, new SelectListItem() { Text = "Finance", Value = "Finance" } };
+            return new SelectListItem[4] { new SelectListItem() { Text = "HR", Value = "HR" }, new SelectListItem() { Text = "Sales", Value = "Sales" }, new SelectListItem() { Text = "Finance", Value = "Finance" }, new SelectListItem() { Text = "Marketing", Value = "Marketing" } };
         }
         public SelectListItem[] Vendors()
         {

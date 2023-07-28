@@ -14,6 +14,15 @@ namespace BOTS_BL.Models
         public string ResponseFailCount { get; set; }
         public string ResponseInValidFormatCount { get; set; }
     }
+    public class DLCSPResponse
+    {
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
+        public string WAMessage { get; set; }
+        public string WATokenId { get; set; }
+        public string WAUrl { get; set; }
+        public string MobileNo { get; set; }
+    }
 
     public class NewCustDetails
     {
