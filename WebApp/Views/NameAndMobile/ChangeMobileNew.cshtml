@@ -150,7 +150,7 @@
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetChangeNameData", "NameAndMobile")',
+            url: '@Url.Action("GetChangeNameDataNew", "NameAndMobile")',
             data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',MobileNo:' + JSON.stringify($('#txtMobileNo1').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo1').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -194,6 +194,7 @@
             }
         });
     }
+
     function SaveMemberMobile() {
         if ($('#txtNewMobileNo').val() == "") {
             toastr.error('Please enter Mobile No');
@@ -240,7 +241,7 @@
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("ChangeMemberMobile", "NameAndMobile")',//"/ITOperations/ChangeMemberMobile",
+                url: '@Url.Action("ChangeMemberMobileNew", "NameAndMobile")',//"/ITOperations/ChangeMemberMobile",
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

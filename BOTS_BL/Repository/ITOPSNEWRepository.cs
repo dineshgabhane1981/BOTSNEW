@@ -72,12 +72,14 @@ namespace BOTS_BL.Repository
 
                     if (CustData != null)
                     {
+                        string Id = GroupId + CustData.MobileNo;
                         objMemberData.MemberName = CustData.CustomerName;
                         objMemberData.MobileNo = CustData.MobileNo;
                         objMemberData.CardNo = CustData.CardNo;
                         objMemberData.PointsBalance = CustData.Points;
                         objMemberData.EnrolledOn = CustData.DOJ.Value.ToString("dd/MM/yyyy");
                         objMemberData.EnrolledOutletName = CustData.EnrolledOutlet;
+                        objMemberData.CustomerId = Id;
                     }
                 }
             }
@@ -99,7 +101,7 @@ namespace BOTS_BL.Repository
                     //objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CardNumber == searchData && x.Status == "00").FirstOrDefault();
                     var CustData = contextNew.View_ITOPSCustData.Where(x => x.CardNo == searchData).FirstOrDefault();
 
-                    if(CustData != null)
+                    if (CustData != null)
                     {
                         objMemberData.MemberName = CustData.CustomerName;
                         objMemberData.MobileNo = CustData.MobileNo;
@@ -107,6 +109,7 @@ namespace BOTS_BL.Repository
                         objMemberData.PointsBalance = CustData.Points;
                         objMemberData.EnrolledOn = CustData.DOJ.Value.ToString("dd/MM/yyyy");
                         objMemberData.EnrolledOutletName = CustData.EnrolledOutlet;
+                        objMemberData.CustomerId = CustData.CustomerId;
                     }
                 }
             }
@@ -150,9 +153,10 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool UpdateNameOfMember(string GroupId, string MobileNo, string Name, tblAudit objAudit)
+        public bool UpdateNameOfMember(string GroupId, string CustomerId, string Name, tblAudit objAudit)
         {
             bool status = false;
+            string MobileNo = CustomerId.Substring(4);
             try
             {
                 //CustomerDetail objCustomerDetail = new CustomerDetail();
@@ -162,12 +166,12 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     //objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                    objCustomerDetail = contextNew.tblCustInfoes.Where(x=> x.MobileNo == MobileNo).FirstOrDefault();
-                    objCustDetail = contextNew.tblCustDetailsMasters.Where(x=> x.MobileNo == MobileNo).FirstOrDefault();
+                    objCustomerDetail = contextNew.tblCustInfoes.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    objCustDetail = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
 
-                    objCustomerDetail.Name = Name;                 
+                    objCustomerDetail.Name = Name;
                     objCustDetail.Name = Name;
-                   
+
                     contextNew.tblCustInfoes.AddOrUpdate(objCustomerDetail);
                     contextNew.tblCustDetailsMasters.AddOrUpdate(objCustDetail);
                     contextNew.SaveChanges();
@@ -193,66 +197,155 @@ namespace BOTS_BL.Repository
             SPResponse result = new SPResponse();
             try
             {
-                CustomerDetail objCustomerDetail = new CustomerDetail();
-                List<TransactionMaster> lstObjTxn = new List<TransactionMaster>();
+                TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+                DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+
+                //CustomerDetail objCustomerDetail = new CustomerDetail();
+                tblCustDetailsMaster objCustomerDetail = new tblCustDetailsMaster();
+                List<tblTxnDetailsMaster> lstObjTxn = new List<tblTxnDetailsMaster>();
                 List<PointsExpiry> lstobjpoints = new List<PointsExpiry>();
                 TransferPointsDetail objtransferPointsDetail = new TransferPointsDetail();
-
+                tblMobileChangeHistory tblMobChnge = new tblMobileChangeHistory();
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-
-                    var objExisting = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                    if (objExisting == null)
+                    using (DbContextTransaction transaction = contextNew.Database.BeginTransaction())
                     {
-                        objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                        string oldno = objCustomerDetail.MobileNo;
-                        objCustomerDetail.MobileNo = MobileNo;
-                        objCustomerDetail.OldMobileNo = oldno;
+                        //var objExisting = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                        var objExisting = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
 
-                        lstObjTxn = contextNew.TransactionMasters.Where(x => x.CustomerId == CustomerId).Take(10000).ToList();
-                        if (lstObjTxn != null)
+                        if (objExisting == null)
                         {
-                            foreach (var trans in lstObjTxn)
-                            {
-                                trans.MobileNo = MobileNo;
-                                contextNew.TransactionMasters.AddOrUpdate(trans);
-                                contextNew.SaveChanges();
-                            }
-                        }
+                            // Object for tblCustDetailsMasters
+                            objCustomerDetail = contextNew.tblCustDetailsMasters.Where(x => x.Id == CustomerId).FirstOrDefault();
 
-                        lstobjpoints = contextNew.PointsExpiries.Where(x => x.CustomerId == CustomerId).Take(10000).ToList();
-                        if (lstobjpoints != null)
+                            string oldno = objCustomerDetail.MobileNo;
+                            string Id = GroupId + MobileNo;
+                            objCustomerDetail.MobileNo = MobileNo;
+                            objCustomerDetail.Id = Id;
+
+                            // Object for tblCustInfoes
+                            var ObjtblCustInfo = contextNew.tblCustInfoes.Where(x => x.MobileNo == oldno).FirstOrDefault();
+                            ObjtblCustInfo.MobileNo = MobileNo;
+
+                            tblMobChnge.NewMobileNo = MobileNo;
+                            tblMobChnge.OldMobileNo = oldno;
+                            tblMobChnge.TxnDatetime = Date;
+                            tblMobChnge.GroupId = GroupId;
+
+                            // Inserting in CustPointsMaster multiple rows
+                            var LsttblCustPointsMaster = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == oldno).ToList();
+
+                            if (LsttblCustPointsMaster != null)
+                            {
+                                foreach (var item in LsttblCustPointsMaster)
+                                {
+                                    item.MobileNo = MobileNo;
+                                    contextNew.tblCustPointsMasters.AddOrUpdate(item);
+                                    contextNew.SaveChanges();
+                                }
+                            }
+                            //Inserting tblTxnDetailsMaster
+                            var LsttblTxn = contextNew.tblTxnDetailsMasters.Where(x => x.MobileNo == oldno).ToList();
+                            if (LsttblTxn != null)
+                            {
+                                foreach (var item in LsttblTxn)
+                                {
+                                    item.MobileNo = MobileNo;
+                                    contextNew.tblTxnDetailsMasters.AddOrUpdate(item);
+                                    contextNew.SaveChanges();
+                                }
+                            }
+
+                            //Inserting tblTxnDetailsMasterClone
+                            var LsttblTxnClone = contextNew.tblTxnDetailsMaster_Clone.Where(x => x.MobileNo == oldno).ToList();
+                            if (LsttblTxnClone != null)
+                            {
+                                foreach (var item in LsttblTxnClone)
+                                {
+                                    item.MobileNo = MobileNo;
+                                    contextNew.tblTxnDetailsMaster_Clone.AddOrUpdate(item);
+                                    contextNew.SaveChanges();
+                                }
+                            }
+
+                            //Inserting in tblSalesReturnMaster
+                            var LsttblSalesReturnMaster = contextNew.tblSalesReturnMasters.Where(x => x.MobileNo == oldno).ToList();
+                            if (LsttblSalesReturnMaster != null)
+                            {
+                                foreach (var item in LsttblSalesReturnMaster)
+                                {
+                                    item.MobileNo = MobileNo;
+                                    contextNew.tblSalesReturnMasters.AddOrUpdate(item);
+                                    contextNew.SaveChanges();
+                                }
+                            }
+
+                            //Inserting in tblSalesReturnMasterClone
+                            var LsttblSalesReturnMasterClone = contextNew.tblSalesReturnMaster_Clone.Where(x => x.MobileNo == oldno).ToList();
+                            if (LsttblSalesReturnMasterClone != null)
+                            {
+                                foreach (var item in LsttblSalesReturnMasterClone)
+                                {
+                                    item.MobileNo = MobileNo;
+                                    contextNew.tblSalesReturnMaster_Clone.AddOrUpdate(item);
+                                    contextNew.SaveChanges();
+                                }
+                            }
+
+                            // Insert into tblTxnProDetailsMaster
+                            var LsttblTxnProDetailsMaster = contextNew.tblTxnProDetailsMasters.Where(x => x.MobileNo == oldno).ToList();
+                            if (LsttblTxnProDetailsMaster != null)
+                            {
+                                foreach (var item in LsttblTxnProDetailsMaster)
+                                {
+                                    item.MobileNo = MobileNo;
+                                    contextNew.tblTxnProDetailsMasters.AddOrUpdate(item);
+                                    contextNew.SaveChanges();
+                                }
+                            }
+
+                            // Insert into tblTxnProDetailsMasterClone
+                            var LsttblTxnProDetailsMasterClone = contextNew.tblTxnProDetailsMaster_Clone.Where(x => x.MobileNo == oldno).ToList();
+                            if (LsttblTxnProDetailsMasterClone != null)
+                            {
+                                foreach (var item in LsttblTxnProDetailsMasterClone)
+                                {
+                                    item.MobileNo = MobileNo;
+                                    contextNew.tblTxnProDetailsMaster_Clone.AddOrUpdate(item);
+                                    contextNew.SaveChanges();
+                                }
+                            }
+
+                            var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == oldno).FirstOrDefault();
+                            tblPtsTransferDetail objPtsTrans = new tblPtsTransferDetail();
+
+                            objPtsTrans.PtsFromMobileNo = oldno;
+                            objPtsTrans.PtsToMobileNo = MobileNo;
+                            objPtsTrans.PtsTransferred = CustData.Points;
+                            objPtsTrans.TxnDatetime = Date;
+                            objPtsTrans.IsActive = true;
+
+                            contextNew.tblPtsTransferDetails.AddOrUpdate(objPtsTrans);
+                            contextNew.SaveChanges();
+
+                            contextNew.tblCustDetailsMasters.AddOrUpdate(objCustomerDetail);
+                            contextNew.tblCustInfoes.AddOrUpdate(ObjtblCustInfo);
+                            contextNew.tblMobileChangeHistories.AddOrUpdate(tblMobChnge);
+
+                            contextNew.SaveChanges();
+
+                            transaction.Commit();
+
+                            result.ResponseCode = "00";
+                            result.ResponseMessage = "Mobile Number Updated Successfully";
+                        }
+                        else
                         {
-                            foreach (var points in lstobjpoints)
-                            {
-                                points.MobileNo = MobileNo;
-                                contextNew.PointsExpiries.AddOrUpdate(points);
-                                contextNew.SaveChanges();
-                            }
-
+                            result.ResponseCode = "01";
+                            result.ResponseMessage = "Mobile Number Already Exist";
                         }
-
-                        objtransferPointsDetail.NewMobileNo = MobileNo;
-                        objtransferPointsDetail.OldMobileNo = oldno;
-                        objtransferPointsDetail.GroupId = GroupId;
-                        objtransferPointsDetail.Datetime = DateTime.Now;
-                        objtransferPointsDetail.Points = objCustomerDetail.Points;
-                        contextNew.TransferPointsDetails.AddOrUpdate(objtransferPointsDetail);
-                        contextNew.SaveChanges();
-
-                        contextNew.CustomerDetails.AddOrUpdate(objCustomerDetail);
-                        contextNew.SaveChanges();
-
-                        result.ResponseCode = "00";
-                        result.ResponseMessage = "Mobile Number Updated Successfully";
                     }
-                    else
-                    {
-                        result.ResponseCode = "01";
-                        result.ResponseMessage = "Mobile Number Already Exist";
-                    }
-
 
                 }
                 using (var context = new CommonDBContext())

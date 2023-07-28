@@ -257,6 +257,20 @@ namespace WebApp.Controllers.ITOPS
             }
             return View();
         }
+
+        public ActionResult ChangeMobileNew()
+        {
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ChangeMobileNew");
+            }
+            return View();
+        }
         public ActionResult GetChangeNameDataNew(string MobileNo, string CardNo)
         {
             MemberData objCustomerDetail = new MemberData();
@@ -294,25 +308,28 @@ namespace WebApp.Controllers.ITOPS
                 tblAudit objAudit = new tblAudit();
                 bool IsSMS = false;
 
-                string MobileNo = string.Empty;
+                string CustomerId = string.Empty;
                 string Name = string.Empty;
+                string MobileNo = string.Empty;
 
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    MobileNo = Convert.ToString(item["CustomerId"]);
+                    CustomerId = Convert.ToString(item["CustomerId"]);
+                    MobileNo = CustomerId.Substring(4);
                     Name = Convert.ToString(item["Name"]);
                     objAudit.GroupId = GroupId;
                     objAudit.RequestedFor = "Name Change";
-                    objAudit.RequestedEntity = "CustomerId - " + MobileNo;
+                    objAudit.RequestedEntity = "CustomerId - " + CustomerId;
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
                     objAudit.AddedBy = userDetails.LoginId;
                     objAudit.AddedDate = DateTime.Now;
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
+
                 }
 
-                result = NewITOPS.UpdateNameOfMember(GroupId, MobileNo, Name, objAudit);
+                result = NewITOPS.UpdateNameOfMember(GroupId, CustomerId, Name, objAudit);
                 if (result)
                 {
                     var subject = "Customer name changed for MobileNo - " + MobileNo;
@@ -367,7 +384,7 @@ namespace WebApp.Controllers.ITOPS
                     IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
 
-                result = ITOPS.UpdateMobileOfMember(groupId, CustomerId, MobileNo, objAudit);
+                result = NewITOPS.UpdateMobileOfMember(groupId, CustomerId, MobileNo, objAudit);
                 if (result.ResponseCode == "00")
                 {
                     var subject = "Customer Mobile Number changed for CustomerId - " + CustomerId;
@@ -389,6 +406,7 @@ namespace WebApp.Controllers.ITOPS
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
         #endregion
 
 

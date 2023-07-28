@@ -377,6 +377,7 @@
     <Compile Include="Models\IndividualDBModels\tblInActiveMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblInActiveMemberDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblLogDetail.cs" />
+    <Compile Include="Models\IndividualDBModels\tblMobileChangeHistory.cs" />
     <Compile Include="Models\IndividualDBModels\tblOTPDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblOutletMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblPointsExpiryMaster.cs" />
@@ -386,6 +387,7 @@
     <Compile Include="Models\IndividualDBModels\tblPromoBlastMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblPromoBlastMemberDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblPromoBlastMemberDetails_Clone.cs" />
+    <Compile Include="Models\IndividualDBModels\tblPtsTransferDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblRuleMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblSalesReturnMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblSalesReturnMaster_Clone.cs" />
