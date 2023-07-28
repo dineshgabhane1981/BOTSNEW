@@ -26,5 +26,8 @@ namespace BOTS_BL.Models.IndividualDBModels
 
         [Column(TypeName = "numeric")]
         public decimal? Points { get; set; }
+
+        [StringLength(20)]
+        public string CustomerId { get; set; }
     }
 }

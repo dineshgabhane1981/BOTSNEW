@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models
+namespace BOTS_BL.Models.IndividualDBModels
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace BOTS_BL.Models
     [Table("tblCustPointsMaster")]
     public partial class tblCustPointsMaster
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long SlNo { get; set; }
 
         [Required]
@@ -35,5 +35,9 @@ namespace BOTS_BL.Models
 
         [Column(TypeName = "numeric")]
         public decimal? MinInvoiceAmtRequired { get; set; }
+
+        [Key]
+        [StringLength(100)]
+        public string MobileNoPtsId { get; set; }
     }
 }
