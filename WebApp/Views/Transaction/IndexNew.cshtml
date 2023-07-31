@@ -1,0 +1,420 @@
+﻿
+@{
+    ViewBag.Title = "IndexNew";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Content/scriptSteps.js"></script>
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container overflow-hidden">
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white" style="height:auto !important;" id="sec12" data-animation="scaleIn">
+                    <h4 class="multisteps-form__title" style="color:blue;">Modify Txn</h4><br />
+                    <div class="multisteps-form__content">
+                        <div>
+                            <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+                            <input type="hidden" id="hdnGroupId" />                            
+                            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                            <input type="number" id="txtMobileNoModify" class="input50" />
+
+                            <label style="padding-right:20px;padding-top:10px;padding-left:20px;"><b>(OR)</b> </label>
+
+                            <label style="padding-right:5px;padding-top:10px;">Enter Invoice Number </label>
+                            <input type="text" id="txtInvoiceNoModify" class="input50" />
+                            <button type="button" id="btnSearchMemberModify" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                        </div>
+
+                        <div style="display:flex; height:auto !important;margin-top:50px;">
+                            <input type="hidden" id="hdnTransactionIdModify" />                            
+                            <table border="1" cellpadding="5" cellspacing="5">
+                                <tr position: absolute top: -9999px; left: -9998px;>
+                                    <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                </tr>
+                                <tr border: 1px solid #ccc;>
+                                    <td style="padding:10px;">Member Name</td>
+                                    <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberNameModify"></span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Mobile No</td>
+                                    <td style="padding:10px;"><span id="spnMobilenoModify"></span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Old Mobile No</td>
+                                    <td style="padding:10px;"><span id="spnOldMobilenoModify"></span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Card No</td>
+                                    <td style="padding:10px;"><span id="spnCardNoModify"></span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Points Balance</td>
+                                    <td style="padding:10px;"><span id="spnPtBalanceModify"></span></td>
+                                </tr>
+
+                            </table>
+
+                            <table border="1" cellpadding="5" cellspacing="5" id="tblUpdateDataModify" style="margin-left:50px;display:none;">
+                                <tr>
+                                    <th colspan="2" style="padding:10px;text-align:center;">Transaction Details</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;width:200px;">Transaction</td>
+                                    <td style="padding:10px;width:200px;">
+                                        <span id="spnTransactionModify"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;width:200px;">Invoice Number</td>
+                                    <td style="padding:10px;width:200px;">
+                                        <span id="spnInvoiceNoModify"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;width:200px;">Invoice Amount</td>
+                                    <td style="padding:10px;width:200px;">
+                                        <span id="spnInvoiceAmtModify"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;width:200px;">Points</td>
+                                    <td style="padding:10px;width:200px;">
+                                        <input class="input50" type="number" id="txtPointsModify" />
+                                        @*<span id="spnPointsModify"></span>*@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Transacting Outlet</td>
+                                    <td style="padding:10px;">
+                                        <span id="spnTransactionOutletModify"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Date / Time</td>
+                                    <td style="padding:10px;">
+                                        <span id="spnTransactionDateTimeModify"></span>
+                                        <span style="display:none;" id="spnTransactionDateTimeModifyOriginal"></span>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Requested by</td>
+                                    <td style="padding:10px;">
+                                        <input type="text" id="txtRequestedByNameModify" placeholder="Requested By" class="input50" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Requested on Forum</td>
+                                    <td style="padding:10px;">
+                                        <select name="ddlRequestedForumModify" id="ddlRequestedForumModify" class="input50">
+                                            <option value="Whatsapp">Whatsapp</option>
+                                            <option value="Email">Email</option>
+                                            <option value="Phone">Phone</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:10px;">Transaction Date</td>
+                                    <td style="padding:10px;"><input type="text" id="txtRequestedDateModify" class="input50" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="button-row d-flex mt-5" style="display:none !important;" id="dvModifyBtn">
+                            <button class="btn btn-primary ml-auto" type="button" title="Delete" id="btnModifyTxn" tabindex="20">Update</button>
+                        </div>
+                        <div class="row mt-3" id="dvActivityDataModify" style="height:800px;">
+                            <div class="table-responsive">
+                                <table class="table" id="activityTableModify">
+                                    <thead style="text-align:center;">
+                                        <tr>
+                                            <th scope="col">Date / Time</th>
+                                            <th scope="col">Invoice No</th>
+                                            <th scope="col">Invoice Amt</th>
+                                            <th scope="col">Txn Type</th>
+                                            <th scope="col">Points</th>
+                                            <th scope="col">Txn Outlet</th>
+                                            <th scope="col">Modify Transaction</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="text-align:center;">
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));   
+      var tableData = [];
+      var tableLogData = [];
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+       // alert(today);
+
+         $('#btnSearchMemberModify').on("click", function () {
+            GetTransactionModifyData();
+          });
+
+         $("#txtRequestedDateModify").datepicker({
+                        dateFormat: "yy-mm-dd",
+                        maxDate: today,
+         });
+         $('#btnModifyTxn').on("click", function () {
+              ModifyTransaction();
+         });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));      
+      });
+                function DrawTableModify() {
+                    var table1 = $('#activityTableModify').DataTable();
+                    table1.destroy();
+
+                    var table = $('#activityTableModify').DataTable({
+
+                        "data": tableData,
+                        "paging": true,
+                        "ordering": false,
+                        "info": true,
+                        "bFilter": true,
+                        "pageLength": 10,
+                        "pagingType": "simple_numbers",
+                        "columns": [
+                            { data: "Datetime" },
+                            { data: "InvoiceNo" },
+                            { data: "InvoiceAmt" },
+                            { data: "TransactionName" },
+                            { data: "Points" },
+                            { data: "OutletName" },
+                            {
+                                "mData": "TransactionId",
+
+                                "mRender": function (data, type, row) {
+                                    return '<a href="#" onclick="GetTransactionToModify(\'' + data + '\')" class="login" title="Edit"><img src="Content/assets/images/shape_editUser.png" /></a>';
+
+
+                                    //return '<button href="#"' + 'id="' + data + '">Edit</button>';
+                                }
+                            }
+                        ],
+                        aoColumnDefs: [
+                            {
+                                bSortable: false,
+                                aTargets: []
+                            }
+                        ]
+                    });
+                    $('#activityTableModify_filter').hide();
+                    $('#txtSearch').on('keyup', function () {
+
+                        $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                            var term = $('#txtSearch').val().toLowerCase()
+                            for (var i = 0; i < searchData.length; i++) {
+                                if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        });
+                        var table = $('#activityTableModify').DataTable();
+                        table.draw();
+                    });
+                }
+
+    function GetTransactionModifyData() {
+        var InvNo = "";
+            if ($('#txtMobileNoModify').val() == "" && $('#txtInvoiceNoModify').val() == "") {
+                toastr.error('Please enter Mobile Number OR Invoice Number');
+                return false
+            }
+            if ($('#txtMobileNoModify').val() != "" && $('#txtInvoiceNoModify').val() != "") {
+                toastr.error('Please enter Mobile Number OR Invoice Number');
+                return false
+            }
+            if ($('#txtInvoiceNoModify').val() != "") {
+                InvNo = $('#txtInvoiceNoModify').val();
+            }
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCancelTxnDataNew", "Transaction")',//"/ITOperations/GetCancelTxnData",
+            data: '{MobileNo: ' + JSON.stringify($('#txtMobileNoModify').val()) + ',InvoiceNo: ' + JSON.stringify(InvNo) +'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                if (result.objMemberData != null) {                    
+                    $("#spnMemberNameModify").text(result.objMemberData.MemberName);
+                    $("#spnMobilenoModify").text(result.objMemberData.MobileNo);
+                    $("#spnOldMobilenoModify").text(result.objMemberData.OldMobileNo);
+                    $("#spnCardNoModify").text(result.objMemberData.CardNumber);
+                    $("#spnPtBalanceModify").text(result.objMemberData.PointsBalance);
+
+                    if (result.objCancelTxnModel != null) {                        
+                        tableData.length = 0;
+                        $("#hdnTransactionIdModify").val(result.objCancelTxnModel.TransactionId);                        
+                        $("#spnTransactionModify").text(result.objCancelTxnModel.TransactionName);
+                        $("#spnInvoiceNoModify").text(result.objCancelTxnModel.InvoiceNo);
+                        var index = result.objCancelTxnModel.InvoiceAmt.toString().indexOf('.');
+                        if (index > -1) {
+                            $("#spnInvoiceAmtModify").text(result.objCancelTxnModel.InvoiceAmt);
+                        }
+                        else {
+                            $("#spnInvoiceAmtModify").text(result.objCancelTxnModel.InvoiceAmt + ".00");
+                        }
+                        $("#txtPointsModify").val(result.objCancelTxnModel.Points);
+                        //$("#spnPointsModify").text(result.objCancelTxnModel.Points);
+                        $("#spnTransactionOutletModify").text(result.objCancelTxnModel.OutletName);
+                        $("#spnTransactionDateTimeModify").text(result.objCancelTxnModel.Datetime);
+                        $("#spnTransactionDateTimeModify").text(result.objCancelTxnModel.DatetimeOriginal);
+
+                        $('#ddlRequestedForumModify').prop('selectedIndex', 0);
+                        $("#tblUpdateDataModify").show();
+                        $("#dvModifyBtn").show();
+                        tableData.length = 0;
+                    }
+                    if (result.lstCancelTxnModel != null) {
+                            tableData.length = 0;
+                            $.map(result.lstCancelTxnModel, function (item) {
+                                optionItem = {}
+                                optionItem["Datetime"] = item.Datetime;
+                                optionItem["InvoiceNo"] = item.InvoiceNo;
+                                optionItem["InvoiceAmt"] = item.InvoiceAmt;
+                                optionItem["TransactionName"] = item.TransactionName;
+                                optionItem["Points"] = item.Points;
+                                optionItem["OutletName"] = item.OutletName;
+                                optionItem["TransactionId"] = item.TransactionId;
+                                tableData.push(optionItem);
+                            });
+                            DrawTableModify();
+                            $("#tblUpdateDataModify").hide();
+                            $("#dvModifyBtn").attr('style', 'display:none !important');
+
+                    }
+                }
+                else
+                {
+                    toastr.error('Transaction not present. Please check entered Mobile Number OR Invoice Number');
+                    $("#tblUpdateDataModify").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function GetTransactionToModify(TransactionId) {
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetModifyTxnDataNew", "Transaction")',//"/ITOperations/GetCancelTxnData",
+            data: '{TransactionId: ' + JSON.stringify(TransactionId) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                if (result.objCancelTxnModel != null) {
+                        $("#hdnTransactionIdModify").val(TransactionId);                    
+                        $("#spnTransactionModify").text(result.objCancelTxnModel.TransactionName);
+                        $("#spnInvoiceNoModify").text(result.objCancelTxnModel.InvoiceNo);
+                        var index = result.objCancelTxnModel.InvoiceAmt.toString().indexOf('.');
+                        if (index > -1) {
+                            $("#spnInvoiceAmtModify").text(result.objCancelTxnModel.InvoiceAmt);
+                        }
+                        else {
+                            $("#spnInvoiceAmtModify").text(result.objCancelTxnModel.InvoiceAmt+".00");
+                        }
+                        $("#txtPointsModify").val(result.objCancelTxnModel.Points);
+                        $("#spnTransactionOutletModify").text(result.objCancelTxnModel.OutletName);
+                        $("#spnTransactionDateTimeModify").text(result.objCancelTxnModel.Datetime);
+                        $("#spnTransactionDateTimeModify").text(result.objCancelTxnModel.DatetimeOriginal);
+
+                        $('#ddlRequestedForumModify').prop('selectedIndex', 0);
+                        $("#tblUpdateDataModify").show();
+                        $("#dvModifyBtn").show();
+                        tableData.length = 0;
+                        DrawTableModify();
+                }
+                else {
+                    toastr.error('Transaction not present. Please check entered Mobile Number OR Invoice Number');
+                    $("#tblUpdateDataModify").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function ModifyTransaction() {
+
+        if ($("#txtRequestedByNameModify").val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByNameModify').focus();
+            return false;
+        }
+        else if ($("#txtRequestedDateModify").val() == "") {
+            toastr.error('Please select transaction date');
+            $('#txtRequestedDateModify').focus();
+            return false;
+        }
+        else {            
+            var MemberData = [];
+            item = {}            
+            item["Points"] = $("#txtPointsModify").val();
+            item["TransactionId"] = $("#hdnTransactionIdModify").val();
+            item["RequestedBy"] = $("#txtRequestedByNameModify").val();
+            item["RequestedForum"] = $('#ddlRequestedForumModify :selected').text();
+            item["RequestedOn"] = $("#txtRequestedDateModify").val();
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ModifyTransactionNew", "Transaction")',//"/ITOperations/DeleteTransaction",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Points Modified Successfully !!!");
+                        $("#tblUpdateDataModify").hide();
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        toastr.error('error occured while updating data');
+                        $("#divLoader").hide();
+                    }
+                }
+
+
+
+            });
+
+
+        }
+    }
+
+</script>
+

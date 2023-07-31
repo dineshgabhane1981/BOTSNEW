@@ -23,6 +23,7 @@ namespace WebApp.Controllers.ITOPS
         ITOpsRepository ITOPS = new ITOpsRepository();
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
+        ITOPSNEWRepository NewITOPS = new ITOPSNEWRepository();
         Exceptions newexception = new Exceptions();
         // GET: Transaction
         public ActionResult Index()
@@ -76,7 +77,6 @@ namespace WebApp.Controllers.ITOPS
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult GetModifyTxnData(string TransactionId)
         {
             //string GroupId = "";
@@ -92,7 +92,6 @@ namespace WebApp.Controllers.ITOPS
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-
         public bool ModifyTransaction(string jsonData)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -260,6 +259,121 @@ namespace WebApp.Controllers.ITOPS
             }
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
+        }
+
+        /////////// ITOPS NEW /////////////
+
+        public ActionResult IndexNew()
+        {
+            try
+            {
+                var groupId = (string)Session["GroupId"];
+                if (!string.IsNullOrEmpty(groupId))
+                {
+                    CommonFunctions common = new CommonFunctions();                    
+                    Session["GroupId"] = groupId;
+                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    userDetails.GroupId = groupId;
+                    userDetails.connectionString = NewITOPS.GetCustomerConnString(groupId);
+                    userDetails.CustomerName = objCustRepo.GetCustomerName(groupId);
+                    Session["UserSession"] = userDetails;
+                    Session["buttons"] = "ITOPS";
+                    ViewBag.GroupId = groupId;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "IndexNew");
+            }
+            return View();
+        }
+        public ActionResult GetCancelTxnDataNew(string MobileNo, string InvoiceNo)
+        {
+            var groupId = (string)Session["GroupId"];
+            MemberData objCustomerDetails = new MemberData();
+            CancelTxnViewModel objData = new CancelTxnViewModel();
+            try
+            {
+                if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+                {
+
+                    objData.objCancelTxnModel = NewITOPS.GetTransactionByInvoiceNoAndMobileNo(groupId, MobileNo, InvoiceNo);
+                    objData.objMemberData = NewITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+                }
+                else if (!string.IsNullOrEmpty(InvoiceNo))
+                {
+                    objData.objCancelTxnModel = NewITOPS.GetTransactionByInvoiceNo(groupId, InvoiceNo);
+                    objData.objMemberData = NewITOPS.GetCustomerByMobileNo(groupId, objData.objCancelTxnModel.MobileNo);                    
+                }
+                else if (!string.IsNullOrEmpty(MobileNo))
+                {
+                    objData.objMemberData = NewITOPS.GetCustomerByMobileNo(groupId, MobileNo);
+                    objData.lstCancelTxnModel = NewITOPS.GetTransactionByMobileNo(groupId, MobileNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCancelTxnData");
+            }
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetModifyTxnDataNew(string TransactionId)
+        {
+            //string GroupId = "";
+            var groupId = (string)Session["GroupId"];
+            CancelTxnViewModel objData = new CancelTxnViewModel();
+            try
+            {
+                objData.objCancelTxnModel = NewITOPS.GetTransactionByTransactionId(groupId, TransactionId);                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetModifyTxnDataNew");
+            }
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public bool ModifyTransactionNew(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            bool result = false;
+            string GroupId = "";
+            try
+            {
+                var groupId = (string)Session["GroupId"];
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblAudit objAudit = new tblAudit();
+                //string GroupId = "";
+                string TransactionId = "";
+                decimal points = 0;
+
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = groupId;
+                    TransactionId = Convert.ToString(item["TransactionId"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
+                    {
+                        points = Convert.ToDecimal(item["Points"]);
+                    }
+                    objAudit.GroupId = groupId;
+                    objAudit.RequestedFor = "Add / Earn";
+                    objAudit.RequestedEntity = "Transaction For  - " + TransactionId;
+                    objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
+                    objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
+                    objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
+                    objAudit.AddedBy = userDetails.LoginId;
+                    objAudit.AddedDate = DateTime.Now;
+
+                }
+                result = NewITOPS.ModifyTransaction(groupId, Convert.ToInt64(TransactionId), points, objAudit);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ModifyTransaction");
+            }
+            return result;
         }
     }
 }

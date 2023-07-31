@@ -12,5 +12,6 @@ namespace WebApp.ViewModel
         public CustomerDetail objCustomerDetail { get; set; }
         public CancelTxnModel objCancelTxnModel { get; set; }
         public List<CancelTxnModel> lstCancelTxnModel { get; set; }
+        public MemberData objMemberData { get; set; }
     }
 }

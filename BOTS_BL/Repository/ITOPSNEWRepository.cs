@@ -853,24 +853,21 @@ namespace BOTS_BL.Repository
             {
                 TransactionMaster objTxn = new TransactionMaster();
                 CustomerDetail objCustomerDetail = new CustomerDetail();
-                string connStr =  GetCustomerConnString(GroupId);
+                string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.Status == "06").FirstOrDefault();
-                }
-                if (objTxn != null)
-                {
-                    objReturn.InvoiceNo = objTxn.InvoiceNo;
-                    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
-                    objReturn.MobileNo = objTxn.MobileNo;
-                    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
-                    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
-                    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
-                    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
-                    using (var contextNew = new BOTSDBContext(connStr))
+                    var CustData = contextNew.View_ITOPSCustTxnData.Where(x => x.InvoiceNo == InvoiceNo).FirstOrDefault();
+
+                    if (CustData != null)
                     {
-                        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
-                        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
+                        objReturn.InvoiceNo = CustData.InvoiceNo;
+                        objReturn.InvoiceAmt = CustData.InvoiceAmt;
+                        objReturn.MobileNo = CustData.MobileNo;
+                        objReturn.Points = Convert.ToString(CustData.PointsEarned);
+                        objReturn.DatetimeOriginal = CustData.TxnDatetime.Value.ToString("dd/MM/yyyy");
+                        objReturn.OutletName = CustData.OutletName;
+                        objReturn.TransactionName = CustData.TxnType;
+                        objReturn.TransactionId = CustData.SlNo;
                     }
                 }
             }
@@ -880,6 +877,7 @@ namespace BOTS_BL.Repository
             }
             return objReturn;
         }
+
         public CancelTxnModel GetTransactionByTransactionId(string GroupId, string TransactionId)
         {
             CancelTxnModel objReturn = new CancelTxnModel();
@@ -887,26 +885,38 @@ namespace BOTS_BL.Repository
             {
                 TransactionMaster objTxn = new TransactionMaster();
                 CustomerDetail objCustomerDetail = new CustomerDetail();
-                string connStr =  GetCustomerConnString(GroupId);
+                string connStr = GetCustomerConnString(GroupId);
                 long TxnId = Convert.ToInt64(TransactionId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objTxn = contextNew.TransactionMasters.Where(x => x.SlNo == TxnId).FirstOrDefault();
-                }
-                if (objTxn != null)
-                {
-                    objReturn.TransactionId = objTxn.SlNo;
-                    objReturn.InvoiceNo = objTxn.InvoiceNo;
-                    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
-                    objReturn.MobileNo = objTxn.MobileNo;
-                    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
-                    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
-                    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
-                    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
-                    using (var contextNew = new BOTSDBContext(connStr))
+                    //    objTxn = contextNew.TransactionMasters.Where(x => x.SlNo == TxnId).FirstOrDefault();
+                    //}
+                    //if (objTxn != null)
+                    //{
+                    //    objReturn.TransactionId = objTxn.SlNo;
+                    //    objReturn.InvoiceNo = objTxn.InvoiceNo;
+                    //    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
+                    //    objReturn.MobileNo = objTxn.MobileNo;
+                    //    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
+                    //    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
+                    //    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
+                    //    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
+                    //    using (var contextNew = new BOTSDBContext(connStr))
+                    //    {
+                    //        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
+                    //        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
+                    //    }
+                    var CustData = contextNew.View_ITOPSCustTxnData.Where(x => x.SlNo == TxnId).FirstOrDefault();
+
+                    if (CustData != null)
                     {
-                        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
-                        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
+                        objReturn.InvoiceNo = CustData.InvoiceNo;
+                        objReturn.InvoiceAmt = CustData.InvoiceAmt;
+                        objReturn.MobileNo = CustData.MobileNo;
+                        objReturn.Points = Convert.ToString(CustData.PointsEarned);
+                        objReturn.DatetimeOriginal = CustData.TxnDatetime.Value.ToString("dd/MM/yyyy");
+                        objReturn.OutletName = CustData.OutletName;
+                        objReturn.TransactionName = CustData.TxnType;
                     }
                 }
             }
@@ -916,6 +926,7 @@ namespace BOTS_BL.Repository
             }
             return objReturn;
         }
+
         public CancelTxnModel GetTransactionByInvoiceNoAndMobileNo(string GroupId, string MobileNo, string InvoiceNo)
         {
             CancelTxnModel objReturn = new CancelTxnModel();
@@ -926,21 +937,34 @@ namespace BOTS_BL.Repository
                 string connStr =  GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.MobileNo == MobileNo && x.Status == "06").FirstOrDefault();
-                }
-                if (objTxn != null)
-                {
-                    objReturn.InvoiceNo = objTxn.InvoiceNo;
-                    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
-                    objReturn.MobileNo = objTxn.MobileNo;
-                    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
-                    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
-                    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
-                    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
-                    using (var contextNew = new BOTSDBContext(connStr))
+                    //    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.MobileNo == MobileNo && x.Status == "06").FirstOrDefault();
+                    //}
+                    //if (objTxn != null)
+                    //{
+                    //    objReturn.InvoiceNo = objTxn.InvoiceNo;
+                    //    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
+                    //    objReturn.MobileNo = objTxn.MobileNo;
+                    //    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
+                    //    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
+                    //    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
+                    //    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
+                    //    using (var contextNew = new BOTSDBContext(connStr))
+                    //    {
+                    //        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
+                    //        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
+                    //    }
+
+                    var CustData = contextNew.View_ITOPSCustTxnData.Where(x => x.MobileNo == MobileNo && x.InvoiceNo == InvoiceNo).FirstOrDefault();
+
+                    if (CustData != null)
                     {
-                        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
-                        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
+                        objReturn.InvoiceNo = CustData.InvoiceNo;
+                        objReturn.InvoiceAmt = CustData.InvoiceAmt;
+                        objReturn.MobileNo = CustData.MobileNo;
+                        objReturn.Points = Convert.ToString(CustData.PointsEarned);
+                        objReturn.DatetimeOriginal = CustData.TxnDatetime.Value.ToString("dd/MM/yyyy");
+                        objReturn.OutletName = CustData.OutletName;
+                        objReturn.TransactionName = CustData.TxnType;
                     }
                 }
             }
@@ -955,30 +979,28 @@ namespace BOTS_BL.Repository
             List<CancelTxnModel> lstObjReturn = new List<CancelTxnModel>();
             try
             {
-                List<TransactionMaster> lstObjTxn = new List<TransactionMaster>();
-                string connStr =  GetCustomerConnString(GroupId);
+                List<View_ITOPSCustTxnData> lstObjTxn = new List<View_ITOPSCustTxnData>();
+                string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    lstObjTxn = contextNew.TransactionMasters.Where(x => x.MobileNo == MobileNo && x.Status == "06").OrderByDescending(m => m.Datetime).ToList();
-                }
-                if (lstObjTxn != null)
-                {
-                    foreach (var objTxn in lstObjTxn)
+                    lstObjTxn = contextNew.View_ITOPSCustTxnData.Where(x => x.MobileNo == MobileNo).ToList();
+                    if (lstObjTxn != null)
                     {
-                        CancelTxnModel objReturn = new CancelTxnModel();
-                        objReturn.TransactionId = objTxn.SlNo;
-                        objReturn.InvoiceNo = objTxn.InvoiceNo;
-                        objReturn.InvoiceAmt = objTxn.InvoiceAmt;
-                        objReturn.MobileNo = objTxn.MobileNo;
-                        objReturn.Points = Convert.ToString(objTxn.PointsEarned);
-                        objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
-                        var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
-                        using (var contextNew = new BOTSDBContext(connStr))
+                        foreach (var objTxn in lstObjTxn)
                         {
-                            objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
-                            objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
+                            CancelTxnModel objReturn = new CancelTxnModel();
+                            objReturn.TransactionId = objTxn.SlNo;
+                            objReturn.InvoiceNo = objTxn.InvoiceNo;
+                            objReturn.InvoiceAmt = objTxn.InvoiceAmt;
+                            objReturn.MobileNo = objTxn.MobileNo;
+                            objReturn.Points = Convert.ToString(objTxn.PointsEarned);
+                            objReturn.Datetime = Convert.ToDateTime(objTxn.TxnDatetime).ToString("dd/MM/yyyy HH:mm:ss");
+                            objReturn.OutletName = objTxn.OutletName;
+                            objReturn.TransactionName = objTxn.TxnType;
+
+                            lstObjReturn.Add(objReturn);
                         }
-                        lstObjReturn.Add(objReturn);
+
                     }
                 }
             }
@@ -988,22 +1010,33 @@ namespace BOTS_BL.Repository
             }
             return lstObjReturn;
         }
-        public CustomerDetail GetCustomerByMobileNo(string GroupId, string MobileNo)
+        public MemberData GetCustomerByMobileNo(string GroupId, string MobileNo)
         {
+            MemberData objMemberData = new MemberData();
             CustomerDetail objCustomerDetail = new CustomerDetail();
             try
             {
-                string connStr =  GetCustomerConnString(GroupId);
+                string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+
+                    if (CustData != null)
+                    {
+                        objMemberData.MemberName = CustData.CustomerName;
+                        objMemberData.MobileNo = CustData.MobileNo;
+                        objMemberData.CardNo = CustData.CardNo;
+                        objMemberData.PointsBalance = CustData.Points;
+                        objMemberData.EnrolledOn = CustData.DOJ.Value.ToString("dd/MM/yyyy");
+                        objMemberData.EnrolledOutletName = CustData.EnrolledOutlet;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "GetCustomerByMobileNo");
             }
-            return objCustomerDetail;
+            return objMemberData;
         }
 
         public SPResponse DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, DateTime ip_Date, tblAudit objAudit)
@@ -1093,47 +1126,37 @@ namespace BOTS_BL.Repository
             string connStr =  GetCustomerConnString(GroupId);
             try
             {
+                long Points = Convert.ToInt64(points);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     using (DbContextTransaction transaction = contextNew.Database.BeginTransaction())
                     {
                         try
                         {
-                            var objTransaction = contextNew.TransactionMasters.Where(x => x.SlNo == TransactionId).FirstOrDefault();
-                            var customerDetails = contextNew.CustomerDetails.Where(x => x.MobileNo == objTransaction.MobileNo).FirstOrDefault();
-                            //var PointExpiry = contextNew.PointsExpiries.Where(x => x.MobileNo == objTransaction.MobileNo && x.Status == "00").ToList();
-                            //var NewPointExpiry = contextNew.PointsExpiries.Where(x => x.MobileNo == objTransaction.MobileNo && x.Status == "00").OrderByDescending(y => y.ExpiryDate).FirstOrDefault();
+                            //var objTransaction = contextNew.TransactionMasters.Where(x => x.SlNo == TransactionId).FirstOrDefault();
+                            //var customerDetails = contextNew.CustomerDetails.Where(x => x.MobileNo == objTransaction.MobileNo).FirstOrDefault();
+                            //var oldTransactionPoints = objTransaction.PointsEarned;
 
-                            var oldTransactionPoints = objTransaction.PointsEarned;
+                            var objTxnDetail = contextNew.tblTxnDetailsMasters.Where(x => x.SlNo == TransactionId).FirstOrDefault();
+                            var objCustTxnSummary = contextNew.tblCustTxnSummaryMasters.Where(x => x.MobileNo == objTxnDetail.MobileNo).FirstOrDefault();
+                            var objCustPointsMaster = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == objTxnDetail.MobileNo).FirstOrDefault();
+                            var oldTransactionPoints = objTxnDetail.PointsEarned;
 
-                            objTransaction.PointsEarned = points;
-                            contextNew.TransactionMasters.AddOrUpdate(objTransaction);
+                            objTxnDetail.PointsEarned = Points;
+                            objTxnDetail.CustBalancePts = (objTxnDetail.CustBalancePts - oldTransactionPoints) + Points;
+                            contextNew.tblTxnDetailsMasters.AddOrUpdate(objTxnDetail);
                             contextNew.SaveChanges();
 
-                            //foreach (var item in PointExpiry)
-                            //{
-                            //    item.Status = "01";
-                            //    contextNew.PointsExpiries.AddOrUpdate(item);
-                            //    contextNew.SaveChanges();
-                            //}
-
-                            //PointsExpiry objPointExpiry = new PointsExpiry();
-                            //objPointExpiry.Points = (customerDetails.Points - oldTransactionPoints) + points;
-                            //objPointExpiry.CounterId = NewPointExpiry.CounterId;
-                            //objPointExpiry.MobileNo = NewPointExpiry.MobileNo;
-                            //objPointExpiry.Datetime = DateTime.Now;
-                            //objPointExpiry.EarnDate = NewPointExpiry.EarnDate;
-                            //objPointExpiry.ExpiryDate = NewPointExpiry.ExpiryDate;
-                            //objPointExpiry.Status = "00";
-                            //objPointExpiry.InvoiceNo = NewPointExpiry.InvoiceNo;
-                            //objPointExpiry.GroupId = NewPointExpiry.GroupId;
-                            //objPointExpiry.CustomerId = NewPointExpiry.CustomerId;
-
-                            //contextNew.PointsExpiries.AddOrUpdate(objPointExpiry);
+                            //customerDetails.Points = (customerDetails.Points - oldTransactionPoints) + points;
+                            //contextNew.CustomerDetails.AddOrUpdate(customerDetails);
                             //contextNew.SaveChanges();
 
-                            customerDetails.Points = (customerDetails.Points - oldTransactionPoints) + points;
-                            contextNew.CustomerDetails.AddOrUpdate(customerDetails);
+                            objCustTxnSummary.EarnPts = (Convert.ToInt64(objCustTxnSummary.EarnPts - oldTransactionPoints)) + Points;
+                            contextNew.tblCustTxnSummaryMasters.AddOrUpdate(objCustTxnSummary);
+                            contextNew.SaveChanges();
+
+                            objCustPointsMaster.Points = (Convert.ToInt64(objCustPointsMaster.Points - oldTransactionPoints)) + Points;
+                            contextNew.tblCustPointsMasters.AddOrUpdate(objCustPointsMaster);
                             contextNew.SaveChanges();
 
                             using (var context = new CommonDBContext())

@@ -42,10 +42,10 @@ namespace BOTS_BL.Models
 
         public long? BurnAmtWithoutPts { get; set; }
 
-        public long? BurnPts { get; set; }
+        public decimal? BurnPts { get; set; }
 
-        public long? EarnPts { get; set; }
-        public long? SalesReturnPtsGiven { get; set; }
-        public long ? SalesReturnPtsRemoved { get; set; }
+        public decimal? EarnPts { get; set; }
+        public decimal? SalesReturnPtsGiven { get; set; }
+        public decimal ? SalesReturnPtsRemoved { get; set; }
     }
 }
