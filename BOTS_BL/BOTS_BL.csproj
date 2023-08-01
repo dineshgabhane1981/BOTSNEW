@@ -493,7 +493,6 @@
     <Compile Include="Models\tblNPCDetail.cs" />
     <Compile Include="Models\tblNPCSubCategory.cs" />
     <Compile Include="Models\tblProductMaster.cs" />
-    <Compile Include="Models\tblPtsTransferDetail.cs" />
     <Compile Include="Models\tblStandardRulesSetting.cs" />
     <Compile Include="Models\tblUniquePoint.cs" />
     <Compile Include="Models\TelecallerReport.cs" />
