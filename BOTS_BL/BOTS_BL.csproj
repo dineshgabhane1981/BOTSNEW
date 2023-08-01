@@ -340,7 +340,6 @@
     <Compile Include="Models\IndividualDBModels\GinesysRedeemModel.cs" />
     <Compile Include="Models\IndividualDBModels\ListReferringBase.cs" />
     <Compile Include="Models\IndividualDBModels\MemberListAllData.cs" />
-    <Compile Include="Models\IndividualDBModels\Model1.cs" />
     <Compile Include="Models\IndividualDBModels\PointExpiryDummyModel.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpCustDetailList.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpMasterAllData.cs" />

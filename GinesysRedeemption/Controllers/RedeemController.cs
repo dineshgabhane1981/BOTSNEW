@@ -18,10 +18,7 @@ namespace GinesysRedeemption.Controllers
         Exceptions newexception = new Exceptions();
         // GET: Redeem
         public ActionResult Index(string token)
-        {
-            string storeid = string.Empty;
-            string mobileno = string.Empty;
-            string billvalue = string.Empty;
+        {            
             CommonFunctions common = new CommonFunctions();
             GinesysRedeemModel objRedeemData = new GinesysRedeemModel();
             if (!string.IsNullOrEmpty(token))
@@ -45,6 +42,11 @@ namespace GinesysRedeemption.Controllers
                         var billvalueParam = item.Split('=');
                         objRedeemData.InvoiceAmount = billvalueParam[1];
                     }
+                    if (item.Contains("billGUID"))
+                    {
+                        var billGUIDParam = item.Split('=');
+                        objRedeemData.billGUID = billGUIDParam[1];
+                    }
                 }
                 objRedeemData = GRR.GetCustomerDetails(objRedeemData);
 
@@ -55,11 +57,13 @@ namespace GinesysRedeemption.Controllers
         {
             var BaseUrl = ConfigurationManager.AppSettings["RedeemBaseUrl"];
             string storeid = "8888888888";
+            string billGUID = "D4E8010B-7164-46ED-8F3D-43F8B257291820180309143018907";
             string mobileno = "9003552567";
             string billvalue = "2000";
             string token = "storeid=" + storeid;
             token += "&mobileno=" + mobileno;
             token += "&billvalue=" + billvalue;
+            token += "&billGUID=" + billGUID;
             string entoken = common.EncryptString(token);
             string url = BaseUrl + "?token=" + entoken;
             ViewBag.URL = url;
@@ -67,14 +71,12 @@ namespace GinesysRedeemption.Controllers
         }
 
         [HttpPost]
-        public ActionResult BurnValidation(string Points,string InvoiceAmt,string MobileNo)
+        public ActionResult BurnValidation(string Points,string InvoiceAmt,string MobileNo,string StoreId)
         {
-            BurnValidateResponse ObjResponse = new BurnValidateResponse();
-            string storeid = "8888888888";
+            BurnValidateResponse ObjResponse = new BurnValidateResponse();           
             try 
             {
-
-                ObjResponse = GRR.BurnValidation(storeid, Points, InvoiceAmt, MobileNo);
+                ObjResponse = GRR.BurnValidation(StoreId, Points, InvoiceAmt, MobileNo);
             }
             catch(Exception ex)
             {

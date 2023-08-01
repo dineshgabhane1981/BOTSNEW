@@ -1,27 +1,47 @@
 ﻿@model WebApp.ViewModel.CustomizeMetricsViewModel
 @{
-    ViewBag.Title = "CustomizeMetrics";
+    ViewBag.Title = "Customize Metrics";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner" id="dvall">
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
         <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
-            <div class="row mt-4" id="secTransaction">
+            
+        </div>
+        <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
+            <div class="row mt-4 col-md-12 col-xl-12">
+                <input type="checkbox" id="chkTransacting" name="firstFilters" style="width:20px; cursor:pointer;" /> &nbsp; Transacting
+                <input type="checkbox" id="chkEnrolledNonTransacting" name="firstFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Enrolled Non Transacting
+                <input type="checkbox" id="chkBulkUpload" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Bulk Upload
+                <input type="checkbox" id="chkReferral" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Referral
+                <input type="checkbox" id="chkDLCRegistered" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;DLC Registered
+            </div>
+            <div class="row mt-4 col-md-12 col-xl-12" id="dvTxnFilters" style="display:none;">
+                <input type="checkbox" id="chkTxnOnlyOnce" name="secondFilters" style="width:20px; cursor:pointer;" /> &nbsp; Only Once
+                <input type="checkbox" id="chkTxnInactive" name="secondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Inactive
+                <input type="checkbox" id="chkTxnNonRedeemed" name="secondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Non Redeemed
+                <input type="checkbox" id="chkTxnCumiulative" name="secondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Cumulative Count/Spend
+            </div>
+            <div class="row mt-4 col-md-12 col-xl-12" id="dvDLCReferalFilters" style="display:none;">
+                <input type="radio" id="rbtnAll" name="DLCReferalFilters" style="width: 20px; height: 20px;cursor:pointer;" /> &nbsp;All
+                <input type="radio" id="rbtnTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Transacting
+                <input type="radio" id="rbtnNonTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" />&nbsp;Non Transacting
+            </div>
+            
+
+
+            <div class="row mt-4 col-md-12 col-xl-12" id="secTransaction">
                 <div class="col-xl-3">
-                    Enrolled Since (days)
-                </div>
-                <div class="col-xl-4">
-                    <input type="radio" id="rdnDateRange" name="dtrangesince" style="width: 20px; height: 20px;cursor:pointer;" /> Date Range &nbsp;&nbsp;
-                    <input type="radio" id="rdnEnrolled" name="dtrangesince" style="width: 20px; height: 20px;cursor:pointer;" /> Enrolled Since
-                </div>
-                <div class="col-xl-5" style="display:none" id="divDateRange">
+                    Enrolled Range
+                </div>                
+                <div class="col-xl-9 row" id="divDateRange">
+                    from <br />
                     <input type="date" id="txtEnrollfromdt" class="input50" placeholder="From Enrolled" />
+                    to <br />
                     <input type="date" id="txtEnrolltodt" class="input50" placeholder="To Enrolled" />
                 </div>
-                <div class="col-xl-3" style="display:none" id="divDays">
-                    <input type="text" id="txtEnrolldays" class="input50" placeholder="Enter days" />
-                </div>
+                
             </div>
             <div class="row mt-3">
                 <div class="col-xl-3">
@@ -39,12 +59,12 @@
                     @Html.DropDownListFor(model => model.Spend, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
                 </div>
                 <div class="col-xl-6">
-                    <input type="number" id="txtSpendMin" class="input50" placeholder="From Spend" style="display:none;"/>
+                    <input type="number" id="txtSpendMin" class="input50" placeholder="From Spend" style="display:none;" />
                     <input type="number" id="txtSpendMax" class="input50" placeholder="To Spend" style="display:none;" />
                 </div>
             </div>
         </div>
-    </div>
+        </div>
 </div>
 
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
@@ -53,16 +73,31 @@
 <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
 <script>
-    $(document).ready(function () {
-        $('#rdnDateRange').change(function () {
-            $('#divDays').hide();
-            $('#divDateRange').show();
-        });
-        $('#rdnEnrolled').change(function () {
-            $('#divDays').show();
-            $('#divDateRange').hide();
+    $(document).ready(function () {        
+        $('input[type="checkbox"]').on('change', function () {
+            $('input[name="' + this.name + '"]').not(this).prop('checked', false);
+            ShowSecondFilters();
         });
     });
+    function ShowSecondFilters() {
+        if ($("#chkTransacting").is(":checked")) {
+            $("#dvTxnFilters").show();
+        }
+        else if ($("#chkReferral").is(":checked")) {
+            $("#dvTxnFilters").hide();
+            $("#dvDLCReferalFilters").show();
+            
+        }
+        else if ($("#chkDLCRegistered").is(":checked")) {
+            $("#dvTxnFilters").hide();
+            $("#dvDLCReferalFilters").show();
+        }
+        else {
+            $("#dvTxnFilters").hide();
+            $("#dvDLCReferalFilters").hide();
+        }
+    }
+
     $("#ddlSpend").change(function () {
         var selected = $("#ddlSpend option:selected").text();
         if (selected == 'Between') {

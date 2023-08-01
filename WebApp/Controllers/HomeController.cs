@@ -353,9 +353,10 @@ namespace WebApp.Controllers
                 var _Password = "bluoct87";
                 var _MobileNo = emailId;
                 var _Sender = "BLUEOC";
-                var _Url = "https://http2.myvfirst.com/smpp/sendsms?";
+                var _Url = "http://sms.visionhlt.com:8080/api/mt/SendSMS";
+                var _SMSAPIKey = "iK474VMKbkCvi2u8ppclXg";
 
-                status = SendSMS(_MobileMessage, _UserName, _Password, _MobileNo, _Sender, _Url);
+                status = SendSMS(_MobileMessage, _UserName, _Password, _MobileNo, _Sender, _Url, _SMSAPIKey);
             }
             catch (Exception ex)
             {
@@ -365,37 +366,38 @@ namespace WebApp.Controllers
             //return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public bool SendSMS(string _MobileMessage, string _UserName, string _Password, string _MobileNo, string _Sender, string _Url)
+        public bool SendSMS(string _MobileMessage, string _UserName, string _Password, string _MobileNo, string _Sender, string _Url, string _SMSAPIKey)
         {
             bool status = false;
             try
             {
-                _MobileMessage = _MobileMessage.Replace("#99", "&");
-                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-                string type1 = "TEXT";
-                StringBuilder sbposdata1 = new StringBuilder();
-                sbposdata1.AppendFormat("username={0}", _UserName);
-                sbposdata1.AppendFormat("&password={0}", _Password);
-                sbposdata1.AppendFormat("&to={0}", _MobileNo);
-                sbposdata1.AppendFormat("&from={0}", _Sender);//BLUEOC
-                sbposdata1.AppendFormat("&text={0}", _MobileMessage);
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(_Url);
-                UTF8Encoding encoding1 = new UTF8Encoding();
-                byte[] data1 = encoding1.GetBytes(sbposdata1.ToString());
-                httpWReq1.Method = "POST";
-                httpWReq1.ContentType = "application/x-www-form-urlencoded";
-                httpWReq1.ContentLength = data1.Length;
-                using (Stream stream1 = httpWReq1.GetRequestStream())
+
+                var httpWebRequest_00003 = (HttpWebRequest)WebRequest.Create(_Url);
+                httpWebRequest_00003.ContentType = "application/json";
+                httpWebRequest_00003.Method = "POST";
+
+                using (var streamWriter_00003 = new StreamWriter(httpWebRequest_00003.GetRequestStream()))
                 {
-                    stream1.Write(data1, 0, data1.Length);
+
+                    string json_00003 = "{\"Account\":" +
+                                    "{\"APIKey\":\"" + _SMSAPIKey + "\"," +
+                                    "\"SenderId\":\"" + _Sender + "\"," +
+                                    "\"Channel\":\"Trans\"," +
+                                    "\"DCS\":\"0\"," +
+                                    "\"SchedTime\":null," +
+                                    "\"GroupId\":null}," +
+                                    "\"Messages\":[{\"Number\":\"" + _MobileNo + "\"," +
+                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
+                                    "}";
+                    streamWriter_00003.Write(json_00003);
                 }
-                HttpWebResponse response1 = (HttpWebResponse)httpWReq1.GetResponse();
-                StreamReader reader1 = new StreamReader(response1.GetResponseStream());
-                string responseString1 = reader1.ReadToEnd();
-                reader1.Close();
-                response1.Close();
+
+                var httpResponse_00003 = (HttpWebResponse)httpWebRequest_00003.GetResponse();
+                using (var streamReader_00003 = new StreamReader(httpResponse_00003.GetResponseStream()))
+                {
+                    var result_00003 = streamReader_00003.ReadToEnd();
+                }
+                
                 status = true;
             }
             catch (Exception ex)

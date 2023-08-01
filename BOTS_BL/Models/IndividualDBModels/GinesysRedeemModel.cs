@@ -11,6 +11,7 @@ namespace BOTS_BL.Models
         public string MobileNo { get; set; }
         public string CustomerName { get; set; }
         public string InvoiceAmount { get; set; }
+        public string billGUID { get; set; }
         public string StoreId { get; set; }
         public decimal? Points { get; set; }
         public decimal? PointsValue { get; set; }

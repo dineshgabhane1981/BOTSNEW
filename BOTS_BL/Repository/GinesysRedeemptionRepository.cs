@@ -105,23 +105,23 @@ namespace BOTS_BL.Repository
                             obj.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
                             obj.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["PointsAsAmt"]);
                             obj.PointsValue = Convert.ToString(dt1.Rows[0]["PointsAsAmt"]);
-                            //if (dt2.Rows.Count > 0)
-                            //{
-                            //    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSWASendStatus"]);
+                            if (dt2.Rows.Count > 0)
+                            {
+                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSWASendStatus"]);
 
-                            //    if (SMSStatus == "SMS")
-                            //    {
-                            //        string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
-                            //        string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
-                            //        string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
-                            //        string _Password = dt2.Rows[0]["SMSPassword"].ToString();
-                            //        string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
-                            //        string _Url = dt2.Rows[0]["SMSUrl"].ToString();
-                            //        //string _SMSBrandId = dt2.Rows[0]["SMSBrandId"].ToString();
-                            //        Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
-                            //        _job.Start();
-                            //    }
-                            //}
+                                if (SMSStatus == "SMS")
+                                {
+                                    string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
+                                    string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
+                                    string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
+                                    string _Password = dt2.Rows[0]["SMSPassword"].ToString();
+                                    string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
+                                    string _Url = dt2.Rows[0]["SMSUrl"].ToString();
+                                    //string _SMSBrandId = dt2.Rows[0]["SMSBrandId"].ToString();
+                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+                                    _job.Start();
+                                }
+                            }
                         }
 
                         else
