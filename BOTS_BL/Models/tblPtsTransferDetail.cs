@@ -25,6 +25,6 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string GroupId { get; set; }
 
-        public bool? IsActive { get; set; }
+        public bool? IsActive { get; set; }  
     }
 }
