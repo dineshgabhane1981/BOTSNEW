@@ -30,12 +30,10 @@ namespace WebApp.Controllers
         {
             return View();
         }
-
         public ActionResult MemberSearch()
         {
             return View();
         }
-
         public ActionResult MemberList()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -44,14 +42,12 @@ namespace WebApp.Controllers
             //ViewBag.OutletId = OutletId;
             return View();
         }
-
         public ActionResult Outletwise()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ViewBag.userdetail = userDetails;
             return View();
         }
-
         public ActionResult Transactionwise(string OutletId)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -61,7 +57,6 @@ namespace WebApp.Controllers
             ViewBag.OutletId = OutletId;
             return View();
         }
-
         public ActionResult PointsExpiry()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -96,14 +91,12 @@ namespace WebApp.Controllers
             ViewBag.YearList = YearList;
             return View(objPointExpiry);
         }
-
         public ActionResult Celebrations()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var CelebrationsData = RR.GetCelebrationsData(userDetails.GroupId, userDetails.connectionString);
             return View(CelebrationsData);
         }
-
         [HttpPost]
         public JsonResult GetCelebrationsTxnResult(int month, int type)
         {
@@ -146,7 +139,6 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = objCelebrationsMoreDetails, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         public ActionResult CreateOwnSegment()
         {
             CreateOwnReportViewModel createownviewmodel = new CreateOwnReportViewModel();
@@ -312,7 +304,6 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = filtercount, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         [HttpPost]
         public JsonResult GetPointsExpiryDataResult(int month, int year)
         {
@@ -323,7 +314,6 @@ namespace WebApp.Controllers
 
             return new JsonResult() { Data = objPointExpiry, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         [HttpPost]
         public JsonResult GetPointsExpiryTxnResult(string month, string year)
         {
@@ -370,7 +360,6 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = objPointExpiryTxn, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         [HttpPost]
         public JsonResult GetMemberDataResult(string jsonData)
         {
@@ -443,7 +432,6 @@ namespace WebApp.Controllers
 
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         public ActionResult ExportToExcelMemberList(string outletId, string fromDate, string toDate, string frmPts, string toPts, string frmSpends, string toSpends)
         {
             System.Data.DataTable table = new System.Data.DataTable();
@@ -540,7 +528,6 @@ namespace WebApp.Controllers
 
 
         }
-
         public ActionResult GetOutletWiseResult(string DateRangeFlag, string fromDate, string toDate)
         {
             string loginId = string.Empty;
@@ -666,7 +653,6 @@ namespace WebApp.Controllers
             lstOutlet.Add(objSum);
             return PartialView("_Outletwise", lstOutlet);
         }
-
         [HttpPost]
         public JsonResult GetOutletWiseTransactionResult(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag)
         {
@@ -720,7 +706,6 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = lstOutletWiseTransaction, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         [HttpPost]
         public ActionResult GetMemberSearchResult(string searchData, string GroupId)
         {
@@ -750,7 +735,6 @@ namespace WebApp.Controllers
             }
             return PartialView("_MemberSearch", objMemberSearch);
         }
-
         public ActionResult ExportToExcelTransactionwise(string DateRangeFlag, string fromDate, string toDate, string outletId, string EnrolmentDataFlag, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
@@ -891,7 +875,6 @@ namespace WebApp.Controllers
 
 
         }
-
         public ActionResult ExportToExcelOutletwise(string DateRangeFlag, string fromDate, string toDate, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
@@ -1081,7 +1064,6 @@ namespace WebApp.Controllers
             }
 
         }
-
         public ActionResult ExportToExcelPointExpiry(int month, int year, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
@@ -1189,7 +1171,6 @@ namespace WebApp.Controllers
             }
 
         }
-
 
         public ActionResult ExportToExcelCelebrations(int month, int type, string ReportName, string EmailId)
         {
@@ -1333,7 +1314,6 @@ namespace WebApp.Controllers
 
 
         }
-
         public ActionResult ProfitableCustomer()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -1361,7 +1341,6 @@ namespace WebApp.Controllers
             ViewBag.ListFilter = ListFilter;
             return View();
         }
-
         [HttpPost]
         public JsonResult GetProfitableCustomersResult(string CountOrBusiness, string Count)
         {
@@ -1422,7 +1401,6 @@ namespace WebApp.Controllers
 
             return new JsonResult() { Data = lstMember, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         public ActionResult ExportToProfitableCustomers(string CountOrBusiness, string Count, string ReportName, string EmailId)
         {
             System.Data.DataTable table = new System.Data.DataTable();
@@ -1551,7 +1529,6 @@ namespace WebApp.Controllers
 
 
         }
-
         public ActionResult ExportToExcelCreateOwnReport(string ReportName)
         {
             System.Data.DataTable table = new System.Data.DataTable();
@@ -1620,7 +1597,6 @@ namespace WebApp.Controllers
                 return null;
             }
         }
-
         public ActionResult MemberSearchExportToExcel(string mobileNo, string groupId)
         {
             CustomerRepository objCustRepo = new CustomerRepository();
@@ -1681,6 +1657,10 @@ namespace WebApp.Controllers
                 }
             }
         }
-
+        public ActionResult CustomizeMetrics()
+        {
+            CustomizeMetricsViewModel objData = new CustomizeMetricsViewModel();
+            return View(objData);
+        }
     }
 }

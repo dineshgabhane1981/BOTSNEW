@@ -1,0 +1,85 @@
+﻿@model WebApp.ViewModel.CustomizeMetricsViewModel
+@{
+    ViewBag.Title = "CustomizeMetrics";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner" id="dvall">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
+            <div class="row mt-4" id="secTransaction">
+                <div class="col-xl-3">
+                    Enrolled Since (days)
+                </div>
+                <div class="col-xl-4">
+                    <input type="radio" id="rdnDateRange" name="dtrangesince" style="width: 20px; height: 20px;cursor:pointer;" /> Date Range &nbsp;&nbsp;
+                    <input type="radio" id="rdnEnrolled" name="dtrangesince" style="width: 20px; height: 20px;cursor:pointer;" /> Enrolled Since
+                </div>
+                <div class="col-xl-5" style="display:none" id="divDateRange">
+                    <input type="date" id="txtEnrollfromdt" class="input50" placeholder="From Enrolled" />
+                    <input type="date" id="txtEnrolltodt" class="input50" placeholder="To Enrolled" />
+                </div>
+                <div class="col-xl-3" style="display:none" id="divDays">
+                    <input type="text" id="txtEnrolldays" class="input50" placeholder="Enter days" />
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-xl-3">
+                    Not transacted since (days)
+                </div>
+                <div class="col-xl-4">
+                    <input type="text" id="txtNonTransactedMax" class="input50" placeholder="Enter days" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-xl-3">
+                    Spends(Rs.)
+                </div>
+                <div class="col-xl-3">
+                    @Html.DropDownListFor(model => model.Spend, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
+                </div>
+                <div class="col-xl-6">
+                    <input type="number" id="txtSpendMin" class="input50" placeholder="From Spend" style="display:none;"/>
+                    <input type="number" id="txtSpendMax" class="input50" placeholder="To Spend" style="display:none;" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function () {
+        $('#rdnDateRange').change(function () {
+            $('#divDays').hide();
+            $('#divDateRange').show();
+        });
+        $('#rdnEnrolled').change(function () {
+            $('#divDays').show();
+            $('#divDateRange').hide();
+        });
+    });
+    $("#ddlSpend").change(function () {
+        var selected = $("#ddlSpend option:selected").text();
+        if (selected == 'Between') {
+            $("#txtSpendMin").show();
+            $("#txtSpendMax").show();
+            $('#txtSpendMin').attr('placeholder', 'From Amount');
+            $('#txtSpendMax').attr('placeholder', 'To Amount');
+        }
+        else if (selected == 'Less than') {
+            $("#txtSpendMin").show();
+            $("#txtSpendMax").hide();
+            $('#txtSpendMin').attr('placeholder', 'Less Than Amount');
+        }
+        else if (selected == 'More than') {
+            $("#txtSpendMin").hide();
+            $("#txtSpendMax").show();
+            $('#txtSpendMax').attr('placeholder', 'More Than Amount');
+        }
+    });
+</script>
