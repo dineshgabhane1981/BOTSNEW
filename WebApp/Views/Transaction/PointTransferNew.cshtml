@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewBag.Title = "PointTransferNew";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <div class="container overflow-hidden">
+                <input type="hidden" id="hdnCustomerId1" />
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec2" data-animation="scaleIn" style="height:650px;">
+                    <h4 class="multisteps-form__title" style="color:blue;">Point Transfer</h4><br />
+                    <div div class="multisteps-form__content">
+                        <div>
+                            <input type="hidden" id="hdnGroupId" />
+                            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                            <input type="number" id="txtMobileNo1" class="input50" />
+
+                            <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
+
+                            <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                            <input type="number" id="txtCardNo1" class="input50" />
+                            <button type="button" id="btnSearchMember1" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                        </div>
+                        <div>
+                            <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                <input type="radio" name="first_item1" id="rbtnSMS1" /> Send SMS
+                                <input type="radio" name="first_item1" style="margin-left:30px;" checked id="rbtnNOSMS1" /> Don't Send SMS
+                            </div>
+                            <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;">
+                                <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; float: left;">
+                                    <table border="1" cellpadding="5" cellspacing="5">
+                                        <tr position: absolute top: -9999px; left: -9998px;>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                        </tr>
+                                        <tr border: 1px solid #ccc;>
+                                            <td style="padding:10px;">Member Name</td>
+                                            <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName1"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Mobile No</td>
+                                            <td style="padding:10px;"><span id="spnMobileno1"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Card No</td>
+                                            <td style="padding:10px;"><span id="spnCardNo1"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Points Balance</td>
+                                            <td style="padding:10px;"><span id="spnPtBalance1"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enrolled Outlet</td>
+                                            <td style="padding:10px;"><span id="spnEnrolledOutlet1"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enrolled On</td>
+                                            <td style="padding:10px;">
+                                                <span id="spnEnrolledOn1"></span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-5 col-lg-5" style="padding-left: 0px !important; float: left;">
+                                    <table border="1" cellpadding="5" cellspacing="5" id="tblUpdateData1" style="display:none;" >
+                                        <tr>
+                                            <th colspan="2" style="padding:10px;text-align:center;">Points Transfer To Mobile Number</th>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Enter Mobile Number</td>
+                                            <td style="padding:10px;width:200px;">
+                                                <input type="number" id="txtMobileNo" placeholder="Mobile No" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Requested by</td>
+                                            <td style="padding:10px;">
+                                                <input type="text" id="txtRequestedByName1" placeholder="Requested By" class="input50" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Requested on Forum</td>
+                                            <td style="padding:10px;">
+                                                <select name="ddlRequestedForum1" id="ddlRequestedForum1" class="input50">
+                                                    <option value="Whatsapp">Whatsapp</option>
+                                                    <option value="Email">Email</option>
+                                                    <option value="Phone">Phone</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:10px;">Transaction Date</td>
+                                            <td style="padding:10px;"><input type="text" id="dtPointTransfer" class="input50" /></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="button-row mt-5" style="text-align:end;">
+                            <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnTransferPoints" tabindex="20">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#dtPointTransfer").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+        $('#btnchgmob').on("click", function () {
+            GetClearAllTab();
+        });
+        $('#btnSearchMember1').on("click", function () {
+            GetChangeNameDataNew();
+        });
+        $('#btnTransferPoints').on("click", function () {
+            TransferPointsNew();
+        });
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+    });
+    function GetChangeNameDataNew() {
+        if ($('#txtMobileNo1').val() == "" && $('#txtCardNo1').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetChangeNameDataNew", "Transaction")',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ',MobileNo:' + JSON.stringify($('#txtMobileNo1').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo1').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberName1").text(result.MemberName);
+                    $("#spnMobileno1").text(result.MobileNo);
+                   /* $("#spnOldMobileno").text(result.OldMobileNo);*/
+                    $("#spnCardNo1").text(result.CardNo);
+                    $("#spnPtBalance1").text(result.PointsBalance);
+                    $("#spnEnrolledOutlet1").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOn1").text(result.EnrolledOn);
+                    $("#hdnCustomerId1").val(result.CustomerId);
+
+                    $('#txtMobileNo').val("");
+                    $('#txtPointsTransferCount').val("");
+                    $('#txtRequestedByName1').val("");
+                    $('#ddlRequestedForum1').prop('selectedIndex', 0);
+                    $('#dtPointTransfer').val("");
+                    $("#tblUpdateData1").show();
+                }
+                else {
+                    toastr.error('Member not present. Please check entered Mobile Number OR Card Number');
+                    $("#spnMemberName1").text("");
+                    $("#spnMobileno1").text("");
+                    $("#spnCardNo1").text("");
+                    $("#spnPtBalance1").text("");
+                    $("#spnEnrolledOutlet1").text("");
+                    $("#spnEnrolledOn1").text("");
+                    $("#hdnCustomerId1").val("");
+
+                    $('#txtMobileNo').val("");
+                    $('#txtPointsTransferCount').val("");
+                    $('#txtRequestedByName1').val("");
+                    $('#ddlRequestedForum1').prop('selectedIndex', 0);
+                    $("#tblUpdateData1").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function TransferPointsNew() {
+        if ($('#txtMobileNo').val() == "") {
+            toastr.error('Please enter Mobile No');
+            $('#txtMobileNo').focus();
+            return false;
+        }
+        if ($('#txtMobileNo').val().length != 10) {
+            toastr.error('Mobile No should be 10 digits');
+            $('#txtMobileNo').focus();
+            return false;
+        }
+        if ($('#txtRequestedByName1').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName1').focus();
+            return false;
+        }
+        if ($('#dtPointTransfer').val() == "") {
+            toastr.error('Please select transaction date');
+            $('#dtPointTransfer').focus();
+            return false;
+        }
+        if (confirm("Are you sure? You want to change Mobile No")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["MobileNo"] = $("#spnMobileno1").text();
+            item["NewMobileNo"] = $("#txtMobileNo").val();
+            item["RequestedBy"] = $("#txtRequestedByName1").val();
+            item["RequestedForum"] = $('#ddlRequestedForum1 :selected').text();
+            item["RequestedOn"] = $("#dtPointTransfer").val();
+            if ($('#rbtnSMS1').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS1').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("TransferPointsNew", "Transaction")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $('#sec2').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Points Transferred Successfully");
+                        $("#divLoader").hide();
+                        $('#sec2').find(':input').val('');
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+

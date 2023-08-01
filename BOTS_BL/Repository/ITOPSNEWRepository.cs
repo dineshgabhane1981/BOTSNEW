@@ -1182,11 +1182,11 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public SPResponse TransferPoints(string GroupId, string MobileNo, string NewMobileNo, tblAudit objAudit)
+        public SPResponse TransferPoints(string GroupId, string MobileNo, string NewMobileNo, tblCustDetailsMaster objCustomer, tblCustPointsMaster objCustPointsMaster, tblCustInfo objcustInfo, tblCustTxnSummaryMaster objCustTxnSummaryMaster, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
 
-            string connStr =  GetCustomerConnString(GroupId);
+            string connStr = GetCustomerConnString(GroupId);
             try
             {
                 using (var contextNew = new BOTSDBContext(connStr))
@@ -1195,8 +1195,58 @@ namespace BOTS_BL.Repository
                     {
                         try
                         {
-                            var objExisting = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                            var objExistingNew = contextNew.CustomerDetails.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
+                            var AdminOutletId = contextNew.tblOutletMasters.Where(x => x.OutletName.Contains("Admin")).Select(y => y.OutletId).FirstOrDefault();
+                            var ObjMobileNo = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
+                            if (ObjMobileNo == null)
+                            {
+                                var NewGroupId = GroupId;
+                                var NewMobileNo1 = NewMobileNo;
+                                var NewId = Convert.ToInt64(string.Format("{0}{1}", NewGroupId, NewMobileNo1));
+                                objCustomer.Id = Convert.ToString(NewId);
+                                objCustomer.EnrolledOutlet = AdminOutletId;
+                                objCustomer.CurrentEnrolledOutlet = AdminOutletId;
+
+                                contextNew.tblCustDetailsMasters.AddOrUpdate(objCustomer);
+                                contextNew.SaveChanges();
+                                result.ResponseCode = "00";
+                                result.ResponseMessage = "Member Added Successfully";
+                            }
+                            else
+                            {
+                                result.ResponseCode = "01";
+                                result.ResponseMessage = "Mobile Number Already Exist";
+                            }
+                            var ObjCustNoNew = contextNew.tblCustInfoes.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
+                            if (ObjCustNoNew == null)
+                            {
+                                var CustNoNew = NewMobileNo;
+                                contextNew.tblCustInfoes.AddOrUpdate(objcustInfo);
+                                contextNew.SaveChanges();
+                                result.ResponseCode = "00";
+                                result.ResponseMessage = "Member Added Successfully";
+                            }
+                            else
+                            {
+                                result.ResponseCode = "01";
+                                result.ResponseMessage = "Mobile Number Already Exist";
+                            }
+                            var ObjMobileNoNew1 = contextNew.tblCustTxnSummaryMasters.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
+                            if (ObjMobileNoNew1 == null)
+                            {
+                                var MobileNoNew1 = NewMobileNo;
+                                contextNew.tblCustTxnSummaryMasters.AddOrUpdate(objCustTxnSummaryMaster);
+                                contextNew.SaveChanges();
+                                result.ResponseCode = "00";
+                                result.ResponseMessage = "Member Added Successfully";
+                            }
+                            else
+                            {
+                                result.ResponseCode = "01";
+                                result.ResponseMessage = "Mobile Number Already Exist";
+                            }
+
+                            var objExisting = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                            var objExistingNew = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
                             if (objExisting != null && objExistingNew != null)
                             {
                                 string oldno = objExisting.MobileNo;
@@ -1204,39 +1254,71 @@ namespace BOTS_BL.Repository
                                 var AddPoints = objExisting.Points + objExistingNew.Points;
                                 objExistingNew.Points = AddPoints;
                                 objExisting.Points = 0;
+                                tblRuleMaster objRuleMaster = new tblRuleMaster();
+                                var ExpiryMonth = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                                var PointExpiryMonthNew = ExpiryMonth.PointsExpiryMonths;
+                                var StartDate = objExistingNew.StartDate;
+                                var EndDate = StartDate.Value.AddMonths(Convert.ToInt32(PointExpiryMonthNew));
+                                objExistingNew.EndDate = EndDate;
 
-                                contextNew.CustomerDetails.AddOrUpdate(objExistingNew);
+                                contextNew.tblCustPointsMasters.AddOrUpdate(objExistingNew);
                                 contextNew.SaveChanges();
-                                contextNew.CustomerDetails.AddOrUpdate(objExisting);
+                                contextNew.tblCustPointsMasters.AddOrUpdate(objExisting);
                                 contextNew.SaveChanges();
 
+                                tblPtsTransferDetail objtblPtsTransferDetail = new tblPtsTransferDetail();
+                                objtblPtsTransferDetail.PtsFromMobileNo = MobileNo;
+                                objtblPtsTransferDetail.PtsToMobileNo = NewMobileNo;
+                                objtblPtsTransferDetail.PtsTransferred = transferPoints;
+                                objtblPtsTransferDetail.TxnDatetime = DateTime.Now;
+                                objtblPtsTransferDetail.GroupId = GroupId;
+                                objtblPtsTransferDetail.IsActive = true;
+                                contextNew.tblPtsTransferDetails.AddOrUpdate(objtblPtsTransferDetail);
+                                contextNew.SaveChanges();
+
+                                result.ResponseCode = "00";
+                                result.ResponseMessage = "Points Transferred Successfully";
+                            }
+                            else
+                            {
+                                var objExisting1 = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                                var objExistingNew1 = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
+                                if (objExistingNew1 == null)
+                                {
+                                    var MobileNo1 = NewMobileNo;
+                                    objCustPointsMaster.MobileNo = MobileNo1;
+                                    objCustPointsMaster.Points = objExisting1.Points;
+                                    objExisting1.Points = 0;
+                                    objCustPointsMaster.StartDate = DateTime.Now;
+                                    tblRuleMaster objRuleMaster = new tblRuleMaster();
+                                    var ExpiryMonth = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                                    var PointExpiryMonthNew = ExpiryMonth.PointsExpiryMonths;
+                                    objCustPointsMaster.EndDate = objCustPointsMaster.StartDate.Value.AddMonths(Convert.ToInt32(PointExpiryMonthNew));
+                                    var EndDate = objCustPointsMaster.EndDate;
+
+                                    contextNew.tblCustPointsMasters.AddOrUpdate(objCustPointsMaster);
+                                    contextNew.SaveChanges();
+
+                                    tblPtsTransferDetail objtblPtsTransferDetail = new tblPtsTransferDetail();
+                                    objtblPtsTransferDetail.PtsFromMobileNo = MobileNo;
+                                    objtblPtsTransferDetail.PtsToMobileNo = NewMobileNo;
+                                    objtblPtsTransferDetail.PtsTransferred = objCustPointsMaster.Points;
+                                    objtblPtsTransferDetail.TxnDatetime = DateTime.Now;
+                                    objtblPtsTransferDetail.GroupId = GroupId;
+                                    objtblPtsTransferDetail.IsActive = true;
+                                    contextNew.tblPtsTransferDetails.AddOrUpdate(objtblPtsTransferDetail);
+                                    contextNew.SaveChanges();
+
+                                    result.ResponseCode = "00";
+                                    result.ResponseMessage = "Points Transferred Successfully";
+                                    transaction.Commit();
+                                }
                                 using (var context = new CommonDBContext())
                                 {
                                     context.tblAudits.Add(objAudit);
                                     context.SaveChanges();
                                 }
-
-                                TransferPointsDetail transferPointsDetail = new TransferPointsDetail();
-                                transferPointsDetail.OldMobileNo = MobileNo;
-                                transferPointsDetail.NewMobileNo = NewMobileNo;
-                                transferPointsDetail.Points = transferPoints;
-                                transferPointsDetail.GroupId = GroupId;
-                                transferPointsDetail.Datetime = DateTime.Now;
-                                contextNew.TransferPointsDetails.AddOrUpdate(transferPointsDetail);
-                                contextNew.SaveChanges();
-
-                                result.ResponseCode = "00";
-                                result.ResponseMessage = "Points Transferred Successfully";
-
-                                transaction.Commit();
                             }
-                            else
-                            {
-                                result.ResponseCode = "01";
-                                result.ResponseMessage = "Mobile Number does not Exist";
-                            }
-
-
                         }
                         catch (Exception ex)
                         {

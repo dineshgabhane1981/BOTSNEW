@@ -14,16 +14,16 @@ using System.Data;
 using System.Text.RegularExpressions;
 using ClosedXML.Excel;
 using WebApp.App_Start;
-
+using BOTS_BL.Models.IndividualDBModels;
 
 namespace WebApp.Controllers.ITOPS
 {
     public class TransactionController : Controller
     {
+        ITOPSNEWRepository NEWITOPS = new ITOPSNEWRepository();
         ITOpsRepository ITOPS = new ITOpsRepository();
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository objCustRepo = new CustomerRepository();
-        ITOPSNEWRepository NewITOPS = new ITOPSNEWRepository();
         Exceptions newexception = new Exceptions();
         // GET: Transaction
         public ActionResult Index()
@@ -77,6 +77,7 @@ namespace WebApp.Controllers.ITOPS
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult GetModifyTxnData(string TransactionId)
         {
             //string GroupId = "";
@@ -92,6 +93,7 @@ namespace WebApp.Controllers.ITOPS
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
+
         public bool ModifyTransaction(string jsonData)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -261,119 +263,140 @@ namespace WebApp.Controllers.ITOPS
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
 
-        /////////// ITOPS NEW /////////////
-
         public ActionResult IndexNew()
         {
+            var groupId = (string)Session["GroupId"];
             try
             {
-                var groupId = (string)Session["GroupId"];
-                if (!string.IsNullOrEmpty(groupId))
-                {
-                    CommonFunctions common = new CommonFunctions();                    
-                    Session["GroupId"] = groupId;
-                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                    userDetails.GroupId = groupId;
-                    userDetails.connectionString = NewITOPS.GetCustomerConnString(groupId);
-                    userDetails.CustomerName = objCustRepo.GetCustomerName(groupId);
-                    Session["UserSession"] = userDetails;
-                    Session["buttons"] = "ITOPS";
-                    ViewBag.GroupId = groupId;
-                }
 
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                var lstOutlet = RR.GetOutletList(groupId, connStr);
+                var lstBrand = RR.GetBrandList(groupId, connStr);
+                var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
+                ViewBag.OutletList = lstOutlet;
+                ViewBag.BranchList = lstBrand;
+                ViewBag.GroupId = groupId;
+                ViewBag.GroupName = GroupDetails.RetailName;
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "IndexNew");
+                newexception.AddException(ex, "Index");
             }
             return View();
         }
-        public ActionResult GetCancelTxnDataNew(string MobileNo, string InvoiceNo)
+        public ActionResult PointTransferNew()
         {
             var groupId = (string)Session["GroupId"];
-            MemberData objCustomerDetails = new MemberData();
-            CancelTxnViewModel objData = new CancelTxnViewModel();
             try
             {
-                if (!string.IsNullOrEmpty(InvoiceNo) && !string.IsNullOrEmpty(MobileNo))
+                ViewBag.GroupId = groupId;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "PointTransfer");
+            }
+            return View();
+        }
+        public ActionResult GetChangeNameDataNew(string MobileNo, string CardNo)
+        {
+            MemberData objCustomerDetail = new MemberData();
+            var groupId = (string)Session["GroupId"];
+            try
+            {
+                if (!string.IsNullOrEmpty(MobileNo))
                 {
+                    objCustomerDetail = NEWITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
+                }
+                if (!string.IsNullOrEmpty(CardNo))
+                {
+                    objCustomerDetail = NEWITOPS.GetChangeNameByCardNo(groupId, CardNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetChangeNameData");
+            }
 
-                    objData.objCancelTxnModel = NewITOPS.GetTransactionByInvoiceNoAndMobileNo(groupId, MobileNo, InvoiceNo);
-                    objData.objMemberData = NewITOPS.GetChangeNameByMobileNo(groupId, MobileNo);
-                }
-                else if (!string.IsNullOrEmpty(InvoiceNo))
-                {
-                    objData.objCancelTxnModel = NewITOPS.GetTransactionByInvoiceNo(groupId, InvoiceNo);
-                    objData.objMemberData = NewITOPS.GetCustomerByMobileNo(groupId, objData.objCancelTxnModel.MobileNo);                    
-                }
-                else if (!string.IsNullOrEmpty(MobileNo))
-                {
-                    objData.objMemberData = NewITOPS.GetCustomerByMobileNo(groupId, MobileNo);
-                    objData.lstCancelTxnModel = NewITOPS.GetTransactionByMobileNo(groupId, MobileNo);
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "GetCancelTxnData");
-            }
-            return Json(objData, JsonRequestBehavior.AllowGet);
+            return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult GetModifyTxnDataNew(string TransactionId)
-        {
-            //string GroupId = "";
-            var groupId = (string)Session["GroupId"];
-            CancelTxnViewModel objData = new CancelTxnViewModel();
-            try
-            {
-                objData.objCancelTxnModel = NewITOPS.GetTransactionByTransactionId(groupId, TransactionId);                
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "GetModifyTxnDataNew");
-            }
-            return Json(objData, JsonRequestBehavior.AllowGet);
-        }
-        public bool ModifyTransactionNew(string jsonData)
+        public ActionResult TransferPointsNew(string jsonData)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            bool result = false;
-            string GroupId = "";
+            SPResponse result = new SPResponse();
+            var groupId = (string)Session["GroupId"];
             try
             {
-                var groupId = (string)Session["GroupId"];
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
                 json_serializer.MaxJsonLength = int.MaxValue;
                 object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                tblCustDetailsMaster objCustomer = new tblCustDetailsMaster();
+                tblCustPointsMaster objCustPointsMaster = new tblCustPointsMaster();
+                tblCustInfo objcustInfo = new tblCustInfo();
+                tblCustTxnSummaryMaster objCustTxnSummaryMaster = new tblCustTxnSummaryMaster();
                 tblAudit objAudit = new tblAudit();
-                //string GroupId = "";
-                string TransactionId = "";
-                decimal points = 0;
+                bool IsSMS = false;
+
+                string MobileNo = "";
+                string NewMobileNo = "";
 
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    GroupId = groupId;
-                    TransactionId = Convert.ToString(item["TransactionId"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["Points"])))
-                    {
-                        points = Convert.ToDecimal(item["Points"]);
-                    }
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    NewMobileNo = Convert.ToString(item["NewMobileNo"]);
+
+                    objCustomer.Name = "Member";
+                    objCustomer.MobileNo = Convert.ToString(item["NewMobileNo"]);
+                    objCustomer.Tier = "Base";
+                    objCustomer.DOJ = DateTime.Now;
+                    objCustomer.IsActive = true;
+                    objCustomer.DisableTxn = false;
+                    objCustomer.DisableSMSWAPromo = false;
+                    objCustomer.CountryCode = "91";
+                    objCustomer.DisableSMSWATxn = false;
+
+                    objCustPointsMaster.MobileNo = Convert.ToString(item["NewMobileNo"]);
+                    objCustPointsMaster.PointsType = "Base";
+                    objCustPointsMaster.PointsDesc = "Base";
+                    objCustPointsMaster.IsActive = true;
+                    objCustPointsMaster.MinInvoiceAmtRequired = 0;
+                    var MobileNo1 = NewMobileNo;
+                    var MobileNoPtsIdNew = NewMobileNo + "Base";
+                    objCustPointsMaster.MobileNoPtsId = MobileNoPtsIdNew;
+
+                    objcustInfo.MobileNo = Convert.ToString(item["NewMobileNo"]);
+                    objcustInfo.Name = "Member";
+
+                    objCustTxnSummaryMaster.MobileNo = Convert.ToString(item["NewMobileNo"]);
+                    objCustTxnSummaryMaster.TotalSpend = 0;
+                    objCustTxnSummaryMaster.TotalTxnCount = 0;
+                    objCustTxnSummaryMaster.EarnCount = 0;
+                    objCustTxnSummaryMaster.BurnCount = 0;
+                    objCustTxnSummaryMaster.SalesReturnCount = 0;
+                    objCustTxnSummaryMaster.SalesReturnAmt = 0;
+                    objCustTxnSummaryMaster.BurnAmtWithPts = 0;
+                    objCustTxnSummaryMaster.BurnAmtWithoutPts = 0;
+                    objCustTxnSummaryMaster.BurnPts = 0;
+                    objCustTxnSummaryMaster.EarnPts = 0;
+                    objCustTxnSummaryMaster.SalesReturnPtsGiven = 0;
+                    objCustTxnSummaryMaster.SalesReturnPtsRemoved = 0;
+
                     objAudit.GroupId = groupId;
-                    objAudit.RequestedFor = "Add / Earn";
-                    objAudit.RequestedEntity = "Transaction For  - " + TransactionId;
+                    objAudit.RequestedFor = "User Added";
+                    objAudit.RequestedEntity = "User Added - " + objCustomer.MobileNo;
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);
                     objAudit.AddedBy = userDetails.LoginId;
                     objAudit.AddedDate = DateTime.Now;
-
+                    IsSMS = Convert.ToBoolean(item["IsSMS"]);
                 }
-                result = NewITOPS.ModifyTransaction(groupId, Convert.ToInt64(TransactionId), points, objAudit);
+                result = NEWITOPS.TransferPoints(groupId, MobileNo, NewMobileNo, objCustomer, objCustPointsMaster, objcustInfo, objCustTxnSummaryMaster, objAudit);
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "ModifyTransaction");
+                newexception.AddException(ex, "TransferPointsNew");
             }
-            return result;
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }
