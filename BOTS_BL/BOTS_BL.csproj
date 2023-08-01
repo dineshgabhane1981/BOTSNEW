@@ -528,6 +528,7 @@
     <Compile Include="Repository\LoyaltyKPIsRepository.cs" />
     <Compile Include="Repository\ManagementDashboardRepository.cs" />
     <Compile Include="Repository\MedrationRepository.cs" />
+    <Compile Include="Repository\MoolchandRedemptionRepository.cs" />
     <Compile Include="Repository\NoActionRepository.cs" />
     <Compile Include="Repository\NPCRepository.cs" />
     <Compile Include="Repository\OnBoarding\CustomerOnBoardingRepository.cs" />
