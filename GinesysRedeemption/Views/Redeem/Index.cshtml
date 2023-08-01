@@ -21,8 +21,70 @@
         </tr>
     </table>
     <div class="col-md-12 col-lg-12" style="background-color:#fff;width:90%;text-align:center;padding-top:20px;">
-        Customer has a reward balance of <b>&#8377;@value, (@Model.Points)</b> Points 
-        <div style="padding:10px;"><input type="number" class="input50" id="txtPoints" /><button class="btn btn-primary" style="margin-left:10px;">Apply</button></div>
+        <input id="hdnPoints" value=@Model.Points hidden />
+        <input id="hdnInvoiceAmt" value=@Model.InvoiceAmount hidden />
+        <input id="hdnMobileNo" value=@Model.MobileNo hidden />
+        <input id="hdnOTP" hidden />
+        <input id="hdnBurnAmt" hidden />
+        Customer has a reward balance of <b>&#8377;@value, (@Model.Points)</b> Points
+        <div style="padding:10px;"><input type="number" class="input50" id="txtPoints" /><button class="btn btn-primary" style="margin-left:10px;" id="btnApply">Apply</button></div>
+        <div style="padding:10px; display:none" id="divOTP"><input type="password" class="input50" id="txtOTP" /><button class="btn btn-primary" style="margin-left:10px;" id="btnVerify">Verify</button></div>
     </div>
 </div>
+<script>
+    $("#btnApply").click(function (){
+        var Points = $("#txtPoints").val();
+        $("#hdnOTP").val( $("#txtPoints").val());
+        var InvoiceAmt = $("#hdnInvoiceAmt").val();
+        var MobileNo = $("#hdnMobileNo").val();
+
+         $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("BurnValidation", "Redeem")',
+                    //url: "/Discussion/GetSubCallTypes",
+                    data: '{Points: ' + JSON.stringify(Points) + ',InvoiceAmt: ' + JSON.stringify(InvoiceAmt) + ',MobileNo: ' + JSON.stringify(MobileNo) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                        if (result.ResponseCode == "00") {
+                            $("#hdnOTP").val(result.OTPValue);
+                            $("#divOTP").show();
+                            $("#txtPoints").attr("disabled", "disabled");
+                            $("#btnApply").attr("disabled", "disabled");
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                    }
+                });
+    });
+    $("#btnVerify").click(function () {
+        var BurnAmount = $("#txtPoints").val();
+        if ($("#txtOTP").val() == $("#hdnOTP").val()) {
+            $("#hdnBurnAmt").val(BurnAmount);
+            cuteAlert({
+                type: "success",
+                title: "OTP Verification Success",
+                message: "Amount " + BurnAmount +" for Redemption is Successfully Applied",
+                buttonText: "Okay"
+            }).then(() => {
+                $("#txtOTP").attr("disabled", "disabled");
+                $("#btnVerify").attr("disabled", "disabled");
+                })
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "OTP Verification Failed",
+                message: "Entered OTP is wrong",
+                buttonText: "Okay"
+            })
+        }
+    });
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 

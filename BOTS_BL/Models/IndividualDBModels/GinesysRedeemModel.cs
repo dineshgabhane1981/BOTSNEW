@@ -15,4 +15,13 @@ namespace BOTS_BL.Models
         public decimal? Points { get; set; }
         public decimal? PointsValue { get; set; }
     }
+    public class BurnValidateResponse
+    {
+        public string ResponseCode { get; set; }
+        public string ResponseMessage { get; set; }
+        public string OTPValue { get; set; }
+        public string BurnPointsAsAmount { get; set; }
+        public string PointsValue { get; set; }
+    }
 }
+

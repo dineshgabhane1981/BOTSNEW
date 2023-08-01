@@ -20,7 +20,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
-        
+        public virtual DbSet<tblOTPSMSWhatsAppCredential> tblOTPSMSWhatsAppCredentials { get; set; }
         public virtual DbSet<View_ITOPSCustTxnData> View_ITOPSCustTxnData { get; set; } 
         public virtual DbSet<tblMobileChangeHistory> tblMobileChangeHistories { get; set; }
         public virtual DbSet<tblPtsTransferDetail> tblPtsTransferDetails { get; set; }

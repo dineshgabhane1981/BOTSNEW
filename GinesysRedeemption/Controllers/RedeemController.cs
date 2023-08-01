@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using GinesysRedeemption.App_Start;
 using BOTS_BL.Models;
 using BOTS_BL.Repository;
+using BOTS_BL;
 
 namespace GinesysRedeemption.Controllers
 {
@@ -14,6 +15,7 @@ namespace GinesysRedeemption.Controllers
     {
         CommonFunctions common = new CommonFunctions();
         GinesysRedeemptionRepository GRR = new GinesysRedeemptionRepository();
+        Exceptions newexception = new Exceptions();
         // GET: Redeem
         public ActionResult Index(string token)
         {
@@ -62,6 +64,24 @@ namespace GinesysRedeemption.Controllers
             string url = BaseUrl + "?token=" + entoken;
             ViewBag.URL = url;
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult BurnValidation(string Points,string InvoiceAmt,string MobileNo)
+        {
+            BurnValidateResponse ObjResponse = new BurnValidateResponse();
+            string storeid = "8888888888";
+            try 
+            {
+
+                ObjResponse = GRR.BurnValidation(storeid, Points, InvoiceAmt, MobileNo);
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "BurnValidation");
+            }
+
+            return new JsonResult() { Data = ObjResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
 }

@@ -103,6 +103,30 @@
     <Content Include="Content\main.js" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\cute-alert-master\LICENSE" />
+    <Content Include="Scripts\cute-alert-master\img\error.svg" />
+    <Content Include="Scripts\cute-alert-master\img\info.svg" />
+    <Content Include="Scripts\cute-alert-master\img\question.svg" />
+    <Content Include="Scripts\cute-alert-master\img\success.svg" />
+    <Content Include="Scripts\cute-alert-master\img\warning.svg" />
+    <Content Include="Scripts\cute-alert-master\README.md" />
+    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\cute-alert-master\cute-alert.js" />
+    <Content Include="Scripts\cute-alert-master\style-alert.css" />
+    <Content Include="Scripts\jquery-3.4.1.js" />
+    <Content Include="Scripts\jquery-3.4.1.min.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.js" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +146,8 @@
     <Content Include="Views\Redeem\Index.cshtml" />
     <Content Include="Views\Redeem\GetURL.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
