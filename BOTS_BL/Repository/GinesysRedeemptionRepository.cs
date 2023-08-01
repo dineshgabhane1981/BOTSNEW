@@ -19,10 +19,30 @@ namespace BOTS_BL.Repository
     {
         CustomerRepository objCustRepo = new CustomerRepository();
         Exceptions newexception = new Exceptions();
+        public string GetCustomerConnString(string GroupId)
+        {
+            string ConnectionString = string.Empty;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {                    
+                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault(); 
+                    if (DBDetails != null)
+                    {                        
+                        ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    }                   
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCustomerConnString");
+            }
+            return ConnectionString;
+        }
         public  GinesysRedeemModel GetCustomerDetails(GinesysRedeemModel objData)
         {            
             string groupId = objData.StoreId.Substring(0, 4);
-            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            string connStr = GetCustomerConnString(groupId);
             try
             {
                 using (var context = new BOTSDBContext(connStr))
