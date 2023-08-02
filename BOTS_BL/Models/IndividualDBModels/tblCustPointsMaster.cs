@@ -36,7 +36,8 @@ namespace BOTS_BL.Models.IndividualDBModels
         [Column(TypeName = "numeric")]
         public decimal? MinInvoiceAmtRequired { get; set; }
 
-        
-        
+        [Key]
+        [StringLength(100)]
+        public string MobileNoPtsId { get; set; }
     }
 }
