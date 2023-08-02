@@ -1273,6 +1273,9 @@ namespace BOTS_BL.Repository
                                 objtblPtsTransferDetail.TxnDatetime = DateTime.Now;
                                 objtblPtsTransferDetail.GroupId = GroupId;
                                 objtblPtsTransferDetail.IsActive = true;
+                                var MobileNo1 = NewMobileNo;
+                                var MobileNoPtsIdNew = NewMobileNo + "Base";
+                                objtblPtsTransferDetail.MobileNoPtsId = MobileNoPtsIdNew;
                                 contextNew.tblPtsTransferDetails.AddOrUpdate(objtblPtsTransferDetail);
                                 contextNew.SaveChanges();
 
@@ -1300,12 +1303,15 @@ namespace BOTS_BL.Repository
                                     contextNew.SaveChanges();
 
                                     tblPtsTransferDetail objtblPtsTransferDetail = new tblPtsTransferDetail();
-                                    objtblPtsTransferDetail.PtsFromMobileNo = MobileNo;
+                                    objtblPtsTransferDetail.PtsFromMobileNo = MobileNo1;
                                     objtblPtsTransferDetail.PtsToMobileNo = NewMobileNo;
                                     objtblPtsTransferDetail.PtsTransferred = objCustPointsMaster.Points;
                                     objtblPtsTransferDetail.TxnDatetime = DateTime.Now;
                                     objtblPtsTransferDetail.GroupId = GroupId;
                                     objtblPtsTransferDetail.IsActive = true;
+                                    var MobileNoNew = NewMobileNo;
+                                    var MobileNoPtsIdNew = NewMobileNo + "Base";
+                                    objtblPtsTransferDetail.MobileNoPtsId = MobileNoPtsIdNew;
                                     contextNew.tblPtsTransferDetails.AddOrUpdate(objtblPtsTransferDetail);
                                     contextNew.SaveChanges();
 
