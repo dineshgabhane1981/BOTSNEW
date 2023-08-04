@@ -48,7 +48,13 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connStr))
                 {
+                    var objBlockedPoints = context.tblBurnPtsSoftBlocks.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).FirstOrDefault();
+
                     objData.Points  = context.tblCustPointsMasters.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y => y.Points);
+                    if (objBlockedPoints != null)
+                    {
+                        objData.Points = objData.Points - objBlockedPoints.BurnPoints;
+                    }
                     objData.PointsValue = context.tblRuleMasters.Select(x => x.PointsAllocation).FirstOrDefault();
                     objData.CustomerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == objData.MobileNo).Select(y => y.Name).FirstOrDefault();
                 }
@@ -60,7 +66,7 @@ namespace BOTS_BL.Repository
             return objData;
         } 
 
-        public BurnValidateResponse BurnValidation(string storeid, string Points, string InvoiceAmt, string MobileNo)
+        public BurnValidateResponse BurnValidation(string storeid, string Points, string InvoiceAmt, string MobileNo, string BillGUID)
         {
             BurnValidateResponse obj = new BurnValidateResponse();
 
@@ -81,7 +87,7 @@ namespace BOTS_BL.Repository
                     {
                         SqlParameter param1 = new SqlParameter("pi_CounterId", storeid);
                         SqlParameter param2 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
-                        SqlParameter param3 = new SqlParameter("pi_InvoiceNo", "");
+                        SqlParameter param3 = new SqlParameter("pi_InvoiceNo", BillGUID);
                         SqlParameter param4 = new SqlParameter("pi_MobileNo", MobileNo);
                         SqlParameter param5 = new SqlParameter("pi_BurnPoints", Points);
                         SqlParameter param6 = new SqlParameter("pi_INDDatetime", indianTime.ToString("yyyy-MM-dd HH:mm:ss"));

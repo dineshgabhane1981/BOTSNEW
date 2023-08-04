@@ -1,14 +1,17 @@
 ﻿@model WebApp.ViewModel.DocumentLibraryViewModel
+@using BOTS_BL.Models;
 @using System.Configuration;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     string baseURL = ConfigurationManager.AppSettings["BaseDocUrl"];
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
 }
 
 <div class="app-main__inner">
     <input type="hidden" id="hdnuploadDocBase64" />
-    <input type="hidden" id="hdnFileName" />   
+    <input type="hidden" id="hdnFileName" />
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-4">
@@ -25,7 +28,7 @@
                 <div class="col-md-3 col-xl-3">
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
-            </div>           
+            </div>
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
                 <div class="col-lg-3 col-md-3 ">
                     Department
@@ -116,7 +119,10 @@
             ShowDeptGroup();
             FillDocumentTypeDDL($("#ddlDepartment").val());
         });
-
+        var loginId = '@userDetails.LoginId';
+        if (loginId != "9766647094") {
+            $("#ddlDepartment option[value='HR']").remove();
+        }
     });
 
     $("#ddlGroupDetails").change(function(){

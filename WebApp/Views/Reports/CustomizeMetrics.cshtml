@@ -7,7 +7,7 @@
 <div class="app-main__inner" id="dvall">
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
         <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
-            
+
         </div>
         <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
             <div class="row mt-4 col-md-12 col-xl-12">
@@ -28,43 +28,71 @@
                 <input type="radio" id="rbtnTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Transacting
                 <input type="radio" id="rbtnNonTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" />&nbsp;Non Transacting
             </div>
-            
-
 
             <div class="row mt-4 col-md-12 col-xl-12" id="secTransaction">
                 <div class="col-xl-3">
                     Enrolled Range
-                </div>                
-                <div class="col-xl-9 row" id="divDateRange">
-                    from <br />
-                    <input type="date" id="txtEnrollfromdt" class="input50" placeholder="From Enrolled" />
-                    to <br />
-                    <input type="date" id="txtEnrolltodt" class="input50" placeholder="To Enrolled" />
                 </div>
-                
+                <div class="col-xl-9 row" id="divDateRange">
+                    <input type="date" id="txtEnrollfromdt" class="input40" placeholder="From Enrolled" />
+                    <input type="date" id="txtEnrolltodt" class="input40" placeholder="To Enrolled" style="margin-left:10px;" />
+                </div>
+
             </div>
-            <div class="row mt-3">
+            <div class="row mt-3 col-md-12 col-xl-12">
                 <div class="col-xl-3">
                     Not transacted since (days)
                 </div>
-                <div class="col-xl-4">
-                    <input type="text" id="txtNonTransactedMax" class="input50" placeholder="Enter days" />
+                <div class="col-xl-3">
+                    <input type="text" id="txtNonTransactedMax" class="input40" placeholder="Enter days" />
                 </div>
             </div>
-            <div class="row mt-2">
+            <div class="row mt-2 col-md-12 col-xl-12">
                 <div class="col-xl-3">
-                    Spends(Rs.)
+                    Spends (Rs.)
                 </div>
-                <div class="col-xl-3">
-                    @Html.DropDownListFor(model => model.Spend, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
+                <div class="col-xl-2">
+                    @Html.DropDownListFor(model => model.Spend, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlSpend" })
                 </div>
                 <div class="col-xl-6">
-                    <input type="number" id="txtSpendMin" class="input50" placeholder="From Spend" style="display:none;" />
-                    <input type="number" id="txtSpendMax" class="input50" placeholder="To Spend" style="display:none;" />
+                    <input type="number" id="txtSpendMin" class="input40" placeholder="From Spend" style="display:none;" />
+                    <input type="number" id="txtSpendMax" class="input40" placeholder="To Spend" style="display:none;" />
                 </div>
             </div>
+            <div class="row mt-2 col-md-12 col-xl-12">
+                <div class="col-xl-3">
+                    Transaction Count
+                </div>
+                <div class="col-xl-2">
+                    @Html.DropDownListFor(model => model.Spend, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlTxnCount" })
+                </div>
+                <div class="col-xl-6">
+                    <input type="number" id="txtTxnCountMin" class="input40" placeholder="From Spend" style="display:none;" />
+                    <input type="number" id="txtTxnCountMax" class="input40" placeholder="To Spend" style="display:none;" />
+                </div>
+            </div>
+            <div class="row mt-2 col-md-12 col-xl-12">
+                <div class="col-xl-3">
+                    Points Balance
+                </div>
+                <div class="col-xl-2">
+                    @Html.DropDownListFor(model => model.PointsBalance, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlPointsBalance" })
+                </div>
+                <div class="col-xl-6">
+                    <input type="number" id="txtPointsBalMin" class="input40" placeholder="From Point Balance" style="display:none" />
+                    <input type="number" id="txtPointsBalMax" class="input40" placeholder="To Point Balance" style="display:none" />
+                </div>
+            </div>
+            <div class="row mt-2 col-md-12 col-xl-12">
+                <div class="col-xl-3">
+                    Redeemed
+                </div>
+                <div class="col-xl-3">
+                    @Html.DropDownListFor(model => model.Redeemed, new SelectList(Model.RedeemedList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlRedeemed" })
+                </div>                
+            </div>
         </div>
-        </div>
+    </div>
 </div>
 
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
@@ -73,7 +101,7 @@
 <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
 <script>
-    $(document).ready(function () {        
+    $(document).ready(function () {
         $('input[type="checkbox"]').on('change', function () {
             $('input[name="' + this.name + '"]').not(this).prop('checked', false);
             ShowSecondFilters();
@@ -82,11 +110,12 @@
     function ShowSecondFilters() {
         if ($("#chkTransacting").is(":checked")) {
             $("#dvTxnFilters").show();
+            $("#dvDLCReferalFilters").hide();
         }
         else if ($("#chkReferral").is(":checked")) {
             $("#dvTxnFilters").hide();
             $("#dvDLCReferalFilters").show();
-            
+
         }
         else if ($("#chkDLCRegistered").is(":checked")) {
             $("#dvTxnFilters").hide();
@@ -109,12 +138,64 @@
         else if (selected == 'Less than') {
             $("#txtSpendMin").show();
             $("#txtSpendMax").hide();
-            $('#txtSpendMin').attr('placeholder', 'Less Than Amount');
+            $('#txtSpendMin').attr('placeholder', 'Amount');
         }
         else if (selected == 'More than') {
             $("#txtSpendMin").hide();
             $("#txtSpendMax").show();
-            $('#txtSpendMax').attr('placeholder', 'More Than Amount');
+            $('#txtSpendMax').attr('placeholder', 'Amount');
+        }
+        else {
+            $("#txtSpendMin").hide();
+            $("#txtSpendMax").hide();
         }
     });
+
+    $("#ddlTxnCount").change(function () {
+        var selected = $("#ddlTxnCount option:selected").text();
+        if (selected == 'Between') {
+            $("#txtTxnCountMin").show();
+            $("#txtTxnCountMax").show();
+            $('#txtTxnCountMin').attr('placeholder', 'From Txn Count');
+            $('#txtTxnCountMax').attr('placeholder', 'To Txn Count');
+        }
+        else if (selected == 'Less than') {
+            $("#txtTxnCountMin").show();
+            $("#txtTxnCountMax").hide();
+            $('#txtTxnCountMin').attr('placeholder', 'Txn Count');
+        }
+        else if (selected == 'More than') {
+            $("#txtTxnCountMax").show();
+            $("#txtTxnCountMin").hide();
+            $('#txtTxnCountMax').attr('placeholder', 'Txn Count');
+        }
+        else {
+            $("#txtTxnCountMin").hide();
+            $("#txtTxnCountMax").hide();
+        }
+    });
+
+    $("#ddlPointsBalance").change(function () {
+        var selected = $("#ddlPointsBalance option:selected").text();
+        if (selected == 'Between') {
+            $("#txtPointsBalMin").show();
+            $("#txtPointsBalMax").show();
+            $('#txtPointsBalMin').attr('placeholder', 'From Point Balance');
+            $('#txtPointsBalMax').attr('placeholder', 'To Point Balance');
+        }
+        else if (selected == 'Less than') {
+            $("#txtPointsBalMin").show();
+            $("#txtPointsBalMax").hide();
+            $('#txtPointsBalMin').attr('placeholder', 'Point Balance');
+        }
+        else if (selected == 'More than') {
+            $("#txtPointsBalMax").show();
+            $("#txtPointsBalMin").hide();
+            $('#txtPointsBalMax').attr('placeholder', 'Point Balance');
+        } else {
+            $("#txtPointsBalMin").hide();
+            $("#txtPointsBalMax").hide();
+        }
+    });
+
 </script>

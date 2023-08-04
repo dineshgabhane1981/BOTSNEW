@@ -71,12 +71,12 @@ namespace GinesysRedeemption.Controllers
         }
 
         [HttpPost]
-        public ActionResult BurnValidation(string Points,string InvoiceAmt,string MobileNo,string StoreId)
+        public ActionResult BurnValidation(string Points,string InvoiceAmt,string MobileNo,string StoreId,string BillGUID)
         {
             BurnValidateResponse ObjResponse = new BurnValidateResponse();           
             try 
             {
-                ObjResponse = GRR.BurnValidation(StoreId, Points, InvoiceAmt, MobileNo);
+                ObjResponse = GRR.BurnValidation(StoreId, Points, InvoiceAmt, MobileNo, BillGUID);
             }
             catch(Exception ex)
             {

@@ -1,7 +1,11 @@
 ﻿@model BOTS_BL.Models.GinesysRedeemModel
 @{
     ViewBag.Title = "Index";
-    var value = Math.Round(Model.Points.Value * Model.PointsValue.Value, 2);
+    decimal? value = 0;
+    if (Model.Points.HasValue)
+    {
+        value = Math.Round(Model.Points.Value * Model.PointsValue.Value, 2);
+    }
 }
 
 <h3>Redeem Loyalty</h3>
@@ -9,7 +13,14 @@
     <table cellpadding="10" cellspacing="10" style="background-color: #FAF9F6; " width="90%">
         <tr>
             <td>Customer Name</td>
-            <td><b>@Model.CustomerName</b></td>
+            @if (Model.CustomerName != null)
+            {
+                <td><b>@Model.CustomerName</b></td>
+            }
+            else
+            {
+                <td></td>
+            }
         </tr>
         <tr>
             <td>Invoice Amount</td>
@@ -18,6 +29,7 @@
         <tr>
             <td>Mobile No</td>
             <td>@Model.MobileNo</td>
+
         </tr>
     </table>
     <div class="col-md-12 col-lg-12" style="background-color:#fff;width:90%;text-align:center;padding-top:20px;">
@@ -36,46 +48,59 @@
     </div>
 </div>
 <script>
-    $("#btnApply").click(function (){
-        var Points = $("#txtPoints").val();
-        $("#hdnOTP").val( $("#txtPoints").val());
-        var InvoiceAmt = $("#hdnInvoiceAmt").val();
-        var MobileNo = $("#hdnMobileNo").val();
-        var StoreId = $("#hdnStoreId").val();
-         $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("BurnValidation", "Redeem")',                   
-                    data: '{Points: ' + JSON.stringify(Points) + ',InvoiceAmt: ' + JSON.stringify(InvoiceAmt) + ',MobileNo: ' + JSON.stringify(MobileNo) + ',StoreId: ' + JSON.stringify(StoreId) + '}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        console.log(result);
-                        if (result.ResponseCode == "00") {
-                            $("#hdnOTP").val(result.OTPValue);
-                            $("#divOTP").show();
-                            $("#txtPoints").attr("disabled", "disabled");
-                            $("#btnApply").attr("disabled", "disabled");
-                        }
-                        else {
-                            cuteAlert({
-                                type: "error",
-                                title: "Failed",
-                                message: result.ResponseMessage,
-                                buttonText: "Okay"
-                            })
-                        }
-                    },
-                    error: function (result) {
-                        console.log(result.responseText);
+    $("#btnApply").click(function () {
+        if ($("#txtPoints").val() != "") {
+            var Points = $("#txtPoints").val();
+            $("#hdnOTP").val($("#txtPoints").val());
+            var InvoiceAmt = $("#hdnInvoiceAmt").val();
+            var MobileNo = $("#hdnMobileNo").val();
+            var StoreId = $("#hdnStoreId").val();
+            var BillGUID = $("#hdnbillGUID").val();
+            
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("BurnValidation", "Redeem")',
+                data: '{Points: ' + JSON.stringify(Points) + ',InvoiceAmt: ' + JSON.stringify(InvoiceAmt) + ',MobileNo: ' + JSON.stringify(MobileNo) + ',StoreId: ' + JSON.stringify(StoreId) + ',BillGUID: ' + JSON.stringify(BillGUID) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result.ResponseCode == "00") {
+                        $("#hdnOTP").val(result.OTPValue);
+                        $("#divOTP").show();
+                        $("#txtPoints").attr("disabled", "disabled");
+                        $("#btnApply").attr("disabled", "disabled");
                     }
-                });
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Failed",
+                            message: result.ResponseMessage,
+                            buttonText: "Okay"
+                        })
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                }
+            });
+
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "OOPS..",
+                message: "Please enter points to redeem !!!",
+                buttonText: "Okay"
+            })
+        }
     });
     $("#btnVerify").click(function () {
         var points = $("#txtPoints").val();
         var multiply = '@Model.PointsValue.Value';
 
         var BurnAmount = points * multiply;
-        
+
         if ($("#txtOTP").val() == $("#hdnOTP").val()) {
             $("#hdnBurnAmt").val(BurnAmount);
             cuteAlert({
@@ -90,16 +115,17 @@
                     'mobileNo': $("#hdnMobileNo").val(),
                     'referenceNo': $("#hdnbillGUID").val(),
                     'redeemedPoints': $("#txtPoints").val(),
-                    'redeemedValue': $("#hdnRedeemValue").val(),
+                    'redeemedValue': BurnAmount,
                     'Allow_Point_Accrual': 1,
                     'OTP': $("#hdnOTP").val(),
                     'ALLOW_POINT_REDEMPTION_BEFORE_BILL_SAVE': true,
                     'status': 'success'
-                }               
-                var myJSON = JSON.stringify(obj);                
+                }
+                var myJSON = JSON.stringify(obj);
                 $("#redemptionResponse").val(myJSON);
-                
-                
+                console.log(myJSON);
+
+
              })
         }
         else {
@@ -114,6 +140,6 @@
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
- 
- 
+
+
 
