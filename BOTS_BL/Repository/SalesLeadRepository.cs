@@ -323,7 +323,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    var SalesManagers = context.CustomerLoginDetails.Where(x => x.UserStatus == true && (x.LoginType == "8" || x.LoginType == "5")).ToList();
+                    var SalesManagers = context.CustomerLoginDetails.Where(x => x.UserStatus == true && (x.LoginType == "8" || x.LoginType == "5" || x.LoginType == "9")).ToList();
 
                     foreach (var item in SalesManagers)
                     {
