@@ -14,6 +14,7 @@ using System.Data;
 using System.Web;
 using System.Net;
 using BOTS_BL.Models.IndividualDBModels;
+using BOTS_BL.Models.ITOps;
 
 namespace BOTS_BL.Repository
 {
@@ -64,21 +65,24 @@ namespace BOTS_BL.Repository
             try
             {
                 CustomerDetail objCustomerDetail = new CustomerDetail();
+                ITOPSCustData ObjCustData = new ITOPSCustData();
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     //objCustomerDetail = contextNew.CustomerDetails.Where(x => x.MobileNo == searchData && x.Status == "00").FirstOrDefault();
-                    var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == searchData).FirstOrDefault();
+                    //var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == searchData).FirstOrDefault();
 
-                    if (CustData != null)
+                    ObjCustData = contextNew.Database.SqlQuery<ITOPSCustData>("select MobileNo,CustomerName,EnrolledOutlet,DOJ,CardNo,CustomerId,Points from View_ITOPSCustData where MobileNo = @MobileNo", new SqlParameter("@MobileNo", searchData)).FirstOrDefault();
+
+                    if (ObjCustData != null)
                     {
-                        string Id = GroupId + CustData.MobileNo;
-                        objMemberData.MemberName = CustData.CustomerName;
-                        objMemberData.MobileNo = CustData.MobileNo;
-                        objMemberData.CardNo = CustData.CardNo;
-                        objMemberData.PointsBalance = CustData.Points;
-                        objMemberData.EnrolledOn = CustData.DOJ.Value.ToString("dd/MM/yyyy");
-                        objMemberData.EnrolledOutletName = CustData.EnrolledOutlet;
+                        string Id = GroupId + ObjCustData.MobileNo;
+                        objMemberData.MemberName = ObjCustData.CustomerName;
+                        objMemberData.MobileNo = ObjCustData.MobileNo;
+                        objMemberData.CardNo = ObjCustData.CardNo;
+                        objMemberData.PointsBalance = Convert.ToDecimal(ObjCustData.Points);
+                        objMemberData.EnrolledOn = ObjCustData.DOJ.Value.ToString("dd/MM/yyyy");
+                        objMemberData.EnrolledOutletName = ObjCustData.EnrolledOutlet;
                         objMemberData.CustomerId = Id;
                     }
                 }
@@ -95,21 +99,23 @@ namespace BOTS_BL.Repository
             try
             {
                 CustomerDetail objCustomerDetail = new CustomerDetail();
+                ITOPSCustData ObjCustData = new ITOPSCustData();
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
                     //objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CardNumber == searchData && x.Status == "00").FirstOrDefault();
-                    var CustData = contextNew.View_ITOPSCustData.Where(x => x.CardNo == searchData).FirstOrDefault();
+                    //var CustData = contextNew.View_ITOPSCustData.Where(x => x.CardNo == searchData).FirstOrDefault();
+                    ObjCustData = contextNew.Database.SqlQuery<ITOPSCustData>("select MobileNo,CustomerName,EnrolledOutlet,DOJ,CardNo,CustomerId,Points from View_ITOPSCustData where CardNo = @CardNo", new SqlParameter("@CardNo", searchData)).FirstOrDefault();
 
-                    if (CustData != null)
+                    if (ObjCustData != null)
                     {
-                        objMemberData.MemberName = CustData.CustomerName;
-                        objMemberData.MobileNo = CustData.MobileNo;
-                        objMemberData.CardNo = CustData.CardNo;
-                        objMemberData.PointsBalance = CustData.Points;
-                        objMemberData.EnrolledOn = CustData.DOJ.Value.ToString("dd/MM/yyyy");
-                        objMemberData.EnrolledOutletName = CustData.EnrolledOutlet;
-                        objMemberData.CustomerId = CustData.CustomerId;
+                        objMemberData.MemberName = ObjCustData.CustomerName;
+                        objMemberData.MobileNo = ObjCustData.MobileNo;
+                        objMemberData.CardNo = ObjCustData.CardNo;
+                        objMemberData.PointsBalance = ObjCustData.Points;
+                        objMemberData.EnrolledOn = ObjCustData.DOJ.Value.ToString("dd/MM/yyyy");
+                        objMemberData.EnrolledOutletName = ObjCustData.EnrolledOutlet;
+                        objMemberData.CustomerId = ObjCustData.CustomerId;
                     }
                 }
             }
@@ -216,10 +222,40 @@ namespace BOTS_BL.Repository
 
                         if (objExisting == null)
                         {
-                            // Object for tblCustDetailsMasters
                             objCustomerDetail = contextNew.tblCustDetailsMasters.Where(x => x.Id == CustomerId).FirstOrDefault();
 
                             string oldno = objCustomerDetail.MobileNo;
+                            var LsttblCustPointsMaster = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == oldno).ToList();
+
+                            if (LsttblCustPointsMaster != null)
+                            {
+                                foreach (var item in LsttblCustPointsMaster)
+                                {
+                                    var TempPK = new String(item.MobileNoPtsId.Where(Char.IsLetter).ToArray());
+
+                                    string TempId = MobileNo + TempPK;
+
+                                    tblCustPointsMaster objPoints = new tblCustPointsMaster();
+                                    tblCustPointsMaster objRmv = new tblCustPointsMaster();
+                                    objPoints.EndDate = item.EndDate;
+                                    objPoints.IsActive = item.IsActive;
+                                    objPoints.MinInvoiceAmtRequired = item.MinInvoiceAmtRequired;
+                                    objPoints.MobileNo = MobileNo;
+                                    objPoints.MobileNoPtsId = TempId;
+                                    objPoints.Points = item.Points;
+                                    objPoints.PointsType = item.PointsType;
+                                    objPoints.PointsDesc = item.PointsDesc;
+                                    objPoints.StartDate = item.StartDate;                                    
+
+                                    contextNew.tblCustPointsMasters.AddOrUpdate(objPoints);
+                                    
+                                    contextNew.tblCustPointsMasters.Remove(item);
+                                                                        
+                                    contextNew.SaveChanges();
+                                }
+                            }
+                            // Object for tblCustDetailsMasters
+
                             string Id = GroupId + MobileNo;
                             objCustomerDetail.MobileNo = MobileNo;
                             objCustomerDetail.Id = Id;
@@ -234,25 +270,38 @@ namespace BOTS_BL.Repository
                             tblMobChnge.GroupId = GroupId;
 
                             // Inserting in CustPointsMaster multiple rows
-                            var LsttblCustPointsMaster = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == oldno).ToList();
 
-                            if (LsttblCustPointsMaster != null)
-                            {
-                                foreach (var item in LsttblCustPointsMaster)
-                                {
-                                    item.MobileNo = MobileNo;
-                                    contextNew.tblCustPointsMasters.AddOrUpdate(item);
-                                    contextNew.SaveChanges();
-                                }
-                            }
                             //Inserting tblTxnDetailsMaster
                             var LsttblTxn = contextNew.tblTxnDetailsMasters.Where(x => x.MobileNo == oldno).ToList();
+
+                            
                             if (LsttblTxn != null)
                             {
                                 foreach (var item in LsttblTxn)
                                 {
-                                    item.MobileNo = MobileNo;
-                                    contextNew.tblTxnDetailsMasters.AddOrUpdate(item);
+                                    //tblTxnDetailsMaster ObjTxn = new tblTxnDetailsMaster();
+                                    //ObjTxn.MobileNo = item.MobileNo;
+                                    //ObjTxn.CounterId = item.CounterId;
+                                    //ObjTxn.OutletId = item.OutletId;
+                                    //ObjTxn.TxnType = item.TxnType;
+                                    //ObjTxn.TxnDatetime = item.TxnDatetime;
+                                    //ObjTxn.TxnReceivedDatetime = item.TxnReceivedDatetime;
+                                    //ObjTxn.InvoiceNo = item.InvoiceNo;
+                                    //ObjTxn.InvoiceAmt = item.InvoiceAmt;
+                                    //ObjTxn.IsActive = item.IsActive;
+                                    //ObjTxn.PointsEarned = item.PointsEarned;
+                                    //ObjTxn.PointsBurned = item.PointsBurned;
+                                    //ObjTxn.CampaignPoints = item.CampaignPoints;
+                                    //ObjTxn.OriginalInvAmt = item.OriginalInvAmt;
+                                    //ObjTxn.CustBalancePts = item.CustBalancePts;
+                                    //ObjTxn.TxnBy = item.TxnBy;
+                                    //ObjTxn.MobileNoInvId = item.MobileNoInvId;
+
+                                    //item.MobileNo = MobileNo;
+
+                                    //contextNew.tblTxnDetailsMasters.AddOrUpdate(ObjTxn);
+                                    //contextNew.tblTxnDetailsMasters.Attach(item);
+                                    contextNew.tblTxnDetailsMasters.Remove(item);
                                     contextNew.SaveChanges();
                                 }
                             }
@@ -317,12 +366,15 @@ namespace BOTS_BL.Repository
                                 }
                             }
 
-                            var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == oldno).FirstOrDefault();
+
+                            //var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == oldno).FirstOrDefault();
+                            ITOPSCustData ObjCustData = new ITOPSCustData();
+                            ObjCustData = contextNew.Database.SqlQuery<ITOPSCustData>("select MobileNo,CustomerName,EnrolledOutlet,DOJ,CardNo,CustomerId,Points from View_ITOPSCustData where MobileNo = @OldNo", new SqlParameter("@OldNo", oldno)).FirstOrDefault();
                             tblPtsTransferDetail objPtsTrans = new tblPtsTransferDetail();
 
                             objPtsTrans.PtsFromMobileNo = oldno;
                             objPtsTrans.PtsToMobileNo = MobileNo;
-                            objPtsTrans.PtsTransferred = CustData.Points;
+                            objPtsTrans.PtsTransferred = ObjCustData.Points;
                             objPtsTrans.TxnDatetime = Date;
                             objPtsTrans.IsActive = true;
 
@@ -1017,18 +1069,20 @@ namespace BOTS_BL.Repository
             try
             {
                 string connStr = GetCustomerConnString(GroupId);
+                ITOPSCustData ObjCustData = new ITOPSCustData();
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    //var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    ObjCustData = contextNew.Database.SqlQuery<ITOPSCustData>("select MobileNo,CustomerName,EnrolledOutlet,DOJ,CardNo,CustomerId,Points from View_ITOPSCustData where MobileNo = @MobileNo", new SqlParameter("@MobileNo", MobileNo)).FirstOrDefault();
 
-                    if (CustData != null)
+                    if (ObjCustData != null)
                     {
-                        objMemberData.MemberName = CustData.CustomerName;
-                        objMemberData.MobileNo = CustData.MobileNo;
-                        objMemberData.CardNo = CustData.CardNo;
-                        objMemberData.PointsBalance = CustData.Points;
-                        objMemberData.EnrolledOn = CustData.DOJ.Value.ToString("dd/MM/yyyy");
-                        objMemberData.EnrolledOutletName = CustData.EnrolledOutlet;
+                        objMemberData.MemberName = ObjCustData.CustomerName;
+                        objMemberData.MobileNo = ObjCustData.MobileNo;
+                        objMemberData.CardNo = ObjCustData.CardNo;
+                        objMemberData.PointsBalance = ObjCustData.Points;
+                        objMemberData.EnrolledOn = ObjCustData.DOJ.Value.ToString("dd/MM/yyyy");
+                        objMemberData.EnrolledOutletName = ObjCustData.EnrolledOutlet;
                     }
                 }
             }

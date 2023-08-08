@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models
+namespace BOTS_BL.Models.IndividualDBModels
 {
     using System;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace BOTS_BL.Models
     [Table("tblTxnDetailsMaster")]
     public partial class tblTxnDetailsMaster
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long SlNo { get; set; }
 
         [StringLength(50)]
@@ -53,5 +53,9 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string TxnBy { get; set; }
+
+        [Key]
+        [StringLength(100)]
+        public string MobileNoInvId { get; set; }
     }
 }
