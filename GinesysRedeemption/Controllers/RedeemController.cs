@@ -58,7 +58,7 @@ namespace GinesysRedeemption.Controllers
             var BaseUrl = ConfigurationManager.AppSettings["RedeemBaseUrl"];
             string storeid = "8888888888";
             string billGUID = "D4E8010B-7164-46ED-8F3D-43F8B257291820180309143018907";
-            string mobileno = "9003552567";
+            string mobileno = "9413021114";
             string billvalue = "2000";
             string token = "storeid=" + storeid;
             token += "&mobileno=" + mobileno;

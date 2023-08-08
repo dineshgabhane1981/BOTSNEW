@@ -199,7 +199,7 @@ namespace WebApp.Controllers
             {
                 ViewBag.EventStarted = "Started";
             }
-            if (eventDetails.EventEndDate.Value < DateTime.Now)
+            if (eventDetails.EventEndDate.Value < DateTime.Now.AddDays(-1))
             {
                 ViewBag.EventEnded = "Ended";
             }
