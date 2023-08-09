@@ -17,4 +17,17 @@ namespace BOTS_BL.Models.ITOps
         public decimal Points { get; set; }
 
     }
+    public class ITOPSCustTxnData
+    {
+        public string TxnType { get; set; }
+        public string InvoiceNo { get; set; }
+        public string MobileNo { get; set; }
+        public decimal? InvoiceAmt { get; set; }
+        public decimal? PointsEarned { get; set; }
+        public string OutletName { get; set; }
+        public DateTime TxnDatetime { get; set; }      
+        public long SlNo { get; set; }
+        public string MobileNoInvId { get; set; }
+    }
+
 }

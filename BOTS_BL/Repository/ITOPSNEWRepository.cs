@@ -819,18 +819,19 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public bool ChangeSMSDetails(string GroupId, string CustomerId, bool Disable, tblAudit objAudit)
+        public bool ChangeSMSDetails(string GroupId, string MobileNo, bool Disable, tblAudit objAudit)
         {
             bool status = false;
             try
             {
-                string connStr =  GetCustomerConnString(GroupId);
+                tblCustDetailsMaster objCustDetail = new tblCustDetailsMaster();
+                string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
-                {
-                    var objCustomer = contextNew.CustomerDetails.Where(x => x.CustomerId == CustomerId).FirstOrDefault();
-                    objCustomer.IsSMS = Disable;
+                {                    
+                    objCustDetail = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    objCustDetail.DisableSMSWAPromo = Disable;
 
-                    contextNew.CustomerDetails.AddOrUpdate(objCustomer);
+                    contextNew.tblCustDetailsMasters.AddOrUpdate(objCustDetail);
                     contextNew.SaveChanges();
                     status = true;
                 }
@@ -879,24 +880,23 @@ namespace BOTS_BL.Repository
         {
             CancelTxnModel objReturn = new CancelTxnModel();
             try
-            {
-                TransactionMaster objTxn = new TransactionMaster();
-                CustomerDetail objCustomerDetail = new CustomerDetail();
+            {                
+                ITOPSCustTxnData ObjCustTxnData = new ITOPSCustTxnData();
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var CustData = contextNew.View_ITOPSCustTxnData.Where(x => x.InvoiceNo == InvoiceNo).FirstOrDefault();
-
-                    if (CustData != null)
+                    ObjCustTxnData = contextNew.Database.SqlQuery<ITOPSCustTxnData>("select InvoiceNo,InvoiceAmt,MobileNo,PointsEarned,TxnDatetime,OutletName,TxnType,SlNo from View_ITOPSCustTxnData where InvoiceNo = @InvoiceNo", new SqlParameter("@InvoiceNo", InvoiceNo)).FirstOrDefault();
+                   
+                    if (ObjCustTxnData != null)
                     {
-                        objReturn.InvoiceNo = CustData.InvoiceNo;
-                        objReturn.InvoiceAmt = CustData.InvoiceAmt;
-                        objReturn.MobileNo = CustData.MobileNo;
-                        objReturn.Points = Convert.ToString(CustData.PointsEarned);
-                        objReturn.DatetimeOriginal = CustData.TxnDatetime.Value.ToString("dd/MM/yyyy");
-                        objReturn.OutletName = CustData.OutletName;
-                        objReturn.TransactionName = CustData.TxnType;
-                        objReturn.TransactionId = CustData.SlNo;
+                        objReturn.InvoiceNo = ObjCustTxnData.InvoiceNo;
+                        objReturn.InvoiceAmt = Convert.ToDecimal(ObjCustTxnData.InvoiceAmt);
+                        objReturn.MobileNo = ObjCustTxnData.MobileNo;
+                        objReturn.Points = Convert.ToString(ObjCustTxnData.PointsEarned);
+                        objReturn.DatetimeOriginal = Convert.ToString(ObjCustTxnData.TxnDatetime);
+                        objReturn.OutletName = ObjCustTxnData.OutletName;
+                        objReturn.TransactionName = ObjCustTxnData.TxnType;
+                        objReturn.TransactionId = ObjCustTxnData.SlNo;
                     }
                 }
             }
@@ -911,41 +911,24 @@ namespace BOTS_BL.Repository
         {
             CancelTxnModel objReturn = new CancelTxnModel();
             try
-            {
-                TransactionMaster objTxn = new TransactionMaster();
-                CustomerDetail objCustomerDetail = new CustomerDetail();
+            {                
+                ITOPSCustTxnData ObjCustTxnData = new ITOPSCustTxnData();
                 string connStr = GetCustomerConnString(GroupId);
                 long TxnId = Convert.ToInt64(TransactionId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    //    objTxn = contextNew.TransactionMasters.Where(x => x.SlNo == TxnId).FirstOrDefault();
-                    //}
-                    //if (objTxn != null)
-                    //{
-                    //    objReturn.TransactionId = objTxn.SlNo;
-                    //    objReturn.InvoiceNo = objTxn.InvoiceNo;
-                    //    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
-                    //    objReturn.MobileNo = objTxn.MobileNo;
-                    //    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
-                    //    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
-                    //    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
-                    //    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
-                    //    using (var contextNew = new BOTSDBContext(connStr))
-                    //    {
-                    //        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
-                    //        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
-                    //    }
-                    var CustData = contextNew.View_ITOPSCustTxnData.Where(x => x.SlNo == TxnId).FirstOrDefault();
-
-                    if (CustData != null)
+                    ObjCustTxnData = contextNew.Database.SqlQuery<ITOPSCustTxnData>("select InvoiceNo,InvoiceAmt,MobileNo,PointsEarned,TxnDatetime,OutletName,TxnType,SlNo from View_ITOPSCustTxnData where SlNo = @SlNo", new SqlParameter("@SlNo", TransactionId)).FirstOrDefault();
+                    
+                    if (ObjCustTxnData != null)
                     {
-                        objReturn.InvoiceNo = CustData.InvoiceNo;
-                        objReturn.InvoiceAmt = CustData.InvoiceAmt;
-                        objReturn.MobileNo = CustData.MobileNo;
-                        objReturn.Points = Convert.ToString(CustData.PointsEarned);
-                        objReturn.DatetimeOriginal = CustData.TxnDatetime.Value.ToString("dd/MM/yyyy");
-                        objReturn.OutletName = CustData.OutletName;
-                        objReturn.TransactionName = CustData.TxnType;
+                        objReturn.InvoiceNo = ObjCustTxnData.InvoiceNo;
+                        objReturn.InvoiceAmt = Convert.ToDecimal(ObjCustTxnData.InvoiceAmt);
+                        objReturn.MobileNo = ObjCustTxnData.MobileNo;
+                        objReturn.Points = Convert.ToString(ObjCustTxnData.PointsEarned);
+                        objReturn.DatetimeOriginal = Convert.ToString(ObjCustTxnData.TxnDatetime);
+                        objReturn.OutletName = ObjCustTxnData.OutletName;
+                        objReturn.TransactionName = ObjCustTxnData.TxnType;
+                        objReturn.TransactionId = ObjCustTxnData.SlNo;
                     }
                 }
             }
@@ -1007,12 +990,14 @@ namespace BOTS_BL.Repository
         {
             List<CancelTxnModel> lstObjReturn = new List<CancelTxnModel>();
             try
-            {
-                List<View_ITOPSCustTxnData> lstObjTxn = new List<View_ITOPSCustTxnData>();
+            {                
+                List<ITOPSCustTxnData> lstObjTxn = new List<ITOPSCustTxnData>();
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
+
                 {
-                    lstObjTxn = contextNew.View_ITOPSCustTxnData.Where(x => x.MobileNo == MobileNo).ToList();
+                    lstObjTxn = contextNew.Database.SqlQuery<ITOPSCustTxnData>("select InvoiceNo,InvoiceAmt,MobileNo,PointsEarned,TxnDatetime,OutletName,TxnType,SlNo from View_ITOPSCustTxnData where MobileNo = @MobileNo", new SqlParameter("@MobileNo", MobileNo)).ToList<ITOPSCustTxnData>();
+
                     if (lstObjTxn != null)
                     {
                         foreach (var objTxn in lstObjTxn)
@@ -1029,7 +1014,6 @@ namespace BOTS_BL.Repository
 
                             lstObjReturn.Add(objReturn);
                         }
-
                     }
                 }
             }
