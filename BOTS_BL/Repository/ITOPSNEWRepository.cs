@@ -434,8 +434,6 @@ namespace BOTS_BL.Repository
 
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    //if (GroupId == "1226")
-                    //{
                         if (IsSMS == "True")
                         {
                             IsSMS = "1";
@@ -513,39 +511,6 @@ namespace BOTS_BL.Repository
                                }                              
                             }
                         }
-                    //}
-                    //else
-                    //{
-                    //    result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_Points,@pi_CustomerName",
-                    //          new SqlParameter("@pi_MobileNo", MobileNo),
-                    //          new SqlParameter("@pi_OutletId", OutletId),
-                    //          new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
-                    //          new SqlParameter("@pi_RequestDate", RequestDate.ToString("yyyy-MM-dd")),
-                    //          new SqlParameter("@pi_InvoiceNo", InvoiceNo),
-                    //          new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
-                    //          new SqlParameter("@pi_LoginId", ""),
-                    //          new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
-                    //          new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                    //          new SqlParameter("@pi_SMSFlag", IsSMS),
-                    //          new SqlParameter("@pi_Points", Points),
-                    //          new SqlParameter("@pi_CustomerName", Name)).FirstOrDefault<SPResponse>();
-                    //}
-
-
-
-                    //DateTime.Now.ToString("yyyy-MM-dd")
-
-
-                    //if (result.ResponseCode == "00")
-                    //{
-                    //   // status = true;
-                    //   if(result.SMSFlag == "1")
-                    //    {
-                    //        string _MobileMessage = result.Message;
-                    //        //Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
-                    //        //_job.Start();
-                    //    }
-                    //}
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -580,8 +545,6 @@ namespace BOTS_BL.Repository
 
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    //if (GroupId == "1226")
-                    //{
                         if (IsSMS == "True")
                         {
                             IsSMS = "1";
@@ -661,25 +624,6 @@ namespace BOTS_BL.Repository
                                 }                                  
                             }
                         }
-
-                    //}
-                    //else
-                    //{
-                    //    result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId,@pi_PartialEarnPoints, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag, @pi_TxnType",
-                    //          new SqlParameter("@pi_MobileNo", MobileNo),
-                    //          new SqlParameter("@pi_OutletId", OutletId),
-                    //          new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
-                    //          new SqlParameter("@pi_RequestDate", RequestDate.ToString("yyyy-MM-dd")),
-                    //          new SqlParameter("@pi_InvoiceNo", InvoiceNo),
-                    //          new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
-                    //          new SqlParameter("@pi_RedeemPoints", Points),
-                    //          new SqlParameter("@pi_LoginId", ""),
-                    //          new SqlParameter("@pi_PartialEarnPoints", PartialEarnPoints),
-                    //          new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
-                    //          new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                    //          new SqlParameter("@pi_SMSFlag", IsSMS),
-                    //          new SqlParameter("@pi_TxnType", TxnType)).FirstOrDefault<SPResponse>();
-                    //}
                 }
                 using (var context = new CommonDBContext())
                 {
