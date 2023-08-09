@@ -96,6 +96,8 @@ namespace BOTS_BL.Repository
         public MemberData GetChangeNameByCardNo(string GroupId, string searchData)
         {
             MemberData objMemberData = new MemberData();
+
+            //Int64 Data = Convert.ToInt64(searchData);
             try
             {
                 CustomerDetail objCustomerDetail = new CustomerDetail();
@@ -105,7 +107,7 @@ namespace BOTS_BL.Repository
                 {
                     //objCustomerDetail = contextNew.CustomerDetails.Where(x => x.CardNumber == searchData && x.Status == "00").FirstOrDefault();
                     //var CustData = contextNew.View_ITOPSCustData.Where(x => x.CardNo == searchData).FirstOrDefault();
-                    ObjCustData = contextNew.Database.SqlQuery<ITOPSCustData>("select MobileNo,CustomerName,EnrolledOutlet,DOJ,CardNo,CustomerId,Points from View_ITOPSCustData where CardNo = @CardNo", new SqlParameter("@CardNo", searchData)).FirstOrDefault();
+                    ObjCustData = contextNew.Database.SqlQuery<ITOPSCustData>("select MobileNo,CustomerName,EnrolledOutlet,DOJ,CardNo,CustomerId,Points from View_ITOPSCustData where CardNo = '"+ searchData + "' ").FirstOrDefault();
 
                     if (ObjCustData != null)
                     {
@@ -415,15 +417,25 @@ namespace BOTS_BL.Repository
 
         public SPResponse AddEarnData(string GroupId, string MobileNo, string Name, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, string IsSMS, string Points, tblAudit objAudit)
         {
+            string DBName = string.Empty;
             SPResponse result = new SPResponse();
+
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+
             try
             {
                 string connStr = GetCustomerConnString(GroupId);
 
+                using (var context = new CommonDBContext())
+                {
+                    DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                }
+
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    if (GroupId == "1226")
-                    {
+                    //if (GroupId == "1226")
+                    //{
                         if (IsSMS == "True")
                         {
                             IsSMS = "1";
@@ -434,7 +446,7 @@ namespace BOTS_BL.Repository
                         }
                         SqlConnection _Con = new SqlConnection(connStr);
                         DataSet DT = new DataSet();
-                        SqlCommand cmdReport = new SqlCommand("sp_EarnRW_New_ITOPS", _Con);
+                        SqlCommand cmdReport = new SqlCommand("sp_ITOPSEarn", _Con);
                         SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
                         using (cmdReport)
                         {
@@ -450,6 +462,8 @@ namespace BOTS_BL.Repository
                             SqlParameter param10 = new SqlParameter("pi_SMSFlag", IsSMS);
                             SqlParameter param11 = new SqlParameter("pi_Points", Points);
                             SqlParameter param12 = new SqlParameter("pi_CustomerName", Name);
+                            SqlParameter param13 = new SqlParameter("pi_DBName", DBName);
+                            SqlParameter param14 = new SqlParameter("pi_INDDatetime", Date);
 
                             cmdReport.CommandType = CommandType.StoredProcedure;
                             cmdReport.Parameters.Add(param1);
@@ -464,6 +478,8 @@ namespace BOTS_BL.Repository
                             cmdReport.Parameters.Add(param10);
                             cmdReport.Parameters.Add(param11);
                             cmdReport.Parameters.Add(param12);
+                            cmdReport.Parameters.Add(param13);
+                            cmdReport.Parameters.Add(param14);
 
                             daReport.Fill(DT);
 
@@ -473,9 +489,10 @@ namespace BOTS_BL.Repository
 
                             if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-
-                                if (Convert.ToString(dt.Rows[0]["SMSFlag"]) == "1")
-                                {
+                               if(IsSMS == "1")
+                               {
+                                   if (Convert.ToString(dt.Rows[0]["SMSFlag"]) == "1")
+                                   {
                                     string SMSStatus = Convert.ToString(dt.Rows[0]["SMSFlag"]);
                                     string WAStatus = Convert.ToString(dt.Rows[0]["WAStatus"]); //MobileNo
                                     string _MobileNo = Convert.ToString(dt.Rows[0]["MobileNo"]);
@@ -487,32 +504,32 @@ namespace BOTS_BL.Repository
                                     string _WAMessage = Convert.ToString(dt.Rows[0]["WAMessage"]);
                                     string _WATokenId = Convert.ToString(dt.Rows[0]["WATokenId"]);
 
-
-                                    if (SMSStatus == "1" && WAStatus == "1")
-                                    {
-                                        Thread _job = new Thread(() => SendSMSandWA(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _WAMessage, _WATokenId));
-                                        _job.Start();
-                                    }
-                                }
+                                        if (SMSStatus == "1" && WAStatus == "1")
+                                        {
+                                            Thread _job = new Thread(() => SendSMSandWA(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _WAMessage, _WATokenId));
+                                            _job.Start();
+                                        }
+                                   }
+                               }                              
                             }
                         }
-                    }
-                    else
-                    {
-                        result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_Points,@pi_CustomerName",
-                              new SqlParameter("@pi_MobileNo", MobileNo),
-                              new SqlParameter("@pi_OutletId", OutletId),
-                              new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
-                              new SqlParameter("@pi_RequestDate", RequestDate.ToString("yyyy-MM-dd")),
-                              new SqlParameter("@pi_InvoiceNo", InvoiceNo),
-                              new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
-                              new SqlParameter("@pi_LoginId", ""),
-                              new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
-                              new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                              new SqlParameter("@pi_SMSFlag", IsSMS),
-                              new SqlParameter("@pi_Points", Points),
-                              new SqlParameter("@pi_CustomerName", Name)).FirstOrDefault<SPResponse>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    result = contextNew.Database.SqlQuery<SPResponse>("sp_EarnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_Points,@pi_CustomerName",
+                    //          new SqlParameter("@pi_MobileNo", MobileNo),
+                    //          new SqlParameter("@pi_OutletId", OutletId),
+                    //          new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
+                    //          new SqlParameter("@pi_RequestDate", RequestDate.ToString("yyyy-MM-dd")),
+                    //          new SqlParameter("@pi_InvoiceNo", InvoiceNo),
+                    //          new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
+                    //          new SqlParameter("@pi_LoginId", ""),
+                    //          new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
+                    //          new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
+                    //          new SqlParameter("@pi_SMSFlag", IsSMS),
+                    //          new SqlParameter("@pi_Points", Points),
+                    //          new SqlParameter("@pi_CustomerName", Name)).FirstOrDefault<SPResponse>();
+                    //}
 
 
 
@@ -546,14 +563,25 @@ namespace BOTS_BL.Repository
 
         public SPResponse AddRedeemPointsData(string GroupId, string MobileNo, string OutletId, DateTime TxnDate, DateTime RequestDate, string InvoiceNo, string InvoiceAmt, decimal Points, string IsSMS, string TxnType, string PartialEarnPoints, tblAudit objAudit)
         {
+            string DBName = string.Empty;
             SPResponse result = new SPResponse();
+
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+
             try
             {
                 string connStr = GetCustomerConnString(GroupId);
+
+                using (var context = new CommonDBContext())
+                {
+                    DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                }
+
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    if (GroupId == "1226")
-                    {
+                    //if (GroupId == "1226")
+                    //{
                         if (IsSMS == "True")
                         {
                             IsSMS = "1";
@@ -564,7 +592,7 @@ namespace BOTS_BL.Repository
                         }
                         SqlConnection _Con = new SqlConnection(connStr);
                         DataSet DT = new DataSet();
-                        SqlCommand cmdReport = new SqlCommand("sp_BurnRW_New_ITOPS", _Con);
+                        SqlCommand cmdReport = new SqlCommand("sp_ITOPSBurn", _Con);
                         SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
                         using (cmdReport)
                         {
@@ -581,6 +609,8 @@ namespace BOTS_BL.Repository
                             SqlParameter param11 = new SqlParameter("pi_RequestedOnForum", objAudit.RequestedOnForum);
                             SqlParameter param12 = new SqlParameter("pi_SMSFlag", IsSMS);
                             SqlParameter param13 = new SqlParameter("pi_TxnType", TxnType);
+                            SqlParameter param14 = new SqlParameter("pi_DBName", DBName);
+                            SqlParameter param15 = new SqlParameter("pi_INDDatetime", Date);
 
                             cmdReport.CommandType = CommandType.StoredProcedure;
                             cmdReport.Parameters.Add(param1);
@@ -596,6 +626,8 @@ namespace BOTS_BL.Repository
                             cmdReport.Parameters.Add(param11);
                             cmdReport.Parameters.Add(param12);
                             cmdReport.Parameters.Add(param13);
+                            cmdReport.Parameters.Add(param14);
+                            cmdReport.Parameters.Add(param15);
 
                             daReport.Fill(DT);
 
@@ -605,48 +637,49 @@ namespace BOTS_BL.Repository
 
                             if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-
-                                if (Convert.ToString(dt.Rows[0]["SMSFlag"]) == "1")
+                                if (IsSMS == "1")
                                 {
-                                    string SMSStatus = Convert.ToString(dt.Rows[0]["SMSFlag"]);
-                                    string WAStatus = Convert.ToString(dt.Rows[0]["WAStatus"]); //MobileNo
-                                    string _MobileNo = Convert.ToString(dt.Rows[0]["MobileNo"]);
-                                    string _MobileMessage = Convert.ToString(dt.Rows[0]["Message"]);
-                                    string _UserName = Convert.ToString(dt.Rows[0]["UserName"]);
-                                    string _Password = Convert.ToString(dt.Rows[0]["Password"]);
-                                    string _Sender = Convert.ToString(dt.Rows[0]["SenderId"]);
-                                    string _Url = Convert.ToString(dt.Rows[0]["Url"]);
-                                    string _WAMessage = Convert.ToString(dt.Rows[0]["WAMessage"]);
-                                    string _WATokenId = Convert.ToString(dt.Rows[0]["WATokenId"]);
-
-
-                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    if (Convert.ToString(dt.Rows[0]["SMSFlag"]) == "1")
                                     {
-                                        Thread _job = new Thread(() => SendSMSandWA(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _WAMessage, _WATokenId));
-                                        _job.Start();
+                                        string SMSStatus = Convert.ToString(dt.Rows[0]["SMSFlag"]);
+                                        string WAStatus = Convert.ToString(dt.Rows[0]["WAStatus"]); //MobileNo
+                                        string _MobileNo = Convert.ToString(dt.Rows[0]["MobileNo"]);
+                                        string _MobileMessage = Convert.ToString(dt.Rows[0]["Message"]);
+                                        string _UserName = Convert.ToString(dt.Rows[0]["UserName"]);
+                                        string _Password = Convert.ToString(dt.Rows[0]["Password"]);
+                                        string _Sender = Convert.ToString(dt.Rows[0]["SenderId"]);
+                                        string _Url = Convert.ToString(dt.Rows[0]["Url"]);
+                                        string _WAMessage = Convert.ToString(dt.Rows[0]["WAMessage"]);
+                                        string _WATokenId = Convert.ToString(dt.Rows[0]["WATokenId"]);
+
+                                        if (SMSStatus == "1" && WAStatus == "1")
+                                        {
+                                            Thread _job = new Thread(() => SendSMSandWA(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _WAMessage, _WATokenId));
+                                            _job.Start();
+                                        }
                                     }
-                                }
+                                }                                  
                             }
                         }
 
-                    }
-                    else
-                    {
-                        result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId,@pi_PartialEarnPoints, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag, @pi_TxnType",
-                              new SqlParameter("@pi_MobileNo", MobileNo),
-                              new SqlParameter("@pi_OutletId", OutletId),
-                              new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
-                              new SqlParameter("@pi_RequestDate", RequestDate.ToString("yyyy-MM-dd")),
-                              new SqlParameter("@pi_InvoiceNo", InvoiceNo),
-                              new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
-                              new SqlParameter("@pi_RedeemPoints", Points),
-                              new SqlParameter("@pi_LoginId", ""),
-                              new SqlParameter("@pi_PartialEarnPoints", PartialEarnPoints),
-                              new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
-                              new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                              new SqlParameter("@pi_SMSFlag", IsSMS),
-                              new SqlParameter("@pi_TxnType", TxnType)).FirstOrDefault<SPResponse>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    result = contextNew.Database.SqlQuery<SPResponse>("sp_BurnRW_New_ITOPS @pi_MobileNo, @pi_OutletId, @pi_TxnDate, @pi_RequestDate, @pi_InvoiceNo, @pi_InvoiceAmt,@pi_RedeemPoints, @pi_LoginId,@pi_PartialEarnPoints, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag, @pi_TxnType",
+                    //          new SqlParameter("@pi_MobileNo", MobileNo),
+                    //          new SqlParameter("@pi_OutletId", OutletId),
+                    //          new SqlParameter("@pi_TxnDate", TxnDate.ToString("yyyy-MM-dd")),
+                    //          new SqlParameter("@pi_RequestDate", RequestDate.ToString("yyyy-MM-dd")),
+                    //          new SqlParameter("@pi_InvoiceNo", InvoiceNo),
+                    //          new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
+                    //          new SqlParameter("@pi_RedeemPoints", Points),
+                    //          new SqlParameter("@pi_LoginId", ""),
+                    //          new SqlParameter("@pi_PartialEarnPoints", PartialEarnPoints),
+                    //          new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
+                    //          new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
+                    //          new SqlParameter("@pi_SMSFlag", IsSMS),
+                    //          new SqlParameter("@pi_TxnType", TxnType)).FirstOrDefault<SPResponse>();
+                    //}
                 }
                 using (var context = new CommonDBContext())
                 {

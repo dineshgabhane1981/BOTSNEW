@@ -1,0 +1,334 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+
+<!--Add / Earn-->
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <!--content inner-->
+
+            <div class="container overflow-hidden">
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec3" data-animation="scaleIn">
+                    <h4 class="multisteps-form__title" style="color:blue;">Add / Earn</h4><br />
+
+                    <div class="multisteps-form__content" style="height: 600px !important">
+                        <div>
+                            <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+                            <input type="hidden" id="hdnGroupId" />
+                            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+                            <input type="number" id="txtMobileNo2" class="input50" />
+
+                            <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
+
+                            <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
+                            <input type="number" id="txtCardNo2" class="input50" />
+                            <button type="button" id="btnSearchMember2" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+                        </div>
+                        <div>
+                            <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                                <input type="radio" name="first_item2" id="rbtnSMS2" /> Send SMS
+                                <input type="radio" name="first_item2" style="margin-left:30px;" checked id="rbtnNOSMS2" /> Don't Send SMS
+                            </div>
+                            <div style="display:flex; height:400px;">
+                                <input type="hidden" id="hdnCustomerId2" />
+                                <table border="2" cellpadding="5" cellspacing="5">
+                                    <tr>
+                                        <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Member Name</td>
+                                        <td style="padding:10px;width:200px;"><span style="color:red;" id="spnMemberName2"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Mobile No</td>
+                                        <td style="padding:10px;"><span id="spnMobileno2"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Card No</td>
+                                        <td style="padding:10px;"><span id="spnCardNo2"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Points Balance</td>
+                                        <td style="padding:10px;"><span id="spnPtBalance2"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Enrolled Outlet</td>
+                                        <td style="padding:10px;"><span id="spnEnrolledOutlet2"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Enrolled On</td>
+                                        <td style="padding:10px;"><span id="spnEnrolledOn2"></span></td>
+                                    </tr>
+
+                                </table>
+
+                                <table border="2" cellpadding="5" cellspacing="5" id="tblUpdateData2" style="margin-left:50px;display:none;">
+                                    <tr>
+                                        <th colspan="2" style="padding:10px;text-align:center;">Points Earning on a Purchase Txn</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;width:200px;">Enter Member Name</td>
+                                        <td style="padding:10px;width:200px;">
+                                            <input type="text" id="txtMemberName" placeholder="Member Name" class="input50" />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;width:200px;">Enter Invoice Number</td>
+                                        <td style="padding:10px;width:200px;">
+                                            <input type="text" id="txtInvoiceNumber" placeholder="Invoice No" class="input50" />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;width:200px;">Enter Invoice Amount</td>
+                                        <td style="padding:10px;width:200px;">
+                                            <input type="number" id="txtInvoiceAmount" placeholder="Invoice Amt" class="input50" />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;width:200px;">Enter Points</td>
+                                        <td style="padding:10px;width:200px;">
+                                            <input type="number" id="txtAddPoints" placeholder="Points" class="input50" />
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;width:200px;">Select Outlet</td>
+                                        <td style="padding:10px;width:200px;">
+                                            @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Requested by</td>
+                                        <td style="padding:10px;">
+                                            <input type="text" id="txtRequestedByName2" placeholder="Requested By" class="input50" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Requested on Forum</td>
+                                        <td style="padding:10px;">
+                                            <select name="ddlRequestedForum2" id="ddlRequestedForum2" class="input50">
+                                                <option value="Whatsapp">Whatsapp</option>
+                                                <option value="Email">Email</option>
+                                                <option value="Phone">Phone</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:10px;">Transaction Date</td>
+                                        <td style="padding:10px;"><input type="text" id="dtTransaction" class="input50" /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="button-row d-flex mt-5">
+                        <button style="margin-top:80px" class="btn btn-primary ml-auto" type="button" title="Next" id="btnSaveAddEarn" tabindex="20">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+
+        $("#dtTransaction").datepicker({
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
+        });
+
+        $('#btnSearchMember2').on("click", function () {
+
+            GetAddEarnData();
+        });
+        $('#btnSaveAddEarn').on("click", function () {
+            SaveAddEarn();
+        });
+
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+
+
+    });
+
+    function SaveLoadBonusData() {
+
+        if ($('#ddlOutletList4').val() == "") {
+            toastr.error('Please select Outlet');
+            $('#ddlOutletList4').focus();
+            return false;
+        }
+
+        }
+
+    function GetAddEarnData() {
+
+
+        if ($('#txtMobileNo2').val() == "" && $('#txtCardNo2').val() == "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        if ($('#txtMobileNo2').val() != "" && $('#txtCardNo2').val() != "") {
+            toastr.error('Please enter Mobile Number OR Card Number');
+            return false
+        }
+        $("#divLoader").show();
+
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDataNew", "EarnBurn")',//"/EarnBurn/GetData",
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNo2').val()) + ',CardNo: ' + JSON.stringify($('#txtCardNo2').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MemberName != null) {
+                    $("#spnMemberName2").text(result.MemberName);
+                    $("#spnMobileno2").text(result.MobileNo);
+                    $("#spnCardNo2").text(result.CardNo);
+                    $("#spnPtBalance2").text(result.PointsBalance);
+                    $("#spnEnrolledOutlet2").text(result.EnrolledOutletName);
+                    $("#spnEnrolledOn2").text(result.EnrolledOn);
+                    $("#hdnCustomerId2").val(result.CustomerId);
+
+                    $('#txtInvoiceNumber').val("");
+                    $('#txtInvoiceAmount').val("");
+                    $('#txtRequestedByName2').val("");
+                    $('#dtTransaction').val("");
+                    $('#ddlOutletList').prop('selectedIndex', 0);
+                    $('#ddlRequestedForum2').prop('selectedIndex', 0);
+                    $("#txtMemberName").val(result.MemberName);
+                    $("#txtMemberName").attr("disabled", "disabled");
+                    $("#tblUpdateData2").show();
+
+                }
+                else {
+
+                    $("#spnMemberName2").text("");
+                    $("#spnMobileno2").text("");
+                    $("#spnCardNo2").text("");
+                    $("#spnPtBalance2").text("");
+                    $("#spnEnrolledOutlet2").text("");
+                    $("#spnEnrolledOn2").text("");
+                    $("#hdnCustomerId2").text("");
+
+                    $('#txtInvoiceNumber').val("");
+                    $('#txtInvoiceAmount').val("");
+                    $('#txtRequestedByName2').val("");
+                    $('#dtTransaction').val("");
+                    $('#ddlOutletList').prop('selectedIndex', 0);
+                    $('#ddlRequestedForum2').prop('selectedIndex', 0);
+                    $("#txtMemberName").removeAttr("disabled");
+                    $("#txtMemberName").val("");
+                    $("#tblUpdateData2").show();
+
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function SaveAddEarn() {
+
+        if ($('#txtInvoiceNumber').val() == "") {
+            toastr.error('Please enter Invoice Number');
+            $('#txtInvoiceNumber').focus();
+            return false;
+        }
+        if ($('#txtInvoiceAmount').val() == "") {
+            toastr.error('Please enter Invoice Amount');
+            $('#txtInvoiceAmount').focus();
+            return false;
+        }
+
+        if ($('#ddlOutletList').val() == "") {
+            toastr.error('Please select Outlet');
+            $('#ddlOutletList').focus();
+            return false;
+        }
+
+        if ($('#txtRequestedByName2').val() == "") {
+            toastr.error('Please enter Requested Person name');
+            $('#txtRequestedByName2').focus();
+            return false;
+        }
+        if ($('#dtTransaction').val() == "") {
+            toastr.error('Please select Transaction date');
+            $('#dtTransaction').focus();
+            return false;
+        }
+        if (confirm("Are you sure? You want to change Data")) {
+            var MemberData = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+            item["MobileNo"] = $("#txtMobileNo2").val();
+            item["OutletId"] = $("#ddlOutletList").val();
+            item["TransactionDate"] = $("#dtTransaction").val();
+            item["InvoiceNumber"] = $("#txtInvoiceNumber").val();
+            item["InvoiceAmount"] = $("#txtInvoiceAmount").val();
+            item["Points"] = $("#txtAddPoints").val();
+            item["RequestedBy"] = $("#txtRequestedByName2").val();
+            item["RequestedForum"] = $('#ddlRequestedForum2 :selected').text();
+            item["RequestedOn"] = $("#dtTransaction").val();
+            item["CustomerName"] = $("#txtMemberName").val();
+
+            if ($('#rbtnSMS2').is(":checked")) {
+                item["IsSMS"] = 1;
+            }
+            if ($('#rbtnNOSMS2').is(":checked")) {
+                item["IsSMS"] = 0;
+            }
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddEarnDataNew", "EarnBurn")',//"/EarnBurn/AddEarnData",
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(111)
+                    if (result.ResponseCode == "00") {
+                        toastr.success(result.ResponseMessage);
+                        $("#divLoader").hide();
+                        $('#sec3').find(':input').val('');
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    if (result.responseText == "True") {
+                        toastr.success("Data Updated Successfully");
+                        $("#divLoader").hide();
+                        $('#sec3').find(':input').val('');
+                    }
+                    else {
+                        toastr.error('error occured while saving data');
+                        $("#divLoader").hide();
+                    }
+                }
+            });
+        }
+    }
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
