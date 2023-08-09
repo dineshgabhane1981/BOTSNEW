@@ -202,205 +202,74 @@ namespace BOTS_BL.Repository
 
         public SPResponse UpdateMobileOfMember(string GroupId, string CustomerId, string MobileNo, tblAudit objAudit)
         {
+            string DBName = string.Empty;
             SPResponse result = new SPResponse();
             try
             {
                 TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
                 DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
 
-                //CustomerDetail objCustomerDetail = new CustomerDetail();
-                tblCustDetailsMaster objCustomerDetail = new tblCustDetailsMaster();
-                List<tblTxnDetailsMaster> lstObjTxn = new List<tblTxnDetailsMaster>();
-                List<PointsExpiry> lstobjpoints = new List<PointsExpiry>();
-                TransferPointsDetail objtransferPointsDetail = new TransferPointsDetail();
-                tblMobileChangeHistory tblMobChnge = new tblMobileChangeHistory();
+                string OldMobileNo = CustomerId.Substring(4);
+
+
                 string connStr = GetCustomerConnString(GroupId);
+
+                using (var context = new CommonDBContext())
+                {
+                    DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                }
+
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    using (DbContextTransaction transaction = contextNew.Database.BeginTransaction())
+                    //var objExisting = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+
+                    var objExisting = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+
+                    if (objExisting == null)
                     {
-                        //var objExisting = contextNew.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                        var objExisting = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
 
-                        if (objExisting == null)
+                        SqlConnection _Con = new SqlConnection(connStr);
+                        DataSet DT = new DataSet();
+                        SqlCommand cmdReport = new SqlCommand("sp_ITOPSChangeMobileNo", _Con);
+                        SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                        using (cmdReport)
                         {
-                            objCustomerDetail = contextNew.tblCustDetailsMasters.Where(x => x.Id == CustomerId).FirstOrDefault();
+                            SqlParameter param1 = new SqlParameter("pi_OldMobileNo", OldMobileNo);
+                            SqlParameter param2 = new SqlParameter("pi_NewMobileNo", MobileNo);
+                            SqlParameter param3 = new SqlParameter("pi_LoginId", objAudit.AddedBy);
+                            SqlParameter param4 = new SqlParameter("pi_RequestBy", objAudit.RequestedBy);
+                            SqlParameter param5 = new SqlParameter("pi_RequestedOnForum", objAudit.RequestedOnForum);
+                            SqlParameter param6 = new SqlParameter("pi_DBName", DBName);
+                            SqlParameter param7 = new SqlParameter("pi_INDDatetime", Date);
 
-                            string oldno = objCustomerDetail.MobileNo;
-                            var LsttblCustPointsMaster = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == oldno).ToList();
+                            cmdReport.CommandType = CommandType.StoredProcedure;
+                            cmdReport.Parameters.Add(param1);
+                            cmdReport.Parameters.Add(param2);
+                            cmdReport.Parameters.Add(param3);
+                            cmdReport.Parameters.Add(param4);
+                            cmdReport.Parameters.Add(param5);
+                            cmdReport.Parameters.Add(param6);
+                            cmdReport.Parameters.Add(param7);
 
-                            if (LsttblCustPointsMaster != null)
+                            daReport.Fill(DT);
+
+                            DataTable dt = DT.Tables[0];
+                            string ResCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                            result.ResponseCode = ResCode;
+
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                                foreach (var item in LsttblCustPointsMaster)
-                                {
-                                    var TempPK = new String(item.MobileNoPtsId.Where(Char.IsLetter).ToArray());
 
-                                    string TempId = MobileNo + TempPK;
-
-                                    tblCustPointsMaster objPoints = new tblCustPointsMaster();
-                                    tblCustPointsMaster objRmv = new tblCustPointsMaster();
-                                    objPoints.EndDate = item.EndDate;
-                                    objPoints.IsActive = item.IsActive;
-                                    objPoints.MinInvoiceAmtRequired = item.MinInvoiceAmtRequired;
-                                    objPoints.MobileNo = MobileNo;
-                                    objPoints.MobileNoPtsId = TempId;
-                                    objPoints.Points = item.Points;
-                                    objPoints.PointsType = item.PointsType;
-                                    objPoints.PointsDesc = item.PointsDesc;
-                                    objPoints.StartDate = item.StartDate;                                    
-
-                                    contextNew.tblCustPointsMasters.AddOrUpdate(objPoints);
-                                    
-                                    contextNew.tblCustPointsMasters.Remove(item);
-                                                                        
-                                    contextNew.SaveChanges();
-                                }
                             }
-                            // Object for tblCustDetailsMasters
-
-                            string Id = GroupId + MobileNo;
-                            objCustomerDetail.MobileNo = MobileNo;
-                            objCustomerDetail.Id = Id;
-
-                            // Object for tblCustInfoes
-                            var ObjtblCustInfo = contextNew.tblCustInfoes.Where(x => x.MobileNo == oldno).FirstOrDefault();
-                            ObjtblCustInfo.MobileNo = MobileNo;
-
-                            tblMobChnge.NewMobileNo = MobileNo;
-                            tblMobChnge.OldMobileNo = oldno;
-                            tblMobChnge.TxnDatetime = Date;
-                            tblMobChnge.GroupId = GroupId;
-
-                            // Inserting in CustPointsMaster multiple rows
-
-                            //Inserting tblTxnDetailsMaster
-                            var LsttblTxn = contextNew.tblTxnDetailsMasters.Where(x => x.MobileNo == oldno).ToList();
-
-                            
-                            if (LsttblTxn != null)
-                            {
-                                foreach (var item in LsttblTxn)
-                                {
-                                    //tblTxnDetailsMaster ObjTxn = new tblTxnDetailsMaster();
-                                    //ObjTxn.MobileNo = item.MobileNo;
-                                    //ObjTxn.CounterId = item.CounterId;
-                                    //ObjTxn.OutletId = item.OutletId;
-                                    //ObjTxn.TxnType = item.TxnType;
-                                    //ObjTxn.TxnDatetime = item.TxnDatetime;
-                                    //ObjTxn.TxnReceivedDatetime = item.TxnReceivedDatetime;
-                                    //ObjTxn.InvoiceNo = item.InvoiceNo;
-                                    //ObjTxn.InvoiceAmt = item.InvoiceAmt;
-                                    //ObjTxn.IsActive = item.IsActive;
-                                    //ObjTxn.PointsEarned = item.PointsEarned;
-                                    //ObjTxn.PointsBurned = item.PointsBurned;
-                                    //ObjTxn.CampaignPoints = item.CampaignPoints;
-                                    //ObjTxn.OriginalInvAmt = item.OriginalInvAmt;
-                                    //ObjTxn.CustBalancePts = item.CustBalancePts;
-                                    //ObjTxn.TxnBy = item.TxnBy;
-                                    //ObjTxn.MobileNoInvId = item.MobileNoInvId;
-
-                                    //item.MobileNo = MobileNo;
-
-                                    //contextNew.tblTxnDetailsMasters.AddOrUpdate(ObjTxn);
-                                    //contextNew.tblTxnDetailsMasters.Attach(item);
-                                    contextNew.tblTxnDetailsMasters.Remove(item);
-                                    contextNew.SaveChanges();
-                                }
-                            }
-
-                            //Inserting tblTxnDetailsMasterClone
-                            var LsttblTxnClone = contextNew.tblTxnDetailsMaster_Clone.Where(x => x.MobileNo == oldno).ToList();
-                            if (LsttblTxnClone != null)
-                            {
-                                foreach (var item in LsttblTxnClone)
-                                {
-                                    item.MobileNo = MobileNo;
-                                    contextNew.tblTxnDetailsMaster_Clone.AddOrUpdate(item);
-                                    contextNew.SaveChanges();
-                                }
-                            }
-
-                            //Inserting in tblSalesReturnMaster
-                            var LsttblSalesReturnMaster = contextNew.tblSalesReturnMasters.Where(x => x.MobileNo == oldno).ToList();
-                            if (LsttblSalesReturnMaster != null)
-                            {
-                                foreach (var item in LsttblSalesReturnMaster)
-                                {
-                                    item.MobileNo = MobileNo;
-                                    contextNew.tblSalesReturnMasters.AddOrUpdate(item);
-                                    contextNew.SaveChanges();
-                                }
-                            }
-
-                            //Inserting in tblSalesReturnMasterClone
-                            var LsttblSalesReturnMasterClone = contextNew.tblSalesReturnMaster_Clone.Where(x => x.MobileNo == oldno).ToList();
-                            if (LsttblSalesReturnMasterClone != null)
-                            {
-                                foreach (var item in LsttblSalesReturnMasterClone)
-                                {
-                                    item.MobileNo = MobileNo;
-                                    contextNew.tblSalesReturnMaster_Clone.AddOrUpdate(item);
-                                    contextNew.SaveChanges();
-                                }
-                            }
-
-                            // Insert into tblTxnProDetailsMaster
-                            var LsttblTxnProDetailsMaster = contextNew.tblTxnProDetailsMasters.Where(x => x.MobileNo == oldno).ToList();
-                            if (LsttblTxnProDetailsMaster != null)
-                            {
-                                foreach (var item in LsttblTxnProDetailsMaster)
-                                {
-                                    item.MobileNo = MobileNo;
-                                    contextNew.tblTxnProDetailsMasters.AddOrUpdate(item);
-                                    contextNew.SaveChanges();
-                                }
-                            }
-
-                            // Insert into tblTxnProDetailsMasterClone
-                            var LsttblTxnProDetailsMasterClone = contextNew.tblTxnProDetailsMaster_Clone.Where(x => x.MobileNo == oldno).ToList();
-                            if (LsttblTxnProDetailsMasterClone != null)
-                            {
-                                foreach (var item in LsttblTxnProDetailsMasterClone)
-                                {
-                                    item.MobileNo = MobileNo;
-                                    contextNew.tblTxnProDetailsMaster_Clone.AddOrUpdate(item);
-                                    contextNew.SaveChanges();
-                                }
-                            }
-
-
-                            //var CustData = contextNew.View_ITOPSCustData.Where(x => x.MobileNo == oldno).FirstOrDefault();
-                            ITOPSCustData ObjCustData = new ITOPSCustData();
-                            ObjCustData = contextNew.Database.SqlQuery<ITOPSCustData>("select MobileNo,CustomerName,EnrolledOutlet,DOJ,CardNo,CustomerId,Points from View_ITOPSCustData where MobileNo = @OldNo", new SqlParameter("@OldNo", oldno)).FirstOrDefault();
-                            tblPtsTransferDetail objPtsTrans = new tblPtsTransferDetail();
-
-                            objPtsTrans.PtsFromMobileNo = oldno;
-                            objPtsTrans.PtsToMobileNo = MobileNo;
-                            objPtsTrans.PtsTransferred = ObjCustData.Points;
-                            objPtsTrans.TxnDatetime = Date;
-                            objPtsTrans.IsActive = true;
-
-                            contextNew.tblPtsTransferDetails.AddOrUpdate(objPtsTrans);
-                            contextNew.SaveChanges();
-
-                            contextNew.tblCustDetailsMasters.AddOrUpdate(objCustomerDetail);
-                            contextNew.tblCustInfoes.AddOrUpdate(ObjtblCustInfo);
-                            contextNew.tblMobileChangeHistories.AddOrUpdate(tblMobChnge);
-
-                            contextNew.SaveChanges();
-
-                            transaction.Commit();
-
-                            result.ResponseCode = "00";
-                            result.ResponseMessage = "Mobile Number Updated Successfully";
                         }
-                        else
-                        {
-                            result.ResponseCode = "01";
-                            result.ResponseMessage = "Mobile Number Already Exist";
-                        }
+                        result.ResponseCode = "00";
+                        result.ResponseMessage = "Mobile Number Updated Successfully";
                     }
-
+                    else
+                    {
+                        result.ResponseCode = "01";
+                        result.ResponseMessage = "Mobile Number Already Exist";
+                    }
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -949,23 +818,7 @@ namespace BOTS_BL.Repository
                 string connStr =  GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    //    objTxn = contextNew.TransactionMasters.Where(x => x.InvoiceNo == InvoiceNo && x.MobileNo == MobileNo && x.Status == "06").FirstOrDefault();
-                    //}
-                    //if (objTxn != null)
-                    //{
-                    //    objReturn.InvoiceNo = objTxn.InvoiceNo;
-                    //    objReturn.InvoiceAmt = objTxn.InvoiceAmt;
-                    //    objReturn.MobileNo = objTxn.MobileNo;
-                    //    objReturn.Points = Convert.ToString(objTxn.PointsEarned);
-                    //    objReturn.Datetime = Convert.ToDateTime(objTxn.Datetime).ToString("dd/MM/yyyy HH:mm:ss");
-                    //    objReturn.DatetimeOriginal = Convert.ToString(objTxn.Datetime);
-                    //    var OutletId = objTxn.CounterId.Substring(0, objTxn.CounterId.Length - 2);
-                    //    using (var contextNew = new BOTSDBContext(connStr))
-                    //    {
-                    //        objReturn.OutletName = contextNew.OutletDetails.Where(x => x.OutletId == OutletId).Select(y => y.OutletName).FirstOrDefault();
-                    //        objReturn.TransactionName = contextNew.TransactionTypeMasters.Where(x => x.TransactionType == objTxn.TransType).Select(y => y.TransactionName).FirstOrDefault();
-                    //    }
-
+                   
                     var CustData = contextNew.View_ITOPSCustTxnData.Where(x => x.MobileNo == MobileNo && x.InvoiceNo == InvoiceNo).FirstOrDefault();
 
                     if (CustData != null)
@@ -1057,21 +910,33 @@ namespace BOTS_BL.Repository
         public SPResponse DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, DateTime ip_Date, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
+
+            string DBName = string.Empty;
+
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+
+            using (var context = new CommonDBContext())
+            {
+                DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+            }
+
             try
             {
                 string connStr =  GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    result = contextNew.Database.SqlQuery<SPResponse>("sp_CancelTxn1_ITOPS @pi_MobileNo, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_RequestDate, @pi_Datetime, @pi_LoginId,@pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_ITOPSCancel @pi_MobileNo, @pi_InvoiceNo, @pi_InvoiceAmt, @pi_LoginId,@pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_DBName,@pi_INDDatetime",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_InvoiceNo", InvoiceNo),
                               new SqlParameter("@pi_InvoiceAmt", InvoiceAmt),
-                              new SqlParameter("@pi_RequestDate", objAudit.RequestedOn),
-                              new SqlParameter("@pi_Datetime", ip_Date),
-                              new SqlParameter("@pi_LoginId", ""),
+                              new SqlParameter("@pi_LoginId", objAudit.AddedBy),
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                              new SqlParameter("@pi_SMSFlag", "0")).FirstOrDefault<SPResponse>();
+                              new SqlParameter("@pi_SMSFlag", "0"),
+                              new SqlParameter("@pi_DBName", DBName),
+                              new SqlParameter("@pi_INDDatetime", Date)
+                              ).FirstOrDefault<SPResponse>();
 
                 }
                 using (var context = new CommonDBContext())
