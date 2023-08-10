@@ -438,6 +438,7 @@ namespace WebApp.Controllers.ITOPS
                     MobileNo = Convert.ToString(item["MobileNo"]);
                     NewMobileNo = Convert.ToString(item["NewMobileNo"]);
 
+                    // tblCustDetailsMaster
                     objCustomer.Name = "Member";
                     objCustomer.MobileNo = Convert.ToString(item["NewMobileNo"]);
                     objCustomer.Tier = "Base";
@@ -448,18 +449,18 @@ namespace WebApp.Controllers.ITOPS
                     objCustomer.CountryCode = "91";
                     objCustomer.DisableSMSWATxn = false;
 
+                    // tblCustPointsMaster
                     objCustPointsMaster.MobileNo = Convert.ToString(item["NewMobileNo"]);
                     objCustPointsMaster.PointsType = "Base";
                     objCustPointsMaster.PointsDesc = "Base";
                     objCustPointsMaster.IsActive = true;
                     objCustPointsMaster.MinInvoiceAmtRequired = 0;
-                    var MobileNo1 = NewMobileNo;
-                    var MobileNoPtsIdNew = NewMobileNo + "Base";
-                    objCustPointsMaster.MobileNoPtsId = MobileNoPtsIdNew;
 
+                    // tblCustInfo
                     objcustInfo.MobileNo = Convert.ToString(item["NewMobileNo"]);
                     objcustInfo.Name = "Member";
 
+                    // tblCustTxnSummaryMaster
                     objCustTxnSummaryMaster.MobileNo = Convert.ToString(item["NewMobileNo"]);
                     objCustTxnSummaryMaster.TotalSpend = 0;
                     objCustTxnSummaryMaster.TotalTxnCount = 0;
@@ -474,6 +475,7 @@ namespace WebApp.Controllers.ITOPS
                     objCustTxnSummaryMaster.SalesReturnPtsGiven = 0;
                     objCustTxnSummaryMaster.SalesReturnPtsRemoved = 0;
 
+                    // tblAudit
                     objAudit.GroupId = groupId;
                     objAudit.RequestedFor = "User Added";
                     objAudit.RequestedEntity = "User Added - " + objCustomer.MobileNo;

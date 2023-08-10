@@ -26,6 +26,6 @@ namespace BOTS_BL.Models.IndividualDBModels
         public string GroupId { get; set; }
 
         public bool? IsActive { get; set; }
-        public string MobileNoPtsId { get; set; }
+        //public string MobileNoPtsId { get; set; }
     }
 }

@@ -1075,6 +1075,7 @@ namespace BOTS_BL.Repository
                     {
                         try
                         {
+                            // Insert in tblCustDetailsMasters
                             var AdminOutletId = contextNew.tblOutletMasters.Where(x => x.OutletName.Contains("Admin")).Select(y => y.OutletId).FirstOrDefault();
                             var ObjMobileNo = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
                             if (ObjMobileNo == null)
@@ -1096,6 +1097,7 @@ namespace BOTS_BL.Repository
                                 result.ResponseCode = "01";
                                 result.ResponseMessage = "Mobile Number Already Exist";
                             }
+                            // Insert in tblCustInfoes
                             var ObjCustNoNew = contextNew.tblCustInfoes.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
                             if (ObjCustNoNew == null)
                             {
@@ -1110,6 +1112,7 @@ namespace BOTS_BL.Repository
                                 result.ResponseCode = "01";
                                 result.ResponseMessage = "Mobile Number Already Exist";
                             }
+                            // Insert in tblCustTxnSummaryMasters
                             var ObjMobileNoNew1 = contextNew.tblCustTxnSummaryMasters.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
                             if (ObjMobileNoNew1 == null)
                             {
@@ -1124,7 +1127,7 @@ namespace BOTS_BL.Repository
                                 result.ResponseCode = "01";
                                 result.ResponseMessage = "Mobile Number Already Exist";
                             }
-
+                            // Insert in tblCustPointsMasters
                             var objExisting = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
                             var objExistingNew = contextNew.tblCustPointsMasters.Where(x => x.MobileNo == NewMobileNo).FirstOrDefault();
                             if (objExisting != null && objExistingNew != null)
@@ -1146,6 +1149,7 @@ namespace BOTS_BL.Repository
                                 contextNew.tblCustPointsMasters.AddOrUpdate(objExisting);
                                 contextNew.SaveChanges();
 
+                                // Insert in tblPtsTransferDetail
                                 tblPtsTransferDetail objtblPtsTransferDetail = new tblPtsTransferDetail();
                                 objtblPtsTransferDetail.PtsFromMobileNo = MobileNo;
                                 objtblPtsTransferDetail.PtsToMobileNo = NewMobileNo;
@@ -1153,9 +1157,6 @@ namespace BOTS_BL.Repository
                                 objtblPtsTransferDetail.TxnDatetime = DateTime.Now;
                                 objtblPtsTransferDetail.GroupId = GroupId;
                                 objtblPtsTransferDetail.IsActive = true;
-                                var MobileNo1 = NewMobileNo;
-                                var MobileNoPtsIdNew = NewMobileNo + "Base";
-                                objtblPtsTransferDetail.MobileNoPtsId = MobileNoPtsIdNew;
                                 contextNew.tblPtsTransferDetails.AddOrUpdate(objtblPtsTransferDetail);
                                 contextNew.SaveChanges();
 
@@ -1173,6 +1174,8 @@ namespace BOTS_BL.Repository
                                     objCustPointsMaster.Points = objExisting1.Points;
                                     objExisting1.Points = 0;
                                     objCustPointsMaster.StartDate = DateTime.Now;
+                                    var MobileNoPtsIdNew = MobileNo1 + "Base";
+                                    objCustPointsMaster.MobileNoPtsId = MobileNoPtsIdNew;
                                     tblRuleMaster objRuleMaster = new tblRuleMaster();
                                     var ExpiryMonth = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
                                     var PointExpiryMonthNew = ExpiryMonth.PointsExpiryMonths;
@@ -1183,15 +1186,12 @@ namespace BOTS_BL.Repository
                                     contextNew.SaveChanges();
 
                                     tblPtsTransferDetail objtblPtsTransferDetail = new tblPtsTransferDetail();
-                                    objtblPtsTransferDetail.PtsFromMobileNo = MobileNo1;
+                                    objtblPtsTransferDetail.PtsFromMobileNo = MobileNo;
                                     objtblPtsTransferDetail.PtsToMobileNo = NewMobileNo;
                                     objtblPtsTransferDetail.PtsTransferred = objCustPointsMaster.Points;
                                     objtblPtsTransferDetail.TxnDatetime = DateTime.Now;
                                     objtblPtsTransferDetail.GroupId = GroupId;
                                     objtblPtsTransferDetail.IsActive = true;
-                                    var MobileNoNew = NewMobileNo;
-                                    var MobileNoPtsIdNew = NewMobileNo + "Base";
-                                    objtblPtsTransferDetail.MobileNoPtsId = MobileNoPtsIdNew;
                                     contextNew.tblPtsTransferDetails.AddOrUpdate(objtblPtsTransferDetail);
                                     contextNew.SaveChanges();
 
