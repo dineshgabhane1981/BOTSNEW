@@ -1197,7 +1197,7 @@ namespace BOTS_BL.Repository
 
                                     result.ResponseCode = "00";
                                     result.ResponseMessage = "Points Transferred Successfully";
-                                    transaction.Commit();
+                                    
                                 }
                                 using (var context = new CommonDBContext())
                                 {
@@ -1205,6 +1205,7 @@ namespace BOTS_BL.Repository
                                     context.SaveChanges();
                                 }
                             }
+                            transaction.Commit();
                         }
                         catch (Exception ex)
                         {
