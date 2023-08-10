@@ -509,13 +509,17 @@ namespace BOTS_BL.Repository
 
         public SPResponse AddLoadBonusData(string GroupId, string MobileNo, string OutletId, int BonusPoints, string BonusRemark, DateTime ExpiryDate, string IsSMS, tblAudit objAudit)
         {
+            string DBName = string.Empty;
             SPResponse result = new SPResponse();
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+
             try
             {
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    result = contextNew.Database.SqlQuery<SPResponse>("sp_BonusPoints_ITOPS @pi_MobileNo, @pi_OutletId, @pi_RequestDate, @pi_ExpiryDate, @pi_BonusRemarks, @pi_BonusPoints,@pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag",
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_ITOPSAddBonus @pi_MobileNo, @pi_OutletId, @pi_RequestDate, @pi_ExpiryDate, @pi_BonusRemarks, @pi_BonusPoints,@pi_LoginId, @pi_RequestBy, @pi_RequestedOnForum, @pi_SMSFlag,@pi_DBName,@pi_INDDatetime",
                               new SqlParameter("@pi_MobileNo", MobileNo),
                               new SqlParameter("@pi_OutletId", OutletId),
                               new SqlParameter("@pi_RequestDate", objAudit.RequestedOn.ToString("yyyy-MM-dd")),
@@ -525,7 +529,9 @@ namespace BOTS_BL.Repository
                               new SqlParameter("@pi_LoginId", ""),
                               new SqlParameter("@pi_RequestBy", objAudit.RequestedBy),
                               new SqlParameter("@pi_RequestedOnForum", objAudit.RequestedOnForum),
-                              new SqlParameter("@pi_SMSFlag", IsSMS)).FirstOrDefault<SPResponse>();
+                              new SqlParameter("@pi_SMSFlag", IsSMS),
+                              new SqlParameter("@pi_DBName", DBName),
+                              new SqlParameter("@pi_INDDatetime", Date)).FirstOrDefault<SPResponse>();
 
                 }
                 using (var context = new CommonDBContext())

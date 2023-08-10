@@ -654,6 +654,7 @@
     <Content Include="Views\EarnBurn\IndexNew.cshtml" />
     <Content Include="Views\EarnBurn\BurnNew.cshtml" />
     <Content Include="Views\BonusPoint\CancelTransactionNew.cshtml" />
+    <Content Include="Views\BonusPoint\IndexNew.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
