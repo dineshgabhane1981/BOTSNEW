@@ -808,8 +808,9 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new CommonDBContext())
                 {
                     DBName = contextNew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-                    Obj = contextNew.Database.SqlQuery<CommonOTPDetails>("select D.LoginId,D.Password,CASE WHEN D.LevelIndicator = 04 THEN 'Outlet' WHEN D.LevelIndicator = 03 THEN 'Brand' WHEN D.LevelIndicator = 02 THEN 'Group' END as LoginLevel, CASE WHEN D.Status = 1 THEN 'Active' WHEN D.Status = 0 THEN 'InActive' END as Status ,D.GroupId,CASE WHEN D.LevelIndicator = 04 THEN D.OutletName WHEN D.LevelIndicator = 02 THEN M.GroupName END as LoginType from (select C.LoginId,C.Password,C.LevelIndicator,C.LoginType,C.Status,C.GroupId,L.OutletName as OutletName from CommonOTPCredentialMaster C Left Join  " + DBName + ".dbo.tblOutletMaster L on C.LoginType = L.OutletId where C.DBStatus = 'New' and C.GroupId = '"+ GroupId + "') as D inner join "+ DBName + ".dbo.tblGroupMaster M on D.GroupId = M.GroupId").ToList();
-                    
+                    Obj = contextNew.Database.SqlQuery<CommonOTPDetails>("select J.LoginId,J.Password,CASE WHEN J.LevelIndicator = 04 THEN 'Outlet' WHEN J.LevelIndicator = 03 THEN 'Brand' WHEN J.LevelIndicator = 02 THEN 'Group' END as LoginLevel, CASE WHEN J.Status = 1 THEN 'Active' WHEN J.Status = 0 THEN 'InActive' END as Status ,J.GroupId, CASE WHEN J.LevelIndicator = 04 THEN J.OutletName WHEN J.LevelIndicator = 03 THEN B.BrandName WHEN J.LevelIndicator = 02 THEN J.GroupName END as LoginType from (select D.LoginId,D.Password,D.LevelIndicator,D.LoginType,D.Status,D.GroupId,D.OutletName,M.GroupName from (select C.LoginId,C.Password,C.LevelIndicator,C.LoginType,C.Status,C.GroupId,L.OutletName as OutletName from CommonOTPCredentialMaster C Left Join " + DBName + ".dbo.tblOutletMaster L on C.LoginType = L.OutletId where C.DBStatus = 'New' and C.GroupId = '" + GroupId + "') as D inner join " + DBName + ".dbo.tblGroupMaster M on D.GroupId = M.GroupId) as J inner join " + DBName + ".dbo.tblBrandMaster B on J.GroupId = B.GroupId").ToList();
+
+
                 } 
 
             }
