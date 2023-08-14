@@ -1,10 +1,10 @@
 ﻿@model BOTS_BL.Models.GinesysRedeemModel
 @{
     ViewBag.Title = "Index";
-    decimal? value = 0;
+    int value = 0;
     if (Model.Points.HasValue)
     {
-        value = Math.Round(Model.Points.Value * Model.PointsValue.Value, 2);
+        value = Decimal.ToInt32(Model.Points.Value) * Decimal.ToInt32(Model.PointsValue.Value); //Convert.ToInt32(Model.Points.Value) * Convert.ToInt32(Model.PointsValue.Value);
     }
 }
 
@@ -42,7 +42,7 @@
         <input id="hdnOTP" hidden />
         <input id="hdnBurnAmt" hidden />
         <input id="redemptionResponse" hidden />
-        Customer has a reward balance of <b>&#8377;@value, (@Model.Points)</b> Points
+        Customer has a reward balance of <b>&#8377;@value, (@Decimal.ToInt32(Model.Points.Value))</b> Points
         <div style="padding:10px;"><input type="number" class="input50" id="txtPoints" /><button class="btn btn-primary" style="margin-left:10px;" id="btnApply">Apply</button></div>
         <div style="padding:10px; display:none" id="divOTP"><input type="password" class="input50" id="txtOTP" /><button class="btn btn-primary" style="margin-left:10px;" id="btnVerify">Verify</button></div>
     </div>

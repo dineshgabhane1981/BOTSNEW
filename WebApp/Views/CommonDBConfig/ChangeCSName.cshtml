@@ -7,40 +7,40 @@
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
-                <div class="col-lg-3 col-md-3 ">
-                    <b >Group Name</b>
+            <div class="col-md-12 col-xl-10 row mt-3 pl-5 mb-4" id="dvGroup">
+                <div class="col-lg-2 col-md-3">
+                    <b>Group Name</b>
                 </div>
                 <div class="col-md-3 col-xl-3">
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
-                <div style="margin-left:50px; margin-top:5px;">
+                <div class="col-lg-2 col-md-2" style="margin-top:5px;">
                     <button type="button" id="btnGO" style="margin-right:30px;" class="btn btn-primary">Show</button>
                 </div>
             </div>
-            <div class="mb-2 pr-3 pt-3 pl-3 " id="dvMemberDetails" style="display: none;">
-                <div class="row" style="margin: 0;">
-                        <div style="float: left; text-align: right; width: 150px; margin-bottom: 30px;">
-                            <b style="margin-left:30px;">Existing CS Name</b>
-                        </div>
-                        <div class="col-sm-4" style="float: left; margin-bottom: 30px; margin-left: 45px;">
-                            @Html.TextBoxFor(model => model.tblGroupDetails.RMAssigned, new { @class = "input50", @id = "txtRMAssigned", ReadOnly = "true", tabindex = 1 })
-                        </div>
+            <div class="col-md-8 col-xl-8 row pl-5 " id="dvMemberDetails" style="display: none;">
+                <div class="col-md-12 col-xl-10 row">
+                    <div class="col-md-3 col-xl-3" style="margin-bottom: 30px;">
+                        <b>Existing CS Name</b>
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.TextBoxFor(model => model.tblGroupDetails.RMAssigned, new { @class = "input50", @id = "txtRMAssigned", @disabled="disabled", tabindex = 1 })
+                    </div>
                 </div>
-                <div class="row" style="margin: 0;">
-                        <div style="float: left; text-align: right; width: 115px; margin-top: 10px; margin-right:80px;">
-                             <b>CS Name</b>
-                        </div>
-                        <div class="col-sm-4" style="float: left; margin-top: 10px;">
-                             @Html.DropDownListFor(model => model.tblRMAssigned.RMAssignedName, new SelectList(Model.lstRMAssigned, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlRMAssigned" })
-                        </div>
+                <div class="col-md-12 col-xl-10 row">
+                    <div class="col-md-3 col-xl-3">
+                        <b>New CS Name</b>
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblRMAssigned.RMAssignedName, new SelectList(Model.lstRMAssigned, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlRMAssigned" })
+                    </div>
                 </div>
                 <div class="row mb-2 ml-2">
-                        <div class="col-md-3 col-xl-6" style="margin-left: 270px; margin-top: 20px; ">
-                                <button type="button" id="btnSave" class="btn btn-primary" Onclick="SaveCSName()"><b>Update</b></button>
-                        </div>
-                </div>                        
-            </div>                
+                    <div class="col-md-3 col-xl-6" style="margin-left: 270px; margin-top: 20px; ">
+                        <button type="button" id="btnSave" class="btn btn-primary" Onclick="SaveCSName()"><b>Update</b></button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -52,7 +52,7 @@
         });
         //$("#btnGO").on("click", function () {
         //    $("#dvMemberDetails").show();
-        //});       
+        //});
     });
 
     function GetCSNameChange() {
@@ -60,10 +60,10 @@
             toastr.error('Please Select Group');
             return false
         }
-        
+
         var GroupId = $('#ddlGroupDetails').val();
-        var GroupName = $("#ddlGroupDetails option:selected").text();        
-        $("#divLoader").show();        
+        var GroupName = $("#ddlGroupDetails option:selected").text();
+        $("#divLoader").show();
         $.ajax({
             type: "POST",
 
@@ -102,7 +102,7 @@
             if (e == ("confirm")) {
                 var MemberData = [];
                 var GroupId = $('#ddlGroupDetails').val();
-                var RMAssignedId = $('#ddlRMAssigned').val();                
+                var RMAssignedId = $('#ddlRMAssigned').val();
                 var GroupName = $("#ddlGroupDetails option:selected").text();
                 item = {}
                 item["GroupID"] = $("#ddlGroupDetails").val();
@@ -127,9 +127,9 @@
                                 message: "Assigned CS Changed Successfully",
                                 buttonText: "Okay"
                             }).then(() => {
-                                window.location.reload();                                
-                            })                                                      
-                            $("#divLoader").hide();                            
+                                window.location.reload();
+                            })
+                            $("#divLoader").hide();
                         }
                         else {
                             cuteAlert({

@@ -841,11 +841,14 @@ namespace BOTS_BL.Repository
 
                     foreach (var item in MemberList)
                     {
-                        lstTier.Add(new SelectListItem
+                        if (!string.IsNullOrEmpty(item))
                         {
-                            Text = item,
-                            Value = Convert.ToString(item)
-                        });
+                            lstTier.Add(new SelectListItem
+                            {
+                                Text = item,
+                                Value = Convert.ToString(item)
+                            });
+                        }
                     }
                 }
             }

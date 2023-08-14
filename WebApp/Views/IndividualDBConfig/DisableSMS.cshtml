@@ -11,13 +11,14 @@
                 <div class="col-lg-3 col-md-3 ">
                     <b>Mobile No</b>
                 </div>
-                <div style="margin-left:15px;">
+                <div class="col-lg-3 col-md-3 " style="margin-left:15px;">
                     <input type="number" id="txtMobileNo" class="input50" />
                 </div>
+                <div class="col-lg-3 col-md-3 " style="margin-left:50px;">
+                    <button type="button" id="btnSearchMember1" style="margin-left:10px;" class="btn btn-primary">Show</button>
+                </div>
             </div>
-            <div style="margin-left:50px;">
-                <button type="button" id="btnSearchMember1" style="margin-left:130px;" class="btn btn-primary">Show</button>
-            </div>
+            
             <div class="col-md-12 col-lg-12" style="padding-left: 0px !important;margin-top:30px;margin-left:80px;display:none;" id="dvMemberDetails">
                 <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
                     <table border="1" cellpadding="5" cellspacing="5">
@@ -29,7 +30,7 @@
                             <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName"></span></td>
                         </tr>
                         <tr>
-                            <td style="padding:10px;">Enable/Disable Msg</td>
+                            <td style="padding:10px;">Enable/Disable Promotional Msg</td>
                             <td><input type="checkbox" id="chkMsg" style="cursor: pointer; margin-right: 5px;width:25px;height:25px;margin-top:5px;" /></td>
                         </tr>
                     </table>
@@ -49,15 +50,13 @@
         });
         $('#btnUpdate').on("click", function () {
             DisablePromotionalSMS();
-        });
-        @*$("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));*@
+        });       
     });
     function GetChangeNameData() {        
         if ($('#txtMobileNo').val() == "") {
             toastr.error('Please Enter Mobile No');
             return false
-        }
-        
+        }        
         $("#divLoader").show();
         $.ajax({
             type: "POST",
@@ -96,7 +95,6 @@
         });
     }
     function DisablePromotionalSMS() {
-
         cuteAlert({
             type: "question",
             title: "Confirmation",
@@ -105,9 +103,7 @@
             cancelText: "No"
         }).then((e) => {
             if (e == ("confirm")) {
-                var MemberData = [];
-                var GroupId = $('#ddlGroupDetails').val();
-                var GroupName = $("#ddlGroupDetails option:selected").text();
+                var MemberData = [];               
                 item = {}                
                 item["MobileNo"] = $("#txtMobileNo").val();
                 if ($("#chkMsg").is(":checked")) {
@@ -137,7 +133,6 @@
                              var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
                              window.location.href = urlLink;
                         });
-
                     },
                     error: function (result) {
                         console.log(result.responseText)

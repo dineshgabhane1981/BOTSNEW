@@ -24,6 +24,8 @@ namespace WebApp.Controllers
     {
         ReportsRepository RR = new ReportsRepository();
         CustomerRepository CR = new CustomerRepository();
+        OtherReportsRepository ORR = new OtherReportsRepository();
+        ITOPSNEWRepository ITOPSNEW = new ITOPSNEWRepository();
         Exceptions newexception = new Exceptions();
         // GET: Reports
         public ActionResult Index()
@@ -1659,7 +1661,17 @@ namespace WebApp.Controllers
         }
         public ActionResult CustomizeMetrics()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             CustomizeMetricsViewModel objData = new CustomizeMetricsViewModel();
+            objData.lstCategory = ORR.GetCategoryCode(userDetails.GroupId, userDetails.connectionString);
+            objData.lstSubCategory= ORR.GetSubCategoryCodeALL(userDetails.GroupId, userDetails.connectionString);
+            objData.lstProduct = ORR.GetProductId(userDetails.GroupId, userDetails.connectionString);
+            objData.lstBrands = ITOPSNEW.GetBrandList(userDetails.GroupId);
+            objData.lstOutlets = ITOPSNEW.GetOutlet(userDetails.GroupId);
+            SelectListItem item = new SelectListItem();
+            item.Value = "0";
+            item.Text = "All";
+            objData.lstOutlets.Insert(0, item);
             return View(objData);
         }
     }

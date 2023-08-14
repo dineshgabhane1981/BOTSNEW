@@ -243,7 +243,7 @@
                                         <li class="@Html.IsSelected(controller: "CommonDBConfig", action: "EnableProgramme")">
                                             <a class="@Html.IsSelected(controller: "CommonDBConfig", action: "EnableProgramme")" href="@Url.Action("EnableProgramme", "CommonDBConfig")">
                                                 <i class="metismenu-icon"></i>
-                                                Enable/Disable Program
+                                                Program Status
                                             </a>
                                         </li>                                        
                                     </ul>
@@ -344,12 +344,18 @@
                                     Celebrations
                                 </a>
                             </li>
-                            @*<li class="@Html.IsSelected(controller: "Reports", action: "CreateOwnSegment")">
-                                    <a class="@Html.IsSelected(controller: "Reports", action: "CreateOwnSegment")" href="@Url.Action("CreateOwnSegment", "Reports")">
-                                        <i class="metismenu-icon"></i>
-                                        Create Own Segment
-                                    </a>
-                                </li>*@
+                            <li class="@Html.IsSelected(controller: "Reports", action: "CreateOwnSegment")">
+                                <a class="@Html.IsSelected(controller: "Reports", action: "CreateOwnSegment")" href="@Url.Action("CreateOwnSegment", "Reports")">
+                                    <i class="metismenu-icon"></i>
+                                    Create Own Segment
+                                </a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "Reports", action: "CustomizeMetrics")">
+                                <a class="@Html.IsSelected(controller: "Reports", action: "CustomizeMetrics")" href="@Url.Action("CustomizeMetrics", "Reports")">
+                                    <i class="metismenu-icon"></i>
+                                    Customize Metrics
+                                </a>
+                            </li>
                             <li class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")">
                                 <a class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")" href="@Url.Action("ProfitableCustomer", "Reports")">
                                     <i class="metismenu-icon"></i>
@@ -626,7 +632,7 @@
                             <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")">
                                 <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")" href="@Url.Action("DisableTransactions", "IndividualDBConfig")">
                                     <i class="metismenu-icon"></i>
-                                    Transaction
+                                    Transactional SMS
                                 </a>
                             </li>
                             <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")">
@@ -668,7 +674,7 @@
                             <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")">
                                 <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")" href="@Url.Action("ChangeDemographicDetails", "IndividualDBConfig")">
                                     <i class="metismenu-icon"></i>
-                                    Change Demographic Data
+                                    Outlet Details
                                 </a>
                             </li>
                         </ul>
@@ -686,7 +692,7 @@
                             Executive Summary
                         </a>
                     </li>
-                    <li>
+                    @*<li>
                         <a href="#">
                             <i class="metismenu-icon pe-7s-car"></i>
                             Reports
@@ -700,7 +706,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>*@
                     <li>
                         <a href="@Url.Action("Index", "Telecaller")" class="@Html.IsSelected(controller: "Telecaller", action: "Index")">
                             <i class="metismenu-icon pe-7s-rocket"></i>

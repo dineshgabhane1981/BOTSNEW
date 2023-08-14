@@ -48,12 +48,12 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    var objBlockedPoints = context.tblBurnPtsSoftBlocks.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).FirstOrDefault();
+                    var BlockedPoints = context.tblBurnPtsSoftBlocks.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y=>y.BurnPoints);
 
                     objData.Points  = context.tblCustPointsMasters.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y => y.Points);
-                    if (objBlockedPoints != null)
+                    if (BlockedPoints != null)
                     {
-                        objData.Points = objData.Points - objBlockedPoints.BurnPoints;
+                        objData.Points = objData.Points - BlockedPoints;
                     }
                     objData.PointsValue = context.tblRuleMasters.Select(x => x.PointsAllocation).FirstOrDefault();
                     objData.CustomerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == objData.MobileNo).Select(y => y.Name).FirstOrDefault();

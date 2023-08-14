@@ -10,87 +10,174 @@
 
         </div>
         <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
-            <div class="row mt-4 col-md-12 col-xl-12">
-                <input type="checkbox" id="chkTransacting" name="firstFilters" style="width:20px; cursor:pointer;" /> &nbsp; Transacting
-                <input type="checkbox" id="chkEnrolledNonTransacting" name="firstFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Enrolled Non Transacting
-                <input type="checkbox" id="chkBulkUpload" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Bulk Upload
-                <input type="checkbox" id="chkReferral" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Referral
-                <input type="checkbox" id="chkDLCRegistered" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;DLC Registered
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                <input type="radio" id="chkTransacting" name="firstFilters" style="width:20px; cursor:pointer;" /> &nbsp; Transacting
+                <input type="radio" id="chkEnrolledNonTransacting" name="firstFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Enrolled Non Transacting
+                <input type="radio" id="chkBulkUpload" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Bulk Upload
+                <input type="radio" id="chkReferral" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Referral
+                <input type="radio" id="chkDLCRegistered" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;DLC Registered
             </div>
-            <div class="row mt-4 col-md-12 col-xl-12" id="dvTxnFilters" style="display:none;">
-                <input type="checkbox" id="chkTxnOnlyOnce" name="secondFilters" style="width:20px; cursor:pointer;" /> &nbsp; Only Once
-                <input type="checkbox" id="chkTxnInactive" name="secondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Inactive
-                <input type="checkbox" id="chkTxnNonRedeemed" name="secondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Non Redeemed
-                <input type="checkbox" id="chkTxnCumiulative" name="secondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Cumulative Count/Spend
+          
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnFilters" style="display:none;">
+                <input type="radio" id="chkAll" name="secondFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
+                <input type="radio" id="chkTxnOnlyOnce" name="secondFilters" style="width:20px; cursor:pointer;" /> &nbsp; Only Once
+                <input type="radio" id="chkTxnInactive" name="secondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Inactive
+                <input type="radio" id="chkTxnCumiulative" name="secondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Cumulative Count/Spend
             </div>
-            <div class="row mt-4 col-md-12 col-xl-12" id="dvDLCReferalFilters" style="display:none;">
+          
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvDLCReferalFilters" style="display:none;">
                 <input type="radio" id="rbtnAll" name="DLCReferalFilters" style="width: 20px; height: 20px;cursor:pointer;" /> &nbsp;All
                 <input type="radio" id="rbtnTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Transacting
                 <input type="radio" id="rbtnNonTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" />&nbsp;Non Transacting
             </div>
+           
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="secTxnCumulative" style="display:none;">
+                <input type="radio" id="rbtnCTxnCount" name="CumulativeFilters" style="width: 20px; height: 20px;cursor:pointer;" /> &nbsp;Txn Count &nbsp;
+                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.LessThanMoreThan(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTxnCumulative" })&nbsp;
+                <input type="number" id="txtCTxnCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
+                <input type="number" id="txtCTxnMonths" class="input20" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px; margin-top: 10px;"> months (per month)</span>
+            </div>
+           
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="secSpendCumulative" style="display:none;">
+                <input type="radio" id="rbtnCSpend" name="CumulativeFilters" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;Spend&nbsp;
+                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.LessThanMoreThan(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlSpendCumulative" })&nbsp;
+                <input type="number" id="txtCSpendCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
+                <input type="number" id="txtCSpendMonths" class="input20" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px; margin-top: 10px;"> months (per month)</span>
+            </div>
 
             <div class="row mt-4 col-md-12 col-xl-12" id="secTransaction">
-                <div class="col-xl-3">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkEnrolledRange" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
                     Enrolled Range
                 </div>
-                <div class="col-xl-9 row" id="divDateRange">
-                    <input type="date" id="txtEnrollfromdt" class="input40" placeholder="From Enrolled" />
-                    <input type="date" id="txtEnrolltodt" class="input40" placeholder="To Enrolled" style="margin-left:10px;" />
+                <div class="col-xl-8 row" id="divDateRange" style="margin-left:0px;">
+                    <input type="date" id="txtEnrollfromdt" class="input40" placeholder="From Enrolled" disabled />
+                    <input type="date" id="txtEnrolltodt" class="input40" placeholder="To Enrolled" disabled style="margin-left:10px;" />
                 </div>
 
             </div>
-            <div class="row mt-3 col-md-12 col-xl-12">
-                <div class="col-xl-3">
-                    Not transacted since (days)
+            
+            <div class="row mt-2 col-md-12 col-xl-12">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkInactiveSince" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Inactive since (days)
                 </div>
                 <div class="col-xl-3">
-                    <input type="text" id="txtNonTransactedMax" class="input40" placeholder="Enter days" />
+                    <input type="text" id="txtNonTransactedMax" class="input40" placeholder="Enter days" disabled />
                 </div>
             </div>
+            
             <div class="row mt-2 col-md-12 col-xl-12">
-                <div class="col-xl-3">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkSpend" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
                     Spends (Rs.)
                 </div>
-                <div class="col-xl-2">
-                    @Html.DropDownListFor(model => model.Spend, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlSpend" })
-                </div>
                 <div class="col-xl-6">
-                    <input type="number" id="txtSpendMin" class="input40" placeholder="From Spend" style="display:none;" />
-                    <input type="number" id="txtSpendMax" class="input40" placeholder="To Spend" style="display:none;" />
+                    <input type="number" id="txtSpendMin" class="input40" placeholder="From/Less than" disabled />
+                    <input type="number" id="txtSpendMax" class="input40" placeholder="To/More than" disabled />
                 </div>
             </div>
+           
             <div class="row mt-2 col-md-12 col-xl-12">
-                <div class="col-xl-3">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkEnrolledRange" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
                     Transaction Count
                 </div>
-                <div class="col-xl-2">
-                    @Html.DropDownListFor(model => model.Spend, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlTxnCount" })
-                </div>
                 <div class="col-xl-6">
-                    <input type="number" id="txtTxnCountMin" class="input40" placeholder="From Spend" style="display:none;" />
-                    <input type="number" id="txtTxnCountMax" class="input40" placeholder="To Spend" style="display:none;" />
+                    <input type="number" id="txtTxnCountMin" class="input40" placeholder="From/Less than" disabled />
+                    <input type="number" id="txtTxnCountMax" class="input40" placeholder="To/More than" disabled />
                 </div>
             </div>
+           
             <div class="row mt-2 col-md-12 col-xl-12">
-                <div class="col-xl-3">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkEnrolledRange" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
                     Points Balance
                 </div>
-                <div class="col-xl-2">
-                    @Html.DropDownListFor(model => model.PointsBalance, new SelectList(Model.SpendList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlPointsBalance" })
-                </div>
                 <div class="col-xl-6">
-                    <input type="number" id="txtPointsBalMin" class="input40" placeholder="From Point Balance" style="display:none" />
-                    <input type="number" id="txtPointsBalMax" class="input40" placeholder="To Point Balance" style="display:none" />
+                    <input type="number" id="txtPointsBalMin" class="input40" placeholder="From/Less than" disabled />
+                    <input type="number" id="txtPointsBalMax" class="input40" placeholder="To/More than" disabled />
                 </div>
             </div>
-            <div class="row mt-2 col-md-12 col-xl-12">
-                <div class="col-xl-3">
+           
+            <div class="row mt-2 col-md-12 col-xl-12" style="padding-bottom:20px;">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkEnrolledRange" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
                     Redeemed
                 </div>
                 <div class="col-xl-3">
-                    @Html.DropDownListFor(model => model.Redeemed, new SelectList(Model.RedeemedList(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @id = "ddlRedeemed" })
-                </div>                
+                    <input type="radio" id="chkTransacting" name="RedeemedOrNot" style="width:20px;height:20px; cursor:pointer;" disabled />&nbsp; Yes
+                    <input type="radio" id="chkEnrolledNonTransacting" name="RedeemedOrNot" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" disabled />&nbsp; No
+                </div>
             </div>
+           
+            <div class="row mt-2 col-md-12 col-xl-12">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkNeverPurchased" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Never Purchased
+                </div>
+                <div class="row col-xl-8 ml-0">
+                    @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPCategory" })&nbsp;
+                    @Html.DropDownListFor(x => Model.dummySubCategory, new SelectList(Model.lstSubCategory, "Value", "Text"), "All SubCategory", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPSubCategory" })&nbsp;
+                    @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Products", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPProduct" })
+                </div>
+            </div>
+           
+            <div class="row mt-2 col-md-12 col-xl-12">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkPurchased" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Purchased
+                </div>
+                <div class="row col-xl-8 ml-0">
+                    @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPCategory" })&nbsp;
+                    @Html.DropDownListFor(x => Model.dummySubCategory, new SelectList(Model.lstSubCategory, "Value", "Text"), "All SubCategory", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPSubCategory" })&nbsp;
+                    @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Products", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPProduct" })
+                </div>
+            </div>
+           
+            <hr style="border-top: dashed 1px;" />
+            <div class="row mt-2 col-md-12 col-xl-12" style="border-top:dashed solid grey;">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkBrands" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Brands
+                </div>
+                <div class="row col-xl-8 ml-0">
+                    @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstBrands, "Value", "Text"), "All", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlBrands" })
+
+                </div>
+            </div>
+           
+            <div class="row mt-2 col-md-12 col-xl-12">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkOutlet" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Outlets
+                </div>
+                <div class="row col-xl-8 ml-0">
+                    @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstOutlets, "Value", "Text"), new { @class = "input50", Multiple = "multiple", @disabled = "disabled", @id = "lstBoxOutlet" })                  
+
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -102,11 +189,22 @@
 
 <script>
     $(document).ready(function () {
-        $('input[type="checkbox"]').on('change', function () {
+        $('input[type="radio"]').on('change', function () {
             $('input[name="' + this.name + '"]').not(this).prop('checked', false);
             ShowSecondFilters();
         });
+
+        $("#chkOutlet").on('change', function () {
+            if ($("#chkOutlet").is(":checked")) {
+                $("#lstBoxOutlet").prop("disabled", false);                
+            }
+            else {
+                $("#lstBoxOutlet").prop("disabled", true);
+                $("#lstBoxOutlet")[0].selectedIndex = -1;
+            }
+        })
     });
+
     function ShowSecondFilters() {
         if ($("#chkTransacting").is(":checked")) {
             $("#dvTxnFilters").show();
@@ -124,6 +222,14 @@
         else {
             $("#dvTxnFilters").hide();
             $("#dvDLCReferalFilters").hide();
+        }
+        if ($("#chkTxnCumiulative").is(":checked")) {
+            $("#secTxnCumulative").show();
+            $("#secSpendCumulative").show();            
+        }
+        else {
+            $("#secTxnCumulative").hide();
+            $("#secSpendCumulative").hide();
         }
     }
 
