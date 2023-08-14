@@ -144,12 +144,18 @@ namespace BOTS_BL.Repository
 
         public List<SelectListItem> GetOutletList(string GroupId, string connstr)
         {
+            string DBStatus = string.Empty;
             List<SelectListItem> countriesItem = new List<SelectListItem>();
             try
             {
+                using (var contextnew = new CommonDBContext())
+                {
+                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y=> y.GroupId).FirstOrDefault();
+
+                }
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    if (GroupId == "1087"|| GroupId == "1002")
+                    if (!string.IsNullOrEmpty(DBStatus))
                     {
                         var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
                         foreach (var item in lstOutlet)
@@ -210,22 +216,41 @@ namespace BOTS_BL.Repository
         }
         public List<SelectListItem> GetBrandList(string GroupId, string connstr)
         {
+            string DBStatus = string.Empty;
             List<SelectListItem> BrandItem = new List<SelectListItem>();
             try
             {
+                using (var contextnew = new CommonDBContext())
+                {
+                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupId).FirstOrDefault();
+                }
                 using (var context = new BOTSDBContext(connstr))
                 {
 
-                    var lstOutlet = context.Database.SqlQuery<BrandList>("sp_GetBrandList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<BrandList>();
-                    foreach (var item in lstOutlet)
+                    if(!string.IsNullOrEmpty(DBStatus))
                     {
-                        BrandItem.Add(new SelectListItem
+                        var LstBrand = context.tblBrandMasters.Where(x => x.GroupId == GroupId).ToList();
+                        foreach (var item in LstBrand)
                         {
-                            Text = item.BrandName,
-                            Value = Convert.ToString(item.BrandId)
-                        });
+                            BrandItem.Add(new SelectListItem
+                            {
+                                Text = item.BrandName,
+                                Value = Convert.ToString(item.BrandId)
+                            });
+                        }
                     }
-
+                    else
+                    {
+                        var lstOutlet = context.Database.SqlQuery<BrandList>("sp_GetBrandList @pi_GroupId", new SqlParameter("@pi_GroupId", GroupId)).ToList<BrandList>();
+                        foreach (var item in lstOutlet)
+                        {
+                            BrandItem.Add(new SelectListItem
+                            {
+                                Text = item.BrandName,
+                                Value = Convert.ToString(item.BrandId)
+                            });
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -235,7 +260,6 @@ namespace BOTS_BL.Repository
             return BrandItem;
 
         }
-
         public List<OutletWise> GetOutletWiseList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string connstr, string loginId)
         {
             List<OutletWise> lstOutletWise = new List<OutletWise>();
@@ -328,7 +352,6 @@ namespace BOTS_BL.Repository
             lstOutletWise = lstOutletWise.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
             return lstOutletWise;
         }
-
         public List<OutletwiseTransaction> GetOutletWiseTransactionList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string OutletId, string EnrolmentDataFlag, string connstr, string loginId)
         {
             List<OutletwiseTransaction> lstOutletWiseTransaction = new List<OutletwiseTransaction>();

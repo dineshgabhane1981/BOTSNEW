@@ -283,6 +283,7 @@
     <Compile Include="Models\CommonDB\Tbl_SinglePageNonTransactingOutlet.cs" />
     <Compile Include="Models\CommonDB\Tbl_SinglePageSummaryTable.cs" />
     <Compile Include="Models\CommonDB\WAReport.cs" />
+    <Compile Include="Models\CommonOTPCredentialMaster.cs" />
     <Compile Include="Models\CompetitionDetail.cs" />
     <Compile Include="Models\CustomerChild.cs" />
     <Compile Include="Models\DashboardSummary\DashboardSummary.cs" />

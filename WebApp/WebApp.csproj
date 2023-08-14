@@ -287,6 +287,7 @@
     <Compile Include="ViewModel\FeedbackDashboardViewModel.cs" />
     <Compile Include="ViewModel\FeedbackGetFeedbackViewModel.cs" />
     <Compile Include="ViewModel\GroupConfigDetailsViewModel.cs" />
+    <Compile Include="ViewModel\ITOPSNewViewModel.cs" />
     <Compile Include="ViewModel\ProgrammeViewModel.cs" />
     <Compile Include="ViewModel\PromoCampaignViewModel.cs" />
     <Compile Include="ViewModel\TestingModuleViewModel.cs" />
@@ -655,6 +656,7 @@
     <Content Include="Views\EarnBurn\BurnNew.cshtml" />
     <Content Include="Views\BonusPoint\CancelTransactionNew.cshtml" />
     <Content Include="Views\BonusPoint\IndexNew.cshtml" />
+    <Content Include="Views\OTPAndLog\EnableDisableOTPNew.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

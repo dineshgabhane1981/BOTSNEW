@@ -15,7 +15,7 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string RequestedFor { get; set; }
 
-        [StringLength(50)]
+        [StringLength(200)]
         public string RequestedEntity { get; set; }
 
         [StringLength(5)]

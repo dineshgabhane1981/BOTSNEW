@@ -11,6 +11,7 @@ using BOTS_BL.Models;
 using BOTS_BL.Repository;
 using WebApp.App_Start;
 using BOTS_BL.Models.IndividualDBModels;
+using WebApp.ViewModel;
 
 namespace WebApp.Controllers.ITOPS
 {
@@ -155,6 +156,7 @@ namespace WebApp.Controllers.ITOPS
 
             return Json(objCustomerDetail, JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
         public ActionResult GetTxnLogDataNew(string GroupId, string search)
         {
@@ -170,6 +172,91 @@ namespace WebApp.Controllers.ITOPS
             }
             return Json(lstLogDetails, JsonRequestBehavior.AllowGet);
 
+        }
+
+        public ActionResult EnableDisableOTPNew()
+        {
+
+            ITOPSNewViewModel LstOTPDetails = new ITOPSNewViewModel();
+
+            try
+            {          
+                groupId = Session["GroupId"].ToString();
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                LstOTPDetails.ObjLstOTPDetails =  NewITOPS.GetCommonOTPDetails(groupId);
+                LstOTPDetails.GroupId = groupId;             
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "EnableDisableOTPNew");
+            }
+
+            return View(LstOTPDetails);
+        }
+
+        public ActionResult GetLoginType(string GroupId,string LoginLevel)
+        {
+            List<SelectListItem> LstDetails = new List<SelectListItem>();
+            try
+            {
+                string connStr = objCustRepo.GetCustomerConnString(GroupId);
+                if (!string.IsNullOrEmpty(GroupId))
+                {
+                    if (LoginLevel == "1")
+                    {
+                        LstDetails = NewITOPS.GetGroupList(GroupId, connStr);
+                    }
+                    else if (LoginLevel == "2")
+                    {
+                        LstDetails = RR.GetBrandList(GroupId, connStr);
+                    }
+                    else if (LoginLevel == "3")
+                    {
+                        LstDetails = RR.GetOutletList(GroupId, connStr);
+                    }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetLoginType");
+            }
+
+            return Json(LstDetails, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult SaveOTPCredential(string GroupId, string LoginType, string LoginId, string Password,string RequestedBy,string RequestedOn)
+        {
+            bool status;
+            status = default;
+            tblAudit objAudit = new tblAudit();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+            try
+            {
+                objAudit.GroupId = GroupId;
+                objAudit.RequestedFor = "Add OTP Credential";
+                objAudit.RequestedEntity = "LoginType - " + LoginType  + " LoginId - " + LoginId + " Password - "+ Password;
+                objAudit.RequestedBy = RequestedBy;
+                objAudit.RequestedOnForum = RequestedOn;
+                objAudit.RequestedOn = Date;
+                objAudit.AddedBy = userDetails.LoginId;
+                objAudit.AddedDate = Date;
+                
+
+                if (!string.IsNullOrEmpty(GroupId))
+                {
+                    status = NewITOPS.SaveOTPDetails(GroupId, LoginType, LoginId, Password, objAudit);
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveOTPCredential");
+            }
+
+            return Json(status, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

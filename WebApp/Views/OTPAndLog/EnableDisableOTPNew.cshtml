@@ -1,0 +1,250 @@
+﻿@model WebApp.ViewModel.ITOPSNewViewModel
+@{
+    ViewBag.Title = "EnableDisableOTPNew";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+
+
+<div class="app-main__inner">
+    <div class="mb-3 card" style="padding-top:20px;">
+        <div class="content">
+            <!--content inner-->
+
+            <div class="container overflow-hidden">
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec3" data-animation="scaleIn">
+                    <h4 class="multisteps-form__title" style="color:blue;">Login List</h4><br />
+
+                    <div class="multisteps-form__content">
+                        <div>
+                                <input type="hidden" id="hdnGroupId" value="@Model.GroupId"/>
+                                
+                        </div>
+                        <div>
+                            <label style="padding-right:5px;padding-top:10px;display:none;" id="LblTxnLog">ADD OTP Credentials</label>
+                            <div class="row mt-3" id="dvTLog">
+                                <div class="table-responsive">
+                                    <table class="table" id="logTable">
+                                        <thead style="text-align:center;">
+                                            <tr>
+                                                <th scope="col">LoginId</th>
+                                                <th scope="col">Password</th>
+                                                <th scope="col">LoginLevel</th>
+                                                <th scope="col">LoginType</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col">GroupId</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="text-align:center;">
+                                            @if (Model != null)
+                                            {
+                                                
+                                                if (Model.ObjLstOTPDetails.Count > 0)
+                                                {
+
+                                                    foreach (var item in Model.ObjLstOTPDetails)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.LoginId</td>
+                                                            <td>@item.Password</td>
+                                                            <td>@item.LoginLevel</td>
+                                                            <td>@item.LoginType</td>
+                                                            <td>@item.Status</td>
+                                                            <td>@item.GroupId</td>
+
+
+                                                        </tr>
+                                                        
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="6" align="center">No Records Found</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="7">No Records Found</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white mt-4 mb-4" id="sec3" data-animation="scaleIn">
+                    <h4 class="multisteps-form__title" style="color:blue;">ADD OTP Login</h4><br />
+                    <div class="multisteps-form__content">
+                        <div class="row" style="margin: 0;">
+                            <input type="hidden" id="hdnGroupId" />
+                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                Login Id :
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                <input type="text" id="txtLoginId" class="input70" style="font-size:medium;" />
+                            </div>
+                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                Password :
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                <input type="text" id="txtPass" class="input70" style="font-size:medium;" />
+                            </div>
+
+                            @*<button type="button" id="btnGetLog" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>*@
+                        </div>
+                        <div class="row" style="margin: 0;">
+                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                Login Level :
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                @*<input type="text" id="txtLoginId" class="input70" style="font-size:medium;" />*@
+                                @Html.DropDownListFor(model => model.LoginLevelddl, new SelectList(Model.Levelddl(), "Value", "Text"),"Select", htmlAttributes: new { @class = "input50", @id = "ddlLoginLevel" })
+                            </div>
+                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                Login Type :
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                @*<input type="text" id="txtPass" class="input70" style="font-size:medium;" />*@
+                                @Html.DropDownList("LoginType", new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), htmlAttributes: new { @class = "input70", @id = "ddlLoginType" })
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 0;">
+                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                Requested By :
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                <input type="text" id="RequestedBy" class="input70" style="font-size:medium;" />
+                            </div>
+                            <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                                Requested On :
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                <select name="ddlRequestedForum" id="ddlRequestedon" class="input50">
+                                    <option value="Whatsapp">Whatsapp</option>
+                                    <option value="Email">Email</option>
+                                    <option value="Phone">Phone</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin: 0;">
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                <button type="button" id="btnSaveLogin" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Save</button>
+                            </div>
+
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+
+                            </div>
+                            <div class="col-sm-4" style="float:left;margin-top:10px;">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Content/scriptSteps.js"></script>
+<script type="text/javascript">
+    $("#ddlLoginLevel").change(function () {
+
+        var GroupId = $("#hdnGroupId").val();
+        //var LoginLevel = $("#ddlLoginLevel").val();
+        var LoginLevel = $('#ddlLoginLevel :selected').val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetLoginType", "OTPAndLog")',//"/OTPAndLogController/GetTxnLogData",
+            data: '{GroupId: ' + JSON.stringify(GroupId) + ', LoginLevel:' + JSON.stringify(LoginLevel) +'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                if (result != null) {
+
+                    $.each(result, function () {
+                        $("#ddlLoginType").empty();
+                        $("#ddlLoginType").append($("<option />").val(this.Value).text(this.Text));
+                    });
+                    //console.log(result)
+
+                } else {
+                    toastr.error('Log are not present');
+
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    $("#btnSaveLogin").click(function () {
+        var GroupId = $("#hdnGroupId").val();
+        var LoginType = $('#ddlLoginType :selected').val();
+        var LoginId = $("#txtLoginId").val();
+        var Password = $("#txtPass").val();
+        var RequestedBy = $("#RequestedBy").val();
+        var RequestedOn = $("#ddlRequestedon").val();
+
+        if (LoginId != null && Password != null) {
+            $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveOTPCredential", "OTPAndLog")',//"/OTPAndLogController/GetTxnLogData",
+            data: '{GroupId: ' + JSON.stringify(GroupId) + ', LoginType:' + JSON.stringify(LoginType) + ', LoginId:' + JSON.stringify(LoginId) + ', Password:' + JSON.stringify(Password) + ', RequestedBy:' + JSON.stringify(RequestedBy) + ', RequestedOn:' + JSON.stringify(RequestedOn) +'}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+                if (result != null) {
+
+                    if (result == true)
+                    {
+
+                        toastr.success('Login created');
+                        var urlLink = "@Url.Action("EnableDisableOTPNew", "OTPAndLog")";
+                       //urlLink = urlLink + "?CampaignId=" + CampaignId;
+                        
+                        window.location.href = urlLink;
+                    }
+                    else
+                    {
+                       toastr.error('Login not created');
+                    }
+                }
+                else {
+                    toastr.error('Log are not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+        }
+        else {
+            toastr.error('Login Id or Password Can not be null');
+        }
+
+
+
+    });
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace BOTS_BL.Models
 {
@@ -49,6 +50,20 @@ namespace BOTS_BL.Models
         public string OutletId { get; set; }
         public string OTP { get; set; }
     }
+
+    public class CommonOTPDetails
+    { 
+        public string LoginId { get; set; }
+        public string Password { get; set; }
+        public string LoginLevel { get; set; }
+        public string LoginType { get; set; }
+        public string Status { get; set; }
+        public string GroupId { get; set; }
+    }
+
+
+
+
     public class DemographicData
     {
         public string GroupId { get; set; }

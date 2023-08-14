@@ -751,6 +751,141 @@ namespace BOTS_BL.Repository
             }
             return objMemberData;
         }
+
+        public List<SelectListItem> GetGroupList(string GroupId, string connstr)
+        {
+            string DBStatus = string.Empty;
+            List<SelectListItem> GroupItem = new List<SelectListItem>();
+            try
+            {
+                using (var contextnew = new CommonDBContext())
+                {
+                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupId).FirstOrDefault();
+                }
+                using (var context = new BOTSDBContext(connstr))
+                {
+
+                    if (!string.IsNullOrEmpty(DBStatus))
+                    {
+                        var LstGroup = context.tblGroupMasters.Where(x => x.GroupId == GroupId).ToList();
+                        foreach (var item in LstGroup)
+                        {
+                            GroupItem.Add(new SelectListItem
+                            {
+                                Text = item.GroupName,
+                                Value = Convert.ToString(item.GroupId)
+                            });
+                        }
+                    }
+                    else
+                    {
+                        var LstGroup = context.Database.SqlQuery<OTPGroupDetails>("select GroupName,GroupId from GroupDetails where GroupId = @GroupId",new SqlParameter("@GroupId", GroupId)).ToList<OTPGroupDetails>();
+                        foreach (var item in LstGroup)
+                        {
+                            GroupItem.Add(new SelectListItem
+                            {
+                                Text = item.GroupName,
+                                Value = Convert.ToString(item.GroupId)
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBrandList");
+            }
+            return GroupItem;
+
+        }
+
+        public List<CommonOTPDetails> GetCommonOTPDetails(string GroupId)
+        {
+            string DBName = string.Empty;
+            List<CommonOTPDetails> Obj = new List<CommonOTPDetails>();
+            try
+            {
+                using (var contextNew = new CommonDBContext())
+                {
+                    DBName = contextNew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                    Obj = contextNew.Database.SqlQuery<CommonOTPDetails>("select D.LoginId,D.Password,CASE WHEN D.LevelIndicator = 04 THEN 'Outlet' WHEN D.LevelIndicator = 03 THEN 'Brand' WHEN D.LevelIndicator = 02 THEN 'Group' END as LoginLevel, CASE WHEN D.Status = 1 THEN 'Active' WHEN D.Status = 0 THEN 'InActive' END as Status ,D.GroupId,CASE WHEN D.LevelIndicator = 04 THEN D.OutletName WHEN D.LevelIndicator = 02 THEN M.GroupName END as LoginType from (select C.LoginId,C.Password,C.LevelIndicator,C.LoginType,C.Status,C.GroupId,L.OutletName as OutletName from CommonOTPCredentialMaster C Left Join  " + DBName + ".dbo.tblOutletMaster L on C.LoginType = L.OutletId where C.DBStatus = 'New' and C.GroupId = '"+ GroupId + "') as D inner join "+ DBName + ".dbo.tblGroupMaster M on D.GroupId = M.GroupId").ToList();
+                    
+                } 
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOTPData");
+            }
+            return Obj;
+        }
+
+        public bool SaveOTPDetails(string GroupId,string LoginType,string LoginId, string Password,tblAudit objAudit)
+        {
+            string LevelIndicator = string.Empty;
+            bool status;
+            status = default;
+
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+
+            try
+            {
+                using(var context = new CommonDBContext())
+                {
+                    var LoginObj = context.CommonOTPCredentialMasters.Where(x=> x.LoginId == LoginId && x.Password == Password && x.GroupId == GroupId).FirstOrDefault();
+
+                    if(LoginType.Length == 4)
+                    {
+                        LevelIndicator = "02";
+                    }
+                    if (LoginType.Length == 5)
+                    {
+                        LevelIndicator = "03";
+                    }
+                    if (LoginType.Length == 8)
+                    {
+                        LevelIndicator = "04";
+                    }
+
+
+                    CommonOTPCredentialMaster Obj = new CommonOTPCredentialMaster();
+                    if(LoginObj == null)
+                    {
+                        Obj.LoginId = LoginId;
+                        Obj.Password = Password;
+                        Obj.LevelIndicator = LevelIndicator;
+                        Obj.CreatedDate = Date;
+                        Obj.LoginType = LoginType;
+                        Obj.Status = "1";
+                        Obj.GroupId = GroupId;
+                        Obj.DBStatus = "New";
+                        context.CommonOTPCredentialMasters.AddOrUpdate(Obj);
+                    }
+                    else
+                    {
+                        LoginObj.LoginId = LoginId;
+                        LoginObj.Password = Password;
+                        LoginObj.LevelIndicator = LevelIndicator;
+                        LoginObj.LoginType = LoginType;
+                        LoginObj.GroupId = GroupId;
+                        context.CommonOTPCredentialMasters.AddOrUpdate(LoginObj);
+                    }
+
+                    context.tblAudits.AddOrUpdate(objAudit);
+                    context.SaveChanges();
+                    status = true;
+                }
+
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SaveOTPDetails");
+            }
+
+            return status;
+        }
+
         public CancelTxnModel GetTransactionByInvoiceNo(string GroupId, string InvoiceNo)
         {
             CancelTxnModel objReturn = new CancelTxnModel();
