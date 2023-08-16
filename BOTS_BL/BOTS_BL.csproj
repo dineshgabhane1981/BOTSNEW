@@ -358,6 +358,7 @@
     <Compile Include="Models\IndividualDBModels\tblCelebrationTxnDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustDetailsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustInfo.cs" />
+    <Compile Include="Models\IndividualDBModels\tblCustomerDataCollection.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustPointsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustTxnSummaryMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCFrontEndPageData.cs" />
@@ -397,6 +398,7 @@
     <Compile Include="Models\IndividualDBModels\tblSMSWhatsAppCredential.cs" />
     <Compile Include="Models\IndividualDBModels\tblSMSWhatsAppScriptMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblStoreMaster.cs" />
+    <Compile Include="Models\IndividualDBModels\tblTierMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblTxnBonusMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblTxnDetailsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblTxnDetailsMaster_Clone.cs" />
