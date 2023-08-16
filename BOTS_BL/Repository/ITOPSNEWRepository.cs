@@ -904,7 +904,7 @@ namespace BOTS_BL.Repository
                         objReturn.InvoiceAmt = Convert.ToDecimal(ObjCustTxnData.InvoiceAmt);
                         objReturn.MobileNo = ObjCustTxnData.MobileNo;
                         objReturn.Points = Convert.ToString(ObjCustTxnData.PointsEarned);
-                        objReturn.DatetimeOriginal = Convert.ToString(ObjCustTxnData.TxnDatetime);
+                        objReturn.DatetimeOriginal = Convert.ToDateTime(ObjCustTxnData.TxnDatetime).ToString("dd/MM/yyyy HH:mm:ss");
                         objReturn.OutletName = ObjCustTxnData.OutletName;
                         objReturn.TransactionName = ObjCustTxnData.TxnType;
                         objReturn.TransactionId = ObjCustTxnData.SlNo;
