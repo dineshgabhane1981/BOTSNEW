@@ -1218,42 +1218,90 @@ namespace BOTS_BL.Repository
 
         public MemberSearch GetMeamberSearchData(string GroupId, string searchData, string connstr, string loginId)
         {
+            string DBStatus = string.Empty;
             MemberSearch memberSearch = new MemberSearch();
             try
             {
-                using (var context = new BOTSDBContext(connstr))
+                using (var contextnew = new CommonDBContext())
                 {
-                    memberSearch = context.Database.SqlQuery<MemberSearch>("sp_BOTS_MemberSearch @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now),
-                        new SqlParameter("@pi_LoginId", loginId),
-                        new SqlParameter("@pi_SearchData", searchData)).FirstOrDefault<MemberSearch>();
+                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                }
 
-                    memberSearch.lstMemberSearchTxn = context.Database.SqlQuery<MemberSearchTxn>("sp_BOTS_MemberSearch1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", loginId),
-                        new SqlParameter("@pi_SearchData", searchData)).ToList<MemberSearchTxn>();
-
-                    //memberSearch.lstMemberSearchTxn = memberSearch.lstMemberSearchTxn.OrderByDescending(x => x.TxnDatetime).ToList();
-                    foreach (var item in memberSearch.lstMemberSearchTxn)
+                if (!string.IsNullOrEmpty(DBStatus))
+                {
+                    using (var context = new CommonDBContext())
                     {
-                        if (!string.IsNullOrEmpty(item.TxnDatetime))
+                        memberSearch = context.Database.SqlQuery<MemberSearch>("sp_MemberSearch @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData,@pi_DBName",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now),
+                            new SqlParameter("@pi_LoginId", loginId),
+                            new SqlParameter("@pi_SearchData", searchData),
+                            new SqlParameter("@pi_DBName", DBStatus)).FirstOrDefault<MemberSearch>();
+
+                        memberSearch.lstMemberSearchTxn = context.Database.SqlQuery<MemberSearchTxn>("sp_BOTS_MemberSearch1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData,@pi_DBName",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_LoginId", loginId),
+                            new SqlParameter("@pi_SearchData", searchData),
+                            new SqlParameter("@pi_DBName", DBStatus)).ToList<MemberSearchTxn>();
+
+                        //memberSearch.lstMemberSearchTxn = memberSearch.lstMemberSearchTxn.OrderByDescending(x => x.TxnDatetime).ToList();
+                        foreach (var item in memberSearch.lstMemberSearchTxn)
                         {
-                            var subDate = Convert.ToString(item.TxnDatetime);
-                            var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)
-                            .ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
-                            item.TxnDatetime = convertedDate;
-                        }
-                        if (!string.IsNullOrEmpty(item.TxnUpdateDate))
-                        {
-                            var subDate = Convert.ToString(item.TxnUpdateDate).Substring(0, 10);
-                            var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                            .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                            item.TxnUpdateDate = convertedDate;
+                            if (!string.IsNullOrEmpty(item.TxnDatetime))
+                            {
+                                var subDate = Convert.ToString(item.TxnDatetime);
+                                var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)
+                                .ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                                item.TxnDatetime = convertedDate;
+                            }
+                            if (!string.IsNullOrEmpty(item.TxnUpdateDate))
+                            {
+                                var subDate = Convert.ToString(item.TxnUpdateDate).Substring(0, 10);
+                                var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                                .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                                item.TxnUpdateDate = convertedDate;
+                            }
                         }
                     }
+
                 }
+                else
+                {
+                    using (var context = new BOTSDBContext(connstr))
+                    {
+                        memberSearch = context.Database.SqlQuery<MemberSearch>("sp_BOTS_MemberSearch @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now),
+                            new SqlParameter("@pi_LoginId", loginId),
+                            new SqlParameter("@pi_SearchData", searchData)).FirstOrDefault<MemberSearch>();
+
+                        memberSearch.lstMemberSearchTxn = context.Database.SqlQuery<MemberSearchTxn>("sp_BOTS_MemberSearch1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_SearchData",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                            new SqlParameter("@pi_LoginId", loginId),
+                            new SqlParameter("@pi_SearchData", searchData)).ToList<MemberSearchTxn>();
+
+                        //memberSearch.lstMemberSearchTxn = memberSearch.lstMemberSearchTxn.OrderByDescending(x => x.TxnDatetime).ToList();
+                        foreach (var item in memberSearch.lstMemberSearchTxn)
+                        {
+                            if (!string.IsNullOrEmpty(item.TxnDatetime))
+                            {
+                                var subDate = Convert.ToString(item.TxnDatetime);
+                                var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture)
+                                .ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                                item.TxnDatetime = convertedDate;
+                            }
+                            if (!string.IsNullOrEmpty(item.TxnUpdateDate))
+                            {
+                                var subDate = Convert.ToString(item.TxnUpdateDate).Substring(0, 10);
+                                var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                                .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                                item.TxnUpdateDate = convertedDate;
+                            }
+                        }
+                    }
+                }    
             }
             catch (Exception ex)
             {
