@@ -118,6 +118,7 @@
         $("#ddlOutletListby").empty();
         var ddlCustomers = $("#ddlOutletListby");
 
+
          $.ajax({
             type: "POST",
             url: '@Url.Action("GetOutletNew", "SMSAndSecurity")',//"/ITOperations/GetChangeNameData",
@@ -155,11 +156,12 @@
     }
     function UpdateSecurityKey(id) {
       //  alert(id);
-        $("#divLoader").show();
-         $.ajax({
+        if (confirm("Are you sure? You want to Reset Security Key")) {
+            $("#divLoader").show();
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateSecurityKeyNew", "SMSAndSecurity")',//"/ITOperations/DeleteTransaction",
-             data: '{CounterId: ' + id + '}',
+                data: '{CounterId: ' + id + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -169,14 +171,14 @@
                     console.log(result.responseText)
                     if (result.responseText == "True") {
                         cuteAlert({
-                        type: "success",
-                        title: "Success Title",
-                        message: "Security Key Updated Successfully",
-                        buttonText: "Okay"
-                    }).then(() => {
-                        var urlLink = "@Url.Action("SecurityKeyNew", "SMSAndSecurity")";
-                        window.location.href = urlLink;
-                    });                        
+                            type: "success",
+                            title: "Success Title",
+                            message: "Security Key Updated Successfully",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("SecurityKeyNew", "SMSAndSecurity")";
+                            window.location.href = urlLink;
+                        });
                         $("#dvActivityData1").hide();
                         $("#divLoader").hide();
                     }
@@ -186,6 +188,7 @@
                     }
                 }
             });
+        }
     }
     function DrawTable1() {
         console.log(tableData);

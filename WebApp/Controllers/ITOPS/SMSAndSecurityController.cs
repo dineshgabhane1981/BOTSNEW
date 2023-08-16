@@ -339,7 +339,7 @@ namespace WebApp.Controllers.ITOPS
             {
 
                 string connStr = objCustRepo.GetCustomerConnString(groupId);
-                var lstOutlet = NewITOPS.GetOutlet(groupId);
+                var lstOutlet = RR.GetOutletList(groupId, connStr);
                 var lstBrand = NewITOPS.GetBrandList(groupId);
                 var GroupDetails = objCustRepo.GetGroupDetails(Convert.ToInt32(groupId));
                 ViewBag.OutletList = lstOutlet;
@@ -376,7 +376,7 @@ namespace WebApp.Controllers.ITOPS
             var GroupId = (string)Session["GroupId"];
             string connStr = objCustRepo.GetCustomerConnString(GroupId);
             SPResponse result = new SPResponse();
-            var lstoutletlist =NewITOPS.GetOutlet(GroupId);
+            var lstoutletlist = RR.GetOutletList(GroupId, connStr);
             ViewBag.OutletListByBrand = lstoutletlist;
             return Json(lstoutletlist, JsonRequestBehavior.AllowGet);
         }
