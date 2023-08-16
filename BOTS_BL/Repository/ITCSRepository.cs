@@ -1,12 +1,17 @@
 ﻿using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
+using BOTS_BL.Models.IndividualDBModels;
 using BOTS_BL.Models.RetailerWeb;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -395,10 +400,31 @@ namespace BOTS_BL.Repository
         }
         public bool SaveBurnRule(tblRuleMaster ObjRuleMaster, string connectionstring)
         {
+            string _WAGroupCode = string.Empty;
+            string CSName = string.Empty;
+            Int32 RMId;
+            int? IntGroupId = Convert.ToInt32(ObjRuleMaster.GroupId);
             bool status = false;
+            ITCSMessage ObjCSMessage = new ITCSMessage();
             try
             {
                 tblRuleMaster objRule = new tblRuleMaster();
+                using (var con = new CommonDBContext())
+                {
+
+                    if (ObjRuleMaster.GroupId == "1051" || ObjRuleMaster.GroupId == "1002")
+                    {
+                        // Takes FineFoods Testing
+                        _WAGroupCode = con.WAReports.Where(x => x.GroupId == "1051" && x.SMSStatus == "5").Select(y => y.GroupCode).FirstOrDefault();
+                        RMId = (int)con.tblGroupDetails.Where(x => x.GroupId == IntGroupId).Select(y => y.RMAssigned).FirstOrDefault();
+                        CSName = con.tblRMAssigneds.Where(x => x.RMAssignedId == RMId).Select(y => y.RMAssignedName).FirstOrDefault();
+                    }
+                    else
+                    {
+                        _WAGroupCode = con.WAReports.Where(x => x.GroupId == ObjRuleMaster.GroupId && x.SMSStatus == "0").Select(y => y.GroupCode).FirstOrDefault();
+                    }
+
+                }
                 using (var context = new BOTSDBContext(connectionstring))
                 {
                     objRule = context.tblRuleMasters.Where(x => x.GroupId == ObjRuleMaster.GroupId).FirstOrDefault();
@@ -415,6 +441,27 @@ namespace BOTS_BL.Repository
                     context.tblRuleMasters.AddOrUpdate(objRule);
                     context.SaveChanges();
                     status = true;
+
+                    ObjCSMessage.GroupCode = _WAGroupCode;
+                    ObjCSMessage.CSName = CSName;
+                    ObjCSMessage.BOTokenid = ConfigurationManager.AppSettings["BOTokenid"].ToString();
+                    ObjCSMessage.WAAPILink = ConfigurationManager.AppSettings["WAAPILink"].ToString();
+                    ObjCSMessage.OldBurnMinTxnAmt = Convert.ToString(ObjRuleMaster.OldBurnMinTxnAmt);
+                    ObjCSMessage.OldMinRedemptionPts = Convert.ToString(ObjRuleMaster.OldMinRedemptionPts);
+                    ObjCSMessage.OldMinRedemptionPtsFirstTime = Convert.ToString(ObjRuleMaster.OldMinRedemptionPtsFirstTime);
+                    ObjCSMessage.OldBurnInvoiceAmtPercentage = Convert.ToString(ObjRuleMaster.OldBurnInvoiceAmtPercentage);
+                    ObjCSMessage.OldBurnDBPointsPercentage = Convert.ToString(ObjRuleMaster.OldBurnDBPointsPercentage);
+                    ObjCSMessage.BurnMinTxnAmt = Convert.ToString(ObjRuleMaster.BurnMinTxnAmt);
+                    ObjCSMessage.MinRedemptionPts = Convert.ToString(ObjRuleMaster.MinRedemptionPts);
+                    ObjCSMessage.MinRedemptionPtsFirstTime = Convert.ToString(ObjRuleMaster.MinRedemptionPtsFirstTime);
+                    ObjCSMessage.BurnInvoiceAmtPercentage = Convert.ToString(ObjRuleMaster.BurnInvoiceAmtPercentage);
+                    ObjCSMessage.BurnDBPointsPercentage = Convert.ToString(ObjRuleMaster.BurnDBPointsPercentage);
+
+                    if (_WAGroupCode != null)
+                    {
+                        Thread _job2 = new Thread(() => SendWAMessageBurnRule(ObjCSMessage));
+                        _job2.Start();
+                    }
                 }
             }
             catch (Exception ex)
@@ -426,6 +473,7 @@ namespace BOTS_BL.Repository
         }
         public Earndata GetEarnRule(string GroupId)
         {
+            
             Earndata obj = new Earndata();
             try
             {
@@ -455,13 +503,35 @@ namespace BOTS_BL.Repository
         }
         public bool SaveEarnRule(tblRuleMaster ObjEarn, string connectionstring)
         {
+            string _WAGroupCode = string.Empty;
+            string CSName = string.Empty;
+            Int32 RMId;
+            int? IntGroupId = Convert.ToInt32(ObjEarn.GroupId);
             bool status = false;
+            ITCSMessage ObjCSMessage = new ITCSMessage();
             try
             {
-                tblRuleMaster objCustomerDetail = new tblRuleMaster();                
+                tblRuleMaster objCustomerDetail = new tblRuleMaster();
+
+                using (var con = new CommonDBContext())
+                {
+                    
+                    if (ObjEarn.GroupId == "1051" || ObjEarn.GroupId == "1002" )
+                    {
+                        // Takes FineFoods Testing
+                       _WAGroupCode = con.WAReports.Where(x => x.GroupId == "1051" && x.SMSStatus == "5").Select(y=> y.GroupCode).FirstOrDefault();
+                        RMId = (int)con.tblGroupDetails.Where(x => x.GroupId == IntGroupId).Select(y => y.RMAssigned).FirstOrDefault();
+                        CSName = con.tblRMAssigneds.Where(x=>x.RMAssignedId == RMId).Select(y=>y.RMAssignedName).FirstOrDefault();
+                    }
+                    else
+                    {
+                        _WAGroupCode = con.WAReports.Where(x => x.GroupId == ObjEarn.GroupId && x.SMSStatus == "0").Select(y => y.GroupCode).FirstOrDefault();
+                    }
+                    
+                }
                 using (var context = new BOTSDBContext(connectionstring))
                 {
-                    objCustomerDetail = context.tblRuleMasters.Where(x => x.GroupId == ObjEarn.GroupId).FirstOrDefault();                   
+                    objCustomerDetail = context.tblRuleMasters.Where(x => x.GroupId == ObjEarn.GroupId).FirstOrDefault();
                     if (objCustomerDetail != null)
                     {
                         objCustomerDetail.GroupId = ObjEarn.GroupId;
@@ -475,6 +545,31 @@ namespace BOTS_BL.Repository
                     context.tblRuleMasters.AddOrUpdate(objCustomerDetail);
                     context.SaveChanges();
                     status = true;
+
+                    
+                    ObjCSMessage.GroupCode = _WAGroupCode;
+                    ObjCSMessage.CSName = CSName;
+                    ObjCSMessage.BOTokenid = ConfigurationManager.AppSettings["BOTokenid"].ToString();
+                    ObjCSMessage.WAAPILink = ConfigurationManager.AppSettings["WAAPILink"].ToString();
+                    ObjCSMessage.OldEarnMinTxnAmt = Convert.ToString(ObjEarn.OldEarnMinTxnAmt);
+                    ObjCSMessage.OldPointsAllocation = Convert.ToString(ObjEarn.OldPointsAllocation);
+                    ObjCSMessage.OldPointsExpiryMonths = Convert.ToString(ObjEarn.OldPointsExpiryMonths);
+                    ObjCSMessage.OldPointsPercentage = Convert.ToString(ObjEarn.OldPointsPercentage);
+                    ObjCSMessage.OldRevolvingStatus = Convert.ToString(ObjEarn.OldRevolvingStatus);
+                    ObjCSMessage.EarnMinTxnAmt = Convert.ToString(ObjEarn.EarnMinTxnAmt);
+                    ObjCSMessage.PointsAllocation = Convert.ToString(ObjEarn.PointsAllocation);
+                    ObjCSMessage.PointsExpiryMonths = Convert.ToString(ObjEarn.PointsExpiryMonths);
+                    ObjCSMessage.PointsPercentage = Convert.ToString(ObjEarn.PointsPercentage);
+                    ObjCSMessage.Revolving = Convert.ToString(ObjEarn.Revolving);
+                    //ObjCSMessage.Message = ConfigurationManager.AppSettings["ITCSMessage"].ToString();
+
+
+                    if (_WAGroupCode != null)
+                    {
+                        Thread _job2 = new Thread(() => SendWAMessageEarnRule(ObjCSMessage));
+                        _job2.Start();
+                    }
+
                 }
             }
             catch (Exception ex)
@@ -973,6 +1068,156 @@ namespace BOTS_BL.Repository
             {
                 context.tblAuditCS.Add(objData);
                 context.SaveChanges();
+            }
+        }
+
+        public void SendWAMessageEarnRule(ITCSMessage ObjCSMessage)
+        {
+            string responseString;
+
+            try
+            {
+                //objMsg.Message = objMsg.Message.Replace("#01", objMsg.SpokenTo);
+                //objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
+                //string type = "TEXT";
+                StringBuilder stb = new StringBuilder();
+                stb.AppendLine("Dear Customer,");
+                stb.AppendLine();
+                stb.AppendLine("As discussed the Loyalty Earn Rule have been changed :");
+                stb.AppendLine();
+                stb.AppendLine("*Old Rule*");
+                stb.AppendLine("--------------");
+                stb.AppendLine("EarnMinTxnAmt : "+ ObjCSMessage.OldEarnMinTxnAmt);
+                stb.AppendLine("PointsAllocation : " + ObjCSMessage.OldPointsAllocation);
+                stb.AppendLine("PointsExpiryMonths : " + ObjCSMessage.OldPointsExpiryMonths);
+                stb.AppendLine("PointsPercentage : " + ObjCSMessage.OldPointsExpiryMonths);
+                stb.AppendLine("PointsRevolving : " + ObjCSMessage.OldRevolvingStatus);
+                stb.AppendLine();
+                stb.AppendLine("*New Rule*");
+                stb.AppendLine("--------------");
+                stb.AppendLine("EarnMinTxnAmt : " + ObjCSMessage.EarnMinTxnAmt);
+                stb.AppendLine("PointsAllocation : " + ObjCSMessage.PointsAllocation);
+                stb.AppendLine("PointsExpiryMonths : " + ObjCSMessage.PointsExpiryMonths);
+                stb.AppendLine("PointsPercentage : " + ObjCSMessage.PointsPercentage);
+                stb.AppendLine("PointsRevolving : " + ObjCSMessage.Revolving);
+                stb.AppendLine();
+                stb.AppendLine("Regards,");
+                stb.AppendLine(" - " + ObjCSMessage.CSName);
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(ObjCSMessage.WAAPILink);
+                sbposdata.AppendFormat("token={0}", ObjCSMessage.BOTokenid);
+                sbposdata.AppendFormat("&phone={0}", ObjCSMessage.GroupCode);
+                sbposdata.AppendFormat("&message={0}", stb.ToString());
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void SendWAMessageBurnRule(ITCSMessage ObjCSMessage)
+        {
+            string responseString;
+
+            try
+            {
+                //objMsg.Message = objMsg.Message.Replace("#01", objMsg.SpokenTo);
+                //objMsg.Message = HttpUtility.UrlEncode(objMsg.Message);
+                //string type = "TEXT";
+                StringBuilder stb = new StringBuilder();
+                stb.AppendLine("Dear Customer,");
+                stb.AppendLine();
+                stb.AppendLine("As discussed the Loyalty Burn Rule have been changed :");
+                stb.AppendLine();
+                stb.AppendLine("*Old Rule*");
+                stb.AppendLine("--------------");
+                stb.AppendLine("BurnMinTxnAmt : " + ObjCSMessage.OldBurnMinTxnAmt);
+                stb.AppendLine("MinRedemptionPts : " + ObjCSMessage.OldMinRedemptionPts);
+                stb.AppendLine("MinRedemptionPtsFirstTime : " + ObjCSMessage.OldMinRedemptionPtsFirstTime);
+                stb.AppendLine("BurnInvoiceAmtPercentage : " + ObjCSMessage.OldBurnInvoiceAmtPercentage);
+                stb.AppendLine("BurnDBPointsPercentage : " + ObjCSMessage.OldBurnDBPointsPercentage);
+                stb.AppendLine();
+                stb.AppendLine("*New Rule*");
+                stb.AppendLine("--------------");
+                stb.AppendLine("BurnMinTxnAmt : " + ObjCSMessage.BurnMinTxnAmt);
+                stb.AppendLine("MinRedemptionPts : " + ObjCSMessage.MinRedemptionPts);
+                stb.AppendLine("MinRedemptionPtsFirstTime : " + ObjCSMessage.MinRedemptionPtsFirstTime);
+                stb.AppendLine("BurnInvoiceAmtPercentage : " + ObjCSMessage.BurnInvoiceAmtPercentage);
+                stb.AppendLine("BurnDBPointsPercentage : " + ObjCSMessage.BurnDBPointsPercentage);
+                stb.AppendLine();
+                stb.AppendLine("Regards,");
+                stb.AppendLine(" - " + ObjCSMessage.CSName);
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(ObjCSMessage.WAAPILink);
+                sbposdata.AppendFormat("token={0}", ObjCSMessage.BOTokenid);
+                sbposdata.AppendFormat("&phone={0}", ObjCSMessage.GroupCode);
+                sbposdata.AppendFormat("&message={0}", stb.ToString());
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
     }

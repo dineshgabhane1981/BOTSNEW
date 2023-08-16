@@ -70,5 +70,36 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string BrandId { get; set; }
+
+        [NotMapped]
+        public decimal? OldEarnMinTxnAmt { get; set; }
+
+        [NotMapped]
+        public int? OldPointsExpiryMonths { get; set; }
+
+        [NotMapped]
+        public decimal? OldPointsPercentage { get; set; }
+
+        [NotMapped]
+        public decimal? OldPointsAllocation { get; set; }
+
+        [NotMapped]
+        public bool OldRevolvingStatus { get; set; }
+
+        [NotMapped]
+        public decimal? OldBurnMinTxnAmt { get; set; }
+
+        [NotMapped]
+        public decimal? OldMinRedemptionPts { get; set; }
+
+        [NotMapped]
+        public decimal? OldMinRedemptionPtsFirstTime { get; set; }
+
+        [NotMapped]
+        public decimal? OldBurnInvoiceAmtPercentage { get; set; }
+
+        [NotMapped]
+        public decimal? OldBurnDBPointsPercentage { get; set; }
+
     }
 }

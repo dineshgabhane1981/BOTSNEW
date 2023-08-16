@@ -337,6 +337,7 @@
     <Compile Include="Models\IndividualDBModels\CustInformatonData.cs" />
     <Compile Include="Models\IndividualDBModels\ExecutiveSummaryAllData.cs" />
     <Compile Include="Models\IndividualDBModels\GinesysRedeemModel.cs" />
+    <Compile Include="Models\IndividualDBModels\ITCSMessage.cs" />
     <Compile Include="Models\IndividualDBModels\ListReferringBase.cs" />
     <Compile Include="Models\IndividualDBModels\MemberListAllData.cs" />
     <Compile Include="Models\IndividualDBModels\PointExpiryDummyModel.cs" />

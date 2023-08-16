@@ -9,6 +9,11 @@
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">            
             <div class="mb-2 pr-3 pt-3 pl-3" id="dvDetails">
                 <div class="row" style="margin: 0;">
+                    <input type="text" id="txtOldBurnMinTxnAmt" hidden />
+                    <input type="text" id="txtOldMinRedemptionPts" hidden />
+                    <input type="text" id="txtOldMinRedemptionPtsFirstTime" hidden />
+                    <input type="text" id="txtOldBurnInvoiceAmtPercentage" hidden />
+                    <input type="text" id="txtOldBurnDBPointsPercentage" hidden />
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         Min Txn Amount
                     </div>
@@ -74,6 +79,12 @@
                     $("#txtMinRedemptionPtsFirstTime").val(result.objBurnData.MinRedemptionPtsFirstTime);
                     $("#txtBurnInvoiceAmtPercentage").val(result.objBurnData.BurnInvoiceAmtPercentage);
                     $("#txtBurnDBPointsPercentage").val(result.objBurnData.BurnDBPointsPercentage);
+                    $("#txtOldBurnMinTxnAmt").val(result.objBurnData.BurnMinTxnAmt);
+                    $("#txtOldMinRedemptionPts").val(result.objBurnData.MinRedemptionPts);
+                    $("#txtOldMinRedemptionPtsFirstTime").val(result.objBurnData.MinRedemptionPtsFirstTime);
+                    $("#txtOldBurnInvoiceAmtPercentage").val(result.objBurnData.BurnInvoiceAmtPercentage);
+                    $("#txtOldBurnDBPointsPercentage").val(result.objBurnData.BurnDBPointsPercentage);
+
                     $("#dvDetails").show();
                     $("#divLoader").hide();
                 }
@@ -143,6 +154,11 @@
             item["MinRedemptionPtsFirstTime"] = MinRedemptionPtsFirstTime;
             item["BurnInvoiceAmtPercentage"] = BurnInvoiceAmtPercentage;
             item["BurnDBPointsPercentage"] = BurnDBPointsPercentage;
+            item["OldBurnMinTxnAmt"] = $("#txtOldBurnMinTxnAmt").val();
+            item["OldMinRedemptionPts"] = $("#txtOldMinRedemptionPts").val();
+            item["OldMinRedemptionPtsFirstTime"] = $("#txtOldMinRedemptionPtsFirstTime").val();
+            item["OldBurnInvoiceAmtPercentage"] = $("#txtOldBurnInvoiceAmtPercentage").val();
+            item["OldBurnDBPointsPercentage"] = $("#txtOldBurnDBPointsPercentage").val();
 
             FilterData.push(item);
             var data = JSON.stringify(FilterData);

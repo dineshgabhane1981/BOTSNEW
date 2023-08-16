@@ -193,6 +193,11 @@ namespace WebApp.Controllers.ITCS
                     objRuleMaster.MinRedemptionPtsFirstTime = Convert.ToDecimal(item["MinRedemptionPtsFirstTime"]);
                     objRuleMaster.BurnInvoiceAmtPercentage = Convert.ToDecimal(item["BurnInvoiceAmtPercentage"]);
                     objRuleMaster.BurnDBPointsPercentage = Convert.ToDecimal(item["BurnDBPointsPercentage"]);
+                    objRuleMaster.OldBurnMinTxnAmt = Convert.ToDecimal(item["OldBurnMinTxnAmt"]);
+                    objRuleMaster.OldMinRedemptionPts = Convert.ToDecimal(item["OldMinRedemptionPts"]);
+                    objRuleMaster.OldMinRedemptionPtsFirstTime = Convert.ToDecimal(item["OldMinRedemptionPtsFirstTime"]);
+                    objRuleMaster.OldBurnInvoiceAmtPercentage = Convert.ToDecimal(item["OldBurnInvoiceAmtPercentage"]);
+                    objRuleMaster.OldBurnDBPointsPercentage = Convert.ToDecimal(item["OldBurnDBPointsPercentage"]);
 
                 }
 
@@ -213,7 +218,9 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult ChangeEarnRule()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();            
+            Earndata obj = new Earndata();
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+     
             return View(objData);
 
         }
@@ -242,6 +249,12 @@ namespace WebApp.Controllers.ITCS
                     objtblRuleMaster.PointsPercentage = Convert.ToDecimal(item["PointsPercentage"]);
                     objtblRuleMaster.PointsAllocation = Convert.ToDecimal(item["PointsAllocation"]);
                     objtblRuleMaster.Revolving = Convert.ToBoolean(item["Revolving"]);
+                    objtblRuleMaster.OldEarnMinTxnAmt = Convert.ToDecimal(item["OldEarnMinTxnAmt"]);
+                    objtblRuleMaster.OldPointsExpiryMonths = Convert.ToInt32(item["OldPointsExpiryMonths"]);
+                    objtblRuleMaster.OldPointsAllocation = Convert.ToDecimal(item["OldPointsAllocation"]);
+                    objtblRuleMaster.OldPointsPercentage = Convert.ToDecimal(item["OldPointsPercentage"]);
+                    objtblRuleMaster.OldRevolvingStatus = Convert.ToBoolean(item["OldRevolvingStatus"]);
+
                 }
                 var connectionString = CR.GetCustomerConnString(Convert.ToString(objtblRuleMaster.GroupId));
                 var Response = ITCSR.SaveEarnRule(objtblRuleMaster, connectionString);
