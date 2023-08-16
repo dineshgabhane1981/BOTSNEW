@@ -86,12 +86,12 @@
                                     @if (Convert.ToString(Session["buttons"]) == "Dashboard")
                                     {
                                         <a href="@Url.Action("AllDiscussions", "Discussion", new { groupId = GroupId })" class="login" title="Go To Discussions" target="_blank"><img src="~/Content/assets/images/discussion.png" style="margin-bottom:15px;" width="30" /></a>
-                                        <a href="@Url.Action("Index", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/ops.jpg" style="margin-bottom:15px;" width="30" /></a>
+                                        <a href="@Url.Action("IndexNew", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/ops.jpg" style="margin-bottom:15px;" width="30" /></a>
                                     }
                                     @if (Convert.ToString(Session["buttons"]) == "Discussion")
                                     {
                                         <a href="@Url.Action("Index", "Home", new { groupId = GroupId })" class="login" title="Go To Dashboard" target="_blank"><img src="~/Content/assets/images/dashboard.jpg" style="margin-bottom:15px;" width="30" /></a>
-                                        <a href="@Url.Action("Index", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/ops.jpg" style="margin-bottom:15px;" width="30" /></a>
+                                        <a href="@Url.Action("IndexNew", "NameAndMobile", new { groupId = GroupId })" class="login" title="Go To IT Ops" target="_blank"><img src="~/Content/assets/images/ops.jpg" style="margin-bottom:15px;" width="30" /></a>
                                     }
 
                                     <a href="@Url.Action("ExitDashboard", "Home")" class="login" title="Exit"><i class="fa fa-window-close" aria-hidden="true" style="font-size:35px;color:white;"></i></a>
