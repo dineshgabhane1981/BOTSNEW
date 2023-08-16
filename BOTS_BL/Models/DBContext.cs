@@ -20,6 +20,8 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<tblTierMaster> tblTierMasters { get; set; }
+        public virtual DbSet<tblCustomerDataCollection> tblCustomerDataCollections { get; set; }
         public virtual DbSet<tblBurnPtsSoftBlock> tblBurnPtsSoftBlocks { get; set; }
         public virtual DbSet<tblOTPSMSWhatsAppCredential> tblOTPSMSWhatsAppCredentials { get; set; }
         public virtual DbSet<View_ITOPSCustTxnData> View_ITOPSCustTxnData { get; set; } 

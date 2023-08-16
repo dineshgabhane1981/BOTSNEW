@@ -1666,8 +1666,9 @@ namespace WebApp.Controllers
             objData.lstCategory = ORR.GetCategoryCode(userDetails.GroupId, userDetails.connectionString);
             objData.lstSubCategory= ORR.GetSubCategoryCodeALL(userDetails.GroupId, userDetails.connectionString);
             objData.lstProduct = ORR.GetProductId(userDetails.GroupId, userDetails.connectionString);
-            objData.lstBrands = ITOPSNEW.GetBrandList(userDetails.GroupId);
-            objData.lstOutlets = ITOPSNEW.GetOutlet(userDetails.GroupId);
+            objData.lstBrands = ORR.GetBrandList(userDetails.connectionString);
+            objData.lstOutlets = ORR.GetOutletList(userDetails.connectionString);
+            objData.lstTiers = ORR.GetTierList(userDetails.connectionString);
             SelectListItem item = new SelectListItem();
             item.Value = "0";
             item.Text = "All";

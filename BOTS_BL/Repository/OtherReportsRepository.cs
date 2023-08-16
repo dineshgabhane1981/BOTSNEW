@@ -56,7 +56,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    lstReportDownload = context.ReportForDownloads.Where(x=>x.GroupId== groupId).ToList();
+                    lstReportDownload = context.ReportForDownloads.Where(x => x.GroupId == groupId).ToList();
                 }
             }
             catch (Exception ex)
@@ -89,12 +89,12 @@ namespace BOTS_BL.Repository
             List<ProductWisePerformance> objProdData = new List<ProductWisePerformance>();
             try
             {
-                using(var context = new BOTSDBContext(connstr))
+                using (var context = new BOTSDBContext(connstr))
                 {
                     objProdData = context.Database.SqlQuery<ProductWisePerformance>("select top(25) T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc").ToList();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "GetProductWisePerformances");
             }
@@ -112,7 +112,7 @@ namespace BOTS_BL.Repository
                     ObjTopSold = context.Database.SqlQuery<ProductWisePerformance>("select top(15) Productcode,ProductCategoryCode,ProductSubCategoryCode,Min(ProductName) as ProductName,Min(ProductCategoryName) as ProductCategoryName ,Min(ProductSubCategoryName) as ProductSubCategoryName,count(Productcode) as TotalTxn,sum(cast(cast(ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(ProductAmt) as TotalAmount,Max(cast(datetime as date)) as LastPurchasedate from TxnProductDetails Group by Productcode,ProductCategoryCode,ProductSubCategoryCode Order by sum(cast(cast(ProductQty as numeric(18,2)) as bigint) ) desc,count(Productcode) desc").ToList();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "GetTop15SellingProduct");
             }
@@ -145,7 +145,7 @@ namespace BOTS_BL.Repository
             List<ProductWisePerformance> Obj1 = new List<ProductWisePerformance>();
             //string StrLastdate = string.Empty;
             //string StrFromdate, StrTodate;
-            
+
             //StrFromdate = FromDate.ToString();
             //StrTodate = ToDate.ToString();
             try
@@ -189,11 +189,11 @@ namespace BOTS_BL.Repository
                         {
                             Obj = context.Database.SqlQuery<ProductWisePerformance>("select T.Productcode as Productcode,T.CategoryCode as ProductCategoryCode,T.SubCategoryCode as ProductSubCategoryCode,Min(P.ProductName) as ProductName,Min(P.CategoryName) as ProductCategoryName ,Min(P.SubCategoryName) as ProductSubCategoryName,count(distinct T.Mobileno) as UniqueMember,count(T.Mobileno) as TotalTxn,sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) )as TotalQuantity,sum(T.ProductAmt) as TotalAmount,Max(cast(T.TxnDatetime as date)) as LastPurchasedate from View_tblTxnProDetailsMaster T inner join tblProductMaster P on T.Productcode = P.Productcode where T.OutletId = @Outlet Group by T.Productcode,T.CategoryCode,T.SubCategoryCode Order by sum(cast(cast(T.ProductQty as numeric(18,2)) as bigint) ) desc,count(T.Productcode) desc", new SqlParameter("@Outlet", OutletId)).ToList();
                         }
-                    }                  
-                    
+                    }
+
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "GetProductDetailFilter");
             }
@@ -212,7 +212,8 @@ namespace BOTS_BL.Repository
 
                     foreach (var item in Proddata)
                     {
-                        ObjProdList.Add(new SelectListItem {
+                        ObjProdList.Add(new SelectListItem
+                        {
                             Text = item.ProductName,
                             Value = Convert.ToString(item.ProductCode)
                         });
@@ -226,10 +227,10 @@ namespace BOTS_BL.Repository
 
             return ObjProdList;
         }
-        public List<SelectListItem> GetCategoryCode(string GroupId,string connstr)
+        public List<SelectListItem> GetCategoryCode(string GroupId, string connstr)
         {
             List<SelectListItem> ObjCategoryCode = new List<SelectListItem>();
-            List <ProductDetailsMaster> objProd = new List<ProductDetailsMaster>();
+            List<ProductDetailsMaster> objProd = new List<ProductDetailsMaster>();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
@@ -294,14 +295,14 @@ namespace BOTS_BL.Repository
                 {
                     //var Proddata = context.ProductMasters.Select(o => o.CategoryCode && o.CategoryName).Distinct().ToList();
 
-                    if(CategoryCode == "0000")
+                    if (CategoryCode == "0000")
                     {
                         objProd = context.Database.SqlQuery<ProductDetailsMaster>("select SubCategoryCode,SubCategoryName from tblProductMaster Group by SubCategoryCode,SubCategoryName").ToList();
                     }
-                    else 
+                    else
                     {
                         objProd = context.Database.SqlQuery<ProductDetailsMaster>("select SubCategoryCode,SubCategoryName from tblProductMaster where CategoryCode = @CategoryCode Group by SubCategoryCode,SubCategoryName", new SqlParameter("@CategoryCode", CategoryCode)).ToList();
-                    }                  
+                    }
 
                     foreach (var item in objProd)
                     {
@@ -329,14 +330,14 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connstr))
                 {
 
-                    if(SubCategorycode == "0000")
+                    if (SubCategorycode == "0000")
                     {
                         objProd = context.Database.SqlQuery<ProductDetailsMaster>("select ProductCode,ProductName from tblProductMaster Group by ProductCode,ProductName").ToList();
                     }
                     else
                     {
                         objProd = context.Database.SqlQuery<ProductDetailsMaster>("select ProductCode,ProductName from tblProductMaster where SubCategoryCode = @SubCategoryCode Group by ProductCode,ProductName", new SqlParameter("@SubCategoryCode", SubCategorycode)).ToList();
-                    }                    
+                    }
 
                     foreach (var item in objProd)
                     {
@@ -355,7 +356,7 @@ namespace BOTS_BL.Repository
 
             return ObjSubCategoryCode;
         }
-        public List<ProductAnalytics> GetProductAnalyticFilter(string GroupId, string connstr, Int16 PurchaseFiter1, Int16 PurchaseFiter2, string dtFrom3, string Todte3, string CategoryCode1, string SubCategoryCode1, string LstProd1, string CategoryCode2, string SubCategoryCode2, string LstProd2, string NotPurchasedSince, Int32 AmountSpentFrom, Int32 AmountSpentTo, string LstOutlet,string LstProdCodeCount1,string LstProdCodeCount2,string LstOutletCount)
+        public List<ProductAnalytics> GetProductAnalyticFilter(string GroupId, string connstr, Int16 PurchaseFiter1, Int16 PurchaseFiter2, string dtFrom3, string Todte3, string CategoryCode1, string SubCategoryCode1, string LstProd1, string CategoryCode2, string SubCategoryCode2, string LstProd2, string NotPurchasedSince, Int32 AmountSpentFrom, Int32 AmountSpentTo, string LstOutlet, string LstProdCodeCount1, string LstProdCodeCount2, string LstOutletCount)
         {
             List<ProductAnalytics> Obj = new List<ProductAnalytics>();
             string StrdtFrom3, StrTodte3;
@@ -364,7 +365,7 @@ namespace BOTS_BL.Repository
 
             if (string.IsNullOrEmpty(dtFrom3))
             {
-                
+
             }
             else
             {
@@ -372,7 +373,7 @@ namespace BOTS_BL.Repository
             }
             if (string.IsNullOrEmpty(Todte3))
             {
-                
+
             }
             else
             {
@@ -383,7 +384,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    Obj = context.Database.SqlQuery<ProductAnalytics>("sp_ProductAnalyticsFilter @pi_AmountSpentFrom,@pi_AmountSpentTo,@pi_CategoryCode1,@pi_CategoryCode2,@pi_LstOutlet,@pi_LstProd1,@pi_LstProd2,@pi_NotPurchasedSince,@pi_PurchaseFiter1,@pi_PurchaseFiter2,@pi_SubCategoryCode1,@pi_SubCategoryCode2,@pi_Todte3,@pi_dtFrom3,@pi_LstProdCodeCount1,@pi_LstProdCodeCount2,@pi_LstOutletCount", 
+                    Obj = context.Database.SqlQuery<ProductAnalytics>("sp_ProductAnalyticsFilter @pi_AmountSpentFrom,@pi_AmountSpentTo,@pi_CategoryCode1,@pi_CategoryCode2,@pi_LstOutlet,@pi_LstProd1,@pi_LstProd2,@pi_NotPurchasedSince,@pi_PurchaseFiter1,@pi_PurchaseFiter2,@pi_SubCategoryCode1,@pi_SubCategoryCode2,@pi_Todte3,@pi_dtFrom3,@pi_LstProdCodeCount1,@pi_LstProdCodeCount2,@pi_LstOutletCount",
                         new SqlParameter("@pi_AmountSpentFrom", AmountSpentFrom), new SqlParameter("@pi_AmountSpentTo", AmountSpentTo), new SqlParameter("@pi_CategoryCode1", CategoryCode1), new SqlParameter("@pi_CategoryCode2", CategoryCode2), new SqlParameter("@pi_LstOutlet", LstOutlet), new SqlParameter("@pi_LstProd1", LstProd1), new SqlParameter("@pi_LstProd2", LstProd2), new SqlParameter("@pi_NotPurchasedSince", NotPurchasedSince), new SqlParameter("@pi_PurchaseFiter1", PurchaseFiter1), new SqlParameter("@pi_PurchaseFiter2", PurchaseFiter2), new SqlParameter("@pi_SubCategoryCode1", SubCategoryCode1), new SqlParameter("@pi_SubCategoryCode2", SubCategoryCode2), new SqlParameter("@pi_Todte3", StrTodte3), new SqlParameter("@pi_dtFrom3", StrdtFrom3), new SqlParameter("@pi_LstProdCodeCount1", LstProdCodeCount1), new SqlParameter("@pi_LstProdCodeCount2", LstProdCodeCount2), new SqlParameter("@pi_LstOutletCount", LstOutletCount)).ToList();
                 }
             }
@@ -393,6 +394,79 @@ namespace BOTS_BL.Repository
             }
 
             return Obj;
+        }
+
+        public List<SelectListItem> GetBrandList(string connstr)
+        {
+            List<SelectListItem> lstBrands = new List<SelectListItem>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    var brandList = context.BrandDetails.ToList();
+                    foreach (var item in brandList)
+                    {
+                        lstBrands.Add(new SelectListItem
+                        {
+                            Text = Convert.ToString(item.BrandName),
+                            Value = Convert.ToString(item.BrandId)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBrandList");
+            }
+            return lstBrands;
+        }
+        public List<SelectListItem> GetOutletList(string connstr)
+        {
+            List<SelectListItem> lstOutlets = new List<SelectListItem>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    var outletList = context.OutletDetails.ToList();
+                    foreach (var item in outletList)
+                    {
+                        lstOutlets.Add(new SelectListItem
+                        {
+                            Text = Convert.ToString(item.OutletName),
+                            Value = Convert.ToString(item.OutletId)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBrandList");
+            }
+            return lstOutlets;
+        }
+        public List<SelectListItem> GetTierList(string connstr)
+        {
+            List<SelectListItem> lstTiers = new List<SelectListItem>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    var outletList = context.tblTierMasters.ToList();
+                    foreach (var item in outletList)
+                    {
+                        lstTiers.Add(new SelectListItem
+                        {
+                            Text = Convert.ToString(item.TierName),
+                            Value = Convert.ToString(item.SlNo)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBrandList");
+            }
+            return lstTiers;
         }
     }
 }

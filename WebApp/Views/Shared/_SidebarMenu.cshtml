@@ -493,12 +493,15 @@
                                     Dashboard Login
                                 </a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Security")">
-                                <a href="@Url.Action("Security", "DashBoardCustomerLogin")" class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Security")">
-                                    <i class="metismenu-icon pe-7s-rocket"></i>
-                                    Security
-                                </a>
-                            </li>
+                            @if (gId != "1051" && gId != "1007")
+                            {
+								<li class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Security")">
+									<a href="@Url.Action("Security", "DashBoardCustomerLogin")" class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Security")">
+										<i class="metismenu-icon pe-7s-rocket"></i>
+										Security
+									</a>
+								</li>
+							}
                             <li class="@Html.IsSelected(controller: "Telecaller", action: "Telecaller")">
                                 <a href="@Url.Action("Telecaller", "Telecaller")" class="@Html.IsSelected(controller: "Telecaller", action: "Telecaller")">
                                     <i class="metismenu-icon pe-7s-rocket"></i>
