@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "BulkImport";
+    ViewBag.Title = "Bulk Import";
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
 
@@ -258,14 +258,18 @@
             contentType: false,
             processData: false,
             success: function (result) {
-                if (result.ResponseSucessCount >= 0 && result.ResponseFailCount >= 0 && result.ResponseCode != -1) {
-                    toastr.success("Records Updated Successfully", result.ResponseSucessCount);
-                    toastr.success("Records Already Exist", result.ResponseFailCount);
-                   /* toastr.success("Records has Invalid Format", result.ResponseInValidFormatCount);*/
+                if (result.ResponseSucessCount > 0 && result.ResponseCode != -1) {
+                    toastr.success("Records Updated Successfully", result.ResponseSucessCount);                   
+                   
                     $("#divLoader").hide();
                     $('#sec5').find(':input').val('');
                 }
-                else {
+                if (result.ResponseFailCount > 0)
+                {
+                    toastr.warning("Records Already Exist", result.ResponseFailCount);
+                }
+                if (result.ResponseCode == -1)
+                {
                     toastr.error("File Format is Not Valid", result.ResponseMessage);
                     $("#divLoader").hide();
                 }
