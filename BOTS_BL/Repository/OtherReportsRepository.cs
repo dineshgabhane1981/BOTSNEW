@@ -356,7 +356,7 @@ namespace BOTS_BL.Repository
 
             return ObjSubCategoryCode;
         }
-        public List<ProductAnalytics> GetProductAnalyticFilter(string GroupId, string connstr, Int16 PurchaseFiter1, Int16 PurchaseFiter2, string dtFrom3, string Todte3, string CategoryCode1, string SubCategoryCode1, string LstProd1, string CategoryCode2, string SubCategoryCode2, string LstProd2, string NotPurchasedSince, Int32 AmountSpentFrom, Int32 AmountSpentTo, string LstOutlet, string LstProdCodeCount1, string LstProdCodeCount2, string LstOutletCount)
+        public List<ProductAnalytics> GetProductAnalyticFilter(string GroupId, string connstr, Int32 AmountSpentFrom, Int32 AmountSpentTo, string CategoryCode1, string CategoryCode2, string LstOutlet, string LstProd1, string LstProd2, string NotPurchasedSince, Int16 PurchaseFiter1, Int16 PurchaseFiter2, string SubCategoryCode1, string SubCategoryCode2, string dtFrom3, string Todte3, string LstProdCodeCount1, string LstProdCodeCount2, string LstOutletCount)
         {
             List<ProductAnalytics> Obj = new List<ProductAnalytics>();
             string StrdtFrom3, StrTodte3;
@@ -395,7 +395,6 @@ namespace BOTS_BL.Repository
 
             return Obj;
         }
-
         public List<SelectListItem> GetBrandList(string connstr)
         {
             List<SelectListItem> lstBrands = new List<SelectListItem>();

@@ -10,16 +10,10 @@
         border-left: 2px solid green;
         height: 200px;
     }
-
-    .col-xl-12 {
-        position: relative;
-        width: 100%;
-        padding-right: 0px;
-        padding-left: 4px;
-    }
 </style>
 <div class="app-main__inner">
-    <div class="row mb-3 pt-3 pl-3 pr-3 card">       
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        @*<div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">*@
         <div class="row" style="display:none;">
             <div class="col-md-6 col-xl-6">
                 <table border="1" cellpadding="5" cellspacing="5">
@@ -81,7 +75,12 @@
                     }
                 </table>
             </div>
-        </div>       
+        </div>
+        @*<div style="margin-bottom:15px;margin-top:15px;">
+                <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass"> Product Performance
+                <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass"> Product Analytics
+            </div>*@
+        @*<div class="row mb-3 pt-3 pl-3 pr-3 card">*@
         <div class="row mt-3">
             <div class="col-md-3 col-xl-3">
                 <input id="rbtnProductPerformance" name="Product" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Product Performance
@@ -90,9 +89,10 @@
                 <input id="rbtnProductAnalytics" name="Product" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Product Analytics
             </div>
         </div>
+        @*</div>*@
 
     </div>
-    <div class="row mb-3 pt-3 pl-3 pr-3 card col-md-12 col-xl-12" id="divProdPerformance">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdPerformance">
         <div class="row">
             <div class="col-md-3 col-xl-3">
                 From Date <br /><input type="text" class="input50" placeholder="From Date" id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
@@ -125,9 +125,10 @@
                     </button>
                 </div>
             </div>
+
         </div>
 
-        <div class="row col-md-12 col-xl-11">
+        <div class="row">
             <div class="table-responsive">
                 <table class="table" id="tblProductDetail">
                     <thead>
@@ -167,49 +168,105 @@
             </div>
         </div>
     </div>
-    <div class="row mb-3 pt-3 pl-3 pr-3 card col-xl-12" id="divProdAnalytics" style="display:none">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdAnalytics" style="display:none">
         <div class="row mb-3">
-            <div class="pl-5">
+            <div class="col-sm-10">
                 <p><b>PRODUCT ANALYTICS (SELL THE RIGHT PRODUCT TO THE RIGHT CUSTOMER)</b></p>
             </div>
         </div>
-        <div class="row mb-3 col-xl-12">
-            <div class="col-xl-4">
-                <div class="form-check">
-                    <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
-                        Filter : 1
-                    </label>
+        @*<div class="row mb-3">
+                <div class="col-md-4 col-xl-4">
+                    <input id="rbtnNeverPurchase1" name="itemPurchased1" type="radio" checked class="rbtnClass"> Never Purchased
+                    <input id="rbtnPurchase1" name="itemPurchased1" type="radio" class="rbtnClass"> Purchased
+                </div>
+
+                <div class="col-md-4 col-xl-4">
+                    <input id="rbtnPurchase2" name="itemPurchased2" type="radio" checked class="rbtnClass"> Also, Purchased
+                    <input id="rbtnNeverPurchase2" name="itemPurchased2" type="radio" class="rbtnClass"> Never Purchased
+                </div>
+
+                <div class="col-md-4 col-xl-4">
+
+                </div>
+            </div>*@
+
+        <div class="row mb-3">
+            <div class="col-xl-3">
+                <div class="row">
+                    <div class="col-xl-4">
+
+                    </div>
+                    <div class="col-xl-5">
+                        <div class="form-check">
+                            @*<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">*@
+                            <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
+                                Filter : 1
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-xl-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="checkFilter2" style="width:20px;height:20px;cursor:pointer;">&nbsp;
-                    <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
-                        Filter : 2
-                    </label>
+            <div class="col-xl-3">
+                <div class="row">
+
+                    <div class="col-xl-4">
+
+                    </div>
+                    <div class="col-xl-7">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="checkFilter2" style="width:20px;height:20px;cursor:pointer;">&nbsp;
+                            <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
+                                Filter : 2
+                            </label>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
-            <div class="col-xl-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="checkFilter3" style="width:20px;height:20px;cursor:pointer;">&nbsp;
-                    <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
-                        Filter : 3
-                    </label>
-                    <button class="btn btn-primary login-btn" onclick='ExportProdAnalyticDataExcel("0");' type="button" id="btnExportProdAnalytic">
-                        <i class="fas fa-file-export"></i> Export
-                    </button>
+            <div class="col-xl-3">
+                <div class="row">
+                    <div class="col-xl-5">
+
+                    </div>
+                    <div class="col-xl-7">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="checkFilter3" style="width:20px;height:20px;cursor:pointer;">&nbsp;
+                            <label class="form-check-label" for="flexCheckDefault" style="font-size: 20px">
+                                Filter : 3
+                            </label>
+                        </div>
+                    </div>
                 </div>
-            </div>            
+            </div>
+            <div class="col-xl-3">
+                <div class="row">
+                    <div class="col-xl-5">
+
+                    </div>
+                    <div class="col-xl-7">
+                        <div class="dropdown">
+                            <button class="btn btn-primary login-btn" onclick='ExportProdAnalyticDataExcel("0");' type="button" id="btnExportProdAnalytic">
+                                <i class="fas fa-file-export"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row mb-3 col-xl-12">
-            <div class="col-xl-4" id="divFilter1">
-                <div class="col-xl-12 row">
-                    <input id="rbtnNeverPurchase1" name="itemPurchased1" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> &nbsp;Never Purchased &nbsp;&nbsp;
-                    <input id="rbtnPurchase1" name="itemPurchased1" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;">&nbsp;Purchased
+        <div class="row mb-3">
+
+            <div class="col-xl-3" id="divFilter1">
+
+                <div class="row mt-4">
+                    <div class="col-xl-12">
+                        <input id="rbtnNeverPurchase1" name="itemPurchased1" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Never Purchased
+                        <input id="rbtnPurchase1" name="itemPurchased1" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Purchased
+                    </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-xl-4">
-                        Category :
+                        Select Category :
                     </div>
                     <div class="col-xl-3">
                         @Html.DropDownListFor(x => Model.lstCategoryCode, new SelectList(Model.lstCategoryCode, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ProdCategoryCode1" })
@@ -217,7 +274,7 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-xl-4">
-                        Sub Category :
+                        Select Sub Category :
                     </div>
                     <div class="col-xl-3">
                         @Html.DropDownListFor(x => Model.lstSubCategoryCode, new SelectList(Model.lstSubCategoryCode, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "SubCategoryCode1" })
@@ -226,22 +283,28 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-xl-4">
-                        Product :
+                        Select Product :
                     </div>
                     <div class="col-xl-3">
+                        @*@Html.DropDownListFor(x => Model.lstOutletdetails, new SelectList(Model.lstOutletdetails, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "OutletList" })*@
+                        @*@Html.ListBoxFor(x => Model.SelectedProdIds, new SelectList(Model.ProductIds, "Value", "Text"), new { @class = "input50", @id = "ProductList", multiple = "multiple", STYLE = "width: 350px" })*@
                         @Html.ListBoxFor(x => x.SelectedProdIds, new SelectList(Model.ProductIds, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ProductList1" })
                     </div>
                 </div>
             </div>
 
-            <div class="col-xl-4" id="divFilter2" style="visibility: hidden; border-left: 1px solid blue;">
-                <div class="col-xl-12">
-                    <input id="rbtnPurchase2" name="itemPurchased2" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Also, Purchased
-                    <input id="rbtnNeverPurchase2" name="itemPurchased2" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Never Purchased
+            <div class="col-xl-3" id="divFilter2" style="visibility: hidden;">
+                @*border-right:1px solid blue;*@
+
+                <div class="row mt-4">
+                    <div class="col-xl-12">
+                        <input id="rbtnPurchase2" name="itemPurchased2" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Also, Purchased
+                        <input id="rbtnNeverPurchase2" name="itemPurchased2" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Never Purchased
+                    </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-xl-4">
-                        Category :
+                        Select Category :
                     </div>
                     <div class="col-xl-3">
                         @Html.DropDownListFor(x => Model.lstCategoryCode, new SelectList(Model.lstCategoryCode, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ProdCategoryCode2" })
@@ -249,7 +312,7 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-xl-4">
-                        Sub Category :
+                        Select Sub Category :
                     </div>
                     <div class="col-xl-3">
                         @Html.DropDownListFor(x => Model.lstSubCategoryCode, new SelectList(Model.lstSubCategoryCode, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "SubCategoryCode2" })
@@ -257,50 +320,53 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-xl-4">
-                        Product :
+                        Select Product :
                     </div>
                     <div class="col-xl-2">
+                        @*@Html.DropDownListFor(x => Model.lstOutletdetails, new SelectList(Model.lstOutletdetails, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "OutletList" })*@
                         @Html.ListBoxFor(x => x.SelectedProdIds, new SelectList(Model.ProductIds, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ProductList2" })
                     </div>
+
                 </div>
             </div>
 
-            <div class="col-xl-4" id="divFilter3" style="visibility: hidden; border-left: 1px solid blue;">
-                <div class="row mb-2 mt-4 col-xl-12" id="divDateRange" style="visibility: hidden;">
-                    <div class="col-xl-12">Date range of purchase</div>
-                    <div class="col-xl-12 row">
-                        <div class="col-xl-6">
-                            <input type="text" class="input40" placeholder="From Date" id="dtFrom3" />
-                        </div>
-                        <div class="col-xl-6">
-                            <input type="text" class="input40" placeholder="To Date" id="dtTo3" />
-                        </div>
-                    </div>
+            <div class="col-xl-5" id="divFilter3" style="visibility: hidden;">
+
+                <div class="row mb-2 mt-4" id="divDateRange" style="visibility: hidden;">
+                    <div class="col-xl-3">Date range of purchase</div>
+                    <div class="col-xl-5"><input type="text" class="input50" placeholder="From Date" id="dtFrom3" /></div>
+                    <div class="col-xl-3"><input type="text" class="input50" placeholder="To Date" id="dtTo3" /></div>
                 </div>
-                <div class="row mb-2 mt-4 col-xl-12" id="divNotPurchased" style="visibility: hidden;">
-                    <div class="col-xl-12">Not purchased since</div>
-                    <div class="col-xl-12">
-                        <input type="text" class="input40" placeholder="Days" id="NotPurchaseDate" />
+                <div class="row mb-2" id="divNotPurchased" style="visibility: hidden;">
+                    <div class="col-xl-3">Not purchased since</div>
+                    <div class="col-xl-5">
+                        <input type="text" class="input50" placeholder="Date" id="NotPurchaseDate" />
                     </div>
+                    <div class="col-xl-3 "></div>
                 </div>
                 <div class="row mb-2" id="divAmountSpend" style="visibility: hidden;">
-                    <div class="col-xl-12">Amount Spent for Purchase</div>
-                    <div class="col-xl-12">
-                        <input type="text" class="input40" placeholder="From" id="FromAmount" />
-                        <input type="text" class="input40" placeholder="To" id="ToAmount" />
-                    </div>
+                    <div class="col-xl-3">Amount Spent for Purchase</div>
+                    <div class="col-xl-5"><input type="text" class="input50" placeholder="From" id="FromAmount" /></div>
+                    <div class="col-xl-3"><input type="text" class="input50" placeholder="To" id="ToAmount" /></div>
                 </div>
                 <div class="row mb-2">
-                    <div class="col-xl-3" style="padding:5px;">Select Outlet</div>
-                    <div class="col-xl-5">                        
+                    <div class="col-xl-3">Select Outlet</div>
+                    <div class="col-xl-5">
+                        @*<input type="text" class="input50" placeholder="Select Outlet" id="OutletId" />*@
                         @Html.ListBoxFor(x => x.SelectedOutletIds, new SelectList(Model.lstOutletdetails, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "FilterOutletId" })
                     </div>
                     <div class="col-xl-3"></div>
                 </div>
             </div>
+
         </div>
-        <div class="pl-3 pb-3 pr-3 col-xl-12" style="text-align:end;">
-            <button type="button" id="btnFilterProdAnalytics" class="btn btn-primary input50"><b>FILTER</b></button>
+        <div class="row mb-2">
+            <div class="col-xl-5">
+            </div>
+            <div class="col-xl-3"></div>
+            <div class="col-xl-4">
+                <button type="button" id="btnFilterProdAnalytics" style="margin-left:17px;margin-top:30px;" class="btn btn-primary input50"><b>FILTER</b></button>
+            </div>
         </div>
     </div>
     <div class="row mb-3 pt-3 pl-3 pr-3 card" id="divProdAnalFilterTble" style="display:none">
@@ -311,6 +377,9 @@
     var tblFilterData = [];
     var Input;
     $(document).ready(function () {
+       /* $('#ProductList').multiselect();*/
+
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $('#dtFrom').datepicker({
             changeMonth: true,
             changeYear: true,
@@ -392,6 +461,7 @@
         }
     });
 
+
     $("#btnFilter").click(function () {
         var flag = 0;
         var Fromdte = $("#dtFrom").val();
@@ -443,10 +513,18 @@
                     console.log(tblFilterData);
                     DrawtblFilterData();
                     $("#divLoader").hide();
+                    //console.log(response);
+                    //console.log(tblFilterData);
                 },
                 failure: function (response) {
                     $("#divLoader").hide();
-                },                
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                //error: (error) => {
+                //    console.log(JSON.stringify(error));
+                //}
             });
         }
         else {
@@ -457,13 +535,16 @@
                 buttonText: "Okay"
             })
         }
+
     });
 
     $("#btnFilterProdAnalytics").click(function () {
         var Dateflag = 0;
         var Amountflag = 0;
         var dtFrom3 = $("#dtFrom3").val();
-        var Todte3 = $("#dtTo3").val();       
+        var Todte3 = $("#dtTo3").val();
+        var LstProdCodeCount1 = 0;
+        var LstProdCodeCount2 = 0;
 
         var CategoryCode1 = $("#ProdCategoryCode1").val();
         var SubCategoryCode1 = $("#SubCategoryCode1").val();
@@ -479,6 +560,8 @@
 
         var PurchaseFiter1 = $('input[id="rbtnNeverPurchase1"]:checked').val();
         var PurchaseFiter2 = $('input[id="rbtnNeverPurchase2"]:checked').val();
+
+        var L1, L2;
 
         const Str1 = (JSON.stringify(ProdCode1)).split(',');
         var ProdCount1 = Str1.length;
@@ -496,10 +579,6 @@
         if (OutletIdList == "") {
             LstOutletCount = 0
         }
-        const LstOutlet = GenerateWhereClause(OutletIdList);
-        const LstProd1 = GenerateProdWhereClause(ProdCode1);
-        const LstProd2 = GenerateProdWhereClause(ProdCode2);
-
         if (PurchaseFiter1) {
             PurchaseFiter1 = 0;
         }
@@ -523,6 +602,29 @@
             PurchaseFiter2 = 2;
         }
 
+        if (PurchaseFiter2 == 2) {
+            CategoryCode2 = "";
+            SubCategoryCode2 = "";
+            ProdCode2 = "";
+            ProdCount2 = 0;
+        }
+        if ($("#checkFilter3").is(':checked')) {
+
+        }
+        else {
+            NotPurchasedSince = '';
+            AmountSpentFrom = '';
+            AmountSpentTo = '';
+            OutletIdList = '';
+            dtFrom3 = '';
+            Todte3 = '';
+
+        }
+
+        const LstOutlet = GenerateWhereClause(OutletIdList);
+        const LstProd1 = GenerateProdWhereClause(ProdCode1);
+        const LstProd2 = GenerateProdWhereClause(ProdCode2);
+
         if ((dtFrom3.length != 0 && Todte3.length != 0)) {
             Dateflag = 1;
         }
@@ -540,6 +642,7 @@
             AmountSpentFrom = 0;
             AmountSpentTo = 0;
         }
+
 
         var FilterData = [];
         item = {};
@@ -593,7 +696,9 @@
                 success: function (response) {
                     $("#divProdAnalFilterTble").html(response);
                     $("#divProdAnalFilterTble").show(1000);
-                    $("#divLoader").hide();
+                   /* $("#divLoader").hide();*/
+                    //console.log(response);
+                    //console.log(tblFilterData);
                 },
                 failure: function (response) {
                     $("#divLoader").hide();
@@ -604,8 +709,13 @@
                     $("#divLoader").hide();
 
                 }
+                //error: (error) => {
+                //    console.log(JSON.stringify(error));
+                //}
             });
+
         }
+
     });
 
     function DrawtblFilterData() {
@@ -634,9 +744,11 @@
                 { data: "LastPurchasedate" }
             ]
         });
-        
+        //$('#tblCampaignSummary_filter').hide();
+
         var table = $('#tblProductDetail').DataTable();
         table.draw();
+        $("#divLoader").hide();
     }
 
     $("#ProdCategoryCode1").change(function () {
@@ -660,19 +772,26 @@
                 success: function (response) {
                     $("#SubCategoryCode1").empty();
                     $("#SubCategoryCode1").append("<option>All</option>");
-                    
+                    /*$("#SubCategoryCode1").prop("disabled", false);*/
                     $.each(response, function () {
                         $("#SubCategoryCode1").append($("<option />").val(this.Value).text(this.Text));
                     });
+
+
+                    //console.log(tblFilterData);
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
                     $("#divLoader").hide();
                 },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
                 error: (error) => {
                     console.log(JSON.stringify(error));
                 }
             });
+
     });
 
     $("#ProdCategoryCode2").change(function () {
@@ -695,19 +814,26 @@
                 success: function (response) {
                     $("#SubCategoryCode2").empty();
                     $("#SubCategoryCode2").append("<option>All</option>");
-                    
+                    /*$("#SubCategoryCode2").prop("disabled", false);*/
                     $.each(response, function () {
                         $("#SubCategoryCode2").append($("<option />").val(this.Value).text(this.Text));
                     });
+
+
+                    //console.log(tblFilterData);
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
                     $("#divLoader").hide();
                 },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
                 error: (error) => {
                     console.log(JSON.stringify(error));
                 }
             });
+
     });
 
     $("#SubCategoryCode1").change(function () {
@@ -729,17 +855,22 @@
                 dataType: "json",
                 success: function (response) {
                     $("#ProductList1").empty();
-                    $("#ProductList1").append("<option>All</option>");
-                  
+                    //$("#ProductList1").append("<option>All</option>"); we comment since unable to take all code
+                    /*$("#ProductList1").prop("disabled", false);*/
                     $.each(response, function () {
                         $("#ProductList1").append($("<option />").val(this.Value).text(this.Text));
                     });
 
+
+                    //console.log(tblFilterData);
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
                     $("#divLoader").hide();
                 },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
                 error: (error) => {
                     console.log(JSON.stringify(error));
                 }
@@ -766,17 +897,22 @@
                 dataType: "json",
                 success: function (response) {
                     $("#ProductList2").empty();
-                    $("#ProductList2").append("<option>All</option>");
-                    
+                    //$("#ProductList2").append("<option>All</option>");
+                    /*$("#ProductList2").prop("disabled", false);*/
                     $.each(response, function () {
                         $("#ProductList2").append($("<option />").val(this.Value).text(this.Text));
                     });
 
+
+                    //console.log(tblFilterData);
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
                     $("#divLoader").hide();
-                },               
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
                 error: (error) => {
                     console.log(JSON.stringify(error));
                 }
@@ -785,16 +921,21 @@
     });
 
     $("#checkFilter2").change(function () {
-        if ($("#checkFilter2").is(':checked')) {            
+        if ($("#checkFilter2").is(':checked')) {
+            $("#divFilter1").css('border-right', '1px solid blue');
+            //$("#divFilter2").show();
             $("#divFilter2").css('visibility', 'visible');
         }
-        else {          
+        else {
+            $("#divFilter1").css('border-right', '');
+            //$("#divFilter2").hide();
             $("#divFilter2").css('visibility', 'hidden');
         }
     });
     $("#checkFilter3").change(function () {
         if ($("#checkFilter3").is(':checked')) {
             if ($("#rbtnPurchase1").is(':checked')){
+                $("#divFilter2").css('border-right', '1px solid blue');
                 $("#divDateRange").css('visibility', 'visible');
                 $("#divNotPurchased").css('visibility', 'visible');
                 $("#divAmountSpend").css('visibility', 'visible');
@@ -802,7 +943,9 @@
             }
             $("#divFilter3").css('visibility', 'visible');
         }
-        else {           
+        else {
+            $("#divFilter2").css('border-right', '');
+            /*$("#divFilter3").hide();*/
             $("#divDateRange").css('visibility', 'hidden');
             $("#divNotPurchased").css('visibility', 'hidden');
             $("#divAmountSpend").css('visibility', 'hidden');
@@ -811,7 +954,9 @@
 
     });
 
-    function ExportDataExcel() {       
+    function ExportDataExcel() {
+
+        var flag = 0;
         var Fromdte = $("#dtFrom").val();
         var Todte = $("#dtTo").val();
         var OutletId = $("#OutletList option:selected").val()
@@ -846,6 +991,7 @@
                 buttonText: "Okay"
             })
         }
+
     }
 
     function ExportProdAnalyticDataExcel() {
@@ -870,7 +1016,12 @@
 
         var PurchaseFiter1 = $('input[id="rbtnNeverPurchase1"]:checked').val();
         var PurchaseFiter2 = $('input[id="rbtnNeverPurchase2"]:checked').val();
-               
+
+        var L1, L2;
+
+        alert(ProdCode1)
+        alert(ProdCode2)
+        alert(OutletIdList)
         const Str1 = (JSON.stringify(ProdCode1)).split(',');
         var ProdCount1 = Str1.length;
         const Str2 = (JSON.stringify(ProdCode2)).split(',');
@@ -960,8 +1111,11 @@
             console.log(urlLink);
             window.location.href = urlLink;
             $("#divLoader").hide();
+
         }
     }
+
+
 
 </script>
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
@@ -972,3 +1126,6 @@
 <script src="~/Scripts/moment.min.js"></script>
 <script src="~/Scripts/GenerateWhereClause.js"></script>
 <script src="~/Scripts/GenerateProdWhereClause.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.2/js/bootstrap-multiselect.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/1.1.2/css/bootstrap-multiselect.css" rel="stylesheet" />*@
+
