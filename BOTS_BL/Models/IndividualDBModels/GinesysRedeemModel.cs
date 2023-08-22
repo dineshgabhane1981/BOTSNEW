@@ -15,6 +15,7 @@ namespace BOTS_BL.Models
         public string StoreId { get; set; }
         public decimal? Points { get; set; }
         public decimal? PointsValue { get; set; }
+        public decimal? PointsToRedeem { get; set; }
     }
     public class BurnValidateResponse
     {
