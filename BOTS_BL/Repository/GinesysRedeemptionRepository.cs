@@ -55,7 +55,13 @@ namespace BOTS_BL.Repository
                     {
                         objData.Points = objData.Points - BlockedPoints;
                     }
-                    objData.PointsValue = context.tblRuleMasters.Select(x => x.PointsAllocation).FirstOrDefault();
+                    var rules =context.tblRuleMasters.FirstOrDefault();
+                    if(rules!=null)
+                    {
+                        objData.PointsValue = rules.PointsAllocation;
+                        objData.PointsToRedeem = Convert.ToDecimal(objData.InvoiceAmount) *(rules.BurnInvoiceAmtPercentage/100);
+                    }
+                    
                     objData.CustomerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == objData.MobileNo).Select(y => y.Name).FirstOrDefault();
                 }
             }

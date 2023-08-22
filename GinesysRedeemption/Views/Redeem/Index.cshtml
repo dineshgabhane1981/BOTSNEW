@@ -29,8 +29,17 @@
         <tr>
             <td>Mobile No</td>
             <td>@Model.MobileNo</td>
-
         </tr>
+        @if (Model.PointsToRedeem != null)
+        {
+            if (Model.PointsToRedeem > 0)
+            {
+                <tr>
+                    <td>You can redeem max</td>
+                    <td>@Model.PointsToRedeem</td>
+                </tr>
+            }
+        }
     </table>
     <div class="col-md-12 col-lg-12" style="background-color:#fff;width:90%;text-align:center;padding-top:20px;">
         <input id="hdnPoints" value=@Model.Points hidden />
@@ -56,7 +65,7 @@
             var MobileNo = $("#hdnMobileNo").val();
             var StoreId = $("#hdnStoreId").val();
             var BillGUID = $("#hdnbillGUID").val();
-            
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("BurnValidation", "Redeem")',
