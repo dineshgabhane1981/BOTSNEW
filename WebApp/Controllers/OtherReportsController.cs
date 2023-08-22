@@ -153,7 +153,7 @@ namespace WebApp.Controllers
                     string LstProdCodeCount2 = Convert.ToString(item["LstProdCodeCount2"]);
                     string LstOutletCount = Convert.ToString(item["LstOutletCount"]);
 
-                    objData1.lstProdAnaltic = ORR.GetProductAnalyticFilter(userDetails.GroupId, userDetails.connectionString, PurchaseFiter1, PurchaseFiter2, dtFrom3, Todte3, CategoryCode1, SubCategoryCode1, LstProd1, CategoryCode2, SubCategoryCode2, LstProd2, NotPurchasedSince, AmountSpentFrom, AmountSpentTo, LstOutlet, LstProdCodeCount1, LstProdCodeCount2, LstOutletCount);
+                    objData1.lstProdAnaltic = ORR.GetProductAnalyticFilter(userDetails.GroupId, userDetails.connectionString, AmountSpentFrom, AmountSpentTo, CategoryCode1, CategoryCode2, LstOutlet, LstProd1, LstProd2, NotPurchasedSince, PurchaseFiter1, PurchaseFiter2, SubCategoryCode1, SubCategoryCode2, dtFrom3, Todte3,    LstProdCodeCount1, LstProdCodeCount2, LstOutletCount);
                 }
             }
             catch (Exception ex)
@@ -319,7 +319,7 @@ namespace WebApp.Controllers
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
                 //List<tblCustDetailsMaster> lstMember = new List<tblCustDetailsMaster>();
-                objData.lstProdAnaltic = ORR.GetProductAnalyticFilter(userDetails.GroupId, userDetails.connectionString, PurchaseFiter1, PurchaseFiter2, dtFrom3, Todte3, CategoryCode1, SubCategoryCode1, LstProd1, CategoryCode2, SubCategoryCode2, LstProd2, NotPurchasedSince, AmountSpentFrom, AmountSpentTo, LstOutlet, LstProdCodeCount1, LstProdCodeCount2, LstOutletCount);
+                objData.lstProdAnaltic = ORR.GetProductAnalyticFilter(userDetails.GroupId, userDetails.connectionString, AmountSpentFrom, AmountSpentTo, CategoryCode1, CategoryCode2, LstOutlet, LstProd1, LstProd2, NotPurchasedSince, PurchaseFiter1, PurchaseFiter2, SubCategoryCode1, SubCategoryCode2, dtFrom3, Todte3, LstProdCodeCount1, LstProdCodeCount2, LstOutletCount);
 
                 PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(ProductAnalytics));
                 foreach (PropertyDescriptor prop in properties)
@@ -334,22 +334,6 @@ namespace WebApp.Controllers
                     table.Rows.Add(row);
                 }
 
-                //table.Columns.Remove("Id");
-                //table.Columns.Remove("DOB");
-                //table.Columns.Remove("Email");
-                //table.Columns.Remove("AnniversaryDate");
-                //table.Columns.Remove("Category");
-                //table.Columns.Remove("CardNo");
-                //table.Columns.Remove("Gender");
-                //table.Columns.Remove("EnrolledBy");
-                //table.Columns.Remove("CountryCode");
-                //table.Columns.Remove("CurrentEnrolledOutlet");
-                //table.Columns.Remove("DisableSMSWATxn");
-                //table.Columns.Remove("EnrolledOutlet");
-                //table.Columns.Remove("DOJ");
-                //table.Columns.Remove("IsActive");
-                //table.Columns.Remove("DisableTxn");
-                //table.Columns.Remove("DisableSMSWAPromo");
                 string ReportName = "ProductAnalyticsData";
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
@@ -371,8 +355,6 @@ namespace WebApp.Controllers
                         return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                     }
                 }
-
-
 
             }
             catch (Exception ex)

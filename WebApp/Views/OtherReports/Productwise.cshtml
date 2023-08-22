@@ -543,8 +543,6 @@
         var Amountflag = 0;
         var dtFrom3 = $("#dtFrom3").val();
         var Todte3 = $("#dtTo3").val();
-        var LstProdCodeCount1 = 0;
-        var LstProdCodeCount2 = 0;
 
         var CategoryCode1 = $("#ProdCategoryCode1").val();
         var SubCategoryCode1 = $("#SubCategoryCode1").val();
@@ -558,10 +556,24 @@
         var AmountSpentTo = $("#ToAmount").val();
         let OutletIdList = $("#FilterOutletId").val();
 
-        var PurchaseFiter1 = $('input[id="rbtnNeverPurchase1"]:checked').val();
-        var PurchaseFiter2 = $('input[id="rbtnNeverPurchase2"]:checked').val();
 
-        var L1, L2;
+        if ($("#rbtnNeverPurchase1").prop("checked")) {
+            PurchaseFiter1 = 0;
+        }
+        else if ($("#rbtnPurchase1").prop("checked")) {
+            PurchaseFiter1 = 1;
+        }
+
+        if ($("#rbtnNeverPurchase2").prop("checked")) {
+            PurchaseFiter2 = 0;
+        }
+        else if ($("#rbtnPurchase2").prop("checked")) {
+
+            PurchaseFiter2 = 1;
+        }
+        else {
+            PurchaseFiter2 = 2;
+        }
 
         const Str1 = (JSON.stringify(ProdCode1)).split(',');
         var ProdCount1 = Str1.length;
@@ -578,25 +590,10 @@
         }
         if (OutletIdList == "") {
             LstOutletCount = 0
-        }
-        if (PurchaseFiter1) {
-            PurchaseFiter1 = 0;
-        }
-        else {
-            PurchaseFiter1 = 1;
-        }
+        }     
 
         if ($("#checkFilter2").is(':checked')) {
 
-            if (PurchaseFiter2 == null) {
-                PurchaseFiter2 = 2;
-            }
-            else if (PurchaseFiter2) {
-                PurchaseFiter2 = 0;
-            }
-            else {
-                PurchaseFiter2 = 1;
-            }
         }
         else {
             PurchaseFiter2 = 2;
@@ -618,7 +615,6 @@
             OutletIdList = '';
             dtFrom3 = '';
             Todte3 = '';
-
         }
 
         const LstOutlet = GenerateWhereClause(OutletIdList);
@@ -680,7 +676,7 @@
            cuteAlert({
               type: "error",
                title: "AmountSpent: Error",
-               message: "Select Amount Spent Both Fields",
+               message: "Select Amount Spent In Both Fields",
               buttonText: "Okay"
            })
         }
@@ -995,12 +991,11 @@
     }
 
     function ExportProdAnalyticDataExcel() {
+
         var Dateflag = 0;
         var Amountflag = 0;
         var dtFrom3 = $("#dtFrom3").val();
         var Todte3 = $("#dtTo3").val();
-        var LstProdCodeCount1 = 0;
-        var LstProdCodeCount2 = 0;
 
         var CategoryCode1 = $("#ProdCategoryCode1").val();
         var SubCategoryCode1 = $("#SubCategoryCode1").val();
@@ -1014,10 +1009,24 @@
         var AmountSpentTo = $("#ToAmount").val();
         let OutletIdList = $("#FilterOutletId").val();
 
-        var PurchaseFiter1 = $('input[id="rbtnNeverPurchase1"]:checked').val();
-        var PurchaseFiter2 = $('input[id="rbtnNeverPurchase2"]:checked').val();
 
-        var L1, L2;
+        if ($("#rbtnNeverPurchase1").prop("checked")) {
+            PurchaseFiter1 = 0;
+        }
+        else if ($("#rbtnPurchase1").prop("checked")) {
+            PurchaseFiter1 = 1;
+        }
+
+        if ($("#rbtnNeverPurchase2").prop("checked")) {
+            PurchaseFiter2 = 0;
+        }
+        else if ($("#rbtnPurchase2").prop("checked")) {
+
+            PurchaseFiter2 = 1;
+        }
+        else {
+            PurchaseFiter2 = 2;
+        }
 
         const Str1 = (JSON.stringify(ProdCode1)).split(',');
         var ProdCount1 = Str1.length;
@@ -1036,34 +1045,35 @@
             LstOutletCount = 0
         }
 
-        LstProdCodeCount1 = ProdCount1;
-        LstProdCodeCount2 = ProdCount2;
-        const LstOutlet = GenerateWhereClause(OutletIdList);
-        const LstProd1 = GenerateProdWhereClause(ProdCode1);
-        const LstProd2 = GenerateProdWhereClause(ProdCode2);
-
-        if (PurchaseFiter1) {
-            PurchaseFiter1 = 0;
-        }
-        else {
-            PurchaseFiter1 = 1;
-        }
-
         if ($("#checkFilter2").is(':checked')) {
 
-            if (PurchaseFiter2 == null) {
-                PurchaseFiter2 = 2;
-            }
-            else if (PurchaseFiter2) {
-                PurchaseFiter2 = 0;
-            }
-            else {
-                PurchaseFiter2 = 1;
-            }
         }
         else {
             PurchaseFiter2 = 2;
         }
+
+        if (PurchaseFiter2 == 2) {
+            CategoryCode2 = "";
+            SubCategoryCode2 = "";
+            ProdCode2 = "";
+            ProdCount2 = 0;
+        }
+        if ($("#checkFilter3").is(':checked')) {
+
+        }
+        else {
+            NotPurchasedSince = '';
+            AmountSpentFrom = '';
+            AmountSpentTo = '';
+            OutletIdList = '';
+            dtFrom3 = '';
+            Todte3 = '';
+
+        }
+
+        const LstOutlet = GenerateWhereClause(OutletIdList);
+        const LstProd1 = GenerateProdWhereClause(ProdCode1);
+        const LstProd2 = GenerateProdWhereClause(ProdCode2);
 
         if ((dtFrom3.length != 0 && Todte3.length != 0)) {
             Dateflag = 1;
@@ -1096,7 +1106,7 @@
            cuteAlert({
               type: "error",
                title: "AmountSpent: Error",
-               message: "Select Amount Spent Both Fields",
+               message: "Select Amount Spent In Both Fields",
               buttonText: "Okay"
            })
         }
@@ -1104,7 +1114,7 @@
 
            $("#divLoader").show();
             var urlLink = "@Url.Action("ExportToExcelProductAnalytics", "OtherReports")";
-            urlLink = urlLink + "?PurchaseFiter1=" + PurchaseFiter1 + "&PurchaseFiter2=" + PurchaseFiter2 + "&dtFrom3=" + dtFrom3 + "&Todte3=" + Todte3 + "&CategoryCode1=" + CategoryCode1 + "&SubCategoryCode1=" + SubCategoryCode1 + "&LstProd1=" + LstProd1 + "&CategoryCode2=" + CategoryCode2 + "&SubCategoryCode2=" + SubCategoryCode2 + "&LstProd2=" + LstProd2 + "&NotPurchasedSince=" + NotPurchasedSince + "&AmountSpentFrom=" + AmountSpentFrom + "&AmountSpentTo=" + AmountSpentTo + "&LstOutlet=" + LstOutlet + "&LstProdCodeCount1=" + LstProdCodeCount1 + "&LstProdCodeCount2=" + LstProdCodeCount2 + "&LstOutletCount=" + LstOutletCount +"";
+            urlLink = urlLink + "?PurchaseFiter1=" + PurchaseFiter1 + "&PurchaseFiter2=" + PurchaseFiter2 + "&dtFrom3=" + dtFrom3 + "&Todte3=" + Todte3 + "&CategoryCode1=" + CategoryCode1 + "&SubCategoryCode1=" + SubCategoryCode1 + "&LstProd1=" + LstProd1 + "&CategoryCode2=" + CategoryCode2 + "&SubCategoryCode2=" + SubCategoryCode2 + "&LstProd2=" + LstProd2 + "&NotPurchasedSince=" + NotPurchasedSince + "&AmountSpentFrom=" + AmountSpentFrom + "&AmountSpentTo=" + AmountSpentTo + "&LstOutlet=" + LstOutlet + "&LstProdCodeCount1=" + ProdCount1 + "&LstProdCodeCount2=" + ProdCount2 + "&LstOutletCount=" + LstOutletCount +"";
             console.log(urlLink);
             window.location.href = urlLink;
             $("#divLoader").hide();
