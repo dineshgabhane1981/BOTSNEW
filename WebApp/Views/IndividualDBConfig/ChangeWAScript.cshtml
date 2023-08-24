@@ -103,8 +103,8 @@
             data: '{OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + ',MessageType: ' + JSON.stringify($('#ddlMessageType').val()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (result) {                
-                if (result.objSMSWhatsAppScriptMaster.WhatsAppScript != null && result.OutletId != null) {
+            success: function (result) {
+                if (result.objSMSWhatsAppScriptMaster.WhatsAppScript != null && result.objSMSWhatsAppScriptMaster.OutletId != null) {
                     $("#dvScript").show();
                     $("#txtScript").text(result.objSMSWhatsAppScriptMaster.WhatsAppScript);
                 }

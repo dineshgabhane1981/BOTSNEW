@@ -183,6 +183,14 @@ namespace BOTS_BL.Repository
                     {
                         Id = "105";
                     }
+                    else if (MessageType == "Balance>0")
+                    {
+                        Id = "106";
+                    }
+                    else if (MessageType == "Balance<0")
+                    {
+                        Id = "107";
+                    }
                     objSMSWhatsAppScriptMaster = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id).FirstOrDefault();
 
                 }
@@ -231,6 +239,14 @@ namespace BOTS_BL.Repository
                     else if (MessageType == "OTP")
                     {
                         Id = "105";
+                    }
+                    else if (MessageType == "Balance>0")
+                    {
+                        Id = "106";
+                    }
+                    else if (MessageType == "Balance<0")
+                    {
+                        Id = "107";
                     }
                     var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id).FirstOrDefault();
                     Script1.WhatsAppScript = Script;

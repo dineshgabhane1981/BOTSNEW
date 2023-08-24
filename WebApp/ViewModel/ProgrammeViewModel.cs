@@ -27,7 +27,7 @@ namespace WebApp.ViewModel
 
         public SelectListItem[] MessageType()
         {
-            return new SelectListItem[6] { new SelectListItem() { Text = "Enrollment", Value = "Enrollment" }, new SelectListItem() { Text = "Earn", Value = "Earn" }, new SelectListItem() { Text = "Burn", Value = "Burn" }, new SelectListItem() { Text = "CancelEarn", Value = "CancelEarn" }, new SelectListItem() { Text = "CancelBurn", Value = "CancelBurn" }, new SelectListItem() { Text = "OTP", Value = "OTP" } };
+            return new SelectListItem[8] { new SelectListItem() { Text = "Enrollment", Value = "Enrollment" }, new SelectListItem() { Text = "Earn", Value = "Earn" }, new SelectListItem() { Text = "Burn", Value = "Burn" }, new SelectListItem() { Text = "CancelEarn", Value = "CancelEarn" }, new SelectListItem() { Text = "CancelBurn", Value = "CancelBurn" }, new SelectListItem() { Text = "OTP", Value = "OTP" }, new SelectListItem() { Text = "Balance>0", Value = "Balance>0" }, new SelectListItem() { Text = "Balance<0", Value = "Balance<0" } };
         }
         public tblSMSWhatsAppScriptMaster  objSMSWhatsAppScriptMaster { get; set; }
         public GroupDetails objGroupDetail { get; set; }
