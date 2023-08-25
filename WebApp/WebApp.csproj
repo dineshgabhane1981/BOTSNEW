@@ -608,9 +608,6 @@
     <Content Include="Views\DLCConfig\ProfileConfig.cshtml" />
     <Content Include="Views\DLCConfig\GenerateDLCLink.cshtml" />
     <Content Include="Views\DocumentLibrary\Index.cshtml" />
-    <Content Include="Views\BOPromoCampaign\BOPromoText.cshtml" />
-    <Content Include="Views\BOPromoCampaign\BOPromoFileWithCaption.cshtml" />
-    <Content Include="Views\BOPromoCampaign\BOPromoFile.cshtml" />
     <Content Include="Views\Member\Index.cshtml" />
     <Content Include="Views\Member\DeleteUser.cshtml" />
     <Content Include="Views\Events\Index.cshtml" />

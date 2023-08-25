@@ -1,2 +1,39 @@
-﻿
-<h1>Text</h1>
+﻿@model BOTS_BL.Models.CommonDB.BOPromoRetailCategory
+<style>
+    img {
+        max-width: 180px;
+    }
+
+    /*input[type=file] {
+        padding: 10px;
+        background: #2d2d2d;
+    }*/
+</style>
+<div class="app-main__inner">
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+            <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+                <b>WA Message Balance :</b>
+            </div>
+            <div>
+                <span id="Balance">@((ViewBag.Balance))</span>
+            </div>
+        </div>
+        <div class="row mt-5" style="margin-top: 20px; margin-left: 10px;">
+            <div class="col-md-2 col-xl-2 ml-3">
+                <input id="rbtnAll1" name="Type1" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;" > ALL
+            </div>
+            <div class="col-md-2 col-xl-2 ">
+                <input id="rbtnCategory1" name="Type1" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;" > Retail Category
+            </div>
+            <div class="col-md-3 col-xl-3" id="ddlCategoryList" style="visibility: hidden;">
+                @Html.DropDownListFor(x => Model.lstRetailCategory, new SelectList(Model.lstRetailCategory, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "IdLstRetailCategory" })
+            </div>
+            <div class="col-md-3 col-xl-3 ">
+                <b>Cutomer Count :</b>
+                <span id="CustCount">@((ViewBag.GroupCount))</span>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -74,15 +74,26 @@ namespace BOTS_BL.Repository
         {
             string Count;
             Count = string.Empty;
-            int Id = Convert.ToInt32(RetailCategoryId);
-            
+            int Id = 0;
+
+            if (!string.IsNullOrEmpty(RetailCategoryId))
+            {
+                Id = Convert.ToInt32(RetailCategoryId);
+            }
+                       
             try
             {
                 using (var context = new CommonDBContext())
                 {
-                    var Cunt = context.Database.SqlQuery<RetailCount>("select count(*) as Count from tblGroupDetails T inner join tblCategory C on T.RetailCategory = C.CategoryId where C.CategoryId = @Id Group by C.CategoryName", new SqlParameter("@Id", Id)).FirstOrDefault();
-                  
-                    Count = Convert.ToString(Cunt.Count);
+                    if(RetailCategoryId == "")
+                    {
+                        Count = GetGroupCount();
+                    }
+                    else
+                    {
+                        var Cunt = context.Database.SqlQuery<RetailCount>("select count(*) as Count from tblGroupDetails T inner join tblCategory C on T.RetailCategory = C.CategoryId where C.CategoryId = @Id Group by C.CategoryName", new SqlParameter("@Id", Id)).FirstOrDefault();
+                        Count = Convert.ToString(Cunt.Count);
+                    }       
                 }
 
             }
@@ -101,37 +112,35 @@ namespace BOTS_BL.Repository
 
 
             try
-            {
-               
-                            var baseAddress = "https://bo.enotify.app/api/chackBal?token=" + Tokenid;
-                            using (var client = new HttpClient())
-                            {
-                                using (var response1 = client.GetAsync(baseAddress).Result)
-                                {
-                                    if (response1.IsSuccessStatusCode)
-                                    {
-                                        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                                        var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
-                                        JObject jsonObj = JObject.Parse(response2);
-                                        IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..data");
-                                        foreach (JToken T in pricyProducts)
-                                        {
-                                //WAInsData Temp = new WAInsData();
-                                //Temp.InstanceName = Convert.ToString(T.InstanceName);
-                                //Temp.TokenId = Convert.ToString(TokenId);
-                                WAInsDetails.InstanceName = null;
-                                WAInsDetails.TokenId = null;
-                                WAInsDetails.quota = Convert.ToString(T["quota"]);
-                                WAInsDetails.Status1 = Convert.ToString(T["status"]);
-                                       
-                                        }
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
-                                    }
-                                }
-                            }
+            {     
+               var baseAddress = "https://bo.enotify.app/api/chackBal?token=" + Tokenid;
+                  using (var client = new HttpClient())
+                    {
+                      using (var response1 = client.GetAsync(baseAddress).Result)
+                        {
+                           if (response1.IsSuccessStatusCode)
+                             {
+                                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                 var response2 = client.GetStringAsync(new Uri(baseAddress)).Result;
+                                 JObject jsonObj = JObject.Parse(response2);
+                                 IEnumerable<JToken> pricyProducts = jsonObj.SelectTokens("$..data");
+                                   foreach (JToken T in pricyProducts)
+                                     {
+                                      //WAInsData Temp = new WAInsData();
+                                      //Temp.InstanceName = Convert.ToString(T.InstanceName);
+                                      //Temp.TokenId = Convert.ToString(TokenId);
+                                      WAInsDetails.InstanceName = null;
+                                      WAInsDetails.TokenId = null;
+                                      WAInsDetails.quota = Convert.ToString(T["quota"]);
+                                      WAInsDetails.Status1 = Convert.ToString(T["status"]);    
+                                     }
+                             }
+                             else
+                             {
+                                Console.WriteLine("{0} ({1})", (int)response1.StatusCode, response1.ReasonPhrase);
+                             }
+                       }
+                   }
                        
             }
             catch (Exception ex)
@@ -190,7 +199,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    Data = context.WAReports.Where(x => x.SMSStatus == "9" && x.Status == "1").ToList();
+                    //Data = context.WAReports.Where(x => x.SMSStatus == "9" && x.Status == "1").ToList();
+                    Data = context.WAReports.Where(x => x.SMSStatus == "5" && x.Status == "1").ToList();
 
                     Thread Job = new Thread(() => RouteMessage(Data, File1, File2, Text1, Text2, ImageWithCaptionUrl, TextUrl, FileUrl, _TokenId));
                     Job.Start();
@@ -198,13 +208,11 @@ namespace BOTS_BL.Repository
                     Obj.ResponseCode = "00";
                     Obj.ResponseMessage = "Success";
                 }                    
-
             }
             catch(Exception ex)
             {
                 newexception.AddException(ex, "SendTestMessage");
             }
-
             return Obj;
         }
 
@@ -316,35 +324,34 @@ namespace BOTS_BL.Repository
             string responseString;
             try
             {
+                //_MobileMessage = _MobileMessage.Replace("#99", "&");
+                //_MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_Url);
+                sbposdata.AppendFormat("token={0}", _TokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                //sbposdata.AppendFormat("&message={0}", _MobileMessage);
+                sbposdata.AppendFormat("&link={0}", _ImageUrl1);
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
 
-                ////_MobileMessage = _MobileMessage.Replace("#99", "&");
-                ////_MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-                ////string type = "TEXT";
-                //StringBuilder sbposdata = new StringBuilder();
-                //sbposdata.AppendFormat(_Url);
-                //sbposdata.AppendFormat("token={0}", _TokenId);
-                //sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
-                ////sbposdata.AppendFormat("&message={0}", _MobileMessage);
-                //sbposdata.AppendFormat("&link={0}", _ImageUrl1);
-                //string Url = sbposdata.ToString();
-                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-                //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                //HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
-                //UTF8Encoding encoding = new UTF8Encoding();
-                //byte[] data = encoding.GetBytes(sbposdata.ToString());
-                //httpWReq.Method = "POST";
-
-                //httpWReq.ContentType = "application/x-www-form-urlencoded";
-                //httpWReq.ContentLength = data.Length;
-                //using (Stream stream = httpWReq.GetRequestStream())
-                //{
-                //    stream.Write(data, 0, data.Length);
-                //}
-                //HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
-                //StreamReader reader = new StreamReader(response.GetResponseStream());
-                //responseString = reader.ReadToEnd();
-                //reader.Close();
-                //response.Close();
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
             }
             catch (ArgumentException ex)
             {

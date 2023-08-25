@@ -83,11 +83,11 @@ namespace WebApp.Controllers
 
                     HttpPostedFileBase files = Request.Files[0];
                     string fileName = Request.Files[0].FileName;
-                    //var path = ConfigurationManager.AppSettings["Path"].ToString();
-                    //string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
+                    var path = ConfigurationManager.AppSettings["Path"].ToString();
+                    string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
 
-                    var path = ConfigurationManager.AppSettings["DiscussionFileUpload"].ToString();
-                    string Path3 = ConfigurationManager.AppSettings["DiscussionDocumentURL"].ToString();
+                    //var path = ConfigurationManager.AppSettings["DiscussionFileUpload"].ToString();
+                    //string Path3 = ConfigurationManager.AppSettings["DiscussionDocumentURL"].ToString();
 
                     var fullFilePath = path + fileName;
 

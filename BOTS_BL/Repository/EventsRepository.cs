@@ -343,7 +343,7 @@ namespace BOTS_BL.Repository
                             TM2.DOB = objCustomerDetail.DOB;
                             TM2.AnniversaryDate = objCustomerDetail.AnniversaryDate;
                             TM2.Gender = objCustomerDetail.Gender;
-                            TM2.DOJ = DateTime.Now;
+                            TM2.DOJ = IndianDatetime();
                             TM2.EnrollingOutlet = AdminOutletId;
                             TM2.MemberGroupId = "1000";
                             TM2.CustomerThrough = "1";
@@ -600,9 +600,7 @@ namespace BOTS_BL.Repository
         {
             List<EventDetail> lstReportEventDate = new List<EventDetail>();
             var connStr = CR.GetCustomerConnString(groupid);
-            //TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-            //DateTime date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
-            string Today = DateTime.Now.ToString("yyyy-MM-dd");
+            string Today = IndianDatetime().ToString("yyyy-MM-dd");
             IFormatProvider culture = new CultureInfo("en-US", true);
             DateTime dateVal = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
             try
@@ -624,7 +622,7 @@ namespace BOTS_BL.Repository
             List<EventMemberDetail> lstReportData = new List<EventMemberDetail>();
             int eventid = Convert.ToInt32(EventId);
             var connStr = CR.GetCustomerConnString(GroupId);
-            string Today = DateTime.Now.ToString("yyyy-MM-dd");
+            string Today = IndianDatetime().ToString("yyyy-MM-dd");
             IFormatProvider culture = new CultureInfo("en-US", true);
             DateTime dateVal = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
             try
@@ -674,7 +672,7 @@ namespace BOTS_BL.Repository
             List<ReminderData> obj = new List<ReminderData>();
             List<ReminderData> objData = new List<ReminderData>();
 
-            string Today = DateTime.Now.ToString("yyyy-MM-dd");
+            string Today = IndianDatetime().ToString("yyyy-MM-dd");
             IFormatProvider culture = new CultureInfo("en-US", true);
             DateTime dateVal = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
             var connStr = CR.GetCustomerConnString(groupid);
@@ -741,7 +739,7 @@ namespace BOTS_BL.Repository
             List<ReminderData> obj = new List<ReminderData>();
             List<ReminderData> objData = new List<ReminderData>();
 
-            string Today = DateTime.Now.ToString("yyyy-MM-dd");
+            string Today = IndianDatetime().ToString("yyyy-MM-dd");
             IFormatProvider culture = new CultureInfo("en-US", true);
             DateTime dateVal = DateTime.ParseExact(Today, "yyyy-MM-dd", culture);
             var connStr = CR.GetCustomerConnString(groupid);
@@ -961,6 +959,14 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "SendDetailsToPOS");
             }
+        }
+
+        public DateTime IndianDatetime()
+        {
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+
+            return Date;
         }
     }
 
