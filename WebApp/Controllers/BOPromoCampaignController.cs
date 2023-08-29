@@ -18,12 +18,13 @@ namespace WebApp.Controllers
     {
         PromoCampaignRepository PCR = new PromoCampaignRepository();
         Exceptions newexception = new Exceptions();
-        
+        EventsRepository ER = new EventsRepository();
+
         // GET: BOPromoCampaign
         public ActionResult Index()
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             BOPromoRetailCategory Obj = new BOPromoRetailCategory();
-
             var WABalance = PCR.GetBOWABalance();
             ViewBag.Balance = WABalance.quota;
             var GroupCount = PCR.GetGroupCount();
@@ -83,11 +84,11 @@ namespace WebApp.Controllers
 
                     HttpPostedFileBase files = Request.Files[0];
                     string fileName = Request.Files[0].FileName;
-                    var path = ConfigurationManager.AppSettings["Path"].ToString();
-                    string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
+                    //var path = ConfigurationManager.AppSettings["Path"].ToString();
+                    //string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
 
-                    //var path = ConfigurationManager.AppSettings["DiscussionFileUpload"].ToString();
-                    //string Path3 = ConfigurationManager.AppSettings["DiscussionDocumentURL"].ToString();
+                    var path = ConfigurationManager.AppSettings["DiscussionFileUpload"].ToString();
+                    string Path3 = ConfigurationManager.AppSettings["DiscussionDocumentURL"].ToString();
 
                     var fullFilePath = path + fileName;
 
@@ -147,14 +148,82 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult SendTestMessage(string File1,string Text1,string File2,string Text2)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JsonData Response = new JsonData();
+            tblAuditBOPromo objaudit = new tblAuditBOPromo();
             try
             {
-                Response = PCR.SendTestMessage(File1, Text1, File2, Text2);
+                objaudit.RequestedBy = userDetails.LoginId;
+                objaudit.RequestedFor = "File1 : " + File1 + " | Text1 : " + Text1 + " | File2 : " + File2 + " | Text2 : " + Text2;
+                objaudit.RequestedDate = ER.IndianDatetime();
+                objaudit.Type = "Test Message";
+                Response = PCR.SendTestMessage(File1, Text1, File2, Text2, objaudit);
+
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "SendTestMessage");
+            }
+            return new JsonResult() { Data = Response, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public JsonResult SendMessage(string File1, string Text1, string File2, string Text2, string Category)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JsonData Response = new JsonData();
+            tblAuditBOPromo objaudit = new tblAuditBOPromo();
+            try
+            {
+                objaudit.RequestedBy = userDetails.LoginId;
+                objaudit.RequestedFor = "File1 : " + File1 + " | Text1 : " + Text1 + " | File2 : " + File2 + " | Text2 : " + Text2 + " | Category : " + Category;
+                objaudit.RequestedDate = ER.IndianDatetime();
+                objaudit.Type = "Cust Message";
+                Response = PCR.SendMessage(File1, Text1, File2, Text2, Category, objaudit);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SendMessage");
+            }
+            return new JsonResult() { Data = Response, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public JsonResult SendTestMessageText (string Text1, string Text2)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            tblAuditBOPromo objaudit = new tblAuditBOPromo();
+            JsonData Response = new JsonData();
+            try
+            {
+                objaudit.RequestedBy = userDetails.LoginId;
+                objaudit.RequestedFor = " Text1 : " + Text1 + " | Text2 : " + Text2;
+                objaudit.RequestedDate = ER.IndianDatetime();
+                objaudit.Type = "Test Message";
+                Response = PCR.SendTestMessage(Text1,Text2, objaudit);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SendTestMessageText");
+            }
+            return new JsonResult() { Data = Response, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public JsonResult SendMessageText(string Text1, string Text2, string Category)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            tblAuditBOPromo objaudit = new tblAuditBOPromo();
+            JsonData Response = new JsonData();
+            try
+            {
+                objaudit.RequestedBy = userDetails.LoginId;
+                objaudit.RequestedFor = " Text1 : " + Text1 + " | Text2 : " + Text2 + " | Category : " + Category;
+                objaudit.RequestedDate = ER.IndianDatetime();
+                objaudit.Type = "Cust Message";
+
+                Response = PCR.SendMessage(Text1, Text2, Category, objaudit);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SendMessageText");
             }
             return new JsonResult() { Data = Response, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

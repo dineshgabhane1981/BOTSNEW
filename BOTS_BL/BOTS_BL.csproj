@@ -488,6 +488,7 @@
     <Compile Include="Models\SMSEmailMaster.cs" />
     <Compile Include="Models\SMSOutletMapping.cs" />
     <Compile Include="Models\StoreDetail.cs" />
+    <Compile Include="Models\tblAuditBOPromo.cs" />
     <Compile Include="Models\tblDLCDashboardConfig.cs" />
     <Compile Include="Models\tblEmployee.cs" />
     <Compile Include="Models\tblFranchiseeEnquiry.cs" />

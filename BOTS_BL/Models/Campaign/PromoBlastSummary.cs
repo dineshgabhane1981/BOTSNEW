@@ -28,4 +28,8 @@ namespace BOTS_BL.Models
         public Int64 TotalTxnCount { get; set; }
         public decimal BusinessGenerated { get; set; }
     }
+    public class GroupCode
+    {
+        public string GroupCodeId { get; set; }
+    }
 }

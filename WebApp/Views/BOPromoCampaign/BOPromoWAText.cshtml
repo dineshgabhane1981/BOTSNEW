@@ -21,19 +21,321 @@
         </div>
         <div class="row mt-5" style="margin-top: 20px; margin-left: 10px;">
             <div class="col-md-2 col-xl-2 ml-3">
-                <input id="rbtnAll1" name="Type1" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;" > ALL
+                <input id="rbtnAll1" name="Type1" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> ALL
             </div>
             <div class="col-md-2 col-xl-2 ">
-                <input id="rbtnCategory1" name="Type1" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;" > Retail Category
+                <input id="rbtnCategory1" name="Type1" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Retail Category
             </div>
-            <div class="col-md-3 col-xl-3" id="ddlCategoryList" style="visibility: hidden;">
+            <div class="col-md-3 col-xl-3" id="ddlCategoryList1" style="visibility: hidden;">
                 @Html.DropDownListFor(x => Model.lstRetailCategory, new SelectList(Model.lstRetailCategory, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "IdLstRetailCategory" })
             </div>
             <div class="col-md-3 col-xl-3 ">
                 <b>Cutomer Count :</b>
-                <span id="CustCount">@((ViewBag.GroupCount))</span>
+                <span id="CustCount2">@((ViewBag.GroupCount))</span>
             </div>
         </div>
+    </div>
+    <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+        <div class="col-sm-4">
+            <div>
+                <label style="font-size: 15px">
+                    <b>Text Message</b>
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-4" style="text-align: right;">
+            <a id="ImgAdd1" href="#" onclick="Add1();" title="Add New Msg">  <img src="~/Content/assets/images/details_open.png" width="25" height="25" /></a>
+            <a id="ImgRemove1" href="#" onclick="Remove1();" title="Remove New Msg" style="display: none"><img src="~/Content/assets/images/details_close.png" width="25" height="25" /></a>
+        </div>
+    </div>
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="row mt-2">
+            <div class="col-sm-2">
+                <b>WA Text Message 1</b>
+            </div>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="textMessage1" rows="3" maxlength="10000" placeholder="Enter Message Script"></textarea>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div>
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; display:none" id="secondMgs1">
+        <div class="row mt-2">
+            <div class="col-sm-2">
+                <b>WA Text Message 2</b>
+            </div>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="textMessage2" rows="3" maxlength="10000" placeholder="Enter Message Script"></textarea>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div>
 
+    <div class="row mt-2">
+        <div class="col-sm-4" id="divTestMsgBtn">
+            <div class="button">
+                <button type="button" id="BtnSendMsgTest1" style="margin-left:25px;" class="btn btn-primary"><b>Send Test Message</b></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-sm-4" id="divSendMsg">
+            <div class="button">
+                <button type="button" id="BtnSendMsg1" style="margin-left:25px;" class="btn btn-success" disabled><b>Send Message</b></button>
+            </div>
+        </div>
     </div>
 </div>
+<script>
+    function Add1() {
+        $("#ImgAdd1").hide();
+        $("#ImgRemove1").show();
+        $("#secondMgs1").show();
+    }
+    function Remove1() {
+        $("#ImgRemove1").hide();
+        $("#ImgAdd1").show();
+        $("#secondMgs1").hide();
+    }
+    $("#rbtnAll1").change(function () {
+
+        $("#ddlCategoryList1").css('visibility', 'hidden');
+
+        var FilterData = [];
+        item = {};
+        item["RetailCategoryId"] = "";
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        GetCategoryList1(data);
+    });
+    $("#rbtnCategory1").change(function () {
+        $("#ddlCategoryList1").css('visibility', 'visible');
+    });
+    $("#IdLstRetailCategory").change(function () {
+        $("#divLoader").show();
+
+        var RetailCategoryId = $("#IdLstRetailCategory").val();
+
+        var FilterData = [];
+        item = {};
+        item["RetailCategoryId"] = RetailCategoryId;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        GetCategoryList1(data);
+    });
+
+    $("#BtnSendMsgTest1").click(function () {
+
+        var Text1 = $("#textMessage1").val();
+        var Text2 = $("#textMessage2").val();
+        var flag = 0;
+
+        if (Text1.length == 0) {
+            flag = 1;
+        }
+
+        if ($("#secondMgs1").is(':visible')) {
+
+            if (Text2.length == 0) {
+                flag = 2;
+            }
+        }
+        else {
+            Text2 = "";
+        }
+
+        if (flag == 0) {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendTestMessageText", "BOPromoCampaign")',
+                data: '{Text1: ' + JSON.stringify(Text1) + ',Text2: ' + JSON.stringify(Text2) +'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.ResponseCode == "00") {
+                        $("#divLoader").hide();
+                        cuteAlert({
+                            //type: "success",
+                            //title: "Message Scheduled",
+                            //message: "Test Messsage Scheduled please check",
+                            //buttonText: "Okay"
+                            type: "question",
+                            title: "Test Message Confirmation",
+                            message: "Have you Received the Test Message?",
+                            confirmText: "Yes",
+                            cancelText: "No"
+                        }).then((e) => {
+                            @*var urlLink = "@Url.Action("Index", "BOPromoCampaign")";
+                            window.location.href = urlLink;*@
+                            if (e == ("confirm")) {
+                                /*alert("111");*/
+                                $("#BtnSendMsgTest1").prop('disabled', true);
+                                $("#BtnSendMsg1").prop('disabled', false);
+                            }
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Test Message Not Send",
+                            message: "Some thing went wrong....",
+                            buttonText: "Okay"
+                        })
+                    }
+
+
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                //error: (error) => {
+                //    console.log(JSON.stringify(error));
+                //}
+            });
+        }
+        else if (flag == 1) {
+            cuteAlert({
+                type: "error",
+                title: "Message 1 NOT Entered",
+                message: "Please Enter Message 1",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 2) {
+            cuteAlert({
+                type: "error",
+                title: "Message 2 NOT Entered",
+                message: "Please Enter Message 2",
+                buttonText: "Okay"
+            })
+        }
+    });
+
+    $("#BtnSendMsg1").click(function () {
+
+        if ($("#rbtnAll1").is(":checked")) {
+            var Category = "ALL";
+        }
+        else {
+
+            var Category = $("#IdLstRetailCategory").val();
+            if (Category == "") {
+                Category = "ALL";
+            }
+        }
+     
+        var Text1 = $("#textMessage1").val();
+        var Text2 = $("#textMessage2").val();
+        var flag = 0;
+
+        if (Text1.length == 0) {
+            flag = 1;
+        }
+
+        if ($("#secondMgs1").is(':visible')) {
+
+            if (Text2.length == 0) {
+                flag = 2;
+            }
+        }
+        else {
+            Text2 = "";
+        }
+
+        if (flag == 0) {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendMessageText", "BOPromoCampaign")',
+                data: '{Text1: ' + JSON.stringify(Text1) + ',Text2: ' + JSON.stringify(Text2) + ',Category: ' + JSON.stringify(Category) +'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.ResponseCode == "00") {
+                        $("#divLoader").hide();
+                        cuteAlert({
+                            type: "success",
+                            title: "Success",
+                            message: "Messages Send Successfully..",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("Index", "BOPromoCampaign")";
+                            window.location.href = urlLink;
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Test Message Not Send",
+                            message: "Some thing went wrong....",
+                            buttonText: "Okay"
+                        })
+                    }
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+            });
+        }
+        else if (flag == 1) {
+            cuteAlert({
+                type: "error",
+                title: "Message 1 NOT Entered",
+                message: "Please Enter Message 1",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 2) {
+            cuteAlert({
+                type: "error",
+                title: "Message 2 NOT Entered",
+                message: "Please Enter Message 2",
+                buttonText: "Okay"
+            })
+        }
+    })
+
+    function GetCategoryList1(data)
+    {
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetGroupList", "BOPromoCampaign")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != '') {
+                        $("#CustCount2").text(response);
+                    }
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            });
+    }
+
+</script>
+    

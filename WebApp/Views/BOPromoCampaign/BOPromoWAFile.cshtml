@@ -10,7 +10,7 @@
     }*/
 </style>
 <div class="app-main__inner">
-    <div class="container-fluid pt-3 pl-3 pr-3">
+    @*<div class="container-fluid pt-3 pl-3 pr-3">*@
         <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
             <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
                 <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
@@ -29,7 +29,7 @@
                     <input id="rbtnCategory" name="Type" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Retail Category
                 </div>
                 <div class="col-md-3 col-xl-3" id="ddlCategoryList"style="visibility: hidden;">
-                      @Html.DropDownListFor(x => Model.lstRetailCategory, new SelectList(Model.lstRetailCategory, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlCategoryListWAFile" })
+                      @Html.DropDownListFor(x => Model.lstRetailCategory, new SelectList(Model.lstRetailCategory, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlCategoryListWAFile" })
                 </div>
                 <div class="col-md-3 col-xl-3 ">
                     <b>Cutomer Count :</b>
@@ -141,7 +141,7 @@
         </div>
 
         @*</div>*@
-    </div>
+    @*</div>*@
 </div>
 <script>
     function Add() {
@@ -157,12 +157,19 @@
         $("#secondCaption").hide();
     }
     $("#rbtnAll").change(function () {
-       
+
         $("#ddlCategoryListWAFile").css('visibility', 'hidden');
 
+        var FilterData = [];
+        item = {};
+        item["RetailCategoryId"] = "";
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        GetCategoryList(data);
     });
     $("#rbtnCategory").change(function () {
-       /* $("#ddlCategoryList").show();*/
         $("#ddlCategoryListWAFile").css('visibility', 'visible');
     });
 
@@ -185,9 +192,9 @@
 
     $("#ddlCategoryListWAFile").change(function () {
         $("#divLoader").show();
-        
+
         var RetailCategoryId = $("#ddlCategoryListWAFile").val();
-        
+
         var FilterData = [];
         item = {};
         item["RetailCategoryId"] = RetailCategoryId;
@@ -195,29 +202,7 @@
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
 
-        $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetGroupList", "BOPromoCampaign")',
-                data: '{jsonData: ' + JSON.stringify(data) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    console.log(response);
-                    if (response != '') {                        
-                        $("#CustCount1").text(response);
-                    }
-                    $("#divLoader").hide();
-                },
-                failure: function (response) {
-                    $("#divLoader").hide();
-                },
-                //error: function (response) {
-                //    $("#divLoader").hide();
-                //}
-                error: (error) => {
-                    console.log(JSON.stringify(error));
-                }
-            });
+        GetCategoryList(data);
     });
 
     $("#btnUpload1").click(function () {
@@ -306,7 +291,6 @@
     }
 
 
-
     function UploadData2() {
 
             if (window.FormData !== undefined) {
@@ -384,7 +368,7 @@
     }
 
     $("#BtnSendMsgTest").click(function () {
-        
+
         $("#hdntextCaption1").val($("#textCaption1").val());
         $("#hdntextCaption2").val($("#textCaption2").val());
 
@@ -395,13 +379,16 @@
         var flag = 0;
 
         if ($("#CaptionCheck1").is(':checked')) {
-            //alert("Inside 1st If")
+
             if (Text1.length == 0) {
                 flag = 1;
             }
         }
+        else {
+            Text1 = "";
+        }
         if ($("#CaptionCheck2").is(':checked')) {
-            //alert("Inside 2nd If")
+
             if (Text2.length == 0) {
                 flag = 2;
             }
@@ -409,17 +396,24 @@
                 flag = 3;
             }
         }
+        else {
+            Text2 = "";
+        }
         if (File1.length == 0) {
                 flag = 4;
         }
 
         if ($("#secondCaption").is(':visible')) {
-            //alert("111")
+
             if (File2.length == 0) {
                 flag = 3;
             }
         }
-        
+        else {
+            Text2 = "";
+            File2 = "";
+        }
+
         if (flag == 0) {
 
             $("#divLoader").show();
@@ -443,10 +437,11 @@
                             message: "Have you Received the Test Message?",
                             confirmText: "Yes",
                             cancelText: "No"
-                        }).then(() => {
+                        }).then((e) => {
                             @*var urlLink = "@Url.Action("Index", "BOPromoCampaign")";
                             window.location.href = urlLink;*@
                             if (e == ("confirm")) {
+                                /*alert("111");*/
                                 $("#BtnSendMsgTest").prop('disabled', true);
                                 $("#BtnSendMsg").prop('disabled', false);
                             }
@@ -507,5 +502,156 @@
             })
         }
     });
+
+    $("#BtnSendMsg").click(function () {
+
+        if ($("#rbtnAll").is(":checked")) {
+            var Category = "ALL";
+        }
+        else {
+
+            var Category = $("#ddlCategoryListWAFile").val();
+            if (Category == "") {
+                Category = "ALL";
+            }
+        }
+        $("#hdntextCaption1").val($("#textCaption1").val());
+        $("#hdntextCaption2").val($("#textCaption2").val());
+
+        var File1 = $("#hdnFile1").val();
+        var File2 = $("#hdnFile2").val();
+        var Text1 = $("#hdntextCaption1").val();
+        var Text2 = $("#hdntextCaption2").val();
+        var flag = 0;
+
+        if ($("#CaptionCheck1").is(':checked')) {
+            if (Text1.length == 0) {
+                flag = 1;
+            }
+        }
+        else {
+            Text1 = "";
+        }
+        if ($("#CaptionCheck2").is(':checked')) {
+            if (Text2.length == 0) {
+                flag = 2;
+            }
+            else if (File2.length == 0) {
+                flag = 3;
+            }
+        }
+        else {
+            Text2 = "";
+            File2 = "";
+        }
+        if (File1.length == 0) {
+            flag = 4;
+        }
+
+        if ($("#secondCaption").is(':visible')) {
+            if (File2.length == 0) {
+                flag = 3;
+            }
+        }
+        else {
+            File2 = "";
+        }
+
+        if (flag == 0) {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SendMessage", "BOPromoCampaign")',
+                data: '{File1: ' + JSON.stringify(File1) + ',Text1: ' + JSON.stringify(Text1) + ',File2: ' + JSON.stringify(File2) + ',Text2: ' + JSON.stringify(Text2) + ',Category: ' + JSON.stringify(Category) +'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    //console.log(response);
+                    if (response.ResponseCode == "00") {
+                        $("#divLoader").hide();
+                        cuteAlert({
+                            type: "success",
+                            title: "Success",
+                            message: "Messages Send Successfully..",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("Index", "BOPromoCampaign")";
+                            window.location.href = urlLink;
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Test Message Not Send",
+                            message: "Some thing went wrong....",
+                            buttonText: "Okay"
+                        })
+                    }
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+            });
+        }
+        else if (flag == 1) {
+            cuteAlert({
+                type: "error",
+                title: "Caption 1 NOT Entered",
+                message: "Please enter caption",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 2) {
+            cuteAlert({
+                type: "error",
+                title: "Caption 2 NOT Entered",
+                message: "Please enter caption",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 3) {
+            cuteAlert({
+                type: "error",
+                title: "File 2 Not Uploaded",
+                message: "Please upload file",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 4) {
+            cuteAlert({
+                type: "error",
+                title: "File 1 Not Uploaded",
+                message: "Please upload file",
+                buttonText: "Okay"
+            })
+        }
+    })
+
+    function GetCategoryList(data)
+    {
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetGroupList", "BOPromoCampaign")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != '') {
+                        $("#CustCount1").text(response);
+                    }
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                //error: function (response) {
+                //    $("#divLoader").hide();
+                //}
+                error: (error) => {
+                    console.log(JSON.stringify(error));
+                }
+            });
+    }
 
 </script>
