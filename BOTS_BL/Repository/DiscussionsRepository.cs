@@ -656,7 +656,7 @@ namespace BOTS_BL.Repository
 
                     if (UpdateStatus)
                     {
-                        if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
+                        if ((objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27") && objDiscussion.DiscussionDoneNotDone != "Reschedule")
                         {
                             if (objDiscussion.DiscussionType != "Query")
                             {
@@ -680,7 +680,7 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        if (objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27")
+                        if ((objDiscussion.SubCallType == "25" || objDiscussion.SubCallType == "26" || objDiscussion.SubCallType == "27") && objDiscussion.DiscussionDoneNotDone != "Reschedule")
                         {
                             if (objDiscussion.DiscussionType != "Query")
                             {

@@ -432,7 +432,7 @@ namespace WebApp.Controllers.OnBoarding
                 if (GroupdId > 0 && objData.bots_TblGroupMaster.CustomerStatus == "CS")
                 {
                     SendEmail(GroupdId);
-                    SendSalesEmailToCustomer(Convert.ToInt32(GroupdId));
+                    //SendSalesEmailToCustomer(Convert.ToInt32(GroupdId));
                 }
                 //SendSalesEmailToCustomer(Convert.ToInt32(GroupdId));
                 TempData["status"] = true;
