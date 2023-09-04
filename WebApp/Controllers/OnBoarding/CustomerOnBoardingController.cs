@@ -2264,12 +2264,10 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     tblStandardRulesSetting objItem = new tblStandardRulesSetting();
                     objItem = OBR.GetStandardConfigurationRules(Convert.ToInt32(item.CategoryId));
-                    objStandardRulesList.Add(objItem);
+                    if (objItem != null)
+                        objStandardRulesList.Add(objItem);
                 }
                 objData.objStandardRulesList = objStandardRulesList;
-
-
-
 
             }
             catch (Exception ex)
@@ -2393,7 +2391,7 @@ namespace WebApp.Controllers.OnBoarding
                 loginId = userDetails.LoginId;
             }
             result = OBR.UpdateConfigurationStatus(groupId, status, loginId, reason);
-            if (reason == "Rejected")
+            if (status == "Rejected")
             {
                 var GroupName = OBR.GetOnboardingGroupName(groupId);
                 var CSEmail = userDetails.EmailId;
@@ -2401,7 +2399,7 @@ namespace WebApp.Controllers.OnBoarding
                 var subject = "Configuration Rejected - " + GroupName;
                 var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
             }
-            if (reason == "Approved")
+            if (status == "Approved")
             {
                 var GroupName = OBR.GetOnboardingGroupName(groupId);
                 var CSEmail = userDetails.EmailId;
@@ -2409,7 +2407,7 @@ namespace WebApp.Controllers.OnBoarding
                 var subject = "Configuration Approved - " + GroupName;
                 var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
             }
-            if (reason == "Rejected By Customer")
+            if (status == "Rejected By Customer")
             {
                 var CSName = OBR.GetAssignedCSNameForOnboarding(groupId);
                 var CSHead = OBR.GetCSHeadEmailId();
