@@ -147,7 +147,7 @@ namespace BOTS_BL.Repository
             return lstGroupDetails;
         }
 
-        public tblSMSWhatsAppScriptMaster GetWAScripts(int GroupId, string OutletId, string MessageType)
+        public tblSMSWhatsAppScriptMaster GetWAScripts(int  GroupId, string OutletId, string MessageType)
         {
             tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
             string Id;
@@ -191,7 +191,7 @@ namespace BOTS_BL.Repository
                     {
                         Id = "107";
                     }
-                    objSMSWhatsAppScriptMaster = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id).FirstOrDefault();
+                    objSMSWhatsAppScriptMaster = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id && x.OutletId == OutletId).FirstOrDefault();
 
                 }
             }
@@ -669,6 +669,7 @@ namespace BOTS_BL.Repository
 
             return lstOutlets;
         }
+        
         public OTPData GetDefaultOTP(string OutletId, string GroupId)
         {
             OTPData objOTPData = new OTPData();

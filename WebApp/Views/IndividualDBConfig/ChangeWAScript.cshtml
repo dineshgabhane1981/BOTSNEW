@@ -104,13 +104,17 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
-                if (result.objSMSWhatsAppScriptMaster.WhatsAppScript != null && result.objSMSWhatsAppScriptMaster.OutletId != null) {
-                    $("#dvScript").show();
-                    $("#txtScript").text(result.objSMSWhatsAppScriptMaster.WhatsAppScript);
+                if (result.objSMSWhatsAppScriptMaster != null) {
+                    if (result.objSMSWhatsAppScriptMaster.WhatsAppScript != null && result.objSMSWhatsAppScriptMaster.OutletId != null) {
+                        $("#dvScript").show();
+                        $("#txtScript").text(result.objSMSWhatsAppScriptMaster.WhatsAppScript);
+                    }
+                    else {
+                        toastr.error('Wa Script for this Outlet is not present');
+                    }
                 }
-                else
-                {
-                    toastr.error('Wa Script for this Outlet is not present');                    
+                else {
+                    toastr.error('Wa Script for this Outlet is not present');
                 }
                 $("#divLoader").hide();
             },
