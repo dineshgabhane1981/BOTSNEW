@@ -50,14 +50,14 @@
         });
         $('#btnUpdate').on("click", function () {
             BlockTransaction();
-        });        
+        });
     });
-    
-    function GetChangeNameData() {        
+
+    function GetChangeNameData() {
         if ($('#txtMobileNo').val() == "") {
             toastr.error('Please Enter Mobile No');
             return false
-        }        
+        }
 
         $("#divLoader").show();
         $.ajax({
@@ -75,7 +75,7 @@
                         $("#chkTxn").prop("checked", true)
                     }
                 }
-                
+
                 else {
                     cuteAlert({
                         type: "error",
@@ -99,29 +99,21 @@
 
         });
     }
+    
     function BlockTransaction() {
-
-        cuteAlert({
-            type: "question",
-            title: "Confirmation",
-            message: "Do you want to block Transactional Message?",
-            confirmText: "Yes",
-            cancelText: "No"
-        }).then((e) => {
-            if (e == ("confirm")) {
+        if ($("#chkTxn").is(":checked")) {
+            DisableSMSWATxn = true;
+            cuteAlert({
+                type: "question",
+                title: "Confirmation",
+                message: "Do you want to Enable Transactional Message?",
+                confirmText: "Yes",
+                cancelText: "No"
+            }).then((e) => {
                 var MemberData = [];
-                var GroupId = $('#ddlGroupDetails').val();
-                var GroupName = $("#ddlGroupDetails option:selected").text();
-                item = {}                
+                item = {}
                 item["MobileNo"] = $("#txtMobileNo").val();
-                if ($("#chkTxn").is(":checked")) {
-                    DisableSMSWATxn = true;
-                }
-                else {
-                    DisableSMSWATxn = false;
-                }
                 item["DisableSMSWATxn"] = DisableSMSWATxn;
-
                 MemberData.push(item);
                 var data = JSON.stringify(MemberData);
                 console.log(data)
@@ -136,7 +128,7 @@
                         cuteAlert({
                             type: "success",
                             title: "Success",
-                            message: "Transactional Message Blocked Successfully",
+                            message: "Transactional Message Enabled Successfully",
                             buttonText: "Okay"
                         }).then(() => {
                             var urlLink = "@Url.Action("DisableTransactions", "IndividualDBConfig")";
@@ -147,8 +139,53 @@
                         console.log(result.responseText)
                     }
                 });
-            }
-        })
+
+            })
+        }
+        else {
+            DisableSMSWATxn = false;
+            cuteAlert({
+                type: "question",
+                title: "Confirmation",
+                message: "Do you want to Disable Transactional Message?",
+                confirmText: "Yes",
+                cancelText: "No"
+            }).then((e) => {
+                var MemberData = [];
+                item = {}
+                item["MobileNo"] = $("#txtMobileNo").val();
+                item["DisableSMSWATxn"] = DisableSMSWATxn;
+                MemberData.push(item);
+                var data = JSON.stringify(MemberData);
+                console.log(data)
+                $("#divLoader").show();
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("BlockTransaction", "IndividualDBConfig")',
+                    data: '{jsonData: ' + JSON.stringify(data) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Success",
+                            message: "Transactional Message Disabled Successfully",
+                            buttonText: "Okay"
+
+                        }).then(() => {
+                            var urlLink = "@Url.Action("DisableTransactions", "IndividualDBConfig")";
+                            window.location.href = urlLink;
+                        });
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+                    }
+                });
+
+            })
+        }
+
     }
+
 </script>
 
