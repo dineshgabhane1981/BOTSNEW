@@ -110,6 +110,7 @@
                 confirmText: "Yes",
                 cancelText: "No"
             }).then((e) => {
+                if (e == ("confirm")) {
                 var MemberData = [];
                 item = {}
                 item["MobileNo"] = $("#txtMobileNo").val();
@@ -140,6 +141,8 @@
                     }
                 });
 
+               }
+
             })
         }
         else {
@@ -151,36 +154,38 @@
                 confirmText: "Yes",
                 cancelText: "No"
             }).then((e) => {
-                var MemberData = [];
-                item = {}
-                item["MobileNo"] = $("#txtMobileNo").val();
-                item["DisableSMSWATxn"] = DisableSMSWATxn;
-                MemberData.push(item);
-                var data = JSON.stringify(MemberData);
-                console.log(data)
-                $("#divLoader").show();
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("BlockTransaction", "IndividualDBConfig")',
-                    data: '{jsonData: ' + JSON.stringify(data) + '}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        cuteAlert({
-                            type: "success",
-                            title: "Success",
-                            message: "Transactional Message Disabled Successfully",
-                            buttonText: "Okay"
+                if (e == ("confirm")) {
+                    var MemberData = [];
+                    item = {}
+                    item["MobileNo"] = $("#txtMobileNo").val();
+                    item["DisableSMSWATxn"] = DisableSMSWATxn;
+                    MemberData.push(item);
+                    var data = JSON.stringify(MemberData);
+                    console.log(data)
+                    $("#divLoader").show();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("BlockTransaction", "IndividualDBConfig")',
+                        data: '{jsonData: ' + JSON.stringify(data) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Success",
+                                message: "Transactional Message Disabled Successfully",
+                                buttonText: "Okay"
 
-                        }).then(() => {
-                            var urlLink = "@Url.Action("DisableTransactions", "IndividualDBConfig")";
-                            window.location.href = urlLink;
-                        });
-                    },
-                    error: function (result) {
-                        console.log(result.responseText)
-                    }
-                });
+                            }).then(() => {
+                                var urlLink = "@Url.Action("DisableTransactions", "IndividualDBConfig")";
+                                window.location.href = urlLink;
+                            });
+                        },
+                        error: function (result) {
+                            console.log(result.responseText)
+                        }
+                    });
+                }
 
             })
         }
