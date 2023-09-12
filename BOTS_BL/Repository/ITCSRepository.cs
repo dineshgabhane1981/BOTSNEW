@@ -1107,7 +1107,7 @@ namespace BOTS_BL.Repository
                 stb.AppendLine("EarnMinTxnAmt : "+ ObjCSMessage.OldEarnMinTxnAmt);
                 stb.AppendLine("PointsAllocation : " + ObjCSMessage.OldPointsAllocation);
                 stb.AppendLine("PointsExpiryMonths : " + ObjCSMessage.OldPointsExpiryMonths);
-                stb.AppendLine("PointsPercentage : " + ObjCSMessage.OldPointsExpiryMonths);
+                stb.AppendLine("PointsPercentage : " + ObjCSMessage.OldPointsPercentage);
                 stb.AppendLine("PointsRevolving : " + ObjCSMessage.OldRevolvingStatus);
                 stb.AppendLine();
                 stb.AppendLine("*New Rule*");
