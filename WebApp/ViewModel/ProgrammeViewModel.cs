@@ -1,5 +1,6 @@
 ﻿using BOTS_BL.Models;
 using BOTS_BL.Models.CommonDB;
+using BOTS_BL.Models.IndividualDBModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
