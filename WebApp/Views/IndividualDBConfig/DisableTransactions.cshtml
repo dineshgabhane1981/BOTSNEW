@@ -106,7 +106,7 @@
             cuteAlert({
                 type: "question",
                 title: "Confirmation",
-                message: "Do you want to Enable Transactional Message?",
+                message: "Do you want to disable Transactional Message?",
                 confirmText: "Yes",
                 cancelText: "No"
             }).then((e) => {
@@ -129,7 +129,7 @@
                         cuteAlert({
                             type: "success",
                             title: "Success",
-                            message: "Transactional Message Enabled Successfully",
+                            message: "Transactional Message Disabled Successfully",
                             buttonText: "Okay"
                         }).then(() => {
                             var urlLink = "@Url.Action("DisableTransactions", "IndividualDBConfig")";
@@ -150,7 +150,7 @@
             cuteAlert({
                 type: "question",
                 title: "Confirmation",
-                message: "Do you want to Disable Transactional Message?",
+                message: "Do you want to enable Transactional Message?",
                 confirmText: "Yes",
                 cancelText: "No"
             }).then((e) => {
@@ -173,7 +173,7 @@
                             cuteAlert({
                                 type: "success",
                                 title: "Success",
-                                message: "Transactional Message Disabled Successfully",
+                                message: "Transactional Message Enabled Successfully",
                                 buttonText: "Okay"
 
                             }).then(() => {

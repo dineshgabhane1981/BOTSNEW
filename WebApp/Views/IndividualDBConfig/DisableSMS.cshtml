@@ -101,49 +101,6 @@
             cuteAlert({
                 type: "question",
                 title: "Confirmation",
-                message: "Do you want to enable promotional SMS?",
-                confirmText: "Yes",
-                cancelText: "No"
-            }).then((e) => {
-                if (e == ("confirm")) {
-                    var MemberData = [];
-                    item = {}
-                    item["MobileNo"] = $("#txtMobileNo").val();
-                    item["DisableSMSWAPromo"] = DisableSMSWAPromo;
-                    MemberData.push(item);
-                    var data = JSON.stringify(MemberData);
-                    console.log(data)
-                    $("#divLoader").show();
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("DisablePromotionalSMS", "IndividualDBConfig")',
-                        data: '{jsonData: ' + JSON.stringify(data) + '}',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (result) {
-                            cuteAlert({
-                                type: "success",
-                                title: "Success",
-                                message: "Message Enabled Successfully",
-                                buttonText: "Okay"
-                            }).then(() => {
-                                var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
-                                window.location.href = urlLink;
-                            });
-                        },
-                        error: function (result) {
-                            console.log(result.responseText)
-                        }
-                    });
-                }
-
-            })
-        }
-        else {
-            DisableSMSWAPromo = false;
-            cuteAlert({
-                type: "question",
-                title: "Confirmation",
                 message: "Do you want to disable promotional SMS?",
                 confirmText: "Yes",
                 cancelText: "No"
@@ -168,6 +125,49 @@
                                 type: "success",
                                 title: "Success",
                                 message: "Message Disabled Successfully",
+                                buttonText: "Okay"
+                            }).then(() => {
+                                var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
+                                window.location.href = urlLink;
+                            });
+                        },
+                        error: function (result) {
+                            console.log(result.responseText)
+                        }
+                    });
+                }
+
+            })
+        }
+        else {
+            DisableSMSWAPromo = false;
+            cuteAlert({
+                type: "question",
+                title: "Confirmation",
+                message: "Do you want to enable promotional SMS?",
+                confirmText: "Yes",
+                cancelText: "No"
+            }).then((e) => {
+                if (e == ("confirm")) {
+                    var MemberData = [];
+                    item = {}
+                    item["MobileNo"] = $("#txtMobileNo").val();
+                    item["DisableSMSWAPromo"] = DisableSMSWAPromo;
+                    MemberData.push(item);
+                    var data = JSON.stringify(MemberData);
+                    console.log(data)
+                    $("#divLoader").show();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("DisablePromotionalSMS", "IndividualDBConfig")',
+                        data: '{jsonData: ' + JSON.stringify(data) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (result) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Success",
+                                message: "Message Enabled Successfully",
                                 buttonText: "Okay"
                             }).then(() => {
                                 var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
