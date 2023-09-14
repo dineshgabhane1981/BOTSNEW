@@ -303,6 +303,51 @@ namespace WebApp.Controllers
             return View("CreateCampaign");
         }
 
+        public ActionResult CreateCampaignPromo()
+        {
+            SMSDetailsTemp SDT = new SMSDetailsTemp();
+            CampaignMgmt ObjviewModel = new CampaignMgmt();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            var SMSGatewayDetails = CMPR.GatewayDetails(userDetails.GroupId, userDetails.connectionString);
+            //var DataTemp = CMPR.GetWAInsData(userDetails.GroupId, userDetails.connectionString);
+            ObjviewModel.LstSMSCost = CMPR.GetSMSCost();
+            try
+            {
+                if (SMSGatewayDetails.Count() > 0)
+                {
+                    for (int i = 0; i <= SMSGatewayDetails.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            SDT.BOCode = SMSGatewayDetails[i].BOCode;
+                        }
+                        if (i == 1)
+                        {
+                            SDT.SMSVendor = SMSGatewayDetails[i].smsBalance;
+                        }
+                    }
+
+                    ViewBag.SMSVendor = SDT.BOCode;
+                    ViewBag.SMSBalance = SDT.SMSVendor;
+                    ViewBag.OutletData = lstOutlet;
+                }
+                else
+                {
+                    ViewBag.SMSVendor = "NA";
+                    ViewBag.SMSBalance = "NA";
+                    ViewBag.OutletData = lstOutlet;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CreateCampaignPromo");
+            }
+
+            return View("_CreateCampaignPromo", ObjviewModel);
+        }
+
         [HttpPost]
         public JsonResult GetFilteredData(string jsonData)
         {
@@ -374,6 +419,45 @@ namespace WebApp.Controllers
                 newexception.AddException(ex, "SaveData");
             }
 
+            return new JsonResult() { Data = SaveData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        [HttpPost]
+        public JsonResult SaveCampaignDataPromo(string jsonData)
+        {
+            List<CampaignSaveDetails> SaveData = new List<CampaignSaveDetails>();
+            CampaignRepository CR = new CampaignRepository();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    string BaseType = Convert.ToString(item["BaseType"]);
+                    string Equality = Convert.ToString(item["Equality"]);
+                    string Points = Convert.ToString(item["Points"]);
+                    string OutletId = Convert.ToString(item["OutletId"]);
+                    string Srcipt = Convert.ToString(item["Srcipt"]);
+                    string StartDate = Convert.ToString(item["StartDate"]);
+                    string EndDate = Convert.ToString(item["EndDate"]);
+                    string CampaignName = Convert.ToString(item["CampaignName"]);
+                    string SMSType = Convert.ToString(item["SMSType"]);
+                    string ScriptType = Convert.ToString(item["ScriptType"]);
+                    string Scheduledatetime = Convert.ToString(item["Scheduledatetime"]);
+                    string TempId = Convert.ToString(item["TempId"]); //PointsRange1
+                    string PointsRange1 = Convert.ToString(item["PointsRange1"]);
+                    Int16 CampaignData = Convert.ToInt16(item["CampaignData"]);
+
+                    SaveData = CR.SavePromoCampaign(BaseType, Equality, Points, OutletId, Srcipt, StartDate, EndDate, CampaignName, SMSType, ScriptType, Scheduledatetime, TempId, PointsRange1, CampaignData, userDetails.GroupId, userDetails.connectionString);
+                    //Session["CampaignId"] = SaveData.;
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SaveCampaignDataPromo");
+            }
             return new JsonResult() { Data = SaveData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
@@ -453,6 +537,27 @@ namespace WebApp.Controllers
             }
 
             return View("CampaignManagement");
+        }
+
+        public ActionResult CampMgmtNew()
+        {
+            LisCampaign CampLst = new LisCampaign();
+            PromoLisCampaign PromoLst = new PromoLisCampaign();
+            CampaignMgmt ObjCamp = new CampaignMgmt();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            
+            try
+            {
+                ObjCamp.LstCampaign = CMPR.GetCampList(userDetails.GroupId, userDetails.connectionString);
+                ObjCamp.LstPromo = CMPR.GetPromoBastList(userDetails.GroupId, userDetails.connectionString);
+                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "CampMgmtNew");
+            }
+
+            return View("CampMgmtNew", ObjCamp);
         }
 
         [HttpPost]

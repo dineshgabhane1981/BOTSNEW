@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "CampMgmentNew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+    #one:checked ~ .panels #one-panel,
+    #two:checked ~ .panels #two-panel{
+        display: block
+    }
+
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab{
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+</style>
+
+<div class="app-main__inner">
+
+    <input class="radio" id="one" name="group" type="radio" checked>
+    <input class="radio" id="two" name="group" type="radio">
+
+    <div class="tabs">
+        <label class="tab" id="one-tab" for="one">Promo Campaign</label>
+        <label class="tab" id="two-tab" for="two">Bonus Campaign</label>
+    </div>
+    <div class="panels">
+        <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="one-panel">
+            <div id="TextMessage">
+                @Html.Partial("_CampMgmtPromoBlastList")
+            </div>
+        </div>       
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel" id="two-panel">
+            <div id="FileMessage">
+                @Html.Partial("_CampMgmtCampaignList")
+            </div>
+        </div>
+    </div>
+</div>

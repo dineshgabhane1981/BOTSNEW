@@ -17,6 +17,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using System.Web.Script.Serialization;
+using BOTS_BL.Models.IndividualDBModels;
+using System.Web.Mvc;
 
 namespace BOTS_BL.Repository
 {
@@ -25,6 +27,7 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
+        EventsRepository ER = new EventsRepository();
         public CampaignTiles GetCampaignTilesData(string GroupId, string connstr)
         {
             CampaignTiles objCampaignTiles = new CampaignTiles();
@@ -493,20 +496,11 @@ namespace BOTS_BL.Repository
         {
             CustomerIdListAndCount objcount = new CustomerIdListAndCount();
             List<CustomerDetail> objcust = new List<CustomerDetail>();
+            List<tblCustPointsMaster> LstPoints = new List<tblCustPointsMaster>();
             CustCount objcustAll = new CustCount();
-            //var CustomerCount;
-            // List<customerIdDetails> lstcustomerId = new List<customerIdDetails>();
-            // var transcount = 0;
+           
             using (var context = new BOTSDBContext(connstr))
             {
-
-                var names = new string[] { "2", "4", "5", "7" };
-                objcust = (from c in context.CustomerDetails where (names.Contains(c.CustomerThrough) && c.Status == "00") select c).ToList();
-
-                //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                //objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.EnrollingOutlet == OutletId).Count();
-
-
 
                 try
                 {
@@ -516,96 +510,130 @@ namespace BOTS_BL.Repository
                     }
                     if (BaseType == "1" && PointsBase == "" && Points == "" && OutletId == "")
                     {
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
                     }
                     else if (BaseType == "1" && PointsBase == "" && Points == "" && OutletId != "")
                     {
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.EnrollingOutlet == OutletId).Count();
+                        var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x=> x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletIdAdmin).Count();
                     }
                     else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId == "")
                     {
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7")).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7")).Count();
+                        var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        
+                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && !x.CurrentEnrolledOutlet.Contains(OutletIdAdmin)).Count();
                     }
                     else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId != "")
                     {
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7")).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.EnrollingOutlet == OutletId).Count();
+                        
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && !x.CurrentEnrolledOutlet.Contains(OutletId)).Count();
                     }
                     else if (BaseType == "3" && PointsBase == "" && Points == "" && OutletId == "")
                     {
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "1").Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "1").Count();
+                        var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
+                        
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletIdAdmin).Count();
                     }
                     else if (BaseType == "3" && PointsBase == "" && Points == "" && OutletId != "")
                     {
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "1").Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && x.CustomerThrough == "1" && x.EnrollingOutlet == OutletId).Count();
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Count();
                     }
                     else if (BaseType == "4" && PointsBase == "1" && Points != "" && OutletId == "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points < DummyPoints).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points < DummyPoints).Count();
+                        
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
+                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x=> decimal.Truncate(x.Points.Value))};
+                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints < DummyPoints).Count();
                     }
                     else if (BaseType == "4" && PointsBase == "1" && Points != "" && OutletId != "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points < DummyPoints).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.EnrollingOutlet == OutletId && x.Points < DummyPoints).Count();
+
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        
+                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
+                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints < DummyPoints).Count();
                     }
                     else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId == "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points > DummyPoints).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points > DummyPoints).Count();
+                       
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
+                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints > DummyPoints).Count();
                     }
                     else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId != "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points > DummyPoints).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points > DummyPoints && x.EnrollingOutlet == OutletId).Count();
+                        
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
+                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints > DummyPoints).Count();
                     }
                     else if (BaseType == "4" && PointsBase == "3" && Points != "" && OutletId == "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points == DummyPoints).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points == DummyPoints).Count();
+                        
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
+                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints == DummyPoints).Count();
                     }
                     else if (BaseType == "4" && PointsBase == "3" && Points != "" && OutletId != "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points == DummyPoints).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.Points == DummyPoints && x.EnrollingOutlet == OutletId).Count();
+                        
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
+                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints == DummyPoints).Count();
                     }
 
                     else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1 != "" && OutletId == "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
                         int DummyPoints2 = Convert.ToInt32(PointsRange1);
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7")).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2)).Count();
+
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
+                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints >= DummyPoints && x.TotalPoints <= DummyPoints).Count();
                     }
                     else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1 != "" && OutletId != "")
                     {
                         int DummyPoints = Convert.ToInt32(Points);
                         int DummyPoints2 = Convert.ToInt32(PointsRange1);
-                        //objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && x.EnrollingOutlet == OutletId).Count();
-                        objcustAll.CustCountALL = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null).Count();
-                        objcustAll.CustFiltered = context.CustomerDetails.Where(x => x.Status == "00" && x.IsSMS == null && (x.CustomerThrough == "2" || x.CustomerThrough == "4" || x.CustomerThrough == "5" || x.CustomerThrough == "7") && (x.Points >= DummyPoints && x.Points <= DummyPoints2) && x.EnrollingOutlet == OutletId).Count();
+
+                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
+                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints >= DummyPoints && x.TotalPoints <= DummyPoints).Count();
                     }
 
                 }
@@ -643,6 +671,30 @@ namespace BOTS_BL.Repository
             return Data;
         }
 
+        public List<CampaignSaveDetails> SavePromoCampaign(string BaseType, string Equality, string Points, string OutletId, string Srcipt, string StartDate, string EndDate, string CampaignName, string SMSType, string ScriptType, string Scheduledatetime, string TempId, string PointsRange1, Int16 CampaignData, string GroupId, string connstr)
+        {
+            List<CampaignSaveDetails> Data = new List<CampaignSaveDetails>();
+
+            if (string.IsNullOrEmpty(Scheduledatetime) == true)
+            {
+
+                Scheduledatetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    Data = context.Database.SqlQuery<CampaignSaveDetails>("sp_BOTS_CreateCampaignPromo @pi_GroupId, @pi_Date,@pi_BaseType,@pi_Equality,@pi_Points,@pi_OutletId,@pi_Script,@pi_CampStartDate,@pi_CampEndDate,@pi_CampName,@pi_SMSType,@pi_ScriptType,@pi_Scheduledatetime,@pi_TempId,@pi_PointsRange1,@pi_CampaignData", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_BaseType", BaseType), new SqlParameter("@pi_Equality", Equality), new SqlParameter("@pi_Points", Points), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_Script", Srcipt), new SqlParameter("@pi_CampStartDate", StartDate), new SqlParameter("@pi_CampEndDate", EndDate), new SqlParameter("@pi_CampName", CampaignName), new SqlParameter("@pi_SMSType", SMSType), new SqlParameter("@pi_ScriptType", ScriptType), new SqlParameter("@pi_Scheduledatetime", Scheduledatetime), new SqlParameter("@pi_TempId", TempId), new SqlParameter("@pi_PointsRange1", PointsRange1), new SqlParameter("@pi_CampaignData", CampaignData)).ToList<CampaignSaveDetails>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SavePromoCampaign");
+            }
+            return Data;
+        }
+
         public List<CampaignMemberDetail> CampDataDownload(string CampaignId, string GroupId, string connectionString)
         {
             List<CampaignMemberDetail> CmpData = new List<CampaignMemberDetail>();
@@ -668,142 +720,295 @@ namespace BOTS_BL.Repository
             List<LisCampaign> CM = new List<LisCampaign>();
             List<LisCampaign> CM3 = new List<LisCampaign>();
             string Todate;
-            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-            DateTime Sched = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
 
+            DateTime Sched = ER.IndianDatetime();
             Todate = Sched.ToString("yyyy-MM-dd");
 
             using (var context = new BOTSDBContext(connectionString))
             {
                 try
                 {
-                    DateTime CDate = DateTime.Parse(DateTime.Now.ToShortDateString());
-                    if (GroupId == "1087")
+                    using (var newcontext = new CommonDBContext())
                     {
-                        var CM2 = context.tblPromoBlastMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.CampaignStatus, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
-                        foreach (var item in CM2)
+                        var DBStatus = newcontext.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                        DateTime CDate = DateTime.Parse(DateTime.Now.ToShortDateString());
+                        if (!string.IsNullOrEmpty(DBStatus))
                         {
-                            LisCampaign itemData = new LisCampaign();
-                            itemData.CampaignId = Convert.ToString(item.CampaignId);
-                            itemData.CampaignName = item.CampaignName;
-                            itemData.StartDate = item.StartDate;
-                            itemData.StartDateStr = item.StartDate.Value.ToString("yyyy-MM-dd");
-                            itemData.EndDate = item.EndDate;
-                            itemData.EndDateStr = item.EndDate.Value.ToString("yyyy-MM-dd");
-                            itemData.Status = item.CampaignStatus;
-                            itemData.ControlBase = Convert.ToString(item.ControlBase);
-                            itemData.CampaignBase = Convert.ToString(item.CampaignBase);
-                            itemData.CommunicationMode = Convert.ToString(item.CommunicationMode);
+                            //var CM2 = context.tblPromoBlastMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.CampaignStatus, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
+                            var CM2 = context.tblCampaignMasters.Take(5).OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.CampaignStatus, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();                            
 
-                            if (item.StartDate > Sched)
+                            foreach (var item in CM2)
                             {
-                                itemData.Status = "Scheduled";
-                            }
-                            else if (item.EndDate < Sched)
-                            {
-                                itemData.Status = "Completed";
-                            }
-                            else if (item.EndDate > Sched)
-                            {
-                                itemData.Status = "On-Going";
-                            }
+                                LisCampaign itemData = new LisCampaign();
+                                itemData.CampaignId = Convert.ToString(item.CampaignId);
+                                itemData.CampaignName = item.CampaignName;
+                                itemData.StartDate = item.StartDate;
+                                itemData.StartDateStr = item.StartDate.Value.ToString("yyyy-MM-dd");
+                                itemData.EndDate = item.EndDate;
+                                itemData.EndDateStr = item.EndDate.Value.ToString("yyyy-MM-dd");
+                                itemData.Status = item.CampaignStatus;
+                                itemData.ControlBase = Convert.ToString(item.ControlBase);
+                                itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                                itemData.CommunicationMode = Convert.ToString(item.CommunicationMode);
 
-                            CM.Add(itemData);
+                                if (item.StartDate > Sched)
+                                {
+                                    itemData.Status = "Scheduled";
+                                }
+                                else if (item.EndDate < Sched)
+                                {
+                                    itemData.Status = "Completed";
+                                }
+                                else if (item.EndDate > Sched)
+                                {
+                                    itemData.Status = "On-Going";
+                                }
+                                CM.Add(itemData);
+                            }
+                            //var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
+
+                            //foreach (var item in CMD)
+                            //{
+                            //    LisCampaign itemData = new LisCampaign();
+                            //    itemData.CampaignId = item.CampaignId;
+                            //    itemData.CampaignName = item.CampaignName;
+                            //    //string str = item.StartDate.Value.ToString("yyyy-MM-dd");
+                            //    itemData.StartDate = item.StartDate;
+                            //    itemData.StartDateStr = item.StartDateStr;
+                            //    itemData.EndDate = item.EndDate;
+                            //    itemData.EndDateStr = item.EndDateStr;
+                            //    itemData.Status = item.Status;
+                            //    itemData.ControlBase = Convert.ToString(item.ControlBase);
+                            //    itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                            //    itemData.CommunicationMode = item.CommunicationMode;
+
+                            //    CM3.Add(itemData);
+                            //}
                         }
-                        var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
-
-                        foreach (var item in CMD)
+                        else
                         {
-                            LisCampaign itemData = new LisCampaign();
-                            itemData.CampaignId = item.CampaignId;
-                            itemData.CampaignName = item.CampaignName;
-                            //string str = item.StartDate.Value.ToString("yyyy-MM-dd");
-                            itemData.StartDate = item.StartDate;
-                            itemData.StartDateStr = item.StartDateStr;
-                            itemData.EndDate = item.EndDate;
-                            itemData.EndDateStr = item.EndDateStr;
-                            itemData.Status = item.Status;
-                            itemData.ControlBase = Convert.ToString(item.ControlBase);
-                            itemData.CampaignBase = Convert.ToString(item.CampaignBase);
-                            itemData.CommunicationMode = item.CommunicationMode;
+                            //var CM1 = context.CampaignMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.Status, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
+                            var CM1 = context.CampaignMasters.Take(5).OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.Status, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
+                            foreach (var item in CM1)
+                            {
+                                LisCampaign itemData = new LisCampaign();
 
-                            CM3.Add(itemData);
+                                itemData.CampaignId = item.CampaignId;
+                                itemData.CampaignName = item.CampaignName;
+
+                                itemData.StartDate = item.StartDate;
+                                itemData.StartDateStr = item.StartDate.Value.ToString("yyyy-MM-dd");
+                                itemData.EndDate = item.EndDate;
+                                itemData.EndDateStr = item.EndDate.Value.ToString("yyyy-MM-dd");
+                                itemData.Status = item.Status;
+                                itemData.ControlBase = Convert.ToString(item.ControlBase);
+                                itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                                string V = Convert.ToString(item.CommunicationMode);
+
+                                if (item.StartDate > Sched)
+                                {
+                                    itemData.Status = "Scheduled";
+                                }
+                                else if (item.EndDate < Sched)
+                                {
+                                    itemData.Status = "Completed";
+                                }
+                                else if (item.EndDate > Sched)
+                                {
+                                    itemData.Status = "On-Going";
+                                }
+                                if (V == "1")
+                                {
+                                    itemData.CommunicationMode = "SMS";
+                                }
+                                else if (V == "2")
+                                {
+                                    itemData.CommunicationMode = "Virtual SMS";
+                                }
+                                else if (V == "3")
+                                {
+                                    itemData.CommunicationMode = "Whats App";
+                                }
+                                else if (V == "4")
+                                {
+                                    itemData.CommunicationMode = " Virtual Whats App";
+                                }
+                                CM.Add(itemData);
+                            }
+                            //var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
+
+                            //foreach (var item in CMD)
+                            //{
+                            //    LisCampaign itemData = new LisCampaign();
+                            //    itemData.CampaignId = item.CampaignId;
+                            //    itemData.CampaignName = item.CampaignName;
+                            //    //string str = item.StartDate.Value.ToString("yyyy-MM-dd");
+                            //    itemData.StartDate = item.StartDate;
+                            //    itemData.StartDateStr = item.StartDateStr;
+                            //    itemData.EndDate = item.EndDate;
+                            //    itemData.EndDateStr = item.EndDateStr;
+                            //    itemData.Status = item.Status;
+                            //    itemData.ControlBase = Convert.ToString(item.ControlBase);
+                            //    itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                            //    itemData.CommunicationMode = item.CommunicationMode;
+
+                            //    CM.Add(itemData);
+                            //}
                         }
                     }
-                    else
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GetCampList");
+                }
+            }
+            return CM;
+        }
+
+        public List<PromoLisCampaign> GetPromoBastList(string GroupId, string connectionString)
+        {
+            List<PromoLisCampaign> CM = new List<PromoLisCampaign>();
+            List<PromoLisCampaign> CM3 = new List<PromoLisCampaign>();
+            string Todate;
+
+            DateTime Sched = ER.IndianDatetime();
+            Todate = Sched.ToString("yyyy-MM-dd");
+
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    using (var newcontext = new CommonDBContext())
                     {
-                        var CM1 = context.CampaignMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.Status, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
-
-                        foreach (var item in CM1)
+                        var DBStatus = newcontext.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                        DateTime CDate = DateTime.Parse(DateTime.Now.ToShortDateString());
+                        if (!string.IsNullOrEmpty(DBStatus))
                         {
-                            LisCampaign itemData = new LisCampaign();
+                            //var CM2 = context.tblPromoBlastMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.CampaignStatus, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
+                            var CM2 = context.tblPromoBlastMasters.Take(5).OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.CampaignStatus, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
+                            foreach (var item in CM2)
+                            {
+                                PromoLisCampaign itemData = new PromoLisCampaign();
+                                itemData.CampaignId = Convert.ToString(item.CampaignId);
+                                itemData.CampaignName = item.CampaignName;
+                                itemData.StartDate = item.StartDate;
+                                itemData.StartDateStr = item.StartDate.Value.ToString("yyyy-MM-dd");
+                                itemData.EndDate = item.EndDate;
+                                itemData.EndDateStr = item.EndDate.Value.ToString("yyyy-MM-dd");
+                                itemData.Status = item.CampaignStatus;
+                                itemData.ControlBase = Convert.ToString(item.ControlBase);
+                                itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                                itemData.CommunicationMode = Convert.ToString(item.CommunicationMode);
 
-                            itemData.CampaignId = item.CampaignId;
-                            itemData.CampaignName = item.CampaignName;
+                                if (item.StartDate > Sched)
+                                {
+                                    itemData.Status = "Scheduled";
+                                }
+                                else if (item.EndDate < Sched)
+                                {
+                                    itemData.Status = "Completed";
+                                }
+                                else if (item.EndDate > Sched)
+                                {
+                                    itemData.Status = "On-Going";
+                                }
 
-                            itemData.StartDate = item.StartDate;
-                            itemData.StartDateStr = item.StartDate.Value.ToString("yyyy-MM-dd");
-                            itemData.EndDate = item.EndDate;
-                            itemData.EndDateStr = item.EndDate.Value.ToString("yyyy-MM-dd");
-                            itemData.Status = item.Status;
-                            itemData.ControlBase = Convert.ToString(item.ControlBase);
-                            itemData.CampaignBase = Convert.ToString(item.CampaignBase);
-                            string V = Convert.ToString(item.CommunicationMode);
+                                CM3.Add(itemData);
+                            }
+                            //var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
 
-                            if (item.StartDate > Sched)
-                            {
-                                itemData.Status = "Scheduled";
-                            }
-                            else if (item.EndDate < Sched)
-                            {
-                                itemData.Status = "Completed";
-                            }
-                            else if (item.EndDate > Sched)
-                            {
-                                itemData.Status = "On-Going";
-                            }
+                            //foreach (var item in CMD)
+                            //{
+                            //    PromoLisCampaign itemData = new PromoLisCampaign();
+                            //    itemData.CampaignId = item.CampaignId;
+                            //    itemData.CampaignName = item.CampaignName;
+                            //    //string str = item.StartDate.Value.ToString("yyyy-MM-dd");
+                            //    itemData.StartDate = item.StartDate;
+                            //    itemData.StartDateStr = item.StartDateStr;
+                            //    itemData.EndDate = item.EndDate;
+                            //    itemData.EndDateStr = item.EndDateStr;
+                            //    itemData.Status = item.Status;
+                            //    itemData.ControlBase = Convert.ToString(item.ControlBase);
+                            //    itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                            //    itemData.CommunicationMode = item.CommunicationMode;
 
-                            if (V == "1")
-                            {
-                                itemData.CommunicationMode = "SMS";
-                            }
-                            else if (V == "2")
-                            {
-                                itemData.CommunicationMode = "Virtual SMS";
-                            }
-                            else if (V == "3")
-                            {
-                                itemData.CommunicationMode = "Whats App";
-                            }
-                            else if (V == "4")
-                            {
-                                itemData.CommunicationMode = " Virtual Whats App";
-                            }
-
-
-                            CM.Add(itemData);
+                            //    CM3.Add(itemData);
+                            //}
                         }
-                        var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
+                        //else
+                        //{
+                        //    // var CM1 = context.CampaignMasters.OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.Status, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
+                        //    var CM1 = context.CampaignMasters.Take(5).OrderByDescending(x => x.CampaignId).Select(x => new { x.CampaignId, x.CampaignName, x.StartDate, x.EndDate, x.CampaignStatus, x.ControlBase, x.CampaignBase, x.CommunicationMode }).ToList();
+                        //    foreach (var item in CM1)
+                        //    {
+                        //        PromoLisCampaign itemData = new PromoLisCampaign();
 
-                        foreach (var item in CMD)
-                        {
-                            LisCampaign itemData = new LisCampaign();
-                            itemData.CampaignId = item.CampaignId;
-                            itemData.CampaignName = item.CampaignName;
-                            //string str = item.StartDate.Value.ToString("yyyy-MM-dd");
-                            itemData.StartDate = item.StartDate;
-                            itemData.StartDateStr = item.StartDateStr;
-                            itemData.EndDate = item.EndDate;
-                            itemData.EndDateStr = item.EndDateStr;
-                            itemData.Status = item.Status;
-                            itemData.ControlBase = Convert.ToString(item.ControlBase);
-                            itemData.CampaignBase = Convert.ToString(item.CampaignBase);
-                            itemData.CommunicationMode = item.CommunicationMode;
+                        //        itemData.CampaignId = Convert.ToString(item.CampaignId);
+                        //        itemData.CampaignName = item.CampaignName;
 
-                            CM3.Add(itemData);
-                        }
+                        //        itemData.StartDate = item.StartDate;
+                        //        itemData.StartDateStr = item.StartDate.Value.ToString("yyyy-MM-dd");
+                        //        itemData.EndDate = item.EndDate;
+                        //        itemData.EndDateStr = item.EndDate.Value.ToString("yyyy-MM-dd");
+                        //        itemData.Status = item.stat;
+                        //        itemData.ControlBase = Convert.ToString(item.ControlBase);
+                        //        itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                        //        string V = Convert.ToString(item.CommunicationMode);
+
+                        //        if (item.StartDate > Sched)
+                        //        {
+                        //            itemData.Status = "Scheduled";
+                        //        }
+                        //        else if (item.EndDate < Sched)
+                        //        {
+                        //            itemData.Status = "Completed";
+                        //        }
+                        //        else if (item.EndDate > Sched)
+                        //        {
+                        //            itemData.Status = "On-Going";
+                        //        }
+
+                        //        if (V == "1")
+                        //        {
+                        //            itemData.CommunicationMode = "SMS";
+                        //        }
+                        //        else if (V == "2")
+                        //        {
+                        //            itemData.CommunicationMode = "Virtual SMS";
+                        //        }
+                        //        else if (V == "3")
+                        //        {
+                        //            itemData.CommunicationMode = "Whats App";
+                        //        }
+                        //        else if (V == "4")
+                        //        {
+                        //            itemData.CommunicationMode = " Virtual Whats App";
+                        //        }
+
+
+                        //        CM.Add(itemData);
+                        //    }
+                        //    //var CMD = ((from c in CM orderby c.CampaignId descending select c).Take(5)).ToList();
+
+                        //    //foreach (var item in CMD)
+                        //    //{
+                        //    //    PromoLisCampaign itemData = new PromoLisCampaign();
+                        //    //    itemData.CampaignId = item.CampaignId;
+                        //    //    itemData.CampaignName = item.CampaignName;
+                        //    //    //string str = item.StartDate.Value.ToString("yyyy-MM-dd");
+                        //    //    itemData.StartDate = item.StartDate;
+                        //    //    itemData.StartDateStr = item.StartDateStr;
+                        //    //    itemData.EndDate = item.EndDate;
+                        //    //    itemData.EndDateStr = item.EndDateStr;
+                        //    //    itemData.Status = item.Status;
+                        //    //    itemData.ControlBase = Convert.ToString(item.ControlBase);
+                        //    //    itemData.CampaignBase = Convert.ToString(item.CampaignBase);
+                        //    //    itemData.CommunicationMode = item.CommunicationMode;
+
+                        //    //    CM3.Add(itemData);
+                        //    //}
+                        //}
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -812,6 +1017,35 @@ namespace BOTS_BL.Repository
 
             }
             return CM3;
+        }
+
+        public List<SelectListItem> GetSMSCost()
+        {
+            List<tblSMSCostMaster> Obj = new List<tblSMSCostMaster>();
+            List<SelectListItem> lstSMSCost = new List<SelectListItem>();
+
+            using (var context = new CommonDBContext())
+            {
+                try
+                {
+                    Obj = context.tblSMSCostMasters.ToList();
+
+                    foreach(var item in Obj)
+                    {
+                        lstSMSCost.Add(new SelectListItem 
+                        { 
+                            Text = item.SMSCost,
+                            Value = Convert.ToString(item.Value)
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GetSMSCost");
+                }
+            }
+                
+            return lstSMSCost;
         }
 
         public bool SendDLTData(string CampaignId, string GroupId, string connectionString)

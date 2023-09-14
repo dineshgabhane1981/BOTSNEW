@@ -26,23 +26,9 @@
         WA Instance Details
     </div>
 
-        @*@if (ViewBag.ListCampDetails.Count > 0)
-            {*@
-        @*<div class="row" style="overflow-x:auto;padding-right:20px;margin-top:10px;margin-left:60px;">
-                <table class="table" id="InstanceTable" border="1" cellpadding="5" cellspacing="5">
-                    <thead>
-                        <tr>
-                            <th>Instance Name</th>
-                            <th>Token Id</th>
-                            <th>Balance</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>*@
-        <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
+    @*@if (ViewBag.ListCampDetails.Count > 0)
+        {*@
+    @*<div class="row" style="overflow-x:auto;padding-right:20px;margin-top:10px;margin-left:60px;">
             <table class="table" id="InstanceTable" border="1" cellpadding="5" cellspacing="5">
                 <thead>
                     <tr>
@@ -55,17 +41,31 @@
                 <tbody>
                 </tbody>
             </table>
-        </div>
+        </div>*@
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
+        <table class="table" id="InstanceTable" border="1" cellpadding="5" cellspacing="5">
+            <thead>
+                <tr>
+                    <th>Instance Name</th>
+                    <th>Token Id</th>
+                    <th>Balance</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
 
-        @*else
-            {
-                <div class="row" style="margin-top : 20px; margin-left:50px;">
-                    <h6 style="font:xx-large"><b>No Instance Found</b></h6>
-                </div>
-            }*@
-        @*</div>*@
+    @*else
+        {
+            <div class="row" style="margin-top : 20px; margin-left:50px;">
+                <h6 style="font:xx-large"><b>No Instance Found</b></h6>
+            </div>
+        }*@
+    @*</div>*@
 
-        @*<div class="row mt-2" style="margin-top : 20px;">
+    @*<div class="row mt-2" style="margin-top : 20px;">
             <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
                 Campaign Name*
             </div>
@@ -77,148 +77,121 @@
             </div>
         </div>*@
 
-        <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
-            <div class="col-md-3 col-xl-3">
-                <label>Campaign Name<b>*</b></label>
-            </div>
-            <div class="col-md-3 col-xl-3">
-                <input type="text" id="WACampName" class="input50" placeholder="Enter Campaign Name" />
-            </div>
-            <div class="col-md-3 col-xl-3">
-                <input type="hidden" id="WACampId" class="input50" />
-            </div>
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
+        <div class="col-md-3 col-xl-3">
+            <label>Campaign Name<b>*</b></label>
         </div>
+        <div class="col-md-3 col-xl-3">
+            <input type="text" id="WACampName" class="input50" placeholder="Enter Campaign Name" />
+        </div>
+        <div class="col-md-3 col-xl-3">
+            <input type="hidden" id="WACampId" class="input50" />
+        </div>
+    </div>
 
-        <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
-            <div id="WAdivdaterange" class="col-md-3 col-xl-3">
-                <label>Campaign Period<b>*</b></label>
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
+        <div id="WAdivdaterange" class="col-md-3 col-xl-3">
+            <label>Campaign Period<b>*</b></label>
+        </div>
+        <div class="col-md-3 col-xl-3">
+            <input type="date" id="WAtxtEnrollfromdt" class="input50" placeholder="Start" onchange="WAValidateDate();" /> &nbsp;&nbsp;&nbsp;
+        </div>
+        <div class="col-md-3 col-xl-3">
+            <input type="date" id="WAtxtEnrolltodt" class="input50" placeholder="End" onchange="WAValidateDate1();" />
+        </div>
+    </div>
+
+    @*<div class="row mt-2" style="margin-top : 20px;">
+            <div id="WAdivdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
+                <label>Campaign Period*</label>
             </div>
-            <div class="col-md-3 col-xl-3">
+            <div style="margin-top: 20px;">
                 <input type="date" id="WAtxtEnrollfromdt" class="input50" placeholder="Start" onchange="WAValidateDate();" /> &nbsp;&nbsp;&nbsp;
             </div>
-            <div class="col-md-3 col-xl-3">
+            <div style="margin-top: 20px;">
                 <input type="date" id="WAtxtEnrolltodt" class="input50" placeholder="End" onchange="WAValidateDate1();" />
             </div>
-        </div>
+        </div>*@
 
-            @*<div class="row mt-2" style="margin-top : 20px;">
-                <div id="WAdivdaterange" class="col-md-2 col-xl-3" style="margin-left: 18px; margin-top: 20px;">
-                    <label>Campaign Period*</label>
-                </div>
-                <div style="margin-top: 20px;">
-                    <input type="date" id="WAtxtEnrollfromdt" class="input50" placeholder="Start" onchange="WAValidateDate();" /> &nbsp;&nbsp;&nbsp;
-                </div>
-                <div style="margin-top: 20px;">
-                    <input type="date" id="WAtxtEnrolltodt" class="input50" placeholder="End" onchange="WAValidateDate1();" />
-                </div>
-            </div>*@
-
-            @*<div class="row" style="margin-top : 20px;">
-                <div class="col-sm-2" style="margin-left: 18px;">
-                    Base Type
-                </div>
-                <div class="col-sm-2 dropdown" style="margin-left : 70px;">
-                    <select id="WABaseType" name="BaseType" class="input50" onchange="WABaseCalc();">
-                        <option value="1">All</option>
-                        <option value="2">Member Base</option>
-                        <option value="3">Bulk Upload</option>
-                        <option value="4">Based On Points</option>
-                    </select>
-                </div>
-            </div>*@
-           <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
-               <div class="col-lg-3 col-md-3 ">
-                   <label>Base Type</label>
-               </div>
-               <div class="col-md-3 col-xl-3">
-                   <select id="WABaseType" name="BaseType" class="input50" onchange="WABaseCalc();">
-                       <option value="1">All</option>
-                       <option value="2">Member Base</option>
-                       <option value="3">Bulk Upload</option>
-                       <option value="4">Based On Points</option>
-                   </select>
-               </div>
-           </div>
-
-            @*<div class="row " id="WAdivPoints" style="margin-top : 20px; display: none;">
-                <div class="col-sm-2" style="margin-left: 22px;">
-                    Points
-                </div>
-                <div class="col-sm-3 dropdown" style="margin-left : 65px;">
-                    <select id="WAFilter" name="Filter" class="input50" onchange="WApointsvalid();">
-                        <option value="1">Less Than</option>
-                        <option value="2">Greater Than</option>
-                        <option value="3">Equal To</option>
-                        <option value="4">Points Range</option>
-                    </select>
-                </div>
-                <div class="col-md-2 col-xl-2" style="margin-left:-55px;">
-                    <input type="number" id="WApoints" name="points" class="input50" />
-                </div>
-                <div class="col-md-2 col-xl-2" style="display:none;margin-left:25px;" id="WAdivPointsRange">
-                    <input type="number" id="WApoints2" name="points2" class="input50" />
-                </div>
-            </div>*@
-
-            <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2" id="WAdivPoints" style="display: none;">
-                <div class="col-lg-3 col-md-3 ">
-                    <label>Points<b>*</b></label>
-                </div>
-                <div class="col-md-3 col-xl-3 ">
-                    <select id="WAFilter" name="Filter" class="input50" onchange="WApointsvalid();">
-                        <option value="1">Less Than</option>
-                        <option value="2">Greater Than</option>
-                        <option value="3">Equal To</option>
-                        <option value="4">Points Range</option>
-                    </select>
-                </div>
-                <div class="col-md-3 col-xl-3">
-                    <input type="number" id="WApoints" name="points" class="input50" />
-                </div>
-                <div class="col-md-3 col-xl-3" id="WAdivPointsRange" style="display:none;">
-                    <input type="number" id="WApoints2" name="points2" class="input50" />
-                </div>
-            </div> 
-     
-
-            @*<div class="row" style="margin-top: 20px;">
-                <div class="col-sm-2" style="margin-left: 18px;">
-                    OutletData
-                </div>
-                <div class="col-sm-2 dropdown" style="margin-left: 70px;">
-                    @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "WAddlOutletList" })
-                </div>
-            </div>*@
-
-<div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
-    <div class="col-lg-3 col-md-3 ">
-        <div class="button">
-            <button type="button" id="WAbtnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="WAShowCount();"><b>FILTER</b></button>
-        </div>
-    </div>
-    <div class="col-md-4 col-xl-4">
-        <table style="border:2px solid black;width:70%">
-            <tr style="border:2px solid black; ">
-                <td style="border:2px solid black;text-align:left;">
-                    <span id="WAAllCount"></span>All Count
-                </td>
-                <td style="border:2px solid black;width:40%">
-                    <span id="WAAllCountnum"></span>
-                </td>
-            </tr>
-            <tr style="border:2px solid black; ">
-                <td style="border:2px solid black;text-align:left;">
-                    <span id="WAFiltCount"></span>Filtered Count
-                </td>
-                <td style="border:2px solid black;width:40%">
-                    <span id="WAFiltCountnum"></span>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
     @*<div class="row" style="margin-top : 20px;">
+            <div class="col-sm-2" style="margin-left: 18px;">
+                Base Type
+            </div>
+            <div class="col-sm-2 dropdown" style="margin-left : 70px;">
+                <select id="WABaseType" name="BaseType" class="input50" onchange="WABaseCalc();">
+                    <option value="1">All</option>
+                    <option value="2">Member Base</option>
+                    <option value="3">Bulk Upload</option>
+                    <option value="4">Based On Points</option>
+                </select>
+            </div>
+        </div>*@
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
+        <div class="col-lg-3 col-md-3 ">
+            <label>Base Type</label>
+        </div>
         <div class="col-md-3 col-xl-3">
+            <select id="WABaseType" name="BaseType" class="input50" onchange="WABaseCalc();">
+                <option value="1">All</option>
+                <option value="2">Member Base</option>
+                <option value="3">Bulk Upload</option>
+                <option value="4">Based On Points</option>
+            </select>
+        </div>
+    </div>
+
+    @*<div class="row " id="WAdivPoints" style="margin-top : 20px; display: none;">
+            <div class="col-sm-2" style="margin-left: 22px;">
+                Points
+            </div>
+            <div class="col-sm-3 dropdown" style="margin-left : 65px;">
+                <select id="WAFilter" name="Filter" class="input50" onchange="WApointsvalid();">
+                    <option value="1">Less Than</option>
+                    <option value="2">Greater Than</option>
+                    <option value="3">Equal To</option>
+                    <option value="4">Points Range</option>
+                </select>
+            </div>
+            <div class="col-md-2 col-xl-2" style="margin-left:-55px;">
+                <input type="number" id="WApoints" name="points" class="input50" />
+            </div>
+            <div class="col-md-2 col-xl-2" style="display:none;margin-left:25px;" id="WAdivPointsRange">
+                <input type="number" id="WApoints2" name="points2" class="input50" />
+            </div>
+        </div>*@
+
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2" id="WAdivPoints" style="display: none;">
+        <div class="col-lg-3 col-md-3 ">
+            <label>Points<b>*</b></label>
+        </div>
+        <div class="col-md-3 col-xl-3 ">
+            <select id="WAFilter" name="Filter" class="input50" onchange="WApointsvalid();">
+                <option value="1">Less Than</option>
+                <option value="2">Greater Than</option>
+                <option value="3">Equal To</option>
+                <option value="4">Points Range</option>
+            </select>
+        </div>
+        <div class="col-md-3 col-xl-3">
+            <input type="number" id="WApoints" name="points" class="input50" />
+        </div>
+        <div class="col-md-3 col-xl-3" id="WAdivPointsRange" style="display:none;">
+            <input type="number" id="WApoints2" name="points2" class="input50" />
+        </div>
+    </div>
+
+
+    @*<div class="row" style="margin-top: 20px;">
+            <div class="col-sm-2" style="margin-left: 18px;">
+                OutletData
+            </div>
+            <div class="col-sm-2 dropdown" style="margin-left: 70px;">
+                @Html.DropDownList("OutletData", new SelectList(ViewBag.OutletData, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "WAddlOutletList" })
+            </div>
+        </div>*@
+
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
+        <div class="col-lg-3 col-md-3 ">
             <div class="button">
                 <button type="button" id="WAbtnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="WAShowCount();"><b>FILTER</b></button>
             </div>
@@ -243,53 +216,80 @@
                 </tr>
             </table>
         </div>
-    </div>*@
+    </div>
+    @*<div class="row" style="margin-top : 20px;">
+            <div class="col-md-3 col-xl-3">
+                <div class="button">
+                    <button type="button" id="WAbtnFilter" style="margin-left:15px;" class="btn btn-primary" onclick="WAShowCount();"><b>FILTER</b></button>
+                </div>
+            </div>
+            <div class="col-md-4 col-xl-4">
+                <table style="border:2px solid black;width:70%">
+                    <tr style="border:2px solid black; ">
+                        <td style="border:2px solid black;text-align:left;">
+                            <span id="WAAllCount"></span>All Count
+                        </td>
+                        <td style="border:2px solid black;width:40%">
+                            <span id="WAAllCountnum"></span>
+                        </td>
+                    </tr>
+                    <tr style="border:2px solid black; ">
+                        <td style="border:2px solid black;text-align:left;">
+                            <span id="WAFiltCount"></span>Filtered Count
+                        </td>
+                        <td style="border:2px solid black;width:40%">
+                            <span id="WAFiltCountnum"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>*@
 
     @*<div class="row" style="margin-top : 50px;">
-        <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
-            Max No Of Msg Per Day*
+            <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+                Max No Of Msg Per Day*
+            </div>
+            <div>
+                <input type="number" min="1" maxlength="3" id="NoOfMsg" class="input50" placeholder="No of Msg per Day" />
+            </div>
+        </div>*@
+
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
+        <div class="col-lg-4 col-md-4 ">
+            <label>Max No Of Msg Per Day<b>*</b></label>
         </div>
-        <div>
+        <div class="col-lg-3 col-md-3 ">
             <input type="number" min="1" maxlength="3" id="NoOfMsg" class="input50" placeholder="No of Msg per Day" />
         </div>
-    </div>*@
-
-<div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
-    <div class="col-lg-4 col-md-4 ">
-        <label>Max No Of Msg Per Day<b>*</b></label>
-     </div>
-    <div class="col-lg-3 col-md-3 ">
-        <input type="number" min="1" maxlength="3" id="NoOfMsg" class="input50" placeholder="No of Msg per Day" />
     </div>
-</div>
 
     @*<div class="row" style="margin-top: 20px; margin-left: 20px; " id="WAMsgType">
-        <div class="col-md-8 col-xl-8">
-            <input type="radio" checked id="rdnTextWA" value="1" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>Text</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdnImageWA" value="2" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="radio" id="rdnImageCaptionWA" value="3" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File With Caption</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="col-md-8 col-xl-8">
+                <input type="radio" checked id="rdnTextWA" value="1" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>Text</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnImageWA" value="2" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnImageCaptionWA" value="3" name="WAType" onclick="WAtypeValidate();" />&nbsp;&nbsp;&nbsp;<b>File With Caption</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </div>*@
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
+        <div class="col-lg-3 col-md-3 ">
+            <input type="radio" checked id="rdnTextWA" value="1" name="WAType" onclick="WAtypeValidate();" /><b>Text</b>
         </div>
-    </div>*@
-<div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
-    <div class="col-lg-3 col-md-3 ">
-        <input type="radio" checked id="rdnTextWA" value="1" name="WAType" onclick="WAtypeValidate();" /><b>Text</b>
+        <div class="col-lg-3 col-md-3 ">
+            <input type="radio" id="rdnImageWA" value="2" name="WAType" onclick="WAtypeValidate();" /><b>File</b>
+        </div>
+        <div class="col-lg-3 col-md-3 ">
+            <input type="radio" id="rdnImageCaptionWA" value="3" name="WAType" onclick="WAtypeValidate();" /><b>File With Caption</b>
+        </div>
     </div>
-    <div class="col-lg-3 col-md-3 ">
-        <input type="radio" id="rdnImageWA" value="2" name="WAType" onclick="WAtypeValidate();" /><b>File</b>
-    </div>
-    <div class="col-lg-3 col-md-3 ">
-        <input type="radio" id="rdnImageCaptionWA" value="3" name="WAType" onclick="WAtypeValidate();" /><b>File With Caption</b>
-    </div>
-</div>
 
     @*<div class="row" style="margin: 20px;">
-        <div class="col-md-8 col-xl-8">
-            <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="WAScheduleSwitch" value="0" onchange="WAShowScheduledate();">
-                <label class="custom-control-label" for="WAScheduleSwitch"><b>Schedule Date & Time</b></label>
+            <div class="col-md-8 col-xl-8">
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="WAScheduleSwitch" value="0" onchange="WAShowScheduledate();">
+                    <label class="custom-control-label" for="WAScheduleSwitch"><b>Schedule Date & Time</b></label>
+                </div>
             </div>
-        </div>
-    </div>*@
+        </div>*@
     <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
         <div class="col-md-8 col-xl-8">
             <div class="custom-control custom-switch">
@@ -300,62 +300,62 @@
     </div>
 
     @*<div class="row" style="margin: 20px; display : none" id="WASchedPick">
+            <div class="col-md-8 col-xl-8">
+                <input id="WAdatetimepicker" type="text" onclick="WAShowdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
+            </div>
+        </div>*@
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
         <div class="col-md-8 col-xl-8">
-            <input id="WAdatetimepicker" type="text" onclick="WAShowdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
+            <input id="WAdatetimepicker" type="text" class="input50" onclick="WAShowdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
         </div>
-    </div>*@
-<div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
-    <div class="col-md-8 col-xl-8">
-        <input id="WAdatetimepicker" type="text" onclick="WAShowdatetime();">&nbsp;&nbsp;<label> Double click to add Datetime</label>
     </div>
-</div>
 
     @*<div class="row" style="margin: 20px; display:none" id="WAUpload">
-        <input type="file" id="FileUpload1" style="margin-left: 30px;" />
-        <input type="button" id="btnUpload" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
-    </div>*@
-<div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2" style="display: none" id="WAUpload">
-    <div class="col-md-4 col-xl-4">
-        <input type="file" id="FileUpload1" />
+            <input type="file" id="FileUpload1" style="margin-left: 30px;" />
+            <input type="button" id="btnUpload" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+        </div>*@
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2" style="display: none" id="WAUpload">
+        <div class="col-md-4 col-xl-4">
+            <input type="file" id="FileUpload1" />
+        </div>
+        <div class="col-md-3 col-xl-3">
+            <input type="button" id="btnUpload" class="btn btn-primary" style="background-color: #2651be;" value="Upload" />
+        </div>
     </div>
-    <div class="col-md-3 col-xl-3">
-        <input type="button" id="btnUpload" class="btn btn-primary" style="background-color: #2651be;" value="Upload" />
-    </div>
-</div>
     <!--<div class="col-md-12" style="margin: 20px; display: none" id="UploadImglink">-->
-        @*display:none*@
-        <!--<span id="WAText">Upload Img Link:</span>
+    @*display:none*@
+    <!--<span id="WAText">Upload Img Link:</span>
         <a id="a" href="#" target="_blank"><span id="WAUploadImg"></span></a>
     </div>-->
 
-<div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2" style="display: none" id="UploadImglink">
-    <div class="col-md-3 col-xl-3">
-        <span id="WAText">Upload Img Link:</span>
+    <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2" style="display: none" id="UploadImglink">
+        <div class="col-md-3 col-xl-3">
+            <span id="WAText">Upload Img Link:</span>
+        </div>
+        <div class="col-md-3 col-xl-3">
+            <a id="a" href="#" target="_blank"><span id="WAUploadImg"></span></a>
+        </div>
     </div>
-    <div class="col-md-3 col-xl-3">
-        <a id="a" href="#" target="_blank"><span id="WAUploadImg"></span></a>
-    </div>
-</div>
 
-<div class="col-md-12 col-xl-12 row mt-2 pl-5 mb-2" id="WAScriptText">
-    <div class="col-md-6 col-xl-6">
-        <textarea class="form-control" id="WASMSScript" rows="7" maxlength="10000" placeholder="Enter SMS Script"></textarea>
+    <div class="col-md-12 col-xl-12 row mt-2 pl-5 mb-2" id="WAScriptText">
+        <div class="col-md-6 col-xl-6">
+            <textarea class="form-control" id="WASMSScript" rows="7" maxlength="10000" placeholder="Enter SMS Script"></textarea>
+        </div>
+
+        <div class="col-md-3 col-xl-3">
+            <br><br><br><br><br><br><br>
+            <table style="border:2px solid black;width:70%">
+                <tr style="border:2px solid black; ">
+                    <td style="border:2px solid black;text-align:left;">
+                        <span id="CharCount"></span>Char Count
+                    </td>
+                    <td style="border:2px solid black;width:40%">
+                        <span id="WAcurrent">0</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-    
-    <div class="col-md-3 col-xl-3">
-        <br><br><br><br><br><br><br> 
-        <table style="border:2px solid black;width:70%">
-            <tr style="border:2px solid black; ">
-                <td style="border:2px solid black;text-align:left;">
-                    <span id="CharCount"></span>Char Count
-                </td>
-                <td style="border:2px solid black;width:40%">
-                    <span id="WAcurrent">0</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
 
     <!--<div class="row" style="margin: 20px;" id="WAScriptText">
         <div class="col-md-4" style="margin-top:10px;">
@@ -374,9 +374,9 @@
                 </tr>
             </table>
         </div>-->
-        @*<div class="col-md-4" style="margin-top:10px;">
-                <textarea class="form-control" id="WASMSScript1" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
-            </div>*@
+    @*<div class="col-md-4" style="margin-top:10px;">
+            <textarea class="form-control" id="WASMSScript1" rows="7" maxlength="10000"></textarea>&nbsp;&nbsp;
+        </div>*@
     <!--</div>-->
 
     <div id="GooleLink1" style="margin-left:40px; margin-top:20px;">
@@ -394,16 +394,16 @@
     </div>
 
     @*<div class="row" style="margin: 20px;">
-        <div class="col-md-4" style="margin-top: 10px;">
-            <textarea class="form-control" id="WATestNumbers" rows="2" maxlength="10000" style="display: none" placeholder="Enter Test Numbers"></textarea>&nbsp;&nbsp;
-        </div>
-        <div class="button col-md-4" style="margin-top: 37px;">
-            <button type="button" id="WAbtnSendTestSMS" style="margin-left: 25px; display: none" class="btn btn-primary" onclick="WASendTestValidate();"><b>TEST SMS</b></button>
-        </div>
-    </div>*@
+            <div class="col-md-4" style="margin-top: 10px;">
+                <textarea class="form-control" id="WATestNumbers" rows="2" maxlength="10000" style="display: none" placeholder="Enter Test Numbers"></textarea>&nbsp;&nbsp;
+            </div>
+            <div class="button col-md-4" style="margin-top: 37px;">
+                <button type="button" id="WAbtnSendTestSMS" style="margin-left: 25px; display: none" class="btn btn-primary" onclick="WASendTestValidate();"><b>TEST SMS</b></button>
+            </div>
+        </div>*@
     <div class="col-md-8 col-xl-8 row mt-2 pl-5 mb-2">
         <div class="col-md-3 col-xl-3">
-           <textarea class="form-control" id="WATestNumbers" rows="2" maxlength="10000" style="display: none" placeholder="Enter Test Numbers"></textarea>
+            <textarea class="form-control" id="WATestNumbers" rows="2" maxlength="10000" style="display: none" placeholder="Enter Test Numbers"></textarea>
         </div>
         <div class="col-md-3 col-xl-3">
             <button type="button" id="WAbtnSendTestSMS" style="margin-left: 25px; display: none" class="btn btn-primary" onclick="WASendTestValidate();"><b>TEST SMS</b></button>
@@ -418,16 +418,16 @@
     @*</div>*@
 </div>
 
-    @*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-        <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-        <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-        <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
+@*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
 
-    @*<link rel="stylesheet" type="text/css" href="~/Scripts/datatable/datatables.min.css" />
-        <script type="text/javascript" src="~/Scripts/datatable/datatables.min.js"></script>*@
+@*<link rel="stylesheet" type="text/css" href="~/Scripts/datatable/datatables.min.css" />
+    <script type="text/javascript" src="~/Scripts/datatable/datatables.min.js"></script>*@
 
 
-    <script>
+<script>
     var tableData = [];
     $("#NoOfMsg").focusout(function () {
         alert("Hi");
@@ -1167,4 +1167,5 @@
         //});
     }
 
-    </script>
+</script>
+

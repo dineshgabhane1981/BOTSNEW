@@ -54,6 +54,10 @@ namespace BOTS_BL.Models.IndividualDBModels
         [Column(TypeName = "numeric")]
         public decimal? TotalBonusPointsRedeemed { get; set; }
         public long? TotalCustCount { get; set; }
+
+        [StringLength(50)]
         public string CommunicationMode { get; set; }
+
+        public string CampaignScript { get; set; }
     }
 }

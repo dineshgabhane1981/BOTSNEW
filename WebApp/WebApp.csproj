@@ -267,6 +267,7 @@
     <Compile Include="ViewModel\BrandAndOutletViewModel.cs" />
     <Compile Include="ViewModel\CancelTxnViewModel.cs" />
     <Compile Include="ViewModel\CelebrationFileUpload.cs" />
+    <Compile Include="ViewModel\CampaignMgmt.cs" />
     <Compile Include="ViewModel\CommunicationConfigViewModel.cs" />
     <Compile Include="ViewModel\CreateOwnReportViewModel.cs" />
     <Compile Include="ViewModel\CSWiseDataViewModel.cs" />
@@ -654,6 +655,11 @@
     <Content Include="Views\BonusPoint\CancelTransactionNew.cshtml" />
     <Content Include="Views\BonusPoint\IndexNew.cshtml" />
     <Content Include="Views\OTPAndLog\EnableDisableOTPNew.cshtml" />
+    <Content Include="Views\Campaigns\CampMgmtNew.cshtml" />
+    <Content Include="Views\Campaigns\_CampMgmtPromoBlastList.cshtml" />
+    <Content Include="Views\Campaigns\_CampMgmtCampaignList.cshtml" />
+    <Content Include="Views\Campaigns\_CreateCampaignPromo.cshtml" />
+    <Content Include="Views\Campaigns\_CampaignPromoWA.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

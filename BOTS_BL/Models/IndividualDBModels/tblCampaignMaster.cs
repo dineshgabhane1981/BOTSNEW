@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models
+namespace BOTS_BL.Models.IndividualDBModels
 {
     using System;
     using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace BOTS_BL.Models
 
         [StringLength(200)]
         public string CampaignStatus { get; set; }
-        
+
         public bool? BackEndStatus { get; set; }
 
         public DateTime? Datetime { get; set; }
@@ -55,5 +55,10 @@ namespace BOTS_BL.Models
         public decimal? TotalBonusPointsRedeemed { get; set; }
 
         public long? TotalCustCount { get; set; }
+
+        [StringLength(50)]
+        public string CommunicationMode { get; set; }
+
+        public string CampaignScript { get; set; }
     }
 }

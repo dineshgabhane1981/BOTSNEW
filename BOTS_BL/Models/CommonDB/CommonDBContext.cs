@@ -17,6 +17,8 @@ namespace BOTS_BL.Models
             : base("name=CommonDBContext")
         {
         }
+        public virtual DbSet<tblSMSCostMaster> tblSMSCostMasters { get; set; }
+
         public virtual DbSet<tblAuditBOPromo> tblAuditBOPromoes { get; set; }
         public virtual DbSet<CommonOTPCredentialMaster> CommonOTPCredentialMasters { get; set; }
         public virtual DbSet<tblAuditC> tblAuditCS { get; set; }
