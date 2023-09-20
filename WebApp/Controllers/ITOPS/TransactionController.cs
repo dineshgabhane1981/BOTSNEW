@@ -477,8 +477,8 @@ namespace WebApp.Controllers.ITOPS
 
                     // tblAudit
                     objAudit.GroupId = groupId;
-                    objAudit.RequestedFor = "User Added";
-                    objAudit.RequestedEntity = "User Added - " + objCustomer.MobileNo;
+                    objAudit.RequestedFor = "Points Transfer";
+                    objAudit.RequestedEntity = "PointsTransfer - " + objCustomer.MobileNo;
                     objAudit.RequestedBy = Convert.ToString(item["RequestedBy"]);
                     objAudit.RequestedOnForum = Convert.ToString(item["RequestedForum"]);
                     objAudit.RequestedOn = Convert.ToDateTime(item["RequestedOn"]);

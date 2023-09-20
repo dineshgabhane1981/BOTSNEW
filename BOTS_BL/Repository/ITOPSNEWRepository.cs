@@ -1203,11 +1203,9 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public SPResponse TransferPoints(string GroupId, string MobileNo, string NewMobileNo, tblCustDetailsMaster objCustomer, tblCustPointsMaster objCustPointsMaster, tblCustInfo objcustInfo, tblCustTxnSummaryMaster objCustTxnSummaryMaster, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
-
             string connStr = GetCustomerConnString(GroupId);
             try
             {
@@ -1339,31 +1337,29 @@ namespace BOTS_BL.Repository
 
                                     result.ResponseCode = "00";
                                     result.ResponseMessage = "Points Transferred Successfully";
-                                    
                                 }
-                                using (var context = new CommonDBContext())
-                                {
-                                    context.tblAudits.Add(objAudit);
-                                    context.SaveChanges();
-                                }
+                            }
+                            using (var context = new CommonDBContext())
+                            {
+                                context.tblAudits.Add(objAudit);
+                                context.SaveChanges();
                             }
                             transaction.Commit();
                         }
                         catch (Exception ex)
                         {
-                            newexception.AddException(ex, GroupId);
                             transaction.Rollback();
+                            newexception.AddException(ex, GroupId);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "TransferPoints");
+                newexception.AddException(ex, "ModifyTransaction");
             }
             return result;
         }
-
         public void SendSMSandWA(string _MobileNo, string _MobileMessage, string _UserName, string _Password, string _Sender, string _Url, string _WAMessage, string _WATokenId)
         {
             string responseString;

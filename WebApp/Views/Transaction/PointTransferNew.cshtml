@@ -3,38 +3,35 @@
     ViewBag.Title = "PointTransfer";
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
-
 <div class="app-main__inner">
     <div class="mb-3 card" style="padding-top:20px;">
         <div class="content">
             <div class="container overflow-hidden">
-                <input type="hidden" id="hdnCustomerId1" />
-                <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec2" data-animation="scaleIn" style="height:650px;">
+                <div class="multisteps-form__panel shadow p-4 list-box bg-white js-active" id="sec1" data-animation="scaleIn">
                     <h4 class="multisteps-form__title" style="color:blue;">Point Transfer</h4><br />
-                    <div div class="multisteps-form__content">
+                    <div class="multisteps-form__content">
                         <div>
                             <input type="hidden" id="hdnGroupId" />
                             <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
                             <input type="number" id="txtMobileNo1" class="input50" />
-
                             <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
-
                             <label style="padding-right:5px;padding-top:10px;">Enter Card Number </label>
                             <input type="number" id="txtCardNo1" class="input50" />
                             <button type="button" id="btnSearchMember1" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
                         </div>
                         <div>
-                            <div style="margin-left:30px;margin-bottom:30px;margin-top:30px;">
+                            <div style="margin-bottom:30px;margin-top:30px;">
                                 <input type="radio" name="first_item1" id="rbtnSMS1" /> Send SMS
-                                <input type="radio" name="first_item1" style="margin-left:30px;" checked id="rbtnNOSMS1" /> Don't Send SMS
+                                <input type="radio" name="first_item1" checked style="margin-left:30px;" id="rbtnNOSMS1" /> Don't Send SMS
                             </div>
                             <div class="col-md-12 col-lg-12" style="padding-left: 0px !important; float: left;">
-                                <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; float: left;">
+                                <input type="hidden" id="hdnCustomerId" />
+                                <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; float: left; ">
                                     <table border="1" cellpadding="5" cellspacing="5">
-                                        <tr position: absolute top: -9999px; left: -9998px;>
+                                        <tr>
                                             <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
                                         </tr>
-                                        <tr border: 1px solid #ccc;>
+                                        <tr>
                                             <td style="padding:10px;">Member Name</td>
                                             <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName1"></span></td>
                                         </tr>
@@ -62,15 +59,15 @@
                                         </tr>
                                     </table>
                                 </div>
-                                <div class="col-md-5 col-lg-5" style="padding-left: 0px !important; float: left;">
-                                    <table border="1" cellpadding="5" cellspacing="5" id="tblUpdateData1" style="display:none;" >
+                                <div class="col-md-5 col-lg-5" style="padding-left:0px !important;float:left;">
+                                    <table border="1" cellpadding="5" cellspacing="5" id="tblUpdateData1" style="display:none;">
                                         <tr>
                                             <th colspan="2" style="padding:10px;text-align:center;">Points Transfer To Mobile Number</th>
                                         </tr>
                                         <tr>
                                             <td style="padding:10px;">Enter Mobile Number</td>
                                             <td style="padding:10px;width:200px;">
-                                                <input type="number" id="txtMobileNo" placeholder="Mobile No" class="input50" />
+                                                <input type="text" id="txtMobileNo" placeholder="Mobile No" class="input50" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -106,6 +103,7 @@
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
@@ -199,7 +197,7 @@
             $('#dtPointTransfer').focus();
             return false;
         }
-        if (confirm("Are you sure? You want to change Mobile No")) {
+        if (confirm("Are you sure? You want to Transfer Points")) {
             var MemberData = [];
             item = {}
             item["GroupID"] = $("#hdnGroupId").val();
