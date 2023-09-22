@@ -14,8 +14,6 @@
                 <input type="radio" id="chkTransacting" name="firstFilters" style="width:20px; cursor:pointer;" /> &nbsp; Transacting
                 <input type="radio" id="chkNonTransacting" name="firstFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Non Transacting
                 <input type="radio" id="chkMemberAcquition" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Member Acquition
-                @*<input type="radio" id="chkReferral" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Referral
-                <input type="radio" id="chkDLCRegistered" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;DLC Registered*@
             </div>
 
             <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnFilters" style="display:none;">
@@ -33,15 +31,14 @@
                 <input type="checkbox" id="chkExcludeOnlyOnce" style="width:20px; height:20px; margin-top:10px; margin-left:10px; cursor:pointer;" /><span style="margin-top:10px;margin-left:3px;">Exclude Only Once</span>
             </div>
 
+            @*<div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvDLCReferalFilters" style="display:none;">
+            <input type="radio" id="rbtnAll" name="DLCReferalFilters" style="width: 20px; height: 20px;cursor:pointer;" /> &nbsp;All
+            <input type="radio" id="rbtnTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Transacting
+            <input type="radio" id="rbtnNonTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" />&nbsp;Non Transacting
+        </div>*@
 
-            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvDLCReferalFilters" style="display:none;">
-                <input type="radio" id="rbtnAll" name="DLCReferalFilters" style="width: 20px; height: 20px;cursor:pointer;" /> &nbsp;All
-                <input type="radio" id="rbtnTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Transacting
-                <input type="radio" id="rbtnNonTxn" name="DLCReferalFilters" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" />&nbsp;Non Transacting
-            </div>
-
-            <div style="border:1px solid lightgrey; border-radius:5px; margin-top:20px; margin-left:20px;display:none;" id="dvCumulative" >
-                <div class="row mt-2 col-md-12 col-xl-12 ml-0" >
+            <div style="border:1px solid lightgrey; border-radius:5px; margin-top:20px; margin-left:20px;display:none;" id="dvCumulative">
+                <div class="row mt-2 col-md-12 col-xl-12 ml-0">
                     <input type="radio" id="rbtnCTxnCount" name="CumulativeFilters" style="width: 20px; height: 20px;cursor:pointer;" /> &nbsp;Txn Count &nbsp;
                     @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.LessThanMoreThan(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTxnCumulative" })&nbsp;
                     <input type="number" id="txtCTxnCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
@@ -54,145 +51,162 @@
                     <input type="number" id="txtCSpendCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
                     <input type="number" id="txtCSpendMonths" class="input20" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px; margin-top: 10px;"> months (per month)</span>
                 </div>
-              </div>
-            
+            </div>
+
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvNonTxnFilters" style="display:none;">
+                <input type="radio" id="chkNonTxnAll" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
+                <input type="radio" id="chkNonTxnEnrolled" name="NonTxnsecondFilters" style="width:20px; cursor:pointer;" /> &nbsp; Enrolled Non Transacting
+                <input type="radio" id="chkNonTxnBulkUpload" name="NonTxnsecondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Bulk Upload
+                <input type="radio" id="chkNonTxnReferal" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Referal
+                <input type="radio" id="chkNonTxnDLC" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;DLC
+            </div>
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvNonTxnDLC" style="display:none;">
+                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstDLCSource, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDLCSource" })&nbsp;
+            </div>
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvMemberAFilters" style="display:none;">
+                <input type="radio" id="chkMReferal" name="MemberAFilters" style="width: 20px; cursor: pointer;" /> &nbsp;Referal &nbsp;
+                <input type="radio" id="chkMDLC" name="MemberAFilters" style="width:20px; cursor:pointer;" /> &nbsp; DLC
+            </div>
+            <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvMemberAThirdFilters" style="display:none;">
+                <input type="radio" id="chkMAAll" name="MemberAThirdFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
+                <input type="radio" id="chkMATransacting" name="MemberAThirdFilters" style="width:20px; cursor:pointer;" /> &nbsp; Transacting &nbsp;
+                <input type="radio" id="chkMANonTransacting" name="MemberAThirdFilters" style="width:20px; cursor:pointer;" /> &nbsp; Non Transacting
+            </div>
+
+
             <div class="row mt-4 col-md-12 col-xl-12" id="dvAvgTicket">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkAvgTicket" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Average Ticket Size
-                    </div>
-                    <div class="col-xl-3">
-                        <input type="number" id="txtAvgTicket" class="input40" placeholder="Ticket size" disabled />
-                    </div>
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkAvgTicket" style="width:20px; height:20px; cursor:pointer;" />
                 </div>
-            
-
-                <div class="row mt-2 col-md-12 col-xl-12" id="dvEnrolledRange">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkEnrolledRange" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Enrolled Range
-                    </div>
-                    <div class="col-xl-8 row" id="divDateRange" style="margin-left:0px;">
-                        <input type="date" id="txtEnrollfromdt" class="input40" placeholder="From Enrolled" disabled />
-                        <input type="date" id="txtEnrolltodt" class="input40" placeholder="To Enrolled" disabled style="margin-left:5px;" />
-                    </div>
-
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Average Ticket Size
                 </div>
-
-                <div class="row mt-2 col-md-12 col-xl-12" id="dvInactive">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkInactiveSince" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Inactive since (days)
-                    </div>
-                    <div class="col-xl-3">
-                        <input type="number" id="txtNonTransactedMax" class="input40" placeholder="Enter days" disabled />
-                    </div>
+                <div class="col-xl-3">
+                    <input type="number" id="txtAvgTicket" class="input40" placeholder="Ticket size" disabled />
                 </div>
+            </div>
 
-                <div class="row mt-2 col-md-12 col-xl-12" id="dvSpend">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkSpend" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Spends (Rs.)
-                    </div>
-                    <div class="col-xl-6">
-                        <input type="number" id="txtSpendMin" class="input40" placeholder="From/Less than" disabled />
-                        <input type="number" id="txtSpendMax" class="input40" placeholder="To/More than" disabled />
-                    </div>
+            <div class="row mt-4 col-md-12 col-xl-12" id="dvEnrolledRange">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkEnrolledRange" style="width:20px; height:20px; cursor:pointer;" />
                 </div>
-
-                <div class="row mt-2 col-md-12 col-xl-12" id="dvTxnCount">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkTxnCount" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Transaction Count
-                    </div>
-                    <div class="col-xl-6">
-                        <input type="number" id="txtTxnCountMin" class="input40" placeholder="From/Less than" disabled />
-                        <input type="number" id="txtTxnCountMax" class="input40" placeholder="To/More than" disabled />
-                    </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Enrolled Range
                 </div>
-
-                <div class="row mt-2 col-md-12 col-xl-12" id="dvPointBalance">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkPointBalance" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Points Balance
-                    </div>
-                    <div class="col-xl-6">
-                        <input type="number" id="txtPointsBalMin" class="input40" placeholder="From/Less than" disabled />
-                        <input type="number" id="txtPointsBalMax" class="input40" placeholder="To/More than" disabled />
-                    </div>
+                <div class="col-xl-8 row" id="divDateRange" style="margin-left:0px;">
+                    <input type="date" id="txtEnrollfromdt" class="input40" placeholder="From Enrolled" disabled />
+                    <input type="date" id="txtEnrolltodt" class="input40" placeholder="To Enrolled" disabled style="margin-left:5px;" />
                 </div>
+            </div>
 
-                <div class="row mt-2 col-md-12 col-xl-12" style="padding-bottom:20px;" id="dvRedeemed">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkRedeemed" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Redeemed
-                    </div>
-                    <div class="col-xl-3">
-                        <input type="radio" id="rbtnRedeemed" name="RedeemedOrNot" style="width:20px;height:20px; cursor:pointer;" disabled />&nbsp; Yes
-                        <input type="radio" id="rbtnNonRedeemed" name="RedeemedOrNot" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" disabled />&nbsp; No
-                    </div>
+            <div class="row mt-2 col-md-12 col-xl-12" id="dvInactive">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkInactiveSince" style="width:20px; height:20px; cursor:pointer;" />
                 </div>
-
-                <hr id="hrProduct" style="border-top: dashed 1px;" />
-
-                <div class="row mt-2 col-md-12 col-xl-12" id="dvNeverPurchased">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkNeverPurchased" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Never Purchased
-                    </div>
-                    <div class="row col-xl-8 ml-0">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPCategory" })&nbsp;
-                        @Html.DropDownListFor(x => Model.dummySubCategory, new SelectList(Model.lstSubCategory, "Value", "Text"), "All SubCategory", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPSubCategory" })&nbsp;
-                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Products", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPProduct" })
-                    </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Inactive since (days)
                 </div>
-
-                <div class="row mt-2 col-md-12 col-xl-12" id="dvPurchased">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkPurchased" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Purchased
-                    </div>
-                    <div class="row col-xl-8 ml-0">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPCategory" })&nbsp;
-                        @Html.DropDownListFor(x => Model.dummySubCategory, new SelectList(Model.lstSubCategory, "Value", "Text"), "All SubCategory", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPSubCategory" })&nbsp;
-                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Products", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPProduct" })
-                    </div>
+                <div class="col-xl-3">
+                    <input type="number" id="txtNonTransactedMax" class="input40" placeholder="Enter days" disabled />
                 </div>
-                               
+            </div>
 
-           
+            <div class="row mt-2 col-md-12 col-xl-12" id="dvSpend">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkSpend" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Spends (Rs.)
+                </div>
+                <div class="col-xl-6">
+                    <input type="number" id="txtSpendMin" class="input40" placeholder="From/Less than" disabled />
+                    <input type="number" id="txtSpendMax" class="input40" placeholder="To/More than" disabled />
+                </div>
+            </div>
+
+            <div class="row mt-2 col-md-12 col-xl-12" id="dvTxnCount">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkTxnCount" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Transaction Count
+                </div>
+                <div class="col-xl-6">
+                    <input type="number" id="txtTxnCountMin" class="input40" placeholder="From/Less than" disabled />
+                    <input type="number" id="txtTxnCountMax" class="input40" placeholder="To/More than" disabled />
+                </div>
+            </div>
+
+            <div class="row mt-2 col-md-12 col-xl-12" id="dvPointBalance">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkPointBalance" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Points Balance
+                </div>
+                <div class="col-xl-6">
+                    <input type="number" id="txtPointsBalMin" class="input40" placeholder="From/Less than" disabled />
+                    <input type="number" id="txtPointsBalMax" class="input40" placeholder="To/More than" disabled />
+                </div>
+            </div>
+
+            <div class="row mt-2 col-md-12 col-xl-12" style="padding-bottom:20px;" id="dvRedeemed">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkRedeemed" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Redeemed
+                </div>
+                <div class="col-xl-3">
+                    <input type="radio" id="rbtnRedeemed" name="RedeemedOrNot" style="width:20px;height:20px; cursor:pointer;" disabled />&nbsp; Yes
+                    <input type="radio" id="rbtnNonRedeemed" name="RedeemedOrNot" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" disabled />&nbsp; No
+                </div>
+            </div>
+
+            <hr id="hrProduct" style="border-top: dashed 1px;" />
+
+            <div class="row mt-2 col-md-12 col-xl-12" id="dvNeverPurchased">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkNeverPurchased" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Never Purchased
+                </div>
+                <div class="row col-xl-8 ml-0">
+                    @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPCategory" })&nbsp;
+                    @Html.DropDownListFor(x => Model.dummySubCategory, new SelectList(Model.lstSubCategory, "Value", "Text"), "All SubCategory", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPSubCategory" })&nbsp;
+                    @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Products", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlNPProduct" })
+                </div>
+            </div>
+
+            <div class="row mt-2 col-md-12 col-xl-12" id="dvPurchased">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkPurchased" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Purchased
+                </div>
+                <div class="row col-xl-8 ml-0">
+                    @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPCategory" })&nbsp;
+                    @Html.DropDownListFor(x => Model.dummySubCategory, new SelectList(Model.lstSubCategory, "Value", "Text"), "All SubCategory", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPSubCategory" })&nbsp;
+                    @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Products", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlPProduct" })
+                </div>
+            </div>
+
             <hr id="hrBrand" style="border-top: dashed 1px;" />
-           
+
             <div class="row mt-2 col-md-12 col-xl-12" id="dvTier">
-                    <div class="col-xl-1">
-                        <input type="checkbox" id="chkTier" style="width:20px; height:20px; cursor:pointer;" />
-                    </div>
-                    <div class="col-xl-3" style="margin-left:-40px;">
-                        Tier
-                    </div>
-                    <div class="row col-xl-8 ml-0">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstTiers, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTier" })&nbsp;
-                        
-                    </div>
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkTier" style="width:20px; height:20px; cursor:pointer;" />
                 </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Tier
+                </div>
+                <div class="row col-xl-8 ml-0">
+                    @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstTiers, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTier" })&nbsp;
+
+                </div>
+            </div>
 
             <div class="row mt-2 col-md-12 col-xl-12" style="border-top:dashed solid grey;">
                 <div class="col-xl-1">
@@ -216,12 +230,73 @@
                 </div>
                 <div class="row col-xl-8 ml-0">
                     @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstOutlets, "Value", "Text"), new { @class = "input50", Multiple = "multiple", @disabled = "disabled", @id = "lstBoxOutlet" })
-
                 </div>
             </div>
 
+            <div class="row mt-2 col-md-12 col-xl-12">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkTOutlet" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Transacting Outlet
+                </div>
+                <div class="row col-xl-3 ml-0">
+                    @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstOutlets, "Value", "Text"), new { @class = "input50", Multiple = "multiple", @disabled = "disabled", @id = "lstBoxTOutlet" })
+                </div>
+                <div class="row col-xl-4 ml-0">
+                    <input type="radio" id="chkTOutletAnyOne" name="TOutlet" style="width: 20px; cursor: pointer;" disabled /> <span style="padding-top:41px;">&nbsp;Anyone &nbsp;</span>
+                    <input type="radio" id="chkTOutletLast" name="TOutlet" style="width:20px; cursor:pointer;" disabled /> <span style="padding-top:41px;">&nbsp;Last &nbsp;</span>
+                </div>
+            </div>
+
+            <hr id="hrDemography" style="border-top: dashed 1px;" />
+
+            <div class="row mt-4 col-md-12 col-xl-12" id="dvGender">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkGender" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Gender
+                </div>
+                <div class="col-xl-8 row" style="margin-left:0px;">
+                    @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.Gender(), "Value", "Text"), "All", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlGender" })
+                </div>
+            </div>
+
+            <div class="row mt-2 col-md-12 col-xl-12" id="dvCity">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkCity" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    City
+                </div>
+                <div class="col-xl-8 row" style="margin-left:0px;">
+                    <input type="text" id="txtCity" class="input40" placeholder="City" disabled />
+                </div>
+            </div>
+
+            <div class="row mt-2 col-md-12 col-xl-12" id="dvAge">
+                <div class="col-xl-1">
+                    <input type="checkbox" id="chkAge" style="width:20px; height:20px; cursor:pointer;" />
+                </div>
+                <div class="col-xl-3" style="margin-left:-40px;">
+                    Age
+                </div>
+                <div class="col-xl-8 row" style="margin-left:0px;">
+                    <input type="number" id="txtAgefrom" class="input40" placeholder="Age From" disabled />
+                    <input type="number" id="txtAgeTo" class="input40" placeholder="Age To" disabled style="margin-left:5px;" />
+                </div>
+            </div>
+
+            <hr id="hrDemography" style="border-top: dashed 1px;" />
+
+            <div class="row mt-4 col-md-12 col-xl-12">
+                <button id="btnFilter" class="btn btn-primary login-btn">Filter</button>
+                <button id="btnGenerate" class="btn btn-primary login-btn ml-2">Generate Report</button>
+                <button id="btnSave" class="btn btn-primary login-btn ml-2">Save For Campaign</button>
+            </div>
         </div>
-    </div>
+        </div>
 </div>
 
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
@@ -236,23 +311,27 @@
             ShowSecondFilters();
         });
 
-        $("#chkOutlet").on('change', function () {
-            if ($("#chkOutlet").is(":checked")) {
-                $("#lstBoxOutlet").prop("disabled", false);
-            }
-            else {
-                $("#lstBoxOutlet").prop("disabled", true);
-                $("#lstBoxOutlet")[0].selectedIndex = -1;
-            }
+        $("#btnFilter").click(function () {
+            GetDataToFilter();           
+        });
+
+        $("#btnGenerate").click(function () {
+            alert("Generate");
+        });
+        $("#btnSave").click(function () {
+            alert("Save");
         });
         EnableDisableControls();
+
+        document.getElementById("btnGenerate").disabled = "disabled";
+        document.getElementById("btnSave").disabled = "disabled";
     });
 
     function EnableDisableControls() {
 
         $("#chkAvgTicket").on('change', function () {
             if ($("#chkAvgTicket").is(":checked")) {
-                $("#txtAvgTicket").prop('disabled', false);                
+                $("#txtAvgTicket").prop('disabled', false);
             }
             else {
                 $("#txtAvgTicket").prop('disabled', true);
@@ -272,7 +351,7 @@
 
         $("#chkInactiveSince").on('change', function () {
             if ($("#chkInactiveSince").is(":checked")) {
-                $("#txtNonTransactedMax").prop('disabled', false);                
+                $("#txtNonTransactedMax").prop('disabled', false);
             }
             else {
                 $("#txtNonTransactedMax").prop('disabled', true);
@@ -369,59 +448,125 @@
 
         $("#chkOutlet").on('change', function () {
             if ($("#chkOutlet").is(":checked")) {
-                $("#lstBoxOutlet").prop('disabled', false);
+                $("#lstBoxOutlet").prop("disabled", false);
             }
             else {
-                $("#lstBoxOutlet").prop('disabled', true);
+                $("#lstBoxOutlet").prop("disabled", true);
+                $("#lstBoxOutlet")[0].selectedIndex = -1;
             }
         });
-     
+
+        $("#chkTOutlet").on('change', function () {
+            if ($("#chkTOutlet").is(":checked")) {
+                $("#lstBoxTOutlet").prop("disabled", false);
+                $("#chkTOutletAnyOne").prop("disabled", false);
+                $("#chkTOutletLast").prop("disabled", false);
+            }
+            else {
+                $("#chkTOutletAnyOne").prop("disabled", true);
+                $("#chkTOutletLast").prop("disabled", true);
+                $("#lstBoxTOutlet").prop("disabled", true);
+                $("#chkTOutletAnyOne").prop('checked', false);
+                $("#chkTOutletLast").prop('checked', false);
+                $("#lstBoxTOutlet")[0].selectedIndex = -1;
+            }
+        });
+
+        $("#chkGender").on('change', function () {
+            if ($("#chkGender").is(":checked")) {
+                $("#ddlGender").prop('disabled', false);
+            }
+            else {
+                $("#ddlGender").prop('disabled', true);
+            }
+        });
+
+        $("#chkCity").on('change', function () {
+            if ($("#chkCity").is(":checked")) {
+                $("#txtCity").prop('disabled', false);
+            }
+            else {
+                $("#txtCity").prop('disabled', true);
+            }
+        });
+
+        $("#chkAge").on('change', function () {
+            if ($("#chkAge").is(":checked")) {
+                $("#txtAgefrom").prop('disabled', false);
+                $("#txtAgeTo").prop('disabled', false);
+            }
+            else {
+                $("#txtAgefrom").prop('disabled', true);
+                $("#txtAgeTo").prop('disabled', true);
+            }
+        });
+
     }
 
     function ShowSecondFilters() {
         if ($("#chkTxnCumiulative").is(":checked")) {
             $("#dvCumulative").show();
-            
+
             $("#dvTxnOnlyOnce").hide();
             $("#dvTxnInactive").hide();
         }
         else {
             $("#dvCumulative").hide();
-            
         }
 
         if ($("#chkTransacting").is(":checked")) {
             ShowAll();
             $("#ddlOnlyOnce").val($("#ddlOnlyOnce option:first").val());
-            
-            
+            $("#dvNonTxnFilters").hide();
+            $("#dvNonTxnDLC").hide();
             $("#dvTxnFilters").show();
             $("#dvDLCReferalFilters").hide();
+            $("#dvMemberAFilters").hide();
+            $("#dvMemberAThirdFilters").hide();
             if ($("#chkTxnCumiulative").is(":checked")) {
                 $("#dvCumulative").show();
-               
             }
             else {
                 $("#dvCumulative").hide();
-                
             }
         }
         else if ($("#chkNonTransacting").is(":checked")) {
             ShowAll();
-            $("#dvTxnFilters").hide();            
+            $("#dvTxnFilters").hide();
             $("#dvTxnOnlyOnce").hide();
             $("#dvTxnInactive").hide();
             $("#dvCumulative").hide();
-            
+            $("#dvMemberAFilters").hide();
+            $("#dvNonTxnFilters").show();
+            $("#dvMemberAThirdFilters").hide();
+            if ($("#chkNonTxnAll").is(":checked") || $("#chkNonTxnEnrolled").is(":checked") || $("#chkNonTxnBulkUpload").is(":checked") || $("#chkNonTxnReferal").is(":checked") || $("#chkNonTxnDLC").is(":checked")) {
+                HideAll();
+                $("#dvEnrolledRange").show();
+                if ($("#chkNonTxnDLC").is(":checked")) {
+                    $("#dvNonTxnDLC").show();
+                }
+                else {
+                    $("#dvNonTxnDLC").hide();
+                }
+            }
         }
         else if ($("#chkMemberAcquition").is(":checked")) {
             ShowAll();
-            $("#dvTxnFilters").hide();            
+            $("#dvTxnFilters").hide();
             $("#dvTxnOnlyOnce").hide();
             $("#dvTxnInactive").hide();
             $("#dvCumulative").hide();
-            
-        }             
+            $("#dvNonTxnFilters").hide();
+            $("#dvNonTxnDLC").hide();
+            $("#dvMemberAFilters").show();
+            if ($("#chkMReferal").is(":checked") || $("#chkMDLC").is(":checked")) {
+                $("#dvMemberAThirdFilters").show();
+            }
+            if ($("#chkMANonTransacting").is(":checked")) {
+                HideAll();
+                $("#dvEnrolledRange").show();
+            }
+        }
     }
 
     $("#chkTxnOnlyOnce").on('change', function () {
@@ -446,7 +591,7 @@
     $("#ddlOnlyOnce").change(function () {
         if ($("#ddlOnlyOnce").val() != "") {
             if ($("#ddlOnlyOnce").val() != "6") {
-               /* $("#txnSection").hide();*/
+                /* $("#txnSection").hide();*/
                 $("#dvEnrolledRange").hide();
                 $("#dvTxnCount").hide();
                 $("#dvPointBalance").hide();
@@ -456,7 +601,7 @@
                 $("#dvInactive").hide();
                 $("#dvSpend").hide();
                 $("#hrProduct").hide();
-                
+
             }
             else {
                 /*$("#txnSection").show();*/
@@ -492,14 +637,13 @@
 
             }
             else {
-                ShowAll();                
+                ShowAll();
             }
         }
         else {
             ShowAll();
         }
     });
-
 
     $("#chkAll").change(function () {
         /*$("#txnSection").show();*/
@@ -529,7 +673,7 @@
     });
 
     function ShowAll() {
-        /*$("#txnSection").show();*/
+        $("#dvAvgTicket").show();
         $("#dvEnrolledRange").show();
         $("#dvTxnCount").show();
         $("#dvPointBalance").show();
@@ -539,6 +683,19 @@
         $("#dvInactive").show();
         $("#dvSpend").show();
         $("#hrProduct").show();
+    }
+
+    function HideAll() {
+        $("#dvAvgTicket").hide();
+        $("#dvEnrolledRange").hide();
+        $("#dvTxnCount").hide();
+        $("#dvPointBalance").hide();
+        $("#dvRedeemed").hide();
+        $("#dvNeverPurchased").hide();
+        $("#dvPurchased").hide();
+        $("#dvInactive").hide();
+        $("#dvSpend").hide();
+        $("#hrProduct").hide();
     }
 
     $("#ddlSpend").change(function () {
@@ -621,21 +778,25 @@
             $("#ddlSpendCumulative").prop('disabled', true);
             $("#txtCSpendCount").prop('disabled', true);
             $("#txtCSpendMonths").prop('disabled', true);
-        }        
+        }
     })
 
     $("#rbtnCSpend").on('change', function () {
         if ($("#rbtnCSpend").is(":checked")) {
-           $("#ddlTxnCumulative").prop('disabled', true);
+            $("#ddlTxnCumulative").prop('disabled', true);
             $("#txtCTxnCount").prop('disabled', true);
             $("#txtCTxnMonths").prop('disabled', true);
 
             $("#ddlSpendCumulative").prop('disabled', false);
             $("#txtCSpendCount").prop('disabled', false);
             $("#txtCSpendMonths").prop('disabled', false);
-        }       
+        }
     })
 
-
+    function GetDataToFilter() {
+        alert(111);
+        document.getElementById("btnGenerate").disabled = "";
+        document.getElementById("btnSave").disabled = "";
+    }
 
 </script>

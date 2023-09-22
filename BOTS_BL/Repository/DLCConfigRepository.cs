@@ -291,12 +291,12 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connStr))
                 {
                     objData = context.tblDLCProfileUpdateConfig_Publish.ToList();
-                    var custData = context.CustomerDetails.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
-                    var childData = context.CustomerChilds.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    var custData = context.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    //var childData = context.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
                     foreach (var item in objData)
                     {
                         if (item.FieldName == "Name")
-                            item.Value = custData.CustomerName;
+                            item.Value = custData.Name;
                         if (item.FieldName == "Gender")
                             item.Value = custData.Gender;
                         if (item.FieldName == "DateOfBirth")
@@ -304,16 +304,16 @@ namespace BOTS_BL.Repository
                             if (custData.DOB.HasValue)
                                 item.Value = custData.DOB.Value.ToString("yyyy/MM/dd");
                         }
-                        if (item.FieldName == "MaritalStatus")
-                            item.Value = custData.MaritalStatus;
-                        if (item.FieldName == "Email")
-                            item.Value = custData.EmailId;
-                        if (item.FieldName == "Area")
-                            item.Value = childData.Area;
-                        if (item.FieldName == "City")
-                            item.Value = childData.City;
-                        if (item.FieldName == "Pincode")
-                            item.Value = childData.Pincode;
+                        //if (item.FieldName == "MaritalStatus")
+                        //    item.Value = custData.MaritalStatus;
+                        //if (item.FieldName == "Email")
+                        //    item.Value = custData.Email;
+                        //if (item.FieldName == "Area")
+                        //    item.Value = custData.;
+                        //if (item.FieldName == "City")
+                        //    item.Value = custData.City;
+                        //if (item.FieldName == "Pincode")
+                        //    item.Value = childData;
                     }
                 }
             }
@@ -421,19 +421,24 @@ namespace BOTS_BL.Repository
             bool result = false;
             try
             {
-                Random r = new Random();
-                int randNum = r.Next(10000);
-                string fourDigitNumber = randNum.ToString("0000");
-                var OTPstatus = InsertOTP(groupId, MobileNo, Convert.ToInt32(fourDigitNumber));
-
-                var _MobileMessage = "Dear Member, " + Convert.ToInt32(fourDigitNumber) + "  is your OTP. Sample SMS for OTP - Blue Ocktopus ";
-                var _UserName = smsDetail.SMSLoginId;
-                var _Password = smsDetail.SMSPassword;
-                var _MobileNo = MobileNo;
-                var _Sender = smsDetail.SMSSenderId;
-                var _Url = smsDetail.SMSUrl;
-
-                result = SendSMS(_MobileMessage, _UserName, _Password, _MobileNo, _Sender, _Url);
+                string connStr = objCustRepo.GetCustomerConnString(groupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    Random r = new Random();
+                    int randNum = r.Next(10000);
+                    string fourDigitNumber = randNum.ToString("0000");
+                    var OTPstatus = InsertOTP(groupId, MobileNo, Convert.ToInt32(fourDigitNumber));
+                    var DLCSMSWAScript = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCMessageId == 107).FirstOrDefault();
+                    var _MobileMessage = DLCSMSWAScript.DLCSMSScript;//"Dear Member, " + Convert.ToInt32(fourDigitNumber) + "  is your OTP. Sample SMS for OTP - Blue Ocktopus ";
+                    _MobileMessage = _MobileMessage.Replace("#14", fourDigitNumber);
+                    var _UserName = smsDetail.SMSLoginId;
+                    var _Password = smsDetail.SMSPassword;
+                    var _MobileNo = MobileNo;
+                    var _Sender = smsDetail.SMSSenderId;
+                    var _Url = smsDetail.SMSUrl;
+                    newexception.AddDummyException(_MobileMessage);
+                    result = SendSMS(_MobileMessage, _UserName, _Password, _MobileNo, _Sender, _Url, smsDetail.SMSVendor, smsDetail.SMSAPIKey);
+                }
             }
             catch (Exception ex)
             {
@@ -468,38 +473,156 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-        public bool SendSMS(string _MobileMessage, string _UserName, string _Password, string _MobileNo, string _Sender, string _Url)
+        public bool SendSMS(string _MobileMessage, string _UserName, string _Password, string _MobileNo, string _Sender, string _Url, string _SMSVendor, string _SMSAPIKey)
         {
             bool status = false;
             try
             {
-                _MobileMessage = _MobileMessage.Replace("#99", "&");
-                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-                string type1 = "TEXT";
-                StringBuilder sbposdata1 = new StringBuilder();
-                sbposdata1.AppendFormat("username={0}", _UserName);
-                sbposdata1.AppendFormat("&password={0}", _Password);
-                sbposdata1.AppendFormat("&to={0}", _MobileNo);
-                sbposdata1.AppendFormat("&from={0}", _Sender);//BLUEOC
-                sbposdata1.AppendFormat("&text={0}", _MobileMessage);
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(_Url);
-                UTF8Encoding encoding1 = new UTF8Encoding();
-                byte[] data1 = encoding1.GetBytes(sbposdata1.ToString());
-                httpWReq1.Method = "POST";
-                httpWReq1.ContentType = "application/x-www-form-urlencoded";
-                httpWReq1.ContentLength = data1.Length;
-                using (Stream stream1 = httpWReq1.GetRequestStream())
+                switch (_SMSVendor)
                 {
-                    stream1.Write(data1, 0, data1.Length);
+                    case "TechnoCore":
+
+                        string date_TechnoCoreText = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+
+                        _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                        string type_TechnoCoreText = "text";
+                        StringBuilder sbposdata_TechnoCoreText = new StringBuilder();
+                        sbposdata_TechnoCoreText.AppendFormat("userid={0}", _UserName);
+                        sbposdata_TechnoCoreText.AppendFormat("&password={0}", _Password);
+                        sbposdata_TechnoCoreText.AppendFormat("&sendMethod={0}", "quick");
+                        sbposdata_TechnoCoreText.AppendFormat("&mobile={0}", _MobileNo);
+                        sbposdata_TechnoCoreText.AppendFormat("&msg={0}", _MobileMessage);
+                        sbposdata_TechnoCoreText.AppendFormat("&senderid={0}", _Sender);
+                        sbposdata_TechnoCoreText.AppendFormat("&msgType={0}", type_TechnoCoreText);
+                        sbposdata_TechnoCoreText.AppendFormat("&format={0}", type_TechnoCoreText);
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                        ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                        HttpWebRequest httpWReq_TechnoCoreText = (HttpWebRequest)WebRequest.Create(_Url);
+                        UTF8Encoding encoding_TechnoCoreText = new UTF8Encoding();
+                        byte[] data_TechnoCoreText = encoding_TechnoCoreText.GetBytes(sbposdata_TechnoCoreText.ToString());
+                        httpWReq_TechnoCoreText.Method = "POST";
+                        httpWReq_TechnoCoreText.ContentType = "application/x-www-form-urlencoded";
+                        httpWReq_TechnoCoreText.ContentLength = data_TechnoCoreText.Length;
+                        using (Stream stream_TechnoCoreText = httpWReq_TechnoCoreText.GetRequestStream())
+                        {
+                            stream_TechnoCoreText.Write(data_TechnoCoreText, 0, data_TechnoCoreText.Length);
+                        }
+                        HttpWebResponse response_TechnoCoreText = (HttpWebResponse)httpWReq_TechnoCoreText.GetResponse();
+                        StreamReader reader_TechnoCoreText = new StreamReader(response_TechnoCoreText.GetResponseStream());
+                        string responseString_TechnoCoreText = reader_TechnoCoreText.ReadToEnd();
+                        reader_TechnoCoreText.Close();
+                        response_TechnoCoreText.Close();
+                        break;
+                    case "Vision":
+
+                        var httpWebRequest_VisionText = (HttpWebRequest)WebRequest.Create(_Url);
+                        httpWebRequest_VisionText.ContentType = "application/json";
+                        httpWebRequest_VisionText.Method = "POST";
+
+                        using (var streamWriter_VisionText = new StreamWriter(httpWebRequest_VisionText.GetRequestStream()))
+                        {
+                            string json_VisionText = "{\"Account\":" +
+                                            "{\"APIKey\":\"" + _SMSAPIKey + "\"," +
+                                            "\"SenderId\":\"" + _Sender + "\"," +
+                                            "\"Channel\":\"Trans\"," +
+                                            "\"DCS\":\"0\"," +
+                                            "\"SchedTime\":null," +
+                                            "\"GroupId\":null}," +
+                                            "\"Messages\":[{\"Number\":\"" + _MobileNo + "\"," +
+                                            "\"Text\":\"" + _MobileMessage + "\"}]" +
+                                            "}";
+                            streamWriter_VisionText.Write(json_VisionText);
+                        }
+                        var httpResponse_VisionText = (HttpWebResponse)httpWebRequest_VisionText.GetResponse();
+                        using (var streamReader_VisionText = new StreamReader(httpResponse_VisionText.GetResponseStream()))
+                        {
+                            var result_VisionText = streamReader_VisionText.ReadToEnd();
+                        }
+
+                        break;
+                    case "Pinnacle":
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                        ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                        var httpWebRequest_PinnacleText = (HttpWebRequest)WebRequest.Create(_Url);
+                        httpWebRequest_PinnacleText.ContentType = "application/json";
+                        httpWebRequest_PinnacleText.Headers.Add("Apikey", _Password);
+                        httpWebRequest_PinnacleText.Method = "POST";
+
+                        using (var streamWriter_PinnacleText = new StreamWriter(httpWebRequest_PinnacleText.GetRequestStream()))
+                        {
+                            string json_PinnacleText = "{\"sender\":\"" + _Sender + "\"," +
+                            "\"message\":[{\"number\":\"" + _MobileNo + "\"," +
+                             "\"text\":\"" + _MobileMessage + "\"}]," + "\"messagetype\":\"TXT\"," + "\"dltentityid\":null ," + "\"dlttempid\":null}";
+                            streamWriter_PinnacleText.Write(json_PinnacleText);
+                        }
+                        var httpResponse_PinnacleText = (HttpWebResponse)httpWebRequest_PinnacleText.GetResponse();
+                        using (var streamReader_PinnacleText = new StreamReader(httpResponse_PinnacleText.GetResponseStream()))
+                        {
+                            var result_PinnacleText = streamReader_PinnacleText.ReadToEnd();
+                        }
+
+                        break;
+                    case "ValueFirst":
+                        string type_ValueFirstText = "TEXT";
+                        StringBuilder sbposdata_ValueFirstText = new StringBuilder();
+                        sbposdata_ValueFirstText.AppendFormat("username={0}", _UserName);
+                        sbposdata_ValueFirstText.AppendFormat("&password={0}", _Password);
+                        sbposdata_ValueFirstText.AppendFormat("&to={0}", _MobileNo);
+                        sbposdata_ValueFirstText.AppendFormat("&from={0}", _Sender);
+                        sbposdata_ValueFirstText.AppendFormat("&text={0}", _MobileMessage);
+                        ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                        ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                        HttpWebRequest httpWReq_ValueFirstText = (HttpWebRequest)WebRequest.Create(_Url);
+                        UTF8Encoding encoding_ValueFirstText = new UTF8Encoding();
+                        byte[] data_ValueFirstText = encoding_ValueFirstText.GetBytes(sbposdata_ValueFirstText.ToString());
+                        httpWReq_ValueFirstText.Method = "POST";
+                        httpWReq_ValueFirstText.ContentType = "application/x-www-form-urlencoded";
+                        httpWReq_ValueFirstText.ContentLength = data_ValueFirstText.Length;
+                        using (Stream stream_ValueFirstText = httpWReq_ValueFirstText.GetRequestStream())
+                        {
+                            stream_ValueFirstText.Write(data_ValueFirstText, 0, data_ValueFirstText.Length);
+                        }
+                        HttpWebResponse response_ValueFirstText = (HttpWebResponse)httpWReq_ValueFirstText.GetResponse();
+                        StreamReader reader_ValueFirstText = new StreamReader(response_ValueFirstText.GetResponseStream());
+                        string responseString_ValueFirstText = reader_ValueFirstText.ReadToEnd();
+                        reader_ValueFirstText.Close();
+                        response_ValueFirstText.Close();
+                        break;
                 }
-                HttpWebResponse response1 = (HttpWebResponse)httpWReq1.GetResponse();
-                StreamReader reader1 = new StreamReader(response1.GetResponseStream());
-                string responseString1 = reader1.ReadToEnd();
-                reader1.Close();
-                response1.Close();
+
+
+
+
+                //_MobileMessage = _MobileMessage.Replace("#99", "&");
+                //_MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                //string type1 = "TEXT";
+                //StringBuilder sbposdata1 = new StringBuilder();
+                //sbposdata1.AppendFormat("username={0}", _UserName);
+                //sbposdata1.AppendFormat("&password={0}", _Password);
+                //sbposdata1.AppendFormat("&to={0}", _MobileNo);
+                //sbposdata1.AppendFormat("&from={0}", _Sender);//BLUEOC
+                //sbposdata1.AppendFormat("&text={0}", _MobileMessage);
+                //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                //ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                //HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(_Url);
+                //UTF8Encoding encoding1 = new UTF8Encoding();
+                //byte[] data1 = encoding1.GetBytes(sbposdata1.ToString());
+                //httpWReq1.Method = "POST";
+                //httpWReq1.ContentType = "application/x-www-form-urlencoded";
+                //httpWReq1.ContentLength = data1.Length;
+                //newexception.AddDummyException("Start SMS");
+
+                //using (Stream stream1 = httpWReq1.GetRequestStream())
+                //{
+                //    stream1.Write(data1, 0, data1.Length);
+                //}
+                //HttpWebResponse response1 = (HttpWebResponse)httpWReq1.GetResponse();
+                //StreamReader reader1 = new StreamReader(response1.GetResponseStream());
+                //string responseString1 = reader1.ReadToEnd();
+                //reader1.Close();
+                //response1.Close();
                 status = true;
+                newexception.AddDummyException("End SMS");
             }
             catch (Exception ex)
             {
@@ -704,7 +827,7 @@ namespace BOTS_BL.Repository
 
         public DLCSPResponse GiveGiftPoints(string MobileNo, string BrandId, string RecipientName, string RecipientNo, string GiftPoints, string groupId)
         {
-            DLCSPResponse objResult = new DLCSPResponse();            
+            DLCSPResponse objResult = new DLCSPResponse();
             string DBName = String.Empty;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             using (var context = new CommonDBContext())
@@ -718,7 +841,7 @@ namespace BOTS_BL.Repository
                     var result = context.Database.SqlQuery<DLCSPResponse>("sp_DLCGiftingPoints @pi_MobileNo, @pi_BrandId, @pi_Datetime, @pi_GiftingPersonMobileNo, @pi_GiftingPersonName, @pi_GiftingPoints,@pi_OTPValue,@pi_DBName",
                                new SqlParameter("@pi_MobileNo", MobileNo),
                                new SqlParameter("@pi_BrandId", BrandId),
-                               new SqlParameter("@pi_Datetime", DateTime.Now),
+                               new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd")),
                                new SqlParameter("@pi_GiftingPersonMobileNo", RecipientNo),
                                new SqlParameter("@pi_GiftingPersonName", RecipientName),
                                new SqlParameter("@pi_GiftingPoints", GiftPoints),
@@ -735,7 +858,7 @@ namespace BOTS_BL.Repository
                             }
                         }
                         objResult = item;
-                    }                    
+                    }
                 }
                 catch (Exception ex)
                 {

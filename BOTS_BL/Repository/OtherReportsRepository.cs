@@ -467,5 +467,29 @@ namespace BOTS_BL.Repository
             }
             return lstTiers;
         }
+        public List<SelectListItem> GetDLCSourceList(string connstr)
+        {
+            List<SelectListItem> lstDLCSource = new List<SelectListItem>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    var outletList = context.tblDLCCampaignMasters.Where(x => x.DLCName != "BaseUrl").ToList();
+                    foreach (var item in outletList)
+                    {
+                        lstDLCSource.Add(new SelectListItem
+                        {
+                            Text = Convert.ToString(item.DLCName),
+                            Value = Convert.ToString(item.DLCName)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBrandList");
+            }
+            return lstDLCSource;
+        }
     }
 }

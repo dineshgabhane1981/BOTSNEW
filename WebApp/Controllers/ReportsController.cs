@@ -1669,6 +1669,7 @@ namespace WebApp.Controllers
             objData.lstBrands = RR.GetBrandList(userDetails.GroupId, userDetails.connectionString);
             objData.lstOutlets = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             objData.lstTiers = ORR.GetTierList(userDetails.connectionString);
+            objData.lstDLCSource = ORR.GetDLCSourceList(userDetails.connectionString);
             SelectListItem item = new SelectListItem();
             item.Value = "0";
             item.Text = "All";

@@ -340,7 +340,6 @@
     <Compile Include="Models\IndividualDBModels\ITCSMessage.cs" />
     <Compile Include="Models\IndividualDBModels\ListReferringBase.cs" />
     <Compile Include="Models\IndividualDBModels\MemberListAllData.cs" />
-    <Compile Include="Models\IndividualDBModels\Model2.cs" />
     <Compile Include="Models\IndividualDBModels\PointExpiryDummyModel.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpCustDetailList.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpMasterAllData.cs" />
@@ -362,6 +361,7 @@
     <Compile Include="Models\IndividualDBModels\tblCustomerDataCollection.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustPointsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustTxnSummaryMaster.cs" />
+    <Compile Include="Models\IndividualDBModels\tblDLCCampaignMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCFrontEndPageData.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCFrontEndPageDataReferTNC.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCFrontEndPageDataTNC.cs" />

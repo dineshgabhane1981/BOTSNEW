@@ -52,7 +52,7 @@ namespace DLC.Controllers
                 {
                     return View("UnauthorizedURL");
                 }
-                objData.lstDLCFrontEndPageData = DCR.GetDLCFrontEndPageData(groupId);
+                //objData.lstDLCFrontEndPageData = DCR.GetDLCFrontEndPageData(groupId);
                 SessionVariables objVariable = new SessionVariables();
                 objVariable.objDashboardConfig = objData.objDashboardConfig;
                 objVariable.GroupId = groupId;
