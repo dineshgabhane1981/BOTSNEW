@@ -1477,36 +1477,36 @@ namespace BOTS_BL.Repository
                             }
                             break;
                         default:
-                            string date = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+                            string date_00000 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
                             _MobileMessage = _MobileMessage.Replace("#99", "&");
                             _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-                            string type = "text";
-                            StringBuilder sbposdata = new StringBuilder();
-                            sbposdata.AppendFormat("userid={0}", _UserName);
-                            sbposdata.AppendFormat("&password={0}", _Password);
-                            sbposdata.AppendFormat("&sendMethod={0}", "quick");
-                            sbposdata.AppendFormat("&mobile={0}", _MobileNo);
-                            sbposdata.AppendFormat("&msg={0}", _MobileMessage);
-                            sbposdata.AppendFormat("&senderid={0}", _Sender);
-                            sbposdata.AppendFormat("&msgType={0}", type);
-                            sbposdata.AppendFormat("&format={0}", type);
+                            string type_00000 = "text";
+                            StringBuilder sbposdata_00000 = new StringBuilder();
+                            sbposdata_00000.AppendFormat("userid={0}", _UserName);
+                            sbposdata_00000.AppendFormat("&password={0}", _Password);
+                            sbposdata_00000.AppendFormat("&sendMethod={0}", "quick");
+                            sbposdata_00000.AppendFormat("&mobile={0}", _MobileNo);
+                            sbposdata_00000.AppendFormat("&msg={0}", _MobileMessage);
+                            sbposdata_00000.AppendFormat("&senderid={0}", _Sender);
+                            sbposdata_00000.AppendFormat("&msgType={0}", type_00000);
+                            sbposdata_00000.AppendFormat("&format={0}", type_00000);
                             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
                             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                            HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(_Url);
-                            UTF8Encoding encoding = new UTF8Encoding();
-                            byte[] data = encoding.GetBytes(sbposdata.ToString());
-                            httpWReq.Method = "POST";
-                            httpWReq.ContentType = "application/x-www-form-urlencoded";
-                            httpWReq.ContentLength = data.Length;
-                            using (Stream stream = httpWReq.GetRequestStream())
+                            HttpWebRequest httpWReq_00000 = (HttpWebRequest)WebRequest.Create(_Url);
+                            UTF8Encoding encoding_00000 = new UTF8Encoding();
+                            byte[] data_00000 = encoding_00000.GetBytes(sbposdata_00000.ToString());
+                            httpWReq_00000.Method = "POST";
+                            httpWReq_00000.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq_00000.ContentLength = data_00000.Length;
+                            using (Stream stream_00000 = httpWReq_00000.GetRequestStream())
                             {
-                                stream.Write(data, 0, data.Length);
+                                stream_00000.Write(data_00000, 0, data_00000.Length);
                             }
-                            HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
-                            StreamReader reader = new StreamReader(response.GetResponseStream());
-                            string responseString = reader.ReadToEnd();
-                            reader.Close();
-                            response.Close();
+                            HttpWebResponse response_00000 = (HttpWebResponse)httpWReq_00000.GetResponse();
+                            StreamReader reader_00000 = new StreamReader(response_00000.GetResponseStream());
+                            string responseString_00000 = reader_00000.ReadToEnd();
+                            reader_00000.Close();
+                            response_00000.Close();
                             break;
                     }
                 }

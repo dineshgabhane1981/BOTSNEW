@@ -310,7 +310,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             var SMSGatewayDetails = CMPR.GatewayDetails(userDetails.GroupId, userDetails.connectionString);
-            //var DataTemp = CMPR.GetWAInsData(userDetails.GroupId, userDetails.connectionString);
+            var DataTemp = CMPR.GetWAInsData(userDetails.GroupId, userDetails.connectionString);
             ObjviewModel.LstSMSCost = CMPR.GetSMSCost();
             try
             {
@@ -821,7 +821,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveDataWA(string jsonData)
+        public JsonResult SaveDataWAPromo(string jsonData)
         {
             List<CampaignSaveDetails> SaveData = new List<CampaignSaveDetails>();
             CampaignRepository CR = new CampaignRepository();
@@ -854,7 +854,7 @@ namespace WebApp.Controllers
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "SaveDataWA");
+                newexception.AddException(ex, "SaveDataWAPromo");
             }
 
             return new JsonResult() { Data = SaveData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
