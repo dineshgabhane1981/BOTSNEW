@@ -25,10 +25,10 @@ namespace BOTS_BL.Models
         public string EnrolledOutlet { get; set; }
         public string CelebrationDate { get; set; }
         public string FirstTxnDate { get; set; }
-        public int TotalTxnCount { get; set; }
-        public Int64 BusinessGenerated { get; set; }
-        public Int64 BonusPointsIssued { get; set; }
-        public Int64 BonusPointsRedeem { get; set; }
+        public int? TotalTxnCount { get; set; }
+        public Int64? BusinessGenerated { get; set; }
+        public Int64? BonusPointsIssued { get; set; }
+        public Int64? BonusPointsRedeem { get; set; }
         public decimal? ExpiredPoints { get; set; }
     }
 }

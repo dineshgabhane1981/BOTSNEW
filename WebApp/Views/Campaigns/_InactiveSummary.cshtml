@@ -44,25 +44,21 @@
 
 <script>
     $(document).ready(function () {
-        var table1 = $('#tblInactiveSummary').DataTable();
-        table1.destroy();
-        var table = $('#tblInactiveSummary').DataTable({
-            "bAutoWidth": false,
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "bFilter": false,
+        $('#tblInactiveSummary').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
             "pageLength": 25,
             "pagingType": "simple_numbers",
-            "columns": [
-                { data: "CelebrationType" },
-                { data: "TotalMemberCount" },
-                { data: "UniqueMemberTxnCount" },                
-                { data: "BusinessGenerated" }
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
             ]
         });
-        $('#tblInactiveSummary_filter').hide();
-
         var table = $('#tblInactiveSummary').DataTable();
         table.draw();
 

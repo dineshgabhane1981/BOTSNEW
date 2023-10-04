@@ -52,28 +52,21 @@
 
 <script>
     $(document).ready(function () {
-        var table1 = $('#tblPointExpirySummary').DataTable();
-        table1.destroy();
-        var table = $('#tblPointExpirySummary').DataTable({
-            "bAutoWidth": false,
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "bFilter": false,
+        $('#tblPointExpirySummary').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
             "pageLength": 25,
             "pagingType": "simple_numbers",
-            "columns": [
-                { data: "CelebrationType" },
-                { data: "TotalMemberCount" },
-                { data: "PointsToBeExpired" },
-                { data: "UniqueMemberTxnCount" },
-                { data: "PointsRedeemed" },
-                { data: "BusinessGenerated" },
-                { data: "PointsExpired" }
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
             ]
         });
-        $('#tblPointExpirySummary_filter').hide();
-
         var table = $('#tblPointExpirySummary').DataTable();
         table.draw();
 

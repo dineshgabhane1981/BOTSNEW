@@ -46,8 +46,8 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connstr))
                 {
                     context.Database.CommandTimeout = 120;
-                    if (GroupId == "1087")
-                    {
+                    //if (GroupId == "1087")
+                    //{
                         var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
                         dataDashboard.TotalBiz = Convert.ToInt64(AllData.Sum(x => x.TotalSpend));
                         dataDashboard.Redemption = AllData.Sum(x => x.BurnAmtWithPts);
@@ -66,12 +66,12 @@ namespace BOTS_BL.Repository
                             lstOutletDetails.Add(newItem);
                         }
                         dataDashboard.lstOutletDetails = lstOutletDetails;
-                    }
-                    else
-                    {
-                        dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date,@pi_LoginId,@pi_Month,@pi_Year,@pi_OutletId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", LoginId), new SqlParameter("@pi_Month", ""), new SqlParameter("@pi_Year", ""), new SqlParameter("@pi_OutletId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<ExecutiveSummary>();
-                        dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date,@pi_LoginId,@pi_Month,@pi_Year,@pi_OutletId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", LoginId), new SqlParameter("@pi_Month", ""), new SqlParameter("@pi_Year", ""), new SqlParameter("@pi_OutletId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<ExecutiveSummary>();
+                    //    dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
+                    //}
                 }
                 using (var context = new CommonDBContext())
                 {
@@ -145,8 +145,8 @@ namespace BOTS_BL.Repository
                     {
                         dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberSegment>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         var dateToCheck = DateTime.Today.AddDays(-30);
                         var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
                         if (string.IsNullOrEmpty(OutletId))
@@ -170,13 +170,13 @@ namespace BOTS_BL.Repository
 
                         var total = dashboardMemberSegment.NoofMember_Repeat + dashboardMemberSegment.NoofMember_NeverRedeem + dashboardMemberSegment.NoofMember_OnlyOnce + dashboardMemberSegment.NoofMember_RecentlyEnrolled + dashboardMemberSegment.NoofMember_NotTransacted;
                         total = total + 1;
-                    }
-                    else
-                    {
-                        context.Database.CommandTimeout = 120;
-                        dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberSegment>();
-                        dashboardMemberSegment.NoofMember_NotTransacted = 0;
-                    }
+                    //}
+                    //else
+                    //{
+                    //    context.Database.CommandTimeout = 120;
+                    //    dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberSegment>();
+                    //    dashboardMemberSegment.NoofMember_NotTransacted = 0;
+                    //}
 
 
                     //DateTime? FromDate;
@@ -438,8 +438,8 @@ namespace BOTS_BL.Repository
                     {
                         dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
                         var outlets = context.tblOutletMasters.ToList();
                         foreach (var item in outlets)
@@ -460,11 +460,11 @@ namespace BOTS_BL.Repository
                                 dashboardOutletEnrolment.Add(newItem);
                             }
                         }
-                    }
-                    else
-                    {
-                        dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
+                    //}
                 }
             }
             catch (Exception ex)
@@ -482,21 +482,21 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connstr))
                 {
                     context.Database.CommandTimeout = 120;
-                    if (GroupId == "1087")
-                    {
+                    //if (GroupId == "1087")
+                    //{
                         using (var contextnew = new CommonDBContext())
                         {
-                            //var DBName = contextnew.GroupDetail.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-                            var DBName = "MadhusudanTextiles_New";
-                            dashboardPointsSummary = contextnew.Database.SqlQuery<DashboardPointsSummary>("sp_DashboardPointsSummary @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate,@pi_DBName", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag),
+                        var DBName = contextnew.GroupDetail.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                        //var DBName = "MadhusudanTextiles_New";
+                        dashboardPointsSummary = contextnew.Database.SqlQuery<DashboardPointsSummary>("sp_DashboardPointsSummary @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate,@pi_DBName", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag),
                                new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate), new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<DashboardPointsSummary>();
                         }
-                    }
-                    else
-                    {
-                        dashboardPointsSummary = context.Database.SqlQuery<DashboardPointsSummary>("sp_BOTS_DashboardPointsSummary @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag),
-                            new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardPointsSummary>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    dashboardPointsSummary = context.Database.SqlQuery<DashboardPointsSummary>("sp_BOTS_DashboardPointsSummary @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag),
+                    //        new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardPointsSummary>();
+                    //}
                 }
             }
             catch (Exception ex)
@@ -518,8 +518,8 @@ namespace BOTS_BL.Repository
                     {
                         dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberWebPage>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
                         dashboardMemberWebPage.MemberBase = AllData.Count();
                         dashboardMemberWebPage.ReferringBase = context.Database.SqlQuery<ExecutiveSummaryAllData>("select distinct count(ReferredByMobileNo) from tblDLCReporting").ToList().Count();
@@ -528,11 +528,11 @@ namespace BOTS_BL.Repository
                         dashboardMemberWebPage.ReferralTxnCount = Convert.ToInt64(context.tblDLCReportings.Sum(x => x.ReferralTotalTxnCount));
                         dashboardMemberWebPage.BusinessGenerated = Convert.ToInt64(context.tblDLCReportings.Sum(x => x.ReferralTotalSpend));
                         dashboardMemberWebPage.ProfileUpdatedCount = context.tblDLCProfileUpdatedLists.Count();
-                    }
-                    else
-                    {
-                        dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberWebPage>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    dashboardMemberWebPage = context.Database.SqlQuery<DashboardMemberWebPage>("sp_BOTS_DashboardMemberWebPage @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", profileFlag), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberWebPage>();
+                    //}
 
 
                 }
@@ -560,8 +560,8 @@ namespace BOTS_BL.Repository
                             new SqlParameter("@pi_FromDate", frmDate),
                             new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
                         objDashboardBulkUpload.TotalUpload = AllData.Where(x => x.EnrolledBy == "BulkUpload").Count();
                         objDashboardBulkUpload.UniqueTransacted = AllData.Where(x => x.EnrolledBy == "BulkUpload" && x.TotalTxnCount == 1).Count();
@@ -569,16 +569,16 @@ namespace BOTS_BL.Repository
                         objDashboardBulkUpload.BusinessGenerated = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "BulkUpload").Sum(y => y.TotalSpend));
                         objDashboardBulkUpload.PieChartYellow = objDashboardBulkUpload.TotalUpload;
                         objDashboardBulkUpload.PieChartGreen = (objDashboardBulkUpload.UniqueTransacted * 100) / objDashboardBulkUpload.TotalUpload;
-                    }
-                    else
-                    {
+                    //}
+                    //else
+                    //{
 
-                        objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                            new SqlParameter("@pi_LoginId", ""),
-                            new SqlParameter("@pi_FromDate", frmDate),
-                            new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
-                    }
+                    //    objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
+                    //        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //        new SqlParameter("@pi_LoginId", ""),
+                    //        new SqlParameter("@pi_FromDate", frmDate),
+                    //        new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
+                    //}
                 }
             }
             catch (Exception ex)
@@ -606,15 +606,15 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_FromDate", frmDate),
                         new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardRedemption>();
                     }
-                    if (GroupId == "1087")
-                    {
+                    //if (GroupId == "1087")
+                    //{
                         using (var contextNew = new CommonDBContext())
                         {
                             contextNew.Database.CommandTimeout = 120;
-                            //var DBName = contextnew.GroupDetail.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-                            var DBName = "MadhusudanTextiles_New";
+                        var DBName = contextNew.GroupDetail.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                        //var DBName = "MadhusudanTextiles_New";
 
-                            objDashboardRedemption = contextNew.Database.SqlQuery<DashboardRedemption>("sp_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type,@pi_FromDate,@pi_ToDate,@pi_DBName", new SqlParameter("@pi_GroupId", GroupId),
+                        objDashboardRedemption = contextNew.Database.SqlQuery<DashboardRedemption>("sp_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type,@pi_FromDate,@pi_ToDate,@pi_DBName", new SqlParameter("@pi_GroupId", GroupId),
                             new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
                             new SqlParameter("@pi_LoginId", loginId),
                             new SqlParameter("@pi_Type", Type),
@@ -622,16 +622,16 @@ namespace BOTS_BL.Repository
                             new SqlParameter("@pi_ToDate", toDate),
                              new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<DashboardRedemption>();
                         }
-                    }
-                    else
-                    {
-                        objDashboardRedemption = context.Database.SqlQuery<DashboardRedemption>("sp_BOTS_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_Type", Type),
-                        new SqlParameter("@pi_FromDate", frmDate),
-                        new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardRedemption>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    objDashboardRedemption = context.Database.SqlQuery<DashboardRedemption>("sp_BOTS_DashboardRedemption @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Type,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //    new SqlParameter("@pi_LoginId", ""),
+                    //    new SqlParameter("@pi_Type", Type),
+                    //    new SqlParameter("@pi_FromDate", frmDate),
+                    //    new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardRedemption>();
+                    //}
 
                 }
             }
@@ -660,13 +660,13 @@ namespace BOTS_BL.Repository
                            new SqlParameter("@pi_FromDate", frmDate),
                            new SqlParameter("@pi_ToDate", toDate)).ToList<DashboardBizShared>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         using (var contextnew = new CommonDBContext())
                         {
                             contextnew.Database.CommandTimeout = 120;
-                            //var DBName = contextnew.GroupDetail.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-                            var DBName = "MadhusudanTextiles_New";
+                        var DBName = contextnew.GroupDetail.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                        //var DBName = "MadhusudanTextiles_New";
                             lstBizShared = contextnew.Database.SqlQuery<DashboardBizShared>("sp_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_FromDate,@pi_ToDate,@pi_DBName",
                            new SqlParameter("@pi_GroupId", GroupId),
                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
@@ -676,17 +676,17 @@ namespace BOTS_BL.Repository
                            new SqlParameter("@pi_ToDate", toDate),
                            new SqlParameter("@pi_DBName", DBName)).ToList<DashboardBizShared>();
                         }
-                    }
-                    else
-                    {
-                        lstBizShared = context.Database.SqlQuery<DashboardBizShared>("sp_BOTS_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_FromDate,@pi_ToDate",
-                            new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                            new SqlParameter("@pi_LoginId", ""),
-                            new SqlParameter("@pi_OutletId", OutletId),
-                            new SqlParameter("@pi_FromDate", frmDate),
-                            new SqlParameter("@pi_ToDate", toDate)).ToList<DashboardBizShared>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    lstBizShared = context.Database.SqlQuery<DashboardBizShared>("sp_BOTS_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_FromDate,@pi_ToDate",
+                    //        new SqlParameter("@pi_GroupId", GroupId),
+                    //        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //        new SqlParameter("@pi_LoginId", ""),
+                    //        new SqlParameter("@pi_OutletId", OutletId),
+                    //        new SqlParameter("@pi_FromDate", frmDate),
+                    //        new SqlParameter("@pi_ToDate", toDate)).ToList<DashboardBizShared>();
+                    //}
                 }
             }
             catch (Exception ex)

@@ -52,30 +52,21 @@
 
 <script>
     $(document).ready(function () {
-        var table1 = $('#tblCampaignSummary').DataTable();
-        table1.destroy();
-        var table = $('#tblCampaignSummary').DataTable({
-            "bAutoWidth": false,
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "bFilter": false,
+        $('#tblCampaignSummary').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
             "pageLength": 25,
             "pagingType": "simple_numbers",
-            "columns": [
-                { data: "CampaignName" },
-                { data: "CampaignStatus" },
-                { data: "StartDateStr" },
-                { data: "EndDateStr" },
-                { data: "CampaignMemberCount" },
-                { data: "TotalTxnCount" },
-                { data: "BusinessGenerated" },
-                { data: "TotalBonusPointsIssued" },
-                { data: "TotalBonusPointsRedeemed" }
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
             ]
         });
-        $('#tblCampaignSummary_filter').hide();
-
         var table = $('#tblCampaignSummary').DataTable();
         table.draw();
 

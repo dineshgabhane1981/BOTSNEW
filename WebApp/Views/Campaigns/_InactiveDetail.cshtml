@@ -35,28 +35,21 @@
 
 <script>
     $(document).ready(function () {
-        var table1 = $('#tblInactiveDetails').DataTable();
-        table1.destroy();
-        var table = $('#tblInactiveDetails').DataTable({
-            "bAutoWidth": false,
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "bFilter": false,
+        $('#tblInactiveDetails').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
             "pageLength": 25,
             "pagingType": "simple_numbers",
-            "columns": [
-                { data: "MobileNo" },
-                { data: "CustomerName" },
-                { data: "EnrolledOutlet" },
-                { data: "LastTxnDate" },
-                { data: "FirstTxnDate" },
-                { data: "TxnAfterDays" },
-                { data: "BusinessGenerated" }
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
             ]
         });
-        $('#tblInactiveDetails_filter').hide();
-
         var table = $('#tblInactiveDetails').DataTable();
         table.draw();
     });

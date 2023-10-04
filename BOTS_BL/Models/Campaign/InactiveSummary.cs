@@ -22,6 +22,6 @@ namespace BOTS_BL.Models
         public string LastTxnDate { get; set; }
         public string FirstTxnDate { get; set; }
         public int? TxnAfterDays { get; set; }
-        public decimal? BusinessGenerated { get; set; }
+        public Int64 BusinessGenerated { get; set; }
     }
 }

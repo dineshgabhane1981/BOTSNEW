@@ -31,27 +31,23 @@
 
 <script>
     $(document).ready(function () {
-        var table1 = $('#tblCampaignPromoBlastDetails').DataTable();
-        table1.destroy();
-        var table = $('#tblCampaignPromoBlastDetails').DataTable({
-            "bAutoWidth": false,
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "bFilter": false,
+        $('#tblCampaignPromoBlastDetails').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
             "pageLength": 25,
             "pagingType": "simple_numbers",
-            "columns": [
-                { data: "MobileNo" },
-                { data: "Name" },
-                { data: "EnrolledOutlet" },
-                { data: "TotalTxnCount" },
-                { data: "BusinessGenerated" }
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
             ]
         });
-        $('#tblCampaignPromoBlastDetails_filter').hide();
-
         var table = $('#tblCampaignPromoBlastDetails').DataTable();
         table.draw();
+       
     });
 </script>

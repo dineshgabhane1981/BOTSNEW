@@ -1887,9 +1887,9 @@ namespace BOTS_BL.Repository
                        DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                     }
                 
-                    if (GroupId == "1087") //sp_CelebrationSummary
-                    {
-                       DBName = "MadhusudanTextiles_New";
+                    //if (GroupId == "1087") //sp_CelebrationSummary
+                    //{
+                       //DBName = "MadhusudanTextiles_New";
                         using (var context = new CommonDBContext())
                         {
                            if (flag != "4")
@@ -1914,33 +1914,33 @@ namespace BOTS_BL.Repository
                            }
                        }
                         
-                    }
-                    else
-                    {
-                       using (var context = new BOTSDBContext(connstr))
-                       {
-                           if (flag != "4")
-                           {
-                            objData = context.Database.SqlQuery<CelebrationSummary>("sp_BOTS_CelebrationSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                             new SqlParameter("@pi_GroupId", GroupId),
-                             new SqlParameter("@pi_Month", DateTime.Today.Month),
-                             new SqlParameter("@pi_Year", DateTime.Today.Year),
-                             new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                             new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationSummary>();
-                           }
-                           else
-                           {
-                            objData = context.Database.SqlQuery<CelebrationSummary>("sp_BOTS_CelebrationSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
-                                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CelebrationSummary>();
-                           }
+                    //}
+                    //else
+                    //{
+                    //   using (var context = new BOTSDBContext(connstr))
+                    //   {
+                    //       if (flag != "4")
+                    //       {
+                    //        objData = context.Database.SqlQuery<CelebrationSummary>("sp_BOTS_CelebrationSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                    //         new SqlParameter("@pi_GroupId", GroupId),
+                    //         new SqlParameter("@pi_Month", DateTime.Today.Month),
+                    //         new SqlParameter("@pi_Year", DateTime.Today.Year),
+                    //         new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                    //         new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationSummary>();
+                    //       }
+                    //       else
+                    //       {
+                    //        objData = context.Database.SqlQuery<CelebrationSummary>("sp_BOTS_CelebrationSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                    //            new SqlParameter("@pi_GroupId", GroupId),
+                    //            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                    //            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                    //            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                    //            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CelebrationSummary>();
+                    //       }
 
-                       }
+                    //   }
                         
-                    }   
+                    //}   
                 
             }
             catch (Exception ex)
@@ -1965,9 +1965,9 @@ namespace BOTS_BL.Repository
                     DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                 }
 
-                if (GroupId == "1087")
-                {
-                    DBName = "MadhusudanTextiles_New";
+                //if (GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
                         if (flag == "4")
@@ -1995,34 +1995,34 @@ namespace BOTS_BL.Repository
 
                         }
                     }
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
-                        if (flag == "4")
-                        {
-                            objData = context.Database.SqlQuery<CelebrationDetail>("sp_BOTS_CelebrationDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime, @pi_CelebrationType,@pi_SelectedCriteria",
-                            new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
-                            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
-                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                            new SqlParameter("@pi_CelebrationType", type),
-                            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CelebrationDetail>();
-                        }
-                        else
-                        {
-                            objData = context.Database.SqlQuery<CelebrationDetail>("sp_BOTS_CelebrationDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime, @pi_CelebrationType,@pi_SelectedCriteria",
-                            new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_Month", DateTime.Today.Month),
-                            new SqlParameter("@pi_Year", DateTime.Today.Year),
-                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                            new SqlParameter("@pi_CelebrationType", type),
-                            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationDetail>();
-                        }
-                    }
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
+                //        if (flag == "4")
+                //        {
+                //            objData = context.Database.SqlQuery<CelebrationDetail>("sp_BOTS_CelebrationDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime, @pi_CelebrationType,@pi_SelectedCriteria",
+                //            new SqlParameter("@pi_GroupId", GroupId),
+                //            new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                //            new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                //            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //            new SqlParameter("@pi_CelebrationType", type),
+                //            new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CelebrationDetail>();
+                //        }
+                //        else
+                //        {
+                //            objData = context.Database.SqlQuery<CelebrationDetail>("sp_BOTS_CelebrationDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime, @pi_CelebrationType,@pi_SelectedCriteria",
+                //            new SqlParameter("@pi_GroupId", GroupId),
+                //            new SqlParameter("@pi_Month", DateTime.Today.Month),
+                //            new SqlParameter("@pi_Year", DateTime.Today.Year),
+                //            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //            new SqlParameter("@pi_CelebrationType", type),
+                //            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CelebrationDetail>();
+                //        }
+                //    }
 
-                }
+                //}
             }
             catch (Exception ex)
             {
@@ -2045,9 +2045,9 @@ namespace BOTS_BL.Repository
 
                     DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                 }
-                if (GroupId == "1087")
-                {
-                    DBName = "MadhusudanTextiles_New";
+                //if (GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
                         if (flag != "4")
@@ -2074,31 +2074,31 @@ namespace BOTS_BL.Repository
                         }
                     }
 
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
-                        if (flag != "4")
-                        {
-                            objData = context.Database.SqlQuery<PointExpirySummary>("sp_BOTS_PointsExpirySummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", DateTime.Today.Month),
-                                new SqlParameter("@pi_Year", DateTime.Today.Year),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PointExpirySummary>();
-                        }
-                        else
-                        {
-                            objData = context.Database.SqlQuery<PointExpirySummary>("sp_BOTS_PointsExpirySummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
-                                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<PointExpirySummary>();
-                        }
-                    }
-                }
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
+                //        if (flag != "4")
+                //        {
+                //            objData = context.Database.SqlQuery<PointExpirySummary>("sp_BOTS_PointsExpirySummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", DateTime.Today.Month),
+                //                new SqlParameter("@pi_Year", DateTime.Today.Year),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PointExpirySummary>();
+                //        }
+                //        else
+                //        {
+                //            objData = context.Database.SqlQuery<PointExpirySummary>("sp_BOTS_PointsExpirySummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                //                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<PointExpirySummary>();
+                //        }
+                //    }
+                //}
                 
             }
             catch (Exception ex)
@@ -2122,9 +2122,9 @@ namespace BOTS_BL.Repository
 
                     DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                 }
-                if (GroupId == "1087")
-                {
-                    DBName = "MadhusudanTextiles_New";
+                //if (GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
                         if (flag != "4")
@@ -2149,31 +2149,31 @@ namespace BOTS_BL.Repository
                         }
                     }
 
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
-                        if (flag != "4")
-                        {
-                            objData = context.Database.SqlQuery<PointExpiryDetailed>("sp_BOTS_PointsExpiryDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", DateTime.Today.Month),
-                                new SqlParameter("@pi_Year", DateTime.Today.Year),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PointExpiryDetailed>();
-                        }
-                        else
-                        {
-                            objData = context.Database.SqlQuery<PointExpiryDetailed>("sp_BOTS_PointsExpiryDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
-                                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<PointExpiryDetailed>();
-                        }
-                    }
-                }
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
+                //        if (flag != "4")
+                //        {
+                //            objData = context.Database.SqlQuery<PointExpiryDetailed>("sp_BOTS_PointsExpiryDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", DateTime.Today.Month),
+                //                new SqlParameter("@pi_Year", DateTime.Today.Year),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PointExpiryDetailed>();
+                //        }
+                //        else
+                //        {
+                //            objData = context.Database.SqlQuery<PointExpiryDetailed>("sp_BOTS_PointsExpiryDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                //                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<PointExpiryDetailed>();
+                //        }
+                //    }
+                //}
                 
             }
             catch (Exception ex)
@@ -2197,9 +2197,9 @@ namespace BOTS_BL.Repository
 
                     DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                 }
-                if(GroupId == "1087")
-                {
-                    DBName = "MadhusudanTextiles_New";
+                //if(GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
                         if (flag != "4")
@@ -2224,31 +2224,31 @@ namespace BOTS_BL.Repository
                         }
                     }
 
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
-                        if (flag != "4")
-                        {
-                            objData = context.Database.SqlQuery<InactiveSummary>("sp_BOTS_InActiveSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", DateTime.Today.Month),
-                                new SqlParameter("@pi_Year", DateTime.Today.Year),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<InactiveSummary>();
-                        }
-                        else
-                        {
-                            objData = context.Database.SqlQuery<InactiveSummary>("sp_BOTS_InActiveSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
-                                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<InactiveSummary>();
-                        }
-                    }
-                }
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
+                //        if (flag != "4")
+                //        {
+                //            objData = context.Database.SqlQuery<InactiveSummary>("sp_BOTS_InActiveSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", DateTime.Today.Month),
+                //                new SqlParameter("@pi_Year", DateTime.Today.Year),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<InactiveSummary>();
+                //        }
+                //        else
+                //        {
+                //            objData = context.Database.SqlQuery<InactiveSummary>("sp_BOTS_InActiveSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                //                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<InactiveSummary>();
+                //        }
+                //    }
+                //}
                 
             }
             catch (Exception ex)
@@ -2267,9 +2267,13 @@ namespace BOTS_BL.Repository
             DBName = string.Empty;
             try
             {
-                if(GroupId == "1087")
+                using (var context = new CommonDBContext())
                 {
-                    DBName = "MadhusudanTextiles_New";
+                    DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                }
+                //if (GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
                         if (flag != "4")
@@ -2294,31 +2298,31 @@ namespace BOTS_BL.Repository
                         }
                     }
 
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
-                        if (flag != "4")
-                        {
-                            objData = context.Database.SqlQuery<InactiveDetailed>("sp_BOTS_InActiveDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", DateTime.Today.Month),
-                                new SqlParameter("@pi_Year", DateTime.Today.Year),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<InactiveDetailed>();
-                        }
-                        else
-                        {
-                            objData = context.Database.SqlQuery<InactiveDetailed>("sp_BOTS_InActiveDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
-                                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<InactiveDetailed>();
-                        }
-                    }
-                }
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
+                //        if (flag != "4")
+                //        {
+                //            objData = context.Database.SqlQuery<InactiveDetailed>("sp_BOTS_InActiveDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", DateTime.Today.Month),
+                //                new SqlParameter("@pi_Year", DateTime.Today.Year),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<InactiveDetailed>();
+                //        }
+                //        else
+                //        {
+                //            objData = context.Database.SqlQuery<InactiveDetailed>("sp_BOTS_InActiveDetailed @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                //                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<InactiveDetailed>();
+                //        }
+                //    }
+                //}
                 
             }
             catch (Exception ex)
@@ -2342,9 +2346,9 @@ namespace BOTS_BL.Repository
 
                     DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                 }
-                if(GroupId == "1087")
-                {
-                    DBName = "MadhusudanTextiles_New";
+                //if(GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
                         if (flag != "4")
@@ -2377,40 +2381,40 @@ namespace BOTS_BL.Repository
                         }
                     }
 
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
-                        if (flag != "4")
-                        {
-                            objData = context.Database.SqlQuery<CampaignSummary>("sp_BOTS_CampaignSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", DateTime.Today.Month),
-                                new SqlParameter("@pi_Year", DateTime.Today.Year),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CampaignSummary>();
-                        }
-                        else
-                        {
-                            objData = context.Database.SqlQuery<CampaignSummary>("sp_BOTS_CampaignSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                                new SqlParameter("@pi_GroupId", GroupId),
-                                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
-                                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
-                                new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CampaignSummary>();
-                        }
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
+                //        if (flag != "4")
+                //        {
+                //            objData = context.Database.SqlQuery<CampaignSummary>("sp_BOTS_CampaignSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", DateTime.Today.Month),
+                //                new SqlParameter("@pi_Year", DateTime.Today.Year),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", flag)).ToList<CampaignSummary>();
+                //        }
+                //        else
+                //        {
+                //            objData = context.Database.SqlQuery<CampaignSummary>("sp_BOTS_CampaignSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //                new SqlParameter("@pi_GroupId", GroupId),
+                //                new SqlParameter("@pi_Month", Convert.ToInt32(month) + 1),
+                //                new SqlParameter("@pi_Year", Convert.ToInt32(year)),
+                //                new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //                new SqlParameter("@pi_SelectedCriteria", "0")).ToList<CampaignSummary>();
+                //        }
 
-                        foreach (var item in objData)
-                        {
-                            if (item.StartDate.HasValue)
-                                item.StartDateStr = item.StartDate.Value.ToString("dd-MMM-yyyy");
+                //        foreach (var item in objData)
+                //        {
+                //            if (item.StartDate.HasValue)
+                //                item.StartDateStr = item.StartDate.Value.ToString("dd-MMM-yyyy");
 
-                            if (item.EndDate.HasValue)
-                                item.EndDateStr = item.EndDate.Value.ToString("dd-MMM-yyyy");
-                        }
-                    }
-                }
+                //            if (item.EndDate.HasValue)
+                //                item.EndDateStr = item.EndDate.Value.ToString("dd-MMM-yyyy");
+                //        }
+                //    }
+                //}
                 
                 
             }
@@ -2435,9 +2439,9 @@ namespace BOTS_BL.Repository
 
                     DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                 }
-                if (GroupId == "1087")
-                {
-                    DBName = "MadhusudanTextiles_New";
+                //if (GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
 
@@ -2448,18 +2452,18 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_DBName", DBName)).ToList<CampaignDetailed>();
                     }
 
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
 
-                            objData = context.Database.SqlQuery<CampaignDetailed>("sp_BOTS_CampaignDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId",
-                            new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                            new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignDetailed>();
-                    }
-                }
+                //            objData = context.Database.SqlQuery<CampaignDetailed>("sp_BOTS_CampaignDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId",
+                //            new SqlParameter("@pi_GroupId", GroupId),
+                //            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //            new SqlParameter("@pi_CampaignId", CampaignId)).ToList<CampaignDetailed>();
+                //    }
+                //}
                 
             }
             catch (Exception ex)
@@ -2482,9 +2486,9 @@ namespace BOTS_BL.Repository
 
                     DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                 }
-                if (GroupId == "1087")
-                {
-                    DBName = "MadhusudanTextiles_New";
+                //if (GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
                         objData = context.Database.SqlQuery<PromoBlastSummary>("sp_PromoBlastSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria,@pi_DBName",
@@ -2505,28 +2509,28 @@ namespace BOTS_BL.Repository
                             item.EndDateStr = item.EndDate.Value.ToString("dd-MMM-yyyy");
                     }
 
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
-                        objData = context.Database.SqlQuery<PromoBlastSummary>("sp_BOTS_PromoBlastSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
-                            new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_Month", DateTime.Today.Month),
-                            new SqlParameter("@pi_Year", DateTime.Today.Year),
-                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PromoBlastSummary>();
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
+                //        objData = context.Database.SqlQuery<PromoBlastSummary>("sp_BOTS_PromoBlastSummary @pi_GroupId,@pi_Month,@pi_Year,@pi_INDDatetime,@pi_SelectedCriteria",
+                //            new SqlParameter("@pi_GroupId", GroupId),
+                //            new SqlParameter("@pi_Month", DateTime.Today.Month),
+                //            new SqlParameter("@pi_Year", DateTime.Today.Year),
+                //            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //            new SqlParameter("@pi_SelectedCriteria", flag)).ToList<PromoBlastSummary>();
 
-                    }
-                    foreach (var item in objData)
-                    {
-                        if (item.StartDate.HasValue)
-                            item.StartDateStr = item.StartDate.Value.ToString("dd-MMM-yyyy");
+                //    }
+                //    foreach (var item in objData)
+                //    {
+                //        if (item.StartDate.HasValue)
+                //            item.StartDateStr = item.StartDate.Value.ToString("dd-MMM-yyyy");
 
-                        if (item.EndDate.HasValue)
-                            item.EndDateStr = item.EndDate.Value.ToString("dd-MMM-yyyy");
-                    }
-                }
+                //        if (item.EndDate.HasValue)
+                //            item.EndDateStr = item.EndDate.Value.ToString("dd-MMM-yyyy");
+                //    }
+                //}
                 
             }
             catch (Exception ex)
@@ -2549,9 +2553,9 @@ namespace BOTS_BL.Repository
                 {
                     DBName = context.DatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                 }
-                if (GroupId == "1087")
-                {
-                    DBName = "MadhusudanTextiles_New";
+                //if (GroupId == "1087")
+                //{
+                    //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
                         objData = context.Database.SqlQuery<PromoBlastDetails>("sp_CampaignDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId,@pi_DBName",
@@ -2561,18 +2565,18 @@ namespace BOTS_BL.Repository
                             new SqlParameter("@pi_DBName", DBName)).ToList<PromoBlastDetails>();
 
                     }
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
+                //}
+                //else
+                //{
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
 
-                        objData = context.Database.SqlQuery<PromoBlastDetails>("sp_BOTS_CampaignDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId",
-                            new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_INDDatetime", DateTime.Now),
-                            new SqlParameter("@pi_CampaignId", CampaignId)).ToList<PromoBlastDetails>();
-                    }
-                }
+                //        objData = context.Database.SqlQuery<PromoBlastDetails>("sp_BOTS_CampaignDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId",
+                //            new SqlParameter("@pi_GroupId", GroupId),
+                //            new SqlParameter("@pi_INDDatetime", DateTime.Now),
+                //            new SqlParameter("@pi_CampaignId", CampaignId)).ToList<PromoBlastDetails>();
+                //    }
+                //}
                 
             }
             catch (Exception ex)

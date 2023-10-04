@@ -40,8 +40,8 @@ namespace BOTS_BL.Repository
                         lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
                         new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", OutletId)).ToList<MemberList>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         if (OutletId == "")
                         {
                             lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
@@ -127,12 +127,12 @@ namespace BOTS_BL.Repository
 
                             lstMember.Add(Obj);
                         }
-                    }
-                    else
-                    {
-                        lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
-                        new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", OutletId)).ToList<MemberList>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
+                    //    new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", OutletId)).ToList<MemberList>();
+                    //}
                 }
             }
             catch (Exception ex)
@@ -278,8 +278,8 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_FromDate", FromDate),
                         new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
                         var lstobj = context.Database.SqlQuery<View_TxnDetailsMaster>("select * from View_TxnDetailsMaster").ToList();
                         var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
@@ -332,17 +332,17 @@ namespace BOTS_BL.Repository
                             lstOutletWise.Add(newItem);
                         }
 
-                    }
-                    else
-                    {
-                        lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
-                        new SqlParameter("@pi_FromDate", FromDate),
-                        new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //    new SqlParameter("@pi_LoginId", ""),
+                    //    new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
+                    //    new SqlParameter("@pi_FromDate", FromDate),
+                    //    new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
+                    //}
                 }
             }
             catch (Exception ex)
@@ -376,8 +376,8 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_OutletId", OutletId),
                         new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         if (DateRangeFlag == "0")
                         {
                             if (string.IsNullOrEmpty(OutletId))
@@ -1051,19 +1051,19 @@ namespace BOTS_BL.Repository
                             }
 
                         }
-                    }
-                    else
-                    {
-                        lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                        new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
-                        new SqlParameter("@pi_FromDate", FromDate),
-                        new SqlParameter("@pi_ToDate", ToDate),
-                        new SqlParameter("@pi_OutletId", OutletId),
-                        new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                    //    new SqlParameter("@pi_LoginId", ""),
+                    //    new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
+                    //    new SqlParameter("@pi_FromDate", FromDate),
+                    //    new SqlParameter("@pi_ToDate", ToDate),
+                    //    new SqlParameter("@pi_OutletId", OutletId),
+                    //    new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
+                    //}
 
                 }
             }
@@ -1081,17 +1081,17 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    if (GroupId == "1086")
-                    {
-                        pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", loginId),
-                        new SqlParameter("@pi_Month", month),
-                        new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
-                    }
-                    else if (GroupId == "1087")
-                    {
+                    //if (GroupId == "1086")
+                    //{
+                    //    pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //    new SqlParameter("@pi_LoginId", loginId),
+                    //    new SqlParameter("@pi_Month", month),
+                    //    new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
+                    //}
+                    //if (GroupId == "1087")
+                    //{
                         DateTime Today = DateTime.Now;
 
                         if (month == Today.Month)
@@ -1123,16 +1123,16 @@ namespace BOTS_BL.Repository
                             pointExpiry.SelectedPoints = Convert.ToInt64(lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Sum(y => y.Points));
                         }
 
-                    }
-                    else
-                    {
-                        pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_Month", month),
-                        new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    pointExpiry = context.Database.SqlQuery<PointExpiryTmp>("sp_BOTS_PointsExpiry @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //    new SqlParameter("@pi_LoginId", ""),
+                    //    new SqlParameter("@pi_Month", month),
+                    //    new SqlParameter("@pi_Year", year)).FirstOrDefault<PointExpiryTmp>();
+                    //}
 
                 }
             }

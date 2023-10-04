@@ -35,29 +35,22 @@
 
 <script>
     $(document).ready(function () {
-        var table1 = $('#tblCampaignPromoBlastSummary').DataTable();
-        table1.destroy();
-        var table = $('#tblCampaignPromoBlastSummary').DataTable({
-            "bAutoWidth": false,
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "bFilter": false,
+        $('#tblCampaignPromoBlastSummary').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
             "pageLength": 25,
             "pagingType": "simple_numbers",
-            "columns": [
-                { data: "CampaignName" },
-                { data: "CampaignStatus" },
-                { data: "StartDateStr" },
-                { data: "EndDateStr" },
-                { data: "CampaignMemberCount" },
-                { data: "TotalTxnCount" },
-                { data: "BusinessGenerated" }
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
             ]
         });
-        $('#tblCampaignPromoBlastSummary_filter').hide();
-
         var table = $('#tblCampaignPromoBlastSummary').DataTable();
-        table.draw();        
+        table.draw();
     });
 </script>
