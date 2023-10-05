@@ -40,7 +40,6 @@ namespace BOTS_BL.Repository
             }
             return lstData;
         }
-
         public bool DisableProgrammeDetails(string GroupId)
         {
             bool status = false;
@@ -119,7 +118,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public List<SelectListItem> GetGroupDetails()
         {
             List<SelectListItem> lstGroupDetails = new List<SelectListItem>();
@@ -146,7 +144,6 @@ namespace BOTS_BL.Repository
             }
             return lstGroupDetails;
         }
-
         public tblSMSWhatsAppScriptMaster GetWAScripts(int  GroupId, string OutletId, string MessageType)
         {
             tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
@@ -202,7 +199,6 @@ namespace BOTS_BL.Repository
             return objSMSWhatsAppScriptMaster;
 
         }
-
         public bool SaveScripts(int GroupId, int OutletId, string Script, string MessageType)
         {
             bool result = false;
@@ -260,6 +256,35 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+        public List<SelectListItem> GetOutlet(string GroupId)
+        {
+            List<SelectListItem> lstOutlets = new List<SelectListItem>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    var Outlets = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId && !x.OutletName.ToLower().Contains("admin")).ToList();
+
+                    foreach (var item in Outlets)
+                    {
+                        lstOutlets.Add(new SelectListItem
+                        {
+                            Text = item.OutletName,
+                            Value = Convert.ToString(item.OutletId)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutlet");
+            }
+
+            lstOutlets = lstOutlets.OrderBy(x => x.Text).ToList();
+
+            return lstOutlets;
+        }
         public MemberData GetChangeNameByMobileNo(string GroupId, string searchData)
         {
             MemberData objMemberData = new MemberData();
@@ -310,7 +335,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public GroupData GetCSNameByGroupId(string GroupId)
         {
             GroupData objMemberData = new GroupData();
@@ -359,7 +383,6 @@ namespace BOTS_BL.Repository
             }
             return lstRMAssigned;
         }
-
         public bool SaveCSData(string GroupId, string RMAssignedId)
         {
             bool status = false;
@@ -386,7 +409,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public BurnData GetBurnRule(string GroupId)
         {
             BurnData objMemberData = new BurnData();
@@ -414,7 +436,7 @@ namespace BOTS_BL.Repository
             }
             return objMemberData;
         }
-        public bool SaveBurnRule(tblRuleMaster ObjRuleMaster, string connectionstring)
+        public bool SaveBurnRule(tblRuleMaster ObjRuleMaster, string connectionstring, string FromName)
         {
             string _WAGroupCode = string.Empty;
             string CSName = string.Empty;
@@ -472,7 +494,7 @@ namespace BOTS_BL.Repository
                     ObjCSMessage.MinRedemptionPtsFirstTime = Convert.ToString(ObjRuleMaster.MinRedemptionPtsFirstTime);
                     ObjCSMessage.BurnInvoiceAmtPercentage = Convert.ToString(ObjRuleMaster.BurnInvoiceAmtPercentage);
                     ObjCSMessage.BurnDBPointsPercentage = Convert.ToString(ObjRuleMaster.BurnDBPointsPercentage);
-
+                    ObjCSMessage.FromName = FromName;
                     if (_WAGroupCode != null)
                     {
                         Thread _job2 = new Thread(() => SendWAMessageBurnRule(ObjCSMessage));
@@ -517,7 +539,7 @@ namespace BOTS_BL.Repository
             return obj;
 
         }
-        public bool SaveEarnRule(tblRuleMaster ObjEarn, string connectionstring)
+        public bool SaveEarnRule(tblRuleMaster ObjEarn, string connectionstring, string FromName)
         {
             string _WAGroupCode = string.Empty;
             string CSName = string.Empty;
@@ -578,7 +600,7 @@ namespace BOTS_BL.Repository
                     ObjCSMessage.PointsPercentage = Convert.ToString(ObjEarn.PointsPercentage);
                     ObjCSMessage.Revolving = Convert.ToString(ObjEarn.Revolving);
                     //ObjCSMessage.Message = ConfigurationManager.AppSettings["ITCSMessage"].ToString();
-
+                    ObjCSMessage.FromName = FromName;
 
                     if (_WAGroupCode != null)
                     {
@@ -640,36 +662,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-        public List<SelectListItem> GetOutlet(string GroupId)
-        {
-            List<SelectListItem> lstOutlets = new List<SelectListItem>();
-            try
-            {
-                var connStr = CR.GetCustomerConnString((GroupId));
-                using (var contextNew = new BOTSDBContext(connStr))
-                {
-                    var Outlets = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId).ToList();
-
-                    foreach (var item in Outlets)
-                    {
-                        lstOutlets.Add(new SelectListItem
-                        {
-                            Text = item.OutletName,
-                            Value = Convert.ToString(item.OutletId)
-                        });
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "GetOutlet");
-            }
-
-            lstOutlets = lstOutlets.OrderBy(x => x.Text).ToList();
-
-            return lstOutlets;
-        }
-        
         public OTPData GetDefaultOTP(string OutletId, string GroupId)
         {
             OTPData objOTPData = new OTPData();
@@ -732,10 +724,17 @@ namespace BOTS_BL.Repository
                     var pointExpiryData = context.tblCustPointsMasters.Where(x => x.MobileNo == mobileNo && x.PointsType == "Base").FirstOrDefault();
                     if (pointExpiryData != null)
                     {
-                        pointExpiryData.EndDate = Convert.ToDateTime(expiryDate);
-                        context.tblCustPointsMasters.AddOrUpdate(pointExpiryData);
-                        context.SaveChanges();
-                        result = true;
+                        if (pointExpiryData.EndDate < DateTime.Now.Date)
+                        {
+                            result = false;
+                        }
+                        else
+                        {
+                            pointExpiryData.EndDate = Convert.ToDateTime(expiryDate);
+                            context.tblCustPointsMasters.AddOrUpdate(pointExpiryData);
+                            context.SaveChanges();
+                            result = true;
+                        }
                     }
                 }
             }
@@ -745,7 +744,6 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-
         public List<PointExpiryDummyModel> GetPointExpiryDateRange(string groupid, string fromDate, string toDate)
         {
             List<PointExpiryDummyModel> objData = new List<PointExpiryDummyModel>();
@@ -789,7 +787,6 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
-
         public bool UpdateExpiryPointsRangeDate(string groupid, string fromDate, string toDate, string updateDate)
         {
             bool result = false;
@@ -841,7 +838,6 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-
         public List<tblCampaignMaster> GetCampaignList(string groupid)
         {
             List<tblCampaignMaster> lstData = new List<tblCampaignMaster>();
@@ -859,7 +855,6 @@ namespace BOTS_BL.Repository
             }
             return lstData;
         }
-
         public PointExpiryCampaignDetails GetCamaignPointExpiryDetails(string groupid, string campaignName)
         {
             PointExpiryCampaignDetails objData = new PointExpiryCampaignDetails();
@@ -881,7 +876,6 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
-
         public bool UpdateCammpaignExpiryDate(string groupid, string campaignName, string updatedDate)
         {
             bool result = false;
@@ -912,7 +906,6 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-
         public bool UpdateCelebrationData(string groupId, string mobileNo, string custName, string DOB, string DOA)
         {
             bool result = false;
@@ -973,32 +966,42 @@ namespace BOTS_BL.Repository
 
             return lstTier;
         }
-        public List<tblCustDetailsMaster> GetSlabWiseReport(string GroupId, string Tier)
+        public List<MemberData> GetSlabWiseReport(string GroupId, string Tier)
         {
             List<tblCustDetailsMaster> lstMember = new List<tblCustDetailsMaster>();
+            List<MemberData> lstData = new List<MemberData>();
             try
             {
+                List<SlabData> lstSlab = new List<SlabData>();
                 var connStr = CR.GetCustomerConnString((GroupId));
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    lstMember = contextNew.tblCustDetailsMasters.Where(x => x.Tier == Tier).ToList();
-
-                    foreach (var item in lstMember)
+                    lstSlab = contextNew.Database.SqlQuery<SlabData>("select MobileNo,Name,Tier,LastTxnDate,AvlPts from View_CustSlabWiseData", new SqlParameter("@Tier", Tier)).ToList<SlabData>();
+                    if (lstSlab != null)
                     {
-                        MemberData Obj = new MemberData();
-                        Obj.MobileNo = item.MobileNo;
-                        Obj.MemberName = item.Name;
-                        Obj.Tier = item.Tier;
+                        foreach (var Data in lstSlab)
+                        {
+                            MemberData Obj = new MemberData();
+                            Obj.MobileNo = Data.MobileNo;
+                            Obj.MemberName = Data.Name;
+                            Obj.Tier = Data.Tier;
+                            if (Data.LastTxnDate.HasValue)
+                            {
+                                Obj.LastTxnDate = Data.LastTxnDate.Value.ToString("yyyy/MM/dd");
+                            }                           
+                            Obj.PointsBalance = Data.AvlPts;
+
+                            lstData.Add(Obj);
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "GetTierList");
+                newexception.AddException(ex, "GetTransactionByMobileNo");
             }
-
-            return lstMember;
-        }
+            return lstData;
+        }        
         public DemographicData GetDemographicDetails(string GroupId, string OutletId)
         {
             DemographicData objDemoData = new DemographicData();
@@ -1019,14 +1022,20 @@ namespace BOTS_BL.Repository
                     objDemoData.AlternateNo = objCustomerDetail.AlternateNo;
                     objDemoData.Email = objCustomerDetail.Email;
                     objDemoData.Address = objCustomerDetail.Address;
-                    objDemoData.DOB = Convert.ToString(objCustomerDetail.DOB);
-                    objDemoData.DOA = Convert.ToString(objCustomerDetail.DOA);
+                    if (objCustomerDetail.DOB.HasValue)
+                    {
+                        objDemoData.DOB = objCustomerDetail.DOB.Value.ToString("yyyy/MM/dd");
+                    }
+                    if(objCustomerDetail.DOA.HasValue)
+                    {
+                        objDemoData.DOA = objCustomerDetail.DOA.Value.ToString("yyyy/MM/dd");
+                    }
                     objDemoData.Gender = objCustomerDetail.Gender;
                     objDemoData.Name = objCustomerDetail.Name;
                 }
-                if (objOutletMaster != null)
+                if (objOutletMaster != null && objOutletMaster.StoreAnniversaryDate.HasValue)
                 {
-                    objDemoData.StoreAnniversary = Convert.ToString(objOutletMaster.StoreAnniversaryDate);
+                    objDemoData.StoreAnniversary = objOutletMaster.StoreAnniversaryDate.Value.ToString("yyyy/MM/dd");
                 }
 
             }
@@ -1036,7 +1045,6 @@ namespace BOTS_BL.Repository
             }
             return objDemoData;
         }
-
         public bool SaveDemographicDetails(tblGroupOwnerInfo ObjGroup, tblOutletMaster objOutletMaster, string connectionstring)
         {
             bool status = false;
@@ -1078,7 +1086,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public void AddCSLog(tblAuditC objData)
         {
             using (var context = new CommonDBContext())
@@ -1087,7 +1094,6 @@ namespace BOTS_BL.Repository
                 context.SaveChanges();
             }
         }
-
         public void SendWAMessageEarnRule(ITCSMessage ObjCSMessage)
         {
             string responseString;
@@ -1119,7 +1125,7 @@ namespace BOTS_BL.Repository
                 stb.AppendLine("PointsRevolving : " + ObjCSMessage.Revolving);
                 stb.AppendLine();
                 stb.AppendLine("Regards,");
-                stb.AppendLine(" - " + ObjCSMessage.CSName);
+                stb.AppendLine(" - " + ObjCSMessage.FromName);
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat(ObjCSMessage.WAAPILink);
                 sbposdata.AppendFormat("token={0}", ObjCSMessage.BOTokenid);
@@ -1162,7 +1168,6 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-
         public void SendWAMessageBurnRule(ITCSMessage ObjCSMessage)
         {
             string responseString;
@@ -1194,7 +1199,7 @@ namespace BOTS_BL.Repository
                 stb.AppendLine("BurnDBPointsPercentage : " + ObjCSMessage.BurnDBPointsPercentage);
                 stb.AppendLine();
                 stb.AppendLine("Regards,");
-                stb.AppendLine(" - " + ObjCSMessage.CSName);
+                stb.AppendLine(" - " + ObjCSMessage.FromName);
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat(ObjCSMessage.WAAPILink);
                 sbposdata.AppendFormat("token={0}", ObjCSMessage.BOTokenid);

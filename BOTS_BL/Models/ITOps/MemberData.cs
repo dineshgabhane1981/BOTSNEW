@@ -19,6 +19,15 @@ namespace BOTS_BL.Models
         public bool DisableSMSWAPromo { get; set; }
         public bool DisableSMSWATxn { get; set; }
         public string Tier { get; set; }
+        public string LastTxnDate { get; set; }
+    }
+    public class SlabData
+    {
+        public string MobileNo { get; set; }
+        public string Name { get; set; }
+        public string Tier { get; set; }
+        public DateTime? LastTxnDate { get; set; }
+        public Int64? AvlPts { get; set; }
     }
 
     public class GroupData

@@ -63,7 +63,6 @@ namespace WebApp.Controllers.ITCS
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();            
             return View(objData);
-
         }
         public ActionResult GetChangeNameData(string MobileNo)
         {
@@ -75,7 +74,6 @@ namespace WebApp.Controllers.ITCS
                 {
                     objCustomerDetail = ITCSR.GetChangeNameByMobileNo(userDetails.GroupId, MobileNo);
                 }
-
             }
             catch (Exception ex)
             {
@@ -159,7 +157,6 @@ namespace WebApp.Controllers.ITCS
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult ChangeBurnRule()
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();            
@@ -172,7 +169,6 @@ namespace WebApp.Controllers.ITCS
             objData.objBurnData = ITCSR.GetBurnRule(userDetails.GroupId);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-
         public ActionResult SaveBurnRule(string jsonData)
         {
             tblRuleMaster objRuleMaster = new tblRuleMaster();
@@ -198,11 +194,10 @@ namespace WebApp.Controllers.ITCS
                     objRuleMaster.OldMinRedemptionPtsFirstTime = Convert.ToDecimal(item["OldMinRedemptionPtsFirstTime"]);
                     objRuleMaster.OldBurnInvoiceAmtPercentage = Convert.ToDecimal(item["OldBurnInvoiceAmtPercentage"]);
                     objRuleMaster.OldBurnDBPointsPercentage = Convert.ToDecimal(item["OldBurnDBPointsPercentage"]);
-
                 }
 
                 var connectionString = CR.GetCustomerConnString(objRuleMaster.GroupId);
-                var Response = ITCSR.SaveBurnRule(objRuleMaster, connectionString);
+                var Response = ITCSR.SaveBurnRule(objRuleMaster, connectionString, userDetails.UserName);
                 tblAuditC obj = new tblAuditC();
                 obj.GroupId = Convert.ToString(userDetails.GroupId);
                 obj.RequestedFor = "Change Burn Rule";
@@ -257,7 +252,7 @@ namespace WebApp.Controllers.ITCS
 
                 }
                 var connectionString = CR.GetCustomerConnString(Convert.ToString(objtblRuleMaster.GroupId));
-                var Response = ITCSR.SaveEarnRule(objtblRuleMaster, connectionString);
+                var Response = ITCSR.SaveEarnRule(objtblRuleMaster, connectionString, userDetails.UserName);
                 tblAuditC obj = new tblAuditC();
                 obj.GroupId = Convert.ToString(userDetails.GroupId);
                 obj.RequestedFor = "Change Earn Rule";
@@ -421,7 +416,7 @@ namespace WebApp.Controllers.ITCS
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.lstMember = ITCSR.GetSlabWiseReport(userDetails.GroupId, Tier);
+            objData.lstMemberData = ITCSR.GetSlabWiseReport(userDetails.GroupId, Tier);
             return PartialView("_Slabwise", objData);
         }
         public ActionResult ExportToExcelSlabMemberList(string Tier)
@@ -431,14 +426,14 @@ namespace WebApp.Controllers.ITCS
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
-                List<tblCustDetailsMaster> lstMember = new List<tblCustDetailsMaster>();
+                List<MemberData> lstMember = new List<MemberData>();
                 lstMember = ITCSR.GetSlabWiseReport(userDetails.GroupId, Tier);
 
-                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(tblCustDetailsMaster));
+                PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(MemberData));
                 foreach (PropertyDescriptor prop in properties)
                     table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
 
-                foreach (tblCustDetailsMaster item in lstMember)
+                foreach (MemberData item in lstMember)
                 {
                     DataRow row = table.NewRow();                                  
                     foreach (PropertyDescriptor prop in properties)
@@ -447,22 +442,14 @@ namespace WebApp.Controllers.ITCS
                     table.Rows.Add(row);
                 }
 
-                table.Columns.Remove("Id");
-                table.Columns.Remove("DOB");
-                table.Columns.Remove("Email");
-                table.Columns.Remove("AnniversaryDate");
-                table.Columns.Remove("Category");
+                table.Columns.Remove("OldMobileNo");
                 table.Columns.Remove("CardNo");
-                table.Columns.Remove("Gender");
-                table.Columns.Remove("EnrolledBy");
-                table.Columns.Remove("CountryCode");
-                table.Columns.Remove("CurrentEnrolledOutlet");
-                table.Columns.Remove("DisableSMSWATxn");
-                table.Columns.Remove("EnrolledOutlet");
-                table.Columns.Remove("DOJ");
-                table.Columns.Remove("IsActive");
-                table.Columns.Remove("DisableTxn");
+                table.Columns.Remove("EnrolledOutletName");
+                table.Columns.Remove("EnrolledOn");
+                table.Columns.Remove("CustomerId");
                 table.Columns.Remove("DisableSMSWAPromo");
+                table.Columns.Remove("DisableSMSWATxn");                
+                
                 string ReportName = "MemberData";
                     string fileName = "BOTS_" + ReportName + ".xlsx";
                     using (XLWorkbook wb = new XLWorkbook())
@@ -546,7 +533,6 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         public ActionResult UploadCelebrationData()
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();            

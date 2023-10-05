@@ -33,5 +33,6 @@ namespace BOTS_BL.Models.IndividualDBModels
         public string BurnInvoiceAmtPercentage { get; set; }
         public string BurnDBPointsPercentage { get; set; }
         public string Message { get; set; }
+        public string FromName { get; set; }
     }
 }

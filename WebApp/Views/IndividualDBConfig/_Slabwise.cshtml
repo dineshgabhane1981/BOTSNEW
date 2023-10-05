@@ -26,20 +26,24 @@
                                 <th scope="col">Mobile Number</th>
                                 <th scope="col">Member Name</th>
                                 <th scope="col">Type</th>
+                                <th scope="col">Total Avl Points</th>
+                                <th scope="col">Last Txn Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.lstMember != null)
+                            @if (Model.lstMemberData != null)
                             {
-                                if (Model.lstMember.Count > 0)
+                                if (Model.lstMemberData.Count > 0)
                                 {
 
-                                    foreach (var member in Model.lstMember)
+                                    foreach (var member in Model.lstMemberData)
                                     {
                                         <tr>
                                             <td>@member.MobileNo</td>
-                                            <td>@member.Name</td>
+                                            <td>@member.MemberName</td>
                                             <td>@member.Tier</td>
+                                            <td>@member.PointsBalance</td>
+                                            <td>@member.LastTxnDate</td>
                                         </tr>
                                     }
                                 }
@@ -94,7 +98,7 @@
         });
     });
 </script>
-                
+
 <style>
     table.dataTable thead .sorting_asc {
         background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
@@ -107,4 +111,4 @@
     table.dataTable thead .sorting {
         background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
     }
-</style>               
+</style>

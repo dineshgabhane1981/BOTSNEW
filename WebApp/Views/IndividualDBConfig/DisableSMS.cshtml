@@ -12,7 +12,7 @@
                     <b>Mobile No</b>
                 </div>
                 <div class="col-lg-3 col-md-3 " style="margin-left:15px;">
-                    <input type="number" id="txtMobileNo" class="input50" />
+                    <input id="txtMobileNo" class="input50" />
                 </div>
                 <div class="col-lg-3 col-md-3 " style="margin-left:50px;">
                     <button type="button" id="btnSearchMember1" style="margin-left:10px;" class="btn btn-primary">Show</button>
@@ -30,13 +30,12 @@
                             <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName"></span></td>
                         </tr>
                         <tr>
-                            <td style="padding:10px;">Enable/Disable Promotional Msg</td>
-                            <td><input type="checkbox" id="chkMsg" style="cursor: pointer; margin-right: 5px;width:25px;height:25px;margin-top:5px;" /></td>
+                            <td style="padding:10px;">Enable/Disable Promotional SMS</td>
+                            <td>
+                                <button id="btnEnableDisable" class="btn btn-primary ml-auto mt-3" value=""></button>
+                            </td>
                         </tr>
                     </table>
-                </div>
-                <div class="col-md-3 col-xl-3" style="margin-left:80px;">
-                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnUpdate" tabindex="20">Update</button>
                 </div>
             </div>          
         </div>
@@ -48,7 +47,7 @@
         $('#btnSearchMember1').on("click", function () {
                 GetChangeNameData();
         });
-        $('#btnUpdate').on("click", function () {
+        $('#btnEnableDisable').on("click", function () {
             DisablePromotionalSMS();
         });
     });
@@ -70,7 +69,10 @@
                 $("#spnMemberName").text(result.MemberName);
                 $("#spnMobileno").text(result.MobileNo);
                     if (result.DisableSMSWAPromo) {
-                        $("#chkMsg").prop("checked", true)
+                        $("#btnEnableDisable").text("Enable");
+                    }
+                    else {
+                        $("#btnEnableDisable").text("Disable");
                     }
                 }
                 else {
@@ -94,97 +96,65 @@
             }
         });
     }
-
     function DisablePromotionalSMS() {
-        if ($("#chkMsg").is(":checked")) {
-            DisableSMSWAPromo = true;
-            cuteAlert({
-                type: "question",
-                title: "Confirmation",
-                message: "Do you want to disable promotional SMS?",
-                confirmText: "Yes",
-                cancelText: "No"
-            }).then((e) => {
-                if (e == ("confirm")) {
-                    var MemberData = [];
-                    item = {}
-                    item["MobileNo"] = $("#txtMobileNo").val();
-                    item["DisableSMSWAPromo"] = DisableSMSWAPromo;
-                    MemberData.push(item);
-                    var data = JSON.stringify(MemberData);
-                    console.log(data)
-                    $("#divLoader").show();
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("DisablePromotionalSMS", "IndividualDBConfig")',
-                        data: '{jsonData: ' + JSON.stringify(data) + '}',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (result) {
-                            cuteAlert({
-                                type: "success",
-                                title: "Success",
-                                message: "Message Disabled Successfully",
-                                buttonText: "Okay"
-                            }).then(() => {
-                                var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
-                                window.location.href = urlLink;
-                            });
-                        },
-                        error: function (result) {
-                            console.log(result.responseText)
-                        }
-                    });
-                }
-
-            })
+        var DisableSMSWAPromo = true;
+        if ($("#btnEnableDisable").text() == "Enable") {
+            DisableSMSWAPromo = false;
+        }
+        var message = '';
+        if (DisableSMSWAPromo) {
+            message = 'Do you want to disable Transactional Message?';
         }
         else {
-            DisableSMSWAPromo = false;
-            cuteAlert({
-                type: "question",
-                title: "Confirmation",
-                message: "Do you want to enable promotional SMS?",
-                confirmText: "Yes",
-                cancelText: "No"
-            }).then((e) => {
-                if (e == ("confirm")) {
-                    var MemberData = [];
-                    item = {}
-                    item["MobileNo"] = $("#txtMobileNo").val();
-                    item["DisableSMSWAPromo"] = DisableSMSWAPromo;
-                    MemberData.push(item);
-                    var data = JSON.stringify(MemberData);
-                    console.log(data)
-                    $("#divLoader").show();
-                    $.ajax({
-                        type: "POST",
-                        url: '@Url.Action("DisablePromotionalSMS", "IndividualDBConfig")',
-                        data: '{jsonData: ' + JSON.stringify(data) + '}',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (result) {
-                            cuteAlert({
-                                type: "success",
-                                title: "Success",
-                                message: "Message Enabled Successfully",
-                                buttonText: "Okay"
-                            }).then(() => {
-                                var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
-                                window.location.href = urlLink;
-                            });
-                        },
-                        error: function (result) {
-                            console.log(result.responseText)
-                        }
-                    });
-                }
-            })
+            message = 'Do you want to enable Transactional Message?';
         }
-
-
+        cuteAlert({
+            type: "question",
+            title: "Confirmation",
+            message: message,
+            confirmText: "Yes",
+            cancelText: "No"
+        }).then((e) => {
+            if (e == ("confirm")) {
+                var MemberData = [];
+                item = {}
+                item["MobileNo"] = $("#txtMobileNo").val();
+                item["DisableSMSWAPromo"] = DisableSMSWAPromo;
+                MemberData.push(item);
+                var data = JSON.stringify(MemberData);
+                console.log(data)
+                $("#divLoader").show();
+                var message1 = ''
+                if (DisableSMSWAPromo) {
+                    message1 = 'Transactional Message Disabled Successfully';
+                }
+                else {
+                    message1 = 'Transactional Message Enabled Successfully';
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DisablePromotionalSMS", "IndividualDBConfig")',
+                    data: '{jsonData: ' + JSON.stringify(data) + '}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Success",
+                            message: message1,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
+                            window.location.href = urlLink;
+                        });
+                    },
+                    error: function (result) {
+                        console.log(result.responseText)
+                    }
+                });
+            }
+        })
     }
-    
 </script>
 
 

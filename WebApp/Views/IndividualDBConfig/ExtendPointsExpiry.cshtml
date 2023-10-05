@@ -160,11 +160,14 @@
         $("#txtExpiryDate").datepicker({
             dateFormat: "yy-mm-dd",
         });
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#dtFrom").datepicker({
             dateFormat: "yy-mm-dd",
+            minDate: today,
         });
         $("#dtTo").datepicker({
             dateFormat: "yy-mm-dd",
+            minDate: today,
         });
         $("#txtUpdateRange").datepicker({
             dateFormat: "yy-mm-dd",
@@ -251,14 +254,23 @@
                  console.log(result);
                  if (result) {
                      cuteAlert({
-                        type: "success",
-                        title: "Update",
-                        message: "Point Expiry date extended Successfully",
-                        buttonText: "Okay"
-                    }).then(() => {
-                        var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
-                        window.location.href = urlLink;
-                    });
+                         type: "success",
+                         title: "Update",
+                         message: "Point Expiry Changed Successfully",
+                         buttonText: "Okay"
+                     }).then(() => {
+                         var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
+                         window.location.href = urlLink;
+                     });
+                     $("#divLoader").hide();
+                 }
+                 else {
+                     cuteAlert({
+                         type: "error",
+                         title: "OOPS...",
+                         message: "Expired Point Can not Extend",
+                         buttonText: "Okay"
+                     })
                      $("#divLoader").hide();
                  }
              },
@@ -323,7 +335,7 @@
                      cuteAlert({
                         type: "success",
                         title: "Update",
-                        message: "Point Expiry dates extended Successfully",
+                        message: "Point Expiry Changed Successfully",
                         buttonText: "Okay"
                     }).then(() => {
                         var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
@@ -404,7 +416,7 @@
                      cuteAlert({
                          type: "success",
                          title: "Update",
-                         message: "Point Expiry dates extended Successfully",
+                         message: "Point Expiry Changed Successfully",
                          buttonText: "Okay"
                      }).then(() => {
                          var urlLink = "@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")";
