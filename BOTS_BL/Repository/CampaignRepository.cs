@@ -2558,7 +2558,7 @@ namespace BOTS_BL.Repository
                     //DBName = "MadhusudanTextiles_New";
                     using (var context = new CommonDBContext())
                     {
-                        objData = context.Database.SqlQuery<PromoBlastDetails>("sp_CampaignDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId,@pi_DBName",
+                        objData = context.Database.SqlQuery<PromoBlastDetails>("sp_PromoBlastDetailed @pi_GroupId,@pi_INDDatetime,@pi_CampaignId,@pi_DBName",
                             new SqlParameter("@pi_GroupId", GroupId),
                             new SqlParameter("@pi_INDDatetime", DateTime.Now),
                             new SqlParameter("@pi_CampaignId", CampaignId),

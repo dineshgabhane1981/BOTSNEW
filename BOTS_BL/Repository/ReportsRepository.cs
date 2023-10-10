@@ -106,7 +106,7 @@ namespace BOTS_BL.Repository
                         {
                             MemberList Obj = new MemberList();
                             Obj.EnrooledOutlet = item.OutletName;
-                            Obj.EnrolledDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                            Obj.EnrolledDate = item.DOJ.Value.ToString("MM/dd/yyyy");
                             Obj.MaskedMobileNo = item.MaskedMobileNo;
                             Obj.MobileNo = item.MobileNo;
                             Obj.MemberName = item.Name;
@@ -118,11 +118,11 @@ namespace BOTS_BL.Repository
                             Obj.AvlBalPoints = item.AvlPts;
                             if (item.LasTTxnDate.HasValue)
                             {
-                                Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("dd/MM/yyyy");
+                                Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("MM/dd/yyyy");
                             }
                             else
                             {
-                                Obj.LastTxnDate = item.DOJ.Value.ToString("dd/MM/yyyy");
+                                Obj.LastTxnDate = item.DOJ.Value.ToString("MM/dd/yyyy");
                             }
 
                             lstMember.Add(Obj);
@@ -1159,8 +1159,8 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_Month", month),
                         new SqlParameter("@pi_Year", year)).ToList<PointExpiryTxn>();
                     }
-                    else if (GroupId == "1087")
-                    {
+                    //else if (GroupId == "1087")
+                    //{
                         DateTime Today = DateTime.Now;
                         int NextMonth = Today.AddMonths(1).Month;
                         int ThirdMonth = Today.AddMonths(2).Month;
@@ -1183,29 +1183,30 @@ namespace BOTS_BL.Repository
                             lstPoint.AvlPoints = Convert.ToInt64(item.AvlPts);
                             if (!string.IsNullOrEmpty(item.LastTxnDate.ToString()))
                             {
-                                lstPoint.LastTxnDate = item.LastTxnDate.ToString();
+                                lstPoint.LastTxnDate = item.LastTxnDate.Value.ToString("MM/dd/yyyy");
+                                
                             }
                             else
                             {
-                                lstPoint.LastTxnDate = item.DOJ.ToString();
+                                lstPoint.LastTxnDate = item.DOJ.Value.ToString("MM/dd/yyyy");
                             }
 
                             lstPoint.PointsExpiry = Convert.ToInt64(item.Points);
-                            lstPoint.ExpiryDate = item.EndDate.ToString();
+                            lstPoint.ExpiryDate = item.EndDate.Value.ToString("MM/dd/yyyy");
 
                             pointExpiryTxn.Add(lstPoint);
                         }
 
-                    }
-                    else
-                    {
-                        pointExpiryTxn = context.Database.SqlQuery<PointExpiryTxn>("sp_BOTS_PointsExpiry1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_Month", month),
-                        new SqlParameter("@pi_Year", year)).ToList<PointExpiryTxn>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    pointExpiryTxn = context.Database.SqlQuery<PointExpiryTxn>("sp_BOTS_PointsExpiry1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month, @pi_Year",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //    new SqlParameter("@pi_LoginId", ""),
+                    //    new SqlParameter("@pi_Month", month),
+                    //    new SqlParameter("@pi_Year", year)).ToList<PointExpiryTxn>();
+                    //}
 
                 }
             }
@@ -1342,8 +1343,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    if (GroupId == "1087")
-                    {
+                    //if (GroupId == "1087")
+                    //{
                         DateTime CurrentMonth = DateTime.Now;
                         var NextMonth = (CurrentMonth.AddMonths(1));
                         var ThirdMonth = (CurrentMonth.AddMonths(2));
@@ -1362,15 +1363,15 @@ namespace BOTS_BL.Repository
                         celebrationsData.EnrollmentAnniversaryCountNextMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == NextMonth.Month && x.DOJ.Value.Year != NextMonth.Year).Count();
                         celebrationsData.EnrollmentAnniversary3rdMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == ThirdMonth.Month && x.DOJ.Value.Year != ThirdMonth.Year).Count();
 
-                    }
-                    else
-                    {
-                        celebrationsData = context.Database.SqlQuery<Celebrations>("sp_BOTS_Celebrate @pi_GroupId, @pi_Date, @pi_LoginId",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //}
+                    //else
+                    //{
+                    //    celebrationsData = context.Database.SqlQuery<Celebrations>("sp_BOTS_Celebrate @pi_GroupId, @pi_Date, @pi_LoginId",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
 
-                        new SqlParameter("@pi_LoginId", "")).FirstOrDefault<Celebrations>();
-                    }
+                    //    new SqlParameter("@pi_LoginId", "")).FirstOrDefault<Celebrations>();
+                    //}
 
                 }
             }
@@ -1387,8 +1388,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    if (GroupId == "1087")
-                    {
+                    //if (GroupId == "1087")
+                    //{
                         DateTime Today = DateTime.Now;
                         int Parmonth;
                         Parmonth = 0;
@@ -1420,8 +1421,8 @@ namespace BOTS_BL.Repository
                                 Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
                                 Obj.AvlPoints = item.AvlPts;
                                 Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
-                                Obj.CelebrationDate = Convert.ToString(item.DOB);
-                                celebrationTxnsData.Add(Obj);
+                                Obj.CelebrationDate = item.DOB.Value.ToString("MM/dd/yyyy");
+                                celebrationTxnsData.Add(Obj);                            
                             }
                         }
                         if (type == 2)
@@ -1438,7 +1439,7 @@ namespace BOTS_BL.Repository
                                 Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
                                 Obj.AvlPoints = item.AvlPts;
                                 Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
-                                Obj.CelebrationDate = Convert.ToString(item.AnniversaryDate);
+                                Obj.CelebrationDate = item.AnniversaryDate.Value.ToString("MM/dd/yyyy");
                                 celebrationTxnsData.Add(Obj);
                             }
                         }
@@ -1456,20 +1457,20 @@ namespace BOTS_BL.Repository
                                 Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
                                 Obj.AvlPoints = item.AvlPts;
                                 Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
-                                Obj.CelebrationDate = Convert.ToString(item.DOJ);
+                                Obj.CelebrationDate = item.DOJ.Value.ToString("MM/dd/yyyy"); 
                                 celebrationTxnsData.Add(Obj);
                             }
                         }
-                    }
-                    else
-                    {
-                        celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                          new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                          new SqlParameter("@pi_LoginId", ""),
-                        new SqlParameter("@pi_Month", month),
-                        new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    celebrationTxnsData = context.Database.SqlQuery<CelebrationsMoreDetails>("sp_BOTS_Celebrate1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_Month,@pi_Type",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //      new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                    //      new SqlParameter("@pi_LoginId", ""),
+                    //    new SqlParameter("@pi_Month", month),
+                    //    new SqlParameter("@pi_Type", type)).ToList<CelebrationsMoreDetails>();
+                    //}
 
                 }
             }
