@@ -42,7 +42,8 @@ namespace WebApp.Controllers
         {
             EventViewModel objData = new EventViewModel();
             EventDetail objEvent = new EventDetail();
-            objEvent.strEventdate = DateTime.Now.ToString("MM/dd/yyyy");
+            //objEvent.strEventdate = DateTime.Now.ToString("MM/dd/yyyy");
+            objEvent.strEventdate = EVR.IndianDatetime().ToString("MM/dd/yyyy");
             objData.objEvent = objEvent;
             return View(objData);
         }
@@ -292,7 +293,7 @@ namespace WebApp.Controllers
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 var EventData = EVR.GetEditEvents(GroupId, EventId, userDetails.connectionString);
                 EventData.Status = "Started";
-                EventData.Addeddate = DateTime.Now;
+                EventData.Addeddate = EVR.IndianDatetime();
                 var Response = EVR.SaveEventData(EventData, userDetails.connectionString);
 
             }
@@ -326,7 +327,7 @@ namespace WebApp.Controllers
         }
 
         public ActionResult SaveNewMemberData(string jsonData)
-        {
+        {   
             string strDOB, strDOA;
             strDOB = string.Empty;
             strDOA = string.Empty;
@@ -344,7 +345,6 @@ namespace WebApp.Controllers
             {
                 foreach (Dictionary<string, object> item in objData)
                 {
-
                     objEventDetail.GroupId = Convert.ToInt32(item["GroupId"]);
                     objEventDetail.EventId = Convert.ToInt32(item["EventId"]);
                     objEventDetail.Place = Convert.ToString(item["Place"]);
@@ -382,7 +382,7 @@ namespace WebApp.Controllers
                     objEventDetail.EmailId = Convert.ToString(item["EmailId"]);
                     objEventDetail.Address = Convert.ToString(item["Address"]);
                     objEventDetail.AlternateNo = Convert.ToString(item["AlternateNo"]);
-                    objEventDetail.DateOfRegistration = DateTime.Now;
+                    objEventDetail.DateOfRegistration = EVR.IndianDatetime();
                     objEventDetail.Area = Convert.ToString(item["Area"]);
                     objEventDetail.City = Convert.ToString(item["City"]);
                     objEventDetail.Pincode = Convert.ToString(item["PinCode"]);
@@ -495,6 +495,7 @@ namespace WebApp.Controllers
             try
             {
                 var AllCustomer = EVR.GetAllEventCustomer();
+                var LstGroupDetails = EVR.GetCustomEventReport();
 
                 foreach (var customer in AllCustomer)
                 {
@@ -508,7 +509,10 @@ namespace WebApp.Controllers
                 {
                     GetSecondRemainderData(Convert.ToString(customer.GroupId));
                 }
-
+                foreach (var item in LstGroupDetails)
+                {
+                    GetCustomReport(Convert.ToString(item.GroupId),Convert.ToString(item.GroupName));
+                }
             }
             catch (Exception ex)
             {
@@ -532,6 +536,24 @@ namespace WebApp.Controllers
             catch (Exception ex)
             {
                 newexception.AddException(ex, "GetReportData");
+            }
+        }
+
+        public void GetCustomReport(string GroupId,string GroupName)
+        {
+            try
+            {
+                DataSet ReportData = new DataSet();
+                ReportData = EVR.EventCustReportData(GroupId);
+
+                if (ReportData.Tables.Count != 0)
+                {
+                    SendEventCustomReport(GroupId, GroupName, ReportData);
+                }
+            }          
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCustomReport");
             }
         }
 
@@ -685,21 +707,23 @@ namespace WebApp.Controllers
 
                     str.Append("</table>");
 
+                    string EmailId = Convert.ToString(ConfigurationManager.AppSettings["ReportsEmail"]);
+                    string Password = Convert.ToString(ConfigurationManager.AppSettings["ReportEmailAppPassword"]);
                     MailMessage Msg = new MailMessage();                    
 
-                    Msg.From = new MailAddress("report@blueocktopus.in");
-                    var emailId = EVR.GetReportEmail(Convert.ToInt32(GroupId));
-                    Msg.To.Add(emailId);
-
+                    Msg.From = new MailAddress(EmailId);
+                    var _ToEmailId = EVR.GetReportEmail(Convert.ToInt32(GroupId));
+                    Msg.To.Add(_ToEmailId);
+                    Msg.CC.Add(Convert.ToString(ConfigurationManager.AppSettings["ReportEmailCC"]));
                     Msg.Subject = EmailSubject;
                     Msg.Body = str.ToString();
 
                     Msg.IsBodyHtml = true;
-                    SmtpClient smtp = new SmtpClient("smtp.zoho.com");
+                    SmtpClient smtp = new SmtpClient(Convert.ToString(ConfigurationManager.AppSettings["ZohoSMTPAddress"]));
                     smtp.Port = 587;
                     smtp.EnableSsl = true;
 
-                    smtp.Credentials = new System.Net.NetworkCredential("report@blueocktopus.in", "S#02MC@OW92d8$x");
+                    smtp.Credentials = new System.Net.NetworkCredential(EmailId, Password);
 
                     smtp.Send(Msg);
                     Msg.Dispose();
@@ -733,7 +757,8 @@ namespace WebApp.Controllers
 
         public void GetSecondRemainderData(string groupid)
         {
-            string DateOnly = DateTime.Now.ToString("yyyy-MM-dd");
+            //string DateOnly = DateTime.Now.ToString("yyyy-MM-dd");
+            string DateOnly = EVR.IndianDatetime().ToString("yyyy-MM-dd");
             try
             {
                 var listEventData = EVR.EventReportData(groupid);
@@ -844,6 +869,153 @@ namespace WebApp.Controllers
                     newexception.AddException(ex, "SendSecondMessage");
                 }
 
+            }
+        }
+
+        public void SendEventCustomReport(string GroupId,string GroupName, DataSet  ReportData)
+        {
+            DataTable Table = new DataTable();
+            DataTable Table1 = new DataTable();
+            try
+            {
+                string ReportName = "EvenReport";
+                string fileName = "EvenReport";
+                string fileLocation_F = Server.MapPath("~/ReportFiles/" + fileName + ".xlsx");
+                //string targetFolder = HttpContext.Current.Server.MapPath("~/uploads/logo");
+                //string targetPath = Path.Combine(targetFolder, yourFileName);
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    //excelSheet.Name
+                    Table = ReportData.Tables[0];
+                    Table1 = ReportData.Tables[1];
+                    Table.TableName = "EventMemberReport";
+                    Table1.TableName = "EventBurnReport";
+
+                    IXLWorksheet worksheet = wb.AddWorksheet(sheetName: ReportName);
+                    worksheet.Cell(1, 1).Value = "Report Name";
+                    worksheet.Cell(1, 2).Value = "Event Member Report";
+                    worksheet.Cell(2, 1).Value = "Date";
+                    worksheet.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet.Cell(3, 1).Value = "Filter";
+
+                    worksheet.Cell(5, 1).InsertTable(Table);
+
+                    IXLWorksheet worksheet1 = wb.AddWorksheet(sheetName: "EventBurnReport");
+                    worksheet1.Cell(1, 1).Value = "Report Name";
+                    worksheet1.Cell(1, 2).Value = "Event Burn Report";
+                    worksheet1.Cell(2, 1).Value = "Date";
+                    worksheet1.Cell(2, 2).Value = DateTime.Now.ToString();
+                    worksheet1.Cell(3, 1).Value = "Filter";
+
+                    worksheet1.Cell(5, 1).InsertTable(Table1);
+
+                    //wb.Worksheets.Add(table);
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                        wb.SaveAs(stream);
+                        File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                        wb.SaveAs(fileLocation_F);
+                    }
+
+                    string Emailheader = string.Empty;
+                    Emailheader = GroupName + " - Event Report";
+                    StringBuilder str = new StringBuilder();
+                    str.Append("<table>");
+                    str.Append("<tr>");
+
+                    str.AppendLine("<td>Dear Customer,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+
+                    str.AppendLine("<td>Please find the Event Report</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>If you have any questions on this report, please do not reply to this email, as this email report is being sent from is an unmonitored email alias. Instead, write to info@blueocktopus.in or call us for information / clarification.</td>");
+                    str.AppendLine("</br>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Regards,</td>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Blue Ocktopus team</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>info@blueocktopus.in</td>");
+                    str.AppendLine("</br>");
+                    str.AppendLine("</br>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.Append("<td>&nbsp;</td>");
+                    str.Append("</tr>");
+                    str.Append("<tr>");
+                    str.AppendLine("<td>Disclaimer: The information/contents of this e-mail message and any attachments are confidential and are intended solely for the addressee. Any review, re-transmission, dissemination or other use of, or taking of any action in reliance upon, this information by persons or entities other than the intended recipient is prohibited. If you have received this transmission in error, please immediately notify the sender by return e-mail and delete this message and its attachments. Any unauthorized use, copying or dissemination of this transmission is prohibited. Neither the confidentiality nor the integrity of this message can be vouched for following transmission on the internet.</td>");
+                    str.Append("</tr>");
+                    str.Append("</table>");
+
+                    string EmailId = Convert.ToString(ConfigurationManager.AppSettings["ReportsEmail"]);
+                    string Password = Convert.ToString(ConfigurationManager.AppSettings["ReportEmailAppPassword"]);
+                    MailMessage Msg = new MailMessage();
+                    Msg.From = new MailAddress(EmailId);
+                    //_ToEmailId = Convert.ToString(ConfigurationManager.AppSettings["Toemail"]);
+                    var _ToEmailId = EVR.GetReportEmail(Convert.ToInt32(GroupId));
+                    Msg.To.Add(_ToEmailId);
+                    Msg.CC.Add(Convert.ToString(ConfigurationManager.AppSettings["ReportEmailCC"]));
+                    Msg.Subject = Emailheader;
+                    Msg.Body = str.ToString();
+
+                    System.Net.Mail.Attachment attachment = new System.Net.Mail.Attachment(fileLocation_F);
+                    Msg.Attachments.Add(attachment);
+                    Msg.IsBodyHtml = true;
+                    SmtpClient smtp = new SmtpClient(Convert.ToString(ConfigurationManager.AppSettings["ZohoSMTPAddress"]));
+
+                    smtp.EnableSsl = true;
+                    smtp.Port = 587;
+                    smtp.Credentials = new System.Net.NetworkCredential(EmailId, Password);
+                    smtp.Send(Msg);
+                    Msg.Dispose();
+                    System.IO.File.Delete(fileLocation_F);
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SendEventCustomReport");
+                
             }
         }
 

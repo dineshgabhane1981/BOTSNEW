@@ -18,6 +18,8 @@ using System.Threading;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
+using System.Web.Mvc;
+using System.Data;
 
 namespace BOTS_BL.Repository
 {
@@ -596,6 +598,24 @@ namespace BOTS_BL.Repository
             return objGroupList;
         }
 
+        public List<EventManagementReport> GetCustomEventReport()
+        {
+            List<EventManagementReport> LstData = new List<EventManagementReport>();
+
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    LstData = context.EventManagementReports.Where(x => x.ReportStatus == true).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCustomEventReport");
+            }
+            return LstData;
+        }
+
         public List<EventDetail> EventReportData(string groupid)
         {
             List<EventDetail> lstReportEventDate = new List<EventDetail>();
@@ -615,6 +635,35 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "EventReportData");
             }
             return lstReportEventDate;
+        }
+
+        public DataSet EventCustReportData(string groupid)
+        {
+            DataTable Dt = new DataTable();
+            DataSet DT = new DataSet();
+            var connStr = CR.GetCustomerConnString(groupid);
+            string Today = IndianDatetime().ToString("yyyy-MM-dd");
+            try
+            {
+                    SqlConnection _Con = new SqlConnection(connStr);
+                    
+                    SqlCommand cmdReport = new SqlCommand("sp_EventReportMonthly", _Con);
+                    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                    using (cmdReport)
+                    {
+                       SqlParameter param1 = new SqlParameter("pi_Date", Today);
+                       cmdReport.CommandType = CommandType.StoredProcedure;
+                       cmdReport.Parameters.Add(param1);
+
+                       daReport.Fill(DT);
+                    }       
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "EventCustReportData");
+            }
+
+            return DT;
         }
 
         public List<EventMemberDetail> EventMemberData(string GroupId, string EventId)
@@ -640,7 +689,6 @@ namespace BOTS_BL.Repository
 
             return lstReportData;
         }
-
 
         public string GetGroupdetails(string groupid)
         {
@@ -854,7 +902,6 @@ namespace BOTS_BL.Repository
 
                 if (errorCode == "0")
                 {
-
                     if (result1 != null)
                     {
                         foreach (JToken item in result1)
@@ -871,7 +918,6 @@ namespace BOTS_BL.Repository
                             ObjPADMData.middleName = (string)item["middleName"];
                             ObjPADMData.surName = (string)item["surName"];
                         }
-
                     }
                     ObjPADMData.name = ObjPADMData.firstName + " " + ObjPADMData.middleName + " " + ObjPADMData.surName;
                     //ObjPADMData.name = Obj.Name;
@@ -952,7 +998,6 @@ namespace BOTS_BL.Repository
                     {
                         result = streamReader1.ReadToEnd();
                     }
-
                 }
             }
             catch(Exception ex)

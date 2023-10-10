@@ -21,10 +21,11 @@ namespace WebApp.EventTaskService
                 //{
                     try
                     {
-                        //string path = "E:\\Projects\\Sample.txt";
-                        string path = "C:\\EventsJobLog.txt";
-                        //string path = "E:\\DashboardJobLog.txt";
-                        using (StreamWriter writer = new StreamWriter(path, true))
+                    //string path = "E:\\Projects\\Sample.txt";
+                    //string path = "E:\\Sample.txt";
+                    string path = "C:\\EventsJobLog.txt";
+                    //string path = "E:\\DashboardJobLog.txt";
+                    using (StreamWriter writer = new StreamWriter(path, true))
                         {
                             writer.WriteLine("Report Generation Started");
                             writer.Close();

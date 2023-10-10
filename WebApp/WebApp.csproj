@@ -817,6 +817,7 @@
     <Folder Include="DashboardReports\" />
     <Folder Include="DLCImages\" />
     <Folder Include="DocLibDownload\" />
+    <Folder Include="ReportFiles\" />
     <Folder Include="Temp\" />
     <Folder Include="Views\testSinglepagews\" />
     <Folder Include="Views\Test\" />
