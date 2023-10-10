@@ -11,136 +11,143 @@
 </style>
 <div class="app-main__inner">
     @*<div class="container-fluid pt-3 pl-3 pr-3">*@
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-            <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
-                <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
-                    <b>WA Message Balance :</b>
-                </div>
-                <div>
-                    <span id="Balance">@((ViewBag.Balance))</span>
-                </div>
-            </div>
-            <div class="row mt-5" style="margin-top: 20px; margin-left: 10px;">
-                
-                <div class="col-md-2 col-xl-2 ml-3">
-                    <input id="rbtnAll" name="Type" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> ALL
-                </div>
-                <div class="col-md-2 col-xl-2 ">
-                    <input id="rbtnCategory" name="Type" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Retail Category
-                </div>
-                <div class="col-md-3 col-xl-3" id="ddlCategoryList"style="visibility: hidden;">
-                      @Html.DropDownListFor(x => Model.lstRetailCategory, new SelectList(Model.lstRetailCategory, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlCategoryListWAFile" })
-                </div>
-                <div class="col-md-3 col-xl-3 ">
-                    <b>Cutomer Count :</b>
-                    <span id="CustCount1">@((ViewBag.GroupCount))</span>
-                </div>
-            </div>
-            <input type="text" id="hdnFile1" hidden />
-            <input type="text" id="hdntextCaption1" hidden />
-            <input type="text" id="hdnFile2" hidden />
-            <input type="text" id="hdntextCaption2" hidden />
-        </div>
-        @*<div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">*@
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
         <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
-            <div class="col-sm-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="CaptionCheck1" style="width: 15px; height: 15px; cursor: pointer;">&nbsp;
-                    <label class="form-check-label" for="CaptionCheck1" style="font-size: 15px">
-                        Add Caption
-                    </label>
-                </div>
+            <div class="col-md-3 col-xl-3" style="margin-left: 18px;">
+                <b>WA Message Balance :</b>
             </div>
-            <div class="col-sm-4">
-            </div>
-            <div class="col-sm-4" style="text-align: right;">
-                <a id="ImgAdd" href="#" onclick="Add();" title="Add New Msg">  <img src="~/Content/assets/images/details_open.png" width="25" height="25" /></a>
-                <a id="ImgRemove" href="#" onclick="Remove();" title="Remove New Msg" style="display: none">  <img src="~/Content/assets/images/details_close.png" width="25" height="25" /></a>
+            <div>
+                <span id="Balance">@((ViewBag.Balance))</span>
             </div>
         </div>
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-            <div class="row mt-2">
-                <div class="col-sm-1">
-                    <B>File 1</B>
-                </div>
-                <div class="col-sm-5">
-                    <input type="file" id="FileUpload1" style="margin-left: 30px; text-align: left;" />
-                    <input type="button" id="btnUpload1" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
-                </div>
-                <div class="col-sm-5" style="display: none" id="UploadImglink">
-                    @*<span id="WAText">Upload Img Link:</span>*@
-                    <a id="a" href="#" target="_blank"><span id="WAUploadImg1"></span></a>
-                    @*<img id="Image1" src="" alt="Image11" />*@
-                </div>
-            </div>
-            <div class="row mt-5" id="Caption1" style="display: none">
-                <div class="col-sm-2">
-                    <b>Caption</b>
-                </div>
-                <div class="col-sm-4">
-                    <textarea class="form-control" id="textCaption1" rows="3" maxlength="10000" placeholder="Enter Caption"></textarea>
-                </div>
-                <div class="col-sm-6">
-                </div>
-            </div>
-        </div>
-        <div class="row mt-2" style="margin-top: 20px; margin-left: 10px; display:none" id="secondCaption">
-            <div class="col-sm-4">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="CaptionCheck2" style="width: 15px; height: 15px; cursor: pointer;">&nbsp;
-                    <label class="form-check-label" for="CaptionCheck2" style="font-size: 15px">
-                        Add Caption
-                    </label>
-                </div>
-            </div>
-            <div class="col-sm-4">
-            </div>
-            <div class="col-sm-4">
-            </div>
-        </div>
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; display:none" id="secondMgs">
-            <div class="row mt-2">
-                <div class="col-sm-1">
-                    <B>File 2</B>
-                </div>
-                <div class="col-sm-5">
-                    <input type="file" id="FileUpload2" style="margin-left: 30px; text-align: left;" />
-                    <input type="button" id="btnUpload2" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
-                </div>
-                <div class="col-sm-5" style="margin: 20px; display: none" id="UploadImglink2">
-                    @*<span id="WAText">Upload Img Link:</span>*@
-                    <a id="a1" href="#" target="_blank"><span id="WAUploadImg2"></span></a>
-                    @*<img id="Image2" src="" alt="Image22" />*@
-                </div>
-            </div>
-            <div class="row mt-5" id="Caption2" style="display: none">
-                <div class="col-sm-2">
-                    <b>Caption</b>
-                </div>
-                <div class="col-sm-4">
-                    <textarea class="form-control" id="textCaption2" rows="3" maxlength="10000" placeholder="Enter Caption"></textarea>
-                </div>
-                <div class="col-sm-6">
-                </div>
-            </div>
-        </div>
+        <div class="row mt-5" style="margin-top: 20px; margin-left: 10px;">
 
-        <div class="row mt-2">
-            <div class="col-sm-4" id="divTestMsgBtn">
-                <div class="button">
-                    <button type="button" id="BtnSendMsgTest" style="margin-left:25px;" class="btn btn-primary"><b>Send Test Message</b></button>
-                </div>
+            <div class="col-md-2 col-xl-2 ml-3">
+                <input id="rbtnAll" name="Type" type="radio" checked class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> ALL
+            </div>
+            <div class="col-md-2 col-xl-2 ">
+                <input id="rbtnCategory" name="Type" type="radio" class="rbtnClass" style="width:20px;height:20px;cursor:pointer;"> Retail Category
+            </div>
+            <div class="col-md-3 col-xl-3" id="ddlCategoryList" style="visibility: hidden;">
+                @Html.DropDownListFor(x => Model.lstRetailCategory, new SelectList(Model.lstRetailCategory, "Value", "Text"), "ALL", htmlAttributes: new { @class = "input50", @id = "ddlCategoryListWAFile" })
+            </div>
+            <div class="col-md-3 col-xl-3 ">
+                <b>Cutomer Count :</b>
+                <span id="CustCount1">@((ViewBag.GroupCount))</span>
             </div>
         </div>
-        <div class="row mt-2">
-            <div class="col-sm-4" id="divSendMsg">
-                <div class="button">
-                    <button type="button" id="BtnSendMsg" style="margin-left:25px;" class="btn btn-success" disabled><b>Send Message</b></button>
-                </div>
+        <input type="text" id="hdnFile1" hidden />
+        <input type="text" id="hdntextCaption1" hidden />
+        <input type="text" id="hdnFile2" hidden />
+        <input type="text" id="hdntextCaption2" hidden />
+    </div>
+    @*<div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">*@
+    <div class="row mt-2" style="margin-top: 20px; margin-left: 10px;">
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="CaptionCheck1" style="width: 15px; height: 15px; cursor: pointer;">&nbsp;
+                <label class="form-check-label" for="CaptionCheck1" style="font-size: 15px">
+                    Add Caption
+                </label>
             </div>
         </div>
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-4" style="text-align: right;">
+            <a id="ImgAdd" href="#" onclick="Add();" title="Add New Msg">  <img src="~/Content/assets/images/details_open.png" width="25" height="25" /></a>
+            <a id="ImgRemove" href="#" onclick="Remove();" title="Remove New Msg" style="display: none">  <img src="~/Content/assets/images/details_close.png" width="25" height="25" /></a>
+        </div>
+    </div>
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="row mt-2">
+            <div class="col-sm-1">
+                <B>File 1</B>
+            </div>
+            <div class="col-sm-5">
+                <input type="file" id="FileUpload1" style="margin-left: 30px; text-align: left;" />
+                <input type="button" id="btnUpload1" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+            </div>
+            <div class="col-sm-5" style="display: none" id="UploadImglink">
+                @*<span id="WAText">Upload Img Link:</span>*@
+                <a id="a" href="#" target="_blank"><span id="WAUploadImg1"></span></a>
+                @*<img id="Image1" src="" alt="Image11" />*@
+            </div>
+        </div>
+        <div class="row mt-5" id="Caption1" style="display: none">
+            <div class="col-sm-2">
+                <b>Caption</b>
+            </div>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="textCaption1" rows="3" maxlength="10000" placeholder="Enter Caption"></textarea>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2" style="margin-top: 20px; margin-left: 10px; display:none" id="secondCaption">
+        <div class="col-sm-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="CaptionCheck2" style="width: 15px; height: 15px; cursor: pointer;">&nbsp;
+                <label class="form-check-label" for="CaptionCheck2" style="font-size: 15px">
+                    Add Caption
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+        </div>
+        <div class="col-sm-4">
+        </div>
+    </div>
+    <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px; display:none" id="secondMgs">
+        <div class="row mt-2">
+            <div class="col-sm-1">
+                <B>File 2</B>
+            </div>
+            <div class="col-sm-5">
+                <input type="file" id="FileUpload2" style="margin-left: 30px; text-align: left;" />
+                <input type="button" id="btnUpload2" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="Upload" />
+            </div>
+            <div class="col-sm-5" style="margin: 20px; display: none" id="UploadImglink2">
+                @*<span id="WAText">Upload Img Link:</span>*@
+                <a id="a1" href="#" target="_blank"><span id="WAUploadImg2"></span></a>
+                @*<img id="Image2" src="" alt="Image22" />*@
+            </div>
+        </div>
+        <div class="row mt-5" id="Caption2" style="display: none">
+            <div class="col-sm-2">
+                <b>Caption</b>
+            </div>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="textCaption2" rows="3" maxlength="10000" placeholder="Enter Caption"></textarea>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div>
 
-        @*</div>*@
+    <div class="row mt-2">
+        <div class="col-sm-4">
+            <input type="text" id="TestNumber" class = "input50" placeholder="Enter Test Numbers" style="margin-left:25px;" />
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-sm-3" id="divTestMsgBtn">
+            <div class="button">
+                <button type="button" id="BtnSendMsgTest" style="margin-left:25px;" class="btn btn-primary"><b>Send Test Message</b></button>
+            </div>
+        </div>
+        <div class="col-sm-3" id="divSendMsg">
+            <div class="button">
+                <button type="button" id="BtnSendMsg" class="btn btn-success" disabled><b>Send Message</b></button>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        
+    </div>
+
+    @*</div>*@
     @*</div>*@
 </div>
 <script>
@@ -371,13 +378,18 @@
 
         $("#hdntextCaption1").val($("#textCaption1").val());
         $("#hdntextCaption2").val($("#textCaption2").val());
+        var TestNumber = $("#TestNumber").val();
 
         var File1 = $("#hdnFile1").val();
         var File2 = $("#hdnFile2").val();
-        var Text1 = $("#hdntextCaption1").val();
-        var Text2 = $("#hdntextCaption2").val();
+        var Text1 = $("#textCaption1").val();
+        var Text2 = $("#textCaption2").val();
         var flag = 0;
 
+
+        if (TestNumber == "") {
+            flag = 5;
+        }
         if ($("#CaptionCheck1").is(':checked')) {
 
             if (Text1.length == 0) {
@@ -420,7 +432,7 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SendTestMessage", "BOPromoCampaign")',
-                data: '{File1: ' + JSON.stringify(File1) + ',Text1: ' + JSON.stringify(Text1) + ',File2: ' + JSON.stringify(File2) + ',Text2: ' + JSON.stringify(Text2) +'}',
+                data: '{TestNumber:' + JSON.stringify(TestNumber) + ',File1: ' + JSON.stringify(File1) + ',Text1: ' + JSON.stringify(Text1) + ',File2: ' + JSON.stringify(File2) + ',Text2: ' + JSON.stringify(Text2) +'}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -498,6 +510,14 @@
                 type: "error",
                 title: "File 1 Not Uploaded",
                 message: "Please upload file",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 5) {
+            cuteAlert({
+                type: "error",
+                title: "Test Number Not Found",
+                message: "Please Enter Testing Number",
                 buttonText: "Okay"
             })
         }

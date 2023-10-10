@@ -120,7 +120,6 @@ namespace BOTS_BL.Repository
             WAInsData WAInsDetails = new WAInsData();
             string Tokenid = ConfigurationManager.AppSettings["BOTokenid"].ToString();
 
-
             try
             {     
                var baseAddress = "https://bo.enotify.app/api/chackBal?token=" + Tokenid;
@@ -188,7 +187,7 @@ namespace BOTS_BL.Repository
             return LstRetailCategory;
         }
 
-        public JsonData SendTestMessage(string File1, string Text1, string File2, string Text2, tblAuditBOPromo objaudit)
+        public JsonData SendTestMessage(string TestNumber,string File1, string Text1, string File2, string Text2, tblAuditBOPromo objaudit)
         {
             string ImageWithCaptionUrl, TextUrl, FileUrl;
             
@@ -196,7 +195,11 @@ namespace BOTS_BL.Repository
             TextUrl = ConfigurationManager.AppSettings["SendTextAPILink"].ToString();
             FileUrl = ConfigurationManager.AppSettings["SendFilesAPILink"].ToString();
 
-            List<GroupCode> Data = new List<GroupCode>();
+            string[] TestSplit = TestNumber.Split(',');
+            List<string> Data = new List<string>();
+
+            Data.AddRange(TestSplit);
+
             JsonData Obj = new JsonData();
             string _MobileNo, _TokenId, _FileUrl1, _FileUrl2, _Message1, _Message2;
             _MobileNo = string.Empty; 
@@ -213,7 +216,7 @@ namespace BOTS_BL.Repository
                     //Data = context.WAReports.Where(x => x.SMSStatus == "9" && x.Status == "1").ToList();
                     //Data = context.WAReports.Where(x => x.SMSStatus == "5" && x.Status == "1").ToList();
                     
-                    Data = context.Database.SqlQuery<GroupCode>("select distinct W.GroupCode as GroupCodeId from WAReport W where W.SMSStatus = 9 and W.Status = 1 Group by W.GroupCode").ToList();
+                    //Data = context.Database.SqlQuery<GroupCode>("select distinct W.GroupCode as GroupCodeId from WAReport W where W.SMSStatus = 9 and W.Status = 1 Group by W.GroupCode").ToList();
 
                     Thread Job = new Thread(() => RouteMessage(Data, File1, File2, Text1, Text2, ImageWithCaptionUrl, TextUrl, FileUrl, _TokenId));
                     Job.Start();
@@ -232,15 +235,20 @@ namespace BOTS_BL.Repository
             return Obj;
         }
 
-        public JsonData SendTestMessage(string Text1, string Text2, tblAuditBOPromo objaudit)
+        public JsonData SendTestMessage(string TestNumber,string Text1, string Text2, tblAuditBOPromo objaudit)
         {
             string ImageWithCaptionUrl, TextUrl, FileUrl;
+
+            string[] TestSplit = TestNumber.Split(',');
+            List<string> Data = new List<string>();
+
+            Data.AddRange(TestSplit);
 
             ImageWithCaptionUrl = ConfigurationManager.AppSettings["SendFileWithCaptionAPILink"].ToString();
             TextUrl = ConfigurationManager.AppSettings["SendTextAPILink"].ToString();
             FileUrl = ConfigurationManager.AppSettings["SendFilesAPILink"].ToString();
 
-            List<GroupCode> Data = new List<GroupCode>();
+            //List<GroupCode> Data = new List<GroupCode>();
             JsonData Obj = new JsonData();
             string _MobileNo, _TokenId;
             _MobileNo = string.Empty;
@@ -253,7 +261,9 @@ namespace BOTS_BL.Repository
                     //Data = context.WAReports.Where(x => x.SMSStatus == "9" && x.Status == "1").ToList();
                     //Data = context.WAReports.Where(x => x.SMSStatus == "5" && x.Status == "1").ToList();
                     
-                    Data = context.Database.SqlQuery<GroupCode>("select distinct W.GroupCode as GroupCodeId from WAReport W where W.SMSStatus = 9 and W.Status = 1 Group by W.GroupCode").ToList();
+                    //Data = context.Database.SqlQuery<GroupCode>("select distinct W.GroupCode as GroupCodeId from WAReport W where W.SMSStatus = 9 and W.Status = 1 Group by W.GroupCode").ToList();
+
+
 
                     Thread Job = new Thread(() => RouteMessage(Data, Text1, Text2, TextUrl, _TokenId));
                     Job.Start();
@@ -466,6 +476,105 @@ namespace BOTS_BL.Repository
             }
         }
 
+        public void RouteMessage(List<string> Data, string File1, string File2, string Text1, string Text2, string ImageWithCaptionUrl, string TextUrl, string FileUrl, string _TokenId)
+        {
+            string _MobileNo;
+            _MobileNo = string.Empty;
+
+            if (!string.IsNullOrEmpty(File1) && !string.IsNullOrEmpty(Text1) && !string.IsNullOrEmpty(File2) && !string.IsNullOrEmpty(Text2))
+            {
+                foreach (var item in Data)
+                {
+                    _MobileNo = item;
+
+                    Thread _job1 = new Thread(() => WATestImageCaption(_MobileNo, ImageWithCaptionUrl, _TokenId, File1, Text1));
+                    _job1.Start();
+
+                    Thread _job2 = new Thread(() => WATestImageCaption(_MobileNo, ImageWithCaptionUrl, _TokenId, File2, Text2));
+                    _job2.Start();
+
+                    Thread.Sleep(2000);
+                }
+
+            }
+            else if (!string.IsNullOrEmpty(File1) && !string.IsNullOrEmpty(Text1) && !string.IsNullOrEmpty(File2) && string.IsNullOrEmpty(Text2))
+            {
+                foreach (var item in Data)
+                {
+                    _MobileNo = item;
+
+                    Thread _job1 = new Thread(() => WATestImageCaption(_MobileNo, ImageWithCaptionUrl, _TokenId, File1, Text1));
+                    _job1.Start();
+
+                    Thread _job2 = new Thread(() => WATestImage(_MobileNo, FileUrl, _TokenId, File2));
+                    _job2.Start();
+
+                    Thread.Sleep(2000);
+                }
+            }
+            else if (!string.IsNullOrEmpty(File1) && !string.IsNullOrEmpty(Text1) && string.IsNullOrEmpty(File2) && string.IsNullOrEmpty(Text2))
+            {
+                foreach (var item in Data)
+                {
+                    _MobileNo = item;
+
+                    Thread _job1 = new Thread(() => WATestImageCaption(_MobileNo, ImageWithCaptionUrl, _TokenId, File1, Text1));
+                    _job1.Start();
+
+                    Thread.Sleep(2000);
+                }
+
+            }
+            else if (!string.IsNullOrEmpty(File1) && string.IsNullOrEmpty(Text1) && string.IsNullOrEmpty(File2) && string.IsNullOrEmpty(Text2))
+            {
+                foreach (var item in Data)
+                {
+                    _MobileNo = item;
+
+                    Thread _job1 = new Thread(() => WATestImage(_MobileNo, FileUrl, _TokenId, File1));
+                    _job1.Start();
+
+                    Thread.Sleep(2000);
+                }
+
+            }
+        }
+
+        public void RouteMessage(List<string> Data, string Text1, string Text2, string TextUrl, string _TokenId)
+        {
+            string _MobileNo;
+            _MobileNo = string.Empty;
+
+            if (!string.IsNullOrEmpty(Text1) && !string.IsNullOrEmpty(Text2))
+            {
+                foreach (var item in Data)
+                {
+                    _MobileNo = item;
+
+                    Thread _job1 = new Thread(() => WATestText(_MobileNo, TextUrl, _TokenId, Text1));
+                    _job1.Start();
+
+                    Thread _job2 = new Thread(() => WATestText(_MobileNo, TextUrl, _TokenId, Text2));
+                    _job2.Start();
+
+                    Thread.Sleep(2000);
+                }
+
+            }
+            else if (!string.IsNullOrEmpty(Text1) && string.IsNullOrEmpty(Text2))
+            {
+                foreach (var item in Data)
+                {
+                    _MobileNo = item;
+
+                    Thread _job1 = new Thread(() => WATestText(_MobileNo, TextUrl, _TokenId, Text1));
+                    _job1.Start();
+
+                    Thread.Sleep(2000);
+                }
+            }
+        }
+
         public void WAText(string _MobileNo, string _Url, string _TokenId,string _Message)
         {
             string responseString;
@@ -581,6 +690,161 @@ namespace BOTS_BL.Repository
                 sbposdata.AppendFormat(_Url);
                 sbposdata.AppendFormat("token={0}", _TokenId);
                 sbposdata.AppendFormat("&phone={0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _Message);
+                sbposdata.AppendFormat("&link={0}", _ImageUrl1);
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void WATestText(string _MobileNo, string _Url, string _TokenId, string _Message)
+        {
+            string responseString;
+            try
+            {
+                _Message = _Message.Replace("#99", "&");
+                _Message = HttpUtility.UrlEncode(_Message);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_Url);
+                sbposdata.AppendFormat("token={0}", _TokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _Message);
+
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void WATestImage(string _MobileNo, string _Url, string _TokenId, string _ImageUrl1)
+        {
+            string responseString;
+            try
+            {
+                
+                //_MobileMessage = _MobileMessage.Replace("#99", "&");
+                //_MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_Url);
+                sbposdata.AppendFormat("token={0}", _TokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
+                //sbposdata.AppendFormat("&message={0}", _MobileMessage);
+                sbposdata.AppendFormat("&link={0}", _ImageUrl1);
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
+
+        public void WATestImageCaption(string _MobileNo, string _Url, string _TokenId, string _ImageUrl1, string _Message)
+        {
+            string responseString;
+            try
+            {
+
+                _Message = _Message.Replace("#99", "&");
+                _Message = HttpUtility.UrlEncode(_Message);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_Url);
+                sbposdata.AppendFormat("token={0}", _TokenId);
+                sbposdata.AppendFormat("&phone=91{0}", _MobileNo);
                 sbposdata.AppendFormat("&message={0}", _Message);
                 sbposdata.AppendFormat("&link={0}", _ImageUrl1);
                 string Url = sbposdata.ToString();

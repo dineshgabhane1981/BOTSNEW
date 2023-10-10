@@ -76,18 +76,26 @@
     </div>
 
     <div class="row mt-2">
-        <div class="col-sm-4" id="divTestMsgBtn">
+        <div class="col-sm-4">
+            <input type="text" id="TestNumber1" class="input50" placeholder="Enter Test Numbers" style="margin-left:25px;" />
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-sm-3" id="divTestMsgBtn">
             <div class="button">
                 <button type="button" id="BtnSendMsgTest1" style="margin-left:25px;" class="btn btn-primary"><b>Send Test Message</b></button>
             </div>
         </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col-sm-4" id="divSendMsg">
+        <div class="col-sm-3" id="divSendMsg">
             <div class="button">
-                <button type="button" id="BtnSendMsg1" style="margin-left:25px;" class="btn btn-success" disabled><b>Send Message</b></button>
+                <button type="button" id="BtnSendMsg1" class="btn btn-success" disabled><b>Send Message</b></button>
             </div>
         </div>
+
+    </div>
+    <div class="row mt-2">
+        
     </div>
 </div>
 <script>
@@ -136,8 +144,12 @@
 
         var Text1 = $("#textMessage1").val();
         var Text2 = $("#textMessage2").val();
+        var TestNumber = $("#TestNumber1").val();
         var flag = 0;
 
+        if (TestNumber == "") {
+            flag = 3;
+        }
         if (Text1.length == 0) {
             flag = 1;
         }
@@ -158,7 +170,7 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SendTestMessageText", "BOPromoCampaign")',
-                data: '{Text1: ' + JSON.stringify(Text1) + ',Text2: ' + JSON.stringify(Text2) +'}',
+                data: '{TestNumber:' + JSON.stringify(TestNumber) + ',Text1: ' + JSON.stringify(Text1) + ',Text2: ' + JSON.stringify(Text2) +'}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -220,6 +232,14 @@
                 type: "error",
                 title: "Message 2 NOT Entered",
                 message: "Please Enter Message 2",
+                buttonText: "Okay"
+            })
+        }
+        else if (flag == 3) {
+            cuteAlert({
+                type: "error",
+                title: "No Test Numbers",
+                message: "Please Enter Test Numbers",
                 buttonText: "Okay"
             })
         }

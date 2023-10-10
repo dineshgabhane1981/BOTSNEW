@@ -84,11 +84,11 @@ namespace WebApp.Controllers
 
                     HttpPostedFileBase files = Request.Files[0];
                     string fileName = Request.Files[0].FileName;
-                    //var path = ConfigurationManager.AppSettings["Path"].ToString();
-                    //string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
+                    var path = ConfigurationManager.AppSettings["Path"].ToString();
+                    string Path3 = ConfigurationManager.AppSettings["Path3"].ToString();
 
-                    var path = ConfigurationManager.AppSettings["DiscussionFileUpload"].ToString();
-                    string Path3 = ConfigurationManager.AppSettings["DiscussionDocumentURL"].ToString();
+                    //var path = ConfigurationManager.AppSettings["DiscussionFileUpload"].ToString();
+                    //string Path3 = ConfigurationManager.AppSettings["DiscussionDocumentURL"].ToString();
 
                     var fullFilePath = path + fileName;
 
@@ -146,7 +146,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult SendTestMessage(string File1,string Text1,string File2,string Text2)
+        public JsonResult SendTestMessage(string TestNumber,string File1,string Text1,string File2,string Text2)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JsonData Response = new JsonData();
@@ -154,10 +154,10 @@ namespace WebApp.Controllers
             try
             {
                 objaudit.RequestedBy = userDetails.LoginId;
-                objaudit.RequestedFor = "File1 : " + File1 + " | Text1 : " + Text1 + " | File2 : " + File2 + " | Text2 : " + Text2;
+                objaudit.RequestedFor = "TestNumber : " + TestNumber + "File1 : " + File1 + " | Text1 : " + Text1 + " | File2 : " + File2 + " | Text2 : " + Text2;
                 objaudit.RequestedDate = ER.IndianDatetime();
                 objaudit.Type = "Test Message";
-                Response = PCR.SendTestMessage(File1, Text1, File2, Text2, objaudit);
+                Response = PCR.SendTestMessage(TestNumber,File1, Text1, File2, Text2, objaudit);
 
             }
             catch (Exception ex)
@@ -187,7 +187,7 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = Response, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
-        public JsonResult SendTestMessageText (string Text1, string Text2)
+        public JsonResult SendTestMessageText (string TestNumber, string Text1, string Text2)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             tblAuditBOPromo objaudit = new tblAuditBOPromo();
@@ -195,10 +195,10 @@ namespace WebApp.Controllers
             try
             {
                 objaudit.RequestedBy = userDetails.LoginId;
-                objaudit.RequestedFor = " Text1 : " + Text1 + " | Text2 : " + Text2;
+                objaudit.RequestedFor = "TestNumber : "+ TestNumber  + "Text1 : " + Text1 + " | Text2 : " + Text2;
                 objaudit.RequestedDate = ER.IndianDatetime();
                 objaudit.Type = "Test Message";
-                Response = PCR.SendTestMessage(Text1,Text2, objaudit);
+                Response = PCR.SendTestMessage(TestNumber,Text1, Text2, objaudit);
             }
             catch (Exception ex)
             {
