@@ -1164,7 +1164,7 @@ namespace BOTS_BL.Repository
                         DateTime Today = DateTime.Now;
                         int NextMonth = Today.AddMonths(1).Month;
                         int ThirdMonth = Today.AddMonths(2).Month;
-                        var AllData = context.Database.SqlQuery<PointsExpCustDetailList>("select C.OutletName,C.MaskedMobileNo,C.Name,C.TotalTxnCount,C.TotalSpend,C.DOJ,P.MobileNo,C.AvlPts,C.LastTxnDate,P.Points,P.EndDate from View_CustDetailsWithTxnSummary C inner join tblCustPointsMaster P on C.MobileNo = P.MobileNo where P.PointsType = 'Base'").ToList();
+                        var AllData = context.Database.SqlQuery<PointsExpCustDetailList>("select C.OutletName,C.MaskedMobileNo,C.Name,isnull(C.TotalTxnCount,0) as TotalTxnCount,isnull(C.TotalSpend,0) as TotalSpend,C.DOJ,P.MobileNo,isnull(C.AvlPts,0) as AvlPts,C.LastTxnDate,isnull(P.Points,0) as Points,P.EndDate from View_CustDetailsWithTxnSummary C inner join tblCustPointsMaster P on C.MobileNo = P.MobileNo where P.PointsType = 'Base'").ToList();
                         var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base'").ToList();
 
                         var lstMobileno = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Select(y => y.Mobileno).ToList();
