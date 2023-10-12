@@ -917,7 +917,7 @@
         RemoveRequiredBorderDeal();
         //var outletCount = $("#hdnOutletCount").val();
 
-            RemoveRequiredOutletDetails();
+        RemoveRequiredOutletDetails();
 
         CheckInstallmentAmount();
 
@@ -1692,53 +1692,55 @@
 
     function RemoveRequiredOutletDetails() {
         var outletCount = $("#hdnOutletCount").val();
+
         for (let i = 1; i <= outletCount; i++) {
-            $("#txtOutletName" + i).focusout(function () {
-                if ($("#txtOutletName" + i).val() != "") {
-                    $('#txtOutletName' + i).css('border-color', '');
+            
+            $("#txtOutletNameNew" + i).focusout(function () {
+                if ($("#txtOutletNameNew" + i).val() != "") {
+                    $('#txtOutletNameNew' + i).css('border-color', '');
                 }
                 else {
-                    $('#txtOutletName' + i).css('border-color', 'red');
+                    $('#txtOutletNameNew' + i).css('border-color', 'red');
                 }
             });
-            $("#txtAreaName" + i).focusout(function () {
-                if ($("#txtAreaName" + i).val() != "") {
-                    $('#txtAreaName' + i).css('border-color', '');
+            $("#txtAreaNameNew" + i).focusout(function () {
+                if ($("#txtAreaNameNew" + i).val() != "") {
+                    $('#txtAreaNameNew' + i).css('border-color', '');
                 }
                 else {
-                    $('#txtAreaName' + i).css('border-color', 'red');
+                    $('#txtAreaNameNew' + i).css('border-color', 'red');
                 }
             });
-            $("#txtAuthorisedPerson" + i).focusout(function () {
-                if ($("#txtAuthorisedPerson" + i).val() != "") {
-                    $('#txtAuthorisedPerson' + i).css('border-color', '');
+            $("#txtAuthorisedPersonNew" + i).focusout(function () {
+                if ($("#txtAuthorisedPersonNew" + i).val() != "") {
+                    $('#txtAuthorisedPersonNew' + i).css('border-color', '');
                 }
                 else {
-                    $('#txtAuthorisedPerson' + i).css('border-color', 'red');
+                    $('#txtAuthorisedPersonNew' + i).css('border-color', 'red');
                 }
             });
-            $("#txtRegisterMobileNo" + i).focusout(function () {
-                if ($("#txtRegisterMobileNo" + i).val() != "") {
-                    $('#txtRegisterMobileNo' + i).css('border-color', '');
+            $("#txtRegisterMobileNoNew" + i).focusout(function () {
+                if ($("#txtRegisterMobileNoNew" + i).val() != "") {
+                    $('#txtRegisterMobileNoNew' + i).css('border-color', '');
                 }
                 else {
-                    $('#txtRegisterMobileNo' + i).css('border-color', 'red');
+                    $('#txtRegisterMobileNoNew' + i).css('border-color', 'red');
                 }
             });
-            $("#txtRegisterEmail" + i).focusout(function () {
-                if ($("#txtRegisterEmail" + i).val() != "") {
-                    $('#txtRegisterEmail' + i).css('border-color', '');
+            $("#txtRegisterEmailNew" + i).focusout(function () {
+                if ($("#txtRegisterEmailNew" + i).val() != "") {
+                    $('#txtRegisterEmailNew' + i).css('border-color', '');
                 }
                 else {
-                    $('#txtRegisterEmail' + i).css('border-color', 'red');
+                    $('#txtRegisterEmailNew' + i).css('border-color', 'red');
                 }
             });
-            $("#txtAddress" + i).focusout(function () {
-                if ($("#txtAddress" + i).val() != "") {
-                    $('#txtAddress' + i).css('border-color', '');
+            $("#txtAddressNew" + i).focusout(function () {
+                if ($("#txtAddressNew" + i).val() != "") {
+                    $('#txtAddressNew' + i).css('border-color', '');
                 }
                 else {
-                    $('#txtAddress' + i).css('border-color', 'red');
+                    $('#txtAddressNew' + i).css('border-color', 'red');
                 }
             });
             $("#txtLatitude" + i).focusout(function () {
@@ -1757,29 +1759,38 @@
                     $('#txtLongitude' + i).css('border-color', 'red');
                 }
             });
-            $("#txtPinCode" + i).focusout(function () {
-                if ($("#txtPinCode" + i).val() != "") {
-                    $('#txtPinCode' + i).css('border-color', '');
+            $("#txtPinCodeNew" + i).focusout(function () {
+                if ($("#txtPinCodeNew" + i).val() != "") {
+                    $('#txtPinCodeNew' + i).css('border-color', '');
                 }
                 else {
-                    $('#txtPinCode' + i).css('border-color', 'red');
+                    $('#txtPinCodeNew' + i).css('border-color', 'red');
                 }
             });
 
-            $('#ddlState' + i).change(function () {
-                if ($("#ddlState"+i+" option:selected").text() == "Please Select") {
-                    $('#ddlState' + i).css('border-color', 'red');
+            $('#ddlStateNew' + i).change(function () {
+                if ($("#ddlStateNew"+i+" option:selected").text() == "Please Select") {
+                    $('#ddlStateNew' + i).css('border-color', 'red');
                 }
                 else {
-                    $('#ddlState' + i).css('border-color', '');
+                    $('#ddlStateNew' + i).css('border-color', '');
                 }
             });
-            $('#ddlCity' + i).change(function () {
-                if ($("#ddlCity" + i + " option:selected").text() == "Please Select") {
-                    $('#ddlCity' + i).css('border-color', 'red');
+            $('#ddlCityNew' + i).change(function () {
+                if ($("#ddlCityNew" + i + " option:selected").text() == "Please Select") {
+                    $('#ddlCityNew' + i).css('border-color', 'red');
                 }
                 else {
-                    $('#ddlCity' + i).css('border-color', '');
+                    $('#ddlCityNew' + i).css('border-color', '');
+                }
+            });
+
+            $('#ddlProgramLanguageNew' + i).change(function () {
+                if ($("#ddlProgramLanguageNew" + i + " option:selected").text() == "Please Select") {
+                    $('#ddlProgramLanguageNew' + i).css('border-color', 'red');
+                }
+                else {
+                    $('#ddlProgramLanguageNew' + i).css('border-color', '');
                 }
             });
         }
@@ -2977,6 +2988,8 @@
     }
 
     function SendForApproval() {
+
+
         cuteAlert({
             type: "question",
             title: "Are you sure?",

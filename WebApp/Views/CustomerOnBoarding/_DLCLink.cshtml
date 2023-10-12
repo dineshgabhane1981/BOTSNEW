@@ -82,12 +82,17 @@
 
     }
 </div>
-<div class="container-fluid pt-3 pl-3 pr-3 pb-3 col-md-12 col-lg-12 row pull-right">
-    <button type="button" id="btnsubmitToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+@*<div class="row">*@
+    <!--<div class="container-fluid pt-3 pl-3 pr-3 pb-5">-->
+    @*col-md-12 col-lg-12 row pull-right*@
+    @*<button type="button" id="btnsubmitToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display:none">Submit For DLT</button>*@
+    <div>
     <button type="button" id="btnDLCLinkSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
-</div>
+    </div>
 
-<script>
+    <!--</div>-->
+@*</div>*@
+    <script>
     $(document).ready(function () {
         $("#btnsubmitToDLT").on("click", function () {
             SendDLCToDLT();
@@ -329,7 +334,7 @@
 
     function ValidateDLCLink() {
         var status = true;
-        
+
         if ($("#txtProfileUpdatePoints").val() == "") {
             $('#txtProfileUpdatePoints').css('border-color', 'red');
             status = false;
@@ -434,7 +439,7 @@
                 $('#txtWAGiftPtCreditOtp').css('border-color', 'red');
                 status = false;
         }
-        
+
         if (!status) {
             cuteAlert({
                 type: "error",
@@ -708,4 +713,4 @@
         $("#divLoader").hide();
     }
 
-</script>
+    </script>

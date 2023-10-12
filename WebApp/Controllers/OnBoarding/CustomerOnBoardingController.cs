@@ -604,6 +604,8 @@ namespace WebApp.Controllers.OnBoarding
                 //email.Priority = MailPriority.High;
                 //smtp.Send(email);
 
+
+
                 var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
                 var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
                 MailMessage mail = new MailMessage();
@@ -695,6 +697,8 @@ namespace WebApp.Controllers.OnBoarding
 
                 sb.Append("** This is an Auto generated email. Do not reply to this email id.");
 
+
+
                 var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
                 var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
                 MailMessage mail = new MailMessage();
@@ -708,11 +712,11 @@ namespace WebApp.Controllers.OnBoarding
                 mail.CC.Add(SourceEmail);
                 var CCEmails = ConfigurationManager.AppSettings["EmailsForOnboarding"].ToString();
                 var CCEmailAll = CCEmails.Split(',');
-                foreach(var item in CCEmailAll)
+                foreach (var item in CCEmailAll)
                 {
                     mail.CC.Add(item);
                 }
-                
+
                 System.Net.Mail.Attachment attachment;
                 attachment = new System.Net.Mail.Attachment(path);
                 mail.Attachments.Add(attachment);
@@ -1394,7 +1398,7 @@ namespace WebApp.Controllers.OnBoarding
 
         }
 
-        public ActionResult SaveCampaignOtherConfig(string jsonData)
+        public ActionResult SaveCampaignOtherConfig(string jsonData) 
         {
             bool status = false;
             try
@@ -1423,37 +1427,37 @@ namespace WebApp.Controllers.OnBoarding
                     objData.Frequency = Convert.ToString(item["Frequency"]);
 
                     objData.IntroDays1 = Convert.ToInt32(item["IntroDays1"]);
-                    objData.IntroScript1 = Convert.ToString(item["IntroScript1"]);
+                    objData.IntroScript1 = Convert.ToString(item["IntroScript1"]).Trim();
                     objData.ReminderDays1 = Convert.ToInt32(item["ReminderDays1"]);
                     objData.ReminderWhen1 = Convert.ToString(item["ReminderWhen1"]);
-                    objData.ReminderScript1 = Convert.ToString(item["ReminderScript1"]);
+                    objData.ReminderScript1 = Convert.ToString(item["ReminderScript1"]).Trim();
                     objData.ReminderDays2 = Convert.ToInt32(item["ReminderDays2"]);
                     objData.ReminderWhen2 = Convert.ToString(item["ReminderWhen2"]);
-                    objData.ReminderScript2 = Convert.ToString(item["ReminderScript2"]);
+                    objData.ReminderScript2 = Convert.ToString(item["ReminderScript2"]).Trim();
                     objData.OnDayTypePT = Convert.ToString(item["OnDayTypePT"]);
-                    objData.OnDayScriptPT = Convert.ToString(item["OnDayScriptPT"]);
+                    objData.OnDayScriptPT = Convert.ToString(item["OnDayScriptPT"]).Trim();
                     objData.OnDayTypeNPT = Convert.ToString(item["OnDayTypeNPT"]);
-                    objData.OnDayScriptNPT = Convert.ToString(item["OnDayScriptNPT"]);
+                    objData.OnDayScriptNPT = Convert.ToString(item["OnDayScriptNPT"]).Trim();
                     if (objData.CampaignType == "Reminder Bulk Uploaded Users" || objData.CampaignType == "Balance Updates" || objData.CampaignType == "DLC Update Reminder" || objData.CampaignType == "DLC Referral Reminder")
                     {
                         objData.IntroDays2 = Convert.ToInt32(item["IntroDays2"]);
-                        objData.IntroScript2 = Convert.ToString(item["IntroScript2"]);
+                        objData.IntroScript2 = Convert.ToString(item["IntroScript2"]).Trim();
                     }
 
                     if (objData.SMSType != "SMS")
                     {
                         if (objData.CampaignType == "Birthday" || objData.CampaignType == "Anniversary")
                         {
-                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]);
-                            objData.SMSScript3 = Convert.ToString(item["SMSScript3"]);
-                            objData.SMSScript4 = Convert.ToString(item["SMSScript4"]);
-                            objData.SMSScript5 = Convert.ToString(item["SMSScript5"]);
-                            objData.SMSScript6 = Convert.ToString(item["SMSScript6"]);
+                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]).Trim();
+                            objData.SMSScript3 = Convert.ToString(item["SMSScript3"]).Trim();
+                            objData.SMSScript4 = Convert.ToString(item["SMSScript4"]).Trim();
+                            objData.SMSScript5 = Convert.ToString(item["SMSScript5"]).Trim();
+                            objData.SMSScript6 = Convert.ToString(item["SMSScript6"]).Trim();
                         }
                         if (objData.CampaignType == "Reminder Bulk Uploaded Users" || objData.CampaignType == "Balance Updates" || objData.CampaignType == "DLC Update Reminder" || objData.CampaignType == "DLC Referral Reminder")
                         {
-                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]);
-                            objData.SMSScript2 = Convert.ToString(item["SMSScript2"]);
+                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]).Trim();
+                            objData.SMSScript2 = Convert.ToString(item["SMSScript2"]).Trim();
                         }
                     }
 
@@ -1510,16 +1514,16 @@ namespace WebApp.Controllers.OnBoarding
                     objData.SMSorWA = Convert.ToString(item["SMSorWA"]);
                     objData.Days = Convert.ToInt32(item["Days"]);
                     objData.LessThanDays = Convert.ToInt32(item["LessThanDays"]);
-                    objData.LessThanDaysScript = Convert.ToString(item["LessThanDaysScript"]);
+                    objData.LessThanDaysScript = Convert.ToString(item["LessThanDaysScript"]).Trim();
                     objData.GreaterThanDays = Convert.ToInt32(item["GreaterThanDays"]);
-                    objData.GreaterThanDaysScript = Convert.ToString(item["GreaterThanDaysScript"]);
+                    objData.GreaterThanDaysScript = Convert.ToString(item["GreaterThanDaysScript"]).Trim();
 
                     if (objData.SMSorWA != "SMS")
                     {
                         if (objData.InactiveType == "Inactive" || objData.InactiveType == "Only Once Inactive" || objData.InactiveType == "Non Redemption Inactive" || objData.InactiveType == "Point Expiry")
                         {
-                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]);
-                            objData.SMSScript2 = Convert.ToString(item["SMSScript2"]);
+                            objData.SMSScript1 = Convert.ToString(item["SMSScript1"]).Trim();
+                            objData.SMSScript2 = Convert.ToString(item["SMSScript2"]).Trim();
                         }
                     }
 
@@ -2293,8 +2297,24 @@ namespace WebApp.Controllers.OnBoarding
                 objBurnRule.RuleId = Convert.ToInt32(item["RuleId"]);
                 objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
-                objBurnRule.PercentageToRedeemPts = Convert.ToInt32(item["PercentageToRedeemPts"]);
-                objBurnRule.PercentageToRedeemExtPts = Convert.ToInt32(item["PercentageToRedeemExtPts"]);
+                if(string.IsNullOrEmpty(Convert.ToString(item["PercentageToRedeemPts"])))
+                {
+                    objBurnRule.PercentageToRedeemPts = 0;
+                }
+                else
+                {
+                    objBurnRule.PercentageToRedeemPts = Convert.ToInt32(item["PercentageToRedeemPts"]);
+                }
+
+                if (string.IsNullOrEmpty(Convert.ToString(item["PercentageToRedeemExtPts"])))
+                {
+                    objBurnRule.PercentageToRedeemExtPts = 0;
+                }
+                else
+                {
+                    objBurnRule.PercentageToRedeemExtPts = Convert.ToInt32(item["PercentageToRedeemExtPts"]);
+                }
+                
                 objBurnRule.MinThreshholdPtsFisttime = Convert.ToInt32(item["MinThreshholdPtsFisttime"]);
                 objBurnRule.MinThreshholdPtsSubsequent = Convert.ToInt32(item["MinThreshholdPtsSubsequent"]);
                 objBurnRule.PartialEarn = Convert.ToString(item["PartialEarn"]);

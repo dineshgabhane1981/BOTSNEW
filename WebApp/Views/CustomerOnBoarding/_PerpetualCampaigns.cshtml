@@ -29,7 +29,7 @@
     <input type="hidden" id="hdnBirthId" />
     <div style="margin-top:20px;">
         <input type="radio" name="SMStype" id="rbtnVWA" /> Varified Whatsapp
-        <input type="radio" name="SMStype" id="rbtnWA" /> Whatsapp
+        <input type="radio" name="SMStype" id="rbtnWA" checked/> Whatsapp
         <input type="radio" name="SMStype" id="rbtnSMS" /> SMS
     </div>
     <div style="margin-top:20px;">
@@ -43,16 +43,16 @@
         <b> Introduction Message</b>
         <div>
             <input type="number" class="input10" id="txtIntroDays1" /> Days before event
-            <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay1"></span>
+            <textarea id="txtIntroScript1" class="input100" style="padding-top:20px;vertical-align:middle;" ></textarea><span style="font-weight:bold;" id="spnBirthDay1"></span>
             <br />
         </div>
         <div id="dvBirthDaySMS1">
             <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay2"></span>
+            <textarea id="txtSMSScript1" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay2"></span>
         </div>
         @*<div style="margin-top:20px;">
                 <input type="number" class="input10" id="txtIntroDays2" /> Days before event
-                <textarea id="txtIntroScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                <textarea id="txtIntroScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"></textarea>
             </div>*@
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
@@ -61,23 +61,23 @@
             <input type="number" class="input10" id="txtRemDays1" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter1", style = "margin-top:20px;" })
             event
-            <textarea id="txtRemScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay3"></span>
+            <textarea id="txtRemScript1" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay3"></span>
             <br />
         </div>
         <div id="dvBirthDaySMS2" style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript3" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay4"></span>
+            <textarea id="txtSMSScript3" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay4"></span>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input10" id="txtRemDays2" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter2", style = "margin-top:20px;" })
             event
-            <textarea id="txtRemScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay5"></span>
+            <textarea id="txtRemScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay5"></span>
             <br />
         </div>
         <div id="dvBirthDaySMS3">
             <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript4" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay6"></span>
+            <textarea id="txtSMSScript4" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay6"></span>
         </div>
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
@@ -85,27 +85,27 @@
         <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsUsed", style = "margin-top:20px;" })
             event
-            <textarea id="txtOnBirthdayScriptPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay7"></span>
+            <textarea id="txtOnBirthdayScriptPT" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay7"></span>
             <br />
         </div>
         <div id="dvBirthDaySMS4" style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript5" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay8"></span>
+            <textarea id="txtSMSScript5" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay8"></span>
         </div>
         <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsNotUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsNotUsed", style = "margin-top:20px;" })
             event
-            <textarea id="txtOnBirthdayScriptNPT" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay9"></span>
+            <textarea id="txtOnBirthdayScriptNPT" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay9"></span>
 
         </div>
         <br />
         <div id="dvBirthDaySMS5">
             <br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript6" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea><span style="font-weight:bold;" id="spnBirthDay10"></span>
+            <textarea id="txtSMSScript6" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea><span style="font-weight:bold;" id="spnBirthDay10"></span>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnBirthdayToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnBirthdayToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display : none">Submit For DLT</button>
         <button type="button" id="btnBirthdaySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
 
     </div>
@@ -115,9 +115,9 @@
 <div id="dvAnniversary" style="border:1px solid grey;border-radius:10px;padding:5px;">
     <input type="hidden" id="hdnAnniversaryId" />
     <div style="margin-top:20px;">
-        <input type="radio" name="SMStype" id="rbtnVWA1" /> Varified Whatsapp
-        <input type="radio" name="SMStype" id="rbtnWA1" /> Whatsapp
-        <input type="radio" name="SMStype" id="rbtnSMS1" /> SMS
+        <input type="radio" name="SMStype1" id="rbtnVWA1"  /> Varified Whatsapp
+        <input type="radio" name="SMStype1" id="rbtnWA1" checked/> Whatsapp
+        <input type="radio" name="SMStype1" id="rbtnSMS1" /> SMS
     </div>
     <div style="margin-top:20px;">
         Bonus Points <input type="number" class="input10" id="txtBonusPoints1" />
@@ -129,12 +129,12 @@
         <b> Introduction Message</b>
         <div>
             <input type="number" class="input10" id="txtIntroDays11" /> Days before event
-            <textarea id="txtIntroScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtIntroScript11" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay1"></span>
         </div>
         <div id="dvAnniversarySMS1">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript11" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay2"></span>
         </div>
 
@@ -145,24 +145,24 @@
             <input type="number" class="input10" id="txtRemDays11" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter11", style = "margin-top:20px;" })
             event
-            <textarea id="txtRemScript11" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtRemScript11" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay3"></span>
         </div>
         <div id="dvAnniversarySMS2" style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript31" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript31" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay4"></span>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input10" id="txtRemDays21" /> Days
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.BeforeAfter(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBeforeAfter21", style = "margin-top:20px;" })
             event
-            <textarea id="txtRemScript21" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            <textarea id="txtRemScript21" class="input100" style="padding-top: 20px; vertical-align: middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay5"></span>
         </div>
         <div id="dvAnniversarySMS3">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript41" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript41" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay6"></span>
         </div>
     </div>
@@ -171,28 +171,28 @@
         <div style="padding-bottom:10px;">
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsUsed1", style = "margin-top:20px;" })
             event
-            <textarea id="txtOnBirthdayScriptPT1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtOnBirthdayScriptPT1" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay7"></span>
         </div>
         <div id="dvAnniversarySMS4" style="border-bottom:1px solid lightgrey;padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript51" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript51" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay8"></span>
         </div>
         <div>
             @Html.DropDownListFor(x => Model.lstBrands.Count, new SelectList(Model.PointsNotUsed(), "Value", "Text"), htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlPointsNotUsed1", style = "margin-top:20px;" })
             event
-            <textarea id="txtOnBirthdayScriptNPT1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtOnBirthdayScriptNPT1" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay9"></span>
         </div>
         <div id="dvAnniversarySMS5" style="padding-bottom:10px;">
             <br /><br />(This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript61" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript61" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnAnniversaryDay10"></span>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnAnniversaryToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnAnniversaryToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display: none">Submit For DLT</button>
         <button type="button" id="btnAnniversarySave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -202,7 +202,7 @@
     <div style="margin-top:20px;">
         No of Message Count <input type="number" id="txtMessageCount" class="input10" />
         Message Type <input type="radio" name="InactiveType" id="rbtnInactiveSMS" /> SMS
-        <input type="radio" name="InactiveType" id="rbtnInactiveWA" /> WhatsApp
+        <input type="radio" name="InactiveType" id="rbtnInactiveWA" checked/> WhatsApp
     </div>
 
     <div class="col-md-12 col-lg-12" style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvInactive1">
@@ -215,26 +215,26 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtLessThanDays1" class="input10" />
-                    <textarea id="txtLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvInactiveSMS1" style="padding-bottom: 10px; float: left;">
-                    <textarea id="txtSMSScript21" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript21" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
-                <div>
+                @*<div>
                     <span style="font-weight:bold;" id="spnInactive1"></span>
-                </div>
+                </div>*@
             </div>
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtGreaterThanDays1" class="input10" />
-                    <textarea id="txtGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvInactiveSMS2" style="float:left;">
-                    <textarea id="txtSMSScript22" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript22" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
-                <div>
+                @*<div>
                     <span style="font-weight:bold;" id="spnInactive2"></span>
-                </div>
+                </div>*@
             </div>
         </div>
     </div>
@@ -249,10 +249,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtLessThanDays2" class="input10" />
-                    <textarea id="txtLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvInactiveSMS3" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript23" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript23" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive3"></span>
@@ -261,10 +261,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtGreaterThanDays2" class="input10" />
-                    <textarea id="txtGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvInactiveSMS4" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript24" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript24" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive4"></span>
@@ -283,10 +283,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtLessThanDays3" class="input10" />
-                    <textarea id="txtLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvInactiveSMS5" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript25" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript25" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
 
                 </div>
                 <div>
@@ -296,10 +296,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtGreaterThanDays3" class="input10" />
-                    <textarea id="txtGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvInactiveSMS6" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript26" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript26" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive6"></span>
@@ -318,10 +318,10 @@
                 <div style="float: left; margin-right: 20px;">
                     points less than
                     <input type="number" id="txtLessThanDays4" class="input10" />
-                    <textarea id="txtLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvInactiveSMS7" style="padding-bottom:10px;">
-                    <textarea id="txtSMSScript27" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript27" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive7"></span>
@@ -329,10 +329,10 @@
                 <div style="float: left;">
                     <div style="float: left; margin-right: 20px;">
                         <br />points greater or equal <input type="number" id="txtGreaterThanDays4" class="input10" />
-                        <textarea id="txtGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                        <textarea id="txtGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                     </div>
                     <div id="dvInactiveSMS8" style="padding-bottom:10px;">
-                        <textarea id="txtSMSScript28" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                        <textarea id="txtSMSScript28" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                     </div>
                     <div>
                         <span style="font-weight:bold;" id="spnInactive8"></span>
@@ -342,7 +342,7 @@
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;display:none">Submit For DLT</button>
         <button type="button" id="btnInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
@@ -352,7 +352,7 @@
     <div style="margin-top:20px;">
         No of Message Count <input type="number" id="txtOOMessageCount" class="input10" />
         Message Type <input type="radio" name="InactiveTypeOO" id="rbtnOOInactiveSMS" /> SMS
-        <input type="radio" name="InactiveTypeOO" id="rbtnOOInactiveWA" /> WhatsApp
+        <input type="radio" name="InactiveTypeOO" id="rbtnOOInactiveWA" checked/> WhatsApp
     </div>
 
     <div class="col-md-12 col-lg-12" style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvOOInactive1">
@@ -365,10 +365,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtOOLessThanDays1" class="input10" />
-                    <textarea id="txtOOLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtOOLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvOnlyOnceInactiveSMS1" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript32" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript32" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive31"></span>
@@ -377,10 +377,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtOOGreaterThanDays1" class="input10" />
-                    <textarea id="txtOOGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtOOGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvOnlyOnceInactiveSMS2" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript33" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript33" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive32"></span>
@@ -399,10 +399,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtOOLessThanDays2" class="input10" />
-                    <textarea id="txtOOLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtOOLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvOnlyOnceInactiveSMS3" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript34" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript34" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive33"></span>
@@ -411,10 +411,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtOOGreaterThanDays2" class="input10" />
-                    <textarea id="txtOOGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtOOGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvOnlyOnceInactiveSMS4" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript35" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript35" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive34"></span>
@@ -433,10 +433,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtOOLessThanDays3" class="input10" />
-                    <textarea id="txtOOLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtOOLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvOnlyOnceInactiveSMS5" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript36" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript36" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive35"></span>
@@ -445,10 +445,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtOOGreaterThanDays3" class="input10" />
-                    <textarea id="txtOOGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtOOGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvOnlyOnceInactiveSMS6" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript37" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript37" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive36"></span>
@@ -467,10 +467,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtOOLessThanDays4" class="input10" />
-                    <textarea id="txtOOLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtOOLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvOnlyOnceInactiveSMS7" style="padding-bottom:10px;">
-                    <textarea id="txtSMSScript38" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript38" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive37"></span>
@@ -479,10 +479,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtOOGreaterThanDays4" class="input10" />
-                    <textarea id="txtOOGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtOOGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvOnlyOnceInactiveSMS8" style="padding-bottom:10px;">
-                    <textarea id="txtSMSScript39" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;margin-top:20px;"> </textarea>
+                    <textarea id="txtSMSScript39" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;margin-top:20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive38"></span>
@@ -492,7 +492,7 @@
     </div>
 
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnOOInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnOOInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display: none">Submit For DLT</button>
         <button type="button" id="btnOOInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
@@ -502,7 +502,7 @@
     <div style="margin-top:20px;">
         No of Message Count <input type="number" id="txtNRMessageCount" class="input10" />
         Message Type <input type="radio" name="InactiveTypeNR" id="rbtnNRInactiveSMS" /> SMS
-        <input type="radio" name="InactiveTypeNR" id="rbtnNRInactiveWA" /> WhatsApp
+        <input type="radio" name="InactiveTypeNR" id="rbtnNRInactiveWA" checked/> WhatsApp
     </div>
 
     <div class="col-md-12 col-lg-12" style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvNRInactive1">
@@ -515,10 +515,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtNRLessThanDays1" class="input10" />
-                    <textarea id="txtNRLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtNRLessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvNRInactiveSMS1" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript42" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript42" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive41"></span>
@@ -527,10 +527,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtNRGreaterThanDays1" class="input10" />
-                    <textarea id="txtNRGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtNRGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvNRInactiveSMS2" style="padding-bottom: 10px; float: left;">
-                    <textarea id="txtSMSScript43" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript43" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive42"></span>
@@ -549,10 +549,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtNRLessThanDays2" class="input10" />
-                    <textarea id="txtNRLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtNRLessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvNRInactiveSMS3" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript44" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript44" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive43"></span>
@@ -561,10 +561,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtNRGreaterThanDays2" class="input10" />
-                    <textarea id="txtNRGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtNRGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvNRInactiveSMS4" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript45" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript45" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive44"></span>
@@ -583,10 +583,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtNRLessThanDays3" class="input10" />
-                    <textarea id="txtNRLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtNRLessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvNRInactiveSMS5" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript46" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript46" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive45"></span>
@@ -595,10 +595,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtNRGreaterThanDays3" class="input10" />
-                    <textarea id="txtNRGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtNRGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvNRInactiveSMS6" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript47" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript47" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive46"></span>
@@ -617,10 +617,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtNRLessThanDays4" class="input10" />
-                    <textarea id="txtNRLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtNRLessThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvNRInactiveSMS7" style="padding-bottom:10px;">
-                    <textarea id="txtSMSScript48" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript48" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                     <span style="font-weight:bold;" id="spnInactive47"></span>
                 </div>
                 <div>
@@ -630,10 +630,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtNRGreaterThanDays4" class="input10" />
-                    <textarea id="txtNRGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtNRGreaterThanDaysScript4" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvNRInactiveSMS8" style="padding-bottom:10px;">
-                    <textarea id="txtSMSScript49" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;margin-top:20px;"> </textarea>
+                    <textarea id="txtSMSScript49" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;margin-top:20px;"></textarea>
                     <span style="font-weight:bold;" id="spnInactive48"></span>
                 </div>
                 <div>
@@ -644,7 +644,7 @@
         </div>
 
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnNRInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnNRInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display: none">Submit For DLT</button>
         <button type="button" id="btnNRInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
@@ -654,7 +654,7 @@
     <div style="margin-top:20px;">
         No of Message Count <input type="number" id="txtPEMessageCount" class="input10" />
         Message Type <input type="radio" name="InactiveTypePE" id="rbtnPEInactiveSMS" /> SMS
-        <input type="radio" name="InactiveTypePE" id="rbtnPEInactiveWA" /> WhatsApp
+        <input type="radio" name="InactiveTypePE" id="rbtnPEInactiveWA" checked/> WhatsApp
     </div>
 
     <div class="col-md-12 col-lg-12" style="margin-top: 20px; display: flex; border: 1px solid grey; padding: 10px; border-radius: 10px; display:none;" id="dvPEInactive1">
@@ -667,10 +667,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtPELessThanDays1" class="input10" />
-                    <textarea id="txtPELessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtPELessThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvPEInactiveSMS1" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript52" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript52" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive52"></span>
@@ -679,10 +679,10 @@
             <div style="float: left;">
                  <div style="float: left; margin-right: 20px;">
                         <br />greater/equal <input type="number" id="txtPEGreaterThanDays1" class="input10" />
-                        <textarea id="txtPEGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                        <textarea id="txtPEGreaterThanDaysScript1" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                  </div>
                  <div id="dvPEInactiveSMS2" style="padding-bottom:10px;float:left;">
-                        <textarea id="txtSMSScript53" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                        <textarea id="txtSMSScript53" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                  </div>
                  <div>
                         <span style="font-weight:bold;" id="spnInactive53"></span>
@@ -701,10 +701,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtPELessThanDays2" class="input10" />
-                    <textarea id="txtPELessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtPELessThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvPEInactiveSMS3" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript54" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript54" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive54"></span>
@@ -713,10 +713,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtPEGreaterThanDays2" class="input10" />
-                    <textarea id="txtPEGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtPEGreaterThanDaysScript2" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvPEInactiveSMS4" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript55" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript55" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive55"></span>
@@ -735,10 +735,10 @@
                 <div style="float: left; margin-right: 20px;">
                     less than
                     <input type="number" id="txtPELessThanDays3" class="input10" />
-                    <textarea id="txtPELessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtPELessThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvPEInactiveSMS5" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript56" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"> </textarea>
+                    <textarea id="txtSMSScript56" class="input50" rows="5" style="padding-top:20px;vertical-align:middle;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive56"></span>
@@ -747,10 +747,10 @@
             <div style="float: left;">
                 <div style="float: left; margin-right: 20px;">
                     <br />greater/equal <input type="number" id="txtPEGreaterThanDays3" class="input10" />
-                    <textarea id="txtPEGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+                    <textarea id="txtPEGreaterThanDaysScript3" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle;"></textarea>
                 </div>
                 <div id="dvPEInactiveSMS6" style="padding-bottom:10px;float:left;">
-                    <textarea id="txtSMSScript57" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"> </textarea>
+                    <textarea id="txtSMSScript57" class="input50" rows="5" style="padding-top: 20px; vertical-align: middle; margin-top: 20px;"></textarea>
                 </div>
                 <div>
                     <span style="font-weight:bold;" id="spnInactive57"></span>
@@ -760,7 +760,7 @@
     </div>
 
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnPEInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnPEInactiveToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display: none">Submit For DLT</button>
         <button type="button" id="btnPEInactiveSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Save</button>
     </div>
 </div>
@@ -770,34 +770,34 @@
     <input type="hidden" id="hdnDLCRRId" />
     <div style="margin-top:20px;">
         <input type="radio" name="DLCRR" id="rbtnDLCRRVWA" /> Varified Whatsapp
-        <input type="radio" name="DLCRR" id="rbtnDLCRRWA" /> Whatsapp
+        <input type="radio" name="DLCRR" id="rbtnDLCRRWA" checked/> Whatsapp
         <input type="radio" name="DLCRR" id="rbtnDLCRRSMS" /> SMS
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Configuration</b>
         <div>
             <input type="number" class="input10" id="txtDLCRRDays1" /> Frequency in Days
-            <textarea id="txtDLCRRScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtDLCRRScript1" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnDLCRRScript1"></span>
         </div>
         <div id="dvDLCConnectSMS1" style="padding-bottom:10px;">
             <br /><br />(This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript71" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript71" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnDLCRRScript2"></span>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input10" id="txtDLCRRDays2" /> Frequency in Days
-            <textarea id="txtDLCRRScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            <textarea id="txtDLCRRScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"></textarea>
             <span style="font-weight:bold;" id="spnDLCRRScript3"></span>
         </div>
         <div id="dvDLCConnectSMS2" style="padding-bottom:10px;">
             <br /><br />(This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript72" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript72" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnDLCRRScript4"></span>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnDLCRRToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnDLCRRToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display: none">Submit For DLT</button>
         <button type="button" id="btnDLCRRSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -807,34 +807,34 @@
     <input type="hidden" id="hdnDLCURId" />
     <div style="margin-top:20px;">
         <input type="radio" name="DLCUR" id="rbtnDLCURVWA" /> Varified Whatsapp
-        <input type="radio" name="DLCUR" id="rbtnDLCURWA" /> Whatsapp
+        <input type="radio" name="DLCUR" id="rbtnDLCURWA" checked/> Whatsapp
         <input type="radio" name="DLCUR" id="rbtnDLCURSMS" /> SMS
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Configuration</b>
         <div>
             <input type="number" class="input10" id="txtDLCURDays1" /> Frequency in Days
-            <textarea id="txtDLCURScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtDLCURScript1" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnDLCURScript1"></span>
         </div>
         <div id="dvDLCUpdateSMS1" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript81" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript81" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnDLCURScript2"></span>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input10" id="txtDLCURDays2" /> Frequency in Days
-            <textarea id="txtDLCURScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            <textarea id="txtDLCURScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"></textarea>
             <span style="font-weight:bold;" id="spnDLCURScript3"></span>
         </div>
         <div id="dvDLCUpdateSMS2" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript82" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript82" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnDLCURScript4"></span>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnDLCURToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnDLCURToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display: none">Submit For DLT</button>
         <button type="button" id="btnDLCURSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -844,34 +844,34 @@
     <input type="hidden" id="hdnBUId" />
     <div style="margin-top:20px;">
         <input type="radio" name="BUNew" id="rbtnBUVWA" /> Varified Whatsapp
-        <input type="radio" name="BUNew" id="rbtnBUWA" /> Whatsapp
+        <input type="radio" name="BUNew" id="rbtnBUWA" checked/> Whatsapp
         <input type="radio" name="BUNew" id="rbtnBUSMS" /> SMS
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Configuration</b>
         <div>
             <input type="number" class="input10" id="txtBUDays1" /> Frequency in Days
-            <textarea id="txtBUScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtBUScript1" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnBUScript1"></span>
         </div>
         <div id="dvPointBalanceSMS1" style="padding-bottom:10px;">
             <br /><br />(This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript91" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript91" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnBUScript2"></span>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input10" id="txtBUDays2" /> Frequency in Days
-            <textarea id="txtBUScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            <textarea id="txtBUScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"></textarea>
             <span style="font-weight:bold;" id="spnBUScript3"></span>
         </div>
         <div id="dvPointBalanceSMS2" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript92" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript92" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnBUScript4"></span>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnBUToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnBUToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display: none">Submit For DLT</button>
         <button type="button" id="btnBUSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -881,34 +881,34 @@
     <input type="hidden" id="hdnUploadedUsersId" />
     <div style="margin-top:20px;">
         <input type="radio" name="UploadedUsers" id="rbtnUploadedUsersVWA" /> Varified Whatsapp
-        <input type="radio" name="UploadedUsers" id="rbtnUploadedUsersWA" /> Whatsapp
+        <input type="radio" name="UploadedUsers" id="rbtnUploadedUsersWA" checked/> Whatsapp
         <input type="radio" name="UploadedUsers" id="rbtnUploadedUsersSMS" /> SMS
     </div>
     <div style="margin-top:20px;border:1px solid grey;padding:10px;border-radius:10px;">
         <b> Configuration</b>
         <div>
             <input type="number" class="input10" id="txtUploadedUsersDays1" /> Frequency in Days
-            <textarea id="txtUploadedUsersScript1" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtUploadedUsersScript1" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnUploadedUsersScript1"></span>
         </div>
         <div id="dvBulkUploadSMS1" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript101" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript101" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnUploadedUsersScript2"></span>
         </div>
         <div style="margin-top:20px;">
             <input type="number" class="input10" id="txtUploadedUsersDays2" /> Frequency in Days
-            <textarea id="txtUploadedUsersScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"> </textarea>
+            <textarea id="txtUploadedUsersScript2" class="input100" style="padding-top: 20px; vertical-align: middle;"></textarea>
             <span style="font-weight:bold;" id="spnUploadedUsersScript3"></span>
         </div>
         <div id="dvBulkUploadSMS2" style="padding-bottom:10px;">
             <br /><br /> (This is SMS script only in case number do not have Whatsapp <b>(Optional)</b>)
-            <textarea id="txtSMSScript102" class="input100" style="padding-top:20px;vertical-align:middle;"> </textarea>
+            <textarea id="txtSMSScript102" class="input100" style="padding-top:20px;vertical-align:middle;"></textarea>
             <span style="font-weight:bold;" id="spnUploadedUsersScript4"></span>
         </div>
     </div>
     <div class="container-fluid pt-3 pl-3 pr-3 pb-5">
-        <button type="button" id="btnUploadedUsersToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;">Submit For DLT</button>
+        <button type="button" id="btnUploadedUsersToDLT" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px; display: none">Submit For DLT</button>
         <button type="button" id="btnUploadedUsersSave" class="btn btn-primary pull-right" style="margin-right: 10px; margin-bottom: 20px;"> Save</button>
     </div>
 </div>
@@ -2944,6 +2944,7 @@
 
     function LoadCampaignControls(edata, type) {
         if (edata != null && edata != "") {
+          
             if (type == "Birthday") {
                 //console.log(data)
                 if (edata.SMSType == "VWA") {
@@ -3068,16 +3069,17 @@
                 }
 
                 $('#hdnBirthId').val(edata.Id);
-                if ($("#hdnBirthId").val() > 0) {
-                    $("#btnBirthdayToDLT").show();
-                }
-                else {
-                    $("#btnBirthdayToDLT").hide();
-                }
+                //if ($("#hdnBirthId").val() > 0) {
+                //    $("#btnBirthdayToDLT").show();
+                //}
+                //else {
+                //    $("#btnBirthdayToDLT").hide();
+                //}
 
             }
 
             if (type == "Anniversary") {
+  
                 //console.log(data)
                 if (edata.SMSType == "VWA") {
                     $("#rbtnVWA1").prop("checked", true);
@@ -5096,108 +5098,108 @@
 
                 if (data[i].SMSorWA == "SMS") {
                     if (i == 0) {
-                        $('#spnInactive1').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive2').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive1').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive2').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive1").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive2").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive1").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive2").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtLessThanDaysScript1");
                         DisableControl(data[i].DLTStatus2, "txtGreaterThanDaysScript1");
                     }
                     if (i == 1) {
-                        $('#spnInactive3').html("Status - " +data[i].DLTStatus1);
-                        $('#spnInactive4').html("Status - " +data[i].DLTStatus2);
+                        //$('#spnInactive3').html("Status - " +data[i].DLTStatus1);
+                        //$('#spnInactive4').html("Status - " +data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive3").html("Status - " + data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive4").html("Status - " + data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive3").html("Status - " + data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive4").html("Status - " + data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtLessThanDaysScript2");
                         DisableControl(data[i].DLTStatus2, "txtGreaterThanDaysScript2");
                     }
                     if (i == 2) {
-                        $('#spnInactive5').html("Status - " +data[i].DLTStatus1);
-                        $('#spnInactive6').html("Status - " +data[i].DLTStatus2);
+                        //$('#spnInactive5').html("Status - " +data[i].DLTStatus1);
+                        //$('#spnInactive6').html("Status - " +data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive5").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive6").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive5").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive6").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtLessThanDaysScript3");
                         DisableControl(data[i].DLTStatus2, "txtGreaterThanDaysScript3");
                     }
                     if (i == 3) {
-                        $('#spnInactive7').html("Status - " +data[i].DLTStatus1);
-                        $('#spnInactive8').html("Status - " +data[i].DLTStatus2);
+                        //$('#spnInactive7').html("Status - " +data[i].DLTStatus1);
+                        //$('#spnInactive8').html("Status - " +data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive7").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive8").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive7").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive8").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtLessThanDaysScript4");
                         DisableControl(data[i].DLTStatus2, "txtGreaterThanDaysScript4");
                     }
                 }
                 else {
                     if (i == 0) {
-                        $('#spnInactive1').html("Status - " +data[i].DLTStatus1);
-                        $('#spnInactive2').html("Status - " +data[i].DLTStatus2);
+                        //$('#spnInactive1').html("Status - " +data[i].DLTStatus1);
+                        //$('#spnInactive2').html("Status - " +data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive1").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive2").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive1").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive2").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript21");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript22");
                     }
                     if (i == 1) {
-                        $('#spnInactive3').html("Status - " +data[i].DLTStatus1);
-                        $('#spnInactive4').html("Status - " +data[i].DLTStatus2);
+                        //$('#spnInactive3').html("Status - " +data[i].DLTStatus1);
+                        //$('#spnInactive4').html("Status - " +data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive3").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive4").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive3").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive4").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript23");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript24");
                     }
                     if (i == 2) {
-                        $('#spnInactive5').html("Status - " +data[i].DLTStatus1);
-                        $('#spnInactive6').html("Status - " +data[i].DLTStatus2);
+                        //$('#spnInactive5').html("Status - " +data[i].DLTStatus1);
+                        //$('#spnInactive6').html("Status - " +data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive5").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive6").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive5").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive6").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript25");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript26");
                     }
                     if (i == 3) {
-                        $('#spnInactive7').html("Status - " +data[i].DLTStatus1);
-                        $('#spnInactive8').html("Status - " +data[i].DLTStatus2);
+                        //$('#spnInactive7').html("Status - " +data[i].DLTStatus1);
+                        //$('#spnInactive8').html("Status - " +data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive7").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive8").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive7").html("Status - " +data[i].DLTStatus1 + " Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive8").html("Status - " +data[i].DLTStatus2 + " Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript27");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript28");
                     }
@@ -5251,108 +5253,108 @@
 
                 if (data[i].SMSorWA == "SMS") {
                     if (i == 0) {
-                        $('#spnInactive31').html("Status - "+ data[i].DLTStatus1);
-                        $('#spnInactive32').html("Status - " +data[i].DLTStatus2);
+                        //$('#spnInactive31').html("Status - "+ data[i].DLTStatus1);
+                        //$('#spnInactive32').html("Status - " +data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive31").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive32").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive31").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive32").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtOOLessThanDaysScript1");
                         DisableControl(data[i].DLTStatus2, "txtOOGreaterThanDaysScript1");
                     }
                     if (i == 1) {
-                        $('#spnInactive33').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive34').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive33').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive34').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive33").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive34").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive33").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive34").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtOOLessThanDaysScript2");
                         DisableControl(data[i].DLTStatus2, "txtOOGreaterThanDaysScript2");
                     }
                     if (i == 2) {
-                        $('#spnInactive35').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive36').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive35').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive36').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive35").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive36").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive35").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive36").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtOOLessThanDaysScript3");
                         DisableControl(data[i].DLTStatus2, "txtOOGreaterThanDaysScript3");
                     }
                     if (i == 3) {
-                        $('#spnInactive37').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive38').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive37').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive38').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive37").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive38").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive37").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive38").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtOOLessThanDaysScript4");
                         DisableControl(data[i].DLTStatus2, "txtOOGreaterThanDaysScript4");
                     }
                 }
                 else {
                     if (i == 0) {
-                        $('#spnInactive31').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive32').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive31').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive32').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive31").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive32").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive31").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive32").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript32");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript33");
                     }
                     if (i == 1) {
-                        $('#spnInactive33').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive34').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive33').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive34').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive33").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive34").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive33").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive34").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript34");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript35");
                     }
                     if (i == 2) {
-                        $('#spnInactive35').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive36').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive35').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive36').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive35").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive36").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive35").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive36").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript36");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript37");
                     }
                     if (i == 3) {
-                        $('#spnInactive37').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive38').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive37').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive38').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive37").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive38").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive37").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive38").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript38");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript39");
                     }
@@ -5405,108 +5407,108 @@
 
                 if (data[i].SMSorWA == "SMS") {
                     if (i == 0) {
-                        $('#spnInactive41').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive42').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive41').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive42').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive41").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive42").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive41").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive42").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtNRLessThanDaysScript1");
                         DisableControl(data[i].DLTStatus2, "txtNRGreaterThanDaysScript1");
                     }
                     if (i == 1) {
-                        $('#spnInactive43').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive44').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive43').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive44').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive43").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive44").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive43").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive44").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtNRLessThanDaysScript2");
                         DisableControl(data[i].DLTStatus2, "txtNRGreaterThanDaysScript2");
                     }
                     if (i == 2) {
-                        $('#spnInactive45').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive46').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive45').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive46').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive45").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive46").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive45").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive46").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtNRLessThanDaysScript3");
                         DisableControl(data[i].DLTStatus2, "txtNRGreaterThanDaysScript3");
                     }
                     if (i == 3) {
-                        $('#spnInactive47').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive48').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive47').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive48').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive47").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive48").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive47").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive48").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtNRLessThanDaysScript4");
                         DisableControl(data[i].DLTStatus2, "txtNRGreaterThanDaysScript4");
                     }
                 }
                 else {
                     if (i == 0) {
-                        $('#spnInactive41').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive42').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive41').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive42').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive41").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive42").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive41").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive42").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript42");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript43");
                     }
                     if (i == 1) {
-                        $('#spnInactive43').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive44').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive43').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive44').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive43").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive44").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive43").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive44").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript44");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript45");
                     }
                     if (i == 2) {
-                        $('#spnInactive45').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive46').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive45').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive46').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive45").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive46").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive45").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive46").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript46");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript47");
                     }
                     if (i == 3) {
-                        $('#spnInactive47').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive48').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive47').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive48').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive47").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive48").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive47").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive48").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript48");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript49");
                     }
@@ -5558,82 +5560,82 @@
 
                 if (data[i].SMSorWA == "SMS") {
                     if (i == 0) {
-                        $('#spnInactive52').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive53').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive52').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive53').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive52").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive53").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive52").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive53").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtPELessThanDaysScript1");
                         DisableControl(data[i].DLTStatus2, "txtPEGreaterThanDaysScript1");
                     }
                     if (i == 1) {
-                        $('#spnInactive54').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive55').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive54').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive55').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive54").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive55").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive54").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive55").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtPELessThanDaysScript2");
                         DisableControl(data[i].DLTStatus2, "txtPEGreaterThanDaysScript2");
                     }
                     if (i == 2) {
-                        $('#spnInactive56').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive57').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive56').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive57').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive56").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive57").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive56").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive57").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtPELessThanDaysScript3");
                         DisableControl(data[i].DLTStatus2, "txtPEGreaterThanDaysScript3");
                     }
                 }
                 else {
                     if (i == 0) {
-                        $('#spnInactive52').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive53').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive52').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive53').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive52").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive53").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive52").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive53").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript52");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript53");
                     }
                     if (i == 1) {
-                        $('#spnInactive54').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive55').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive54').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive55').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive54").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive55").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive54").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive55").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript54");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript55");
                     }
                     if (i == 2) {
-                        $('#spnInactive56').html("Status - " + data[i].DLTStatus1);
-                        $('#spnInactive57').html("Status - " + data[i].DLTStatus2);
+                        //$('#spnInactive56').html("Status - " + data[i].DLTStatus1);
+                        //$('#spnInactive57').html("Status - " + data[i].DLTStatus2);
 
-                        if (data[i].DLTStatus1 == "Rejected") {
-                            $("#spnInactive56").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
-                        }
-                        if (data[i].DLTStatus2 == "Rejected") {
-                            $("#spnInactive57").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
-                        }
+                        //if (data[i].DLTStatus1 == "Rejected") {
+                        //    $("#spnInactive56").html("Status - " + data[i].DLTStatus1 + "   Reason - " + data[i].RejectReason1);
+                        //}
+                        //if (data[i].DLTStatus2 == "Rejected") {
+                        //    $("#spnInactive57").html("Status - " + data[i].DLTStatus2 + "   Reason - " + data[i].RejectReason2);
+                        //}
                         DisableControl(data[i].DLTStatus1, "txtSMSScript56");
                         DisableControl(data[i].DLTStatus2, "txtSMSScript57");
                     }

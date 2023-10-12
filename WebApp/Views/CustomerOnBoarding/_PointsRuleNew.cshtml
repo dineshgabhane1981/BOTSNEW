@@ -203,13 +203,13 @@
         @Html.TextBoxFor(model => model.objBurnRuleConfig.MinThreshholdPtsSubsequent, new { @class = "input50", @id = "txtMinThreshholdPtsSubsequent" })
     </div>
     <div class="col-md-3 col-lg-3">
-        Redeemption % of Invoice Amt <br />
+        Redemption % of Invoice Amt <br />
         @Html.TextBoxFor(model => model.objBurnRuleConfig.PercentageToRedeemPts, new { @class = "input50", @id = "txtPercentageToRedeemPts" })
     </div>
 </div>
     <div>
     <div class="col-md-3 col-lg-3">
-        Redeemption % of Existing Pts <br />
+        Redemption % of Existing Pts <br />
         @Html.TextBoxFor(model => model.objBurnRuleConfig.PercentageToRedeemExtPts, new { @class = "input50", @id = "txtPercentageToRedeemExtPts" })
     </div>
 </div>
@@ -741,6 +741,7 @@
 
     function ValidateBurnRule() {
         var status = true;
+        var flag = true;
         if ($("#txtMinBurnInvoiceAmt").val() == "") {
             $('#txtMinBurnInvoiceAmt').css('border-color', 'red');
             status = false;
@@ -753,22 +754,30 @@
             $('#txtMinThreshholdPtsSubsequent').css('border-color', 'red');
             status = false;
         }
-        if ($("#txtPercentageToRedeemPts").val() == "") {
-            $('#txtPercentageToRedeemPts').css('border-color', 'red');
-                status = false;
+        if (($("#txtPercentageToRedeemPts").val() == "") && ($("#txtPercentageToRedeemExtPts").val() == "")) {
+            status = false;
         }
-        if ($("#txtPercentageToRedeemExtPts").val() == "") {
-            $('#txtPercentageToRedeemExtPts').css('border-color', 'red');
-                status = false;
+        else if (($("#txtPercentageToRedeemPts").val() != "") && ($("#txtPercentageToRedeemExtPts").val() != "")) {            
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "One of Redemption % for Invoice amt or Redemption % of Existing Rule can be set",
+                    buttonText: "Okay"
+                })
+            status = false;
+            flag = false;
         }
     
         if (!status) {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please Enter required fields",
-                buttonText: "Okay"
-            })
+            if (flag) {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please Enter required fields",
+                    buttonText: "Okay"
+                })
+            }
+            
         }
 
         return status;
@@ -798,22 +807,6 @@
             }
             else {
                 $('#txtMinThreshholdPtsSubsequent').css('border-color', 'red');
-            }
-        });
-        $("#txtPercentageToRedeemPts").focusout(function () {
-            if ($("#txtPercentageToRedeemPts").val() != "") {
-                $('#txtPercentageToRedeemPts').css('border-color', '');
-            }
-            else {
-                $('#txtPercentageToRedeemPts').css('border-color', 'red');
-            }
-        });
-        $("#txtPercentageToRedeemExtPts").focusout(function () {
-            if ($("#txtPercentageToRedeemExtPts").val() != "") {
-                $('#txtPercentageToRedeemExtPts').css('border-color', '');
-            }
-            else {
-                $('#txtPercentageToRedeemExtPts').css('border-color', 'red');
             }
         });
     }
