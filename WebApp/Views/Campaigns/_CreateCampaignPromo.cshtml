@@ -258,13 +258,13 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12 col-xl-12 row mt-2 pl-5 mb-2">
+                    <div class="col-md-12 col-xl-12 row mt-2 pl-5 mb-2" id="divTestSMS" style="display: none">
                         <div class="col-lg-6 col-md-6" style="margin-top: 10px; "> @*display: none*@
-                            <textarea class="form-control" id="TestNumbers" rows="2" maxlength="10000" placeholder="Enter Test Numbers"></textarea>&nbsp;&nbsp;
+                            <textarea class="form-control" id="TestNumbersPromo" rows="2" maxlength="10000" placeholder="Enter Test Numbers"></textarea>&nbsp;&nbsp;
                         </div>
                         <div class="button col-lg-3 col-md-3" style="margin-top: 37px;">
                             @*display: none*@
-                            <button type="button" id="btnSendTestSMS" style="margin-left: 25px;" class="btn btn-primary" onclick="SendTestValidate();"><b>TEST SMS</b></button>
+                            <button type="button" id="btnSendTestPromoSMS" style="margin-left: 25px;" class="btn btn-primary" onclick="SendTestValidate();"><b>TEST SMS</b></button>
                         </div>
                     </div>
 
@@ -813,8 +813,9 @@
                             message: "Campaign is Saved Successfully",
                             buttonText: "Campaign Saved"
                         }).then(() => {
-                            $("#btnSendTestSMS").show();
-                            $("#TestNumbers").show();
+                            //$("#btnSendTestPromoSMS").show();
+                            //$("#TestNumbersPromo").show();
+                            $("#divTestSMS").show();
                             $("#btnSave").prop('disabled', true);
                         })
                         $("#divLoader").hide();
@@ -939,7 +940,7 @@
 
     function SendTestSMS(){
         var CampaignId = $("#CampId").val();
-        var TestNumber = $("#TestNumbers").val();
+        var TestNumber = $("#TestNumbersPromo").val();
 
             var FilterData = [];
             item = {};
@@ -967,7 +968,7 @@
                             cancelText: "No"
                         }).then((e) => {
                             if (e == ("confirm")) {
-                                $("#btnSendTestSMS").prop('disabled', true);
+                                $("#btnSendTestPromoSMS").prop('disabled', true);
                                 $("#btnSendDLT").show();
                             }
                             //else {
@@ -1072,7 +1073,7 @@
                             message: "Campaign Message will be delivered as per the schedule",
                             buttonText: "Okay"
                         }).then(() => {
-                            var urlLink = "@Url.Action("CampaignManagement", "Campaigns")";
+                            var urlLink = "@Url.Action("CampMgmtNew", "Campaigns")";
                             window.location.href = urlLink;
                         })
                         $("#divLoader").hide();
