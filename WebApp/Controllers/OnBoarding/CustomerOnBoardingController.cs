@@ -1599,6 +1599,108 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = SetList, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult GetCommunicationConfig(string groupId)
+        {
+            OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
+            var GroupDetails = OBR.GetGroupMasterDetails(groupId);
+            List<SelectListItem> refferedname = new List<SelectListItem>();
+
+            SelectListItem item = new SelectListItem();
+            item.Value = "0";
+            item.Text = "Please Select";
+            refferedname.Add(item);
+            objData.lstAllGroups = refferedname;
+            objData.lstBrands = refferedname;
+
+            objData.lstCity = CR.GetCity();
+            objData.lstRetailCategory = CR.GetRetailCategory();
+            objData.lstBillingPartner = CR.GetBillingPartner();
+            objData.lstSourcedBy = CR.GetSourcedBy();
+            objData.lstRMAssigned = CR.GetRMAssigned();
+            objData.lstRefferedCategory = CR.GetAllRefferedCategory();
+            objData.lstStates = CR.GetStates();
+            objData.bots_TblGroupMaster = OBR.GetGroupMasterDetails(groupId);
+            objData.bots_TblDealDetails = OBR.GetDealMasterDetails(groupId);
+            objData.bots_TblPaymentDetails = OBR.GetPaymentDetails(groupId);
+            objData.objRetailList = OBR.GetRetailDetails(groupId);
+            objData.objInstallmentList = OBR.GetInstallmentDetails(groupId);
+            objData.lstOutlets = OBR.GetOutletDetails(groupId);
+            objData.lstCommunicationSet = OBR.GetCommunicationSetsByGroupId(groupId);
+            objData.IsWA = false;
+            var dataWA = OBR.GetCommunicationWAConfigByGroupId(groupId);
+            if (dataWA != null)
+            {
+                if (dataWA.Count > 0)
+                {
+                    objData.IsWA = true;
+                }
+            }
+
+            //Earn Data Fetch
+            objData.objEarnRuleConfig = OBR.GetEarnRuleConfig(groupId);
+            if (objData.objEarnRuleConfig == null)
+            {
+                BOTS_TblEarnRuleConfig objEarnRule = new BOTS_TblEarnRuleConfig();
+                objData.objEarnRuleConfig = objEarnRule;
+            }
+
+            //Burn Data Fetch
+            objData.objBurnRuleConfig = OBR.GetBurnRuleConfig(groupId);
+            if (objData.objBurnRuleConfig == null)
+            {
+                BOTS_TblBurnRuleConfig objBurnRule = new BOTS_TblBurnRuleConfig();
+                objData.objBurnRuleConfig = objBurnRule;
+            }
+
+            objData.lstSlabConfig = OBR.GetEarnRuleSlabConfig(groupId);
+
+            foreach (var brand in objData.objRetailList)
+            {
+                objData.lstBrands.Add(new SelectListItem
+                {
+                    Text = brand.BrandName,
+                    Value = Convert.ToString(brand.BrandId)
+                });
+            }
+
+            if (objData.lstOutlets.Count == 0)
+            {
+                var brandId = 1;
+                var outletId = 1;
+                foreach (var item1 in objData.objRetailList)
+                {
+                    for (int i = 1; i <= item1.NoOfEnrolled; i++)
+                    {
+                        BOTS_TblOutletMaster outlet = new BOTS_TblOutletMaster();
+                        outlet.Id = 0;
+                        outlet.BrandId = Convert.ToString(brandId);
+                        outlet.OutletId = Convert.ToString(outletId);
+                        outlet.BrandName = item1.BrandName;
+                        objData.lstOutlets.Add(outlet);
+                        outletId++;
+                    }
+                    brandId++;
+                }
+            }
+            else
+            {
+                foreach (var item1 in objData.objRetailList)
+                {
+                    foreach (var item2 in objData.lstOutlets)
+                    {
+                        if (item1.BrandId == item2.BrandId)
+                            item2.BrandName = item1.BrandName;
+                    }
+                }
+            }
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();             
+            objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
+            objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
+            //Documents
+            objData.lstOtherDocs = OBR.GetOtherDocuments(groupId);
+
+            return PartialView("_CommunicationsConfig", objData);
+        }
         public JsonResult GetOutletListWithAssignment(string GroupId, string SetId)
         {
             var SetList = OBR.GetOutletListWithAssignment(GroupId, SetId);

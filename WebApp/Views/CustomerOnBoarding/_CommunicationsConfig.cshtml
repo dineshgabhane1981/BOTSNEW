@@ -246,6 +246,7 @@
             $('#ddlSMSProvider').attr("disabled", false);
         }
     }
+
     function WAEnableDisable(flag) {
         if (flag == 0) {
             $('#txtWAUserName').attr("disabled", true);
@@ -276,6 +277,7 @@
             $('#ddlWAProvider').attr("disabled", false);
         }
     }
+
     function LoadEditableCommunication(SetId) {
         var BrandId = 0;
          $("#divLoader").show();
@@ -300,6 +302,7 @@
                 }
             });
     }
+
     function LoadControls(ObjData) {
         var SMSConfig = ObjData["SMSConfig"];
         var WAConfig = ObjData["WAConfig"];
@@ -570,116 +573,8 @@
             }
         }
     }
-    function SaveCommunicationConfig() {
-        var validationStatus = ValidateSet();
-        if (validationStatus) {
-            if ($('#chkIsSMS').is(":checked") || $('#chkIsWA').is(":checked")) {
-                var CommConfig = [];
-                item = {}
-                item["SetId"] = $("#hdnSetId").val();
-                item["SetName"] = $("#txtSetName").val();
-                item["GroupId"] = $('#hdnGroupID').val();
-                item["BrandId"] = "All";
 
-                if ($('#chkIsSMS').is(":checked")) {
-                    item["IsSMS"] = 1;
-                    item["SMSSetId"] = $('#hdnSetId').val();
-                    item["SMSProvider"] = $('#ddlSMSProvider').val();
-                    item["SMSSenderId"] = $('#txtSMSSenderId').val();
-                    item["SMSUserName"] = $('#txtSMSUserName').val();
-                    item["SMSPassword"] = $('#txtSMSPassword').val();
-                    item["SMSLink"] = $('#txtSMSLink').val();
-                    item["SMSEnrollmentId"] = $('#hdnCommSMSConfigId1').val();
-                    item["SMSEnrollment"] = $('#txtSMSEnrollment').val();
-                    item["SMSEnrollmentAndEarnId"] = $('#hdnCommSMSConfigId2').val();
-                    item["SMSEnrollmentAndEarn"] = $('#txtSMSEnrollmentAndEarn').val();
-                    item["SMSEarnId"] = $('#hdnCommSMSConfigId3').val();
-                    item["SMSEarn"] = $('#txtSMSEarn').val();
-                    item["SMSOTPId"] = $('#hdnCommSMSConfigId4').val();
-                    item["SMSOTP"] = $('#txtSMSOTP').val();
-                    item["SMSBurnId"] = $('#hdnCommSMSConfigId5').val();
-                    item["SMSBurn"] = $('#txtSMSBurn').val();
-                    item["SMSAnyCancelId"] = $('#hdnCommSMSConfigId8').val();
-                    item["SMSAnyCancel"] = $('#txtSMSAnyCancel').val();
-                    item["SMSBalanceInquiryId"] = $('#hdnCommSMSConfigId9').val();
-                    item["SMSBalanceInquiry"] = $('#txtSMSBalanceInquiry').val();
-                }
-                else {
-                    item["IsSMS"] = 0;
-                }
-
-                if ($('#chkIsWA').is(":checked")) {
-                    item["IsWA"] = 1;
-                    item["WASetId"] = $('#hdnSetId').val();
-                    item["WAProvider"] = $('#ddlWAProvider').val();
-                    item["WAUserName"] = $('#txtWAUserName').val();
-                    item["WAPassword"] = $('#txtWAPassword').val();
-                    item["WALink"] = $('#txtWALink').val();
-                    item["WATokenId"] = $('#txtWATokenId').val();
-                    item["WAEnrollmentId"] = $('#hdnCommWAConfigId1').val();
-                    item["WAEnrollment"] = $('#txtWAEnrollment').val();
-                    item["WAEnrollmentAndEarnId"] = $('#hdnCommWAConfigId2').val();
-                    item["WAEnrollmentAndEarn"] = $('#txtWAEnrollmentAndEarn').val();
-                    item["WAEarnId"] = $('#hdnCommWAConfigId3').val();
-                    item["WAEarn"] = $('#txtWAEarn').val();
-                    item["WAOTPId"] = $('#hdnCommWAConfigId4').val();
-                    item["WAOTP"] = $('#txtWAOTP').val();
-                    item["WABurnId"] = $('#hdnCommWAConfigId5').val();
-                    item["WABurn"] = $('#txtWABurn').val();
-                    item["WAAnyCancelId"] = $('#hdnCommWAConfigId8').val();
-                    item["WAAnyCancel"] = $('#txtWAAnyCancel').val();
-                    item["WABalanceInquiryId"] = $('#hdnCommWAConfigId9').val();
-                    item["WABalanceInquiry"] = $('#txtWABalanceInquiry').val();
-                }
-                else {
-                    item["IsWA"] = 0;
-                }
-
-                CommConfig.push(item);
-                var CommConfigData = JSON.stringify(CommConfig);
-
-                $("#divLoader").show();
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("SaveCommunicationConfig", "CustomerOnBoarding")',
-                    data: '{jsonData: ' + JSON.stringify(CommConfigData) + '}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result) {
-                        if (result == true) {
-                            cuteAlert({
-                                type: "success",
-                                title: "Saved..",
-                                message: "Communication Data Saved Successfully!",
-                                buttonText: "Okay"
-                            })
-                            $("#dvCreateSet").hide(1000);
-                        }
-                        else {
-                            cuteAlert({
-                                type: "error",
-                                title: "Oops..",
-                                message: "There is some problem while saving Communication Data",
-                                buttonText: "Okay"
-                            })
-                        }
-                        $("#divLoader").hide();
-                    },
-                    error: function (result) {
-                        $("#divLoader").hide();
-                    }
-                });
-            }
-            else {
-                cuteAlert({
-                    type: "error",
-                    title: "Oops..",
-                    message: "Please Enter SMS OR WhatsApp Script",
-                    buttonText: "Okay"
-                })
-            }
-        }
-    }
+    
 
     function ValidateSet() {
         var status = true;

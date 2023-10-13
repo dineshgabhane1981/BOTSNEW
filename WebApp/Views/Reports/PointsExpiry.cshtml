@@ -281,7 +281,10 @@
                     "mData": "MaskedMobileNo",
                     "mRender": function (data, type, row) {
                         var MobileNo = row.MobileNo;
-                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                        if (data !=null)
+                            return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                        else
+                            return '<span></span>';
                     }
                 },
                 { data: "MemberName" },
