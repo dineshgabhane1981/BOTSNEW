@@ -1166,7 +1166,6 @@ namespace BOTS_BL.Repository
                         int ThirdMonth = Today.AddMonths(2).Month;
                         var AllData = context.Database.SqlQuery<PointsExpCustDetailList>("select C.OutletName,C.MaskedMobileNo,C.Name,isnull(C.TotalTxnCount,0) as TotalTxnCount,isnull(C.TotalSpend,0) as TotalSpend,C.DOJ,P.MobileNo,isnull(C.AvlPts,0) as AvlPts,C.LastTxnDate,isnull(P.Points,0) as Points,P.EndDate from View_CustDetailsWithTxnSummary C inner join tblCustPointsMaster P on C.MobileNo = P.MobileNo where P.PointsType = 'Base'").ToList();
                         var lstPtsExp = context.Database.SqlQuery<PointsExpMasterAllData>("select * from tblCustPointsMaster where PointsType = 'Base'").ToList();
-
                         var lstMobileno = lstPtsExp.Where(x => x.EndDate.Value.Month == month && x.EndDate.Value.Year == year).Select(y => y.Mobileno).ToList();
                         var lstdata = AllData.Where(x => lstMobileno.Contains(x.MobileNo)).ToList();
 
@@ -1350,14 +1349,17 @@ namespace BOTS_BL.Repository
                         var ThirdMonth = (CurrentMonth.AddMonths(2));
                         var celebrationsData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
                         celebrationsData1 = celebrationsData1.Where(x => x.DOB.HasValue).ToList();
-                        celebrationsData1 = celebrationsData1.Where(x => x.AnniversaryDate.HasValue).ToList();
-
+                        //celebrationsData1 = celebrationsData1.Where(x => x.AnniversaryDate.HasValue).ToList();
                         celebrationsData.BirthdayCountThisMonth = celebrationsData1.Where(x => x.DOB.Value.Month == CurrentMonth.Month).Count();
                         celebrationsData.BirthdayCountNextMonth = celebrationsData1.Where(x => x.DOB.Value.Month == NextMonth.Month).Count();
                         celebrationsData.BirthdayCount3rdMonth = celebrationsData1.Where(x => x.DOB.Value.Month == ThirdMonth.Month).Count();
+
+                        var CelebrationData1 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
+                        celebrationsData1 = celebrationsData1.Where(x => x.AnniversaryDate.HasValue).ToList();
                         celebrationsData.AnniversaryCountThisMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == CurrentMonth.Month).Count();
                         celebrationsData.AnniversaryCountNextMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == NextMonth.Month).Count();
                         celebrationsData.AnniversaryCount3rdMonth = celebrationsData1.Where(x => x.AnniversaryDate.Value.Month == ThirdMonth.Month).Count();
+
                         var celebrationsData2 = context.Database.SqlQuery<CelebrationMemberData>("select * from View_CustDetailsWithTxnSummary").ToList();
                         celebrationsData.EnrollmentAnniversaryCountThisMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == CurrentMonth.Month && x.DOJ.Value.Year != CurrentMonth.Year).Count();
                         celebrationsData.EnrollmentAnniversaryCountNextMonth = celebrationsData2.Where(x => x.DOJ.Value.Month == NextMonth.Month && x.DOJ.Value.Year != NextMonth.Year).Count();
@@ -1420,8 +1422,19 @@ namespace BOTS_BL.Repository
                                 Obj.TxnCount = item.TotalTxnCount;
                                 Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
                                 Obj.AvlPoints = item.AvlPts;
-                                Obj.LastTxnDate = Convert.ToString(item.LastTxnDate);
-                                Obj.CelebrationDate = item.DOB.Value.ToString("MM/dd/yyyy");
+                                var Temp = Convert.ToString(item.LastTxnDate);
+
+
+                            if (Temp != "")
+                            {
+                                Obj.LastTxnDate = item.LastTxnDate.Value.ToString("MM/dd/yyyy");
+                            }
+                            else
+                            {
+                                Obj.LastTxnDate = "01/01/1900";
+                            }
+
+                            Obj.CelebrationDate = item.DOB.Value.ToString("MM/dd/yyyy");
                                 celebrationTxnsData.Add(Obj);                            
                             }
                         }

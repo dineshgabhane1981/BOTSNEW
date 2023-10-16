@@ -5,19 +5,28 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="app-main__inner" id="dvall">
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="row">
+            <div class="col-md-6 col-xl-12" style="text-align:center;">
+                <h3>This Functionality is under Development.... </h3>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="app-main__inner" id="dvall">
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">-->
             @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
-            <div class="row mt-4">
+            <!--<div class="row mt-4">
                 <div class="col-md-8 col-xl-8">
                     <input type="radio" checked id="rdnSliceandDice" name="btdornot" /><b> Slice And Dice </b> &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" id="rdnTxncnt" name="btdornot" /><b> Txn Count and Spend DrillDown</b> &nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
-            </div>
+            </div>-->
 
             @*</div>*@
-        </div>
+        <!--</div>
         <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="divSliceDice">
             <div class="row mt-4">
                 <div class="col-md-8 col-xl-8">
@@ -209,9 +218,9 @@
                     <i class="fas fa-file-export"></i> Export
                 </button>
             </div>
-                <div id="dvListing" style="display:none;">
+                <div id="dvListing" style="display:none;">-->
                     @*@Html.Partial("~/Views/Reports/_CreateOwnReportCustomerWise.cshtml", Model)*@
-                </div>
+                <!--</div>
                 <div class="mb-3 pr-3 pt-3 pl-3 card" id="divTxncount" style="padding-bottom:20px;display:none; text-align:center;">
                     <div class="row mt-4">
                         <div class="col-md-8 col-xl-8">
@@ -220,10 +229,10 @@
                     </div>
                     <div class="row mt-4">
                         <div class="col-md-6 col-xl-4 ">
-                            <b>Select Outlet</b>
+                            <b>Select Outlet</b>-->
                             @*</div>
                         <div class="col-md-2 col-xl-2">*@
-                            @Html.DropDownList("Outlet", new SelectList(Model.LstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddloutletId" })
+                            <!--@Html.DropDownList("Outlet", new SelectList(Model.LstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddloutletId" })
                         </div>
                     </div>
                     <div class="row mt-8 ">
@@ -316,14 +325,14 @@
                 </div>
             </div>
         </div>
-</div>
+</div>-->
 
-    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    @*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
     <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
     <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
 
-    <script>
+    @*<script>
 
     $(function () {
         $('.date-picker').datepicker({
@@ -1152,8 +1161,8 @@
         $("#divLoader").hide();
     }
 
-    </script>
-    <style>
+    </script>*@
+    @*<style>
         .ui-datepicker-calendar {
             display: none;
         }
@@ -1167,7 +1176,7 @@
         input[type="number"] {
             -moz-appearance: textfield;
         }
-    </style>
+    </style>*@
 
 
 

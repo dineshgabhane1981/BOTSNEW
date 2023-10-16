@@ -29,12 +29,12 @@ namespace WebApp.Controllers
         public ActionResult Index()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var data = DLCR.GetDLCReportings(userDetails.GroupId, "0", "0", "4");
+            var data = DLCR.GetDLCReportings(userDetails.GroupId, "0", "0", "0");
             return View(data);
         }
 
         [HttpPost]
-        public JsonResult GetCampaignSummary(string flag, string year, string month)
+        public JsonResult GetCampaignSummary(string GroupId,string flag, string year, string month)
         {
             List<DLCReporting> data = new List<DLCReporting>();
             try

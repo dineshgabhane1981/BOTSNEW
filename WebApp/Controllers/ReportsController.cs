@@ -816,7 +816,7 @@ namespace WebApp.Controllers
                         string subTime = "";
                         if (Convert.ToString(dr["TxnDatetime"]).Length > 10)
                             subTime = Convert.ToString(dr["TxnDatetime"]).Substring(11, 8);
-                        var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        var convertedDate = DateTime.ParseExact(subDate, "MM/dd/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
 
                         if (subTime == "")
@@ -829,8 +829,9 @@ namespace WebApp.Controllers
                         //dr["TxnUpdateDate"] = Convert.ToDateTime(dr["TxnUpdateDate"]).ToString("MM/dd/yyyy hh:mm:ss");
                         var subDate = Convert.ToString(dr["TxnUpdateDate"]).Substring(0, 10);
                         //var subTime = Convert.ToString(dr["TxnUpdateDate"]).Substring(11, 8);
-                        var convertedDate = DateTime.ParseExact(subDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        var convertedDate = DateTime.ParseExact(subDate, "MM/dd/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+
                         dr["TxnUpdateDate"] = convertedDate;// + " " + subTime;
                     }
 
@@ -1122,13 +1123,13 @@ namespace WebApp.Controllers
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "MM/dd/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["ExpiryDate"])))
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["ExpiryDate"] = DateTime.ParseExact(Convert.ToString(dr["ExpiryDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        dr["ExpiryDate"] = DateTime.ParseExact(Convert.ToString(dr["ExpiryDate"]), "MM/dd/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
@@ -1230,13 +1231,18 @@ namespace WebApp.Controllers
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+
+                        var subDate = Convert.ToString(dr["LastTxnDate"]).Substring(0, 10);
+
+                        dr["LastTxnDate"] = DateTime.ParseExact(subDate, "MM/dd/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["CelebrationDate"])))
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["CelebrationDate"] = DateTime.ParseExact(Convert.ToString(dr["CelebrationDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        var subDate = Convert.ToString(dr["CelebrationDate"]).Substring(0, 10);
+
+                        dr["CelebrationDate"] = DateTime.ParseExact(subDate, "MM/dd/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
@@ -1451,13 +1457,13 @@ namespace WebApp.Controllers
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "MM/dd/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["EnrolledDate"])))
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["EnrolledDate"] = DateTime.ParseExact(Convert.ToString(dr["EnrolledDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        dr["EnrolledDate"] = DateTime.ParseExact(Convert.ToString(dr["EnrolledDate"]), "MM/dd/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }

@@ -3,11 +3,7 @@
 
 @{var count = 1;}
 <div class="app-main__inner">
-    <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
-
-
-
-
+    @*<div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">*@
         @foreach (var item in Model)
         {
             if (count == 1)
@@ -22,7 +18,7 @@
                 }
             }
             count = count + 1;
-        }
+         }
 
         <div class="table-responsive">
             <table class="table" id="tblDLCDetail">
@@ -69,37 +65,26 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    @*</div>*@
 </div>
 
 <script>
     $(document).ready(function () {
-        var table1 = $('#tblDLCDetail').DataTable();
-        table1.destroy();
-        var table = $('#tblDLCDetail').DataTable({
-            "bAutoWidth": false,
-            "paging": false,
-            "ordering": false,
-            "info": false,
-            "bFilter": false,
+        $('#tblDLCDetail').DataTable({
+            "aaSorting": [[1, "asc"]],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
             "pageLength": 25,
-            "pagingType": "simple_numbers"
-            //"columns": [
-            //    { data: "MobileNo" },
-            //    { data: "Member Name" },
-            //    { data: "Type" },
-            //    { data: "Bonus Points Issued" },
-            //    { data: "Reg Date" },
-            //    { data: "1st TxnDate" },
-            //    { data: "TxnAfterDays" },
-            //    { data: "Total Txn Count" },
-            //    { data: "Business Generated" },
-            //    { data: "Points Redeemed" },
-            //    { data: "Points Expired" }
-            //]
+            "pagingType": "simple_numbers",
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: [-1, -2]
+                }
+            ]
         });
-        //$('#tblCampaignDetails_filter').hide();
-
         var table = $('#tblDLCDetail').DataTable();
         table.draw();
     });
