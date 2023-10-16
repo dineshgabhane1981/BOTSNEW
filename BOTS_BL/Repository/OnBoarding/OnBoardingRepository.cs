@@ -2328,6 +2328,39 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public ValidateApproval ValidateSendForApproval(string GroupId)
+        {
+            ValidateApproval ObjValidation = new ValidateApproval();
+
+            try
+            {
+                using (var contex = new CommonDBContext())
+                {
+                    ObjValidation.Outletstatus = contex.BOTS_TblOutletMaster.Select(x => x.GroupId).Contains(GroupId);
+                    ObjValidation.Earnstatus = contex.BOTS_TblEarnRuleConfig.Select(x => x.GroupId).Contains(GroupId);
+                    ObjValidation.Burnstatus = contex.BOTS_TblBurnRuleConfig.Select(x => x.GroupId).Contains(GroupId);
+                    ObjValidation.CommCount = contex.BOTS_TblCommunicationSet.Select(x => x.SetId).Count();
+                    if(ObjValidation.CommCount > 0)
+                    {
+                        ObjValidation.CommounicationStatus = true;
+                    }
+                    var SMSList = contex.BOTS_TblSMSConfig.Select(x => x.SetId).Distinct().ToList();
+                    var WAList = contex.BOTS_TblWAConfig.Select(x => x.SetId).Distinct().ToList();
+                    var CountSMSWAset = SMSList.Union(WAList).Distinct().Count();
+                    if (ObjValidation.CommCount == CountSMSWAset)
+                    {
+                        ObjValidation.CommSMSWAStatus = true;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "ValidateSendForApproval Repository");
+            }
+
+            return ObjValidation;
+        }
+
         public bool SendForApproval(string groupId, string LoginId)
         {
             bool status = false;

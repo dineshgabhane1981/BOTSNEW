@@ -2487,6 +2487,23 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public ActionResult ValidateSendForApproval(string GroupId)
+        {
+            ValidateApproval ObjData = new ValidateApproval();
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            try
+            {
+                ObjData = OBR.ValidateSendForApproval(GroupId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ValidateSendForApproval");
+            }
+            return new JsonResult() { Data = ObjData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
         public ActionResult SendForApproval(string GroupId)
         {
             bool result = true;
@@ -2827,7 +2844,6 @@ namespace WebApp.Controllers.OnBoarding
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-
         public ActionResult CustomerTerms(string groupId)
         {
             OnBoardingSalesViewModel objData = new OnBoardingSalesViewModel();
