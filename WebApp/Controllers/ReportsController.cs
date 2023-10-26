@@ -1665,12 +1665,12 @@ namespace WebApp.Controllers
                 }
             }
         }
-        public ActionResult CustomizeMetrics()
+        public ActionResult SmartSlicer()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             CustomizeMetricsViewModel objData = new CustomizeMetricsViewModel();
             objData.lstCategory = ORR.GetCategoryCode(userDetails.GroupId, userDetails.connectionString);
-            objData.lstSubCategory= ORR.GetSubCategoryCodeALL(userDetails.GroupId, userDetails.connectionString);
+            objData.lstSubCategory = ORR.GetSubCategoryCodeALL(userDetails.GroupId, userDetails.connectionString);
             objData.lstProduct = ORR.GetProductId(userDetails.GroupId, userDetails.connectionString);
             objData.lstBrands = RR.GetBrandList(userDetails.GroupId, userDetails.connectionString);
             objData.lstOutlets = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
@@ -1682,5 +1682,14 @@ namespace WebApp.Controllers
             objData.lstOutlets.Insert(0, item);
             return View(objData);
         }
+
+        [HttpPost]
+        public JsonResult GetSSFilterCount(string jsonData)
+        {
+            return new JsonResult() { Data = "", JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+
+
     }
 }

@@ -535,7 +535,7 @@
             $("#dvMemberAFilters").hide();
             $("#dvMemberAThirdFilters").hide();
             $("#dvMDLCSource").hide();
-            
+
             if ($("#chkTxnCumiulative").is(":checked")) {
                 $("#dvCumulative").show();
             }
@@ -716,7 +716,7 @@
         $("#dvPointBalance").hide();
         $("#dvRedeemed").hide();
         $("#dvNeverPurchased").hide();
-        $("#headingProduct").hide();        
+        $("#headingProduct").hide();
         $("#dvPurchased").hide();
         $("#dvInactive").hide();
         $("#dvSpend").hide();
@@ -824,7 +824,8 @@
 
     function GetDataToFilter() {
         var AllData = [];
-        var FirstLevel = [];
+
+        //First, Second and Third level Radio buttons or Checkboxes
         item = {}
         if ($("#chkTransacting").is(":checked")) {
             item["FirstChk"] = "Transacting";
@@ -838,7 +839,7 @@
             if ($("#chkTxnInactive").is(":checked")) {
                 item["SecondChk"] = "Inactive";
                 item["InactiveSegment"] = $("#ddlInactive").val();
-                item["ExcludeOnlyOnce"] = $("#chkExcludeOnlyOnce").is(":checked");                
+                item["ExcludeOnlyOnce"] = $("#chkExcludeOnlyOnce").is(":checked");
             }
             if ($("#chkTxnCumiulative").is(":checked")) {
                 item["SecondChk"] = "Cumiulative";
@@ -846,7 +847,7 @@
                     item["LSGT"] = $("#ddlTxnCumulative").val();
                     item["TxnCount"] = $("#txtCTxnCount").val();
                     item["Months"] = $("#txtCTxnMonths").val();
-                    item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();                    
+                    item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
                 }
                 if ($("#rbtnCSpend").is(":checked")) {
                     item["LSGT"] = $("#ddlSpendCumulative").val();
@@ -858,12 +859,160 @@
         }
         if ($("#chkNonTransacting").is(":checked")) {
             item["FirstChk"] = "NonTransacting";
+            if ($("#chkNonTxnAll").is(":checked")) {
+                item["SecondChk"] = "All";
+            }
+            if ($("#chkNonTxnEnrolled").is(":checked")) {
+                item["SecondChk"] = "Enrolled";
+            }
+            if ($("#chkNonTxnBulkUpload").is(":checked")) {
+                item["SecondChk"] = "BulkUpload";
+            }
+            if ($("#chkNonTxnReferal").is(":checked")) {
+                item["SecondChk"] = "Referal";
+            }
+            if ($("#chkNonTxnDLC").is(":checked")) {
+                item["SecondChk"] = "DLC";
+                item["QRSource"] = $("#ddlDLCSourceNT").val();
+            }
         }
         if ($("#chkMemberAcquition").is(":checked")) {
             item["FirstChk"] = "MemberAcquition";
+            if ($("#chkMReferal").is(":checked")) {
+                item["SecondChk"] = "Referal";
+                if ($("#chkMAAll").is(":checked")) {
+                    item["MAFinal"] = "All";
+                }
+                if ($("#chkMATransacting").is(":checked")) {
+                    item["MAFinal"] = "Transacting";
+                }
+                if ($("#chkMANonTransacting").is(":checked")) {
+                    item["MAFinal"] = "NonTransacting";
+                }
+            }
+            if ($("#chkMDLC").is(":checked")) {
+                item["SecondChk"] = "DLC";
+                if ($("#chkMAAll").is(":checked")) {
+                    item["MAFinal"] = "All";
+                }
+                if ($("#chkMATransacting").is(":checked")) {
+                    item["MAFinal"] = "Transacting";
+                }
+                if ($("#chkMANonTransacting").is(":checked")) {
+                    item["MAFinal"] = "NonTransacting";
+                }
+                item["QRSource"] = $("#ddlDLCSource").val();
+            }
         }
+        AllData.push(item);
 
+        //Transactional Filters
+        item1 = {}
+        if ($("#chkAvgTicket").is(":checked")) {
+            item1["AvgTicket"] = $("#txtAvgTicket").val();
+        }
+        if ($("#chkEnrolledRange").is(":checked")) {
+            item1["Enrollfromdt"] = $("#txtEnrollfromdt").val();
+            item1["Enrolltodt"] = $("#txtEnrolltodt").val();
+        }
+        if ($("#chkInactiveSince").is(":checked")) {
+            item1["NonTransactedSince"] = $("#txtNonTransactedMax").val();
+        }
+        if ($("#chkSpend").is(":checked")) {
+            item1["SpendMin"] = $("#txtSpendMin").val();
+            item1["SpendMax"] = $("#txtSpendMax").val();
+        }
+        if ($("#chkTxnCount").is(":checked")) {
+            item1["CountMin"] = $("#txtTxnCountMin").val();
+            item1["CountMax"] = $("#txtTxnCountMax").val();
+        }
+        if ($("#chkPointBalance").is(":checked")) {
+            item1["PointsBalMin"] = $("#txtPointsBalMin").val();
+            item1["PointsBalMax"] = $("#txtPointsBalMax").val();
+        }
+        if ($("#chkRedeemed").is(":checked")) {
+            if ($("#rbtnRedeemed").is(":checked")) {
+                item1["Redeemed"] = "Yes";
+            }
+            if ($("#rbtnNonRedeemed").is(":checked")) {
+                item1["Redeemed"] = "No";
+            }
+        }
+        AllData.push(item1);
 
+        //Product Filter
+        item2 = {}
+        if ($("#chkNeverPurchased").is(":checked")) {
+            item2["NPCategory"] = $("#ddlNPCategory").val();
+            item2["NPSubCategory"] = $("#ddlNPSubCategory").val();
+            item2["NPProduct"] = $("#ddlNPProduct").val();
+        }
+        if ($("#chkPurchased").is(":checked")) {
+            item2["PCategory"] = $("#ddlPCategory").val();
+            item2["PSubCategory"] = $("#ddlPSubCategory").val();
+            item2["PProduct"] = $("#ddlPProduct").val();
+        }
+        AllData.push(item2);
+
+        //Product Filter
+        item3 = {}
+        if ($("#chkBrands").is(":checked")) {
+            item3["Zone"] = $("#ddlBrands").val();
+        }
+        if ($("#chkOutlet").is(":checked")) {
+            item3["Outlets"] = $("#lstBoxOutlet").val();
+        }
+        if ($("#chkTOutlet").is(":checked")) {
+            item3["TransactingOutlets"] = $("#lstBoxTOutlet").val();
+        }
+        if ($("#chkTOutletAnyOne").is(":checked")) {
+            item3["TOutletsAnyLast"] = "AnyOne";
+        }
+        if ($("#chkTOutletLast").is(":checked")) {
+            item3["TOutletsAnyLast"] = "Last";
+        }
+        AllData.push(item3);
+
+        //Demographic Filter
+        item4 = {}
+        if ($("#chkTier").is(":checked")) {
+            item4["Tier"] = $("#ddlTier").val();
+        }
+        if ($("#chkGender").is(":checked")) {
+            item4["Gender"] = $("#ddlGender").val();
+        }
+        if ($("#chkCity").is(":checked")) {
+            item4["City"] = $("#txtCity").val();
+        }
+        if ($("#chkAge").is(":checked")) {
+            item4["AgeFrom"] = $("#txtAgefrom").val();
+            item4["AgeTo"] = $("#txtAgeTo").val();
+        }
+        AllData.push(item4);
+
+        var data = JSON.stringify(AllData);
+
+         $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSSFilterCount", "Reports")',
+             data: "{'JsonData': '" + JSON.stringify(data) + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+               
+               
+               
+               
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $('#dvMemberData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
 
         document.getElementById("btnGenerate").disabled = "";
         document.getElementById("btnSave").disabled = "";

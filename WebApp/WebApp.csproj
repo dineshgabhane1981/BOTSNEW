@@ -52,6 +52,10 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="BOTS_BL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BOTS_BL\bin\Debug\BOTS_BL.dll</HintPath>
+    </Reference>
     <Reference Include="ClosedXML, Version=0.95.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ClosedXML.0.95.4\lib\net46\ClosedXML.dll</HintPath>
     </Reference>
@@ -649,7 +653,6 @@
     <Content Include="Views\Member\DeleteUserNew.cshtml" />
     <Content Include="Views\Transaction\IndexNew.cshtml" />
     <Content Include="Views\Transaction\PointTransferNew.cshtml" />
-    <Content Include="Views\Reports\CustomizeMetrics.cshtml" />
     <Content Include="Views\EarnBurn\IndexNew.cshtml" />
     <Content Include="Views\EarnBurn\BurnNew.cshtml" />
     <Content Include="Views\BonusPoint\CancelTransactionNew.cshtml" />
@@ -660,6 +663,7 @@
     <Content Include="Views\Campaigns\_CampMgmtCampaignList.cshtml" />
     <Content Include="Views\Campaigns\_CreateCampaignPromo.cshtml" />
     <Content Include="Views\Campaigns\_CampaignPromoWA.cshtml" />
+    <Content Include="Views\Reports\SmartSlicer.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -821,12 +825,6 @@
     <Folder Include="Temp\" />
     <Folder Include="Views\testSinglepagews\" />
     <Folder Include="Views\Test\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BOTS_BL\BOTS_BL.csproj">
-      <Project>{91b6424d-678c-4df3-89d7-af08c652d574}</Project>
-      <Name>BOTS_BL</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

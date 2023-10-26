@@ -48,5 +48,9 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Male", Value = "1" }, new SelectListItem() { Text = "Female", Value = "2" }};
         }
+        public SelectListItem[] CumulativeFrequency()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Per Month", Value = "PerMonth" }, new SelectListItem() { Text = "Cumulative", Value = "Cumulative" } };
+        }
     }
 }
