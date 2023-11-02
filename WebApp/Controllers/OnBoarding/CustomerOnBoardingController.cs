@@ -2533,18 +2533,18 @@ namespace WebApp.Controllers.OnBoarding
             if (status == "Rejected")
             {
                 var GroupName = OBR.GetOnboardingGroupName(groupId);
-                var CSEmail = userDetails.EmailId;
+                var CSAssignedEmail = OBR.GetAssignedCSNameForOnboarding(groupId);
                 var message = "Configuration Rejected by CS Head for Group - " + GroupName;
                 var subject = "Configuration Rejected - " + GroupName;
-                var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+                var isEmail = SendEmailOnBoarding(CSAssignedEmail, subject, message);
             }
             if (status == "Approved")
             {
                 var GroupName = OBR.GetOnboardingGroupName(groupId);
-                var CSEmail = userDetails.EmailId;
+                var CSAssignedEmail = OBR.GetAssignedCSNameForOnboarding(groupId);
                 var message = "Configuration Approved by CS Head for Group - " + GroupName;
                 var subject = "Configuration Approved - " + GroupName;
-                var isEmail = SendEmailOnBoarding(CSEmail, subject, message);
+                var isEmail = SendEmailOnBoarding(CSAssignedEmail, subject, message);
             }
             if (status == "Rejected By Customer")
             {
@@ -2639,7 +2639,7 @@ namespace WebApp.Controllers.OnBoarding
                 smtp.UseDefaultCredentials = true;
                 smtp.Credentials = networkCredential;
                 smtp.Port = 587;
-                smtp.Send(mail);
+                //smtp.Send(mail);
 
                 result = true;
             }
