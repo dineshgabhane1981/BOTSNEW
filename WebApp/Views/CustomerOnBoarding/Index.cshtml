@@ -879,7 +879,7 @@
                         {
                             if (roleId == "1" || roleId == "7" || roleId == "6")
                             {
-                                <button type="button" id="btnSendForApproval" class="btn btn-primary pull-right" onclick="return SendForApproval();" style="margin-right:10px;font-weight:bold;">Send For Approval</button>
+                                <button type="button" id="btnSendForApproval" class="btn btn-primary pull-right" onclick="return ValidateSendForApproval();" style="margin-right:10px;font-weight:bold;">Send For Approval</button>
                             }
                         }
                     }
@@ -1694,7 +1694,7 @@
         var outletCount = $("#hdnOutletCount").val();
 
         for (let i = 1; i <= outletCount; i++) {
-            
+
             $("#txtOutletNameNew" + i).focusout(function () {
                 if ($("#txtOutletNameNew" + i).val() != "") {
                     $('#txtOutletNameNew' + i).css('border-color', '');
@@ -2985,6 +2985,95 @@
                 return false;
             }
         }
+    }
+
+    function ValidateSendForApproval() {
+
+        var hdnGroupId = $("#hdnGroupID").val();
+        //alert(hdnGroupId)
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ValidateSendForApproval", "CustomerOnBoarding")',
+            data: '{GroupId: ' + JSON.stringify(hdnGroupId) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (ObjData) {
+                console.log(ObjData)
+
+                if (ObjData != null) {
+
+                    if (ObjData.Outletstatus == false) {
+
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Outlet Details not configured...",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else if (ObjData.Earnstatus == false) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Earn Rule not configured...",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else if (ObjData.Burnstatus == false) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Burn Rule not configured...",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else if (ObjData.CommounicationStatus == false) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Commounication set configured...",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else if (ObjData.CommSMSWAStatus == false) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "Commounication set and Messages are not matched...",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        SendForApproval();
+                    }
+
+
+
+                    //cuteAlert({
+                    //    type: "success",
+                    //    title: "Saved",
+                    //    message: "Configuration sent for approval",
+                    //    buttonText: "Okay"
+                    //})
+                    //location.reload();
+                    //$("#divLoader").hide();
+                    //SendForApproval();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is a problem in sending for approval",
+                        buttonText: "Okay"
+                    })
+                    $("#divLoader").hide();
+                }
+            },
+            error: function (result) {
+                //console.log(result.responseText)
+            }
+        });
     }
 
     function SendForApproval() {
