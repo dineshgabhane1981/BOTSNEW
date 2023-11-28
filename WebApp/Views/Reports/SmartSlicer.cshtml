@@ -1420,8 +1420,7 @@
             console.log($("#lstBoxOutlet").val());
             var selectedVal = [];
             $('#lstBoxOutlet :selected').each(function (i, selected) {
-                selectedVal[i] = $(selected).text();
-                alert(selectedVal[i]);
+                selectedVal[i] = $(selected).text();                
             });
             item3["Outlets"] = selectedVal;
         }
