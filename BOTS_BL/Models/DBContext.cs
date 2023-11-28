@@ -20,6 +20,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<tblCRDataset> tblCRDatasets { get; set; }
         public virtual DbSet<tblDLCCampaignMaster> tblDLCCampaignMasters { get; set; }
         public virtual DbSet<tblTierMaster> tblTierMasters { get; set; }
         public virtual DbSet<tblCustomerDataCollection> tblCustomerDataCollections { get; set; }

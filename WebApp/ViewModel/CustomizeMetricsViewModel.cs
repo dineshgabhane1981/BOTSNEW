@@ -23,34 +23,35 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstOutlets { get; set; }
         public List<SelectListItem> lstTiers { get; set; }
         public List<SelectListItem> lstDLCSource { get; set; }
+        public List<tblCRDataset> lstCRDataset { get; set; }
         public SelectListItem[] SpendList()
         {
-            return new SelectListItem[3] { new SelectListItem() { Text = "Less than", Value = "1" }, new SelectListItem() { Text = "More than", Value = "2" }, new SelectListItem() { Text = "Between", Value = "3" } };
+            return new SelectListItem[3] { new SelectListItem() { Text = "Less than", Value = "Less than" }, new SelectListItem() { Text = "More than", Value = "More than" }, new SelectListItem() { Text = "Between", Value = "Between" } };
         }
         public SelectListItem[] RedeemedList()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Redeemed", Value = "1" }, new SelectListItem() { Text = "Not Redeemed", Value = "2" } };
+            return new SelectListItem[2] { new SelectListItem() { Text = "Redeemed", Value = "Redeemed" }, new SelectListItem() { Text = "Not Redeemed", Value = "Not Redeemed" } };
         }
         public SelectListItem[] LessThanMoreThan()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Less than", Value = "1" }, new SelectListItem() { Text = "More than", Value = "2" } };
+            return new SelectListItem[2] { new SelectListItem() { Text = "Less than", Value = "Less than" }, new SelectListItem() { Text = "More than", Value = "More than" } };
         }
         public SelectListItem[] OnlyOnceDDL()
         {
-            return new SelectListItem[6] { new SelectListItem() { Text = "All", Value = "1" }, new SelectListItem() { Text = "High Spend Long time", Value = "2" }, new SelectListItem() { Text = "Low Spend Long time", Value = "3" }, new SelectListItem() { Text = "High Spend Recent", Value = "4" }, new SelectListItem() { Text = "Low Spend Recent", Value = "5" }, new SelectListItem() { Text = "Custom", Value = "6" } };
+            return new SelectListItem[6] { new SelectListItem() { Text = "All", Value = "All" }, new SelectListItem() { Text = "High Spend Long time", Value = "High Spend Long time" }, new SelectListItem() { Text = "Low Spend Long time", Value = "Low Spend Long time" }, new SelectListItem() { Text = "High Spend Recent", Value = "High Spend Recent" }, new SelectListItem() { Text = "Low Spend Recent", Value = "Low Spend Recent" }, new SelectListItem() { Text = "Custom", Value = "Custom" } };
         }
         public SelectListItem[] InactiveDDL()
         {
-            return new SelectListItem[8] { new SelectListItem() { Text = "All", Value = "1" }, new SelectListItem() { Text = "Within 30 days", Value = "2" }, new SelectListItem() { Text = "31 to 60 days", Value = "3" }, new SelectListItem() { Text = "61 to 90 days", Value = "4" }, new SelectListItem() { Text = "91 to 180 days", Value = "5" }, new SelectListItem() { Text = "181 to 365 days", Value = "6" }, new SelectListItem() { Text = "More than a year", Value = "7" }, new SelectListItem() { Text = "Custom", Value = "8" } };
+            return new SelectListItem[8] { new SelectListItem() { Text = "All", Value = "All" }, new SelectListItem() { Text = "Within 30 days", Value = "Within 30 days" }, new SelectListItem() { Text = "31 to 60 days", Value = "31 to 60 days" }, new SelectListItem() { Text = "61 to 90 days", Value = "61 to 90 days" }, new SelectListItem() { Text = "91 to 180 days", Value = "91 to 180 days" }, new SelectListItem() { Text = "181 to 365 days", Value = "181 to 365 days" }, new SelectListItem() { Text = "More than a year", Value = "More than a year" }, new SelectListItem() { Text = "Custom", Value = "Custom" } };
         }
 
         public SelectListItem[] Gender()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Male", Value = "1" }, new SelectListItem() { Text = "Female", Value = "2" }};
+            return new SelectListItem[2] { new SelectListItem() { Text = "Male", Value = "Male" }, new SelectListItem() { Text = "Female", Value = "Female" } };
         }
         public SelectListItem[] CumulativeFrequency()
         {
-            return new SelectListItem[2] { new SelectListItem() { Text = "Per Month", Value = "PerMonth" }, new SelectListItem() { Text = "Cumulative", Value = "Cumulative" } };
+            return new SelectListItem[2] { new SelectListItem() { Text = "Per Month", Value = "Per Month" }, new SelectListItem() { Text = "Cumulative", Value = "Cumulative" } };
         }
     }
 }

@@ -357,6 +357,7 @@
     <Compile Include="Models\IndividualDBModels\tblCelebrationMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblCelebrationMemberDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblCelebrationTxnDetail.cs" />
+    <Compile Include="Models\IndividualDBModels\tblCRDataset.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustDetailsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustInfo.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustomerDataCollection.cs" />

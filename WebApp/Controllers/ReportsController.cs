@@ -1676,6 +1676,7 @@ namespace WebApp.Controllers
             objData.lstOutlets = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             objData.lstTiers = ORR.GetTierList(userDetails.connectionString);
             objData.lstDLCSource = ORR.GetDLCSourceList(userDetails.connectionString);
+            objData.lstCRDataset = RR.GetCRDataset(userDetails.connectionString);
             SelectListItem item = new SelectListItem();
             item.Value = "0";
             item.Text = "All";
@@ -1684,12 +1685,28 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetSSFilterCount(string jsonData)
+        public JsonResult GetSSFilterCount(string jsonData,string IsCount)
         {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            int count = RR.GetSSFilterCount(objData, userDetails.LoginId, Convert.ToBoolean(IsCount));
+            
             return new JsonResult() { Data = "", JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        [HttpPost]
+        public JsonResult SaveDataset(string jsonData, string DSName)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
+            bool status = RR.SaveDataset(objData, userDetails, DSName);
 
-
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

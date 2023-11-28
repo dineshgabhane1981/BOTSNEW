@@ -48,6 +48,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connStr))
                 {
+                    context.Database.CommandTimeout = 180;
+
                     var BlockedPoints = context.tblBurnPtsSoftBlocks.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y=>y.BurnPoints);
 
                     objData.Points  = context.tblCustPointsMasters.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y => y.Points);
