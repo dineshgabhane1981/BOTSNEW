@@ -557,7 +557,7 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "GetDLCWAScript");
             }
-            return objDLCSMSWAScriptMaster;
+            return objDLCSMSWAScriptMaster; 
         }
         //public bool SaveDLCWAScripts(int GroupId, string DLCMessage, string DLCScript)
         //{
