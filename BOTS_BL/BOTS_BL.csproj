@@ -344,6 +344,8 @@
     <Compile Include="Models\IndividualDBModels\PointExpiryDummyModel.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpCustDetailList.cs" />
     <Compile Include="Models\IndividualDBModels\PointsExpMasterAllData.cs" />
+    <Compile Include="Models\IndividualDBModels\tblAnniversarySMSWAScript.cs" />
+    <Compile Include="Models\IndividualDBModels\tblBirthdaySMSWAScript.cs" />
     <Compile Include="Models\IndividualDBModels\tblBrandMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblBulkCustList.cs" />
     <Compile Include="Models\IndividualDBModels\tblBurnPtsProrataInvAmt.cs" />
@@ -380,6 +382,7 @@
     <Compile Include="Models\IndividualDBModels\tblGroupMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblInActiveMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblInActiveMemberDetail.cs" />
+    <Compile Include="Models\IndividualDBModels\tblInActiveSMSWAScript.cs" />
     <Compile Include="Models\IndividualDBModels\tblLogDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblMobileChangeHistory.cs" />
     <Compile Include="Models\IndividualDBModels\tblOTPDetail.cs" />
@@ -387,6 +390,7 @@
     <Compile Include="Models\IndividualDBModels\tblOutletMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblPointsExpiryMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblPointsExpiryMemberDetail.cs" />
+    <Compile Include="Models\IndividualDBModels\tblPointsExpirySMSWAScript.cs" />
     <Compile Include="Models\IndividualDBModels\tblProductRuleMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblProfileUpdateMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblPromoBlastMaster.cs" />

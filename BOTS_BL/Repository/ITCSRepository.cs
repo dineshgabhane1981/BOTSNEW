@@ -144,7 +144,33 @@ namespace BOTS_BL.Repository
             }
             return lstGroupDetails;
         }
-        public tblSMSWhatsAppScriptMaster GetWAScripts(int  GroupId, string OutletId, string MessageType)
+        public List<SelectListItem> GetScript(string GroupId, string OutletId)
+        {
+            List<SelectListItem> lstScript = new List<SelectListItem>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    var Outlets = contextNew.tblSMSWhatsAppScriptMasters.Where(x => x.OutletId == OutletId).ToList();
+
+                    foreach (var item in Outlets)
+                    {
+                        lstScript.Add(new SelectListItem
+                        {
+                            Text = item.MessageType,
+                            Value = Convert.ToString(item.Id)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutlet");
+            }
+            return lstScript;
+        }
+        public tblSMSWhatsAppScriptMaster GetWAScripts(int GroupId, string OutletId, string MessageType)
         {
             tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
             string Id;
@@ -156,40 +182,7 @@ namespace BOTS_BL.Repository
                 var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    if (MessageType == "Enrollment")
-                    {
-                        Id = "100";
-                    }
-                    else if (MessageType == "Earn")
-                    {
-                        Id = "101";
-                    }
-                    else if (MessageType == "Burn")
-                    {
-                        Id = "102";
-                    }
-                    else if (MessageType == "CancelEarn")
-                    {
-                        Id = "103";
-                    }
-                    else if (MessageType == "CancelBurn")
-                    {
-                        Id = "104";
-                    }
-                    else if (MessageType == "OTP")
-                    {
-                        Id = "105";
-                    }
-                    else if (MessageType == "Balance>0")
-                    {
-                        Id = "106";
-                    }
-                    else if (MessageType == "Balance<0")
-                    {
-                        Id = "107";
-                    }
-                    objSMSWhatsAppScriptMaster = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id && x.OutletId == OutletId).FirstOrDefault();
-
+                    objSMSWhatsAppScriptMaster = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
                 }
             }
             catch (Exception ex)
@@ -204,47 +197,14 @@ namespace BOTS_BL.Repository
             bool result = false;
             string Id;
             Id = string.Empty;
-            tblGroupDetail obj = new tblGroupDetail();            
+            tblGroupDetail obj = new tblGroupDetail();
             tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
             try
             {
                 var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
                 using (var context = new BOTSDBContext(connStr))
-
                 {
-                    if (MessageType == "Enrollment")
-                    {
-                        Id = "100";
-                    }
-                    else if (MessageType == "Earn")
-                    {
-                        Id = "101";
-                    }
-                    else if (MessageType == "Burn")
-                    {
-                        Id = "102";
-                    }
-                    else if (MessageType == "CancelEarn")
-                    {
-                        Id = "103";
-                    }
-                    else if (MessageType == "CancelBurn")
-                    {
-                        Id = "104";
-                    }
-                    else if (MessageType == "OTP")
-                    {
-                        Id = "105";
-                    }
-                    else if (MessageType == "Balance>0")
-                    {
-                        Id = "106";
-                    }
-                    else if (MessageType == "Balance<0")
-                    {
-                        Id = "107";
-                    }
-                    var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == Id).FirstOrDefault();
+                    var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType).FirstOrDefault();
                     Script1.WhatsAppScript = Script;
                     context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                     context.SaveChanges();
@@ -256,6 +216,373 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+        public List<SelectListItem> GetBirthdayScript(string GroupId)
+        {
+            List<SelectListItem> lstBirthday = new List<SelectListItem>();
+            List<tblBirthdaySMSWAScript> GroupDetails = new List<tblBirthdaySMSWAScript>();
+            try
+            {
+
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    GroupDetails = contextNew.tblBirthdaySMSWAScript.Where(x => x.IsActive == true).ToList();
+                }
+                foreach (var item in GroupDetails)
+                {
+                    lstBirthday.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = Convert.ToString(item.Id)
+                    });
+                }
+                //lstInactive = lstInactive.OrderBy(x => x.Text).ToList();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
+            }
+            return lstBirthday;
+        }
+        public tblBirthdaySMSWAScript GetBirthdayWAScripts(int GroupId, string Name)
+        {
+            tblBirthdaySMSWAScript objBirthdaySMSWAScript = new tblBirthdaySMSWAScript();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objBirthdaySMSWAScript = context.tblBirthdaySMSWAScript.Where(x => x.Name == Name).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBirthdayWAScripts");
+            }
+            return objBirthdaySMSWAScript;
+
+        }
+        public bool SaveBirthdayScripts(int GroupId, string Script1, string Name1)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblBirthdaySMSWAScript objBirthdaySMSWAScript = new tblBirthdaySMSWAScript();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var ScriptNew = context.tblBirthdaySMSWAScript.Where(x => x.Name == Name1).FirstOrDefault();
+                    ScriptNew.WAScript = Script1;
+                    context.tblBirthdaySMSWAScript.AddOrUpdate(ScriptNew);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveInactiveScripts");
+            }
+            return result;
+        }
+        public List<SelectListItem> GetAnniversaryScript(string GroupId)
+        {
+            List<SelectListItem> lstAnniversary = new List<SelectListItem>();
+            List<tblAnniversarySMSWAScript> GroupDetails = new List<tblAnniversarySMSWAScript>();
+            try
+            {
+
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    GroupDetails = contextNew.tblAnniversarySMSWAScript.Where(x => x.IsActive == true).ToList();
+                }
+                foreach (var item in GroupDetails)
+                {
+                    lstAnniversary.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = Convert.ToString(item.Id)
+                    });
+                }
+                //lstInactive = lstInactive.OrderBy(x => x.Text).ToList();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
+            }
+            return lstAnniversary;
+        }
+        public tblAnniversarySMSWAScript GetAnniversaryWAScript(int GroupId, string Name)
+        {
+            tblAnniversarySMSWAScript objAnniversarySMSWAScript = new tblAnniversarySMSWAScript();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objAnniversarySMSWAScript = context.tblAnniversarySMSWAScript.Where(x => x.Name == Name).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAnniversaryWAScript");
+            }
+            return objAnniversarySMSWAScript;
+
+        }
+        public bool SaveAnniversaryScripts(int GroupId, string Script2, string Name2)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblAnniversarySMSWAScript objAnniversarySMSWAScript = new tblAnniversarySMSWAScript();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var ScriptNew1 = context.tblAnniversarySMSWAScript.Where(x => x.Name == Name2).FirstOrDefault();
+                    ScriptNew1.WAScript = Script2;
+                    context.tblAnniversarySMSWAScript.AddOrUpdate(ScriptNew1);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveAnniversaryScripts");
+            }
+            return result;
+        }
+        public List<SelectListItem> GetInactiveScript(string GroupId)
+        {
+            List<SelectListItem> lstInactive = new List<SelectListItem>();
+            List<tblInActiveSMSWAScript> GroupDetails = new List<tblInActiveSMSWAScript>();
+            try
+            {
+
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    GroupDetails = contextNew.tblInActiveSMSWAScripts.Where(x => x.IsActive == true).ToList();
+                }
+                foreach (var item in GroupDetails)
+                {
+                    lstInactive.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = Convert.ToString(item.Id)
+                    });
+                }
+                //lstInactive = lstInactive.OrderBy(x => x.Text).ToList();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetGroupDetails");
+            }
+            return lstInactive;
+        }
+        public tblInActiveSMSWAScript GetInactiveWAScripts(int GroupId, string Name)
+        {
+            tblInActiveSMSWAScript objInActiveSMSWAScript = new tblInActiveSMSWAScript();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objInActiveSMSWAScript = context.tblInActiveSMSWAScripts.Where(x => x.Name == Name).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetInactiveWAScripts");
+            }
+            return objInActiveSMSWAScript;
+
+        }
+        public bool SaveInactiveScripts(int GroupId, string Script, string Name)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblInActiveSMSWAScript objInActiveSMSWAScript = new tblInActiveSMSWAScript();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var Script2 = context.tblInActiveSMSWAScripts.Where(x => x.Name == Name).FirstOrDefault();
+                    Script2.WAScript = Script;
+                    context.tblInActiveSMSWAScripts.AddOrUpdate(Script2);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveInactiveScripts");
+            }
+            return result;
+        }
+        public List<SelectListItem> GetPointsExpiryScript(string GroupId)
+        {
+            List<SelectListItem> lstPointExpiry = new List<SelectListItem>();
+            List<tblPointsExpirySMSWAScript> GroupDetails = new List<tblPointsExpirySMSWAScript>();
+            try
+            {
+
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    GroupDetails = contextNew.tblPointsExpirySMSWAScript.Where(x => x.IsActive == true).ToList();
+                }
+                foreach (var item in GroupDetails)
+                {
+                    lstPointExpiry.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = Convert.ToString(item.Id)
+                    });
+                }
+                //lstInactive = lstInactive.OrderBy(x => x.Text).ToList();
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetPointsExpiryScript");
+            }
+            return lstPointExpiry;
+        }
+        public tblPointsExpirySMSWAScript GetPointsExpiryWAScripts(int GroupId, string Name)
+        {
+            tblPointsExpirySMSWAScript objPointsExpirySMSWAScript = new tblPointsExpirySMSWAScript();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objPointsExpirySMSWAScript = context.tblPointsExpirySMSWAScript.Where(x => x.Name == Name).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetPointsExpiryWAScripts");
+            }
+            return objPointsExpirySMSWAScript;
+
+        }
+        public bool SavePointsExpiryScripts(int GroupId, string Script4, string Name4)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblPointsExpirySMSWAScript objPointsExpirySMSWAScript = new tblPointsExpirySMSWAScript();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var ScriptNew2 = context.tblPointsExpirySMSWAScript.Where(x => x.Name == Name4).FirstOrDefault();
+                    ScriptNew2.WAScript = Script4;
+                    context.tblPointsExpirySMSWAScript.AddOrUpdate(ScriptNew2);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SavePointsExpiryScripts");
+            }
+            return result;
+        }
+        public List<SelectListItem> GetDLCScript(string GroupId)
+        {
+            List<SelectListItem> lstDLCScripts = new List<SelectListItem>();
+            List<tblDLCSMSWAScriptMaster> GroupDetails = new List<tblDLCSMSWAScriptMaster>();
+            try
+            {
+                var connStr = CR.GetCustomerConnString((GroupId));
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    GroupDetails = contextNew.tblDLCSMSWAScriptMasters.Where(x => x.IsActive == true).ToList();
+                }
+                foreach (var item in GroupDetails)
+                {
+                    lstDLCScripts.Add(new SelectListItem
+                    {
+                        Text = item.DLCMessageType,
+                        Value = Convert.ToString(item.DLCMessageId)
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetPointsExpiryScript");
+            }
+            return lstDLCScripts;
+        }
+        public tblDLCSMSWAScriptMaster GetDLCWAScripts(int GroupId,string DLCMessageType)
+        {
+            tblDLCSMSWAScriptMaster objDLCSMSWAScriptMaster = new tblDLCSMSWAScriptMaster();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objDLCSMSWAScriptMaster = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCMessageType == DLCMessageType).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCWAScript");
+            }
+            return objDLCSMSWAScriptMaster;
+        }
+        //public bool SaveDLCWAScripts(int GroupId, string DLCMessage, string DLCScript)
+        //{
+        //    bool result = false;
+        //    string Id;
+        //    Id = string.Empty;
+        //    tblGroupDetail obj = new tblGroupDetail();
+        //    tblDLCSMSWAScriptMaster objDLCSMSWAScriptMaster = new tblDLCSMSWAScriptMaster();
+        //    try
+        //    {
+        //        var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+        //        using (var context = new BOTSDBContext(connStr))
+        //        {
+        //            var DLCScriptNew = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCWAScript == DLCScript).FirstOrDefault();
+        //            DLCScriptNew.DLCWAScript = DLCScript;
+        //            context.tblDLCSMSWAScriptMasters.AddOrUpdate(DLCScriptNew);
+        //            context.SaveChanges();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        newexception.AddException(ex, "SaveDLCScripts");
+        //    }
+        //    return result;
+        //}
         public List<SelectListItem> GetOutlet(string GroupId)
         {
             List<SelectListItem> lstOutlets = new List<SelectListItem>();

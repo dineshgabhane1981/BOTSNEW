@@ -89,6 +89,10 @@ namespace BOTS_BL.Models
         public virtual DbSet<LogDetailsRW> LogDetailsRWs { get; set; }
 
         //New DB Structure Tables
+        public virtual DbSet<tblInActiveSMSWAScript> tblInActiveSMSWAScripts { get; set; }
+        public virtual DbSet<tblBirthdaySMSWAScript> tblBirthdaySMSWAScript { get; set; }
+        public virtual DbSet<tblAnniversarySMSWAScript> tblAnniversarySMSWAScript { get; set; }
+        public virtual DbSet<tblPointsExpirySMSWAScript> tblPointsExpirySMSWAScript { get; set; }
         public virtual DbSet<tblBrandMaster> tblBrandMasters { get; set; }
         public virtual DbSet<tblBurnPtsProrataInvAmt> tblBurnPtsProrataInvAmts { get; set; }
         public virtual DbSet<tblCampaignMemberDetail> tblCampaignMemberDetails { get; set; }

@@ -35,5 +35,7 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string SMSWhatsAppSendStatus { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }
