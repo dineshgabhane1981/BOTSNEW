@@ -128,7 +128,7 @@ namespace WebApp.Controllers
                 var userDetail = LR.CheckUserType(LoginID);
                 if (userDetail != null)
                 {
-                    if(userDetail.LoginId== "9922333332" || userDetail.LoginId == "8248934837")
+                    if(userDetail.LoginId== "9922333332" || userDetail.LoginId == "8248934837" || userDetail.LoginId == "552672063") 
                     {
                         returnString = "Password";
                     }

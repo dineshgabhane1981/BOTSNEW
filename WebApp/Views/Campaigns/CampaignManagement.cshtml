@@ -9,9 +9,14 @@
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
         <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
             <div>
-                <div class="row" style="margin-top : 20px;">
+                @*<div class="row" style="margin-top : 20px;">
                     <div class="col-sm-2">
                         <b>Campaign Details</b>
+                    </div>
+                </div>*@
+                <div class="row" style="margin-top : 20px; margin-left:30px;">
+                    <div class="col-md-3 col-xl-3">                       
+                        <a href="@Url.Action("CreateCampaign", "Campaigns")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Campaign</a>
                     </div>
                 </div>
                 @if (ViewBag.ListCampDetails.Count > 0)
@@ -32,22 +37,22 @@
                             @foreach (var item in ViewBag.ListCampDetails)
                             {
                                 var total = Convert.ToInt64(item.ControlBase) + Convert.ToInt64(item.CampaignBase);
-                        <tr>
-                            <td>@item.CampaignId</td>
-                            @*<td style="text-align:center;">--</td>*@
+                                <tr>
+                                    <td>@item.CampaignId</td>
+                                    @*<td style="text-align:center;">--</td>*@
 
-                            <td>@item.CampaignName</td>
+                                    <td>@item.CampaignName</td>
 
-                            <td>@total</td>
+                                    <td>@total</td>
 
-                            <td>@item.CommunicationMode</td>
+                                    <td>@item.CommunicationMode</td>
 
-                            <td>@item.StartDateStr</td>
+                                    <td>@item.StartDateStr</td>
 
-                            <td>@item.EndDateStr</td>
+                                    <td>@item.EndDateStr</td>
 
-                            <td>@item.Status</td>
-                        </tr>
+                                    <td>@item.Status</td>
+                                </tr>
                             }
                         </table>
 
@@ -63,14 +68,7 @@
                     </div>
                 }
 
-                <div class="row" style="margin-top : 20px; margin-left:30px;">
-                    <div class="col-md-3 col-xl-3">
-                        @*<div class="button">
-                                <button type="button" id="btnLinkCampaign" style="margin-left:15px;" class="btn btn-primary" onclick="LinkCreateCamp();"><b>CreateCampaign</b></button>
-                            </div>*@
-                        <a href="@Url.Action("CreateCampaign", "Campaigns")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Campaign</a>
-                    </div>
-                </div>
+
 
             </div>
         </div>

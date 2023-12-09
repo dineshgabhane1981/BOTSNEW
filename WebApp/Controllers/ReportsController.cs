@@ -257,12 +257,12 @@ namespace WebApp.Controllers
                 if (ReportType == "customer")
                 {
                     List<object> lstcustlist = new List<object>();
-                    createownviewmodel.listCustR = RR.GenerateCustomerTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                    //createownviewmodel.listCustR = RR.GenerateCustomerTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
                     Session["ExportCustomerReport"] = createownviewmodel.listCustR;
                 }
                 else if (ReportType == "transaction")
                 {
-                    createownviewmodel.listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
+                    //createownviewmodel.listTxnR = RR.GenerateTxnTypeReport(ColumnId, lstcustomerdetails, userDetails.GroupId, userDetails.connectionString);
                     Session["ExportTransactionReport"] = createownviewmodel.listTxnR;
                 }
 
@@ -1685,16 +1685,17 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult GetSSFilterCount(string jsonData,string IsCount)
+        public JsonResult GetSSFilterCount(string jsonData)
         {
+            bool IsCount = true;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
-            int count = RR.GetSSFilterCount(objData, userDetails.LoginId, Convert.ToBoolean(IsCount));
-            
-            return new JsonResult() { Data = "", JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            var count = RR.GetSSFilterCount(objData, userDetails.LoginId, IsCount, userDetails.connectionString);
+
+            return new JsonResult() { Data = count, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         [HttpPost]
         public JsonResult SaveDataset(string jsonData, string DSName)
@@ -1707,6 +1708,58 @@ namespace WebApp.Controllers
             bool status = RR.SaveDataset(objData, userDetails, DSName);
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult GetSlicerReport(string jsonData, string columnslist)
+        {
+            // var transcount = 0;
+            // List<int> lstcounts = new List<int>();
+            CreateOwnReportViewModel createownviewmodel = new CreateOwnReportViewModel();
+            List<CustomerDetail> lstcustomerdetails = (List<CustomerDetail>)Session["customerId"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+           
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+
+            object[] columnData = (object[])json_serializer.DeserializeObject(columnslist);
+            List<string> lstcolumnlist = new List<string>();
+            List<string> lstcolumnIdlist = new List<string>();
+            string columns = string.Empty;
+            foreach (Dictionary<string, object> item in columnData)
+            {
+                object[] ColumnId = (object[])item["ColumnId"];
+                object[] columnname = (object[])item["columnnm"];
+                
+                foreach (var itemNew1 in (columnname))
+                {
+                    string name = Convert.ToString(itemNew1);
+                    lstcolumnlist.Add(name);                    
+                }
+                
+                foreach (var itemNew1 in (ColumnId))
+                {
+                    //string name = Convert.ToString(itemNew1);
+                    string name = Convert.ToString(itemNew1);//string.Concat(Convert.ToString(itemNew1).Where(c => !char.IsWhiteSpace(c)));
+                    lstcolumnIdlist.Add(name);
+                    columns += itemNew1 + ",";
+                }
+            }
+
+
+            //foreach (var item in columnData)
+            //{
+            //    string name = Convert.ToString(item);
+            //    lstcolumnlist.Add(name);
+            //    columns += item + ",";
+            //}
+            columns = columns.Remove(columns.Length - 1);
+            createownviewmodel.listCustR = RR.GetSSFilterReport(objData, columns, userDetails.GroupId, userDetails.connectionString);
+            createownviewmodel.lstcolumnlist = lstcolumnlist;
+            createownviewmodel.lstcolumnIdlist = lstcolumnIdlist;
+            Session["ExportColumnList"] = createownviewmodel.lstcolumnlist;
+
+            return PartialView("_CreateOwnReportCustomerWise", createownviewmodel);            
         }
     }
 }

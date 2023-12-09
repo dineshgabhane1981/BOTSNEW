@@ -38,7 +38,7 @@ namespace WebApp.ViewModel
         }
         public SelectListItem[] OnlyOnceDDL()
         {
-            return new SelectListItem[6] { new SelectListItem() { Text = "All", Value = "All" }, new SelectListItem() { Text = "High Spend Long time", Value = "High Spend Long time" }, new SelectListItem() { Text = "Low Spend Long time", Value = "Low Spend Long time" }, new SelectListItem() { Text = "High Spend Recent", Value = "High Spend Recent" }, new SelectListItem() { Text = "Low Spend Recent", Value = "Low Spend Recent" }, new SelectListItem() { Text = "Custom", Value = "Custom" } };
+            return new SelectListItem[5] { new SelectListItem() { Text = "High Spend Long time", Value = "High Spend Long time" }, new SelectListItem() { Text = "Low Spend Long time", Value = "Low Spend Long time" }, new SelectListItem() { Text = "High Spend Recent", Value = "High Spend Recent" }, new SelectListItem() { Text = "Low Spend Recent", Value = "Low Spend Recent" }, new SelectListItem() { Text = "Custom", Value = "Custom" } };
         }
         public SelectListItem[] InactiveDDL()
         {

@@ -111,9 +111,9 @@
             cursor: pointer;
         }
 
-    input:read-only {
+    /* input:read-only {
         background-color: lightgray;
-    }
+    }*/
 </style>
 <div class="app-main__inner" id="dvall">
     <input class="radio" id="one" name="group" type="radio" checked>
@@ -157,6 +157,35 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;display:none;" id="dvShowReport">
+                <h5>Customize Report</h5>
+
+                <div id="divcolumns" class="row mt-3 ml-3 col-md-10 col-xl-10 ">
+                    <div>
+                        <select id="ChooseLeft1" multiple="multiple" style="height: 300px; width: 200px;">
+                        </select>
+                    </div>
+                    <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
+                        <input id="ShiftRight1" type="button" value="ShiftRight >>" class="btn btn-primary login-btn" style="margin-right:10px;font-weight:bold;" />
+                        <input id="ShiftLeft1" type="button" value="ShiftLeft << " class="btn btn-primary login-btn" style="font-weight:bold;" />
+                    </div>
+                    <div>
+                        <select id="ChooseRight1" multiple="multiple" style="height:300px;width:200px;">
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <button class=" ml-3 btn btn-primary login-btn" type="button" id="btnGetReport1" onclick="GetReport1();" style="text-align:right;">
+                        Get Report
+                    </button>
+                    <button class="ml-3 btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport1">
+                        <i class="fas fa-file-export"></i> Export
+                    </button>
+                </div>
+                <div id="dvListing1" class="row mt-5 col-md-12 col-xl-12" style="display:none;">
+
                 </div>
             </div>
         </div>
@@ -241,9 +270,11 @@
                         <div class="col-xl-3" style="margin-left:-40px;">
                             Average Ticket Size
                         </div>
-                        <div class="col-xl-3">
-                            <input type="number" id="txtAvgTicket" class="input40" placeholder="Ticket size" disabled />
+                        <div class="col-xl-8">
+                            <input type="number" id="txtAvgTicketFrm" class="input40" placeholder="Ticket size from" disabled />
+                            <input type="number" id="txtAvgTicketTo" class="input40" placeholder="Ticket size to" disabled />
                         </div>
+                         
                     </div>
 
                     <div class="row mt-4 col-md-12 col-xl-12" id="dvEnrolledRange">
@@ -378,7 +409,7 @@
                             Enrolled Outlet
                         </div>
                         <div class="row col-xl-8 ml-0">
-                            @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstOutlets, "Value", "Text"), new { @class = "input50", Multiple = "multiple", @disabled = "disabled", @id = "lstBoxOutlet" })
+                            @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstOutlets, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @disabled = "disabled", @id = "lstBoxOutlet" })
                         </div>
                     </div>
 
@@ -389,10 +420,10 @@
                         <div class="col-xl-3" style="margin-left:-40px;">
                             Transacting Outlet
                         </div>
-                        <div class="row col-xl-3 ml-0">
-                            @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstOutlets, "Value", "Text"), new { @class = "input50", Multiple = "multiple", @disabled = "disabled", @id = "lstBoxTOutlet" })
+                        <div class="row col-xl-5 ml-0">
+                            @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstOutlets, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @disabled = "disabled", @id = "lstBoxTOutlet" })
                         </div>
-                        <div class="row col-xl-4 ml-0">
+                        <div class="row col-xl-3 ml-0">
                             <input type="radio" id="chkTOutletAnyOne" name="TOutlet" style="width: 20px; cursor: pointer;" disabled /> <span style="padding-top:41px;">&nbsp;Anyone &nbsp;</span>
                             <input type="radio" id="chkTOutletLast" name="TOutlet" style="width:20px; cursor:pointer;" disabled /> <span style="padding-top:41px;">&nbsp;Last &nbsp;</span>
                         </div>
@@ -452,15 +483,59 @@
                     </div>
 
                     <hr id="hrButtons" style="border-top: dashed 1px;" />
+                    
+                        <div class="row mt-4 col-md-8 col-xl-8">
+                            <button id="btnFilter" class="btn btn-primary login-btn">Filter</button>
+                            <button id="btnGenerate" class="btn btn-primary login-btn ml-2">Generate Report</button>
+                            <button id="btnSave" class="btn btn-primary login-btn ml-2">Save For Campaign</button>
 
-                    <div class="row mt-4 col-md-12 col-xl-12">
-                        <button id="btnFilter" class="btn btn-primary login-btn">Filter</button>
-                        <button id="btnGenerate" class="btn btn-primary login-btn ml-2">Generate Report</button>
-                        <button id="btnSave" class="btn btn-primary login-btn ml-2">Save For Campaign</button>                       
-                    </div>
-                    <div class="row mt-4 col-md-12 col-xl-12" style="display:none;" id="dvDatasetSave">                        
+                        </div>
+                        <div class="row mt-4 col-md-4 col-xl-4" >
+                            <table id="tblFilterDetails" border="1" cellpadding="5" cellspacing="5" style="margin-left:50px;display:none;">
+                                <tr>
+                                    <td>Total Base Count</td>
+                                    <td><span id="spnTotalCount"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Filter Count</td>
+                                    <td><span id="spnFilterCount"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                     
+                    <div class="row mt-4 col-md-12 col-xl-12" style="display:none;" id="dvDatasetSave">
                         <input type="text" id="txtDSName" class="input100" placeholder="Dataset Name" />
                         <button id="btnSaveDS" class="btn btn-primary login-btn ml-2">Save Dataset</button>
+                    </div>
+                </div>
+
+                <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;display:none;" id="dvGenerateReport">
+                    <h5>Customize Report</h5>
+
+                    <div id="divcolumnlist" class="row mt-3 ml-3 col-md-10 col-xl-10 ">
+                        <div>
+                            <select id="ChooseLeft" multiple="multiple" style="height: 300px; width: 200px;">
+                            </select>
+                        </div>
+                        <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
+                            <input id="ShiftRight" type="button" value="ShiftRight >>" class="btn btn-primary login-btn" style="margin-right:10px;font-weight:bold;" />
+                            <input id="ShiftLeft" type="button" value="ShiftLeft << " class="btn btn-primary login-btn" style="font-weight:bold;" />
+                        </div>
+                        <div>
+                            <select id="ChooseRight" multiple="multiple" style="height:300px;width:200px;">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <button class=" ml-3 btn btn-primary login-btn" type="button" id="btnGetReport" onclick="GetReport();" style="text-align:right;">
+                            Get Report
+                        </button>
+                        <button class="ml-3 btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                    <div id="dvListing" class="row mt-5 col-md-12 col-xl-12" style="display:none;">
+
                     </div>
                 </div>
             </div>
@@ -474,7 +549,40 @@
 <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 
 <script>
+    $(function () {
+        $("#ShiftRight,#ShiftLeft").click(function (event) {
+            var ID = $(event.target).attr("ID");
+            var ChooseFrom = ID == "ShiftRight" ? "#ChooseLeft" : "#ChooseRight";
+            var moveTo = ID == "ShiftRight" ? "#ChooseRight" : "#ChooseLeft";
+            var SelectData = $(ChooseFrom + " :selected").toArray();
+            $(moveTo).append(SelectData);
+            SelectData.remove;
+        });
+    });
     $(document).ready(function () {
+        $("#ChooseLeft").empty();
+        $("#ChooseRight").empty();
+        let myOptions = [
+
+            { "ColumnId": "EnrolledOutletName", "ColumnName": "Outlet Name" },
+            { "ColumnId": "MobileNo", "ColumnName": "Mobile No" },
+            { "ColumnId": "CustName", "ColumnName": "Customer Name" },
+            { "ColumnId": "FirstTxnDate", "ColumnName": "First Txn Date" },
+            { "ColumnId": "LastTxnDate", "ColumnName": "Last Txn Date" },
+            { "ColumnId": "TotalTxnCount", "ColumnName": "No Of Txn" },
+            { "ColumnId": "EnrolledDate", "ColumnName": "Enrolled Date" },
+            { "ColumnId": "PointsBalance", "ColumnName": "Total Available Points" },
+            //{ "ColumnId": 9, "ColumnName": "Total Earn" },
+            //{ "ColumnId": 10, "ColumnName": "Total Burn" },
+            { "ColumnId": "Spends", "ColumnName": "Total Spend" },
+               /* { "ColumnId": 12, "ColumnName": "Bonus Points" }*/
+        ];
+
+        myOptions.forEach(function (e, i) {
+            $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
+        });
+
+
         $('input[type="radio"]').on('change', function () {
             $('input[name="' + this.name + '"]').not(this).prop('checked', false);
             ShowSecondFilters();
@@ -482,31 +590,34 @@
 
         $("#btnFilter").click(function () {
             GetDataToFilter();
+
         });
 
         $("#btnGenerate").click(function () {
-            alert("Generate");
+            $("#dvGenerateReport").show();
         });
         $("#btnSave").click(function () {
-            $("#dvDatasetSave").show();            
+            $("#dvDatasetSave").show();
         });
         $("#btnSaveDS").click(function () {
             SaveFilterCriteria();
         });
         EnableDisableControls();
 
-        //document.getElementById("btnGenerate").disabled = "disabled";
-        //document.getElementById("btnSave").disabled = "disabled";
+        document.getElementById("btnGenerate").disabled = "disabled";
+        document.getElementById("btnSave").disabled = "disabled";
     });
 
     function EnableDisableControls() {
 
         $("#chkAvgTicket").on('change', function () {
             if ($("#chkAvgTicket").is(":checked")) {
-                $("#txtAvgTicket").prop('disabled', false);
+                $("#txtAvgTicketFrm").prop('disabled', false);
+                $("#txtAvgTicketTo").prop('disabled', false);
             }
             else {
-                $("#txtAvgTicket").prop('disabled', true);
+                $("#txtAvgTicketFrm").prop('disabled', true);
+                $("#txtAvgTicketTo").prop('disabled', true);
             }
         });
 
@@ -769,7 +880,7 @@
 
     $("#ddlOnlyOnce").change(function () {
         if ($("#ddlOnlyOnce").val() != "") {
-            if ($("#ddlOnlyOnce").val() != "6") {
+            if ($("#ddlOnlyOnce").val() != "Custom") {
                 /* $("#txnSection").hide();*/
                 $("#dvEnrolledRange").hide();
                 $("#dvTxnCount").hide();
@@ -781,19 +892,21 @@
                 $("#dvInactive").hide();
                 $("#dvSpend").hide();
                 $("#hrProduct").hide();
+                $("#dvAvgTicket").hide();
 
             }
             else {
                 /*$("#txnSection").show();*/
-                $("#dvEnrolledRange").hide();
+                $("#dvEnrolledRange").hide(); 
                 $("#dvTxnCount").hide();
                 $("#dvPointBalance").hide();
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
                 $("#dvPurchased").hide();
-                $("#dvInactive").show();
-                $("#dvSpend").show();
+                $("#dvInactive").show();                
+                $("#dvAvgTicket").show();
+                $("#dvSpend").hide();
                 $("#hrProduct").hide();
             }
         }
@@ -984,6 +1097,7 @@
     })
 
     function GetDataToFilter() {
+        $("#divLoader").show();
         var AllData = [];
 
         //First, Second and Third level Radio buttons or Checkboxes
@@ -1075,10 +1189,12 @@
         item1["IsSpend"] = "No";
         item1["IsTxnCount"] = "No";
         item1["IsPointBalance"] = "No";
+        item1["IsRedeemed"] = "";
 
         if ($("#chkAvgTicket").is(":checked")) {
             item1["IsAvgTicket"] = "Yes";
-            item1["AvgTicket"] = $("#txtAvgTicket").val();
+            item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
+            item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
         }
 
         if ($("#chkEnrolledRange").is(":checked")) {
@@ -1208,11 +1324,15 @@
          $.ajax({
             type: "POST",
             url: '@Url.Action("GetSSFilterCount", "Reports")',
-             data: "{'JsonData': '" + JSON.stringify(AllData) + "',IsCount': '1'}",
+             data: "{'jsonData': '" + JSON.stringify(AllData) + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
+               
+                $("#spnFilterCount").text(addComma(response[0]));
+                $("#spnTotalCount").text(addComma(response[1]));
 
+                $("#tblFilterDetails").show();
 
 
 
@@ -1332,7 +1452,8 @@
 
         if ($("#chkAvgTicket").is(":checked")) {
             item1["IsAvgTicket"] = "Yes";
-            item1["AvgTicket"] = $("#txtAvgTicket").val();
+            item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
+            item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
         }
 
         if ($("#chkEnrolledRange").is(":checked")) {
@@ -1385,7 +1506,7 @@
             item2["NPCategory"] = $("#ddlNPCategory").val();
             item2["NPSubCategory"] = $("#ddlNPSubCategory").val();
             item2["NPProduct"] = $("#ddlNPProduct").val();
-            
+
             item2["NPCategoryName"] = $("#ddlNPCategory option:selected").text();
             item2["NPSubCategoryName"] = $("#ddlNPSubCategory option:selected").text();
             item2["NPProductName"] = $("#ddlNPProduct option:selected").text();
@@ -1419,15 +1540,25 @@
             item3["IsOutlet"] = "Yes";
             console.log($("#lstBoxOutlet").val());
             var selectedVal = [];
+            var selectedIds = [];
             $('#lstBoxOutlet :selected').each(function (i, selected) {
-                selectedVal[i] = $(selected).text();                
+                selectedVal[i] = $(selected).text();
+                selectedIds[i] = $(selected).val();
             });
             item3["Outlets"] = selectedVal;
+            item3["OutletIds"] = selectedIds;
         }
 
         if ($("#chkTOutlet").is(":checked")) {
             item3["IsTOutlet"] = "Yes";
-            item3["TransactingOutlets"] = $("#lstBoxTOutlet").val();
+            var selectedVal = [];
+            var selectedIds = [];
+            $('#lstBoxTOutlet :selected').each(function (i, selected) {
+                selectedVal[i] = $(selected).text();
+                selectedIds[i] = $(selected).val();
+            });
+            item3["TransactingOutlets"] = selectedVal;
+            item3["TransactingOutletIds"] = selectedIds;
         }
 
         if ($("#chkTOutletAnyOne").is(":checked")) {
@@ -1498,5 +1629,324 @@
         document.getElementById("btnSave").disabled = "";
     }
 
+    function GetReport() {
+        var returnStatus = true;
+        var AllData = [];
+
+        //First, Second and Third level Radio buttons or Checkboxes
+        item = {}
+        item["SecondChkCumu"] = "No";
+        item["SecondChk"] = "No";
+        item["MAFinal"] = "No";
+        if ($("#chkTransacting").is(":checked")) {
+            item["FirstChk"] = "Transacting";
+            if ($("#chkAll").is(":checked")) {
+                item["SecondChk"] = "All";
+            }
+            if ($("#chkTxnOnlyOnce").is(":checked")) {
+                item["SecondChk"] = "OnlyOnce";
+                item["OnlyOnceSegment"] = $("#ddlOnlyOnce").val();
+            }
+            if ($("#chkTxnInactive").is(":checked")) {
+                item["SecondChk"] = "Inactive";
+                item["InactiveSegment"] = $("#ddlInactive").val();
+                item["ExcludeOnlyOnce"] = $("#chkExcludeOnlyOnce").is(":checked");
+            }
+            if ($("#chkTxnCumiulative").is(":checked")) {
+                item["SecondChk"] = "Cumulative";
+                if ($("#rbtnCTxnCount").is(":checked")) {
+                    item["SecondChkCumu"] = "TxnCount";
+                    item["LSGT"] = $("#ddlTxnCumulative").val();
+                    item["TxnCount"] = $("#txtCTxnCount").val();
+                    item["Months"] = $("#txtCTxnMonths").val();
+                    item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
+                }
+                if ($("#rbtnCSpend").is(":checked")) {
+                    item["SecondChkCumu"] = "CSpend";
+                    item["LSGT"] = $("#ddlSpendCumulative").val();
+                    item["TxnCount"] = $("#txtCSpendCount").val();
+                    item["Months"] = $("#txtCSpendMonths").val();
+                    item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
+                }
+            }
+        }
+        if ($("#chkNonTransacting").is(":checked")) {
+            item["FirstChk"] = "NonTransacting";
+            if ($("#chkNonTxnAll").is(":checked")) {
+                item["SecondChk"] = "All";
+            }
+            if ($("#chkNonTxnEnrolled").is(":checked")) {
+                item["SecondChk"] = "Enrolled";
+            }
+            if ($("#chkNonTxnBulkUpload").is(":checked")) {
+                item["SecondChk"] = "BulkUpload";
+            }
+            if ($("#chkNonTxnReferal").is(":checked")) {
+                item["SecondChk"] = "Referal";
+            }
+            if ($("#chkNonTxnDLC").is(":checked")) {
+                item["SecondChk"] = "DLC";
+                item["QRSource"] = $("#ddlDLCSourceNT").val();
+            }
+        }
+        if ($("#chkMemberAcquition").is(":checked")) {
+            item["FirstChk"] = "MemberAcquition";
+            if ($("#chkMReferal").is(":checked")) {
+                item["SecondChk"] = "Referal";
+                if ($("#chkMAAll").is(":checked")) {
+                    item["MAFinal"] = "All";
+                }
+                if ($("#chkMATransacting").is(":checked")) {
+                    item["MAFinal"] = "Transacting";
+                }
+                if ($("#chkMANonTransacting").is(":checked")) {
+                    item["MAFinal"] = "NonTransacting";
+                }
+            }
+            if ($("#chkMDLC").is(":checked")) {
+                item["SecondChk"] = "DLC";
+                if ($("#chkMAAll").is(":checked")) {
+                    item["MAFinal"] = "All";
+                }
+                if ($("#chkMATransacting").is(":checked")) {
+                    item["MAFinal"] = "Transacting";
+                }
+                if ($("#chkMANonTransacting").is(":checked")) {
+                    item["MAFinal"] = "NonTransacting";
+                }
+                item["QRSource"] = $("#ddlDLCSource").val();
+            }
+        }
+        AllData.push(item);
+
+        //Transactional Filters
+        item1 = {}
+        item1["IsAvgTicket"] = "No";
+        item1["IsEnrolledRange"] = "No";
+        item1["IsInactiveSince"] = "No";
+        item1["IsSpend"] = "No";
+        item1["IsTxnCount"] = "No";
+        item1["IsPointBalance"] = "No";
+        item1["IsRedeemed"] = "No";
+
+        if ($("#chkAvgTicket").is(":checked")) {
+            item1["IsAvgTicket"] = "Yes";
+            item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
+            item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
+        }
+
+        if ($("#chkEnrolledRange").is(":checked")) {
+            item1["IsEnrolledRange"] = "Yes";
+            item1["Enrollfromdt"] = $("#txtEnrollfromdt").val();
+            item1["Enrolltodt"] = $("#txtEnrolltodt").val();
+        }
+
+        if ($("#chkInactiveSince").is(":checked")) {
+            item1["IsInactiveSince"] = "Yes";
+            item1["NonTransactedSince"] = $("#txtNonTransactedMax").val();
+        }
+
+        if ($("#chkSpend").is(":checked")) {
+            item1["IsSpend"] = "Yes";
+            item1["SpendMin"] = $("#txtSpendMin").val();
+            item1["SpendMax"] = $("#txtSpendMax").val();
+        }
+
+        if ($("#chkTxnCount").is(":checked")) {
+            item1["IsTxnCount"] = "Yes";
+            item1["CountMin"] = $("#txtTxnCountMin").val();
+            item1["CountMax"] = $("#txtTxnCountMax").val();
+        }
+
+        if ($("#chkPointBalance").is(":checked")) {
+            item1["IsPointBalance"] = "Yes";
+            item1["PointsBalMin"] = $("#txtPointsBalMin").val();
+            item1["PointsBalMax"] = $("#txtPointsBalMax").val();
+        }
+
+        if ($("#chkRedeemed").is(":checked")) {
+            if ($("#rbtnRedeemed").is(":checked")) {
+                item1["IsRedeemed"] = "Yes";
+            }
+            if ($("#rbtnNonRedeemed").is(":checked")) {
+                item1["IsRedeemed"] = "No";
+            }
+        }
+
+        AllData.push(item1);
+
+        //Product Filter
+        item2 = {}
+        item2["IsNeverPurchased"] = "No";
+        item2["IsPurchased"] = "No";
+
+        if ($("#chkNeverPurchased").is(":checked")) {
+            item2["IsNeverPurchased"] = "Yes";
+            item2["NPCategory"] = $("#ddlNPCategory").val();
+            item2["NPSubCategory"] = $("#ddlNPSubCategory").val();
+            item2["NPProduct"] = $("#ddlNPProduct").val();
+
+            item2["NPCategoryName"] = $("#ddlNPCategory option:selected").text();
+            item2["NPSubCategoryName"] = $("#ddlNPSubCategory option:selected").text();
+            item2["NPProductName"] = $("#ddlNPProduct option:selected").text();
+        }
+
+        if ($("#chkPurchased").is(":checked")) {
+            item2["IsPurchased"] = "Yes";
+            item2["PCategory"] = $("#ddlPCategory").val();
+            item2["PSubCategory"] = $("#ddlPSubCategory").val();
+            item2["PProduct"] = $("#ddlPProduct").val();
+
+            item2["PCategoryName"] = $("#ddlPCategory option:selected").text();
+            item2["PSubCategoryName"] = $("#ddlPSubCategory option:selected").text();
+            item2["PProductName"] = $("#ddlPProduct option:selected").text();
+        }
+        AllData.push(item2);
+
+        //Product Filter
+        item3 = {}
+        item3["IsBrands"] = "No";
+        item3["IsOutlet"] = "No";
+        item3["IsTOutlet"] = "No";
+        item3["TOutletsAnyLast"] = "No";
+
+        if ($("#chkBrands").is(":checked")) {
+            item3["IsBrands"] = "Yes";
+            item3["Zone"] = $("#ddlBrands").val();
+        }
+
+        if ($("#chkOutlet").is(":checked")) {
+            item3["IsOutlet"] = "Yes";
+            console.log($("#lstBoxOutlet").val());
+            var selectedVal = [];
+            var selectedIds = [];
+            $('#lstBoxOutlet :selected').each(function (i, selected) {
+                selectedVal[i] = $(selected).text();
+                selectedIds[i] = $(selected).val();
+            });
+            item3["Outlets"] = selectedVal;
+            item3["OutletIds"] = selectedIds;
+        }
+
+        if ($("#chkTOutlet").is(":checked")) {
+            item3["IsTOutlet"] = "Yes";
+            var selectedVal = [];
+            var selectedIds = [];
+            $('#lstBoxTOutlet :selected').each(function (i, selected) {
+                selectedVal[i] = $(selected).text();
+                selectedIds[i] = $(selected).val();
+            });
+            item3["TransactingOutlets"] = selectedVal;
+            item3["TransactingOutletIds"] = selectedIds;
+        }
+
+        if ($("#chkTOutletAnyOne").is(":checked")) {
+            item3["TOutletsAnyLast"] = "Anyone";
+        }
+
+        if ($("#chkTOutletLast").is(":checked")) {
+            item3["TOutletsAnyLast"] = "Last";
+        }
+
+        AllData.push(item3);
+
+        //Demographic Filter
+        item4 = {}
+        item4["IsTier"] = "No";
+        item4["IsGender"] = "No";
+        item4["IsCity"] = "No";
+        item4["IsAge"] = "No";
+
+        if ($("#chkTier").is(":checked")) {
+            item4["IsTier"] = "Yes";
+            item4["Tier"] = $("#ddlTier").val();
+        }
+
+        if ($("#chkGender").is(":checked")) {
+            item4["IsGender"] = "Yes";
+            item4["Gender"] = $("#ddlGender").val();
+        }
+
+        if ($("#chkCity").is(":checked")) {
+            item4["IsCity"] = "Yes";
+            item4["City"] = $("#txtCity").val();
+        }
+
+        if ($("#chkAge").is(":checked")) {
+            item4["IsAge"] = "Yes";
+            item4["AgeFrom"] = $("#txtAgefrom").val();
+            item4["AgeTo"] = $("#txtAgeTo").val();
+        }
+
+        AllData.push(item4);
+
+        var selecteddata = JSON.stringify(AllData);
+            var Array = [];
+            var ArrayColumnName = [];
+            $('#ChooseRight :selected').each(function (i, selected) {
+                Array.push($(selected).val());
+                ArrayColumnName.push($(selected).text());
+            });
+        if (ArrayColumnName.length >0) {
+            console.log(Array);
+            if (returnStatus) {
+                $("#divLoader").show();
+                //var custreport = $("#rdncustwise").val();
+                //var txnreport = $("#rdntransactionwise").val();
+                //var type;
+                //if ($("#rdncustwise").is(":checked")) {
+                //    type = "customer";
+                //}
+                //else if ($("#rdntransactionwise").is(":checked")) {
+                //    type = "transaction";
+                //}
+                //console.log(custreport);
+                //console.log(txnreport);
+                var FilterData = [];
+                item = {};
+                item["ColumnId"] = Array;
+                item["columnnm"] = ArrayColumnName;
+                //item["reporttype"] = type;
+                FilterData.push(item);
+                var data = JSON.stringify(FilterData);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSlicerReport", "Reports")',
+                data: '{jsonData: ' + JSON.stringify(selecteddata) + ',columnslist: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        $("#dvListing").html(response);
+                        $("#dvListing").show();
+                        $("#btnExport").show();
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                    $("#dvListing").html(response.responseText);
+                    $("#dvListing").show();
+                    $("#btnExport").show();
+                    $("#divLoader").hide();
+                }
+            });
+            }
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Column from List",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+        }
+    }
 
 </script>

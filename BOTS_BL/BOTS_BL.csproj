@@ -402,6 +402,8 @@
     <Compile Include="Models\IndividualDBModels\tblSalesReturnMaster_Clone.cs" />
     <Compile Include="Models\IndividualDBModels\tblSalesReturnProDetailsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblSalesReturnProDetailsMaster_Clone.cs" />
+    <Compile Include="Models\IndividualDBModels\tblSmartSlicerMaster.cs" />
+    <Compile Include="Models\IndividualDBModels\tblSmartSlicerRuleMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblSMSWhatsAppCredential.cs" />
     <Compile Include="Models\IndividualDBModels\tblSMSWhatsAppScriptMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblStoreMaster.cs" />

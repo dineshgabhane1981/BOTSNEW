@@ -21,5 +21,7 @@ namespace BOTS_BL.Models
         public string AddedBy { get; set; }
 
         public DateTime AddedDate { get; set; }
+
+        public string DSCriteriaForQuery { get; set; }
     }
 }

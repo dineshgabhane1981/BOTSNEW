@@ -4,13 +4,13 @@
 
 <div class="app-main__inner" id="dvall">
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="card" style="padding-bottom:20px;">
             <div>
-                <div class="row" style="margin-top : 20px;">
-                    <div class="col-sm-2">
-                        <b>Campaign Details</b>
-                    </div>
+
+                <div class="col-md-12 col-xl-12" style="text-align:right;">
+                    <a href="@Url.Action("CreateCampaign", "Campaigns")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Campaign</a>
                 </div>
+
                 @if (Model.LstPromo.Count > 0)
                 {
                     <div class="row" style="overflow-x:auto;padding-right:20px;margin-top:10px;margin-left:60px;">
@@ -53,19 +53,10 @@
                 }
                 else
                 {
-                    <div class="row" style="margin-top : 20px; margin-left:50px;">
-                        <h6 style="font:xx-large"><b>No Campaigns</b></h6>
+                    <div class="col-md-12 col-xl-12" style="text-align:center;">
+                        <h6>No Campaigns</h6>
                     </div>
                 }
-
-                <div class="row" style="margin-top : 20px; margin-left:30px;">
-                    <div class="col-md-3 col-xl-3">
-                        @*<div class="button">
-                                <button type="button" id="btnLinkCampaign" style="margin-left:15px;" class="btn btn-primary" onclick="LinkCreateCamp();"><b>CreateCampaign</b></button>
-                            </div>*@
-                        <a href="@Url.Action("CreateCampaignPromo", "Campaigns")" class="btn btn-primary" role="button" data-bs-toggle="button">Create Campaign</a>
-                    </div>
-                </div>
 
             </div>
         </div>

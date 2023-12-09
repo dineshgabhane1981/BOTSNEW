@@ -522,8 +522,8 @@ namespace BOTS_BL.Repository
                     //{
                         var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
                         dashboardMemberWebPage.MemberBase = AllData.Count();
-                        dashboardMemberWebPage.ReferringBase = context.Database.SqlQuery<ExecutiveSummaryAllData>("select distinct count(ReferredByMobileNo) from tblDLCReporting").ToList().Count();
-                        dashboardMemberWebPage.ReferralGenerated = context.Database.SqlQuery<ExecutiveSummaryAllData>("select distinct count(ReferralMobileNo) from tblDLCReporting").ToList().Count();
+                        dashboardMemberWebPage.ReferringBase = context.Database.SqlQuery<int>("select distinct count(ReferredByMobileNo) from tblDLCReporting").FirstOrDefault();
+                        dashboardMemberWebPage.ReferralGenerated = context.Database.SqlQuery<int>("select distinct count(ReferralMobileNo) from tblDLCReporting").FirstOrDefault();
                         dashboardMemberWebPage.ReferralTransacted = context.tblDLCReportings.Where(x => x.ConvertedStatus.Value == true).Count();
                         dashboardMemberWebPage.ReferralTxnCount = Convert.ToInt64(context.tblDLCReportings.Sum(x => x.ReferralTotalTxnCount));
                         dashboardMemberWebPage.BusinessGenerated = Convert.ToInt64(context.tblDLCReportings.Sum(x => x.ReferralTotalSpend));
@@ -669,7 +669,7 @@ namespace BOTS_BL.Repository
                         //var DBName = "MadhusudanTextiles_New";
                             lstBizShared = contextnew.Database.SqlQuery<DashboardBizShared>("sp_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_FromDate,@pi_ToDate,@pi_DBName",
                            new SqlParameter("@pi_GroupId", GroupId),
-                           new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                           new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                            new SqlParameter("@pi_LoginId", loginId),
                            new SqlParameter("@pi_OutletId", OutletId),
                            new SqlParameter("@pi_FromDate", frmDate),
