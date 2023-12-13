@@ -119,78 +119,13 @@
     <input class="radio" id="one" name="group" type="radio" checked>
     <input class="radio" id="two" name="group" type="radio">
     <div class="tabs">
-        <label class="tab" id="one-tab" for="one">Saved Datasets</label>
-        <label class="tab" id="two-tab" for="two">Smart Slicer</label>
+        <label class="tab" id="one-tab" for="one">Smart Slicer</label>
+        <label class="tab" id="two-tab" for="two">Saved Datasets</label>
     </div>
     <div class="panels">
+
+
         <div class="multisteps-form__panel  p-2 m-2 bg-white panel" id="one-panel">
-            <div id="dvDataset">
-                <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
-                    <h5>Dataset List</h5>
-                    <div class="row mt-3" id="dvActivityData">
-                        <div class="table-responsive">
-                            <table class="table" id="groupListTable">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" style="text-align:center;">Dataset Name</th>
-                                        <th scope="col" style="text-align:left;">Criteria</th>
-                                        <th scope="col" style="text-align:center;">Created Date</th>
-                                        <th scope="col" style="text-align: left;">Created By</th>
-                                        <th scope="col" style="text-align:center;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (Model != null)
-                                    {
-                                        foreach (var item in Model.lstCRDataset)
-                                        {
-                                            <tr>
-                                                <td>@item.DSName</td>
-                                                <td>@Html.Raw(item.DSCriteria)</td>
-                                                <td>@item.AddedDate</td>
-                                                <td>@item.AddedBy</td>
-                                                <td>Generate Report</td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;display:none;" id="dvShowReport">
-                <h5>Customize Report</h5>
-
-                <div id="divcolumns" class="row mt-3 ml-3 col-md-10 col-xl-10 ">
-                    <div>
-                        <select id="ChooseLeft1" multiple="multiple" style="height: 300px; width: 200px;">
-                        </select>
-                    </div>
-                    <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
-                        <input id="ShiftRight1" type="button" value="ShiftRight >>" class="btn btn-primary login-btn" style="margin-right:10px;font-weight:bold;" />
-                        <input id="ShiftLeft1" type="button" value="ShiftLeft << " class="btn btn-primary login-btn" style="font-weight:bold;" />
-                    </div>
-                    <div>
-                        <select id="ChooseRight1" multiple="multiple" style="height:300px;width:200px;">
-                        </select>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <button class=" ml-3 btn btn-primary login-btn" type="button" id="btnGetReport1" onclick="GetReport1();" style="text-align:right;">
-                        Get Report
-                    </button>
-                    <button class="ml-3 btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport1">
-                        <i class="fas fa-file-export"></i> Export
-                    </button>
-                </div>
-                <div id="dvListing1" class="row mt-5 col-md-12 col-xl-12" style="display:none;">
-
-                </div>
-            </div>
-        </div>
-
-        <div class="multisteps-form__panel  p-2 m-2 bg-white panel" id="two-panel">
             <div id="dvSmartSlicer">
 
                 <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
@@ -274,7 +209,7 @@
                             <input type="number" id="txtAvgTicketFrm" class="input40" placeholder="Ticket size from" disabled />
                             <input type="number" id="txtAvgTicketTo" class="input40" placeholder="Ticket size to" disabled />
                         </div>
-                         
+
                     </div>
 
                     <div class="row mt-4 col-md-12 col-xl-12" id="dvEnrolledRange">
@@ -483,26 +418,26 @@
                     </div>
 
                     <hr id="hrButtons" style="border-top: dashed 1px;" />
-                    
-                        <div class="row mt-4 col-md-8 col-xl-8">
-                            <button id="btnFilter" class="btn btn-primary login-btn">Filter</button>
-                            <button id="btnGenerate" class="btn btn-primary login-btn ml-2">Generate Report</button>
-                            <button id="btnSave" class="btn btn-primary login-btn ml-2">Save For Campaign</button>
 
-                        </div>
-                        <div class="row mt-4 col-md-4 col-xl-4" >
-                            <table id="tblFilterDetails" border="1" cellpadding="5" cellspacing="5" style="margin-left:50px;display:none;">
-                                <tr>
-                                    <td>Total Base Count</td>
-                                    <td><span id="spnTotalCount"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Filter Count</td>
-                                    <td><span id="spnFilterCount"></span></td>
-                                </tr>
-                            </table>
-                        </div>
-                     
+                    <div class="row mt-4 col-md-8 col-xl-8">
+                        <button id="btnFilter" class="btn btn-primary login-btn">Filter</button>
+                        <button id="btnGenerate" class="btn btn-primary login-btn ml-2">Generate Report</button>
+                        <button id="btnSave" class="btn btn-primary login-btn ml-2">Save For Campaign</button>
+
+                    </div>
+                    <div class="row mt-4 col-md-4 col-xl-4">
+                        <table id="tblFilterDetails" border="1" cellpadding="5" cellspacing="5" style="margin-left:50px;display:none;">
+                            <tr>
+                                <td>Total Base Count</td>
+                                <td><span id="spnTotalCount"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Filter Count</td>
+                                <td><span id="spnFilterCount"></span></td>
+                            </tr>
+                        </table>
+                    </div>
+
                     <div class="row mt-4 col-md-12 col-xl-12" style="display:none;" id="dvDatasetSave">
                         <input type="text" id="txtDSName" class="input100" placeholder="Dataset Name" />
                         <button id="btnSaveDS" class="btn btn-primary login-btn ml-2">Save Dataset</button>
@@ -537,6 +472,73 @@
                     <div id="dvListing" class="row mt-5 col-md-12 col-xl-12" style="display:none;">
 
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="multisteps-form__panel  p-2 m-2 bg-white panel" id="two-panel">
+            <div id="dvDataset">
+                <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
+                    <h5>Dataset List</h5>
+                    <div class="row mt-3" id="dvActivityData">
+                        <div class="table-responsive">
+                            <table class="table" id="groupListTable">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" style="text-align:center;">Dataset Name</th>
+                                        <th scope="col" style="text-align:left;">Criteria</th>
+                                        <th scope="col" style="text-align:center;">Created Date</th>
+                                        <th scope="col" style="text-align: left;">Created By</th>
+                                        <th scope="col" style="text-align:center;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var item in Model.lstCRDataset)
+                                        {
+                                            <tr>
+                                                <td>@item.DSName</td>
+                                                <td>@Html.Raw(item.DSCriteria)</td>
+                                                <td>@item.AddedDate</td>
+                                                <td>@item.AddedBy</td>
+                                                <td>Generate Report</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;display:none;" id="dvShowReport">
+                <h5>Customize Report</h5>
+
+                <div id="divcolumns" class="row mt-3 ml-3 col-md-10 col-xl-10 ">
+                    <div>
+                        <select id="ChooseLeft1" multiple="multiple" style="height: 300px; width: 200px;">
+                        </select>
+                    </div>
+                    <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
+                        <input id="ShiftRight1" type="button" value="ShiftRight >>" class="btn btn-primary login-btn" style="margin-right:10px;font-weight:bold;" />
+                        <input id="ShiftLeft1" type="button" value="ShiftLeft << " class="btn btn-primary login-btn" style="font-weight:bold;" />
+                    </div>
+                    <div>
+                        <select id="ChooseRight1" multiple="multiple" style="height:300px;width:200px;">
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <button class=" ml-3 btn btn-primary login-btn" type="button" id="btnGetReport1" onclick="GetReport1();" style="text-align:right;">
+                        Get Report
+                    </button>
+                    <button class="ml-3 btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport1">
+                        <i class="fas fa-file-export"></i> Export
+                    </button>
+                </div>
+                <div id="dvListing1" class="row mt-5 col-md-12 col-xl-12" style="display:none;">
+
                 </div>
             </div>
         </div>

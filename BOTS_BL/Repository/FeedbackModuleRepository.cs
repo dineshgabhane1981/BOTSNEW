@@ -333,13 +333,29 @@ namespace BOTS_BL.Repository
         {
             string logoUrl = string.Empty;
             CustomerDetail objCustomerDetail = new CustomerDetail();
+            string DBStatus = string.Empty;
             string connStr = CR.GetCustomerConnString(groupId);
             try
             {
-                using (var contextdb = new BOTSDBContext(connStr))
+                using (var contextnew = new CommonDBContext())
                 {
-                    var objbrandDetail = contextdb.BrandDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
-                    logoUrl = objbrandDetail.BrandLogoUrl;
+                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == groupId).Select(y => y.GroupId).FirstOrDefault();
+                }
+                if (string.IsNullOrEmpty(DBStatus))
+                {
+                    using (var contextdb = new BOTSDBContext(connStr))
+                    {
+                        var objbrandDetail = contextdb.BrandDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                        logoUrl = objbrandDetail.BrandLogoUrl;
+                    }
+                }
+                else
+                {
+                    using (var contextdb = new BOTSDBContext(connStr))
+                    {
+                        var LstBrand = contextdb.tblBrandMasters.Where(x => x.GroupId == groupId).FirstOrDefault();
+                        logoUrl = LstBrand.BrandLogoUrl;
+                    }
                 }
             }
             catch (Exception ex)

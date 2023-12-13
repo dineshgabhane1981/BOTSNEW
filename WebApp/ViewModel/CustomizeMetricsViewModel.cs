@@ -42,7 +42,7 @@ namespace WebApp.ViewModel
         }
         public SelectListItem[] InactiveDDL()
         {
-            return new SelectListItem[8] { new SelectListItem() { Text = "All", Value = "All" }, new SelectListItem() { Text = "Within 30 days", Value = "Within 30 days" }, new SelectListItem() { Text = "31 to 60 days", Value = "31 to 60 days" }, new SelectListItem() { Text = "61 to 90 days", Value = "61 to 90 days" }, new SelectListItem() { Text = "91 to 180 days", Value = "91 to 180 days" }, new SelectListItem() { Text = "181 to 365 days", Value = "181 to 365 days" }, new SelectListItem() { Text = "More than a year", Value = "More than a year" }, new SelectListItem() { Text = "Custom", Value = "Custom" } };
+            return new SelectListItem[7] { new SelectListItem() { Text = "Within 30 days", Value = "Within 30 days" }, new SelectListItem() { Text = "31 to 60 days", Value = "31 to 60 days" }, new SelectListItem() { Text = "61 to 90 days", Value = "61 to 90 days" }, new SelectListItem() { Text = "91 to 180 days", Value = "91 to 180 days" }, new SelectListItem() { Text = "181 to 365 days", Value = "181 to 365 days" }, new SelectListItem() { Text = "More than a year", Value = "More than a year" }, new SelectListItem() { Text = "Custom", Value = "Custom" } };
         }
 
         public SelectListItem[] Gender()
