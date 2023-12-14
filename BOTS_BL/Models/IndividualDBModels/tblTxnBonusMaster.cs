@@ -9,7 +9,9 @@ namespace BOTS_BL.Models
     [Table("tblTxnBonusMaster")]
     public partial class tblTxnBonusMaster
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
+        [Column(Order = 0)]
         public long SlNo { get; set; }
 
         [StringLength(50)]
@@ -53,5 +55,10 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string TxnBy { get; set; }
+
+        [Key]
+        [Column(Order = 1)]
+        [StringLength(200)]
+        public string BonusIdBackEnd { get; set; }
     }
 }

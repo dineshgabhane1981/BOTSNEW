@@ -20,6 +20,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        
         public virtual DbSet<tblSmartSlicerRuleMaster> tblSmartSlicerRuleMasters { get; set; }
         public virtual DbSet<tblSmartSlicerMaster> tblSmartSlicerMasters { get; set; }
         public virtual DbSet<tblCRDataset> tblCRDatasets { get; set; }

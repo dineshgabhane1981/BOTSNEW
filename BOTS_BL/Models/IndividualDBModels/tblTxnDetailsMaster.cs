@@ -1,4 +1,4 @@
-namespace BOTS_BL.Models.IndividualDBModels
+namespace BOTS_BL.Models
 {
     using System;
     using System.Collections.Generic;

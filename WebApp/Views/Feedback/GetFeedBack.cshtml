@@ -627,7 +627,7 @@
                     success: function (response) {
                         console.log(response);
                         if (response == "true") {
-                            
+
                             var nm = $('#spnCustName').text();
                             $('#spnCustName1').text(nm);
                             $("#divLoader").hide();
@@ -645,7 +645,7 @@
                                 }).then((e) => {
                                     var googleSetting = '@Model.PointsAndMessages.IsGoogleReview';
                                     if (googleSetting == 'True') {
-                                        
+
                                         window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
                                     }
                                     else {
@@ -657,7 +657,7 @@
                             else {
                                 var IsOtherInfoShow = '@Model.PointsAndMessages.IsOtherInfoShow';
                                 if (IsOtherInfoShow != "True") {
-                                   
+
                                     $("#dvLogo").hide();
                                     $("#divLoader").hide();
                                     cuteAlert({
@@ -681,13 +681,13 @@
                             $("#divLoader").hide();
                         }
                         if (response == "false") {
-                            
+
                             $("#divLoader").hide();
                             $("#divquestions").hide();
                             $("#divwelcome").hide();
                         }
                         if (response == "pointsGiven") {
-                            
+
                             $("#divLoader").hide();
                             cuteAlert({
                                 type: "success",
@@ -734,7 +734,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                           success: function (response) {
-                             
+
                      console.log(response);
                     if (response == "true") {
 
@@ -764,7 +764,7 @@
                             });
                         }
                         else {
-                            
+
                             var IsOtherInfoShow='@Model.PointsAndMessages.IsOtherInfoShow';
                             if (IsOtherInfoShow != "True") {
                                 $("#dvLogo").hide();
@@ -789,13 +789,13 @@
                         $("#divLoader").hide();
                     }
                     if (response == "false") {
-                        
+
                         $("#divLoader").hide();
                         $("#divquestions").hide();
                         $("#divwelcome").hide();
                     }
                     if (response == "pointsGiven") {
-                        
+
                         $("#divLoader").hide();
                         cuteAlert({
                             type: "success",
@@ -897,7 +897,7 @@
                     }
                     else {
                         if (response.CustomerName != null) {
-                            $('#spnCustomerName').text(response.CustomerName);
+                            $('#spnCustomerName').text(response.Name);
                             $("#divLoader").hide();
                             $("#divquestions").show();
                             $("#divwelcome").hide();
@@ -1008,16 +1008,33 @@
             else {
                 annidt = $("#txtAniversary").val();
             }
+            var birthdt;
+            if ($("#txtBirthDate").val() == null || $("#txtBirthDate").val() == "") {
+                birthdt = null;
+            }
+            else {
+                birthdt = $("#txtBirthDate").val();
+            }
+            var gender;
+            if ($("#ddlGender").val() == null || $("#ddlGender").val() == "") {
+                gender = null;
+            }
+            else {
+                gender = $("#ddlGender").val();
+            }
+
             var urlnew = $("#url").text();
             $("#divLoader").show();
              $.ajax({
             type: "POST",
                  url: '@Url.Action("SubmitotherinfowithPoints", "Feedback")',
-                 data: '{MemberName: ' + JSON.stringify("") + ', Gender: ' + JSON.stringify($("#ddlGender").val()) + ',BirthDt: ' + JSON.stringify($("#txtBirthDate").val()) + ', mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', AnniversaryDt: ' + JSON.stringify(annidt) + ', Knowabt: ' + JSON.stringify(howtoknow) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', OutletId: ' + JSON.stringify($("#hdoutletId").val()) +'}',
+                 data: '{MemberName: ' + JSON.stringify("") + ', Gender: ' + JSON.stringify(gender) + ',BirthDt: ' + JSON.stringify(birthdt) + ', mobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', AnniversaryDt: ' + JSON.stringify(annidt) + ', Knowabt: ' + JSON.stringify(howtoknow) + ', GroupId: ' + JSON.stringify($("#hdGroupId").val()) + ', OutletId: ' + JSON.stringify($("#hdoutletId").val()) +'}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                  success: function (response) {
+                     
                      if (response) {
+                         
                          //alert(response)
                          $("#divLoader").hide();
                          $("#txtbirthdt").val("");
@@ -1040,7 +1057,7 @@
                          });
                      }
                      else {
-
+                         
                          cuteAlert({
                              type: "success",
                              title: "Save",
@@ -1059,7 +1076,7 @@
                      }
                  },
                  failure: function (response) {
-
+                     
                      $("#divLoader").hide();
                  },
                  error: function (response) {
@@ -1071,7 +1088,13 @@
                          message: "Feedback Save Successfully!",
                          buttonText: "Okay"
                      }).then((e) => {
-                         window.location.replace($("#url").text() + $("#hdoutletId").val());
+                         var googleSetting = '@Model.PointsAndMessages.IsGoogleReview';
+                                if (googleSetting == 'True') {
+                                    window.location.replace('@Model.PointsAndMessages.GoogleReviewLink');
+                                }
+                                else {
+                                    window.location.replace($("#url").text() + $("#hdoutletId").val());
+                                }
                      });
                  }
              });
