@@ -1761,5 +1761,13 @@ namespace WebApp.Controllers
 
             return PartialView("_CreateOwnReportCustomerWise", createownviewmodel);            
         }
+    
+        public ActionResult SuperSaverReport()
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var data = RR.GetSSNonSSReport(userDetails.connectionString);
+            return View(data);
+        }
+    
     }
 }

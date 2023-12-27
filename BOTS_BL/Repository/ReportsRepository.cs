@@ -265,105 +265,118 @@ namespace BOTS_BL.Repository
             List<OutletWise> lstOutletWise = new List<OutletWise>();
             try
             {
-                using (var context = new BOTSDBContext(connstr))
+                using (var context = new CommonDBContext())
                 {
-                    context.Database.CommandTimeout = 120;
-                    if (GroupId == "1086")
-                    {
-                        lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                        new SqlParameter("@pi_LoginId", loginId),
-                        new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
-                        new SqlParameter("@pi_FromDate", FromDate),
-                        new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
-                    }
-                    //else if (GroupId == "1087")
-                    //{
-                    var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
-                    var lstobj = context.Database.SqlQuery<View_TxnDetailsMaster>("select * from View_TxnDetailsMaster").ToList();
-                    var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin") && x.IsActive == true).ToList();
-                    foreach (var item in lstOutlet)
-                    {
-                        OutletWise newItem = new OutletWise();
-                        newItem.OutletName = item.OutletName;
-
-                        if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
-                        {
-                            var fDate = Convert.ToDateTime(FromDate);
-                            var tDate = Convert.ToDateTime(ToDate);
-
-                            newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                            newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
-                            newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt));
-                            newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt) * 100) / lstobj.Where(x => x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(x => x.InvoiceAmt);
-                            newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count());
-                            var last90DaysDate = DateTime.Today.AddDays(-90);
-                            var last30DaysDate = DateTime.Today.AddDays(-30);
-                            newItem.NonActive = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
-                            var lstMobileNo = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TotalTxnCount == 1).Select(y => y.MobileNo).ToList();
-                            newItem.OnlyOnce = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate && lstMobileNo.Contains(x.MobileNo)).Count();
-                            if (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned) > 0)
-                                newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned);
-                            else
-                                newItem.RedemptionRate = 0;
-                            //newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned);
-                            newItem.PointsEarned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned));
-                            newItem.PointsBurned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned));
-                            newItem.PointsCancelled = Convert.ToInt64(context.tblSalesReturnMasters.Where(x => x.OutletId == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsRemoved));
-                            newItem.PointsExpired = Convert.ToInt64(context.tblExpiredPointsMasters.Where(x => x.OutletId == item.OutletId && x.ExpiredDate >= fDate && x.ExpiredDate <= tDate).Sum(y => y.ExpiredPoints));
-                        }
-                        else
-                        {
-
-                            newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                            newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                            newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt));
-                            if (lstobj.Sum(x => x.InvoiceAmt) > 0)
-                                newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt) * 100) / lstobj.Sum(x => x.InvoiceAmt);
-                            else
-                                newItem.BizShare = 0;
-
-                            if (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count() > 0)
-                                newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count());
-                            else
-                                newItem.ATS = 0;
-                            var last90DaysDate = DateTime.Today.AddDays(-90);
-                            var last30DaysDate = DateTime.Today.AddDays(-30);
-                            newItem.NonActive = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime < last90DaysDate).Count();
-                            var lstMobileNo = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.LastTxnDate < last30DaysDate && x.TotalTxnCount == 1).Select(y => y.MobileNo).ToList();
-                            newItem.OnlyOnce = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime < last30DaysDate && lstMobileNo.Contains(x.MobileNo)).Count();
-                            if (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned) > 0)
-                                newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned);
-                            else
-                                newItem.RedemptionRate = 0;
-                            newItem.PointsEarned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned));
-                            newItem.PointsBurned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsBurned));
-                            newItem.PointsCancelled = Convert.ToInt64(context.tblSalesReturnMasters.Where(x => x.OutletId == item.OutletId).Sum(y => y.PointsRemoved));
-                            newItem.PointsExpired = Convert.ToInt64(context.tblExpiredPointsMasters.Where(x => x.OutletId == item.OutletId).Sum(y => y.ExpiredPoints));
-                        }
-
-                        lstOutletWise.Add(newItem);
-                    }
-
-                    //}
-                    //else
-                    //{
-                    //    lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
-                    //    new SqlParameter("@pi_GroupId", GroupId),
-                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                    //    new SqlParameter("@pi_LoginId", ""),
-                    //    new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
-                    //    new SqlParameter("@pi_FromDate", FromDate),
-                    //    new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
-                    //}
+                    context.Database.CommandTimeout = 300;
+                    var DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                    lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_DBName",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                            new SqlParameter("@pi_LoginId", ""),
+                            new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
+                            new SqlParameter("@pi_FromDate", FromDate),
+                            new SqlParameter("@pi_ToDate", ToDate),
+                            new SqlParameter("@pi_DBName", DBName)).ToList<OutletWise>();
                 }
+                //using (var context = new BOTSDBContext(connstr))
+                //{
+                //    context.Database.CommandTimeout = 120;
+                //    if (GroupId == "1086")
+                //    {
+                //        lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
+                //        new SqlParameter("@pi_GroupId", GroupId),
+                //        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                //        new SqlParameter("@pi_LoginId", loginId),
+                //        new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
+                //        new SqlParameter("@pi_FromDate", FromDate),
+                //        new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
+                //    }
+                //    //else if (GroupId == "1087")
+                //    //{
+                //    var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
+                //    var lstobj = context.Database.SqlQuery<View_TxnDetailsMaster>("select * from View_TxnDetailsMaster").ToList();
+                //    var lstOutlet = context.tblOutletMasters.Where(x => !x.OutletName.ToLower().Contains("admin") && x.IsActive == true).ToList();
+                //    foreach (var item in lstOutlet)
+                //    {
+                //        OutletWise newItem = new OutletWise();
+                //        newItem.OutletName = item.OutletName;
+
+                //        if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
+                //        {
+                //            var fDate = Convert.ToDateTime(FromDate);
+                //            var tDate = Convert.ToDateTime(ToDate);
+
+                //            newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                //            newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
+                //            newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt));
+                //            newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt) * 100) / lstobj.Where(x => x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(x => x.InvoiceAmt);
+                //            newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count());
+                //            var last90DaysDate = DateTime.Today.AddDays(-90);
+                //            var last30DaysDate = DateTime.Today.AddDays(-30);
+                //            newItem.NonActive = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Count();
+                //            var lstMobileNo = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TotalTxnCount == 1).Select(y => y.MobileNo).ToList();
+                //            newItem.OnlyOnce = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate && lstMobileNo.Contains(x.MobileNo)).Count();
+                //            if (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned) > 0)
+                //                newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned);
+                //            else
+                //                newItem.RedemptionRate = 0;
+                //            //newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned);
+                //            newItem.PointsEarned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsEarned));
+                //            newItem.PointsBurned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsBurned));
+                //            newItem.PointsCancelled = Convert.ToInt64(context.tblSalesReturnMasters.Where(x => x.OutletId == item.OutletId && x.TxnDatetime >= fDate && x.TxnDatetime <= tDate).Sum(y => y.PointsRemoved));
+                //            newItem.PointsExpired = Convert.ToInt64(context.tblExpiredPointsMasters.Where(x => x.OutletId == item.OutletId && x.ExpiredDate >= fDate && x.ExpiredDate <= tDate).Sum(y => y.ExpiredPoints));
+                //        }
+                //        else
+                //        {
+
+                //            newItem.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                //            newItem.TotalTxn = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                //            newItem.TotalSpend = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt));
+                //            if (lstobj.Sum(x => x.InvoiceAmt) > 0)
+                //                newItem.BizShare = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt) * 100) / lstobj.Sum(x => x.InvoiceAmt);
+                //            else
+                //                newItem.BizShare = 0;
+
+                //            if (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count() > 0)
+                //                newItem.ATS = Convert.ToInt64((lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.InvoiceAmt)) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count());
+                //            else
+                //                newItem.ATS = 0;
+                //            var last90DaysDate = DateTime.Today.AddDays(-90);
+                //            var last30DaysDate = DateTime.Today.AddDays(-30);
+                //            newItem.NonActive = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime < last90DaysDate).Count();
+                //            var lstMobileNo = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.LastTxnDate < last30DaysDate && x.TotalTxnCount == 1).Select(y => y.MobileNo).ToList();
+                //            newItem.OnlyOnce = lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId && x.TxnDatetime < last30DaysDate && lstMobileNo.Contains(x.MobileNo)).Count();
+                //            if (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned) > 0)
+                //                newItem.RedemptionRate = (lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsBurned) * 100) / lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned);
+                //            else
+                //                newItem.RedemptionRate = 0;
+                //            newItem.PointsEarned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsEarned));
+                //            newItem.PointsBurned = Convert.ToInt64(lstobj.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Sum(y => y.PointsBurned));
+                //            newItem.PointsCancelled = Convert.ToInt64(context.tblSalesReturnMasters.Where(x => x.OutletId == item.OutletId).Sum(y => y.PointsRemoved));
+                //            newItem.PointsExpired = Convert.ToInt64(context.tblExpiredPointsMasters.Where(x => x.OutletId == item.OutletId).Sum(y => y.ExpiredPoints));
+                //        }
+
+                //        lstOutletWise.Add(newItem);
+                //    }
+
+                //    //}
+                //    //else
+                //    //{
+                //    //    lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_BOTS_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate",
+                //    //    new SqlParameter("@pi_GroupId", GroupId),
+                //    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                //    //    new SqlParameter("@pi_LoginId", ""),
+                //    //    new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
+                //    //    new SqlParameter("@pi_FromDate", FromDate),
+                //    //    new SqlParameter("@pi_ToDate", ToDate)).ToList<OutletWise>();
+                //    //}
+                //}
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "GetOutletWiseList");
             }
-            lstOutletWise = lstOutletWise.Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
+            lstOutletWise = lstOutletWise.OrderByDescending(z => z.TotalSpend).Where(x => !x.OutletName.ToLower().Contains("admin")).ToList();
             return lstOutletWise;
         }
         public List<OutletwiseTransaction> GetOutletWiseTransactionList(string GroupId, string DateRangeFlag, string FromDate, string ToDate, string OutletId, string EnrolmentDataFlag, string connstr, string loginId)
@@ -2698,42 +2711,45 @@ namespace BOTS_BL.Repository
                     if (FirstChk == "Transacting")
                     {
                         Criteria += "Transacting";
-                        WhereClause += " TotalTxnCount > 0 ";
+
 
                         if (SecondChk == "All")
                         {
+                            WhereClause += " TotalTxnCount > 0 ";
                             Criteria += " : All";
                         }
                         if (SecondChk == "OnlyOnce")
                         {
+                            //This need to corrected
                             Criteria += " : Only Once";
                             Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
+                            WhereClause += " TotalTxnCount = 1 ";
                             if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
                             {
                                 try
                                 {
                                     using (var context = new BOTSDBContext(connstr))
                                     {
-                                        decimal? avgTicketSize = context.tblSmartSlicerRuleMasters.Select(x => x.AvgTicketSize).FirstOrDefault();
-                                        if (avgTicketSize.HasValue)
+                                        //decimal? avgTicketSize = context.tblSmartSlicerRuleMasters.Select(x => x.AvgTicketSize).FirstOrDefault();
+                                        //if (avgTicketSize.HasValue)
+                                        //{
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
                                         {
-                                            if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
-                                            {
-                                                WhereClause += "and VisitStatus= 'LongTime' and AvgTicketSize > " + avgTicketSize;
-                                            }
-                                            if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
-                                            {
-                                                WhereClause += "and VisitStatus= 'LongTime' and AvgTicketSize < " + avgTicketSize;
-                                            }
-                                            if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
-                                            {
-                                                WhereClause += "and VisitStatus= 'RecentTime' and AvgTicketSize > " + avgTicketSize;
-                                            }
-                                            if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
-                                            {
-                                                WhereClause += "and VisitStatus= 'RecentTime' and AvgTicketSize < " + avgTicketSize;
-                                            }
+                                            WhereClause += "and VisitStatus= 'LongTime' and SpendStatusOnlyOnce = 'High' ";
                                         }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
+                                        {
+                                            WhereClause += "and VisitStatus= 'LongTime' and SpendStatusOnlyOnce = 'Low' ";
+                                        }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
+                                        {
+                                            WhereClause += "and VisitStatus= 'RecentTime' and SpendStatusOnlyOnce = 'High' ";
+                                        }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
+                                        {
+                                            WhereClause += "and VisitStatus= 'RecentTime' and SpendStatusOnlyOnce = 'Low' ";
+                                        }
+                                        //}
                                     }
                                 }
                                 catch (Exception ex)
@@ -2745,15 +2761,42 @@ namespace BOTS_BL.Repository
                         }
                         if (SecondChk == "Inactive")
                         {
+                            //This need to add
                             Criteria += " : Inactive";
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
+                            if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
+                            {
+                                WhereClause += " InActiveDays < 30 ";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
+                            {
+                                WhereClause += " InActiveDays >= 31 and  InActiveDays <= 60";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
+                            {
+                                WhereClause += " InActiveDays >= 61 and  InActiveDays <= 90";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
+                            {
+                                WhereClause += " InActiveDays >= 91 and  InActiveDays <= 180";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
+                            {
+                                WhereClause += " InActiveDays >= 181 and  InActiveDays <= 365";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
+                            {
+                                WhereClause += " InActiveDays > 365";
+                            }
                             if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
                             {
                                 Criteria += " - Exclude Only Once";
+                                WhereClause += " and TotalTxnCount > 1 ";
                             }
                         }
                         if (SecondChk == "Cumulative")
                         {
+                            //This need to add
                             Criteria += " : Cumulative";
                             if (Convert.ToString(item["SecondChkCumu"]) != "No")
                             {
@@ -2803,10 +2846,20 @@ namespace BOTS_BL.Repository
                     }
                     if (FirstChk == "NonTransacting")
                     {
+                        //This need to add
                         Criteria += "Non Transacting";
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
                         {
                             Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            if (Convert.ToString(item["SecondChk"]) == "All")
+                            {
+                                WhereClause += " TotalTxnCount = 0";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "Enrolled")
+                            {
+                                WhereClause += " TotalTxnCount = 0";
+                            }
+
                             if (Convert.ToString(item["SecondChk"]) == "DLC")
                             {
                                 if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
@@ -2818,6 +2871,7 @@ namespace BOTS_BL.Repository
                     }
                     if (FirstChk == "MemberAcquition")
                     {
+                        //This need to add
                         Criteria += "Member Acquition";
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
                         {
@@ -2920,6 +2974,7 @@ namespace BOTS_BL.Repository
                 {
                     if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
                     {
+                        //This need to add
                         if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategoryName"])))
                         {
                             Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
@@ -2936,6 +2991,7 @@ namespace BOTS_BL.Repository
 
                     if (Convert.ToString(item["IsPurchased"]) == "Yes")
                     {
+                        //This need to add
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PCategoryName"])))
                         {
                             Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
@@ -2954,6 +3010,7 @@ namespace BOTS_BL.Repository
                 {
                     if (Convert.ToString(item["IsBrands"]) == "Yes")
                     {
+                        //This need to add
                         Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
                     }
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
@@ -2966,7 +3023,7 @@ namespace BOTS_BL.Repository
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                            if (Convert.ToString(item1) == "All")
+                            if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
                             }
@@ -2975,9 +3032,12 @@ namespace BOTS_BL.Repository
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
                         }
-                        outletIds = outletIds.Remove(outletIds.Length - 1);
-                        if (outletAll != "All")
-                            WhereClause += " and EnrolledOutletId in (" + outletIds + ")";
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (outletAll != "All")
+                                WhereClause += " and EnrolledOutletId in (" + outletIds + ")";
+                        }
 
                     }
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
@@ -2985,14 +3045,41 @@ namespace BOTS_BL.Repository
                         //Need to use item["TransactingOutletIds"] for Query building
                         var outlets = (object[])item["TransactingOutlets"];
                         Criteria += "<br/>Transacting Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
                         }
-                    }
-                    if (Convert.ToString(item["TOutletsAnyLast"]) == "Yes")
-                    {
-                        Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
+                            {
+                                //This need to add
+                                Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
+                                if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
+                                {
+                                    WhereClause += " and LastTxnOutletId in (" + outletIds + ")";
+                                }
+                                else
+                                {
+                                    WhereClause += " and (FirstTxnOutletId in (" + outletIds + ") or LastTxnOutletId in (" + outletIds + "))";
+                                }
+                            }
+                            else
+                            {
+                                WhereClause += " and FirstTxnOutletId in (" + outletIds + ")";
+                            }
+                        }
                     }
                 }
                 if (index == 5)
@@ -3000,6 +3087,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsTier"]) == "Yes")
                     {
                         Criteria += "<br/>Tier : " + Convert.ToString(item["IsTier"]);
+                        WhereClause += " and Tier = " + Convert.ToString(item["IsTier"]);
                     }
                     if (Convert.ToString(item["IsGender"]) == "Yes")
                     {
@@ -3012,16 +3100,19 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsCity"]) == "Yes")
                     {
                         Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
+                        WhereClause += " and City = " + Convert.ToString(item["IsCity"]);
                     }
                     if (Convert.ToString(item["IsAge"]) == "Yes")
                     {
                         if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
                         {
                             Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
+                            WhereClause += " and Age >= " + Convert.ToString(item["AgeFrom"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
                         {
                             Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
+                            WhereClause += " and Age <= " + Convert.ToString(item["AgeTo"]);
                         }
                     }
                 }
@@ -3717,6 +3808,17 @@ namespace BOTS_BL.Repository
 
             return objcustomertypereport;
         }
+
+        public tblSSNonSSReport GetSSNonSSReport(string connectionString)
+        {
+            tblSSNonSSReport objData = new tblSSNonSSReport();
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                objData = context.tblSSNonSSReports.OrderByDescending(x=>x.SlNo).FirstOrDefault();
+            }
+            return objData;
+        }
+
     }
 }
 

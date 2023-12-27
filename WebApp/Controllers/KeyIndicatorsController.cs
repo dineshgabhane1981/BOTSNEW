@@ -246,15 +246,15 @@ namespace WebApp.Controllers
 
                     table.Rows.Add(row);
                 }
-                foreach (DataRow dr in table.Rows)
-                {
-                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
-                    {
-                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                    }
-                }
+                //foreach (DataRow dr in table.Rows)
+                //{
+                //    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                //    {
+                //        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                //        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                //        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                //    }
+                //}
                 var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
 
                 if (!GroupDetails.IsMasked)

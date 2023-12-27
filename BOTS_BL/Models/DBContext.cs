@@ -20,7 +20,9 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
-        
+        public virtual DbSet<tblSSNonSSReport> tblSSNonSSReports { get; set; }
+        public virtual DbSet<tblVelocityDetailData> tblVelocityDetailDatas { get; set; }
+        public virtual DbSet<tblVelocityMasterData> tblVelocityMasterDatas { get; set; }
         public virtual DbSet<tblSmartSlicerRuleMaster> tblSmartSlicerRuleMasters { get; set; }
         public virtual DbSet<tblSmartSlicerMaster> tblSmartSlicerMasters { get; set; }
         public virtual DbSet<tblCRDataset> tblCRDatasets { get; set; }

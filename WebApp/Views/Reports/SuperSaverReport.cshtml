@@ -1,0 +1,48 @@
+﻿@model BOTS_BL.Models.tblSSNonSSReport
+@using System.Globalization
+@using BOTS_BL.Models;
+@{
+    ViewBag.Title = "Super Saver Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="app-main__inner">
+    <div class="card m-5">
+        <div class="col-md-12 col-lg-12 m-2 p-lg-5">
+            <h3 class="mb-4">Super Saver VS Non-Super Saver</h3>
+            @if (Model != null)
+            {
+                var countPer = Convert.ToDouble(Model.SSTxnCount * 100) / Convert.ToDouble(Model.TotalTxnCount);
+                <table border="1" cellpadding="10" cellspacing="10" style="text-align:end;">
+                    <tr style="text-align:left;">
+                        <th>Elements</th>
+                        <th>Total Base</th>
+                        <th>SS Base</th>
+                        <th>SS Cont %</th>
+                        <th>Non-SS Base</th>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; text-align: left;">Business</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.SSBiz))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.SSBizPercentage))%</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.NonSSBiz))</td>
+                    </tr>                    
+                    <tr>
+                        <td style="font-weight: bold; text-align: left;">Txn Count</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.TotalTxnCount))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.SSTxnCount))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(countPer))%</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.NonSSTxnCount))</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; text-align: left;">Average Ticket Size</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.ATS))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.SSATS))</td>
+                        <td></td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.NonSSATS))</td>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>

@@ -374,6 +374,15 @@
                                     DLC New Registration
                                 </a>
                             </li>
+                            @if (gId == "1341")
+                            {
+                                <li class="@Html.IsSelected(controller: "Reports", action: "SuperSaverReport")">
+                                    <a class="@Html.IsSelected(controller: "Reports", action: "SuperSaverReport")" href="@Url.Action("SuperSaverReport", "Reports")">
+                                        <i class="metismenu-icon"></i>
+                                        SS Vs Non-SS
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </li>
                     <li>

@@ -834,7 +834,24 @@
                 processData: false, // Not to process data
                 data: fileData,
                 success: function (result) {
-                    $("#myModal").hide(1000);
+                    if (result == "True") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Status updated Successfully !!!",
+                            buttonText: "Okay"
+                        })
+                        BindListing();
+                        $("#myModal").hide(1000);
+                    }
+                    else {                        
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "There is some problem while saving data",
+                            buttonText: "Okay"
+                        })
+                    }
                 },
                 error: function (result) {
                     if (result.responseText == "True") {
@@ -846,6 +863,14 @@
                         })
                         BindListing();
                         $("#myModal").hide(1000);
+                    }
+                    else {                        
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "There is some problem while saving data",
+                            buttonText: "Okay"
+                        })
                     }
                 }
             });

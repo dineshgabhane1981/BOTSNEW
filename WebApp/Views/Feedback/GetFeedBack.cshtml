@@ -520,20 +520,22 @@
 
     function SubmitRating() {
         var returnStatus = false;
+        var IsMandatory = true;
         var HomeData = [];
         var Comments = "";
             $('[id^=hdnQuestionId]').each(function (i, itemid) {
-                var id11 = itemid.id.substr(13); //hdnMandatoryQuestionId
-
+                var id11 = itemid.id.substr(13); //hdnMandatoryQuestionId                
                 $('[id^=hdnMandatoryQuestionId' + id11 + ']').each(function (i, itemman) {
                     if (itemman.value == "Mandatory") {
                         var count = 0;
-                            $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
+                        $('[id^=rbtvariety' + id11 + ']').each(function (i, itemradio) {
 
-                                if ($("#" + itemradio.id).is(":checked")) {
-                                    count = 1;
-                                }
-                            });
+                            if ($("#" + itemradio.id).is(":checked")) {
+                                count = 1;
+                            }
+                        });
+
+                        
                         if (count == 1)
                             returnStatus = true;
                         else {
@@ -541,8 +543,12 @@
                             return false;
                         }
                     }
+                    else {
+                        IsMandatory = false;
+                    }
                 });
-                if (!returnStatus) {
+                
+                if (!returnStatus && IsMandatory) {                    
                     return false;
                 }
             });
