@@ -21,8 +21,9 @@ namespace BOTS_BL.Models
         {
         }
         public virtual DbSet<tblSSNonSSReport> tblSSNonSSReports { get; set; }
-        public virtual DbSet<tblVelocityDetailData> tblVelocityDetailDatas { get; set; }
-        public virtual DbSet<tblVelocityMasterData> tblVelocityMasterDatas { get; set; }
+        public virtual DbSet<tblVelocityCustomerData> tblVelocityCustomerDatas { get; set; }
+        public virtual DbSet<tblVelocityMain> tblVelocityMains { get; set; }
+        public virtual DbSet<tblVelocityMonthwise> tblVelocityMonthwises { get; set; }
         public virtual DbSet<tblSmartSlicerRuleMaster> tblSmartSlicerRuleMasters { get; set; }
         public virtual DbSet<tblSmartSlicerMaster> tblSmartSlicerMasters { get; set; }
         public virtual DbSet<tblCRDataset> tblCRDatasets { get; set; }

@@ -300,6 +300,7 @@
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
     <Compile Include="ViewModel\OutletDetailsViewModel.cs" />
     <Compile Include="ViewModel\SinglePageViewModel.cs" />
+    <Compile Include="ViewModel\VelocityReportViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="APIPackets.xml" />
@@ -665,6 +666,8 @@
     <Content Include="Views\Campaigns\_CampaignPromoWA.cshtml" />
     <Content Include="Views\Reports\SmartSlicer.cshtml" />
     <Content Include="Views\Reports\SuperSaverReport.cshtml" />
+    <Content Include="Views\Reports\VelocityReport.cshtml" />
+    <Content Include="Views\Reports\_VelocityCustomerData.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

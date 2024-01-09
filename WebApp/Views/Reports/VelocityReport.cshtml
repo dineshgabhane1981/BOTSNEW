@@ -1,0 +1,77 @@
+﻿@model WebApp.ViewModel.VelocityReportViewModel
+@using System.Globalization
+@{
+    ViewBag.Title = "Velocity Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner" style="margin-top:-10px;">
+    <div class="card p-2 pb-3 pl-4">
+        <div class="col-md-12 col-lg-12 row" style="height:100px !important;">
+            <input type="hidden" id="hdnFrequency" />
+            @if (Model != null)
+            {
+                var count = 0;
+                foreach (var item in Model.lstMain)
+                {
+
+                    count++;
+                    <div class="card col-md-2 col-lg-2 m-2 widget-content" style="background-color: #DBEEF4; cursor: pointer;" onclick="GetData('@item.Days')">
+                        <div class="widget-content-wrapper" style="display:block !important;">
+                            <div class="align-content-center" style="text-align:center;">
+                                <div class="widget-heading" style="text-align:center;font-weight:bold;">
+                                    Last @item.Days days
+                                    <hr style="border-top: 2px solid black;margin:0px;" />
+                                </div>
+                            </div>
+                            <div>
+                                <div class="widget-numbers" style="text-align:center;">
+                                    <span style="font-size:16px !important;"><i>@item.NoOfTxn+ txns</i></span><br />
+                                    <span style="font-size:16px !important;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(item.NoOfCustomers))</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div id="dvData" style="display:none;"></div>
+
+    </div>
+</div>
+<script>
+    var tableData = [];
+    function GetData(count) {
+        $("#divLoader").show();
+        $("#hdnFrequency").val(count);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetVelocityCustomerData", "Reports")',
+            data: "{'count': '" + count + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvData").html(response.responseText);
+                $("#dvData").show(1000);
+                $("#divLoader").hide();
+            }
+        });
+
+    }
+    function ExportDataExcel() {
+        var frequency= $("#hdnFrequency").val();
+        var urlLink = "@Url.Action("VelocityCustomerDataExportToExcel", "Reports")";
+        urlLink = urlLink + "?frequency=" + frequency + "";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
+
+</script>

@@ -2698,7 +2698,7 @@ namespace BOTS_BL.Repository
             int count = 0;
             int index = 1;
             string Criteria = string.Empty;
-            string query = "select count(*) from tblSmartSlicerMaster where ";
+            string query = "select count(*) from tblSmartSlicerMaster as a where ";
             string WhereClause = string.Empty;
 
             foreach (Dictionary<string, object> item in objData)
@@ -2715,7 +2715,7 @@ namespace BOTS_BL.Repository
 
                         if (SecondChk == "All")
                         {
-                            WhereClause += " TotalTxnCount > 0 ";
+                            WhereClause += " a.TotalTxnCount > 0 ";
                             Criteria += " : All";
                         }
                         if (SecondChk == "OnlyOnce")
@@ -2723,7 +2723,7 @@ namespace BOTS_BL.Repository
                             //This need to corrected
                             Criteria += " : Only Once";
                             Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
-                            WhereClause += " TotalTxnCount = 1 ";
+                            WhereClause += " a.TotalTxnCount = 1 ";
                             if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
                             {
                                 try
@@ -2735,19 +2735,19 @@ namespace BOTS_BL.Repository
                                         //{
                                         if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
                                         {
-                                            WhereClause += "and VisitStatus= 'LongTime' and SpendStatusOnlyOnce = 'High' ";
+                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'High' ";
                                         }
                                         if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
                                         {
-                                            WhereClause += "and VisitStatus= 'LongTime' and SpendStatusOnlyOnce = 'Low' ";
+                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'Low' ";
                                         }
                                         if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
                                         {
-                                            WhereClause += "and VisitStatus= 'RecentTime' and SpendStatusOnlyOnce = 'High' ";
+                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'High' ";
                                         }
                                         if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
                                         {
-                                            WhereClause += "and VisitStatus= 'RecentTime' and SpendStatusOnlyOnce = 'Low' ";
+                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'Low' ";
                                         }
                                         //}
                                     }
@@ -2766,32 +2766,32 @@ namespace BOTS_BL.Repository
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
                             if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
                             {
-                                WhereClause += " InActiveDays < 30 ";
+                                WhereClause += " a.InActiveDays < 30 ";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
                             {
-                                WhereClause += " InActiveDays >= 31 and  InActiveDays <= 60";
+                                WhereClause += " a.InActiveDays >= 31 and  a.InActiveDays <= 60";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
                             {
-                                WhereClause += " InActiveDays >= 61 and  InActiveDays <= 90";
+                                WhereClause += " a.InActiveDays >= 61 and  a.InActiveDays <= 90";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
                             {
-                                WhereClause += " InActiveDays >= 91 and  InActiveDays <= 180";
+                                WhereClause += " a.InActiveDays >= 91 and  a.InActiveDays <= 180";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
                             {
-                                WhereClause += " InActiveDays >= 181 and  InActiveDays <= 365";
+                                WhereClause += " a.InActiveDays >= 181 and  a.InActiveDays <= 365";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
                             {
-                                WhereClause += " InActiveDays > 365";
+                                WhereClause += " a.InActiveDays > 365";
                             }
                             if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
                             {
                                 Criteria += " - Exclude Only Once";
-                                WhereClause += " and TotalTxnCount > 1 ";
+                                WhereClause += " and a.TotalTxnCount > 1 ";
                             }
                         }
                         if (SecondChk == "Cumulative")
@@ -2853,11 +2853,11 @@ namespace BOTS_BL.Repository
                             Criteria += " - " + Convert.ToString(item["SecondChk"]);
                             if (Convert.ToString(item["SecondChk"]) == "All")
                             {
-                                WhereClause += " TotalTxnCount = 0";
+                                WhereClause += " a.TotalTxnCount = 0";
                             }
                             if (Convert.ToString(item["SecondChk"]) == "Enrolled")
                             {
-                                WhereClause += " TotalTxnCount = 0";
+                                WhereClause += " a.TotalTxnCount = 0";
                             }
 
                             if (Convert.ToString(item["SecondChk"]) == "DLC")
@@ -2895,12 +2895,12 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketFrm"])))
                         {
                             Criteria += "<br/>Avgerage ticket size from : " + Convert.ToString(item["AvgTicketFrm"]);
-                            WhereClause += " and AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
+                            WhereClause += " and a.AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketTo"])))
                         {
                             Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
-                            WhereClause += " and AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
+                            WhereClause += " and a.AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
                         }
                         //Criteria += "<br/>Avgerage ticket size : " + Convert.ToString(item["AvgTicket"]);
                     }
@@ -2909,30 +2909,30 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
                         {
                             Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
-                            WhereClause += " and EnrolledDate > " + Convert.ToString(item["Enrollfromdt"]);
+                            WhereClause += " and a.EnrolledDate > " + Convert.ToString(item["Enrollfromdt"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
                         {
                             Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
-                            WhereClause += " and EnrolledDate < " + Convert.ToString(item["Enrolltodt"]);
+                            WhereClause += " and a.EnrolledDate < " + Convert.ToString(item["Enrolltodt"]);
                         }
                     }
                     if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
                     {
                         Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                        WhereClause += " and InActiveDays > " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays > " + Convert.ToString(item["NonTransactedSince"]);
                     }
                     if (Convert.ToString(item["IsSpend"]) == "Yes")
                     {
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
                         {
                             Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
-                            WhereClause += " and Spends > " + Convert.ToString(item["SpendMin"]);
+                            WhereClause += " and a.Spends > " + Convert.ToString(item["SpendMin"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
                         {
                             Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
-                            WhereClause += " and Spends < " + Convert.ToString(item["SpendMax"]);
+                            WhereClause += " and a.Spends < " + Convert.ToString(item["SpendMax"]);
                         }
                     }
                     if (Convert.ToString(item["IsTxnCount"]) == "Yes")
@@ -2940,12 +2940,12 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
                         {
                             Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
-                            WhereClause += " and TotalTxnCount > " + Convert.ToString(item["CountMin"]);
+                            WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
                         {
                             Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
-                            WhereClause += " and TotalTxnCount < " + Convert.ToString(item["CountMax"]);
+                            WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
                         }
                     }
                     if (Convert.ToString(item["IsPointBalance"]) == "Yes")
@@ -2953,12 +2953,12 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
                         {
                             Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                            WhereClause += " and PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
                         {
                             Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                            WhereClause += " and PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
                         }
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(item["IsRedeemed"])))
@@ -2967,7 +2967,7 @@ namespace BOTS_BL.Repository
                         int isR = 0;
                         if (Convert.ToString(item["IsRedeemed"]) == "Yes")
                             isR = 1;
-                        WhereClause += " and RedeemStatus < " + isR;
+                        WhereClause += " and a.RedeemStatus < " + isR;
                     }
                 }
                 if (index == 3)
@@ -3036,7 +3036,7 @@ namespace BOTS_BL.Repository
                         {
                             outletIds = outletIds.Remove(outletIds.Length - 1);
                             if (outletAll != "All")
-                                WhereClause += " and EnrolledOutletId in (" + outletIds + ")";
+                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
                         }
 
                     }
@@ -3068,16 +3068,16 @@ namespace BOTS_BL.Repository
                                 Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
                                 if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
                                 {
-                                    WhereClause += " and LastTxnOutletId in (" + outletIds + ")";
+                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
                                 }
                                 else
                                 {
-                                    WhereClause += " and (FirstTxnOutletId in (" + outletIds + ") or LastTxnOutletId in (" + outletIds + "))";
+                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
                                 }
                             }
                             else
                             {
-                                WhereClause += " and FirstTxnOutletId in (" + outletIds + ")";
+                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
                             }
                         }
                     }
@@ -3087,32 +3087,32 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsTier"]) == "Yes")
                     {
                         Criteria += "<br/>Tier : " + Convert.ToString(item["IsTier"]);
-                        WhereClause += " and Tier = " + Convert.ToString(item["IsTier"]);
+                        WhereClause += " and a.Tier = " + Convert.ToString(item["IsTier"]);
                     }
                     if (Convert.ToString(item["IsGender"]) == "Yes")
                     {
                         Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
                         if (Convert.ToString(item["Gender"]) == "Male")
-                            WhereClause += " and Gender = 'M' ";
+                            WhereClause += " and a.Gender = 'M' ";
                         if (Convert.ToString(item["Gender"]) == "Female")
-                            WhereClause += " and Gender = 'F' ";
+                            WhereClause += " and a.Gender = 'F' ";
                     }
                     if (Convert.ToString(item["IsCity"]) == "Yes")
                     {
                         Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
-                        WhereClause += " and City = " + Convert.ToString(item["IsCity"]);
+                        WhereClause += " and a.City = " + Convert.ToString(item["IsCity"]);
                     }
                     if (Convert.ToString(item["IsAge"]) == "Yes")
                     {
                         if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
                         {
                             Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
-                            WhereClause += " and Age >= " + Convert.ToString(item["AgeFrom"]);
+                            WhereClause += " and a.Age >= " + Convert.ToString(item["AgeFrom"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
                         {
                             Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
-                            WhereClause += " and Age <= " + Convert.ToString(item["AgeTo"]);
+                            WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
                         }
                     }
                 }
@@ -3817,6 +3817,30 @@ namespace BOTS_BL.Repository
                 objData = context.tblSSNonSSReports.OrderByDescending(x=>x.SlNo).FirstOrDefault();
             }
             return objData;
+        }
+        
+        public List<tblVelocityMain> GetVelocityMains(string connectionString)
+        {
+            var year = DateTime.Today.Year;
+            List<tblVelocityMain> lstData = new List<tblVelocityMain>();
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                lstData = context.tblVelocityMains.OrderByDescending(y => y.SlNo).Take(5).ToList();
+                lstData = lstData.OrderBy(x => x.SlNo).ToList();
+            }
+            return lstData;
+        }
+        
+        public List<tblVelocityCustomerData> GetVelocityCustomerData(string frequency, string connectionString)
+        {
+            List<tblVelocityCustomerData> lstData = new List<tblVelocityCustomerData>();
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                lstData = context.tblVelocityCustomerDatas.Where(x => x.VelocityPeriod == frequency).ToList();
+                lstData = lstData.OrderByDescending(x => x.NoofTxn).ToList();
+            }
+
+            return lstData;
         }
 
     }

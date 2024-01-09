@@ -382,6 +382,12 @@
                                         SS Vs Non-SS
                                     </a>
                                 </li>
+                                <li class="@Html.IsSelected(controller: "Reports", action: "VelocityReport")">
+                                    <a class="@Html.IsSelected(controller: "Reports", action: "VelocityReport")" href="@Url.Action("VelocityReport", "Reports")">
+                                        <i class="metismenu-icon"></i>
+                                        Velocity Report
+                                    </a>
+                                </li>
                             }
                         </ul>
                     </li>

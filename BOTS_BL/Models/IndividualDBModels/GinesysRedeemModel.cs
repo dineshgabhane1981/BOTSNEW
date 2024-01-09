@@ -13,9 +13,9 @@ namespace BOTS_BL.Models
         public string InvoiceAmount { get; set; }
         public string billGUID { get; set; }
         public string StoreId { get; set; }
-        public decimal? Points { get; set; }
-        public decimal? PointsValue { get; set; }
-        public decimal? PointsToRedeem { get; set; }
+        public string Points { get; set; }
+        public string PointsValue { get; set; }
+        public string PointsToRedeem { get; set; }
     }
     public class BurnValidateResponse
     {

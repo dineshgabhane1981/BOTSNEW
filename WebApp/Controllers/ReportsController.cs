@@ -1669,6 +1669,7 @@ namespace WebApp.Controllers
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             CustomizeMetricsViewModel objData = new CustomizeMetricsViewModel();
+            objData.GroupId = userDetails.GroupId;
             objData.lstCategory = ORR.GetCategoryCode(userDetails.GroupId, userDetails.connectionString);
             objData.lstSubCategory = ORR.GetSubCategoryCodeALL(userDetails.GroupId, userDetails.connectionString);
             objData.lstProduct = ORR.GetProductId(userDetails.GroupId, userDetails.connectionString);
@@ -1768,6 +1769,62 @@ namespace WebApp.Controllers
             var data = RR.GetSSNonSSReport(userDetails.connectionString);
             return View(data);
         }
-    
+
+        public ActionResult VelocityReport()
+        {
+            VelocityReportViewModel objModel = new VelocityReportViewModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objModel.lstMain = RR.GetVelocityMains(userDetails.connectionString);
+            //objModel.lstMonthwise = RR.GetVelocityMonthwise(userDetails.connectionString);
+            return View(objModel);
+        }
+
+        [HttpPost]
+        public ActionResult GetVelocityCustomerData(string count)
+        {
+             
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var customerData = RR.GetVelocityCustomerData(count, userDetails.connectionString);
+            return PartialView("_VelocityCustomerData", customerData);
+        }
+        public ActionResult VelocityCustomerDataExportToExcel(string frequency)
+        {
+            List<tblVelocityCustomerData> lstData = new List<tblVelocityCustomerData>();            
+            System.Data.DataTable table = new System.Data.DataTable();
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            lstData = RR.GetVelocityCustomerData(frequency, userDetails.connectionString);
+            string fileName = "VelocityCustomerData_Frequency_" + frequency + ".xlsx";
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(tblVelocityCustomerData));
+            foreach (PropertyDescriptor prop in properties)
+            {
+                if (prop.Name != "SlNo")
+                    table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+            }
+
+            foreach (tblVelocityCustomerData item in lstData)
+            {
+                DataRow row = table.NewRow();
+                foreach (PropertyDescriptor prop in properties)
+                {
+                    if (prop.Name != "SlNo")
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;                  
+                }
+                table.Rows.Add(row);
+            }           
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                table.TableName = fileName;
+                IXLWorksheet worksheet = wb.AddWorksheet(sheetName: "CustomerData");                
+                worksheet.Cell(1, 1).InsertTable(table);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                }
+            }
+        }
+
     }
 }

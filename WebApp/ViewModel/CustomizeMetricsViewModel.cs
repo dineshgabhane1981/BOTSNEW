@@ -16,6 +16,7 @@ namespace WebApp.ViewModel
         public string dummyCategory { get; set; }
         public string dummySubCategory { get; set; }
         public string dummyProduct { get; set; }
+        public string GroupId { get; set; }
         public List<SelectListItem> lstCategory { get; set; }
         public List<SelectListItem> lstSubCategory { get; set; }
         public List<SelectListItem> lstProduct { get; set; }

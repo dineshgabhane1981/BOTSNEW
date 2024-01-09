@@ -1,0 +1,124 @@
+﻿@model List<BOTS_BL.Models.tblVelocityCustomerData>
+@using BOTS_BL.Models;
+@using System.Globalization
+
+<div class="row mb-3 mt-2 card">
+    <div class="container-fluid pt-3 pl-2 pr-2">
+        <div class="pt-3 pl-3 pr-2 col-md-12 col-lg-12">
+            <div class="row">
+                <div class="col search-container">
+                    <i class="fas fa-search"></i>
+                    <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                </div>
+                <div class="col text-right">
+                    <ul class="list-inline progress-list mt-2">
+                        <li class="list-inline-item">
+                            <div class="dropdown">
+                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                    <i class="fas fa-file-export"></i> Export
+                                </button>
+                            </div>                            
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-3" id="dvActivityData">
+                <div class="table-responsive">
+                    <table class="table" id="activityTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">Velcoity Period</th>
+                                <th scope="col">Card Number</th>
+                                <th scope="col">Mobile Number</th>
+                                <th scope="col">Member Name</th>
+                                <th scope="col">Enrolled Date</th>
+                                <th scope="col">No of Txns</th>
+                                <th scope="col">Total Amount Spent</th>
+                                <th scope="col">Last Txn Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                if (Model.Count > 0)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.VelocityPeriod</td>
+                                            <td>@item.CardNumber</td>
+                                            <td>@item.MobileNo</td>
+                                            <td>@item.MemberName</td>
+                                            <td>@item.EnrolledDate.Value.ToString("dd-MM-yyyy")</td>
+                                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.NoofTxn))</td>
+                                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TotalAmtSpend))</td>
+                                            <td>@item.LastTxnDate.Value.ToString("dd-MM-yyyy")</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="8" align="center">No Learning Available</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8">No Learning Available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#activityTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": false,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers"
+
+        });
+
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    });
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
