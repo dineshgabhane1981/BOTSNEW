@@ -335,6 +335,7 @@
     <Compile Include="Models\GroupDetail.cs" />
     <Compile Include="Models\GroupWiseDetails.cs" />
     <Compile Include="Models\HeatMaps\DaywiseHourwise.cs" />
+    <Compile Include="Models\IndividualDBModels\CategoryWiseSSvsNonSS.cs" />
     <Compile Include="Models\IndividualDBModels\CustInformatonData.cs" />
     <Compile Include="Models\IndividualDBModels\ExecutiveSummaryAllData.cs" />
     <Compile Include="Models\IndividualDBModels\GinesysRedeemModel.cs" />
@@ -414,8 +415,8 @@
     <Compile Include="Models\IndividualDBModels\tblTxnDetailsMaster_Clone.cs" />
     <Compile Include="Models\IndividualDBModels\tblTxnProDetailsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblTxnProDetailsMaster_Clone.cs" />
-    <Compile Include="Models\IndividualDBModels\tblVelocityDetailData.cs" />
-    <Compile Include="Models\IndividualDBModels\tblVelocityMasterData.cs" />
+    <Compile Include="Models\IndividualDBModels\tblVelocityMain.cs" />
+    <Compile Include="Models\IndividualDBModels\tblVelocityMonthwise.cs" />
     <Compile Include="Models\IndividualDBModels\TransactionSummaryData.cs" />
     <Compile Include="Models\IndividualDBModels\View_ITOPSCustData.cs" />
     <Compile Include="Models\IndividualDBModels\View_ITOPSCustTxnData.cs" />
@@ -515,6 +516,7 @@
     <Compile Include="Models\tblSMSCostMaster.cs" />
     <Compile Include="Models\tblStandardRulesSetting.cs" />
     <Compile Include="Models\tblUniquePoint.cs" />
+    <Compile Include="Models\tblVelocityCustomerData.cs" />
     <Compile Include="Models\TelecallerReport.cs" />
     <Compile Include="Models\TelecallerTracking.cs" />
     <Compile Include="Models\TransferPointsDetail.cs" />

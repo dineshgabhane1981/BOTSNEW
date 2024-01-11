@@ -691,7 +691,11 @@
             if ($("#chkNeverPurchased").is(":checked")) {
                 $("#ddlNPCategory").prop('disabled', false);
                 $("#ddlNPSubCategory").prop('disabled', false);
-                $("#ddlNPProduct").prop('disabled', false);
+                var GroupId = '@Model.GroupId';
+                if (GroupId == "1341")
+                    $("#ddlNPProduct").prop('disabled', true);
+                else
+                    $("#ddlNPProduct").prop('disabled', false);
             }
             else {
                 $("#ddlNPCategory").prop('disabled', true);
@@ -704,7 +708,12 @@
             if ($("#chkPurchased").is(":checked")) {
                 $("#ddlPCategory").prop('disabled', false);
                 $("#ddlPSubCategory").prop('disabled', false);
-                $("#ddlPProduct").prop('disabled', false);
+                var GroupId = '@Model.GroupId';
+                if (GroupId == "1341")
+                    $("#ddlPProduct").prop('disabled', true);
+                else
+                    $("#ddlPProduct").prop('disabled', false);
+                //$("#ddlPProduct").prop('disabled', false);
             }
             else {
                 $("#ddlPCategory").prop('disabled', true);
@@ -899,14 +908,14 @@
             }
             else {
                 /*$("#txnSection").show();*/
-                $("#dvEnrolledRange").hide(); 
+                $("#dvEnrolledRange").hide();
                 $("#dvTxnCount").hide();
                 $("#dvPointBalance").hide();
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
                 $("#dvPurchased").hide();
-                $("#dvInactive").show();                
+                $("#dvInactive").show();
                 $("#dvAvgTicket").show();
                 $("#dvSpend").hide();
                 $("#hrProduct").hide();
@@ -1330,7 +1339,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-               
+
                 $("#spnFilterCount").text(addComma(response[0]));
                 $("#spnTotalCount").text(addComma(response[1]));
 

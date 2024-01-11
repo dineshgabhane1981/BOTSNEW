@@ -1712,9 +1712,7 @@ namespace WebApp.Controllers
         }
 
         public ActionResult GetSlicerReport(string jsonData, string columnslist)
-        {
-            // var transcount = 0;
-            // List<int> lstcounts = new List<int>();
+        {            
             CreateOwnReportViewModel createownviewmodel = new CreateOwnReportViewModel();
             List<CustomerDetail> lstcustomerdetails = (List<CustomerDetail>)Session["customerId"];
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -1739,21 +1737,13 @@ namespace WebApp.Controllers
                 }
                 
                 foreach (var itemNew1 in (ColumnId))
-                {
-                    //string name = Convert.ToString(itemNew1);
+                {                    
                     string name = Convert.ToString(itemNew1);//string.Concat(Convert.ToString(itemNew1).Where(c => !char.IsWhiteSpace(c)));
                     lstcolumnIdlist.Add(name);
                     columns += itemNew1 + ",";
                 }
             }
 
-
-            //foreach (var item in columnData)
-            //{
-            //    string name = Convert.ToString(item);
-            //    lstcolumnlist.Add(name);
-            //    columns += item + ",";
-            //}
             columns = columns.Remove(columns.Length - 1);
             createownviewmodel.listCustR = RR.GetSSFilterReport(objData, columns, userDetails.GroupId, userDetails.connectionString);
             createownviewmodel.lstcolumnlist = lstcolumnlist;
@@ -1765,9 +1755,12 @@ namespace WebApp.Controllers
     
         public ActionResult SuperSaverReport()
         {
+            SSvsNonSSViewModel objData = new SSvsNonSSViewModel();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var data = RR.GetSSNonSSReport(userDetails.connectionString);
-            return View(data);
+            objData.objSSNonSSReport = RR.GetSSNonSSReport(userDetails.connectionString);
+            objData.lstCategory = ORR.GetCategoryCode(userDetails.GroupId, userDetails.connectionString);
+            objData.lstSubCategory = ORR.GetSubCategoryCodeALL(userDetails.GroupId, userDetails.connectionString);
+            return View(objData);
         }
 
         public ActionResult VelocityReport()
@@ -1825,6 +1818,28 @@ namespace WebApp.Controllers
                 }
             }
         }
+        [HttpPost]
+        public JsonResult GetSubCategory(string CatCode)
+        {
+            if (CatCode == "")
+            {
+                CatCode = "0000";
+            }
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var SubCatData= ORR.GetSubCategoryCode(userDetails.connectionString, CatCode);
 
+            return new JsonResult() { Data = SubCatData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult GetCategorySubCategoryReport(string CatCode, string SubCatCode)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var ReportData = RR.GetSSNonSSCatSubCatReport(userDetails.connectionString, CatCode, SubCatCode);
+
+            ReportData.TotalBusinessStr = String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(ReportData.TotalBusiness));
+            ReportData.TotalBusinessSSStr = String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(ReportData.TotalBusinessSS));
+            ReportData.TotalBusinessNonSSStr = String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(ReportData.TotalBusinessNonSS));
+
+            return new JsonResult() { Data = ReportData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

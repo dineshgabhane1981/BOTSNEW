@@ -295,6 +295,7 @@
     <Compile Include="ViewModel\ITOPSNewViewModel.cs" />
     <Compile Include="ViewModel\ProgrammeViewModel.cs" />
     <Compile Include="ViewModel\PromoCampaignViewModel.cs" />
+    <Compile Include="ViewModel\SSvsNonSSViewModel.cs" />
     <Compile Include="ViewModel\TestingModuleViewModel.cs" />
     <Compile Include="ViewModel\OnBoardingSalesViewModel.cs" />
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />

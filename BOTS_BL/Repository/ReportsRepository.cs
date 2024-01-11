@@ -3814,11 +3814,11 @@ namespace BOTS_BL.Repository
             tblSSNonSSReport objData = new tblSSNonSSReport();
             using (var context = new BOTSDBContext(connectionString))
             {
-                objData = context.tblSSNonSSReports.OrderByDescending(x=>x.SlNo).FirstOrDefault();
+                objData = context.tblSSNonSSReports.OrderByDescending(x => x.SlNo).FirstOrDefault();
             }
             return objData;
         }
-        
+
         public List<tblVelocityMain> GetVelocityMains(string connectionString)
         {
             var year = DateTime.Today.Year;
@@ -3830,7 +3830,7 @@ namespace BOTS_BL.Repository
             }
             return lstData;
         }
-        
+
         public List<tblVelocityCustomerData> GetVelocityCustomerData(string frequency, string connectionString)
         {
             List<tblVelocityCustomerData> lstData = new List<tblVelocityCustomerData>();
@@ -3843,6 +3843,26 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
+        public CategoryWiseSSvsNonSS GetSSNonSSCatSubCatReport(string connectionString, string CatCode, string SubCatCode)
+        {
+            CategoryWiseSSvsNonSS objData = new CategoryWiseSSvsNonSS();
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    objData = context.Database.SqlQuery<CategoryWiseSSvsNonSS>("sp_ReportSSvsNONSS @pi_CategoryCode, @pi_SubCategoryCode, @pi_INDDatetime",
+                           new SqlParameter("@pi_CategoryCode", CatCode),
+                           new SqlParameter("@pi_SubCategoryCode", SubCatCode),
+                           new SqlParameter("@pi_INDDatetime", DateTime.Now.ToShortDateString())).FirstOrDefault<CategoryWiseSSvsNonSS>();
+                    
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GetSSNonSSCatSubCatReport");
+                }
+            }
+            return objData;
+        }
     }
 }
 

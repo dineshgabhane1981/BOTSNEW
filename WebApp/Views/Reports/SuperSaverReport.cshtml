@@ -1,4 +1,4 @@
-﻿@model BOTS_BL.Models.tblSSNonSSReport
+﻿@model WebApp.ViewModel.SSvsNonSSViewModel
 @using System.Globalization
 @using BOTS_BL.Models;
 @{
@@ -6,12 +6,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="app-main__inner">
-    <div class="card m-5">
-        <div class="col-md-12 col-lg-12 m-2 p-lg-5">
-            <h3 class="mb-4">Super Saver VS Non-Super Saver</h3>
+    <div class="card m-2">
+        <div class="col-md-12 col-lg-12 m-2 p-3">
+            <h5 class="mb-4">Super Saver VS Non-Super Saver</h5>
             @if (Model != null)
             {
-                var countPer = Convert.ToDouble(Model.SSTxnCount * 100) / Convert.ToDouble(Model.TotalTxnCount);
+                var countPer = Convert.ToDouble(Model.objSSNonSSReport.SSTxnCount * 100) / Convert.ToDouble(Model.objSSNonSSReport.TotalTxnCount);
                 <table border="1" cellpadding="10" cellspacing="10" style="text-align:end;">
                     <tr style="text-align:left;">
                         <th>Elements</th>
@@ -22,27 +22,126 @@
                     </tr>
                     <tr>
                         <td style="font-weight: bold; text-align: left;">Business</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.SSBiz))</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.SSBizPercentage))%</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.NonSSBiz))</td>
-                    </tr>                    
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.TotalBiz))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.SSBiz))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.SSBizPercentage))%</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSBiz))</td>
+                    </tr>
                     <tr>
                         <td style="font-weight: bold; text-align: left;">Txn Count</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.TotalTxnCount))</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.SSTxnCount))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.TotalTxnCount))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.SSTxnCount))</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(countPer))%</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.NonSSTxnCount))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSTxnCount))</td>
                     </tr>
                     <tr>
                         <td style="font-weight: bold; text-align: left;">Average Ticket Size</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.ATS))</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.SSATS))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.ATS))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.SSATS))</td>
                         <td></td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.NonSSATS))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSATS))</td>
                     </tr>
                 </table>
+                <div class="row mt-3 ml-1">
+                    <div>@Html.DropDownListFor(x => Model.dummyCategoryCode, new SelectList(Model.lstCategory, "Value", "Text"), "Select Category", htmlAttributes: new { @class = "input100", @id = "ddlCategory" })&nbsp;</div>
+                    <div>@Html.DropDownListFor(x => Model.dummySubCategoryCode, new SelectList(Model.lstSubCategory, "Value", "Text"), "Select SubCategory", htmlAttributes: new { @class = "input100", @id = "ddlSubCategory" })&nbsp;</div>
+                    <div style="padding:5px;"><button id="btnGo" class="btn btn-primary login-btn">Get Data</button></div>
+                </div>
+                <div class="row mt-3 ml-1" id="dvCatData" style="display:none;">
+                    <table border="1" cellpadding="10" cellspacing="10" style="text-align:end;">
+                        <tr style="text-align:left;">
+                            <th>Elements</th>
+                            <th>Total Base</th>
+                            <th>SS Base</th>
+                            <th>SS Cont %</th>
+                            <th>Non-SS Base</th>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold; text-align: left;">Business</td>
+                            <td><span id="spnTotalBase"></span></td>
+                            <td><span id="spnSSBase"></span></td>
+                            <td><span id="spnSSCont"></span></td>
+                            <td><span id="spnNonSSBase"></span></td>
+                        </tr>
+                    </table>
+                </div>
             }
         </div>
     </div>
 </div>
+<script>
+     $(document).ready(function () {
+
+         $("#btnGo").click(function () {
+             GetData();
+        });
+
+         $("#ddlCategory").change(function () {
+             GetSubCategoryData();
+         });
+    });
+    function GetData() {
+        if ($("#ddlCategory").val() == "" && $("#ddlSubCategory").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please select Category or SubCategory to get report",
+                buttonText: "Okay"
+            })
+        }
+        else {
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetCategorySubCategoryReport", "Reports")',
+                 data: "{'CatCode': '" + $("#ddlCategory").val() + "','SubCatCode': '" + $("#ddlSubCategory").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)
+                    $("#spnTotalBase").text(response.TotalBusinessStr);
+                    $("#spnSSBase").text(response.TotalBusinessSSStr);
+                    $("#spnSSCont").text(response.SSPercentage);
+                    $("#spnNonSSBase").text(response.TotalBusinessNonSSStr);
+                    $("#dvCatData").show();
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    console.log(response)
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+    function GetSubCategoryData() {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSubCategory", "Reports")',
+                data: "{'CatCode': '" + $("#ddlCategory").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)
+                    $("#ddlSubCategory").html("");
+                    var items = '<option>Select SubCategory</option>';
+                    $.each(response, function (i, item) {
+                        items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                    });
+                    $("#ddlSubCategory").html(items);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    console.log(response)
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
+</script>
