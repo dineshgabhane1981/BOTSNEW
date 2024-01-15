@@ -9,15 +9,19 @@
                 <div class="col search-container">
                     <i class="fas fa-search"></i>
                     <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+
                 </div>
                 <div class="col text-right">
                     <ul class="list-inline progress-list mt-2">
+                        <li class="list-inline-item" style="margin-right: 100px; font-weight: bold;font-size:18px;">
+                            <span style="">Total Amount - @String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(ViewBag.Total)) </span>
+                        </li>
                         <li class="list-inline-item">
                             <div class="dropdown">
                                 <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
                                     <i class="fas fa-file-export"></i> Export
                                 </button>
-                            </div>                            
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -49,10 +53,24 @@
                                             <td>@item.CardNumber</td>
                                             <td>@item.MobileNo</td>
                                             <td>@item.MemberName</td>
-                                            <td>@item.EnrolledDate.Value.ToString("dd-MM-yyyy")</td>
-                                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.NoofTxn))</td>
-                                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TotalAmtSpend))</td>
-                                            <td>@item.LastTxnDate.Value.ToString("dd-MM-yyyy")</td>
+                                            @if (item.EnrolledDate.HasValue)
+                                            {
+                                                <td>@item.EnrolledDate.Value.ToString("dd-MM-yyyy")</td>
+                                            }
+                                            else
+                                            {
+                                                <td>-</td>
+                                            }
+                                            <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(item.NoofTxn))</td>
+                                            <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(item.TotalAmtSpend))</td>
+                                            @if (item.LastTxnDate.HasValue)
+                                            {
+                                                <td>@item.LastTxnDate.Value.ToString("dd-MM-yyyy")</td>
+                                            }
+                                            else
+                                            {
+                                                <td>-</td>
+                                            }
                                         </tr>
                                     }
                                 }
@@ -71,6 +89,7 @@
                             }
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>

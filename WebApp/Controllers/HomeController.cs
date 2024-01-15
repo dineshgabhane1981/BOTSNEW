@@ -95,12 +95,12 @@ namespace WebApp.Controllers
                 DashboardMemberSegment dataMemberSegment = new DashboardMemberSegment();
                 dataMemberSegment = DR.GetDashboardMemberSegmentData(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
 
-                dataList.Add(dataMemberSegment.NoofMember_Total);
-                dataList.Add(dataMemberSegment.NoofMember_Repeat);
-                dataList.Add(dataMemberSegment.NoofMember_NeverRedeem);
-                dataList.Add(dataMemberSegment.NoofMember_RecentlyEnrolled);
-                dataList.Add(dataMemberSegment.NoofMember_OnlyOnce);
-                dataList.Add(dataMemberSegment.NoofMember_NotTransacted);
+                dataList.Add(dataMemberSegment.TotalMember);
+                dataList.Add(dataMemberSegment.RepeatMember);
+                dataList.Add(dataMemberSegment.NeverRedeem);
+                dataList.Add(dataMemberSegment.RecentlyEnrolled);
+                dataList.Add(dataMemberSegment.OnlyOnce);
+                dataList.Add(dataMemberSegment.NotTransacted);
                 lstDates.Add(dataMemberSegment.FromDate);
                 lstDates.Add(dataMemberSegment.ToDate);
                 lstData.Add(dataList);
@@ -279,6 +279,7 @@ namespace WebApp.Controllers
                     dataList.Add(objDashboardBulkUpload.BusinessGenerated);
                     dataList.Add(objDashboardBulkUpload.PieChartYellow);
                     dataList.Add(objDashboardBulkUpload.PieChartGreen);
+                    dataList.Add(objDashboardBulkUpload.PieChartTotalMemberConverted);
                 }
             }
             catch (Exception ex)
@@ -498,7 +499,7 @@ namespace WebApp.Controllers
                 var conStr = CR.GetCustomerConnString(groupId);
                 var dataMemberSegment = DR.GetDashboardMemberSegmentData(groupId, "", conStr, "", "", "");
 
-                objData.lstMemberBaseAndTransaction[1].BaseCount = Convert.ToInt32(dataMemberSegment.NoofMember_Total);
+                objData.lstMemberBaseAndTransaction[1].BaseCount = Convert.ToInt32(dataMemberSegment.TotalMember);
 
                 var connectionString = CR.GetCustomerConnString(groupId);
                 var dataDashboard = DR.GetDashboardData(groupId, connectionString, "", "", "");

@@ -138,64 +138,79 @@ namespace BOTS_BL.Repository
             DashboardMemberSegment dashboardMemberSegment = new DashboardMemberSegment();
             try
             {
-                using (var context = new BOTSDBContext(connstr))
+                string DBName = string.Empty;
+                using (var contextnew = new CommonDBContext())
                 {
-                    context.Database.CommandTimeout = 120;
-                    if (GroupId == "1086")
-                    {
-                        dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberSegment>();
-                    }
-                    //else if (GroupId == "1087")
-                    //{
-                        var dateToCheck = DateTime.Today.AddDays(-30);
-                        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
-                        if (string.IsNullOrEmpty(OutletId))
-                        {
-                            dashboardMemberSegment.NoofMember_Total = AllData.Count();
-                            dashboardMemberSegment.NoofMember_Repeat = AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Count();
-                            dashboardMemberSegment.NoofMember_NeverRedeem = AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Count();
-                            dashboardMemberSegment.NoofMember_OnlyOnce = AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Count();
-                            dashboardMemberSegment.NoofMember_RecentlyEnrolled = AllData.Where(x => x.DOJ >= dateToCheck).Count();
-                            dashboardMemberSegment.NoofMember_NotTransacted = AllData.Where(x => x.DOJ < dateToCheck && x.TotalTxnCount == 0).Count();
-                        }
-                        else
-                        {
-                            dashboardMemberSegment.NoofMember_Total = AllData.Where(x => x.CurrentEnrolledOutlet == OutletId).Count();
-                            dashboardMemberSegment.NoofMember_Repeat = AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
-                            dashboardMemberSegment.NoofMember_NeverRedeem = AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
-                            dashboardMemberSegment.NoofMember_OnlyOnce = AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
-                            dashboardMemberSegment.NoofMember_RecentlyEnrolled = AllData.Where(x => x.DOJ > dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
-                            dashboardMemberSegment.NoofMember_NotTransacted = AllData.Where(x => x.DOJ < dateToCheck && x.TotalTxnCount == 0 && x.CurrentEnrolledOutlet == OutletId).Count();
-                        }
+                    contextnew.Database.CommandTimeout = 120;
+                    DBName = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
 
-                        var total = dashboardMemberSegment.NoofMember_Repeat + dashboardMemberSegment.NoofMember_NeverRedeem + dashboardMemberSegment.NoofMember_OnlyOnce + dashboardMemberSegment.NoofMember_RecentlyEnrolled + dashboardMemberSegment.NoofMember_NotTransacted;
-                        total = total + 1;
-                    //}
-                    //else
-                    //{
-                    //    context.Database.CommandTimeout = 120;
-                    //    dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberSegment>();
-                    //    dashboardMemberSegment.NoofMember_NotTransacted = 0;
-                    //}
-
-
-                    //DateTime? FromDate;
-                    //if (!string.IsNullOrEmpty(OutletId))
-                    //{
-                    //    OutletId = OutletId + "01";
-                    //    FromDate = context.TransactionMasters.Where(x => x.CounterId == OutletId).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
-
-                    //}
-                    //else
-                    //{
-                    //    FromDate = context.TransactionMasters.OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
-                    //}
-                    //if (FromDate.HasValue)
-                    //{
-                    //    dashboardMemberSegment.FromDate = FromDate.Value.ToString("MM-dd-yyyy");
-                    //    dashboardMemberSegment.ToDate = DateTime.Now.ToString("MM-dd-yyyy");
-                    //}
+                    dashboardMemberSegment = contextnew.Database.SqlQuery<DashboardMemberSegment>("sp_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate,@pi_DBName", 
+                        new SqlParameter("@pi_GroupId", GroupId), 
+                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), 
+                        new SqlParameter("@pi_OutletId", OutletId), 
+                        new SqlParameter("@pi_LoginId", loginId), 
+                        new SqlParameter("@pi_FromDate", frmDate), 
+                        new SqlParameter("@pi_ToDate", toDate),
+                        new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<DashboardMemberSegment>();
                 }
+                //using (var context = new BOTSDBContext(connstr))
+                //{
+                //    context.Database.CommandTimeout = 120;
+                //    if (GroupId == "1086")
+                //    {
+                //        dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberSegment>();
+                //    }
+                //    //else if (GroupId == "1087")
+                //    //{
+                //        var dateToCheck = DateTime.Today.AddDays(-30);
+                //        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
+                //        if (string.IsNullOrEmpty(OutletId))
+                //        {
+                //            dashboardMemberSegment.NoofMember_Total = AllData.Count();
+                //            dashboardMemberSegment.NoofMember_Repeat = AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck).Count();
+                //            dashboardMemberSegment.NoofMember_NeverRedeem = AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck).Count();
+                //            dashboardMemberSegment.NoofMember_OnlyOnce = AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck).Count();
+                //            dashboardMemberSegment.NoofMember_RecentlyEnrolled = AllData.Where(x => x.DOJ >= dateToCheck).Count();
+                //            dashboardMemberSegment.NoofMember_NotTransacted = AllData.Where(x => x.DOJ < dateToCheck && x.TotalTxnCount == 0).Count();
+                //        }
+                //        else
+                //        {
+                //            dashboardMemberSegment.NoofMember_Total = AllData.Where(x => x.CurrentEnrolledOutlet == OutletId).Count();
+                //            dashboardMemberSegment.NoofMember_Repeat = AllData.Where(x => x.EarnCount >= 1 && x.BurnCount > 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
+                //            dashboardMemberSegment.NoofMember_NeverRedeem = AllData.Where(x => x.EarnCount > 1 && x.BurnCount == 0 && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
+                //            dashboardMemberSegment.NoofMember_OnlyOnce = AllData.Where(x => ((x.EarnCount == 1 && x.BurnCount == 0) || (x.EarnCount == 0 && x.BurnCount == 1)) && x.DOJ < dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
+                //            dashboardMemberSegment.NoofMember_RecentlyEnrolled = AllData.Where(x => x.DOJ > dateToCheck && x.CurrentEnrolledOutlet == OutletId).Count();
+                //            dashboardMemberSegment.NoofMember_NotTransacted = AllData.Where(x => x.DOJ < dateToCheck && x.TotalTxnCount == 0 && x.CurrentEnrolledOutlet == OutletId).Count();
+                //        }
+
+                //        var total = dashboardMemberSegment.NoofMember_Repeat + dashboardMemberSegment.NoofMember_NeverRedeem + dashboardMemberSegment.NoofMember_OnlyOnce + dashboardMemberSegment.NoofMember_RecentlyEnrolled + dashboardMemberSegment.NoofMember_NotTransacted;
+                //        total = total + 1;
+                //    //}
+                //    //else
+                //    //{
+                //    //    context.Database.CommandTimeout = 120;
+                //    //    dashboardMemberSegment = context.Database.SqlQuery<DashboardMemberSegment>("sp_BOTS_DashboardMemberSegment @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardMemberSegment>();
+                //    //    dashboardMemberSegment.NoofMember_NotTransacted = 0;
+                //    //}
+
+
+                //    //DateTime? FromDate;
+                //    //if (!string.IsNullOrEmpty(OutletId))
+                //    //{
+                //    //    OutletId = OutletId + "01";
+                //    //    FromDate = context.TransactionMasters.Where(x => x.CounterId == OutletId).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+
+                //    //}
+                //    //else
+                //    //{
+                //    //    FromDate = context.TransactionMasters.OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+                //    //}
+                //    //if (FromDate.HasValue)
+                //    //{
+                //    //    dashboardMemberSegment.FromDate = FromDate.Value.ToString("MM-dd-yyyy");
+                //    //    dashboardMemberSegment.ToDate = DateTime.Now.ToString("MM-dd-yyyy");
+                //    //}
+                //}
             }
 
             catch (Exception ex)
@@ -433,7 +448,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    context.Database.CommandTimeout = 120;
+                    context.Database.CommandTimeout = 300;
                     if (GroupId == "1086")
                     {
                         dashboardOutletEnrolment = context.Database.SqlQuery<DashboardOutletEnrolment>("sp_BOTS_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_Flag", monthFlag), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
@@ -481,7 +496,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    context.Database.CommandTimeout = 120;
+                    context.Database.CommandTimeout = 300;
                     //if (GroupId == "1087")
                     //{
                         using (var contextnew = new CommonDBContext())
@@ -549,26 +564,42 @@ namespace BOTS_BL.Repository
             DashboardBulkUpload objDashboardBulkUpload = new DashboardBulkUpload();
             try
             {
-                using (var context = new BOTSDBContext(connstr))
+
+                string DBName = string.Empty;
+                using (var contextnew = new CommonDBContext())
                 {
-                    context.Database.CommandTimeout = 120;
-                    if (GroupId == "1086")
-                    {
-                        objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    contextnew.Database.CommandTimeout = 120;
+                    DBName = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+
+                    objDashboardBulkUpload = contextnew.Database.SqlQuery<DashboardBulkUpload>("sp_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate,@pi_DBName",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                             new SqlParameter("@pi_LoginId", loginId),
                             new SqlParameter("@pi_FromDate", frmDate),
-                            new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
-                    }
+                            new SqlParameter("@pi_ToDate", toDate),
+                            new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<DashboardBulkUpload>();
+                   
+                }
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    //context.Database.CommandTimeout = 120;
+                    //if (GroupId == "1086")
+                    //{
+                    //    objDashboardBulkUpload = context.Database.SqlQuery<DashboardBulkUpload>("sp_BOTS_DashboardBulkUpload @pi_GroupId, @pi_Date, @pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId),
+                    //        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
+                    //        new SqlParameter("@pi_LoginId", loginId),
+                    //        new SqlParameter("@pi_FromDate", frmDate),
+                    //        new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<DashboardBulkUpload>();
+                    //}
                     //else if (GroupId == "1087")
                     //{
-                        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
-                        objDashboardBulkUpload.TotalUpload = AllData.Where(x => x.EnrolledBy == "BulkUpload").Count();
-                        objDashboardBulkUpload.UniqueTransacted = AllData.Where(x => x.EnrolledBy == "BulkUpload" && x.TotalTxnCount == 1).Count();
-                        objDashboardBulkUpload.TransactedCount = AllData.Where(x => x.EnrolledBy == "BulkUpload").Sum(y => y.TotalTxnCount);
-                        objDashboardBulkUpload.BusinessGenerated = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "BulkUpload").Sum(y => y.TotalSpend));
-                        objDashboardBulkUpload.PieChartYellow = objDashboardBulkUpload.TotalUpload;
-                        objDashboardBulkUpload.PieChartGreen = (objDashboardBulkUpload.UniqueTransacted * 100) / objDashboardBulkUpload.TotalUpload;
+                        //var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
+                        //objDashboardBulkUpload.TotalUpload = AllData.Where(x => x.EnrolledBy == "BulkUpload").Count();
+                        //objDashboardBulkUpload.UniqueTransacted = AllData.Where(x => x.EnrolledBy == "BulkUpload" && x.TotalTxnCount == 1).Count();
+                        //objDashboardBulkUpload.TransactedCount = AllData.Where(x => x.EnrolledBy == "BulkUpload").Sum(y => y.TotalTxnCount);
+                        //objDashboardBulkUpload.BusinessGenerated = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "BulkUpload").Sum(y => y.TotalSpend));
+                        //objDashboardBulkUpload.PieChartYellow = objDashboardBulkUpload.TotalUpload;
+                        //objDashboardBulkUpload.PieChartGreen = (objDashboardBulkUpload.UniqueTransacted * 100) / objDashboardBulkUpload.TotalUpload;
                     //}
                     //else
                     //{
@@ -649,7 +680,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    context.Database.CommandTimeout = 120;
+                    context.Database.CommandTimeout = 300;
                     if (GroupId == "1086")
                     {
                         lstBizShared = context.Database.SqlQuery<DashboardBizShared>("sp_BOTS_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_FromDate,@pi_ToDate",
@@ -664,7 +695,7 @@ namespace BOTS_BL.Repository
                     //{
                         using (var contextnew = new CommonDBContext())
                         {
-                            contextnew.Database.CommandTimeout = 120;
+                            contextnew.Database.CommandTimeout = 300;
                         var DBName = contextnew.GroupDetail.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
                         //var DBName = "MadhusudanTextiles_New";
                             lstBizShared = contextnew.Database.SqlQuery<DashboardBizShared>("sp_DashboardBizShared @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_FromDate,@pi_ToDate,@pi_DBName",

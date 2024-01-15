@@ -123,7 +123,7 @@
         <label class="tab" id="two-tab" for="two">Saved Datasets</label>
     </div>
     <div class="panels">
-
+        <input type="hidden" id="hdnDSID" />
 
         <div class="multisteps-form__panel  p-2 m-2 bg-white panel" id="one-panel">
             <div id="dvSmartSlicer">
@@ -449,7 +449,7 @@
 
                     <div id="divcolumnlist" class="row mt-3 ml-3 col-md-10 col-xl-10 ">
                         <div>
-                            <select id="ChooseLeft" multiple="multiple" style="height: 300px; width: 200px;">
+                            <select id="ChooseLeft" multiple="multiple" style="height: 200px; width: 200px;">
                             </select>
                         </div>
                         <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
@@ -457,7 +457,7 @@
                             <input id="ShiftLeft" type="button" value="ShiftLeft << " class="btn btn-primary login-btn" style="font-weight:bold;" />
                         </div>
                         <div>
-                            <select id="ChooseRight" multiple="multiple" style="height:300px;width:200px;">
+                            <select id="ChooseRight" multiple="multiple" style="height:200px;width:200px;">
                             </select>
                         </div>
                     </div>
@@ -502,7 +502,11 @@
                                                 <td>@Html.Raw(item.DSCriteria)</td>
                                                 <td>@item.AddedDate</td>
                                                 <td>@item.AddedBy</td>
-                                                <td>Generate Report</td>
+                                                <td>
+                                                    <button class="ml-3 btn btn-primary login-btn" onclick='GenerateReportFromDS("@item.DSId");' type="button" id="btnGenerateReport">
+                                                        Generate Report
+                                                    </button>                                                
+                                                </td>
                                             </tr>
                                         }
                                     }
@@ -517,7 +521,7 @@
 
                 <div id="divcolumns" class="row mt-3 ml-3 col-md-10 col-xl-10 ">
                     <div>
-                        <select id="ChooseLeft1" multiple="multiple" style="height: 300px; width: 200px;">
+                        <select id="ChooseLeft1" multiple="multiple" style="height: 200px; width: 200px;">
                         </select>
                     </div>
                     <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
@@ -525,12 +529,12 @@
                         <input id="ShiftLeft1" type="button" value="ShiftLeft << " class="btn btn-primary login-btn" style="font-weight:bold;" />
                     </div>
                     <div>
-                        <select id="ChooseRight1" multiple="multiple" style="height:300px;width:200px;">
+                        <select id="ChooseRight1" multiple="multiple" style="height:200px;width:200px;">
                         </select>
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <button class=" ml-3 btn btn-primary login-btn" type="button" id="btnGetReport1" onclick="GetReport1();" style="text-align:right;">
+                    <button class=" ml-3 btn btn-primary login-btn" type="button" id="btnGetReport1" onclick="GetReportDS();" style="text-align:right;">
                         Get Report
                     </button>
                     <button class="ml-3 btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport1">
@@ -560,6 +564,14 @@
             $(moveTo).append(SelectData);
             SelectData.remove;
         });
+        $("#ShiftRight1,#ShiftLeft1").click(function (event) {
+            var ID = $(event.target).attr("ID");
+            var ChooseFrom = ID == "ShiftRight1" ? "#ChooseLeft1" : "#ChooseRight1";
+            var moveTo = ID == "ShiftRight1" ? "#ChooseRight1" : "#ChooseLeft1";
+            var SelectData = $(ChooseFrom + " :selected").toArray();
+            $(moveTo).append(SelectData);
+            SelectData.remove;
+        });
     });
     $(document).ready(function () {
         $("#ChooseLeft").empty();
@@ -574,16 +586,29 @@
             { "ColumnId": "TotalTxnCount", "ColumnName": "No Of Txn" },
             { "ColumnId": "EnrolledDate", "ColumnName": "Enrolled Date" },
             { "ColumnId": "PointsBalance", "ColumnName": "Total Available Points" },
-            //{ "ColumnId": 9, "ColumnName": "Total Earn" },
-            //{ "ColumnId": 10, "ColumnName": "Total Burn" },
             { "ColumnId": "Spends", "ColumnName": "Total Spend" },
-               /* { "ColumnId": 12, "ColumnName": "Bonus Points" }*/
         ];
 
         myOptions.forEach(function (e, i) {
             $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
         });
 
+        $("#ChooseLeft1").empty();
+        $("#ChooseRight1").empty();
+        let myOptions1 = [
+            { "ColumnId": "EnrolledOutletName", "ColumnName": "Outlet Name" },
+            { "ColumnId": "MobileNo", "ColumnName": "Mobile No" },
+            { "ColumnId": "CustName", "ColumnName": "Customer Name" },
+            { "ColumnId": "FirstTxnDate", "ColumnName": "First Txn Date" },
+            { "ColumnId": "LastTxnDate", "ColumnName": "Last Txn Date" },
+            { "ColumnId": "TotalTxnCount", "ColumnName": "No Of Txn" },
+            { "ColumnId": "EnrolledDate", "ColumnName": "Enrolled Date" },
+            { "ColumnId": "PointsBalance", "ColumnName": "Total Available Points" },
+            { "ColumnId": "Spends", "ColumnName": "Total Spend" },
+        ];
+        myOptions1.forEach(function (e, i) {
+            $('#ChooseLeft1').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
+        });
 
         $('input[type="radio"]').on('change', function () {
             $('input[name="' + this.name + '"]').not(this).prop('checked', false);
@@ -1621,16 +1646,22 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-
-
-
+                 cuteAlert({
+                     type: "success",
+                     title: "Saved",
+                     message: "Dataset Saved Successfully!!!",
+                     buttonText: "Okay"
+                }).then((e) => {
+                    window.location.reload();
+                });
 
                 $("#divLoader").hide();
             },
             failure: function (response) {
                 $("#divLoader").hide();
             },
-            error: function (response) {
+             error: function (response) {
+                 alert(222)
                 $('#dvMemberData').html(response.responseText);
                 $("#divLoader").hide();
             }
@@ -1738,7 +1769,7 @@
         item1["IsSpend"] = "No";
         item1["IsTxnCount"] = "No";
         item1["IsPointBalance"] = "No";
-        item1["IsRedeemed"] = "No";
+        item1["IsRedeemed"] = "";
 
         if ($("#chkAvgTicket").is(":checked")) {
             item1["IsAvgTicket"] = "Yes";
@@ -1902,17 +1933,6 @@
             console.log(Array);
             if (returnStatus) {
                 $("#divLoader").show();
-                //var custreport = $("#rdncustwise").val();
-                //var txnreport = $("#rdntransactionwise").val();
-                //var type;
-                //if ($("#rdncustwise").is(":checked")) {
-                //    type = "customer";
-                //}
-                //else if ($("#rdntransactionwise").is(":checked")) {
-                //    type = "transaction";
-                //}
-                //console.log(custreport);
-                //console.log(txnreport);
                 var FilterData = [];
                 item = {};
                 item["ColumnId"] = Array;
@@ -1960,4 +1980,66 @@
         }
     }
 
+    function GenerateReportFromDS(id) {
+        $("#hdnDSID").val(id);
+        $("#dvShowReport").show();
+    }
+
+    function GetReportDS() {
+        var returnStatus = true;
+        var Array = [];
+            var ArrayColumnName = [];
+            $('#ChooseRight1 :selected').each(function (i, selected) {
+                Array.push($(selected).val());
+                ArrayColumnName.push($(selected).text());
+            });
+        if (ArrayColumnName.length >0) {
+            console.log(Array);
+            if (returnStatus) {
+                $("#divLoader").show();
+                var FilterData = [];
+                item = {};
+                item["ColumnId"] = Array;
+                item["columnnm"] = ArrayColumnName;
+                //item["reporttype"] = type;
+                FilterData.push(item);
+                var data = JSON.stringify(FilterData);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSlicerReportFromDS", "Reports")',
+                data: '{DSId: ' + JSON.stringify($("#hdnDSID").val()) + ',columnslist: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        $("#dvListing1").html(response);
+                        $("#dvListing1").show();
+                        $("#btnExport").show();
+                        $("#divLoader").hide();
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                    $("#dvListing1").html(response.responseText);
+                    $("#dvListing1").show();
+                    $("#btnExport").show();
+                    $("#divLoader").hide();
+                }
+            });
+            }
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Column from List",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+        }
+    }
 </script>

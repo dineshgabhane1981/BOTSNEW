@@ -40,39 +40,39 @@ namespace BOTS_BL.Repository
             }
             return ConnectionString;
         }
-        public  GinesysRedeemModel GetCustomerDetails(GinesysRedeemModel objData)
-        {            
-            string groupId = objData.StoreId.Substring(0, 4);
-            string connStr = GetCustomerConnString(groupId);
-            try
-            {
-                using (var context = new BOTSDBContext(connStr))
-                {
-                    context.Database.CommandTimeout = 180;
+        //public  GinesysRedeemModel GetCustomerDetails(GinesysRedeemModel objData)
+        //{            
+        //    string groupId = objData.StoreId.Substring(0, 4);
+        //    string connStr = GetCustomerConnString(groupId);
+        //    try
+        //    {
+        //        using (var context = new BOTSDBContext(connStr))
+        //        {
+        //            context.Database.CommandTimeout = 180;
 
-                    var BlockedPoints = context.tblBurnPtsSoftBlocks.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y=>y.BurnPoints);
+        //            var BlockedPoints = context.tblBurnPtsSoftBlocks.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y=>y.BurnPoints);
 
-                    objData.Points  = context.tblCustPointsMasters.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y => y.Points);
-                    if (BlockedPoints != null)
-                    {
-                        objData.Points = objData.Points - BlockedPoints;
-                    }
-                    var rules =context.tblRuleMasters.FirstOrDefault();
-                    if(rules!=null)
-                    {
-                        objData.PointsValue = rules.PointsAllocation;
-                        objData.PointsToRedeem = Convert.ToDecimal(objData.InvoiceAmount) *(rules.BurnInvoiceAmtPercentage/100);
-                    }
+        //            objData.Points  = context.tblCustPointsMasters.Where(x => x.MobileNo == objData.MobileNo && x.IsActive == true).Sum(y => y.Points);
+        //            if (BlockedPoints != null)
+        //            {
+        //                objData.Points = objData.Points - BlockedPoints;
+        //            }
+        //            var rules =context.tblRuleMasters.FirstOrDefault();
+        //            if(rules!=null)
+        //            {
+        //                objData.PointsValue = rules.PointsAllocation;
+        //                objData.PointsToRedeem = Convert.ToDecimal(objData.InvoiceAmount) *(rules.BurnInvoiceAmtPercentage/100);
+        //            }
                     
-                    objData.CustomerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == objData.MobileNo).Select(y => y.Name).FirstOrDefault();
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "GetCustomerDetails");
-            }
-            return objData;
-        } 
+        //            objData.CustomerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == objData.MobileNo).Select(y => y.Name).FirstOrDefault();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        newexception.AddException(ex, "GetCustomerDetails");
+        //    }
+        //    return objData;
+        //} 
 
         public BurnValidateResponse BurnValidation(string storeid, string Points, string InvoiceAmt, string MobileNo, string BillGUID)
         {
@@ -88,8 +88,10 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connStr))
                 {
                     SqlConnection _Con = new SqlConnection(connStr);
+                    
                     DataSet retVal = new DataSet();
                     SqlCommand cmdReport = new SqlCommand("sp_BillingBurnValidationWeb", _Con);
+                    cmdReport.CommandTimeout = 300;
                     SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
                     using (cmdReport)
                     {

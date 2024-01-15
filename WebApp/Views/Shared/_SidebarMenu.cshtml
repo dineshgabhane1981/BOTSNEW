@@ -356,12 +356,12 @@
                                     Smart Slicer
                                 </a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")">
-                                <a class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")" href="@Url.Action("ProfitableCustomer", "Reports")">
-                                    <i class="metismenu-icon"></i>
-                                    Profitable Customer
-                                </a>
-                            </li>
+                            @*<li class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")">
+                                    <a class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")" href="@Url.Action("ProfitableCustomer", "Reports")">
+                                        <i class="metismenu-icon"></i>
+                                        Profitable Customer
+                                    </a>
+                                </li>*@
                             <li class="@Html.IsSelected(controller: "DLCReporting", action: "Index")">
                                 <a class="@Html.IsSelected(controller: "DLCReporting", action: "Index")" href="@Url.Action("Index", "DLCReporting")">
                                     <i class="metismenu-icon"></i>

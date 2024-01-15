@@ -2712,7 +2712,6 @@ namespace BOTS_BL.Repository
                     {
                         Criteria += "Transacting";
 
-
                         if (SecondChk == "All")
                         {
                             WhereClause += " a.TotalTxnCount > 0 ";
@@ -2720,19 +2719,15 @@ namespace BOTS_BL.Repository
                         }
                         if (SecondChk == "OnlyOnce")
                         {
-                            //This need to corrected
                             Criteria += " : Only Once";
                             Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
-                            WhereClause += " a.TotalTxnCount = 1 ";
+                            WhereClause += " a.BackEndCustType = 'OnlyOnce' ";
                             if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
                             {
                                 try
                                 {
                                     using (var context = new BOTSDBContext(connstr))
                                     {
-                                        //decimal? avgTicketSize = context.tblSmartSlicerRuleMasters.Select(x => x.AvgTicketSize).FirstOrDefault();
-                                        //if (avgTicketSize.HasValue)
-                                        //{
                                         if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
                                         {
                                             WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'High' ";
@@ -2749,19 +2744,16 @@ namespace BOTS_BL.Repository
                                         {
                                             WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'Low' ";
                                         }
-                                        //}
                                     }
                                 }
                                 catch (Exception ex)
                                 {
                                     newexception.AddException(ex, "errorofgetting data");
                                 }
-
                             }
                         }
                         if (SecondChk == "Inactive")
                         {
-                            //This need to add
                             Criteria += " : Inactive";
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
                             if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
@@ -2846,7 +2838,6 @@ namespace BOTS_BL.Repository
                     }
                     if (FirstChk == "NonTransacting")
                     {
-                        //This need to add
                         Criteria += "Non Transacting";
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
                         {
@@ -2859,7 +2850,6 @@ namespace BOTS_BL.Repository
                             {
                                 WhereClause += " a.TotalTxnCount = 0";
                             }
-
                             if (Convert.ToString(item["SecondChk"]) == "DLC")
                             {
                                 if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
@@ -2902,7 +2892,438 @@ namespace BOTS_BL.Repository
                             Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
                             WhereClause += " and a.AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
                         }
-                        //Criteria += "<br/>Avgerage ticket size : " + Convert.ToString(item["AvgTicket"]);
+                    }
+                    if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
+                        {
+                            Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
+                            WhereClause += " and a.EnrolledDate > '" + Convert.ToString(item["Enrollfromdt"] +"'");
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
+                        {
+                            Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
+                            WhereClause += " and a.EnrolledDate < '" + Convert.ToString(item["Enrolltodt"] + "'");
+                        }
+                    }
+                    if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
+                    {
+                        Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays > " + Convert.ToString(item["NonTransactedSince"]);
+                    }
+                    if (Convert.ToString(item["IsSpend"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
+                        {
+                            Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
+                            WhereClause += " and a.Spends > " + Convert.ToString(item["SpendMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
+                        {
+                            Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
+                            WhereClause += " and a.Spends < " + Convert.ToString(item["SpendMax"]);
+                        }
+                    }
+                    if (Convert.ToString(item["IsTxnCount"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
+                        {
+                            Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
+                            WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
+                        {
+                            Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
+                            WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
+                        }
+                    }
+                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
+                        {
+                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
+                        {
+                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["IsRedeemed"])))
+                    {
+                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["IsRedeemed"]);
+                        int isR = 0;
+                        if (Convert.ToString(item["IsRedeemed"]) == "Yes")
+                            isR = 1;
+                        WhereClause += " and a.RedeemStatus < " + isR;
+                    }
+                }
+                if (index == 3)
+                {
+                    if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
+                    {
+                        //This need to add
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategoryName"])))
+                        {
+                            Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPSubCategoryName"])))
+                        {
+                            Criteria += "<br/>Never Purchase Sub Category : " + Convert.ToString(item["NPSubCategoryName"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPProductName"])))
+                        {
+                            Criteria += "<br/>Never Purchase Product Name : " + Convert.ToString(item["NPProductName"]);
+                        }
+                    }
+
+                    if (Convert.ToString(item["IsPurchased"]) == "Yes")
+                    {
+                        //This need to add
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PCategoryName"])))
+                        {
+                            Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PSubCategoryName"])))
+                        {
+                            Criteria += "<br/>Purchase Sub Category : " + Convert.ToString(item["PSubCategoryName"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PProductName"])))
+                        {
+                            Criteria += "<br/>Purchase Product Name : " + Convert.ToString(item["PProductName"]);
+                        }
+                    }
+                }
+                if (index == 4)
+                {
+                    if (Convert.ToString(item["IsBrands"]) == "Yes")
+                    {
+                        //This need to add
+                        Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
+                    }
+                    if (Convert.ToString(item["IsOutlet"]) == "Yes")
+                    {
+                        var outlets = (object[])item["Outlets"];
+                        Criteria += "<br/>Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
+                        foreach (var item1 in outlets)
+                        {
+                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (outletAll != "All")
+                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
+                        }
+
+                    }
+                    if (Convert.ToString(item["IsTOutlet"]) == "Yes")
+                    {
+                        var outlets = (object[])item["TransactingOutlets"];
+                        Criteria += "<br/>Transacting Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
+                        foreach (var item1 in outlets)
+                        {
+                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
+                            {
+                                //This need to add
+                                Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
+                                if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
+                                {
+                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
+                                }
+                                else
+                                {
+                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
+                                }
+                            }
+                            else
+                            {
+                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
+                            }
+                        }
+                    }
+                }
+                if (index == 5)
+                {
+                    if (Convert.ToString(item["IsTier"]) == "Yes")
+                    {
+                        Criteria += "<br/>Tier : " + Convert.ToString(item["IsTier"]);
+                        WhereClause += " and a.Tier = " + Convert.ToString(item["IsTier"]);
+                    }
+                    if (Convert.ToString(item["IsGender"]) == "Yes")
+                    {
+                        Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
+                        if (Convert.ToString(item["Gender"]) == "Male")
+                            WhereClause += " and a.Gender = 'M' ";
+                        if (Convert.ToString(item["Gender"]) == "Female")
+                            WhereClause += " and a.Gender = 'F' ";
+                    }
+                    if (Convert.ToString(item["IsCity"]) == "Yes")
+                    {
+                        Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
+                        WhereClause += " and a.City = " + Convert.ToString(item["IsCity"]);
+                    }
+                    if (Convert.ToString(item["IsAge"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
+                        {
+                            Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
+                            WhereClause += " and a.Age >= " + Convert.ToString(item["AgeFrom"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
+                        {
+                            Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
+                            WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
+                        }
+                    }
+                }
+                index++;
+            }
+
+            query = query + WhereClause;
+            int totalCount = 0;
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    count = context.Database.SqlQuery<int>(query).FirstOrDefault();
+                    totalCount = context.tblSmartSlicerMasters.Count();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "errorofgetting data");
+            }
+
+            int[] lstCount = new int[2];
+            lstCount[0] = count;
+            lstCount[1] = totalCount;
+            return lstCount;
+        }
+
+        public bool SaveDataset(object[] objData, CustomerLoginDetail userDetails, string DSName, string connstr)
+        {
+            bool status = false;
+            string Criteria = string.Empty;
+            string query = "select count(*) from tblSmartSlicerMaster as a where ";
+            string WhereClause = string.Empty;
+            int index = 1;
+            foreach (Dictionary<string, object> item in objData)
+            {
+                if (index == 1)
+                {
+                    string FirstChk = Convert.ToString(item["FirstChk"]);
+                    string SecondChk = Convert.ToString(item["SecondChk"]);
+                    if (FirstChk == "Transacting")
+                    {
+                        Criteria += "Transacting";
+
+                        if (SecondChk == "All")
+                        {
+                            WhereClause += " a.TotalTxnCount > 0 ";
+                            Criteria += " : All";
+                        }
+                        if (SecondChk == "OnlyOnce")
+                        {
+                            Criteria += " : Only Once";
+                            Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
+                            WhereClause += " a.BackEndCustType = 'OnlyOnce' ";
+                            if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
+                            {
+                                try
+                                {
+                                    using (var context = new BOTSDBContext(connstr))
+                                    {
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
+                                        {
+                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'High' ";
+                                        }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
+                                        {
+                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'Low' ";
+                                        }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
+                                        {
+                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'High' ";
+                                        }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
+                                        {
+                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'Low' ";
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    newexception.AddException(ex, "errorofgetting data");
+                                }
+                            }
+                        }
+                        if (SecondChk == "Inactive")
+                        {
+                            Criteria += " : Inactive";
+                            Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
+                            if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
+                            {
+                                WhereClause += " a.InActiveDays < 30 ";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
+                            {
+                                WhereClause += " a.InActiveDays >= 31 and  a.InActiveDays <= 60";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
+                            {
+                                WhereClause += " a.InActiveDays >= 61 and  a.InActiveDays <= 90";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
+                            {
+                                WhereClause += " a.InActiveDays >= 91 and  a.InActiveDays <= 180";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
+                            {
+                                WhereClause += " a.InActiveDays >= 181 and  a.InActiveDays <= 365";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
+                            {
+                                WhereClause += " a.InActiveDays > 365";
+                            }
+                            if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
+                            {
+                                Criteria += " - Exclude Only Once";
+                                WhereClause += " and a.TotalTxnCount > 1 ";
+                            }
+                        }
+                        if (SecondChk == "Cumulative")
+                        {
+                            //This need to add
+                            Criteria += " : Cumulative";
+                            if (Convert.ToString(item["SecondChkCumu"]) != "No")
+                            {
+                                //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
+                                if (Convert.ToString(item["SecondChkCumu"]) == "TxnCount")
+                                {
+                                    Criteria += " : Transaction Count";
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["Months"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
+                                    }
+                                }
+                                if (Convert.ToString(item["SecondChkCumu"]) == "CSpend")
+                                {
+                                    Criteria += "- Spend";
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["Months"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (FirstChk == "NonTransacting")
+                    {
+                        Criteria += "Non Transacting";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
+                        {
+                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            if (Convert.ToString(item["SecondChk"]) == "All")
+                            {
+                                WhereClause += " a.TotalTxnCount = 0";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "Enrolled")
+                            {
+                                WhereClause += " a.TotalTxnCount = 0";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "DLC")
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
+                                {
+                                    Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
+                                }
+                            }
+                        }
+                    }
+                    if (FirstChk == "MemberAcquition")
+                    {
+                        //This need to add
+                        Criteria += "Member Acquition";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
+                        {
+                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            Criteria += " - " + Convert.ToString(item["MAFinal"]);
+
+                            if (Convert.ToString(item["SecondChk"]) == "DLC")
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
+                                {
+                                    Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (index == 2)
+                {
+                    if (Convert.ToString(item["IsAvgTicket"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketFrm"])))
+                        {
+                            Criteria += "<br/>Avgerage ticket size from : " + Convert.ToString(item["AvgTicketFrm"]);
+                            WhereClause += " and a.AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketTo"])))
+                        {
+                            Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
+                            WhereClause += " and a.AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
+                        }
                     }
                     if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
                     {
@@ -3015,14 +3436,19 @@ namespace BOTS_BL.Repository
                     }
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
-                        //Need to use item["OutletIds"] for Query building
                         var outlets = (object[])item["Outlets"];
+                        var outletsIds = (object[])item["OutletIds"];
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
                         foreach (var item1 in outlets)
                         {
-                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            Criteria += Convert.ToString(Convert.ToString(item1)) + ",";
+                        }
+                        Criteria = Criteria.Remove(Criteria.Length - 1);
+                        foreach (var item1 in outletsIds)
+                        {
+                            ////Criteria += ", " + Convert.ToString(Convert.ToString(item1));
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
@@ -3042,14 +3468,471 @@ namespace BOTS_BL.Repository
                     }
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
-                        //Need to use item["TransactingOutletIds"] for Query building
                         var outlets = (object[])item["TransactingOutlets"];
+                        var outletsIds = (object[])item["TransactingOutletIds"];
+                        Criteria += "<br/>Transacting Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
+                        foreach (var item1 in outlets)
+                        {
+                            Criteria += Convert.ToString(Convert.ToString(item1)) + ",";
+                        }
+                        Criteria = Criteria.Remove(Criteria.Length - 1);
+                        foreach (var item1 in outletsIds)
+                        {
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
+                            {
+                                //This need to add
+                                Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
+                                if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
+                                {
+                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
+                                }
+                                else
+                                {
+                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
+                                }
+                            }
+                            else
+                            {
+                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
+                            }
+                        }
+                    }
+                }
+                if (index == 5)
+                {
+                    if (Convert.ToString(item["IsTier"]) == "Yes")
+                    {
+                        Criteria += "<br/>Tier : " + Convert.ToString(item["IsTier"]);
+                        WhereClause += " and a.Tier = " + Convert.ToString(item["IsTier"]);
+                    }
+                    if (Convert.ToString(item["IsGender"]) == "Yes")
+                    {
+                        Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
+                        if (Convert.ToString(item["Gender"]) == "Male")
+                            WhereClause += " and a.Gender = 'M' ";
+                        if (Convert.ToString(item["Gender"]) == "Female")
+                            WhereClause += " and a.Gender = 'F' ";
+                    }
+                    if (Convert.ToString(item["IsCity"]) == "Yes")
+                    {
+                        Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
+                        WhereClause += " and a.City = " + Convert.ToString(item["IsCity"]);
+                    }
+                    if (Convert.ToString(item["IsAge"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
+                        {
+                            Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
+                            WhereClause += " and a.Age >= " + Convert.ToString(item["AgeFrom"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
+                        {
+                            Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
+                            WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
+                        }
+                    }
+                }
+                index++;
+            }
+            query = query + WhereClause;
+            try
+            {
+                using (var context = new BOTSDBContext(userDetails.connectionString))
+                {
+                    tblCRDataset objDataset = new tblCRDataset();
+                    objDataset.DSName = DSName;
+                    objDataset.DSCriteria = Criteria;
+                    objDataset.DSCriteriaForQuery = query;
+                    objDataset.AddedBy = userDetails.LoginId;
+                    objDataset.AddedDate = DateTime.Now;
+                    context.tblCRDatasets.Add(objDataset);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetStartDtOfProgram");
+            }
+            return status;
+        }
+
+        public List<tblCRDataset> GetCRDataset(string connectionString)
+        {
+            List<tblCRDataset> lstData = new List<tblCRDataset>();
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                lstData = context.tblCRDatasets.ToList();
+            }
+
+            return lstData;
+        }
+
+        public List<CustomerTypeReport> GetSSFilterReport(object[] objData, string columns, string loginId, string connstr)
+        {
+            int index = 1;
+            string Criteria = string.Empty;
+            string query = "select " + columns + " from tblSmartSlicerMaster as a where ";
+            string WhereClause = string.Empty;
+
+            foreach (Dictionary<string, object> item in objData)
+            {
+                if (index == 1)
+                {
+                    string FirstChk = Convert.ToString(item["FirstChk"]);
+                    string SecondChk = Convert.ToString(item["SecondChk"]);
+                    if (FirstChk == "Transacting")
+                    {
+                        Criteria += "Transacting";
+
+                        if (SecondChk == "All")
+                        {
+                            WhereClause += " a.TotalTxnCount > 0 ";
+                            Criteria += " : All";
+                        }
+                        if (SecondChk == "OnlyOnce")
+                        {
+                            Criteria += " : Only Once";
+                            Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
+                            WhereClause += " a.BackEndCustType = 'OnlyOnce' ";
+                            if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
+                            {
+                                try
+                                {
+                                    using (var context = new BOTSDBContext(connstr))
+                                    {
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
+                                        {
+                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'High' ";
+                                        }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
+                                        {
+                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'Low' ";
+                                        }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
+                                        {
+                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'High' ";
+                                        }
+                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
+                                        {
+                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'Low' ";
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    newexception.AddException(ex, "errorofgetting data");
+                                }
+                            }
+                        }
+                        if (SecondChk == "Inactive")
+                        {
+                            Criteria += " : Inactive";
+                            Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
+                            if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
+                            {
+                                WhereClause += " a.InActiveDays < 30 ";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
+                            {
+                                WhereClause += " a.InActiveDays >= 31 and  a.InActiveDays <= 60";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
+                            {
+                                WhereClause += " a.InActiveDays >= 61 and  a.InActiveDays <= 90";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
+                            {
+                                WhereClause += " a.InActiveDays >= 91 and  a.InActiveDays <= 180";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
+                            {
+                                WhereClause += " a.InActiveDays >= 181 and  a.InActiveDays <= 365";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
+                            {
+                                WhereClause += " a.InActiveDays > 365";
+                            }
+                            if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
+                            {
+                                Criteria += " - Exclude Only Once";
+                                WhereClause += " and a.TotalTxnCount > 1 ";
+                            }
+                        }
+                        if (SecondChk == "Cumulative")
+                        {
+                            //This need to add
+                            Criteria += " : Cumulative";
+                            if (Convert.ToString(item["SecondChkCumu"]) != "No")
+                            {
+                                //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
+                                if (Convert.ToString(item["SecondChkCumu"]) == "TxnCount")
+                                {
+                                    Criteria += " : Transaction Count";
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["Months"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
+                                    }
+                                }
+                                if (Convert.ToString(item["SecondChkCumu"]) == "CSpend")
+                                {
+                                    Criteria += "- Spend";
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["Months"]);
+                                    }
+                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
+                                    {
+                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (FirstChk == "NonTransacting")
+                    {
+                        Criteria += "Non Transacting";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
+                        {
+                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            if (Convert.ToString(item["SecondChk"]) == "All")
+                            {
+                                WhereClause += " a.TotalTxnCount = 0";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "Enrolled")
+                            {
+                                WhereClause += " a.TotalTxnCount = 0";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "DLC")
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
+                                {
+                                    Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
+                                }
+                            }
+                        }
+                    }
+                    if (FirstChk == "MemberAcquition")
+                    {
+                        //This need to add
+                        Criteria += "Member Acquition";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
+                        {
+                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            Criteria += " - " + Convert.ToString(item["MAFinal"]);
+
+                            if (Convert.ToString(item["SecondChk"]) == "DLC")
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
+                                {
+                                    Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (index == 2)
+                {
+                    if (Convert.ToString(item["IsAvgTicket"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketFrm"])))
+                        {
+                            Criteria += "<br/>Avgerage ticket size from : " + Convert.ToString(item["AvgTicketFrm"]);
+                            WhereClause += " and a.AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketTo"])))
+                        {
+                            Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
+                            WhereClause += " and a.AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
+                        }
+                    }
+                    if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
+                        {
+                            Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
+                            WhereClause += " and a.EnrolledDate > '" + Convert.ToString(item["Enrollfromdt"] + "'");
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
+                        {
+                            Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
+                            WhereClause += " and a.EnrolledDate < '" + Convert.ToString(item["Enrolltodt"] + "'");
+                        }
+                    }
+                    if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
+                    {
+                        Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays < " + Convert.ToString(item["NonTransactedSince"]);
+                    }
+                    if (Convert.ToString(item["IsSpend"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
+                        {
+                            Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
+                            WhereClause += " and a.Spends > " + Convert.ToString(item["SpendMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
+                        {
+                            Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
+                            WhereClause += " and a.Spends < " + Convert.ToString(item["SpendMax"]);
+                        }
+                    }
+                    if (Convert.ToString(item["IsTxnCount"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
+                        {
+                            Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
+                            WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
+                        {
+                            Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
+                            WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
+                        }
+                    }
+                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
+                        {
+                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
+                        {
+                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["IsRedeemed"])))
+                    {
+                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["IsRedeemed"]);
+                        int isR = 0;
+                        if (Convert.ToString(item["IsRedeemed"]) == "Yes")
+                            isR = 1;
+                        WhereClause += " and a.RedeemStatus < " + isR;
+                    }
+                }
+                if (index == 3)
+                {
+                    if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
+                    {
+                        //This need to add
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategoryName"])))
+                        {
+                            Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPSubCategoryName"])))
+                        {
+                            Criteria += "<br/>Never Purchase Sub Category : " + Convert.ToString(item["NPSubCategoryName"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPProductName"])))
+                        {
+                            Criteria += "<br/>Never Purchase Product Name : " + Convert.ToString(item["NPProductName"]);
+                        }
+                    }
+
+                    if (Convert.ToString(item["IsPurchased"]) == "Yes")
+                    {
+                        //This need to add
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PCategoryName"])))
+                        {
+                            Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PSubCategoryName"])))
+                        {
+                            Criteria += "<br/>Purchase Sub Category : " + Convert.ToString(item["PSubCategoryName"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PProductName"])))
+                        {
+                            Criteria += "<br/>Purchase Product Name : " + Convert.ToString(item["PProductName"]);
+                        }
+                    }
+                }
+                if (index == 4)
+                {
+                    if (Convert.ToString(item["IsBrands"]) == "Yes")
+                    {
+                        //This need to add
+                        Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
+                    }
+                    if (Convert.ToString(item["IsOutlet"]) == "Yes")
+                    {
+                        var outlets = (object[])item["Outlets"];
+                        var outletsIds = (object[])item["OutletIds"];
+                        Criteria += "<br/>Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
+                        foreach (var item1 in outlets)
+                        {
+                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                        }
+                        foreach (var item1 in outletsIds)
+                        {
+                            ////Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (outletAll != "All")
+                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
+                        }
+
+                    }
+                    if (Convert.ToString(item["IsTOutlet"]) == "Yes")
+                    {
+                        var outlets = (object[])item["TransactingOutlets"];
+                        var outletsIds = (object[])item["TransactingOutletIds"];
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                        }
+                        foreach (var item1 in outletsIds)
+                        {
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
@@ -3120,678 +4003,6 @@ namespace BOTS_BL.Repository
             }
 
             query = query + WhereClause;
-            int totalCount = 0;
-            try
-            {
-                using (var context = new BOTSDBContext(connstr))
-                {
-                    count = context.Database.SqlQuery<int>(query).FirstOrDefault();
-                    totalCount = context.tblSmartSlicerMasters.Count();
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "errorofgetting data");
-            }
-
-            int[] lstCount = new int[2];
-            lstCount[0] = count;
-            lstCount[1] = totalCount;
-            return lstCount;
-        }
-
-        public bool SaveDataset(object[] objData, CustomerLoginDetail userDetails, string DSName)
-        {
-            bool status = false;
-            string Criteria = string.Empty;
-            string QueryCriteria = string.Empty;
-            int index = 1;
-            foreach (Dictionary<string, object> item in objData)
-            {
-                string WhereClause = string.Empty;
-                if (index == 1)
-                {
-                    string FirstChk = Convert.ToString(item["FirstChk"]);
-                    string SecondChk = Convert.ToString(item["SecondChk"]);
-                    if (FirstChk == "Transacting")
-                    {
-                        Criteria += "Transacting";
-
-                        if (SecondChk == "All")
-                        {
-                            Criteria += " : All";
-                        }
-                        if (SecondChk == "OnlyOnce")
-                        {
-                            Criteria += " : Only Once";
-                            Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
-                        }
-                        if (SecondChk == "Inactive")
-                        {
-                            Criteria += " : Inactive";
-                            Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
-                            if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
-                            {
-                                Criteria += " - Exclude Only Once";
-                            }
-                        }
-                        if (SecondChk == "Cumulative")
-                        {
-                            Criteria += " : Cumulative";
-                            if (Convert.ToString(item["SecondChkCumu"]) != "No")
-                            {
-                                //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
-                                if (Convert.ToString(item["SecondChkCumu"]) == "TxnCount")
-                                {
-                                    Criteria += " : Transaction Count";
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Months"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
-                                    }
-                                }
-                                if (Convert.ToString(item["SecondChkCumu"]) == "CSpend")
-                                {
-                                    Criteria += "- Spend";
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Months"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (FirstChk == "NonTransacting")
-                    {
-                        Criteria += "Non Transacting";
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
-                        {
-                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
-                            if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
-                                {
-                                    Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
-                                }
-                            }
-                        }
-                    }
-                    if (FirstChk == "MemberAcquition")
-                    {
-                        Criteria += "Member Acquition";
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
-                        {
-                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
-                            Criteria += " - " + Convert.ToString(item["MAFinal"]);
-
-                            if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
-                                {
-                                    Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (index == 2)
-                {
-                    if (Convert.ToString(item["IsAvgTicket"]) == "Yes")
-                    {
-                        Criteria += "<br/>Avgerage ticket size : " + Convert.ToString(item["AvgTicket"]);
-                    }
-                    if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
-                        {
-                            Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
-                        {
-                            Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
-                    {
-                        Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                    }
-                    if (Convert.ToString(item["IsSpend"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
-                        {
-                            Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
-                        {
-                            Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsTxnCount"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
-                        {
-                            Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
-                        {
-                            Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
-                        {
-                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
-                        {
-                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["IsRedeemed"])))
-                    {
-                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["IsRedeemed"]);
-                    }
-                }
-                if (index == 3)
-                {
-                    if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategoryName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPSubCategoryName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Sub Category : " + Convert.ToString(item["NPSubCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPProductName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Product Name : " + Convert.ToString(item["NPProductName"]);
-                        }
-                    }
-
-                    if (Convert.ToString(item["IsPurchased"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PCategoryName"])))
-                        {
-                            Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PSubCategoryName"])))
-                        {
-                            Criteria += "<br/>Purchase Sub Category : " + Convert.ToString(item["PSubCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PProductName"])))
-                        {
-                            Criteria += "<br/>Purchase Product Name : " + Convert.ToString(item["PProductName"]);
-                        }
-                    }
-                }
-                if (index == 4)
-                {
-                    if (Convert.ToString(item["IsBrands"]) == "Yes")
-                    {
-                        Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
-                    }
-                    if (Convert.ToString(item["IsOutlet"]) == "Yes")
-                    {
-                        //Need to use item["OutletIds"] for Query building
-                        var outlets = (object[])item["Outlets"];
-                        Criteria += "<br/>Outlet : ";
-                        foreach (var item1 in outlets)
-                        {
-                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                        }
-
-                    }
-                    if (Convert.ToString(item["IsTOutlet"]) == "Yes")
-                    {
-                        //Need to use item["TransactingOutletIds"] for Query building
-                        var outlets = (object[])item["TransactingOutlets"];
-                        Criteria += "<br/>Transacting Outlet : ";
-                        foreach (var item1 in outlets)
-                        {
-                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                        }
-                    }
-                    if (Convert.ToString(item["TOutletsAnyLast"]) == "Yes")
-                    {
-                        Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
-                    }
-                }
-                if (index == 5)
-                {
-                    if (Convert.ToString(item["IsTier"]) == "Yes")
-                    {
-                        Criteria += "<br/>Tier : " + Convert.ToString(item["IsTier"]);
-                    }
-                    if (Convert.ToString(item["IsGender"]) == "Yes")
-                    {
-                        Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
-                    }
-                    if (Convert.ToString(item["IsCity"]) == "Yes")
-                    {
-                        Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
-                    }
-                    if (Convert.ToString(item["IsAge"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
-                        {
-                            Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
-                        {
-                            Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
-                        }
-                    }
-                }
-                index++;
-            }
-            try
-            {
-                using (var context = new BOTSDBContext(userDetails.connectionString))
-                {
-                    tblCRDataset objDataset = new tblCRDataset();
-                    objDataset.DSName = DSName;
-                    objDataset.DSCriteria = Criteria;
-                    objDataset.DSCriteriaForQuery = QueryCriteria;
-                    objDataset.AddedBy = userDetails.LoginId;
-                    objDataset.AddedDate = DateTime.Now;
-                    context.tblCRDatasets.Add(objDataset);
-                    context.SaveChanges();
-                    status = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "GetStartDtOfProgram");
-            }
-            return status;
-        }
-
-        public List<tblCRDataset> GetCRDataset(string connectionString)
-        {
-            List<tblCRDataset> lstData = new List<tblCRDataset>();
-            using (var context = new BOTSDBContext(connectionString))
-            {
-                lstData = context.tblCRDatasets.ToList();
-            }
-
-            return lstData;
-        }
-
-        public List<CustomerTypeReport> GetSSFilterReport(object[] objData, string columns, string loginId, string connstr)
-        {
-            int count = 0;
-            int index = 1;
-            string Criteria = string.Empty;
-            string query = "select " + columns + " from tblSmartSlicerMaster where ";
-            string WhereClause = string.Empty;
-
-            foreach (Dictionary<string, object> item in objData)
-            {
-
-                if (index == 1)
-                {
-                    string FirstChk = Convert.ToString(item["FirstChk"]);
-                    string SecondChk = Convert.ToString(item["SecondChk"]);
-                    if (FirstChk == "Transacting")
-                    {
-                        Criteria += "Transacting";
-                        WhereClause += " TotalTxnCount > 0 ";
-
-                        if (SecondChk == "All")
-                        {
-                            Criteria += " : All";
-                        }
-                        if (SecondChk == "OnlyOnce")
-                        {
-                            Criteria += " : Only Once";
-                            Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
-                            if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
-                            {
-                                try
-                                {
-                                    using (var context = new BOTSDBContext(connstr))
-                                    {
-                                        decimal? avgTicketSize = context.tblSmartSlicerRuleMasters.Select(x => x.AvgTicketSize).FirstOrDefault();
-                                        if (avgTicketSize.HasValue)
-                                        {
-                                            if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
-                                            {
-                                                WhereClause += "and VisitStatus= 'LongTime' and AvgTicketSize > " + avgTicketSize;
-                                            }
-                                            if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
-                                            {
-                                                WhereClause += "and VisitStatus= 'LongTime' and AvgTicketSize < " + avgTicketSize;
-                                            }
-                                            if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
-                                            {
-                                                WhereClause += "and VisitStatus= 'RecentTime' and AvgTicketSize > " + avgTicketSize;
-                                            }
-                                            if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
-                                            {
-                                                WhereClause += "and VisitStatus= 'RecentTime' and AvgTicketSize < " + avgTicketSize;
-                                            }
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    newexception.AddException(ex, "errorofgetting data");
-                                }
-
-                            }
-                        }
-                        if (SecondChk == "Inactive")
-                        {
-                            Criteria += " : Inactive";
-                            Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
-                            if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
-                            {
-                                Criteria += " - Exclude Only Once";
-                            }
-                        }
-                        if (SecondChk == "Cumulative")
-                        {
-                            Criteria += " : Cumulative";
-                            if (Convert.ToString(item["SecondChkCumu"]) != "No")
-                            {
-                                //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
-                                if (Convert.ToString(item["SecondChkCumu"]) == "TxnCount")
-                                {
-                                    Criteria += " : Transaction Count";
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Months"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
-                                    }
-                                }
-                                if (Convert.ToString(item["SecondChkCumu"]) == "CSpend")
-                                {
-                                    Criteria += "- Spend";
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Months"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (FirstChk == "NonTransacting")
-                    {
-                        Criteria += "Non Transacting";
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
-                        {
-                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
-                            if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
-                                {
-                                    Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
-                                }
-                            }
-                        }
-                    }
-                    if (FirstChk == "MemberAcquition")
-                    {
-                        Criteria += "Member Acquition";
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
-                        {
-                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
-                            Criteria += " - " + Convert.ToString(item["MAFinal"]);
-
-                            if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
-                                {
-                                    Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (index == 2)
-                {
-                    if (Convert.ToString(item["IsAvgTicket"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketFrm"])))
-                        {
-                            Criteria += "<br/>Avgerage ticket size from : " + Convert.ToString(item["AvgTicketFrm"]);
-                            WhereClause += " and AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketTo"])))
-                        {
-                            Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
-                            WhereClause += " and AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
-                        }
-                        //Criteria += "<br/>Avgerage ticket size : " + Convert.ToString(item["AvgTicket"]);
-                    }
-                    if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
-                        {
-                            Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
-                            WhereClause += " and EnrolledDate > " + Convert.ToString(item["Enrollfromdt"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
-                        {
-                            Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
-                            WhereClause += " and EnrolledDate < " + Convert.ToString(item["Enrolltodt"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
-                    {
-                        Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                        WhereClause += " and InActiveDays > " + Convert.ToString(item["NonTransactedSince"]);
-                    }
-                    if (Convert.ToString(item["IsSpend"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
-                        {
-                            Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
-                            WhereClause += " and Spends > " + Convert.ToString(item["SpendMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
-                        {
-                            Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
-                            WhereClause += " and Spends < " + Convert.ToString(item["SpendMax"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsTxnCount"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
-                        {
-                            Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
-                            WhereClause += " and TotalTxnCount > " + Convert.ToString(item["CountMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
-                        {
-                            Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
-                            WhereClause += " and TotalTxnCount < " + Convert.ToString(item["CountMax"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
-                        {
-                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                            WhereClause += " and PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
-                        {
-                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                            WhereClause += " and PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["IsRedeemed"])))
-                    {
-                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["IsRedeemed"]);
-
-                        if (Convert.ToString(item["IsRedeemed"]) == "Yes")
-                            WhereClause += " and RedeemStatus = 1";
-                        //WhereClause += " and RedeemStatus < " + isR;
-                    }
-                }
-                if (index == 3)
-                {
-                    if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategoryName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPSubCategoryName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Sub Category : " + Convert.ToString(item["NPSubCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPProductName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Product Name : " + Convert.ToString(item["NPProductName"]);
-                        }
-                    }
-
-                    if (Convert.ToString(item["IsPurchased"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PCategoryName"])))
-                        {
-                            Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PSubCategoryName"])))
-                        {
-                            Criteria += "<br/>Purchase Sub Category : " + Convert.ToString(item["PSubCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PProductName"])))
-                        {
-                            Criteria += "<br/>Purchase Product Name : " + Convert.ToString(item["PProductName"]);
-                        }
-                    }
-                }
-                if (index == 4)
-                {
-                    if (Convert.ToString(item["IsBrands"]) == "Yes")
-                    {
-                        Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
-                    }
-                    if (Convert.ToString(item["IsOutlet"]) == "Yes")
-                    {
-                        //Need to use item["OutletIds"] for Query building
-                        var outlets = (object[])item["Outlets"];
-                        Criteria += "<br/>Outlet : ";
-                        string outletIds = string.Empty;
-                        string outletAll = string.Empty;
-                        foreach (var item1 in outlets)
-                        {
-                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                            if (Convert.ToString(item1) == "All")
-                            {
-                                outletAll = "All";
-                            }
-                            else
-                            {
-                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
-                            }
-                        }
-                        outletIds = outletIds.Remove(outletIds.Length - 1);
-                        if (outletAll != "All")
-                            WhereClause += " and EnrolledOutletId in (" + outletIds + ")";
-
-                    }
-                    if (Convert.ToString(item["IsTOutlet"]) == "Yes")
-                    {
-                        //Need to use item["TransactingOutletIds"] for Query building
-                        var outlets = (object[])item["TransactingOutlets"];
-                        Criteria += "<br/>Transacting Outlet : ";
-                        foreach (var item1 in outlets)
-                        {
-                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                        }
-                    }
-                    if (Convert.ToString(item["TOutletsAnyLast"]) == "Yes")
-                    {
-                        Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
-                    }
-                }
-                if (index == 5)
-                {
-                    if (Convert.ToString(item["IsTier"]) == "Yes")
-                    {
-                        Criteria += "<br/>Tier : " + Convert.ToString(item["IsTier"]);
-                    }
-                    if (Convert.ToString(item["IsGender"]) == "Yes")
-                    {
-                        Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
-                        if (Convert.ToString(item["Gender"]) == "Male")
-                            WhereClause += " and Gender = 'M' ";
-                        if (Convert.ToString(item["Gender"]) == "Female")
-                            WhereClause += " and Gender = 'F' ";
-                    }
-                    if (Convert.ToString(item["IsCity"]) == "Yes")
-                    {
-                        Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
-                    }
-                    if (Convert.ToString(item["IsAge"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
-                        {
-                            Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
-                        {
-                            Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
-                        }
-                    }
-                }
-                index++;
-            }
-
-            query = query + WhereClause;
             List<CustomerTypeReport> objcustomertypereport = new List<CustomerTypeReport>();
             try
             {
@@ -3839,7 +4050,6 @@ namespace BOTS_BL.Repository
                 lstData = context.tblVelocityCustomerDatas.Where(x => x.VelocityPeriod == frequency).ToList();
                 lstData = lstData.OrderByDescending(x => x.NoofTxn).ToList();
             }
-
             return lstData;
         }
 
@@ -3854,7 +4064,7 @@ namespace BOTS_BL.Repository
                            new SqlParameter("@pi_CategoryCode", CatCode),
                            new SqlParameter("@pi_SubCategoryCode", SubCatCode),
                            new SqlParameter("@pi_INDDatetime", DateTime.Now.ToShortDateString())).FirstOrDefault<CategoryWiseSSvsNonSS>();
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -3862,6 +4072,34 @@ namespace BOTS_BL.Repository
                 }
             }
             return objData;
+        }
+
+        public List<CustomerTypeReport> GetSSFilterReportFromDS(string DSId, string columns, string loginId, string connstr)
+        {
+            string query = "";
+            using (var context = new BOTSDBContext(connstr))
+            {
+                var id = Convert.ToInt32(DSId);
+                query = context.tblCRDatasets.Where(x => x.DSId == id).Select(y => y.DSCriteriaForQuery).FirstOrDefault();
+
+                query = query.Replace("count(*)", columns);
+            }
+
+            List<CustomerTypeReport> objcustomertypereport = new List<CustomerTypeReport>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objcustomertypereport = context.Database.SqlQuery<CustomerTypeReport>(query).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "errorofgetting data");
+            }
+
+
+            return objcustomertypereport;
         }
     }
 }

@@ -8,12 +8,12 @@ namespace BOTS_BL.Models
 {
     public class DashboardMemberSegment
     {
-        public long NoofMember_Total { get; set; }
-        public long NoofMember_Repeat { get; set; }
-        public long NoofMember_NeverRedeem { get; set; }
-        public long NoofMember_OnlyOnce { get; set; }
-        public long NoofMember_RecentlyEnrolled { get; set; }
-        public long NoofMember_NotTransacted { get; set; }
+        public long TotalMember { get; set; }
+        public long RepeatMember { get; set; }
+        public long NeverRedeem { get; set; }
+        public long OnlyOnce { get; set; }
+        public long RecentlyEnrolled { get; set; }
+        public long NotTransacted { get; set; }
 
         public string FromDate { get; set; }
         public string ToDate { get; set; }
@@ -73,6 +73,7 @@ namespace BOTS_BL.Models
         public long BusinessGenerated { get; set; }
         public long PieChartYellow { get; set; }
         public decimal PieChartGreen { get; set; }
+        public decimal PieChartTotalMemberConverted { get; set; }
     }
 
     public class DashboardRedemption

@@ -47,8 +47,29 @@ namespace GinesysRedeemption.Controllers
                         var billGUIDParam = item.Split('=');
                         objRedeemData.billGUID = billGUIDParam[1];
                     }
+                    if (item.Contains("PointValue"))
+                    {
+                        var billPointsValueParam = item.Split('=');
+                        objRedeemData.PointsValue = billPointsValueParam[1];
+                    }
+                    if (item.Contains("Points"))
+                    {
+                        var billPointsParam = item.Split('=');
+                        objRedeemData.Points =  billPointsParam[1];
+                    }
+                    
+                    if (item.Contains("PointToRedeem"))
+                    {
+                        var billPointsToRedeemParam = item.Split('=');
+                        objRedeemData.PointsToRedeem = billPointsToRedeemParam[1];
+                    }
+                    if (item.Contains("CustomerName"))
+                    {
+                        var billCustomerNameParam = item.Split('=');
+                        objRedeemData.CustomerName = billCustomerNameParam[1];
+                    }
                 }
-                objRedeemData = GRR.GetCustomerDetails(objRedeemData);
+                //objRedeemData = GRR.GetCustomerDetails(objRedeemData);
 
             }
             return View(objRedeemData);
@@ -56,14 +77,22 @@ namespace GinesysRedeemption.Controllers
         public ActionResult GetURL()
         {
             var BaseUrl = ConfigurationManager.AppSettings["RedeemBaseUrl"];
-            string storeid = "8888888888";
+            string storeid = "1063888888";
             string billGUID = "D4E8010B-7164-46ED-8F3D-43F8B257291820180309143018907";
-            string mobileno = "9413021114";
-            string billvalue = "2000";
+            string mobileno = "7709303625";
+            string billvalue = "1780";
+            string CustomerName = "Dinesh";
+            decimal? Points = 10;
+            decimal? PointsValue = 1;
+            decimal? PointsToRedeem = 10;
             string token = "storeid=" + storeid;
             token += "&mobileno=" + mobileno;
             token += "&billvalue=" + billvalue;
             token += "&billGUID=" + billGUID;
+            token += "&Points=" + Points;
+            token += "&PointsValue=" + PointsValue;
+            token += "&PointsToRedeem=" + PointsToRedeem;
+            token += "&CustomerName=" + CustomerName;
             string entoken = common.EncryptString(token);
             string url = BaseUrl + "?token=" + entoken;
             ViewBag.URL = url;
