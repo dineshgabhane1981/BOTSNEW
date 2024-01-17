@@ -100,7 +100,7 @@ namespace WebApp.Controllers
                 dataList.Add(dataMemberSegment.NeverRedeem);
                 dataList.Add(dataMemberSegment.RecentlyEnrolled);
                 dataList.Add(dataMemberSegment.OnlyOnce);
-                dataList.Add(dataMemberSegment.NotTransacted);
+                dataList.Add(dataMemberSegment.NonTransacted);
                 lstDates.Add(dataMemberSegment.FromDate);
                 lstDates.Add(dataMemberSegment.ToDate);
                 lstData.Add(dataList);

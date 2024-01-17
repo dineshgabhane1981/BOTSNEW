@@ -377,15 +377,15 @@ namespace WebApp.Controllers
                 long? availbal = 0;
                 foreach (var item in objNonTransactingTxn)
                 {
-                    totalspent += item.TotalSpend;
+                    totalspent += item.Spends;
                     totalvisit += item.TotalVisit;
-                    availbal += item.AvlBalPoints;
+                    availbal += item.PointsBalance;
                 }
                 NonTransactingTxn totalItem = new NonTransactingTxn();
-                totalItem.EnrolledOutlet = "<b>Total</b>";
-                totalItem.TotalSpend = totalspent;
+                totalItem.EnrolledOutletName = "<b>Total</b>";
+                totalItem.Spends = totalspent;
                 totalItem.TotalVisit = totalvisit;
-                totalItem.AvlBalPoints = availbal;
+                totalItem.PointsBalance = availbal;
                 totalItem.MobileNo = "";
                 totalItem.MaskedMobileNo = "";
                 objNonTransactingTxn.Add(totalItem);
@@ -529,15 +529,15 @@ namespace WebApp.Controllers
                         table.Columns["MaskedMobileNo"].ColumnName = "MobileNo";
                     }
                 }
-                foreach (DataRow dr in table.Rows)
-                {
-                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
-                    {
-                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                    }
-                }
+                //foreach (DataRow dr in table.Rows)
+                //{
+                //    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                //    {
+                //        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                //        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                //        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                //    }
+                //}
                 string fileName = "BOTS_" + ReportName + ".xlsx";
                 using (XLWorkbook wb = new XLWorkbook())
                 {

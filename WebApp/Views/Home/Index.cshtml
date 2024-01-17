@@ -89,7 +89,7 @@
                      </div>
                  }
              </div>*@
-        <div class="row">
+        <div class="row" style="display:none;">
             <div class="col-md-12 col-lg-12">
                 <div class="mb-3 card">
                     <div class="card-header-tab card-header-tab-animation card-header">
@@ -541,13 +541,13 @@
 <script>
     $(document).ready(function () {
 
-        ShowMemberSegmentChart();
-        ShowAllSharedBiz();
+        ShowMemberSegmentChart();        
         showOutletEnrolmentChart('');
-        showPointSummeryChart('');
-        showMemberWebpageChart('1');
         showBulkUploadChart();
+        showPointSummeryChart('');
+        showMemberWebpageChart('1');        
         showRedemptionChart('1');
+        //ShowAllSharedBiz();
         $("#memberSegmentOutletList").on("change", function () {
             ShowMemberSegmentChart();
         });
@@ -1280,9 +1280,8 @@
                     }
                     var label1 = '';
                     var label2 = '';
-                    var data1 = 100 - parseFloat(response[5]);
-                    var data2 = response[5];
-
+                    var data1 = 100 - parseFloat(response[6]);
+                    var data2 = response[6];                    
                     var data = {
                         datasets: [{
                             data: [data1, data2],

@@ -2758,27 +2758,27 @@ namespace BOTS_BL.Repository
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
                             if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
                             {
-                                WhereClause += " a.InActiveDays < 30 ";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 30 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
                             {
-                                WhereClause += " a.InActiveDays >= 31 and  a.InActiveDays <= 60";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
                             {
-                                WhereClause += " a.InActiveDays >= 61 and  a.InActiveDays <= 90";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 120 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
                             {
-                                WhereClause += " a.InActiveDays >= 91 and  a.InActiveDays <= 180";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";                               
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
                             {
-                                WhereClause += " a.InActiveDays >= 181 and  a.InActiveDays <= 365";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";                                
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
                             {
-                                WhereClause += " a.InActiveDays > 365";
+                                WhereClause += " a.LastTxnDate < cast(getdate() - 395 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
                             {
@@ -3645,27 +3645,27 @@ namespace BOTS_BL.Repository
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
                             if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
                             {
-                                WhereClause += " a.InActiveDays < 30 ";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 30 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
                             {
-                                WhereClause += " a.InActiveDays >= 31 and  a.InActiveDays <= 60";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
                             {
-                                WhereClause += " a.InActiveDays >= 61 and  a.InActiveDays <= 90";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 120 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
                             {
-                                WhereClause += " a.InActiveDays >= 91 and  a.InActiveDays <= 180";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
                             {
-                                WhereClause += " a.InActiveDays >= 181 and  a.InActiveDays <= 365";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
                             {
-                                WhereClause += " a.InActiveDays > 365";
+                                WhereClause += " a.LastTxnDate < cast(getdate() - 395 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
                             {
@@ -3796,7 +3796,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
                     {
                         Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                        WhereClause += " and a.InActiveDays < " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays > " + Convert.ToString(item["NonTransactedSince"]);
                     }
                     if (Convert.ToString(item["IsSpend"]) == "Yes")
                     {
@@ -3892,17 +3892,12 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["Outlets"];
-                        var outletsIds = (object[])item["OutletIds"];
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                        }
-                        foreach (var item1 in outletsIds)
-                        {
-                            ////Criteria += ", " + Convert.ToString(Convert.ToString(item1));
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
@@ -3923,16 +3918,12 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["TransactingOutlets"];
-                        var outletsIds = (object[])item["TransactingOutletIds"];
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                        }
-                        foreach (var item1 in outletsIds)
-                        {
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";

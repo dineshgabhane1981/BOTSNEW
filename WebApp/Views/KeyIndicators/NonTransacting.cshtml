@@ -21,7 +21,7 @@
                     <ul class="nav">
                         <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAll();" class="active nav-link">All</a></li>
                         <li class="nav-item">
-                            @Html.DropDownListFor(x => Model._181to365Days, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "nonTransOutlet", style = "margin-top:9px;" })
+                            @Html.DropDownListFor(x => Model.NonTxn181to365Days, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "nonTransOutlet", style = "margin-top:9px;" })
                         </li>
                     </ul>
                 </div>
@@ -150,7 +150,7 @@
                                 "#ffee65",
                             ],
                             borderWidth: 2,
-                            data: [response._Within30Days, response._31to60Days, response._61to90Days, response._91to180Days, response._181to365Days, response._MoreThanYear]
+                            data: [response.NonTxnWithin30Days, response.NonTxn31to60Days, response.NonTxn61to90Days, response.NonTxn91to180Days, response.NonTxn181to365Days, response.NonTxnMoreThan]
                         }]
                     };
 
@@ -244,14 +244,14 @@
                     tableData.length = 0;
                     $.map(response, function (item) {
                         optionItem = {}
-                        optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
+                        optionItem["EnrolledOutlet"] = item.EnrolledOutletName;
                         optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
                         optionItem["MobileNo"] = item.MobileNo;
-                        optionItem["MemberName"] = item.MemberName;
-                        optionItem["Type"] = item.Type;
-                        optionItem["TotalSpend"] = item.TotalSpend;
+                        optionItem["MemberName"] = item.CustName;
+                        optionItem["Type"] = item.Tier;
+                        optionItem["TotalSpend"] = item.Spends;
                         optionItem["TotalVisit"] = item.TotalVisit;
-                        optionItem["AvlBalPoints"] = item.AvlBalPoints;
+                        optionItem["AvlBalPoints"] = item.PointsBalance;
                         optionItem["LastTxnDate"] = item.LastTxnDate;
                         tableData.push(optionItem);
                     });
@@ -302,28 +302,33 @@
                         return '<span>' + addComma(data) + '</span>';
                     }
                 },
-                { data: "TotalVisit" },
+                {
+                    "mData": "TotalVisit",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },                 
                 {
                     "mData": "AvlBalPoints",
                     "mRender": function (data, type, row) {
                         return '<span>' + addComma(data) + '</span>';
                     }
                 },
-                /*{ data: "LastTxnDate" }*/
-                {
-                    "data": "LastTxnDate", "title": "Last Txn Date", "render": function (data, type) {
-                        if (data != "" && data != null) {
-                            var day = data.split('/')[0]
-                            var month = data.split('/')[1]
-                            var year = data.split('/')[2]
-                            var date = month + "/" + day + "/" + year;
-                            return date;
-                        }
-                        else {
-                            return data;
-                        }
-                    }
-                }
+                { data: "LastTxnDate" }
+                //{
+                //    "data": "LastTxnDate", "title": "Last Txn Date", "render": function (data, type) {
+                //        if (data != "" && data != null) {
+                //            var day = data.split('/')[0]
+                //            var month = data.split('/')[1]
+                //            var year = data.split('/')[2]
+                //            var date = month + "/" + day + "/" + year;
+                //            return date;
+                //        }
+                //        else {
+                //            return data;
+                //        }
+                //    }
+                //}
             ],
             "columnDefs": [
                 {
