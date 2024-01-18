@@ -1203,6 +1203,7 @@ namespace BOTS_BL.Repository
 
                         lstPoint.EnrolledOutlet = item.OutletName;
                         lstPoint.MaskedMobileNo = item.MaskedMobileNo;
+                        lstPoint.MobileNo = item.MobileNo;
                         lstPoint.MemberName = item.Name;
                         lstPoint.TxnCount = Convert.ToInt64(item.TotalTxnCount);
                         lstPoint.TotalSpend = Convert.ToInt64(item.TotalSpend);
@@ -1445,6 +1446,7 @@ namespace BOTS_BL.Repository
                             CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
                             Obj.EnrolledOutlet = item.OutletName;
                             Obj.MaskedMobileNo = item.MobileNo;
+                            Obj.MobileNo = item.MobileNo;
                             Obj.MemberName = item.Name;
                             Obj.TxnCount = item.TotalTxnCount;
                             Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
@@ -1474,6 +1476,7 @@ namespace BOTS_BL.Repository
                             CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
                             Obj.EnrolledOutlet = item.OutletName;
                             Obj.MaskedMobileNo = item.MobileNo;
+                            Obj.MobileNo = item.MobileNo;
                             Obj.MemberName = item.Name;
                             Obj.TxnCount = item.TotalTxnCount;
                             Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
@@ -1492,6 +1495,7 @@ namespace BOTS_BL.Repository
                             CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
                             Obj.EnrolledOutlet = item.OutletName;
                             Obj.MaskedMobileNo = item.MobileNo;
+                            Obj.MobileNo = item.MobileNo;
                             Obj.MemberName = item.Name;
                             Obj.TxnCount = item.TotalTxnCount;
                             Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
