@@ -1,23 +1,29 @@
 ﻿@model BOTS_BL.Models.LoyaltyKPIs
 @using System.Globalization
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "Loyalty Performance";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
 }
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
-
-<div class="app-main__inner">
-    <div class="row mb-3 pt-3 pl-3 pr-3 card">
-        <div class="row">
-            <div class="col-md-6 col-xl-12" style="text-align:center;">
-                <h3>This Functionality is under Development.... </h3>
+@if (userDetails.GroupId != "1326")
+{
+    <div class="app-main__inner">
+        <div class="row mb-3 pt-3 pl-3 pr-3 card">
+            <div class="row">
+                <div class="col-md-6 col-xl-12" style="text-align:center;">
+                    <h3>This Functionality is under Development.... </h3>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-@*<div class="app-main__inner">
+}
+else
+{
+    <div class="app-main__inner">
         <div class="row mb-3 pt-3 pl-3 pr-3 card">
             <div class="row">
                 <div class="col-md-6 col-xl-3">
@@ -155,9 +161,9 @@
                 </div>
             </div>
         </div>
-    </div>*@
+    </div>
 
-@*<script>
+    <script>
     $(document).ready(function () {
         $('#cvKPI').remove(); // this is my <canvas> element
         $('#containerKPI').append('<canvas id="cvKPI"><canvas>');
@@ -219,4 +225,6 @@
             options: options
         });
     });
-            </script>*@
+    </script>
+
+}
