@@ -245,6 +245,7 @@
 
                     tableData.push(optionItem);
                 });
+                console.log(tableData);
                 DrawTable();
                 if (currentMonth == 1) {
                     $("#spnMonth").text('@currentMonth' + '-' + '@currentYear');
@@ -296,7 +297,7 @@
             "columns": [
                 { data: "EnrolledOutlet" },
                 {
-                    "mData": "MaskedMobileNo",
+                    "mData": "MobileNo",
                     "mRender": function (data, type, row) {
                         var MobileNo = row.MobileNo;
                         if (MobileNo == "")
