@@ -1446,6 +1446,7 @@ namespace BOTS_BL.Repository
                             CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
                             Obj.EnrolledOutlet = item.OutletName;
                             Obj.MaskedMobileNo = item.MobileNo;
+                            Obj.MobileNo = item.MobileNo;
                             Obj.MemberName = item.Name;
                             Obj.TxnCount = item.TotalTxnCount;
                             Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
@@ -1475,6 +1476,7 @@ namespace BOTS_BL.Repository
                             CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
                             Obj.EnrolledOutlet = item.OutletName;
                             Obj.MaskedMobileNo = item.MobileNo;
+                            Obj.MobileNo = item.MobileNo;
                             Obj.MemberName = item.Name;
                             Obj.TxnCount = item.TotalTxnCount;
                             Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
@@ -1493,6 +1495,7 @@ namespace BOTS_BL.Repository
                             CelebrationsMoreDetails Obj = new CelebrationsMoreDetails();
                             Obj.EnrolledOutlet = item.OutletName;
                             Obj.MaskedMobileNo = item.MobileNo;
+                            Obj.MobileNo = item.MobileNo;
                             Obj.MemberName = item.Name;
                             Obj.TxnCount = item.TotalTxnCount;
                             Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
