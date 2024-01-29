@@ -57,6 +57,8 @@ namespace BOTS_BL.Models
         public bool IsFeedback { get; set; }
         [NotMapped]
         public bool IsEvent { get; set; }
+        [NotMapped]
+        public bool IsCoupon { get; set; }
     }
 
     public class DashboardCustomerLogin

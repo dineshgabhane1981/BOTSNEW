@@ -45,7 +45,7 @@ namespace BOTS_BL.Repository
             {
                 if (GroupId != "1341")
                 {
-                    using (var context = new CommonDBContext())
+                    using (var context = new CommonDBContext()) 
                     {
                         context.Database.CommandTimeout = 120;
                         var DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
@@ -75,8 +75,7 @@ namespace BOTS_BL.Repository
                     using (var context = new BOTSDBContext(connstr))
                     {
                         context.Database.CommandTimeout = 120;
-                        //if (GroupId == "1087")
-                        //{
+                        
                         var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
                         dataDashboard.TotalBiz = Convert.ToInt64(AllData.Sum(x => x.TotalSpend));
                         dataDashboard.Redemption = AllData.Sum(x => x.BurnAmtWithPts);
@@ -94,13 +93,7 @@ namespace BOTS_BL.Repository
                             newItem.EnrollmentCount = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
                             lstOutletDetails.Add(newItem);
                         }
-                        dataDashboard.lstOutletDetails = lstOutletDetails;
-                        //}
-                        //else
-                        //{
-                        //    dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_BOTS_LoyaltyPerfromance @pi_GroupId, @pi_Date,@pi_LoginId,@pi_Month,@pi_Year,@pi_OutletId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", LoginId), new SqlParameter("@pi_Month", ""), new SqlParameter("@pi_Year", ""), new SqlParameter("@pi_OutletId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).FirstOrDefault<ExecutiveSummary>();
-                        //    dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_OutletDashboard @pi_GroupId, @pi_Date", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd"))).ToList<OutletDetails>();
-                        //}
+                        dataDashboard.lstOutletDetails = lstOutletDetails;                        
                     }
                 }
                 using (var context = new CommonDBContext())

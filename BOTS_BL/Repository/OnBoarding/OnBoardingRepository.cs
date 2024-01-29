@@ -486,6 +486,7 @@ namespace BOTS_BL.Repository
                     foreach (var item in data)
                     {
                         RetailDetails item1 = new RetailDetails();
+                        item1.BrandName = item.BrandName;
                         item1.CategoryName = item.CategoryName;
                         item1.NoOfOutlets = item.NoOfOutlets;
                         item1.NoOfEnrolled = item.NoOfEnrolled;

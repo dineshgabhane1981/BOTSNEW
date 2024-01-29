@@ -47,7 +47,7 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                @if ((string.IsNullOrEmpty(GroupId) && (roleId != null || roleId == "1")) && GroupId != "1051")
+                @if ((string.IsNullOrEmpty(GroupId) && (roleId != null || roleId == "1")) && gId != "1051" && gId != "1000" && gId != "1001")
                 {
                     <li>
                         <a href="#">
@@ -142,11 +142,11 @@
                                     @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
                                     {
                                         @*<li class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")">
-                                                <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
-                                                    <i class="metismenu-icon"></i>
-                                                    Non Transacting
-                                                </a>
-                                            </li>*@
+                                    <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
+                                        <i class="metismenu-icon"></i>
+                                        Non Transacting
+                                    </a>
+                                </li>*@
                                     }
                                     <li class="@Html.IsSelected(controller: "SinglePage", action: "Communication")">
                                         <a class="@Html.IsSelected(controller: "SinglePage", action: "Communication")" href="@Url.Action("Communication", "SinglePage")">
@@ -357,11 +357,11 @@
                                 </a>
                             </li>
                             @*<li class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")">
-                                    <a class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")" href="@Url.Action("ProfitableCustomer", "Reports")">
-                                        <i class="metismenu-icon"></i>
-                                        Profitable Customer
-                                    </a>
-                                </li>*@
+                        <a class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")" href="@Url.Action("ProfitableCustomer", "Reports")">
+                            <i class="metismenu-icon"></i>
+                            Profitable Customer
+                        </a>
+                    </li>*@
                             <li class="@Html.IsSelected(controller: "DLCReporting", action: "Index")">
                                 <a class="@Html.IsSelected(controller: "DLCReporting", action: "Index")" href="@Url.Action("Index", "DLCReporting")">
                                     <i class="metismenu-icon"></i>
@@ -423,14 +423,14 @@
                                 </a>
                             </li>
                             @* @if (roleId != null)
-                                {
-                                    <li class="@Html.IsSelected(controller: "KeyIndicators", action: "DLCCreation")">
-                                        <a class="@Html.IsSelected(controller: "KeyIndicators", action: "DLCCreation")" href="@Url.Action("DLCCreation", "KeyIndicators")">
-                                            <i class="metismenu-icon"></i>
-                                            DLC Creation
-                                        </a>
-                                    </li>
-                                }*@
+                    {
+                        <li class="@Html.IsSelected(controller: "KeyIndicators", action: "DLCCreation")">
+                            <a class="@Html.IsSelected(controller: "KeyIndicators", action: "DLCCreation")" href="@Url.Action("DLCCreation", "KeyIndicators")">
+                                <i class="metismenu-icon"></i>
+                                DLC Creation
+                            </a>
+                        </li>
+                    }*@
                         </ul>
                     </li>
 
@@ -470,11 +470,11 @@
                                 </a>
                             </li>
                             @*<li class="@Html.IsSelected(controller: "Campaigns", action: "Campaign")">
-                                    <a class="@Html.IsSelected(controller: "Campaigns", action: "Campaign")" href="@Url.Action("Campaign", "Campaigns")">
-                                        <i class="metismenu-icon"></i>
-                                        Campaign Reporting
-                                    </a>
-                                </li>*@
+                        <a class="@Html.IsSelected(controller: "Campaigns", action: "Campaign")" href="@Url.Action("Campaign", "Campaigns")">
+                            <i class="metismenu-icon"></i>
+                            Campaign Reporting
+                        </a>
+                    </li>*@
                             <li class="@Html.IsSelected(controller: "Campaigns", action: "CampaignReport")">
                                 <a class="@Html.IsSelected(controller: "Campaigns", action: "CampaignReport")" href="@Url.Action("CampaignReport", "Campaigns")">
                                     <i class="metismenu-icon"></i>
@@ -497,11 +497,11 @@
                                 </a>
                             </li>
                             @*<li class="@Html.IsSelected(controller: "OtherReports", action: "Manufacturer")">
-                                    <a class="@Html.IsSelected(controller: "OtherReports", action: "Manufacturer")" href="@Url.Action("Manufacturer", "OtherReports")">
-                                        <i class="metismenu-icon"></i>
-                                        Manufacturer
-                                    </a>
-                                </li>*@
+                        <a class="@Html.IsSelected(controller: "OtherReports", action: "Manufacturer")" href="@Url.Action("Manufacturer", "OtherReports")">
+                            <i class="metismenu-icon"></i>
+                            Manufacturer
+                        </a>
+                    </li>*@
                             <li class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Index")">
                                 <a href="@Url.Action("Index", "DashBoardCustomerLogin")" class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Index")">
                                     <i class="metismenu-icon pe-7s-rocket"></i>
@@ -524,11 +524,11 @@
                                 </a>
                             </li>
                             @*<li class="@Html.IsSelected(controller: "OtherReports", action: "ReportsDownload")">
-                                    <a class="@Html.IsSelected(controller: "OtherReports", action: "ReportsDownload")" href="@Url.Action("ReportsDownload", "OtherReports")">
-                                        <i class="metismenu-icon"></i>
-                                        Reports Download
-                                    </a>
-                                </li>*@
+                        <a class="@Html.IsSelected(controller: "OtherReports", action: "ReportsDownload")" href="@Url.Action("ReportsDownload", "OtherReports")">
+                            <i class="metismenu-icon"></i>
+                            Reports Download
+                        </a>
+                    </li>*@
                             @if (gId == "1172")
                             {
                                 <li class="@Html.IsSelected(controller: "OtherReports", action: "FranchiseeEnquiryReport")">
@@ -627,7 +627,39 @@
                         </li>
 
                     }
-                    if (roleId != "2" && roleId != "3" && roleId != "4")
+                    if (userDetails.IsCoupon)
+                    {
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-date"></i>
+                                Coupon Module
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+                            <ul>
+
+                                <li class="@Html.IsSelected(controller: "Coupon", action: "Index")">
+                                    <a href="@Url.Action("Index", "Coupon")" class="@Html.IsSelected(controller: "Coupon", action: "Index")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Coupons
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Coupon", action: "Upload")">
+                                    <a href="@Url.Action("Upload", "Coupon")" class="@Html.IsSelected(controller: "Coupon", action: "Upload")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Upload
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Coupon", action: "Report")">
+                                    <a href="@Url.Action("Report", "Coupon")" class="@Html.IsSelected(controller: "Coupon", action: "Report")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Report
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    }
+                    if (roleId != "2" && roleId != "3" && roleId != "4" && gId != "1051" && gId != "1000" && gId != "1001")
                     {
                         <li>
                             <a href="#">
@@ -712,20 +744,20 @@
                         </a>
                     </li>
                     @*<li>
-                            <a href="#">
-                                <i class="metismenu-icon pe-7s-car"></i>
-                                Reports
-                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                            </a>
-                            <ul>
-                                <li class="@Html.IsSelected(controller: "Reports", action: "Outletwise")">
-                                    <a class="@Html.IsSelected(controller: "Reports", action: "Outletwise")" href="@Url.Action("Outletwise", "Reports")">
-                                        <i class="metismenu-icon"></i>
-                                        Outlet-wise
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>*@
+                <a href="#">
+                    <i class="metismenu-icon pe-7s-car"></i>
+                    Reports
+                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                </a>
+                <ul>
+                    <li class="@Html.IsSelected(controller: "Reports", action: "Outletwise")">
+                        <a class="@Html.IsSelected(controller: "Reports", action: "Outletwise")" href="@Url.Action("Outletwise", "Reports")">
+                            <i class="metismenu-icon"></i>
+                            Outlet-wise
+                        </a>
+                    </li>
+                </ul>
+            </li>*@
                     <li>
                         <a href="@Url.Action("Index", "Telecaller")" class="@Html.IsSelected(controller: "Telecaller", action: "Index")">
                             <i class="metismenu-icon pe-7s-rocket"></i>

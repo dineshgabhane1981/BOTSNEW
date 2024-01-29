@@ -469,18 +469,11 @@ namespace WebApp.Controllers.OnBoarding
                 var GroupDetails = OBR.GetGroupMasterDetails(Convert.ToString(groupId));
                 var RetailList = OBR.GetRetailDetailsForEmail(Convert.ToString(groupId));
                 var emailIds = OBR.GetAllInternalEmailIds();
+                var installmentDetails = OBR.GetInstallmentDetails(Convert.ToString(groupId));
                 StringBuilder sb = new StringBuilder();
                 sb.Append("<table border=\"1\" cellpadding=\"5\" cellspacing=\"5\">");
                 sb.Append("<tr>");
-                sb.Append("<td>Retail Name:</td><td>" + GroupDetails.GroupName + "</td>");
-                sb.Append("</tr>");
-
-                sb.Append("<tr>");
-                sb.Append("<td>Customer Name:</td><td>" + GroupDetails.OwnerName + "</td>");
-                sb.Append("</tr>");
-
-                sb.Append("<tr>");
-                sb.Append("<td>Mobile No:</td><td>" + GroupDetails.OwnerMobileNo + "</td>");
+                sb.Append("<td>Group Name:</td><td>" + GroupDetails.GroupName + "</td>");
                 sb.Append("</tr>");
 
                 int count = 1;
@@ -489,6 +482,7 @@ namespace WebApp.Controllers.OnBoarding
                 string Category = string.Empty;
                 string NoOfOutlets = "";
                 string BillingProduct = string.Empty;
+                string RetailName = string.Empty;
                 foreach (var item in RetailList)
                 {
                     if (count == 1)
@@ -498,6 +492,7 @@ namespace WebApp.Controllers.OnBoarding
                         BillingPartner = item.BillingPartner;
                         Product = item.BOProduct;
                         BillingProduct = item.BillingProduct;
+                        RetailName = item.BrandName;
                     }
                     else
                     {
@@ -506,9 +501,22 @@ namespace WebApp.Controllers.OnBoarding
                         BillingPartner += "," + item.BillingPartner;
                         Product += "," + item.BOProduct;
                         BillingProduct += "," + item.BillingProduct;
+                        RetailName += "," + item.BrandName;
                     }
                     count++;
                 }
+
+                sb.Append("<tr>");
+                sb.Append("<td>Retail Name:</td><td><b>" + RetailName + "</b></td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Customer Name:</td><td>" + GroupDetails.OwnerName + "</td>");
+                sb.Append("</tr>");
+
+                sb.Append("<tr>");
+                sb.Append("<td>Mobile No:</td><td>" + GroupDetails.OwnerMobileNo + "</td>");
+                sb.Append("</tr>");
 
                 sb.Append("<tr>");
                 sb.Append("<td>BO Product:</td><td>" + Product + "</td>");
@@ -574,40 +582,32 @@ namespace WebApp.Controllers.OnBoarding
                 sb.Append("<td>Comments:</td><td>" + GroupDetails.Comments + "</td>");
                 sb.Append("</tr>");
 
+                if (installmentDetails.Count > 0)
+                {
+                    sb.Append("<tr>");
+                    sb.Append("<td colspan='2'>");
+
+                    sb.Append("<table border=\"1\" cellpadding=\"5\" cellspacing=\"5\" style='width:100%;'>");
+                    sb.Append("<tr>");
+                    sb.Append("<td colspan='2' style='text-align:center;'><b>Payment Installment Details</b></td>");
+                    sb.Append("</tr>");
+                    foreach (var inst in installmentDetails)
+                    {
+                        sb.Append("<tr>");
+                        sb.Append("<td>" + inst.PaymentDateStr + "</td>");
+                        sb.Append("<td>" + inst.PaymentAmount + "</td>");
+                        sb.Append("</tr>");
+                    }
+
+                    sb.Append("</table>");
+
+                    sb.Append("</td>");
+                    sb.Append("</tr>");
+                }
                 sb.Append("</table>");
 
-
-                //var userName = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
-                //var password = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
-                //SmtpClient smtp = new SmtpClient();
-                //smtp.UseDefaultCredentials = true;
-                //smtp.Credentials = new System.Net.NetworkCredential(userName, password);
-                //smtp.Host = "smtp.zoho.com";
-                //smtp.Port = 587;
-                //smtp.EnableSsl = true;
-                //var userDetails = (CustomerLoginDetail)Session["UserSession"];
-
-                //MailMessage email = new MailMessage();
-                //MailAddress from = new MailAddress(userName);
-                //email.From = from;
-                //foreach (var item in emailIds)
-                //{
-                //    email.To.Add(item);
-                //}
-
-                //email.Subject = "New Customer Onboarded - " + GroupDetails.GroupName;
-                //email.SubjectEncoding = System.Text.Encoding.Default;
-
-                //email.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");
-                //email.Body = sb.ToString();
-                //email.IsBodyHtml = true;
-                //email.Priority = MailPriority.High;
-                //smtp.Send(email);
-
-
-
-                var from = ConfigurationManager.AppSettings["FrmEmailOnboarding"].ToString();
-                var PWD = ConfigurationManager.AppSettings["FrmEmailOnboardingPwd"].ToString();
+                var from = "report@blueocktopus.in";
+                var PWD = "S#02MC@OW92d8$x";
                 MailMessage mail = new MailMessage();
                 MailAddress fromMail = new MailAddress(from);
                 mail.From = fromMail;
@@ -615,7 +615,8 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     mail.To.Add(item);
                 }
-                //mail.From = from;
+                //mail.To.Add("dinesh@blueocktopus.in");
+
                 mail.Subject = "New Customer Onboarded - " + GroupDetails.GroupName;
                 mail.SubjectEncoding = System.Text.Encoding.Default;
                 mail.Body = sb.ToString();
@@ -736,7 +737,7 @@ namespace WebApp.Controllers.OnBoarding
                 smtp.Port = 587;
                 smtp.Send(mail);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, Convert.ToString(groupId));
             }
@@ -1398,7 +1399,7 @@ namespace WebApp.Controllers.OnBoarding
 
         }
 
-        public ActionResult SaveCampaignOtherConfig(string jsonData) 
+        public ActionResult SaveCampaignOtherConfig(string jsonData)
         {
             bool status = false;
             try
@@ -1693,7 +1694,7 @@ namespace WebApp.Controllers.OnBoarding
                     }
                 }
             }
-            JavaScriptSerializer json_serializer = new JavaScriptSerializer();             
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             objData.bots_TblGroupMaster.CategoryData = json_serializer.Serialize(objData.objRetailList);
             objData.bots_TblGroupMaster.PaymentScheduleData = json_serializer.Serialize(objData.objInstallmentList);
             //Documents
@@ -2200,12 +2201,12 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 result = OBR.SaveEarnRule(objEarnRule, lstSlab, lstProdUpload, lstBlockEarnUpload);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 newexception.AddException(ex, "SaveEarnRuleConfig");
             }
-            
-            
+
+
 
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -2399,7 +2400,7 @@ namespace WebApp.Controllers.OnBoarding
                 objBurnRule.RuleId = Convert.ToInt32(item["RuleId"]);
                 objBurnRule.GroupId = Convert.ToString(item["GroupId"]);
                 objBurnRule.MinInvoiceAmt = Convert.ToInt32(item["MinInvoiceAmt"]);
-                if(string.IsNullOrEmpty(Convert.ToString(item["PercentageToRedeemPts"])))
+                if (string.IsNullOrEmpty(Convert.ToString(item["PercentageToRedeemPts"])))
                 {
                     objBurnRule.PercentageToRedeemPts = 0;
                 }
@@ -2416,7 +2417,7 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     objBurnRule.PercentageToRedeemExtPts = Convert.ToInt32(item["PercentageToRedeemExtPts"]);
                 }
-                
+
                 objBurnRule.MinThreshholdPtsFisttime = Convert.ToInt32(item["MinThreshholdPtsFisttime"]);
                 objBurnRule.MinThreshholdPtsSubsequent = Convert.ToInt32(item["MinThreshholdPtsSubsequent"]);
                 objBurnRule.PartialEarn = Convert.ToString(item["PartialEarn"]);
@@ -2735,7 +2736,7 @@ namespace WebApp.Controllers.OnBoarding
             return status;
         }
 
-        public bool SendEmailToOPS(string to, string subject,NewCustDetails objData)
+        public bool SendEmailToOPS(string to, string subject, NewCustDetails objData)
         {
             bool status = false;
             try
@@ -2749,11 +2750,11 @@ namespace WebApp.Controllers.OnBoarding
                     str.AppendLine();
                     str.AppendLine("Please find below Integration details");
                     str.AppendLine();
-                    str.AppendLine("Billing Partner Url - "+objData.BillingPartnerUrl);
+                    str.AppendLine("Billing Partner Url - " + objData.BillingPartnerUrl);
                     str.AppendLine();
                     str.AppendLine("DLC Link - " + objData.DLCLink);
                     str.AppendLine();
-                    foreach(var item in objData.lstCounterIdDetails)
+                    foreach (var item in objData.lstCounterIdDetails)
                     {
                         str.AppendLine("Outlet Name - " + item.OutletName);
                         str.AppendLine();

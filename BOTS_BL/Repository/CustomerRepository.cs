@@ -485,6 +485,28 @@ namespace BOTS_BL.Repository
             }
             return IsEvent;
         }
+        public bool GetIsCoupon(string GroupId)
+        {
+            bool IsCoupon = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var GId = Convert.ToInt32(GroupId);
+                    var CouponDetail = context.tblGroupDetails.Where(x => x.GroupId == GId).Select(y => y.IsCoupon).FirstOrDefault();
+                    if (CouponDetail.HasValue)
+                    {
+                        if (CouponDetail.Value)
+                            IsCoupon = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetIsEvent");
+            }
+            return IsCoupon;
+        }
 
         public tblGroupDetail GetGroupDetails(int GroupId)
         {

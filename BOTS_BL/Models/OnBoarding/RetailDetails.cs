@@ -17,5 +17,6 @@ namespace BOTS_BL.Models
         public string BOProduct { get; set; }
         public string BillingPartner { get; set; }
         public string BillingProduct { get; set; }
+        public string BrandName { get; set; }
     }
 }

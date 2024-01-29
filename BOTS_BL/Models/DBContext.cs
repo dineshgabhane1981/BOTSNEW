@@ -20,6 +20,8 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<tblCouponMapping> tblCouponMappings { get; set; }
+        public virtual DbSet<tblCouponUpload> tblCouponUploads { get; set; }
         public virtual DbSet<tblSSNonSSReport> tblSSNonSSReports { get; set; }
         public virtual DbSet<tblVelocityCustomerData> tblVelocityCustomerDatas { get; set; }
         public virtual DbSet<tblVelocityMain> tblVelocityMains { get; set; }

@@ -4,11 +4,14 @@
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
     CommonFunctions common = new CommonFunctions();
     string GroupId = string.Empty;
+    string gid = string.Empty;
     if (userDetails.GroupId != null)
     {
         GroupId = common.EncryptString(userDetails.GroupId);
+        gid = userDetails.GroupId;
     }
-    string roleid = userDetails.LoginType;    
+    string roleid = userDetails.LoginType;
+
 }
 @{
 
@@ -75,7 +78,7 @@
                     <div class="widget-content-wrapper">
                         @if (!string.IsNullOrEmpty(GroupId))
                         {
-                            if (!string.IsNullOrEmpty(roleid) && userDetails.LoginId != "123" && userDetails.LoginId != "9860099963" && roleid != "2" && roleid != "4")
+                            if (!string.IsNullOrEmpty(roleid) && userDetails.LoginId != "9860099963" && roleid != "2" && roleid != "4" && gid!="1000" && gid != "1001" && gid != "1007" && gid != "1051")
                             {
                                 <div>
                                     @if (Convert.ToString(Session["buttons"]) == "ITOPS")

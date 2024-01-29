@@ -36,6 +36,7 @@ namespace WebApp.Controllers
                 dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId, "", "");
                 userDetails.IsFeedback = CR.GetIsFeedback(userDetails.GroupId);
                 userDetails.IsEvent = CR.GetIsEvent(userDetails.GroupId);
+                userDetails.IsCoupon = CR.GetIsCoupon(userDetails.GroupId);
                 Session["UserSession"] = userDetails;
                 ViewBag.OutletList = lstOutlet;
                 ViewBag.OutletCount = lstOutlet.Count;
