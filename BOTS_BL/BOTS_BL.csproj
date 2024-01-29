@@ -528,6 +528,7 @@
     <Compile Include="Repository\AudioPalaceRepository.cs" />
     <Compile Include="Repository\CampaignRepository.cs" />
     <Compile Include="Repository\ChitaleDashboardRepository.cs" />
+    <Compile Include="Repository\CouponRepository.cs" />
     <Compile Include="Repository\CustomerRepository.cs" />
     <Compile Include="Repository\DashBoardCustomerLoginRepository.cs" />
     <Compile Include="Repository\DashboardRepository.cs" />
