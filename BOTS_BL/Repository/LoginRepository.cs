@@ -16,6 +16,7 @@ namespace BOTS_BL.Repository
     public class LoginRepository
     {
         Exceptions newexception = new Exceptions();
+        CustomerRepository CR = new CustomerRepository();
         public CustomerLoginDetail AuthenticateUser(LoginModel objLoginModel)
         {
             DatabaseDetail DBDetails = new DatabaseDetail();
@@ -30,10 +31,11 @@ namespace BOTS_BL.Repository
                     {
                         if (userDetail.GroupId != null)
                         {
+
                             DBDetails = context.DatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
                             //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
 
-                            userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                            userDetail.connectionString = CR.GetCustomerConnString(userDetail.GroupId); //"Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
 
                         }
                     }

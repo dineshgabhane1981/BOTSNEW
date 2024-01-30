@@ -1,8 +1,137 @@
-﻿
+﻿@model  List<BOTS_BL.Models.tblCouponUpload>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="app-main__inner" style="margin-top:-10px;">
+    <div class="card p-2 pb-3 pl-4 mb-2" id="dvAddData" style="display:none;">
+        <div class="col-md-12 col-lg-12 row">
+            <div class="col-md-6 col-lg-6">
+                Upload File - <input type="file" id="fileUpload" />
+            </div>
+            <div class="col-md-6 col-lg-6">
+                Expiry Date - <input type="date" class="input50" id="ExpiryDate" />
+            </div>            
+        </div>
+        <div class="col-md-12 col-lg-12 row">            
+            <div class="col-md-6 col-lg-6">
+                Reminder - <input type="checkbox" style="width:20px; height:20px;cursor:pointer;"  id="chkIsReminder" /> before expiry days <input type="number" class="input50" id="reminderDays" />
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <button type="button" id="btnUploadCouponData" class="btn btn-primary" style="margin-right:10px;"> Upload</button>
+            </div>
+        </div>
+    </div>
+    <div class="card p-2 pb-3 pl-4">
+        <div class="col-md-12 col-lg-12 row">
+            <div class="col-md-12 col-lg-12 row">
+                <div class="col search-container">
+                    <input type="hidden" id="hdnId" name="hdnId" />
+                    <input type="hidden" id="hdnSubDiscussionId" name="hdnSubDiscussionId" />
+                </div>
+                <div style="text-align:right;">
+                    <a href="#" onclick="AddCouponData();" title="Upload Coupon Data">  <img src="~/Content/assets/images/AddCustomer.png" width="70%" /></a>
+                </div>
+            </div>
 
+            <table class="table" id="activityTable">
+                <thead>
+                    <tr>
+                        <th scope="col">Coupon File Name</th>
+                        <th scope="col">IsReminder</th>
+                        <th scope="col">Count</th>
+                        <th scope="col">Reminder Date</th>
+                        <th scope="col">Uploaded Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+                        if (Model.Count > 0)
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.CouponFileName</td>
+                                    <td>@item.IsReminder</td>
+                                    <td>@item.Count</td>
+                                    <td>@item.ReminderDate</td>
+                                    <td>@item.UploadedDate</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" align="center">No Data Available</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">No Data Available</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#activityTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+        $("#btnUploadCouponData").on("click", function () {
+            UploadCouponData();
+        });
+    });
+
+    function AddCouponData() {
+        $("#dvAddData").show(1000)
+    }
+    function UploadCouponData() {
+
+    }
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

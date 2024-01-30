@@ -96,16 +96,19 @@ namespace WebApp.Controllers
                 DashboardMemberSegment dataMemberSegment = new DashboardMemberSegment();
                 dataMemberSegment = DR.GetDashboardMemberSegmentData(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId, frmDate, toDate);
 
-                dataList.Add(dataMemberSegment.TotalMember);
-                dataList.Add(dataMemberSegment.RepeatMember);
-                dataList.Add(dataMemberSegment.NeverRedeem);
-                dataList.Add(dataMemberSegment.RecentlyEnrolled);
-                dataList.Add(dataMemberSegment.OnlyOnce);
-                dataList.Add(dataMemberSegment.NonTransacted);
-                lstDates.Add(dataMemberSegment.FromDate);
-                lstDates.Add(dataMemberSegment.ToDate);
-                lstData.Add(dataList);
-                lstData.Add(lstDates);
+                if (dataMemberSegment != null)
+                {
+                    dataList.Add(dataMemberSegment.TotalMember);
+                    dataList.Add(dataMemberSegment.RepeatMember);
+                    dataList.Add(dataMemberSegment.NeverRedeem);
+                    dataList.Add(dataMemberSegment.RecentlyEnrolled);
+                    dataList.Add(dataMemberSegment.OnlyOnce);
+                    dataList.Add(dataMemberSegment.NonTransacted);
+                    lstDates.Add(dataMemberSegment.FromDate);
+                    lstDates.Add(dataMemberSegment.ToDate);
+                    lstData.Add(dataList);
+                    lstData.Add(lstDates);
+                }
 
             }
             catch (Exception ex)
@@ -399,7 +402,7 @@ namespace WebApp.Controllers
                 {
                     var result_00003 = streamReader_00003.ReadToEnd();
                 }
-                
+
                 status = true;
             }
             catch (Exception ex)
@@ -446,7 +449,7 @@ namespace WebApp.Controllers
             string status = "Report Sent";
             try
             {
-                var AllCustomer = CR.GetAllCustomer("","");
+                var AllCustomer = CR.GetAllCustomer("", "");
                 //GeneratePDF("1051");
                 foreach (var customer in AllCustomer)
                 {
@@ -543,7 +546,7 @@ namespace WebApp.Controllers
                 var path = "https://blueocktopus.in/bots/DashboardReports/" + fileName;
                 //var path = "http://localhost:57265/DashboardReports/" + fileName;
                 var Month = DateTime.Now.AddMonths(-1).ToString("MMMM", CultureInfo.InvariantCulture) + "_" + DateTime.Now.AddMonths(-1).Year.ToString();
-                string _MobileMessage = "Dear Customer, Your *LOYALTY PROGRAM SYNOPSIS* for "+ Month + " is attached";
+                string _MobileMessage = "Dear Customer, Your *LOYALTY PROGRAM SYNOPSIS* for " + Month + " is attached";
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat("https://bo.enotify.app/api/sendFileWithCaption?");
                 sbposdata.AppendFormat("token={0}", "5fc8ed623629423c01ce4221");

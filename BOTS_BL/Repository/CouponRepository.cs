@@ -24,5 +24,22 @@ namespace BOTS_BL.Repository
 {
     public class CouponRepository
     {
+        Exceptions newexception = new Exceptions();
+        public List<tblCouponUpload> GetAllCouponUpload(string conStr)
+        {
+            List<tblCouponUpload> lstData = new List<tblCouponUpload>();
+            try
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    lstData = context.tblCouponUploads.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAllCouponUpload");
+            }
+            return lstData;
+        }
     }
 }

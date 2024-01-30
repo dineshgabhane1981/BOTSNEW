@@ -794,21 +794,20 @@
         });
     }
     function SaveDLCWAScripts() {
-        alert(100);
-        var DLCMessage = $('#ddltblDLCSMSWAScriptMaster option:selected').text();
-        alert(111);
+        
+        var DLCMessageType = $('#ddltblDLCSMSWAScriptMaster option:selected').text();
+        
         var DLCScript = $("#txtDLCScript").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("SaveDLCWAScripts", "IndividualDBConfig")',
-            data: '{DLCMessage: ' + JSON.stringify(DLCMessage) + ', DLCScript: ' + JSON.stringify(DLCScript) + '}',
+            data: '{DLCMessageType: ' + JSON.stringify(DLCMessageType) + ', DLCScript: ' + JSON.stringify(DLCScript) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
                 console.log(result)
-                if (result = true) {
-                    alert(222);
+                if (result = true) {                    
                     cuteAlert({
                         type: "success",
                         title: "Success Title",
@@ -834,167 +833,3 @@
     }
 
 </script>
-<!--<div class="app-main__inner">
-    <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">-->
-            @*<div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
-                <input type="hidden" id="hdnGroupId" />
-                <div class="col-lg-3 col-md-3 ">
-                    <b>Group Name</b>
-                </div>
-                <div class="col-md-3 col-xl-3">
-                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
-                </div>
-            </div>*@
-            <!--<div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
-                <div class="col-lg-3 col-md-3 ">
-                    <b>Outlet Name</b>
-                </div>
-                <div class="col-lg-3 col-md-3 ">
-                    @Html.DropDownListFor(model => model.tblOutletMaster.OutletName, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutletMaster" })
-                </div>
-            </div>
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvMessage">
-                <div class="col-md-3 col-xl-3">
-                    <b>Message Type</b>
-                </div>
-                <div class="col-md-3 col-xl-3">
-                    
-                </div>
-            </div>
-            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvInternal">
-                <div class="col-md-3 col-xl-3" style="margin-left:120px;">
-                    <button class="btn btn-primary ml-auto mt-3" type="button" title="GO" id="btnShow" style="margin-bottom:20px;">Show</button>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-6 row mt-3 pl-5 mb-2" id="dvScript" style="display:none;">
-                <div class="col-md-3 col-xl-3">
-                    <b>Script</b>
-                </div>
-                <div style="margin-left:80px;">
-                     @Html.TextAreaFor(model => model.objSMSWhatsAppScriptMaster.WhatsAppScript, new { @id = "txtScript",@class="input150", @rows=10 })
-                </div>
-                <div class="col-md-3 col-xl-3" style="margin-left:120px;">
-                    <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnUpdate">Update</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->
-
-<!--<script>
-    $(document).ready(function () {
-        GetOutlets();
-        $('#btnShow').on("click", function () {
-            GetWAScripts();
-        });
-        $('#btnUpdate').on("click", function () {
-            SaveScripts();
-        });
-        function GetOutlets() {
-
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
-                /*data: '{GroupId: ' + JSON.stringify($("#ddlGroupDetails").val()) + '}',*/
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    $("#ddlOutletMaster").empty();
-                    $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
-                    $.each(result, function () {
-                        $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
-                    });
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    console.log(result.responseText);
-                    $("#divLoader").hide();
-                }
-            });
-
-        }
-    });-->
-
-    @*function GetWAScripts() {
-        if ($('#ddlOutletMaster').val() == "") {
-            toastr.error('Please Select Outlet');
-            return false
-        }
-        if ($('#ddlMessageType').val() == "") {
-            toastr.error('Please select Message Type');
-            return false
-        }
-
-        $("#divLoader").show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetWAScripts", "IndividualDBConfig")',
-            data: '{OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + ',MessageType: ' + JSON.stringify($('#ddlMessageType').val()) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                if (result.objSMSWhatsAppScriptMaster != null) {
-                    if (result.objSMSWhatsAppScriptMaster.WhatsAppScript != null && result.objSMSWhatsAppScriptMaster.OutletId != null) {
-                        $("#dvScript").show();
-                        $("#txtScript").text(result.objSMSWhatsAppScriptMaster.WhatsAppScript);
-                    }
-                    else {
-                        toastr.error('Wa Script for this Outlet is not present');
-                    }
-                }
-                else {
-                    toastr.error('Wa Script for this Outlet is not present');
-                }
-                $("#divLoader").hide();
-            },
-            error: function (result) {
-                console.log(result.responseText)
-                $("#divLoader").hide();
-            }
-        });
-    }*@   
-
-    @*function SaveScripts() {
-        var OutletId = $('#ddlOutletMaster').val();
-        var Script = $("#txtScript").val();
-        var MassageType = $('#ddlMessageType option:selected').val();
-
-        $("#divLoader").show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("SaveScripts", "IndividualDBConfig")',
-            data: '{OutletId: ' + JSON.stringify(OutletId) + ', Script: ' + JSON.stringify(Script) + ', MessageType: ' + JSON.stringify(MassageType) + '}',
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (result) {
-                console.log(result)
-                if (result = true) {
-                    cuteAlert({
-                        type: "success",
-                        title: "Success Title",
-                        message: "Script Saved Successfully",
-                        buttonText: "Okay"
-                    }).then(() => {
-                        var urlLink = "@Url.Action("ChangeWAScript", "IndividualDBConfig")";
-                        window.location.href = urlLink;
-                    });
-                    $("#divLoader").hide();
-                }
-                else {
-                    cuteAlert({
-                        type: "error",
-                        title: "Oops..",
-                        message: "Error in Saving Script",
-                        buttonText: "Okay"
-                    })
-                }
-                $("#divLoader").hide();
-            },
-        });
-
-    }*@
-
-<!--</script>-->
-

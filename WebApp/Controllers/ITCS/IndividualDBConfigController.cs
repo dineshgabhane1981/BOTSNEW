@@ -213,26 +213,26 @@ namespace WebApp.Controllers.ITCS
             objData.objDLCSMSWAScriptMaster = ITCSR.GetDLCWAScripts(Convert.ToInt32(userDetails.GroupId), DLCMessageType);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        //public ActionResult SaveDLCWAScripts(string DLCMessage, string DLCScript)
-        //{
-        //    bool result = false;
-        //    var userDetails = (CustomerLoginDetail)Session["UserSession"];
-        //    try
-        //    {
-        //        result = ITCSR.SaveDLCWAScripts(Convert.ToInt32(userDetails.GroupId), DLCMessage, DLCScript);
-        //        tblAuditC objData = new tblAuditC();
-        //        objData.GroupId = Convert.ToString(userDetails.GroupId);
-        //        objData.RequestedFor = "Change DLC WA Script";
-        //        objData.RequestedBy = userDetails.UserName;
-        //        objData.RequestedDate = DateTime.Now;
-        //        ITCSR.AddCSLog(objData);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        newexception.AddException(ex, "SaveDLCWAScripts");
-        //    }
-        //    return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
-        //}
+        public ActionResult SaveDLCWAScripts(string DLCMessageType, string DLCScript)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                result = ITCSR.SaveDLCWAScripts(Convert.ToInt32(userDetails.GroupId), DLCMessageType, DLCScript);
+                tblAuditC objData = new tblAuditC();
+                objData.GroupId = Convert.ToString(userDetails.GroupId);
+                objData.RequestedFor = "Change DLC WA Script";
+                objData.RequestedBy = userDetails.UserName;
+                objData.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(objData);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDLCWAScripts");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
         public ActionResult DisableSMS()
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();            

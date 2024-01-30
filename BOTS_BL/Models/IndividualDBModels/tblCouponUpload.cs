@@ -26,5 +26,8 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string UploadedBy { get; set; }
+
+        public DateTime? ExpiryDate { get; set; }
+        
     }
 }

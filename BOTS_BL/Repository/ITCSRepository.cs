@@ -559,30 +559,30 @@ namespace BOTS_BL.Repository
             }
             return objDLCSMSWAScriptMaster; 
         }
-        //public bool SaveDLCWAScripts(int GroupId, string DLCMessage, string DLCScript)
-        //{
-        //    bool result = false;
-        //    string Id;
-        //    Id = string.Empty;
-        //    tblGroupDetail obj = new tblGroupDetail();
-        //    tblDLCSMSWAScriptMaster objDLCSMSWAScriptMaster = new tblDLCSMSWAScriptMaster();
-        //    try
-        //    {
-        //        var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
-        //        using (var context = new BOTSDBContext(connStr))
-        //        {
-        //            var DLCScriptNew = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCWAScript == DLCScript).FirstOrDefault();
-        //            DLCScriptNew.DLCWAScript = DLCScript;
-        //            context.tblDLCSMSWAScriptMasters.AddOrUpdate(DLCScriptNew);
-        //            context.SaveChanges();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        newexception.AddException(ex, "SaveDLCScripts");
-        //    }
-        //    return result;
-        //}
+        public bool SaveDLCWAScripts(int GroupId, string DLCMessageType, string DLCScript)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblDLCSMSWAScriptMaster objDLCSMSWAScriptMaster = new tblDLCSMSWAScriptMaster();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var DLCScriptNew = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCMessageType == DLCMessageType).FirstOrDefault();
+                    DLCScriptNew.DLCWAScript = DLCScript;
+                    context.tblDLCSMSWAScriptMasters.AddOrUpdate(DLCScriptNew);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDLCScripts");
+            }
+            return result;
+        }
         public List<SelectListItem> GetOutlet(string GroupId)
         {
             List<SelectListItem> lstOutlets = new List<SelectListItem>();

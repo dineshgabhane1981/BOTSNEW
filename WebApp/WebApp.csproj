@@ -826,6 +826,7 @@
     <Folder Include="App_Browsers\" />
     <Folder Include="App_Data\" />
     <Folder Include="CampaignFileUpload\" />
+    <Folder Include="CouponFiles\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="DashboardReports\" />
     <Folder Include="DLCImages\" />
