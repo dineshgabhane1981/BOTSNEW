@@ -58,17 +58,14 @@ namespace WebApp.App_Start
             }
             return cipherText;
         }
-        public string GenerateCoupon()
+
+        private static Random random = new Random();
+
+        public string GenerateCoupon(int length)
         {
-            string coupon = string.Empty;
-            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var random = new Random();
-            coupon = new string(
-                Enumerable.Repeat(chars, 6)
-                          .Select(s => s[random.Next(s.Length)])
-                          .ToArray());
-            
-            return coupon;
-        }
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
+        }       
     }
 }

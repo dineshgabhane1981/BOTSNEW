@@ -28,6 +28,8 @@ namespace BOTS_BL.Models
         public string UploadedBy { get; set; }
 
         public DateTime? ExpiryDate { get; set; }
-        
+
+        public decimal? CouponValue { get; set; }
+
     }
 }

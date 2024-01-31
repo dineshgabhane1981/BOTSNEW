@@ -41,5 +41,29 @@ namespace BOTS_BL.Repository
             }
             return lstData;
         }
+        public bool UploadCouponData(List<tblCouponMapping> lstData, tblCouponUpload objUploadData, string conStr)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    context.tblCouponUploads.Add(objUploadData);
+                    context.SaveChanges();
+                    foreach (var item in lstData)
+                    {
+                        context.tblCouponMappings.Add(item);
+                        context.SaveChanges();
+                    }
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UploadCouponData");
+            }
+
+            return status;
+        }
     }
 }
