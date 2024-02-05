@@ -65,5 +65,26 @@ namespace BOTS_BL.Repository
 
             return status;
         }
+    
+        public bool SaveCouponEarnRule(tblCouponRule objData,string conStr)
+        {
+            bool result = false;
+            try
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    context.tblCouponRules.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCouponEarnRule");
+            }
+
+            return result;
+        }
+    
     }
 }

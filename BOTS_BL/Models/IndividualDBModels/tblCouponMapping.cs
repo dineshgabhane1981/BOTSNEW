@@ -32,5 +32,24 @@ namespace BOTS_BL.Models
 
         [StringLength(150)]
         public string InvoiceNo { get; set; }
+
+        public DateTime? RedeemDate { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? RedeemInvoiceAmount { get; set; }
+
+        [StringLength(50)]
+        public string RedeemDay { get; set; }
+
+        [StringLength(50)]
+        public string RedeemCategory { get; set; }
+
+        [StringLength(50)]
+        public string RedeemProduct { get; set; }
+
+        [StringLength(50)]
+        public string RedeemOutlet { get; set; }
+
+        public int? EarnRuleId { get; set; }
     }
 }

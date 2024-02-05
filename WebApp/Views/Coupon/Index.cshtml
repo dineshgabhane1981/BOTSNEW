@@ -1,57 +1,105 @@
-﻿@model  List<BOTS_BL.Models.tblCouponUpload>
+﻿@model  WebApp.ViewModel.UploadCouponViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner" style="margin-top:-10px;">
-    <div class="card p-2 pb-3 pl-4 mb-2" id="dvAddData" style="display:none;">
-        <div class="col-md-12 col-lg-12 row mt-3">
-            <div class="col-md-2 col-lg-2">
-                Upload File :
+    <div class="card p-2 pb-3 pl-4 mb-2 ml-1 row" id="dvAddData" style="display:none;">
+        
+        <div class="col-md-12 col-lg-12 row">
+            <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px">
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <h5>Upload Coupon Configuration</h5>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Upload File :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="file" id="fileUpload" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Expiry Date :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="date" class="input50" id="ExpiryDate" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Coupon Value :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="number" class="input50" id="CouponValue" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Reminder :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="checkbox" style="width:20px; height:20px;cursor:pointer;" id="chkIsReminder" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3" id="dvReminderDays" style="display:none;">
+                    <div class="col-md-4 col-lg-4">
+                        Before expiry days :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="number" class="input50" id="reminderDays" />
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6 col-lg-6">
-                <input type="file" id="fileUpload" />
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12 row mt-3">
-            <div class="col-md-2 col-lg-2">
-                Expiry Date :
-            </div>
-            <div class="col-md-6 col-lg-6">
-                <input type="date" class="input50" id="ExpiryDate" />
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12 row mt-3">
-            <div class="col-md-2 col-lg-2">
-                Coupon Value :
-            </div>
-            <div class="col-md-6 col-lg-6">
-                <input type="number" class="input50" id="CouponValue" />
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12 row mt-3">
-            <div class="col-md-2 col-lg-2">
-                Reminder :
-            </div>
-            <div class="col-md-6 col-lg-6">
-                <input type="checkbox" style="width:20px; height:20px;cursor:pointer;" id="chkIsReminder" />
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12 row mt-3" id="dvReminderDays" style="display:none;">
-            <div class="col-md-2 col-lg-2">
-                Before expiry days :
-            </div>
-            <div class="col-md-6 col-lg-6">
-                <input type="number" class="input50" id="reminderDays" />
+            <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px ">
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <h5>Redeemption Criteria</h5>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Invoice Value :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="number" id="redeemInvoiceValue" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Day :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.RedeemDays(), "Value", "Text"), "All Days", htmlAttributes: new { @class = "input50", @id = "ddlDays" })&nbsp;
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Caregory/ Product :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input50", @id = "ddlCategory" })&nbsp; <br />
+                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @id = "ddlProduct" })&nbsp;
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Outlet :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstOutlet, "Value", "Text"), "All Outlets", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })&nbsp;
+                    </div>
+                </div>
+
             </div>
         </div>
         <div class="col-md-12 col-lg-12 row mt-4">
-            <div class="col-md-5 col-lg-5" style="text-align:center;">
+            <div class="col-md-12 col-lg-12" style="text-align:right;">
                 <button type="button" id="btnUploadCouponData" class="btn btn-primary" onclick="UploadCouponData();" style="margin-right:10px;"> Upload</button>
             </div>
         </div>
     </div>
+    
     <div class="card p-2 pb-3 pl-4">
         <div class="col-md-12 col-lg-12 row">
             <div class="col-md-12 col-lg-12">
@@ -73,9 +121,9 @@
                     <tbody>
                         @if (Model != null)
                         {
-                            if (Model.Count > 0)
+                            if (Model.lstCouponUpload != null)
                             {
-                                foreach (var item in Model)
+                                foreach (var item in Model.lstCouponUpload)
                                 {
                                     <tr>
                                         <td>@item.CouponFileName</td>
@@ -151,6 +199,9 @@
             table.draw();
         });
 
+        $("#ddlCategory").change(function () {
+            GetProductData();
+        });
     });
 
     function AddCouponData() {
@@ -166,6 +217,7 @@
                 buttonText: "Okay"
             })
             returnStatus = false;
+            return false;            
         }
         if ($("#ExpiryDate").val() == "") {
             cuteAlert({
@@ -175,6 +227,7 @@
                 buttonText: "Okay"
             })
             returnStatus = false;
+            return false;
         }
         if ($("#CouponValue").val() == "") {
             cuteAlert({
@@ -184,8 +237,22 @@
                 buttonText: "Okay"
             })
             returnStatus = false;
+            return false;
         }
-
+                
+        if ($("#redeemInvoiceValue").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "") {            
+            if ($("#ddlProduct").val() == "") {               
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please add at least one redeemption criteria",
+                    buttonText: "Okay"
+                })
+                returnStatus = false;
+                return false;
+            }
+        }
+        
         if (returnStatus) {
             $("#divLoader").show();
             $.ajax({
@@ -196,27 +263,67 @@
                     data.append("ExpiryDate", jQuery("#ExpiryDate").val());
                     data.append("Reminder", jQuery("#reminderDays").val());
                     data.append("CouponValue", jQuery("#CouponValue").val());
+                    data.append("InvoiceValue", jQuery("#redeemInvoiceValue").val());
+                    data.append("Day", jQuery("#ddlDays").val());
+                    data.append("Category", jQuery("#ddlCategory").val());
+                    data.append("Product", jQuery("#ddlProduct").val());
+                    data.append("Outlet", jQuery("#ddlOutlet").val());
                     data.append("file", jQuery("#fileUpload").get(0).files[0]);
                     return data;
                 }(),
                 contentType: false,
                 processData: false,
-                success: function (result) {
-                    console.log(result);
-                    cuteAlert({
-                        type: "success",
-                        title: "Uploaded",
-                        message: "Coupon data uploaded successfully!!!",
-                        buttonText: "Okay"
-                    }).then((e) => {
-                        location.reload();
-                    })
+                success: function (result) {                    
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Uploaded",
+                            message: "Coupon data uploaded successfully!!!",
+                            buttonText: "Okay"
+                        }).then((e) => {
+                            location.reload();
+                        })
+                    }
+                    else {
+
+                    }
                     $("#divLoader").hide();
                 }
             });
         }
 
     }
+
+    function GetProductData() {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetProductData", "Coupon")',
+                data: "{'CatCode': '" + $("#ddlCategory").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)
+                    $("#ddlProduct").html("");
+                    var items = '<option>All Product</option>';
+                    $.each(response, function (i, item) {
+                        items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                    });
+                    $("#ddlProduct").html(items);
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    console.log(response)
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
+
 </script>
 
 <style>

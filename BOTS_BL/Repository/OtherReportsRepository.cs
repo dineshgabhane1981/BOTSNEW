@@ -356,6 +356,33 @@ namespace BOTS_BL.Repository
 
             return ObjSubCategoryCode;
         }
+
+        public List<SelectListItem> GetProductCodeByCategory(string connstr, string Categorycode)
+        {
+            List<SelectListItem> lstProd = new List<SelectListItem>();
+            List<ProductDetailsMaster> objProd = new List<ProductDetailsMaster>();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objProd = context.Database.SqlQuery<ProductDetailsMaster>("select ProductCode,ProductName from tblProductMaster where Categorycode = @Categorycode",new SqlParameter("@Categorycode", Categorycode)).ToList();
+                    foreach (var item in objProd)
+                    {
+                        lstProd.Add(new SelectListItem
+                        {
+                            Text = Convert.ToString(item.ProductName),
+                            Value = Convert.ToString(item.ProductCode)
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetProductCode");
+            }
+            return lstProd;
+        }
+
         public List<ProductAnalytics> GetProductAnalyticFilter(string GroupId, string connstr, Int32 AmountSpentFrom, Int32 AmountSpentTo, string CategoryCode1, string CategoryCode2, string LstOutlet, string LstProd1, string LstProd2, string NotPurchasedSince, Int16 PurchaseFiter1, Int16 PurchaseFiter2, string SubCategoryCode1, string SubCategoryCode2, string dtFrom3, string Todte3, string LstProdCodeCount1, string LstProdCodeCount2, string LstOutletCount)
         {
             List<ProductAnalytics> Obj = new List<ProductAnalytics>();

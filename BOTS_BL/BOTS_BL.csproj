@@ -361,6 +361,7 @@
     <Compile Include="Models\IndividualDBModels\tblCelebrationMemberDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblCelebrationTxnDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblCouponMapping.cs" />
+    <Compile Include="Models\IndividualDBModels\tblCouponRule.cs" />
     <Compile Include="Models\IndividualDBModels\tblCouponUpload.cs" />
     <Compile Include="Models\IndividualDBModels\tblCRDataset.cs" />
     <Compile Include="Models\IndividualDBModels\tblCustDetailsMaster.cs" />

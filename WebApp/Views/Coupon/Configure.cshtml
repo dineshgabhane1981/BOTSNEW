@@ -1,0 +1,229 @@
+﻿@model  WebApp.ViewModel.UploadCouponViewModel
+@{
+    ViewBag.Title = "Configure";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner" style="margin-top:-10px;">
+    <div class="card p-2 pb-3 pl-4 mb-2">
+        <div class="col-md-12 col-lg-12 row">
+            <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px ">
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <h5>Earn Criteria</h5>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Invoice Value :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="number" id="earnInvoiceValue" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Day :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.RedeemDays(), "Value", "Text"), "All Days", htmlAttributes: new { @class = "input50", @id = "earnddlDays" })&nbsp;
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Caregory/ Product :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input50", @id = "earnddlCategory" })&nbsp; <br />
+                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @id = "earnddlProduct" })&nbsp;
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Outlet :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstOutlet, "Value", "Text"), "All Outlets", htmlAttributes: new { @class = "input50", @id = "earnddlOutlet" })&nbsp;
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px ">
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <h5>Redeemption Criteria</h5>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Invoice Value :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="number" id="redeemInvoiceValue" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Day :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.RedeemDays(), "Value", "Text"), "All Days", htmlAttributes: new { @class = "input50", @id = "ddlDays" })&nbsp;
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Caregory/ Product :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input50", @id = "ddlCategory" })&nbsp; <br />
+                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @id = "ddlProduct" })&nbsp;
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Outlet :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstOutlet, "Value", "Text"), "All Outlets", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })&nbsp;
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 row mt-4">
+            <div class="col-md-12 col-lg-12" style="text-align:right;">
+                <input type="checkbox" id="chkIsCouponOnly" style="cursor:pointer;width:20px;height:20px;" /> Apply Coupon Only &nbsp;&nbsp;&nbsp; <input id="txtRuleName" type="text" class="input100" />  <button type="button" id="btnSaveCouponRule" class="btn btn-primary" onclick="SaveCouponRule();" style="margin-right:10px;"> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#activityTable').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+        $("#earnddlCategory").change(function () {
+            GetProductData(1);
+        });
+        $("#ddlCategory").change(function () {
+            GetProductData(2);
+        });
+    });
+    function GetProductData(type) {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetProductData", "Coupon")',
+                data: "{'CatCode': '" + $("#ddlCategory").val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response)
+                    if (type == 1) {
+                        $("#earnddlProduct").html("");
+                        var items = '<option>All Product</option>';
+                        $.each(response, function (i, item) {
+                            items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                        });
+                        $("#earnddlProduct").html(items);
+                    }
+                    if (type == 2) {
+                        $("#ddlProduct").html("");
+                        var items = '<option>All Product</option>';
+                        $.each(response, function (i, item) {
+                            items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                        });
+                        $("#ddlProduct").html(items);
+                    }
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    console.log(response)
+                    $("#divLoader").hide();
+                }
+            });
+
+    }
+
+    function SaveCouponRule() {
+        var returnStatus = true;
+        
+
+        if ($("#earnInvoiceValue").val() == "" && $("#earnddlDays").val() == "" && $("#earnddlCategory").val() == "" && $("#earnddlOutlet").val() == "") {
+            if ($("#earnddlProduct").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please add at least one Earn criteria",
+                    buttonText: "Okay"
+                })
+                returnStatus = false;
+                return false;
+            }
+        }
+        if ($("#redeemInvoiceValue").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "") {
+            if ($("#ddlProduct").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please add at least one redeemption criteria",
+                    buttonText: "Okay"
+                })
+                returnStatus = false;
+                return false;
+            }
+        }
+        if (returnStatus) {
+            var data = [];
+            item = {}
+            item["GroupID"] = $("#hdnGroupId").val();
+
+            data.push(item);
+            var datanew = JSON.stringify(MemberData);
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveCouponRule", "Coupon")',
+                data: '{jsonData: ' + JSON.stringify(datanew) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (responce) {
+
+                    $("#divcity").html(responce);
+
+                },
+                error: function (responce) {
+                    $("#divcity").html(responce.responseText);
+
+                }
+            });
+        }
+    }
+
+
+</script>

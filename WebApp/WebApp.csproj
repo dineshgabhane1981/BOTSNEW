@@ -302,6 +302,7 @@
     <Compile Include="ViewModel\OtherReportProductwiseViewModel.cs" />
     <Compile Include="ViewModel\OutletDetailsViewModel.cs" />
     <Compile Include="ViewModel\SinglePageViewModel.cs" />
+    <Compile Include="ViewModel\UploadCouponViewModel.cs" />
     <Compile Include="ViewModel\VelocityReportViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -672,7 +673,7 @@
     <Content Include="Views\Reports\_VelocityCustomerData.cshtml" />
     <Content Include="Views\Coupon\Index.cshtml" />
     <Content Include="Views\Coupon\Report.cshtml" />
-    <Content Include="Views\Coupon\Upload.cshtml" />
+    <Content Include="Views\Coupon\Configure.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
