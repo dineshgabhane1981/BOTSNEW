@@ -20,6 +20,7 @@ namespace BOTS_BL.Repository
         public CustomerLoginDetail AuthenticateUser(LoginModel objLoginModel)
         {
             DatabaseDetail DBDetails = new DatabaseDetail();
+            tblDatabaseDetail tblDatabase = new tblDatabaseDetail();
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
             try
             {
@@ -35,8 +36,15 @@ namespace BOTS_BL.Repository
                             DBDetails = context.DatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
                             //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
 
-                            userDetail.connectionString = CR.GetCustomerConnString(userDetail.GroupId); //"Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-
+                            if (DBDetails == null)
+                            {
+                                tblDatabase = context.tblDatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
+                                userDetail.connectionString = "Data Source = " + tblDatabase.IPAddress + "; Initial Catalog = " + tblDatabase.DBName + "; user id = " + tblDatabase.DBId + "; password = " + tblDatabase.DBPassword + "";
+                            }
+                            else
+                            {
+                                userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                            }
                         }
                     }
                 }
@@ -128,6 +136,7 @@ namespace BOTS_BL.Repository
         public CustomerLoginDetail GetUserDetailsByLoginID(string LoginId)
         {
             CustomerLoginDetail userDetail = new CustomerLoginDetail();
+            tblDatabaseDetail tblDatabase = new tblDatabaseDetail();
             DatabaseDetail DBDetails = new DatabaseDetail();
             try
             {
@@ -141,8 +150,15 @@ namespace BOTS_BL.Repository
                             DBDetails = context.DatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
                             //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
 
-                            userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-
+                            if (DBDetails == null)
+                            {
+                                tblDatabase = context.tblDatabaseDetails.Where(x => x.GroupId == userDetail.GroupId).FirstOrDefault();
+                                userDetail.connectionString = "Data Source = " + tblDatabase.IPAddress + "; Initial Catalog = " + tblDatabase.DBName + "; user id = " + tblDatabase.DBId + "; password = " + tblDatabase.DBPassword + "";
+                            }
+                            else
+                            {
+                                userDetail.connectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                            }
                         }
                     }
                 }

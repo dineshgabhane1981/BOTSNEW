@@ -24,6 +24,7 @@
                             <input type="hidden" id="hdnGroupId" />
                             <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
                             <input type="number" id="txtMobileNo4" class="input50" />
+                            <input type="hidden" id="hdnMobileNo"/>
 
                             <label style="padding-right:30px;padding-top:10px;padding-left:30px;"><b>(OR)</b> </label>
 
@@ -193,6 +194,12 @@
             $("#spnEnrolledOn4").text(result.EnrolledOn);
             $("#hdnCustomerId4").val(result.CustomerId);
 
+                if ($("#txtMobileNo4").val() == "")
+                {
+                    $("#hdnMobileNo").val(result.MobileNo);
+                }
+
+
             //$('#txtInvoiceNumber1').val("");
             //$('#txtInvoiceAmount1').val("");
             //$('#txtPointsToRedeem').val("");
@@ -261,9 +268,17 @@
 
         if (confirm("Are you sure? You want to Load Points")) {
             var MemberData = [];
+            var TempMobileNo;
             item = {}
             item["GroupID"] = $("#hdnGroupId").val();
-            item["MobileNo"] = $("#txtMobileNo4").val();
+
+            if ($("#txtMobileNo4").val() == "") {
+                TempMobileNo = $("#hdnMobileNo").val();
+            }
+            else {
+                TempMobileNo = $("#txtMobileNo4").val();
+            }
+            item["MobileNo"] = TempMobileNo;
             item["OutletId"] = $("#ddlOutletList4").val();
             item["BonusPoints"] = $("#txtBonusPoints").val();
             item["BonusRemark"] = $("#txtBonusRemark").val();
