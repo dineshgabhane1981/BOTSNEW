@@ -85,6 +85,22 @@ namespace BOTS_BL.Repository
 
             return result;
         }
+        public List<tblCouponRule> GetAllCouponRule(string conStr)
+        {
+            List<tblCouponRule> lstData = new List<tblCouponRule>();
+            try
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    lstData = context.tblCouponRules.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCouponEarnRule");
+            }
+            return lstData;
+        }
     
     }
 }

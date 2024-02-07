@@ -16,6 +16,7 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstProduct { get; set; }
         public string dummyCategory { get; set; }
         public string dummyProduct { get; set; }
+        public List<tblCouponRule> lstCouponRule { get; set; }
         public SelectListItem[] RedeemDays()
         {
             return new SelectListItem[7] { new SelectListItem() { Text = "Monday", Value = "Monday" },

@@ -16,7 +16,7 @@ namespace BOTS_BL.Models
         [StringLength(250)]
         public string EarnRuleName { get; set; }
 
-        public decimal? EarnInvoiceAmount { get; set; }
+        public decimal? EarnInvoiceAmountFrom { get; set; }
 
         [StringLength(50)]
         public string EarnDay { get; set; }
@@ -28,7 +28,7 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string EarnOutlet { get; set; }
 
-        public decimal? RedeemInvoiceAmount { get; set; }
+        public decimal? RedeemInvoiceAmountFrom { get; set; }
 
         [StringLength(50)]
         public string RedeemDay { get; set; }
@@ -48,5 +48,11 @@ namespace BOTS_BL.Models
         public string AddedBy { get; set; }
 
         public bool? IsOnlyCoupon { get; set; }
+
+        public int? CouponValue { get; set; }
+
+        public decimal? EarnInvoiceAmountTo { get; set; }
+
+        public decimal? RedeemInvoiceAmountTo { get; set; }
     }
 }

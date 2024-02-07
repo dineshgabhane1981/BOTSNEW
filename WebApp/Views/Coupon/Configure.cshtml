@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="app-main__inner" style="margin-top:-10px;">
+<div class="app-main__inner" style="margin-top:-10px;display:none;" id="dvAddCoupon">
     <div class="card p-2 pb-3 pl-4 mb-2">
         <div class="col-md-12 col-lg-12 row">
             <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px ">
@@ -16,7 +16,8 @@
                         Invoice Value :
                     </div>
                     <div class="col-md-6 col-lg-6">
-                        <input type="number" id="earnInvoiceValue" class="input50" />
+                        <input type="number" id="earnInvoiceValue1" class="input50" />
+                        <input type="number" id="earnInvoiceValue2" class="input50" style="margin-top:10px;" />
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
@@ -33,7 +34,7 @@
                     </div>
                     <div class="col-md-6 col-lg-6">
                         @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input50", @id = "earnddlCategory" })&nbsp; <br />
-                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @id = "earnddlProduct" })&nbsp;
+                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @style = "margin-top:10px;", @id = "earnddlProduct" })&nbsp;
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
@@ -46,7 +47,7 @@
                 </div>
 
             </div>
-            <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px ">
+            <div class="col-md-6 col-lg-6 pb-2" style="border:1px solid gray;border-radius:5px ">
                 <div class="col-md-12 col-lg-12 row mt-3">
                     <h5>Redeemption Criteria</h5>
                 </div>
@@ -55,7 +56,8 @@
                         Invoice Value :
                     </div>
                     <div class="col-md-6 col-lg-6">
-                        <input type="number" id="redeemInvoiceValue" class="input50" />
+                        <input type="number" id="redeemInvoiceValue1" class="input50" />
+                        <input type="number" id="redeemInvoiceValue2" class="input50" style="margin-top:10px;" />
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
@@ -72,7 +74,7 @@
                     </div>
                     <div class="col-md-6 col-lg-6">
                         @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input50", @id = "ddlCategory" })&nbsp; <br />
-                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @id = "ddlProduct" })&nbsp;
+                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @style = "margin-top:10px;", @id = "ddlProduct" })&nbsp;
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
@@ -88,12 +90,63 @@
         </div>
         <div class="col-md-12 col-lg-12 row mt-4">
             <div class="col-md-12 col-lg-12" style="text-align:right;">
-                <input type="checkbox" id="chkIsCouponOnly" style="cursor:pointer;width:20px;height:20px;" /> Apply Coupon Only &nbsp;&nbsp;&nbsp; <input id="txtRuleName" type="text" class="input100" />  <button type="button" id="btnSaveCouponRule" class="btn btn-primary" onclick="SaveCouponRule();" style="margin-right:10px;"> Save</button>
+                Coupon Value : <input type="number" id="couponValue" class="input50" />  <input type="checkbox" id="chkIsCouponOnly" style="cursor:pointer;width:20px;height:20px;" /> Apply Coupon Only &nbsp;&nbsp;&nbsp; <input id="txtRuleName" type="text" class="input100" />  <button type="button" id="btnSaveCouponRule" class="btn btn-primary" onclick="SaveCouponRule();" style="margin-right:10px;"> Save</button>
             </div>
         </div>
     </div>
 </div>
 
+<div class="app-main__inner" style="margin-top:-10px;">
+    <div class="card p-2 pb-3 pl-4 mb-2">
+        <div class="col-md-12 col-lg-12 row">
+            <div class="col-md-12 col-lg-12">
+                <div style="text-align:right;">
+                    <a href="#" onclick="AddCouponRule();" title="Add Coupon Rule">  <img src="~/Content/assets/images/AddCustomer.png" width="7%" /></a>
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12">
+                <table class="table" id="activityTable">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rule Name</th>
+                            <th scope="col">Is Coupon Only</th>
+                            <th scope="col">Added Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            if (Model.lstCouponRule != null)
+                            {
+                                foreach (var item in Model.lstCouponRule)
+                                {
+                                    <tr>
+                                        <td>@item.EarnRuleName</td>
+                                        <td>@item.IsOnlyCoupon.ToString()</td>
+                                        <td>@item.AddedDate.Value.ToString("dd-MM-yyy")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" align="center">No Data Available</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5">No Data Available</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         $('#activityTable').DataTable({
@@ -130,13 +183,22 @@
             GetProductData(2);
         });
     });
+    function AddCouponRule() {
+        $("#dvAddCoupon").show(1000)
+    }
     function GetProductData(type) {
-
+        var catId = 0;
+        if (type == 1) {
+            catId = $("#earnddlCategory").val();
+        }
+        if (type == 2) {
+            catId = $("#ddlCategory").val();
+        }
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetProductData", "Coupon")',
-                data: "{'CatCode': '" + $("#ddlCategory").val() + "'}",
+                data: "{'CatCode': '" + catId + "'}",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -151,11 +213,11 @@
                     }
                     if (type == 2) {
                         $("#ddlProduct").html("");
-                        var items = '<option>All Product</option>';
-                        $.each(response, function (i, item) {
-                            items += "<option value='" + item.Value + "'>" + item.Text + "</option>";
+                        var items1 = '<option>All Product</option>';
+                        $.each(response, function (i, item1) {
+                            items1 += "<option value='" + item1.Value + "'>" + item1.Text + "</option>";
                         });
-                        $("#ddlProduct").html(items);
+                        $("#ddlProduct").html(items1);
                     }
                     $("#divLoader").hide();
                 },
@@ -172,9 +234,9 @@
 
     function SaveCouponRule() {
         var returnStatus = true;
-        
 
-        if ($("#earnInvoiceValue").val() == "" && $("#earnddlDays").val() == "" && $("#earnddlCategory").val() == "" && $("#earnddlOutlet").val() == "") {
+
+        if ($("#earnInvoiceValue1").val() == "" && $("#earnInvoiceValue2").val() == "" && $("#earnddlDays").val() == "" && $("#earnddlCategory").val() == "" && $("#earnddlOutlet").val() == "") {
             if ($("#earnddlProduct").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -198,13 +260,42 @@
                 return false;
             }
         }
+        if ($("#couponValue").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Coupon value",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+            return false;
+        }
+
         if (returnStatus) {
             var data = [];
             item = {}
-            item["GroupID"] = $("#hdnGroupId").val();
+            item["EarnRuleName"] = $("#txtRuleName").val();
+            item["EarnInvoiceAmountFrom"] = $("#earnInvoiceValue1").val();
+            item["EarnInvoiceAmountTo"] = $("#earnInvoiceValue2").val();
+            item["EarnDay"] = $("#earnddlDays").val();
+            item["EarnCategory"] = $("#earnddlCategory").val();
+            item["EarnProduct"] = $("#earnddlProduct").val();
+            item["EarnOutlet"] = $("#earnddlOutlet").val();
+            item["RedeemInvoiceAmountFrom"] = $("#redeemInvoiceValue1").val();
+            item["RedeemInvoiceAmountTo"] = $("#redeemInvoiceValue2").val();
+            item["RedeemDay"] = $("#ddlDays").val();
+            item["RedeemCategory"] = $("#ddlCategory").val();
+            item["RedeemProduct"] = $("#ddlProduct").val();
+            item["RedeemOutlet"] = $("#ddlOutlet").val();
+            if ($('#chkIsCouponOnly').is(':checked'))
+                item["IsOnlyCoupon"] = true;
+            else
+                item["IsOnlyCoupon"] = false;
+            item["CouponValue"] = $("#couponValue").val();
 
             data.push(item);
-            var datanew = JSON.stringify(MemberData);
+            var datanew = JSON.stringify(data);
+
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -212,13 +303,29 @@
                 data: '{jsonData: ' + JSON.stringify(datanew) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (responce) {
-
-                    $("#divcity").html(responce);
-
+                success: function (result) {
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Uploaded",
+                            message: "Coupon criteria saved successfully!!!",
+                            buttonText: "Okay"
+                        }).then((e) => {
+                            location.reload();
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "There is problem in saving data!!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
                 },
-                error: function (responce) {
-                    $("#divcity").html(responce.responseText);
+                error: function (result) {
+                    alert(222)
 
                 }
             });

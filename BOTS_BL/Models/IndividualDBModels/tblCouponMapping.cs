@@ -36,7 +36,9 @@ namespace BOTS_BL.Models
         public DateTime? RedeemDate { get; set; }
 
         [Column(TypeName = "numeric")]
-        public decimal? RedeemInvoiceAmount { get; set; }
+        public decimal? RedeemInvoiceAmountFrom { get; set; }
+        [Column(TypeName = "numeric")]
+        public decimal? RedeemInvoiceAmountTo { get; set; }        
 
         [StringLength(50)]
         public string RedeemDay { get; set; }

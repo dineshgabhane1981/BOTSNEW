@@ -6,9 +6,9 @@
 
 <div class="app-main__inner" style="margin-top:-10px;">
     <div class="card p-2 pb-3 pl-4 mb-2 ml-1 row" id="dvAddData" style="display:none;">
-        
+
         <div class="col-md-12 col-lg-12 row">
-            <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px">
+            <div class="col-md-6 col-lg-6" style="border: 1px solid gray; border-radius: 5px; padding-bottom:10px;">
                 <div class="col-md-12 col-lg-12 row mt-3">
                     <h5>Upload Coupon Configuration</h5>
                 </div>
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px ">
+            <div class="col-md-6 col-lg-6" style="border: 1px solid gray; border-radius: 5px; padding-bottom: 10px;">
                 <div class="col-md-12 col-lg-12 row mt-3">
                     <h5>Redeemption Criteria</h5>
                 </div>
@@ -62,7 +62,8 @@
                         Invoice Value :
                     </div>
                     <div class="col-md-6 col-lg-6">
-                        <input type="number" id="redeemInvoiceValue" class="input50" />
+                        <input type="number" id="redeemInvoiceValue1" class="input50" />
+                        <input type="number" id="redeemInvoiceValue2" class="input50" style="margin-top:10px;" />
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
@@ -99,7 +100,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="card p-2 pb-3 pl-4">
         <div class="col-md-12 col-lg-12 row">
             <div class="col-md-12 col-lg-12">
@@ -112,10 +113,10 @@
                     <thead>
                         <tr>
                             <th scope="col">Coupon File Name</th>
+                            <th scope="col">Uploaded Date</th>
                             <th scope="col">Coupon Value</th>
                             <th scope="col">Member Count</th>
-                            <th scope="col">Reminder Date</th>
-                            <th scope="col">Uploaded Date</th>
+                            <th scope="col">Expiry Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,17 +128,18 @@
                                 {
                                     <tr>
                                         <td>@item.CouponFileName</td>
+                                        <td>@item.UploadedDate</td>
                                         <td>@item.CouponValue</td>
                                         <td>@item.Count</td>
-                                        @if (item.ReminderDate.HasValue)
+                                        @if (item.ExpiryDate.HasValue)
                                         {
-                                            <td>@item.ReminderDate.Value.ToString("dd-MM-yyyy")</td>
+                                            <td>@item.ExpiryDate.Value.ToString("dd-MM-yyyy")</td>
                                         }
                                         else
                                         {
                                             <td>--</td>
                                         }
-                                        <td>@item.UploadedDate</td>
+
                                     </tr>
                                 }
                             }
@@ -217,7 +219,7 @@
                 buttonText: "Okay"
             })
             returnStatus = false;
-            return false;            
+            return false;
         }
         if ($("#ExpiryDate").val() == "") {
             cuteAlert({
@@ -239,9 +241,9 @@
             returnStatus = false;
             return false;
         }
-                
-        if ($("#redeemInvoiceValue").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "") {            
-            if ($("#ddlProduct").val() == "") {               
+
+        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "") {
+            if ($("#ddlProduct").val() == "") {
                 cuteAlert({
                     type: "error",
                     title: "Oops..",
@@ -252,7 +254,7 @@
                 return false;
             }
         }
-        
+
         if (returnStatus) {
             $("#divLoader").show();
             $.ajax({
@@ -263,7 +265,8 @@
                     data.append("ExpiryDate", jQuery("#ExpiryDate").val());
                     data.append("Reminder", jQuery("#reminderDays").val());
                     data.append("CouponValue", jQuery("#CouponValue").val());
-                    data.append("InvoiceValue", jQuery("#redeemInvoiceValue").val());
+                    data.append("InvoiceValueFrom", jQuery("#redeemInvoiceValue1").val());
+                    data.append("InvoiceValueTo", jQuery("#redeemInvoiceValue2").val());
                     data.append("Day", jQuery("#ddlDays").val());
                     data.append("Category", jQuery("#ddlCategory").val());
                     data.append("Product", jQuery("#ddlProduct").val());
@@ -273,7 +276,7 @@
                 }(),
                 contentType: false,
                 processData: false,
-                success: function (result) {                    
+                success: function (result) {
                     if (result) {
                         cuteAlert({
                             type: "success",
@@ -285,7 +288,12 @@
                         })
                     }
                     else {
-
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "There is problem in uploading data!!!",
+                            buttonText: "Okay"
+                        })
                     }
                     $("#divLoader").hide();
                 }
