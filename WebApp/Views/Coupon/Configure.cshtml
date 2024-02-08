@@ -90,7 +90,11 @@
         </div>
         <div class="col-md-12 col-lg-12 row mt-4">
             <div class="col-md-12 col-lg-12" style="text-align:right;">
-                Coupon Value : <input type="number" id="couponValue" class="input50" />  <input type="checkbox" id="chkIsCouponOnly" style="cursor:pointer;width:20px;height:20px;" /> Apply Coupon Only &nbsp;&nbsp;&nbsp; <input id="txtRuleName" type="text" class="input100" />  <button type="button" id="btnSaveCouponRule" class="btn btn-primary" onclick="SaveCouponRule();" style="margin-right:10px;"> Save</button>
+                <input type="number" id="expiryDays" class="input50" placeholder="Expiry Days" /> 
+                <input type="number" id="couponValue" class="input50" placeholder="Coupon Value" /> 
+                <input type="checkbox" id="chkIsCouponOnly" style="cursor:pointer;width:20px;height:20px;" /> Apply Coupon Only &nbsp;&nbsp;&nbsp; 
+                <input id="txtRuleName" type="text" class="input100" placeholder="Rule Name" />  
+                <button type="button" id="btnSaveCouponRule" class="btn btn-primary" onclick="SaveCouponRule();" style="margin-right:10px;"> Save</button>
             </div>
         </div>
     </div>
@@ -248,7 +252,7 @@
                 return false;
             }
         }
-        if ($("#redeemInvoiceValue").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "") {
+        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "") {
             if ($("#ddlProduct").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -260,6 +264,16 @@
                 return false;
             }
         }
+        if ($("#expiryDays").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Expiry days",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+            return false;
+        }
         if ($("#couponValue").val() == "") {
             cuteAlert({
                 type: "error",
@@ -269,7 +283,20 @@
             })
             returnStatus = false;
             return false;
+        }        
+        if ($("#txtRuleName").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Rule Name",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+            return false;
         }
+
+
+        
 
         if (returnStatus) {
             var data = [];
@@ -292,7 +319,8 @@
             else
                 item["IsOnlyCoupon"] = false;
             item["CouponValue"] = $("#couponValue").val();
-
+            item["ExpiryDays"] = $("#expiryDays").val();
+            
             data.push(item);
             var datanew = JSON.stringify(data);
 

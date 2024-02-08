@@ -54,5 +54,6 @@ namespace BOTS_BL.Models
         public decimal? EarnInvoiceAmountTo { get; set; }
 
         public decimal? RedeemInvoiceAmountTo { get; set; }
+        public int? ExpiryDays { get; set; }
     }
 }

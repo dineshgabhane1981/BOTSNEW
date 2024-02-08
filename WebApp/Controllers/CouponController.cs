@@ -184,6 +184,7 @@ namespace WebApp.Controllers
                     objRule.AddedBy = userDetails.LoginId;
                     objRule.IsOnlyCoupon = Convert.ToBoolean(item["IsOnlyCoupon"]);
                     objRule.CouponValue = Convert.ToInt32(item["CouponValue"]);
+                    objRule.ExpiryDays = Convert.ToInt32(item["ExpiryDays"]);
                 }
                 result = CR.SaveCouponEarnRule(objRule, userDetails.connectionString);
             }
