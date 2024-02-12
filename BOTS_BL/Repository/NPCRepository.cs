@@ -68,7 +68,7 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    var objData = context.OutletDetails.ToList();
+                    var objData = context.tblOutletMasters.ToList();
                     foreach (var item in objData)
                     {
                         SelectListItem lstItem = new SelectListItem();
