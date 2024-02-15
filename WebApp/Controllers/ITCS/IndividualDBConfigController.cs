@@ -54,7 +54,7 @@ namespace WebApp.Controllers.ITCS
             var userDetails = (CustomerLoginDetail)Session["UserSession"];           
             try
             {
-                result = ITCSR.SaveScripts(Convert.ToInt32(userDetails.GroupId), OutletId, Script, MessageType);
+                result = ITCSR.SaveScripts(Convert.ToInt32(userDetails.GroupId), Convert.ToString(OutletId), Script, MessageType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change WA Script";

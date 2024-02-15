@@ -52,6 +52,12 @@ namespace BOTS_BL.Models
         [StringLength(50)]
         public string RedeemOutlet { get; set; }
 
-        public int? EarnRuleId { get; set; }
+        public string EarnRuleId { get; set; }
+        public bool? AllowPointAccrual { get; set; }
+
+        [Column(TypeName = "numeric")]
+        public decimal? InvoiceAmount { get; set; }
+        public string OfferCode { get; set; }
+
     }
 }

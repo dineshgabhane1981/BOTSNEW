@@ -33,6 +33,13 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(conStr))
                 {
                     lstData = context.tblCouponUploads.ToList();
+                    foreach(var item in lstData)
+                    {
+                        var sum = context.tblCouponMappings.Where(x => x.EarnRuleId == item.CouponFileName).Sum(y => y.InvoiceAmount);
+                        var count = context.tblCouponMappings.Where(x => x.EarnRuleId == item.CouponFileName && x.InvoiceAmount != null).Count();
+                        item.CouponRedeemBiz = String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(sum));
+                        item.RedeemCount = count;
+                    }
                 }
             }
             catch (Exception ex)
@@ -102,5 +109,21 @@ namespace BOTS_BL.Repository
             return lstData;
         }
     
+        public List<tblCouponMapping> GetRedeemDetailedReport(string fileName, string conStr)
+        {
+            List<tblCouponMapping> objRedeemData = new List<tblCouponMapping>();
+            try
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    objRedeemData = context.tblCouponMappings.Where(x => x.EarnRuleId == fileName && x.InvoiceAmount != null).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRedeemDetailedReport");
+            }
+            return objRedeemData;
+        }
     }
 }

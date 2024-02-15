@@ -200,6 +200,140 @@ namespace BOTS_BL.Repository
             }
             return obj;
         }
+
+        public BurnValidateResponse BurnCouponValidation(string storeid, string Coupon, string InvoiceAmt, string MobileNo, string BillGUID)
+        {
+            BurnValidateResponse obj = new BurnValidateResponse();
+
+            TimeZoneInfo INDIAN_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime indianTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, INDIAN_ZONE);
+            string groupId = storeid.Substring(0, 4);
+            string connStr = GetCustomerConnString(groupId);
+
+            try
+            {
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    SqlConnection _Con = new SqlConnection(connStr);
+
+                    DataSet retVal = new DataSet();
+                    SqlCommand cmdReport = new SqlCommand("sp_BillingBurnValidationCouponWeb", _Con);
+                    cmdReport.CommandTimeout = 300;
+                    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                    using (cmdReport)
+                    {
+                        SqlParameter param1 = new SqlParameter("pi_CounterId", storeid);
+                        SqlParameter param2 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
+                        SqlParameter param3 = new SqlParameter("pi_InvoiceNo", BillGUID);
+                        SqlParameter param4 = new SqlParameter("pi_MobileNo", MobileNo);
+                        SqlParameter param5 = new SqlParameter("pi_CouponCode", Coupon);
+                        SqlParameter param6 = new SqlParameter("pi_INDDatetime", indianTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                        cmdReport.CommandType = CommandType.StoredProcedure;
+                        cmdReport.Parameters.Add(param1);
+                        cmdReport.Parameters.Add(param2);
+                        cmdReport.Parameters.Add(param3);
+                        cmdReport.Parameters.Add(param4);
+                        cmdReport.Parameters.Add(param5);
+                        cmdReport.Parameters.Add(param6);
+                        daReport.Fill(retVal);
+
+                        DataTable dt = retVal.Tables[0];
+
+                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                        {
+                            obj.ResponseCode = "00";
+                            obj.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            DataTable dt1 = retVal.Tables[1];
+                           // DataTable dt2 = retVal.Tables[2];
+                            obj.BurnCouponAmount = Convert.ToString(dt1.Rows[0]["CouponAmt"]);
+                            if (Convert.ToBoolean(dt1.Rows[0]["AllowPointAccrual"]))
+                                obj.AllowPointAccrual = false;
+                            else
+                                obj.AllowPointAccrual = true;
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(dt1.Rows[0]["OfferCode"])))
+                                obj.OfferCode = Convert.ToString(dt1.Rows[0]["OfferCode"]);
+
+                            //if (dt2.Rows.Count > 0)
+                            //{
+                            //    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSWASendStatus"]);
+
+                                //    //if (SMSStatus == "SMS")
+                                //    //{
+                                //    //    string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
+                                //    //    string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
+                                //    //    string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
+                                //    //    string _Password = dt2.Rows[0]["SMSPassword"].ToString();
+                                //    //    string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
+                                //    //    string _Url = dt2.Rows[0]["SMSUrl"].ToString();
+                                //    //    //string _SMSBrandId = dt2.Rows[0]["SMSBrandId"].ToString();
+                                //    //    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+                                //    //    _job.Start();
+                                //    //}
+
+                                //    switch (SMSStatus)
+                                //    {
+                                //        case "SMS":
+                                //            string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
+                                //            string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
+                                //            string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
+                                //            string _Password = dt2.Rows[0]["SMSPassword"].ToString();
+                                //            string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
+                                //            string _Url = dt2.Rows[0]["SMSUrl"].ToString();
+                                //            string _SMSVendor = dt2.Rows[0]["SMSVendor"].ToString();
+                                //            string _SMSScriptType = dt2.Rows[0]["SMSScriptType"].ToString();
+
+                                //            Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSVendor, _SMSScriptType));
+                                //            _job.Start();
+                                //            break;
+                                //        case "WA":
+                                //            string _MobileNoWA = dt2.Rows[0]["MobileNo"].ToString();
+                                //            string _MobileMessageWA = dt2.Rows[0]["SMSScript"].ToString();
+                                //            string _WATokenId = dt2.Rows[0]["WhatsAppTokenId"].ToString();
+                                //            string _WAUrl = dt2.Rows[0]["WhatsAppUrl"].ToString();
+
+                                //            Thread _jobWA = new Thread(() => SendWA(_MobileNoWA, _MobileMessageWA, _WATokenId, _WAUrl));
+                                //            _jobWA.Start();
+                                //            break;
+                                //        default:
+
+                                //            string _MobileNoSMSWA = dt2.Rows[0]["MobileNo"].ToString();
+                                //            string _MobileMessageSMS = dt2.Rows[0]["SMSScript"].ToString();
+                                //            string _UserNameSMSWA = dt2.Rows[0]["SMSLoginId"].ToString();
+                                //            string _PasswordSMSWA = dt2.Rows[0]["SMSPassword"].ToString();
+                                //            string _SenderSMSWA = dt2.Rows[0]["SMSSenderId"].ToString();
+                                //            string _UrlSMSWA = dt2.Rows[0]["SMSUrl"].ToString();
+                                //            string _SMSAPIKey = dt2.Rows[0]["SMSAPIKey"].ToString();
+                                //            string _SMSVendorSMSWA = dt2.Rows[0]["SMSVendor"].ToString();
+                                //            string _SMSScriptTypeSMSWA = dt2.Rows[0]["SMSScriptType"].ToString();
+                                //            string _MobileMessageWASMSWA = dt2.Rows[0]["WhatsAppScript"].ToString();
+                                //            string _WATokenIdSMSWA = dt2.Rows[0]["WhatsAppTokenId"].ToString();
+                                //            string _WAUrlSMSWA = dt2.Rows[0]["WhatsAppUrl"].ToString();
+                                //            string _SMSTemplateId = string.Empty;
+                                //            string _DisableSMS = string.Empty;
+
+
+                                //            Thread _jobSMSWA = new Thread(() => SendSMSWA(_MobileNoSMSWA, _MobileMessageWASMSWA, _WATokenIdSMSWA, _WAUrlSMSWA, _MobileMessageSMS, _SMSTemplateId, _SMSScriptTypeSMSWA, _SMSVendorSMSWA, _UrlSMSWA, _UserNameSMSWA, _PasswordSMSWA, _SMSAPIKey, _DisableSMS, _SenderSMSWA, SMSStatus));
+                                //            _jobSMSWA.Start();
+                                //            break;
+                                //    }
+                                //}
+                        }
+                        else
+                        {
+                            obj.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                            obj.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "BurnValidation");
+            }
+            return obj;
+        }
+
         public void SendSMS(string _MobileNo, string _SMSScript, string _SMSLoginId, string _SMSPassword, string _SMSSenderId, string _SMSUrl, string _SMSVendor, string _SMSScriptType)
         {
             string responseString;

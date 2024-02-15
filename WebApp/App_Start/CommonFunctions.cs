@@ -61,11 +61,19 @@ namespace WebApp.App_Start
 
         private static Random random = new Random();
 
-        public string GenerateCoupon(int length)
+        public string GenerateCoupon()
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+            //Random r = new Random();
+            //int _min = 1000;
+            //int _max = 9999;
+            //Random _rdm = new Random();
+            Random random = new Random();
+            int value = random.Next(10000);
+            //var fourDigitNumber = _rdm.Next(_min, _max);
+            return "C" + value;
+            //const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            //return new string(Enumerable.Repeat(chars, length)
+            //    .Select(s => s[random.Next(s.Length)]).ToArray());
         }       
     }
 }

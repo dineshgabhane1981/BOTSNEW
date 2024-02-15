@@ -30,6 +30,10 @@ namespace BOTS_BL.Models
         public DateTime? ExpiryDate { get; set; }
 
         public decimal? CouponValue { get; set; }
+        [NotMapped]
+        public int RedeemCount { get; set; }
+        [NotMapped]
+        public string CouponRedeemBiz { get; set; }
 
     }
 }

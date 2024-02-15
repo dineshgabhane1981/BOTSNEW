@@ -606,6 +606,9 @@ namespace WebApp.Controllers.OnBoarding
                 }
                 sb.Append("</table>");
 
+                string sourcedyByEmail = OBR.GetEmailSourceBy(GroupDetails.SourcedBy);
+                string asignedCSEmail = OBR.GetEmailAssignedCS(GroupDetails.AssignedCS);
+
                 var from = "report@blueocktopus.in";
                 var PWD = "S#02MC@OW92d8$x";
                 MailMessage mail = new MailMessage();
@@ -615,6 +618,8 @@ namespace WebApp.Controllers.OnBoarding
                 {
                     mail.To.Add(item);
                 }
+                mail.To.Add(sourcedyByEmail);
+                mail.To.Add(asignedCSEmail);
                 //mail.To.Add("dinesh@blueocktopus.in");
 
                 mail.Subject = "New Customer Onboarded - " + GroupDetails.GroupName;

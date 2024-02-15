@@ -9,9 +9,10 @@ namespace BOTS_BL.Models
     [Table("tblSMSWhatsAppScriptMaster")]
     public partial class tblSMSWhatsAppScriptMaster
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public long SlNo { get; set; }
 
+        [Required]
         [StringLength(50)]
         public string Id { get; set; }
 
@@ -35,5 +36,10 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string SMSWhatsAppSendStatus { get; set; }
+
+        [StringLength(50)]
+        public string WhatsAppMessageType { get; set; }
+
+        public bool? IsActive { get; set; }
     }
 }

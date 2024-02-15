@@ -24,6 +24,18 @@ namespace BOTS_BL.Models
         public string OTPValue { get; set; }
         public string BurnPointsAsAmount { get; set; }
         public string PointsValue { get; set; }
+        public string BurnCouponAmount { get; set; }
+        public bool AllowPointAccrual { get; set; }
+        public string OfferCode { get; set; }
+
+    }
+    public class GinesysRedeemCouponModel
+    {
+        public string MobileNo { get; set; }
+        public string CustomerName { get; set; }
+        public string InvoiceAmount { get; set; }
+        public string billGUID { get; set; }
+        public string StoreId { get; set; }        
     }
 }
 

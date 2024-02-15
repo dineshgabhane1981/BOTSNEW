@@ -192,7 +192,7 @@ namespace BOTS_BL.Repository
             return objSMSWhatsAppScriptMaster;
 
         }
-        public bool SaveScripts(int GroupId, int OutletId, string Script, string MessageType)
+        public bool SaveScripts(int GroupId, string OutletId, string Script, string MessageType)
         {
             bool result = false;
             string Id;
@@ -204,7 +204,7 @@ namespace BOTS_BL.Repository
                 var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType).FirstOrDefault();
+                    var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId== OutletId).FirstOrDefault();
                     Script1.WhatsAppScript = Script;
                     context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                     context.SaveChanges();

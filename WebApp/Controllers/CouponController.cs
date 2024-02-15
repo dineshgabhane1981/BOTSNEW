@@ -11,6 +11,8 @@ using ClosedXML.Excel;
 using System.Data;
 using WebApp.ViewModel;
 using System.Web.Script.Serialization;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace WebApp.Controllers
 {
@@ -21,10 +23,12 @@ namespace WebApp.Controllers
         ReportsRepository RR = new ReportsRepository();
         OtherReportsRepository ORR = new OtherReportsRepository();
         // GET: Coupon
-        public ActionResult Index()
-        {
-            UploadCouponViewModel objData = new UploadCouponViewModel();
+        public  ActionResult  Index()
+        {            
             CommonFunctions Common = new CommonFunctions();
+            string cCode = Common.GenerateCoupon();
+            UploadCouponViewModel objData = new UploadCouponViewModel();
+            
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objData.lstCouponUpload = CR.GetAllCouponUpload(userDetails.connectionString);
             objData.lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
@@ -32,7 +36,7 @@ namespace WebApp.Controllers
             objData.lstProduct = ORR.GetProductId(userDetails.GroupId, userDetails.connectionString);
             return View(objData);
         }
-        public JsonResult UploadCouponBulkData(HttpPostedFileBase file, string ExpiryDate, string Reminder, string CouponValue, string InvoiceValueFrom, string InvoiceValueTo, string Day, string Category, string Product, string Outlet)
+        public JsonResult UploadCouponBulkData(HttpPostedFileBase file, string ExpiryDate, string Reminder, string CouponValue, string InvoiceValueFrom, string InvoiceValueTo, string Day, string Category, string Product, string Outlet,string OfferCode, string IsOnlyCoupon)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -40,7 +44,7 @@ namespace WebApp.Controllers
             tblCouponUpload objUpload = new tblCouponUpload();
             try
             {
-                objUpload.CouponFileName = file.FileName;
+                objUpload.CouponFileName = file.FileName + "_" + DateTime.Now.Year + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "_" + DateTime.Now.Hour + "_" + DateTime.Now.Minute + "_" + DateTime.Now.Second;
                 if (!string.IsNullOrEmpty(Reminder))
                 {
                     objUpload.IsReminder = true;
@@ -50,7 +54,6 @@ namespace WebApp.Controllers
                 objUpload.UploadedDate = DateTime.Now;
                 objUpload.UploadedBy = userDetails.LoginId;
                 objUpload.CouponValue = Convert.ToDecimal(CouponValue);
-
 
                 using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
                 {
@@ -85,7 +88,7 @@ namespace WebApp.Controllers
                         CommonFunctions Common = new CommonFunctions();
                         tblCouponMapping objData = new tblCouponMapping();
                         objData.MobileNo = Convert.ToString(dr["MobileNo"]);
-                        objData.CouponCode = Common.GenerateCoupon(6);
+                        objData.CouponCode = Common.GenerateCoupon();
                         objData.CouponValue = Convert.ToDecimal(CouponValue);
                         objData.ExpiryDate = Convert.ToDateTime(ExpiryDate);
                         objData.CreatedDate = DateTime.Now;
@@ -94,7 +97,7 @@ namespace WebApp.Controllers
                         if (!string.IsNullOrEmpty(InvoiceValueFrom))
                             objData.RedeemInvoiceAmountFrom = Convert.ToDecimal(InvoiceValueFrom);
                         if (!string.IsNullOrEmpty(InvoiceValueTo))
-                            objData.RedeemInvoiceAmountFrom = Convert.ToDecimal(InvoiceValueTo);
+                            objData.RedeemInvoiceAmountTo = Convert.ToDecimal(InvoiceValueTo);
                         if (!string.IsNullOrEmpty(Day))
                             objData.RedeemDay = Day;
                         if (!string.IsNullOrEmpty(Category))
@@ -103,6 +106,10 @@ namespace WebApp.Controllers
                             objData.RedeemProduct = Product;
                         if (!string.IsNullOrEmpty(Outlet))
                             objData.RedeemOutlet = Outlet;
+
+                        objData.EarnRuleId = objUpload.CouponFileName;
+                        objData.AllowPointAccrual = Convert.ToBoolean(IsOnlyCoupon);
+                        objData.OfferCode = OfferCode;                        
 
                         lstData.Add(objData);
                     }
@@ -163,9 +170,9 @@ namespace WebApp.Controllers
                     if (!string.IsNullOrEmpty(Convert.ToString(item["EarnInvoiceAmountTo"])))
                         objRule.EarnInvoiceAmountTo = Convert.ToDecimal(item["EarnInvoiceAmountTo"]);
                     objRule.EarnDay = Convert.ToString(item["EarnDay"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["EarnCategory"])))
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["EarnCategory"])) && Convert.ToString(item["EarnCategory"]) != "All Category")
                         objRule.EarnCategory = Convert.ToInt32(item["EarnCategory"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["EarnProduct"])))
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["EarnProduct"])) && Convert.ToString(item["EarnProduct"]) != "All Product")
                         objRule.EarnProduct = Convert.ToInt32(item["EarnProduct"]);
                     objRule.EarnOutlet = Convert.ToString(item["EarnOutlet"]);
 
@@ -174,9 +181,9 @@ namespace WebApp.Controllers
                     if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemInvoiceAmountTo"])))
                         objRule.RedeemInvoiceAmountTo = Convert.ToDecimal(item["RedeemInvoiceAmountTo"]);
                     objRule.RedeemDay = Convert.ToString(item["RedeemDay"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemCategory"])))
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemCategory"])) && Convert.ToString(item["RedeemCategory"]) != "All Category")
                         objRule.RedeemCategory = Convert.ToInt32(item["RedeemCategory"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemProduct"])))
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemProduct"])) && Convert.ToString(item["RedeemProduct"]) != "All Product")
                         objRule.RedeemProduct = Convert.ToInt32(item["RedeemProduct"]);
                     objRule.RedeemOutlet = Convert.ToString(item["RedeemOutlet"]);
                     objRule.IsActive = true;
@@ -194,5 +201,21 @@ namespace WebApp.Controllers
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult GetRedeemReport(string fileName)
+        {
+            List<tblCouponMapping> objData = new List<tblCouponMapping>();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                objData = CR.GetRedeemDetailedReport(fileName, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRedeemReport");
+            }
+            return PartialView("_RedeemCouponReport", objData);
+        }
+
+
     }
 }

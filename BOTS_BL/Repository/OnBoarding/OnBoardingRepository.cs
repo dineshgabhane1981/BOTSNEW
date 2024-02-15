@@ -532,8 +532,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    var loginTypeList = new List<string> { "2", "3", "4" };
-                    lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType != null && !loginTypeList.Contains(x.LoginType) && x.UserStatus == true).Select(y => y.EmailId).ToList();
+                    var loginTypeList = new List<string> { "5", "6", "9", "10" };
+                    lstEmails = context.CustomerLoginDetails.Where(x => x.EmailId != null && x.LoginType != null && loginTypeList.Contains(x.LoginType) && x.UserStatus == true).Select(y => y.EmailId).ToList();
                 }
             }
             catch (Exception ex)

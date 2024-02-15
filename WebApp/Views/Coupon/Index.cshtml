@@ -8,92 +8,123 @@
     <div class="card p-2 pb-3 pl-4 mb-2 ml-1 row" id="dvAddData" style="display:none;">
 
         <div class="col-md-12 col-lg-12 row">
-            <div class="col-md-6 col-lg-6" style="border: 1px solid gray; border-radius: 5px; padding-bottom:10px;">
+            <div class="col-md-12 col-lg-12 mt-2" style="border: 1px solid gray; border-radius: 5px; padding-bottom:10px;">
                 <div class="col-md-12 col-lg-12 row mt-3">
                     <h5>Upload Coupon Configuration</h5>
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Upload File :
+                    <div class="col-md-6 col-lg-6 row ">
+                        <div class="col-md-4 col-lg-4">
+                            Upload File :
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <input type="file" id="fileUpload" />
+                        </div>
                     </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="file" id="fileUpload" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Expiry Date :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="date" class="input50" id="ExpiryDate" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Coupon Value :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="number" class="input50" id="CouponValue" />
+                    <div class="col-md-4 col-lg-4 row">
+                        <div class="col-md-6 col-lg-6">
+                            Is Coupon Only:
+                        </div>
+                        <div class="col-md-4 col-lg-4">
+                            <input type="checkbox" style="width:20px; height:20px;cursor:pointer;" id="chkIsCouponOnly" />
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Reminder :
+                    <div class="col-md-6 col-lg-6 row">
+                        <div class="col-md-4 col-lg-4">
+                            Expiry Date :
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <input type="date" class="input50" id="ExpiryDate" />
+                        </div>
                     </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="checkbox" style="width:20px; height:20px;cursor:pointer;" id="chkIsReminder" />
+                    <div class="col-md-6 col-lg-6 row">
+                        <div class="col-md-4 col-lg-4">
+                            Coupon Value :
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <input type="number" class="input50" id="CouponValue" />
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3" id="dvReminderDays" style="display:none;">
-                    <div class="col-md-4 col-lg-4">
-                        Before expiry days :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="number" class="input50" id="reminderDays" />
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    
+                    <div class="col-md-6 col-lg-6 row ">
+                        <div class="col-md-4 col-lg-4">
+                            Reminder :
+                        </div>
+                        <div class="col-md-2 col-lg-2">
+                            <input type="checkbox" style="width:20px; height:20px;cursor:pointer;" id="chkIsReminder" />
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 row" id="dvReminderDays" style="display:none;">
+                            <div class="col-md-9 col-lg-9">
+                                Before expiry days :
+                            </div>
+                            <div class="col-md-3 col-lg-3">
+                                <input type="number" class="input50" id="reminderDays" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-6" style="border: 1px solid gray; border-radius: 5px; padding-bottom: 10px;">
+            
+            <div class="col-md-12 col-lg-12 mt-2" style="border: 1px solid gray; border-radius: 5px; padding-bottom: 10px;">
                 <div class="col-md-12 col-lg-12 row mt-3">
                     <h5>Redeemption Criteria</h5>
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Invoice Value :
+                    <div class="col-md-6 col-lg-6 row">
+                        <div class="col-md-4 col-lg-4">
+                            Invoice Value :
+                        </div>
+                        <div class="col-md-8 col-lg-8">
+                            <input type="number" id="redeemInvoiceValue1" class="input50" placeholder="Min value" />
+                            <input type="number" id="redeemInvoiceValue2" class="input50" placeholder="Max value" style="margin-top:10px;" />
+                        </div>
                     </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="number" id="redeemInvoiceValue1" class="input50" />
-                        <input type="number" id="redeemInvoiceValue2" class="input50" style="margin-top:10px;" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Day :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.RedeemDays(), "Value", "Text"), "All Days", htmlAttributes: new { @class = "input50", @id = "ddlDays" })&nbsp;
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Caregory/ Product :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input50", @id = "ddlCategory" })&nbsp; <br />
-                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @id = "ddlProduct" })&nbsp;
+                    <div class="col-md-6 col-lg-6 row">
+                        <div class="col-md-5 col-lg-5">
+                            Caregory/ Product :
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstCategory, "Value", "Text"), "All Category", htmlAttributes: new { @class = "input50", @id = "ddlCategory" })&nbsp; <br />
+                            @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstProduct, "Value", "Text"), "All Product", htmlAttributes: new { @class = "input50", @style = "margin-top:10px;", @id = "ddlProduct" })&nbsp;
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Outlet :
+                <div class="col-md-12 col-lg-12 row mt-2">
+                    <div class="col-md-6 col-lg-6 row">
+                        <div class="col-md-4 col-lg-4">
+                            Day :
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.RedeemDays(), "Value", "Text"), "All Days", htmlAttributes: new { @class = "input50", @id = "ddlDays" })&nbsp;
+                        </div>
                     </div>
-                    <div class="col-md-6 col-lg-6">
-                        @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstOutlet, "Value", "Text"), "All Outlets", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })&nbsp;
+                    <div class="col-md-6 col-lg-6 row">
+                        <div class="col-md-5 col-lg-5">
+                            Outlet :
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstOutlet, "Value", "Text"), "All Outlets", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })&nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-2">
+                    <div class="col-md-6 col-lg-6 row">
+                        <div class="col-md-4 col-lg-4">
+                            Offer Code :
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <input type="text" class="input50" id="OfferCode" />
+                        </div>
                     </div>
                 </div>
 
+                </div>
             </div>
-        </div>
         <div class="col-md-12 col-lg-12 row mt-4">
             <div class="col-md-12 col-lg-12" style="text-align:right;">
                 <button type="button" id="btnUploadCouponData" class="btn btn-primary" onclick="UploadCouponData();" style="margin-right:10px;"> Upload</button>
@@ -116,6 +147,8 @@
                             <th scope="col">Uploaded Date</th>
                             <th scope="col">Coupon Value</th>
                             <th scope="col">Member Count</th>
+                            <th scope="col">Member Redeem Count</th>
+                            <th scope="col">Redeem Business</th>
                             <th scope="col">Expiry Date</th>
                         </tr>
                     </thead>
@@ -127,10 +160,12 @@
                                 foreach (var item in Model.lstCouponUpload)
                                 {
                                     <tr>
-                                        <td>@item.CouponFileName</td>
+                                        <td><a href="#" onclick="GetRedeemReport('@item.CouponFileName');">@item.CouponFileName</a></td>
                                         <td>@item.UploadedDate</td>
                                         <td>@item.CouponValue</td>
                                         <td>@item.Count</td>
+                                        <td>@item.RedeemCount</td>
+                                        <td>@item.CouponRedeemBiz</td>
                                         @if (item.ExpiryDate.HasValue)
                                         {
                                             <td>@item.ExpiryDate.Value.ToString("dd-MM-yyyy")</td>
@@ -162,6 +197,12 @@
             </div>
         </div>
     </div>
+
+    <div class="row card p-3 m-3" style="margin-left:20px;display:none;" id="dvDetailReport">
+
+    </div>
+
+
 </div>
 
 <script>
@@ -242,7 +283,7 @@
             return false;
         }
 
-        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "") {
+        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#OfferCode").val() == "" && $("#ddlOutlet").val() == "") {
             if ($("#ddlProduct").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -271,6 +312,12 @@
                     data.append("Category", jQuery("#ddlCategory").val());
                     data.append("Product", jQuery("#ddlProduct").val());
                     data.append("Outlet", jQuery("#ddlOutlet").val());
+                    data.append("OfferCode", jQuery("#OfferCode").val());
+
+                    if ($('#chkIsCouponOnly').is(':checked'))
+                        data.append("IsOnlyCoupon", true);
+                    else
+                        data.append("IsOnlyCoupon", false);
                     data.append("file", jQuery("#fileUpload").get(0).files[0]);
                     return data;
                 }(),
@@ -332,6 +379,32 @@
 
     }
 
+
+    function GetRedeemReport(fileName) {
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRedeemReport", "Coupon")',
+            data: "{'fileName': " + JSON.stringify(fileName) + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#dvDetailReport").html(response);
+                $("#dvDetailReport").show(1000);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#dvDetailReport").html(response.responseText);
+                $("#dvDetailReport").show(1000);
+
+                $("#divLoader").hide();
+            }
+        });
+    }
 </script>
 
 <style>
