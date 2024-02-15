@@ -1,0 +1,469 @@
+﻿// JScript File
+
+
+
+(function ($) {
+
+    $.fillM = function () {
+        $('#ddlCountry option').remove();
+        $('#ddlState option').remove();
+        $('#ddlCity option').remove();
+        $.ajax({
+            type: "GET",
+            url: "XMLFiles/Countries.xml",
+            dataType: "xml",
+            success: function (xml) {
+                $(xml).find('Country').each(function () {
+                    $('#ddlCountry').append($('<option></option>').val($(this).attr('CountryId')).html($(this).attr('mcname')));
+                });
+            }
+        });
+
+    },
+
+    $.fillS = function (hdfCountryId, ddlStateId, ddlCityId, hdfStateId) {
+        var StateXMLFilePath = "";
+        if (intFrontEnd == "0") {
+            StateXMLFilePath = "../XMLFiles/State.xml";
+        }
+        else {
+            StateXMLFilePath = "XMLFiles/State.xml";
+        }
+        $('#' + ddlStateId + ' option').remove();
+        $('#' + ddlCityId + ' option').remove();
+        $('#' + ddlStateId).append($('<option></option>').val('0').html('--Select--'));
+        // $('#' + ddlStateId).append($('<option></option>').val('-1').html('--Others--'));
+        $('#' + ddlCityId).append($('<option></option>').val('0').html('--Select--'));
+        // $('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+
+        if ($('#' + hdfCountryId).val() != "0") {
+            $.ajax({
+                type: "GET",
+                url: StateXMLFilePath,
+                dataType: "xml",
+                async: "false",
+                success: function (xml) {
+                    $(xml).find('State').each(function () {
+                        if ($(this).attr('CountryId') == $('#' + hdfCountryId).val()) {
+                            $('#' + ddlStateId).append($('<option></option>').val($(this).attr('StateId')).html($(this).attr('StateName')));
+                        }
+                    });
+                    $('#' + ddlStateId + " >option[value='-1']").remove();
+                    // $('#' + ddlStateId).append($('<option></option>').val('-1').html('--Others--'));
+                    if (hdfStateId != null && document.getElementById(hdfStateId) != null) {
+                        $('#' + ddlStateId).val($('#' + hdfStateId).val());
+                    }
+                }
+            });
+        }
+
+    },
+    $.fillCircle = function (OperatorId, ddlCircleId, CircleId) {
+
+        $('#' + ddlCircleId + ' option').remove();
+        $('#' + ddlCircleId).append($('<option></option>').val('0').html('--Select Circle--'));
+
+        if (OperatorId != "0") {
+            $.ajax({
+                type: "GET",
+                url: "../XMLFiles/Circle.xml",
+                dataType: "xml",
+                async: "false",
+                success: function (xml) {
+                    $(xml).find('Circle').each(function () {
+                        if ($(this).attr('OperatorId') == OperatorId) {
+                            $('#' + ddlCircleId).append($('<option></option>').val($(this).attr('CircleCode')).html($(this).attr('DisplayName')));
+                        }
+                    });
+                    if (CircleId != null) {
+                        $('#' + ddlCircleId).val(CircleId);
+                        if (document.getElementById("ctl00_ContentPlaceHolder1_hdfIsPrefixExists") != null) {
+                            document.getElementById("ctl00_ContentPlaceHolder1_hdfIsPrefixExists").value = $("#" + ddlCircleId + " option:selected").text();
+                        }
+                    }
+                }
+            });
+        }
+
+    },
+    $.fillC = function (ddlStateId, ddlCityId, hdfStateId, rfvStateId, rfvStateOtherId, txtStateOtherId, hdfCityId, rfvCityId, rfvCityOtherId, txtCityOtherId) {
+
+        $('#' + ddlCityId + ' option').remove();
+        $('#' + ddlCityId).append($('<option></option>').val('0').html('--Select--'));
+        //$('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+
+        if ($('#' + hdfStateId).val() == "-1") {
+            ValidatorEnable(document.getElementById(rfvStateId), false);
+            ValidatorEnable(document.getElementById(rfvStateOtherId), true);
+            document.getElementById(txtStateOtherId).style.display = "";
+            if (document.getElementById("ctl00_ContentPlaceHolder1_trOtherState") != null) {
+                document.getElementById("ctl00_ContentPlaceHolder1_trOtherState").style.display = "";
+            }
+            //            document.getElementById('')
+
+            $('#' + hdfCityId).val('-1');
+            ValidatorEnable(document.getElementById(rfvCityId), false);
+            ValidatorEnable(document.getElementById(rfvCityOtherId), true);
+            document.getElementById(txtCityOtherId).style.display = "";
+            if (document.getElementById("ctl00_ContentPlaceHolder1_trOtherCity") != null) {
+                document.getElementById("ctl00_ContentPlaceHolder1_trOtherCity").style.display = "";
+            }
+        }
+        else {
+            document.getElementById(txtStateOtherId).value = '';
+            document.getElementById(txtStateOtherId).style.display = "none";
+            if (document.getElementById("ctl00_ContentPlaceHolder1_trOtherState") != null) {
+                document.getElementById("ctl00_ContentPlaceHolder1_trOtherState").style.display = "none";
+            }
+            ValidatorEnable(document.getElementById(rfvStateOtherId), false);
+            ValidatorEnable(document.getElementById(rfvStateId), true);
+
+            if ($('#' + hdfCityId).val() == "-1") {
+                ValidatorEnable(document.getElementById(rfvCityId), false);
+                ValidatorEnable(document.getElementById(rfvCityOtherId), true);
+                document.getElementById(txtCityOtherId).style.display = "";
+                if (document.getElementById("ctl00_ContentPlaceHolder1_trOtherCity") != null) {
+                    document.getElementById("ctl00_ContentPlaceHolder1_trOtherCity").style.display = "";
+                }
+            }
+            else {
+                $('#' + ddlCityId).val('0');
+                ValidatorEnable(document.getElementById(rfvCityId), true);
+                ValidatorEnable(document.getElementById(rfvCityOtherId), false);
+                document.getElementById(txtCityOtherId).style.display = "none";
+                document.getElementById(txtCityOtherId).value = '';
+                if (document.getElementById("ctl00_ContentPlaceHolder1_trOtherCity") != null) {
+                    document.getElementById("ctl00_ContentPlaceHolder1_trOtherCity").style.display = "none";
+                }
+            }
+        }
+        if ($('#' + hdfStateId).val() != "0") {
+            var CityXMLFilePath = "";
+            if (intFrontEnd == "0") {
+                CityXMLFilePath = "../XMLFiles/City.xml";
+            }
+            else {
+                CityXMLFilePath = "XMLFiles/City.xml";
+            }
+            $.ajax({
+                type: "GET",
+                url: CityXMLFilePath,
+                dataType: "xml",
+                async: "false",
+                success: function (xml) {
+                    $(xml).find('City').each(function () {
+                        if ($(this).attr('StateId') == $('#' + ddlStateId).val()) {
+                            $('#' + ddlCityId).append($('<option></option>').val($(this).attr('CityId')).html($(this).attr('CityName')));
+                        }
+                    });
+                    $('#' + ddlCityId + " >option[value='-1']").remove();
+                    //$('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+                    if (document.getElementById(hdfCityId) != null) {
+                        $('#' + ddlCityId).val($('#' + hdfCityId).val());
+                    }
+                }
+            });
+        }
+
+
+    },
+
+
+    $.fillState = function (hdfCountryId, ddlStateId, ddlCityId, hdfStateId, BindStateOthers, BindCityOthers) {
+
+        $('#' + ddlStateId + ' option').remove();
+        $('#' + ddlCityId + ' option').remove();
+        $('#' + ddlStateId).append($('<option></option>').val('0').html('--Select--'));
+        if (BindStateOthers == "1") {
+            //$('#' + ddlStateId).append($('<option></option>').val('-1').html('--Others--'));
+        }
+
+        $('#' + ddlCityId).append($('<option></option>').val('0').html('--Select--'));
+        if (BindCityOthers == "1") {
+            // $('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+        }
+
+        if ($('#' + hdfCountryId).val() != "" && $('#' + hdfCountryId).val() != "0") {
+            var StateXMLFilePath = "";
+            if (intFrontEnd == "0") {
+                StateXMLFilePath = "../XMLFiles/State.xml";
+            }
+            else {
+                StateXMLFilePath = "XMLFiles/State.xml";
+            }
+            $.ajax({
+                type: "GET",
+                url: StateXMLFilePath,
+                dataType: "xml",
+                async: "false",
+                success: function (xml) {
+                    $(xml).find('State').each(function () {
+                        if ($(this).attr('CountryId') == $('#' + hdfCountryId).val()) {
+                            $('#' + ddlStateId).append($('<option></option>').val($(this).attr('StateId')).html($(this).attr('StateName')));
+                        }
+                    });
+
+
+                    if (BindStateOthers == "1") {
+                        $('#' + ddlStateId + " >option[value='-1']").remove();
+                        // $('#' + ddlStateId).append($('<option></option>').val('-1').html('--Others--'));
+                    }
+
+                    if (hdfStateId != null && document.getElementById(hdfStateId) != null) {
+                        $('#' + ddlStateId).val($('#' + hdfStateId).val());
+                    }
+                }
+            });
+        }
+
+    },
+
+
+        $.fillDistrict = function (hdfCountryId, ddlDistrictId, ddlCityId, hdfDistrictId,
+        BindDistrictOthers, BindCityOthers, hdfDistrictName, hdfCityId, hdfCityName, hdfLanguage) {
+        //ddlDistrictId 
+        //hdfDistrictId
+        //BindDistrictOthers
+        $('#' + ddlDistrictId + ' option').remove();
+        $('#' + ddlCityId + ' option').remove();
+		var selecttext = '--Select--';
+        if ($("#" + hdfLanguage).val() == "ar" || $("#" + hdfLanguage).val() == "arb") {
+            selecttext = 'إختر';
+        }
+
+        $('#' + ddlDistrictId).append($('<option></option>').val('0').html(selecttext));
+
+        if (BindDistrictOthers == "1") {
+            //$('#' + ddlDistrictId).append($('<option></option>').val('-1').html('--Others--'));
+        }
+
+        $('#' + ddlCityId).append($('<option></option>').val('0').html(selecttext));
+        if (BindCityOthers == "1") {
+            // $('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+        }
+
+        if ($('#' + hdfCountryId).val() != "" && $('#' + hdfCountryId).val() != "0") {
+            var StateXMLFilePath = "../../../XMLFiles/ArabicDistrict.xml";
+            //var StateXMLFilePath = "../../XMLFiles/State.xml";
+            //if (intFrontEnd == "0") {
+            //    StateXMLFilePath = "../XMLFiles/State.xml";
+            //}
+            //else {
+            //    StateXMLFilePath = "XMLFiles/State.xml";
+            //}
+            $.ajax({
+                type: "GET",
+                url: StateXMLFilePath,
+                dataType: "xml",
+                async: "false",
+                success: function (xml) {
+                    $(xml).find('State').each(function () {
+                        if ($(this).attr('CountryId') == $('#' + hdfCountryId).val()) {                            
+                            if ($("#" + hdfLanguage).val() == "ar" || $("#" + hdfLanguage).val() == "arb") {
+                                $('#' + ddlDistrictId).append($('<option></option>').val($(this).attr('DistrictId')).html($(this).attr('ArabicDistrictName')));
+                            }
+                            else {
+                                $('#' + ddlDistrictId).append($('<option></option>').val($(this).attr('DistrictId')).html($(this).attr('DistrictName')));
+                            }
+                        }
+                    });
+
+
+                    if (BindDistrictOthers == "1") {
+                        $('#' + ddlDistrictId + " >option[value='-1']").remove();
+                        // $('#' + ddlStateId).append($('<option></option>').val('-1').html('--Others--'));
+                    }
+
+                    //if (hdfDistrictId != null && document.getElementById(hdfDistrictId) != null) {
+                    //    $('#' + ddlDistrictId).val($('#' + hdfDistrictId).val());
+                    //}
+                    
+
+                    if (document.getElementById(hdfDistrictName) != null && document.getElementById(hdfDistrictName).value != '') {
+                        $("#" + ddlDistrictId).children("option").each(function () {
+                            if ($(this)[0].text == document.getElementById(hdfDistrictName).value) {
+                                $("#" + ddlDistrictId).val($(this).val());
+                                $("#" + hdfDistrictId).val($(this).val());
+
+                                $.fillCity1(hdfDistrictId, hdfCityId, ddlCityId, 0, hdfCityName,hdfLanguage);
+                            }
+                        });
+                    }
+                    else {
+                        $('#' + ddlDistrictId).val(0);
+                    }
+                },
+				failure: function (response) {  
+					console.log(response.d);  
+				}
+            });
+        }
+
+    },
+
+        $.fillCity1 = function (hdfDistrictId, hdfCityId, ddlCityId, BindOthers, hdfCityName, hdfLanguage) {
+
+        $('#' + ddlCityId + ' option').remove();
+        //$('#' + ddlCityId).append($('<option></option>').val('0').html('--Select--'));
+		
+		var selecttext = '--Select--';
+        if ($("#" + hdfLanguage).val() == "ar" || $("#" + hdfLanguage).val() == "arb") {
+            selecttext = 'إختر';
+        }
+
+        $('#' + ddlCityId).append($('<option></option>').val('0').html(selecttext));
+
+		
+        if (BindOthers == "1") {
+            // $('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+        }
+        $('#' + ddlCityId).val('0');
+
+        if ($('#' + hdfDistrictId).val() != "" && $('#' + hdfDistrictId).val() != "0") {
+            var CityXMLFilePath = "../../../XMLFiles/ArabicCities.xml";
+           // var CityXMLFilePath = "../../XMLFiles/City.xml";
+            //if (intFrontEnd == "0") {
+            //    CityXMLFilePath = "../XMLFiles/City.xml";
+            //}
+            //else {
+            //    CityXMLFilePath = "XMLFiles/City.xml";
+            //}
+            $.ajax({
+                type: "GET",
+                url: CityXMLFilePath,
+                dataType: "xml",
+                async: "false",
+                success: function (xml) {
+                    $(xml).find('City').each(function () {
+       
+                        //if ($(this).attr('StateId') == $('#' + hdfDistrictId).val()) {
+                        //    $('#' + ddlCityId).append($('<option></option>').val($(this).attr('CityId')).html($(this).attr('CityName')));
+                        //}
+
+                        if ($(this).attr('DistrictId') == $('#' + hdfDistrictId).val()) {
+                            if ($("#" + hdfLanguage).val() == "ar" || $("#" + hdfLanguage).val() == "arb") {
+                                $('#' + ddlCityId).append($('<option></option>').val($(this).attr('CityId')).html($(this).attr('ArabicCityName')));
+                            }
+                            else {
+                                $('#' + ddlCityId).append($('<option></option>').val($(this).attr('CityId')).html($(this).attr('CityName')));
+                            }
+                        }
+                    });
+
+                    if (BindOthers == "1") {
+                        $('#' + ddlCityId + " >option[value='-1']").remove();
+                        // $('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+                    }
+
+                    //if (document.getElementById(hdfCityId) != null && document.getElementById(hdfCityId).value != '') {
+                    //    $('#' + ddlCityId).val($('#' + hdfCityId).val());
+                    //}
+                    //else {
+                    //    $('#' + ddlCityId).val(0);
+                    //}
+                    
+                    if (document.getElementById(hdfCityName) != null && document.getElementById(hdfCityName).value != '') {
+                        $("#" + ddlCityId).children("option").each(function () {
+                            if ($(this)[0].text == document.getElementById(hdfCityName).value) {
+                                $("#" + ddlCityId).val($(this).val());
+                            }
+                        });
+                    }
+                    else {
+                        $('#' + ddlCityId).val(0);
+                    }
+                }
+            });
+        }
+    },
+
+     $.fillCity = function (hdfStateId, hdfCityId, ddlCityId, BindOthers) {
+
+         $('#' + ddlCityId + ' option').remove();
+         $('#' + ddlCityId).append($('<option></option>').val('0').html('--Select--'));
+         if (BindOthers == "1") {
+             // $('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+         }
+         $('#' + ddlCityId).val('0');
+
+         if ($('#' + hdfStateId).val() != "" && $('#' + hdfStateId).val() != "0") {
+             var CityXMLFilePath = "";
+             if (intFrontEnd == "0") {
+                 CityXMLFilePath = "../XMLFiles/City.xml";
+             }
+             else {
+                 CityXMLFilePath = "XMLFiles/City.xml";
+             }
+             $.ajax({
+                 type: "GET",
+                 url: CityXMLFilePath,
+                 dataType: "xml",
+                 async: "false",
+                 success: function (xml) {
+                     $(xml).find('City').each(function () {
+                         if ($(this).attr('StateId') == $('#' + hdfStateId).val()) {
+                             $('#' + ddlCityId).append($('<option></option>').val($(this).attr('CityId')).html($(this).attr('CityName')));
+                         }
+                     });
+
+                     if (BindOthers == "1") {
+                         $('#' + ddlCityId + " >option[value='-1']").remove();
+                         // $('#' + ddlCityId).append($('<option></option>').val('-1').html('--Others--'));
+                     }
+
+                     if (document.getElementById(hdfCityId) != null) {
+                         $('#' + ddlCityId).val($('#' + hdfCityId).val());
+                     }
+                 }
+             });
+         }
+     },
+
+
+    $.fillCityZone = function (hdfCityId, hdfCityZoneId, ddlCityZoneId, BindOthers) {
+
+        $('#' + ddlCityZoneId + ' option').remove();
+        $('#' + ddlCityZoneId).append($('<option></option>').val('0').html('--Select--'));
+        if (BindOthers == "1") {
+            // $('#' + ddlCityZoneId).append($('<option></option>').val('-1').html('--Others--'));
+        }
+
+        $('#' + ddlCityZoneId).val('0');
+
+        if ($('#' + hdfCityId).val() != "" && $('#' + hdfCityId).val() != "0") {
+            $.ajax({
+                type: "GET",
+                url: "../XMLFiles/CityZones.xml",
+                dataType: "xml",
+                async: "false",
+                success: function (xml) {
+                    $(xml).find('CityZone').each(function () {
+                        if ($(this).attr('CityId') == $('#' + hdfCityId).val()) {
+                            $('#' + ddlCityZoneId).append($('<option></option>').val($(this).attr('CityZoneId')).html($(this).attr('CityZoneName')));
+                        }
+                    });
+
+                    if (BindOthers == "1") {
+                        $('#' + ddlCityZoneId + " >option[value='-1']").remove();
+                        //$('#' + ddlCityZoneId).append($('<option></option>').val('-1').html('--Others--'));
+                    }
+
+                    if (hdfCityZoneId != null && document.getElementById(hdfCityZoneId) != null) {
+                        $('#' + ddlCityZoneId).val($('#' + hdfCityZoneId).val());
+                    }
+                }
+            });
+        }
+
+    },
+
+    $.redP = function () {
+        if ($('#drpMain').val() != "0" && $('#ddlCountry').val() != "0" && $('#ddlState').val() != "0" && $('#ddlCity').val() != "0") {
+            $('#dResult').html("Searched for: " + $('#drpMain option:selected').text() + "-->" + $('#ddlCountry option:selected').text() + "-->" + $('#ddlState option:selected').text() + "-->" + $('#ddlCity option:selected').text());
+            $('#dResult').show();
+        } else {
+            $('#dResult').hide();
+        }
+    }
+
+})(jQuery);
