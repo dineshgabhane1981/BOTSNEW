@@ -231,13 +231,15 @@ namespace WebApp.Controllers
             }
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-    
-        //public ActionResult GetCustomerDetails(string groupId)
-        //{             
-        //    var objData = OBR.GetOnBoardingCustomerDetails(groupId);
 
-        //    return Json(objData, JsonRequestBehavior.AllowGet);
-        //}
+
+        public ActionResult GetCustomerDetails(string groupId)
+        {
+            var objData = OBR.GetOnBoardingCustomerDetails(groupId);
+
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+
        
         public ActionResult GetCustomerConfigDetails(string groupId)
         {
@@ -270,9 +272,15 @@ namespace WebApp.Controllers
                     objData.objSMSConfig = CR.GetSMSEmailMasterDetails(groupId);
                     objData.objWAConfig = CR.GetWAEmailMasterDetails(groupId);
                 }
-                objData.lstMWPDetails = CR.GetDLCDetails(groupId);
+                objData.lstDLCDetails = CR.GetDLCDetails(groupId);
+                //objData.lstCelebrationRuleDetails = CR.GetCelebrationRuleDetails(groupId);
                 objData.objMWPSourceMaster = CR.GetMWPSourceMaster(groupId);
                 objData.lstUniquePoints = CR.GetUniquePoints(groupId);
+                objData.lstCelebrationRule = CR.GetCelebrationRules(groupId);
+                objData.lstBirthdaySMSWAScript = CR.GetBirthdayScript(groupId);
+                objData.lstAnniversarySMSWAScript = CR.GetAnniversaryScript(groupId);
+                objData.lstInActiveSMSWAScript = CR.GetInActiveScript(groupId);
+                objData.lstPointsExpirySMSWAScript = CR.GetPointsExpiryScript(groupId);
             }
             catch (Exception ex)
             {

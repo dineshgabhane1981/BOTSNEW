@@ -360,6 +360,7 @@
     <Compile Include="Models\IndividualDBModels\tblCampaignTxnDetails_Clone.cs" />
     <Compile Include="Models\IndividualDBModels\tblCelebrationMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblCelebrationMemberDetail.cs" />
+    <Compile Include="Models\IndividualDBModels\tblCelebrationRuleMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblCelebrationTxnDetail.cs" />
     <Compile Include="Models\IndividualDBModels\tblCouponMapping.cs" />
     <Compile Include="Models\IndividualDBModels\tblCouponRule.cs" />

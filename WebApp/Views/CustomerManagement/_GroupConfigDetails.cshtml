@@ -68,1233 +68,1479 @@
 </style>
 
 <div class="row col-md-12 col-lg-12 p-2">
-    <div class="col-md-3 col-lg-3">
-        <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName <br /> <b>Average Ticket (BTD) </b> <br /> 
-        @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objGroupDetails.AverageTicket))
-    </div>
-    <div class="col-md-2 col-lg-2">
-        <b>Brand Name </b><br />
-        @{
-            var count = 0;
-        }
-        @foreach (var item in Model.lstBrandDetails)
-        {
-            count++;
-            if (Model.lstBrandDetails.Count > 1)
+    
+    <div class="row col-md-12 col-lg-12 p-2">
+        <div class="col-md-3 col-lg-3">
+            <b>   Group Name </b> <br /> @Model.objGroupDetails.GroupName <br /> <b>Average Ticket (BTD) </b> <br />
+            @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.objGroupDetails.AverageTicket))
+        </div>
+        <div class="col-md-2 col-lg-2">
+            <b>Brand Name </b><br />
+            @{
+                var count = 0;
+            }
+            @foreach (var item in Model.lstBrandDetails)
             {
-                if (Model.lstBrandDetails.Count == count)
+                count++;
+                if (Model.lstBrandDetails.Count > 1)
+                {
+                    if (Model.lstBrandDetails.Count == count)
+                    {
+                        <div> @item.BrandName</div>
+                    }
+                    else
+                    {
+                        <div> @item.BrandName,</div>
+                    }
+                }
+                else
                 {
                     <div> @item.BrandName</div>
                 }
-                else
-                {
-                    <div> @item.BrandName,</div>
-                }
-            }
-            else
-            {
-                <div> @item.BrandName</div>
+
             }
 
-        }
-
-        <br /><b>Annual Revenue Target</b>
-    </div>
-    <div class="col-md-2 col-lg-2">
-        <b>Member Base</b><br />
-        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objGroupConfig.MemberBase))
-    </div>
-    <div class="col-md-2 col-lg-2">
-        <b>   Language Preference </b> <br /> @Model.objGroupDetails.LanguagePreference
-    </div>
-        <div class="col-md-3 col-lg-3"><img src="@Model.objGroupDetails.Logo" style="width:200px;" alt="Logo"></div>
- </div>   
-<input class="radio1" id="one1" name="group" type="radio" checked>
-<input class="radio1" id="two1" name="group" type="radio">
-<input class="radio1" id="three1" name="group" type="radio">
-<input class="radio1" id="four1" name="group" type="radio">
-<input class="radio1" id="five1" name="group" type="radio">
-<input class="radio1" id="six1" name="group" type="radio">
-<input class="radio1" id="seven1" name="group" type="radio">
-<div class="tabs1">
-    <label class="tab1" id="one-tab1" for="one1"> Group, Brand & Outlet</label>
-    <label class="tab1" id="two-tab1" for="two1"> Points Rule</label>
-    <label class="tab1" id="three-tab1" for="three1"> Communication</label>
-    <label class="tab1" id="four-tab1" for="four1"> Perpetual Campaigns</label>
-    <label class="tab1" id="five-tab1" for="five1"> DLC Link</label>
-    <label class="tab1" id="six-tab1" for="six1"> Velocity Checks</label>
-    <label class="tab1" id="seven-tab1" for="seven1"> Discussions</label>
-</div>
-
-<div class="panels1">
-
-    <div class="multisteps-form__panel p-3 m-3 list-box bg-white panel1" id="one-panel1">
-        <div class="row">
-            <div style="margin-left:15px;">
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td>Authorized Person</td>
-                        <td>@Model.objGroupDetails.OwnerName</td>
-                    </tr>
-                    <tr>
-                        <td>Reg Mobile No </td>
-                        <td>@Model.objGroupDetails.OwnerMobileNo</td>
-                    </tr>
-                    <tr>
-                        <td>Reg Email </td>
-                        <td>@Model.objGroupDetails.OwnerEmail</td>
-                    </tr>
-                    <tr>
-                        <td>City</td>
-                        <td>@Model.objGroupConfig.CityName</td>
-                    </tr>
-                    <tr>
-                        <td>No of Outlets </td>
-                        <td>@Model.objGroupDetails.OutletCount</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div style="margin-left:15px;">
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td>Start Date</td>
-                        @if (Model.objGroupDetails.WentLiveDate.HasValue)
-                        {
-                            <td>@Model.objGroupDetails.WentLiveDate.Value.ToString("dd-MMM-yyyy")</td>
-                        }
-                        else
-                        {
-                            <td>-</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>Retail Category</td>
-                        <td>@Model.objGroupConfig.CategoryName</td>
-                    </tr>
-                    <tr>
-                        <td>Billing Partner</td>
-                        <td>@Model.objGroupConfig.BillingPartnerName</td>
-                    </tr>
-                    <tr>
-                        <td>Billing System</td>
-                        <td>@Model.objGroupConfig.BillingSystemName</td>
-                    </tr>
-
-                </table>
-            </div>
-
-            <div style="margin-left:15px;">
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td>
-                            Daily / Monthly Email
-                        </td>
-                        <td>NA</td>
-
-                    </tr>
-                    <tr>
-                        <td>Whatsapp Enabled</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>DLC Enabled</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Feedback Enabled</td>
-                        @if (Model.objGroupDetails.IsFeedback.Value)
-                        {
-                            <td>Yes</td>
-                        }
-                        else
-                        {
-                            <td>No</td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>Sourced by</td>
-                        <td>@Model.objGroupConfig.SourceByName</td>
-                    </tr>
-                    <tr>
-                        <td>CS Assigned</td>
-                        <td>@Model.objGroupConfig.CSAssignedName</td>
-                    </tr>
-
-                </table>
-            </div>
-            <div>
-                <table border="1" cellpadding="5" cellspacing="5" style="margin-left:15px;">
-                    <tr style="background-color:lightgrey;">
-                        <td><b>Unique Requirement</b></td>
-                    </tr>
-                    @foreach (var item in Model.lstUniquePoints)
-            {
-                <tr>
-                    <td>@item.Description</td>
-                </tr>
-            }
-                </table>
-            </div>
-
+            <br /><b>Annual Revenue Target</b>
         </div>
-        <div class="row" style="overflow-x:auto;padding-right:10px;margin-top:20px;">
-            <table border="1" cellpadding="5" cellspacing="5">
-                <tr>
-                    <th>Outlet Name</th>
-                    <th>Outlet Code (Clients)</th>
-                    <th>Store Manager Name</th>
-                    <th>Reg Mobile No</th>
-                    <th>Reg Email ID</th>
-                    <th>Store Address</th>
-                    <th>City</th>
-                    <th>Pincode</th>
-                    <th>Geo Lat Long</th>
-                    <th>Mobile No (for Octa XS)</th>
-                    <th>Program Start Date</th>
-                    <th>Renewal Date</th>
-                    <th>Transaction Per Day (BTD)</th>
-                </tr>
-                @foreach (var item in Model.lstOutlets)
-                {
-            <tr>
-                <td>@item.OutletName</td>
-                <td style="text-align:center;">--</td>
-                <td>@item.AuthorisedPerson</td>
-                <td>@item.ContactNo</td>
-                <td>@item.EmailId</td>
-                <td>@item.Address</td>
-                <td>@item.City</td>
-                <td>@item.PinCode</td>
-                <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
-                <td style="text-align:center;">--</td>
-                @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramStartDate)))
-                {
-                    <td>@item.ProgramStartDate.Value.ToString("dd-MM-yyyy")</td>
-                }
-                else
-                {
-                    <td>--</td>
-                }
-                @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramRenewalDate)))
-                {
-                    <td>@item.ProgramRenewalDate.Value.ToString("dd-MM-yyyy")</td>
-                }
-                else
-                {
-                    <td>--</td>
-                }
-                @if (!string.IsNullOrEmpty(Convert.ToString(item.TransactionPerDay)))
-                {
-                    <td>@item.TransactionPerDay</td>
-                }
-                else
-                {
-                    <td>--</td>
-                }
-               
-            </tr>
-                }
-            </table>
+        <div class="col-md-2 col-lg-2">
+            <b>Member Base</b><br />
+            @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.objGroupConfig.MemberBase))
         </div>
+        <div class="col-md-2 col-lg-2">
+            <b>   Language Preference </b> <br /> @Model.objGroupDetails.LanguagePreference
+        </div>
+            <div class="col-md-3 col-lg-3"><img src="@Model.objGroupDetails.Logo" style="width:200px;" alt="Logo"></div>
+     </div>
+    <input class="radio1" id="one1" name="group" type="radio" checked>
+    <input class="radio1" id="two1" name="group" type="radio">
+    <input class="radio1" id="three1" name="group" type="radio">
+    <input class="radio1" id="four1" name="group" type="radio">
+    <input class="radio1" id="five1" name="group" type="radio">
+    <input class="radio1" id="six1" name="group" type="radio">
+    <input class="radio1" id="seven1" name="group" type="radio">
+    <div class="tabs1">
+        <label class="tab1" id="one-tab1" for="one1"> Group, Brand & Outlet</label>
+        <label class="tab1" id="two-tab1" for="two1"> Points Rule</label>
+        <label class="tab1" id="three-tab1" for="three1"> Communication</label>
+        <label class="tab1" id="four-tab1" for="four1"> Perpetual Campaigns</label>
+        <label class="tab1" id="five-tab1" for="five1"> DLC Link</label>
+        <label class="tab1" id="six-tab1" for="six1"> Velocity Checks</label>
+        <label class="tab1" id="seven-tab1" for="seven1"> Discussions</label>
     </div>
 
-    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="two-panel1">
-        <table border="1" cellpadding="5" cellspacing="5">
-            <tr>
-                <td>
-                </td>
-                @foreach (var item in Model.lstBrandDetails)
-                {
-                    <td style="font-weight:bold;">@item.BrandName</td>
-                }
-            </tr>
-            <tr>
-                <td>
-                    1 point is Rs.
-                </td>
-                @foreach (var item in Model.objEarnConfig)
-                {
-                    <td>@item.PointsAllocation</td>
-                }
-            </tr>
-            <tr>
-                <td>
-                    Expiry (months)
-                </td>
-                @foreach (var item in Model.objEarnConfig)
-                {
-                    <td>@item.PointsExpiryVariableDate</td>
-                }
-            </tr>
-            <tr>
-                <td>
-                    Type
-                </td>
-                <td>NA</td>
-            </tr>
-        </table>
-        <div class="row">
-            <div style="margin-right:20px;">
-                @if (Model.lstBrandDetails.Count > 0)
-                {
-                    var cellCount = Model.lstBrandDetails.Count + 1;
-                    <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+    <div class="panels1">
+
+        <div class="multisteps-form__panel p-3 m-3 list-box bg-white panel1" id="one-panel1">
+            <div class="row">
+                <div style="margin-left:15px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
                         <tr>
-                            <td style="text-align:center;background-color:lightgray;font-weight:bold;" colspan="@cellCount">
-                                EARN RULES
-                            </td>
+                            <td>Authorized Person</td>
+                            <td>@Model.objGroupDetails.OwnerName</td>
                         </tr>
                         <tr>
-                            <td>
-                            </td>
-                            @foreach (var item in Model.lstBrandDetails)
-                            {
-                                <td style="font-weight:bold;">@item.BrandName</td>
-                            }
+                            <td>Reg Mobile No </td>
+                            <td>@Model.objGroupDetails.OwnerMobileNo</td>
                         </tr>
                         <tr>
-                            <td>Min Txn Amt for issuance</td>
-                            @foreach (var item in Model.objEarnConfig)
-                            {
-                                <td>@item.MinTxnAmt</td>
-                            }
+                            <td>Reg Email </td>
+                            <td>@Model.objGroupDetails.OwnerEmail</td>
                         </tr>
                         <tr>
-                            <td>Max Pts Earned (per txn)</td>
-                            @foreach (var item in Model.objEarnConfig)
-                            {
-                                <td>@item.MaxPointsEarned</td>
-                            }
+                            <td>City</td>
+                            <td>@Model.objGroupConfig.CityName</td>
                         </tr>
                         <tr>
-                            <td>
-                                Earn on Invoice / Category, Sub-Category,  Products
-                            </td>
-                            @foreach (var item in Model.objEarnConfig)
-                            {
-                                <td>@item.PointsProductORBase</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                Earn % Rate
-                            </td>
-                            @foreach (var item in Model.objEarnConfig)
-                            {
-                                <td>@item.PointsPrecentage</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                Multiple Earn % Rate
-                            </td>
-                            @foreach (var item in Model.objEarnConfig)
-                            {
-                                <td>NA</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                Earn Block on
-                            </td>
-                            @foreach (var item in Model.objEarnConfig)
-                            {
-                                <td>NA</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                Block Codes
-                            </td>
-                            @foreach (var item in Model.objEarnConfig)
-                            {
-                                <td>NA</td>
-                            }
+                            <td>No of Outlets </td>
+                            <td>@Model.objGroupDetails.OutletCount</td>
                         </tr>
                     </table>
-                }
-            </div>
-            <div>
-                @if (Model.lstBrandDetails.Count > 0)
-                {
-                    var cellCount = Model.lstBrandDetails.Count + 1;
-                    <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                </div>
+
+                <div style="margin-left:15px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
                         <tr>
-                            <td style="text-align:center;background-color:lightgray;font-weight:bold;" colspan="@cellCount">
-                                BURN RULES
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                            </td>
-                            @foreach (var item in Model.lstBrandDetails)
+                            <td>Start Date</td>
+                            @if (Model.objGroupDetails.WentLiveDate.HasValue)
                             {
-                                <td style="font-weight:bold;">@item.BrandName</td>
+                                <td>@Model.objGroupDetails.WentLiveDate.Value.ToString("dd-MMM-yyyy")</td>
+                            }
+                            else
+                            {
+                                <td>-</td>
                             }
                         </tr>
                         <tr>
-                            <td>
-                                Min Points Threshold (1st time)
-                            </td>
-                            @foreach (var item in Model.objBurnConfig)
-                            {
-                                <td>@item.MinThresholdPointsFirstTime</td>
-                            }
+                            <td>Retail Category</td>
+                            <td>@Model.objGroupConfig.CategoryName</td>
                         </tr>
                         <tr>
-                            <td>
-                                Min Points Threshold (Subsequent time)
-                            </td>
-                            @foreach (var item in Model.objBurnConfig)
-                            {
-                                <td>@item.MinThresholdPointsEveryTime</td>
-                            }
+                            <td>Billing Partner</td>
+                            <td>@Model.objGroupConfig.BillingPartnerName</td>
                         </tr>
                         <tr>
-                            <td>
-                                Min Invoice Amt
-                            </td>
-                            @foreach (var item in Model.objBurnConfig)
-                            {
-                                <td>@item.MinTxnAmt</td>
-                            }
+                            <td>Billing System</td>
+                            <td>@Model.objGroupConfig.BillingSystemName</td>
                         </tr>
-                        <tr>
-                            <td>
-                                Points as a % of Invoice Amt
-                            </td>
-                            @foreach (var item in Model.objBurnConfig)
-                            {
-                                <td>NA</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                Earn while Burn
-                            </td>
-                            @foreach (var item in Model.objBurnConfig)
-                            {
-                                <td>@item.EarnFullWhileBurnFlag</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                Burn Block on
-                            </td>
-                            @foreach (var item in Model.objBurnConfig)
-                            {
-                                <td>NA</td>
-                            }
-                        </tr>
-                        <tr>
-                            <td>
-                                Block Codes
-                            </td>
-                            @foreach (var item in Model.objBurnConfig)
-                            {
-                                <td>NA</td>
-                            }
-                        </tr>
+
                     </table>
+                </div>
+
+                <div style="margin-left:15px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td>
+                                Daily / Monthly Email
+                            </td>
+                            <td>NA</td>
+
+                        </tr>
+                        <tr>
+                            <td>Whatsapp Enabled</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>DLC Enabled</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>Feedback Enabled</td>
+                            @if (Model.objGroupDetails.IsFeedback.Value)
+                            {
+                                <td>Yes</td>
+                            }
+                            else
+                            {
+                                <td>No</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>Sourced by</td>
+                            <td>@Model.objGroupConfig.SourceByName</td>
+                        </tr>
+                        <tr>
+                            <td>CS Assigned</td>
+                            <td>@Model.objGroupConfig.CSAssignedName</td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div>
+                    <table border="1" cellpadding="5" cellspacing="5" style="margin-left:15px;">
+                        <tr style="background-color:lightgrey;">
+                            <td><b>Unique Requirement</b></td>
+                        </tr>
+                        @foreach (var item in Model.lstUniquePoints)
+                {
+                    <tr>
+                        <td>@item.Description</td>
+                    </tr>
                 }
+                    </table>
+                </div>
+
             </div>
-        </div>
-    </div>
-    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="three-panel1">
-        @Html.HiddenFor(model => model.SMSDetailsCount, new { @id = "hdnSMSDetailsCount" })
-        @Html.DropDownListFor(x => Model.lstOutletList.Count, new SelectList(Model.lstOutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutlets", style = "margin-top:20px;" })
-        @*<div style="margin-top:10px;">
-            <b>Communication Preference </b>
-
-
-
-        </div>*@
-        <div class="row" style="margin-top:20px;">
-            <div style="margin-right:20px;">
+            <div class="row" style="overflow-x:auto;padding-right:10px;margin-top:20px;">
                 <table border="1" cellpadding="5" cellspacing="5">
                     <tr>
-                        <td>SMS</td>
-                        <td>NA</td>
+                        <th>Outlet Name</th>
+                        <th>Outlet Code (Clients)</th>
+                        <th>Store Manager Name</th>
+                        <th>Reg Mobile No</th>
+                        <th>Reg Email ID</th>
+                        <th>Store Address</th>
+                        <th>City</th>
+                        <th>Pincode</th>
+                        <th>Geo Lat Long</th>
+                        <th>Mobile No (for Octa XS)</th>
+                        <th>Program Start Date</th>
+                        <th>Renewal Date</th>
+                        <th>Transaction Per Day (BTD)</th>
                     </tr>
-                    <tr>
-                        <td>
-                            SMS Sender ID
-                        </td>
-                        @if (Model.objSMSDetails != null)
-                        {
-                            <td>@Model.objSMSDetails.SenderId</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-
-                    </tr>
-                    <tr>
-                        <td>
-                            SMS Username
-                        </td>
-                        @if (Model.objSMSDetails != null)
-                        {
-                            <td>@Model.objSMSDetails.TxnUserName</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            SMS Password
-                        </td>
-                        @if (Model.objSMSDetails != null)
-                        {
-                            <td>@Model.objSMSDetails.TxnPassword</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            SMS link
-                        </td>
-                        @if (Model.objSMSDetails != null)
-                        {
-                            <td>@Model.objSMSDetails.TxnUrl</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                </table>
-            </div>
-            <div style="margin-left:20px;">
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td>Whatsapp </td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Whatsapp Number
-                        </td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            WA Username
-                        </td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            WA Password
-                        </td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            WA link
-                        </td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top:20px;">
-            <div style="margin-right:20px;">
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr style="background-color: lightgray; font-weight: bold;">
-                        <td>Element</td>
-                        <td>
-                            SMS Script
-                        </td>
-                        <td style="width:50px;"></td>
-                        <td>WA Script</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Enrollment
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.Enrollment</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.Enrollment</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-
-                    </tr>
-                    <tr>
-                        <td>
-                            Enrollment & Earn
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.EnrollmentAndEarn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.EnrollmentAndEarn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            Earn
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.Earn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.Earn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            OTP
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.OTP</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.OTP</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            Burn
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.Burn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.Burn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            Cancel Earn
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.CancelEarn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.CancelEarn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            Cancel Burn
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.CancelBurn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.CancelBurn</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            Any Cancel
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.AnyCancel</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.AnyCancel</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                    <tr>
-                        <td>
-                            Balance Inquiry
-                        </td>
-                        @if (Model.objSMSConfig != null)
-                        {
-                            <td>@Model.objSMSConfig.BalanceInquiry</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                        <td></td>
-                        @if (Model.objWAConfig != null)
-                        {
-                            <td>@Model.objWAConfig.BalanceInquiry</td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="four-panel1">
-        <div class="row">
-            <div>
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td rowspan="5" style="text-align:center; width:100px;font-size:18px;font-weight:bold;">1 <br /> Birthday</td>
-
-                    </tr>
-                    <tr>
-                        <td>Bonus Points</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Valid Period </td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            SMS count per birthday
-                        </td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Sending through
-                        </td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-            <div style="margin-left:20px;">
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td>Count</td>
-                        <td>When</td>
-                        <td>Script</td>
-                    </tr>
-                    <tr>
-                        <td>Message 1</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Message 2</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Message 3</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Message 4</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top:20px;">
-            <div>
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
-                            2 <br /> Anniversary
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>Bonus Points</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Valid Period </td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            SMS count per anniversary
-                        </td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Sending through
-                        </td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-            <div style="margin-left:20px;">
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td>Count</td>
-                        <td>When</td>
-                        <td>Script</td>
-                    </tr>
-                    <tr>
-                        <td>Message 1</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Message 2</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Message 3</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>Message 4</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top:20px;">
-            <div>
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
-                            3 <br /> Inactive
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>Count</td>
-                        <td>Days Since Last txn</td>
-                        <td>Script</td>
-                    </tr>
-                    <tr>
-                        <td>Message 1 </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Message 2
-                        </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Message3
-                        </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-
-        </div>
-
-        <div class="row" style="margin-top:20px;">
-            <div>
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
-                            4 <br /> Points Expiry
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>Count</td>
-                        <td>Days Since Last txn</td>
-                        <td>Script</td>
-                    </tr>
-                    <tr>
-                        <td>Message 1 </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Message 2
-                        </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Message3
-                        </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-
-        </div>
-
-        <div class="row" style="margin-top:20px;">
-            <div>
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
-                            5 <br /> Non - redeem campaign
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>Count</td>
-                        <td>Days Since Last txn</td>
-                        <td>Script</td>
-                    </tr>
-                    <tr>
-                        <td>Message 1 </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Message 2
-                        </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Message3
-                        </td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-
-        </div>
-    </div>
-    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="five-panel1">
-
-        @if (Model.lstMWPDetails != null)
-        {
-            var ProfileUpdatePoints = Model.lstMWPDetails.Where(x => x.MWP_Id == "04").Select(y => y.MWP_Name).FirstOrDefault();
-            var ReferralPoints = Model.lstMWPDetails.Where(x => x.MWP_Id == "09").Select(y => y.MWP_Name).FirstOrDefault();
-            var ReferredPoints = Model.lstMWPDetails.Where(x => x.MWP_Id == "06").Select(y => y.MWP_Name).FirstOrDefault();
-
-            <table border="1" cellpadding="5" cellspacing="5">
-                <tr>
-                    <td>
-                        Profile Update Points
-                    </td>
-                    <td>@ProfileUpdatePoints</td>
-                </tr>
-                <tr>
-                    <td>
-                        Referral Points
-                    </td>
-                    <td>@ReferralPoints</td>
-                </tr>
-                <tr>
-                    <td>
-                        Referred Points
-                    </td>
-                    <td>@ReferredPoints</td>
-                </tr>
-                <tr>
-                    <td>
-                        Max no of referrals
-                    </td>
-                    <td>NA</td>
-                </tr>
-                <tr>
-                    <td>
-                        Validity of Referral points
-                    </td>
-                    <td>NA</td>
-                </tr>
-                <tr>
-                    <td>
-                        Referral reminder (days before expiry)
-                    </td>
-                    <td>NA</td>
-                </tr>
-            </table>
-
-            var ToTheReferal = Model.lstMWPDetails.Where(x => x.MWP_Id == "07").Select(y => y.MWP_Name).FirstOrDefault();
-            var RemForPointsUsage = Model.lstMWPDetails.Where(x => x.MWP_Id == "19").Select(y => y.MWP_Name).FirstOrDefault();
-            var ReferredSuccess = Model.lstMWPDetails.Where(x => x.MWP_Id == "10").Select(y => y.MWP_Name).FirstOrDefault();
-            var ToTheReferal1 = Model.lstMWPDetails.Where(x => x.MWP_Id == "20").Select(y => y.MWP_Name).FirstOrDefault();
-            var RemForPointsUsage1 = Model.lstMWPDetails.Where(x => x.MWP_Id == "21").Select(y => y.MWP_Name).FirstOrDefault();
-            var ReferredSuccess1 = Model.lstMWPDetails.Where(x => x.MWP_Id == "22").Select(y => y.MWP_Name).FirstOrDefault();
-
-            <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
-                <tr>
-                    <th>Element</th>
-                    <th style="width:300px !important;">SMS Script</th>
-                    <th>Len</th>
-                    <th style="width:30px !important;"></th>
-                    <th style="width:300px !important;">WA Script</th>
-                    <th>Len</th>
-                </tr>
-                <tr>
-                    <td>
-                        To the referral
-                    </td>
-                    <td>@ToTheReferal</td>
-                    <td>NA</td>
-                    <td></td>
-                    <td>@ToTheReferal1</td>
-                    <td>NA</td>
-                </tr>
-                <tr>
-                    <td>
-                        Reminder for points usage
-                    </td>
-                    <td>@RemForPointsUsage</td>
-                    <td>NA</td>
-                    <td></td>
-                    <td>@RemForPointsUsage1</td>
-                    <td>NA</td>
-                </tr>
-                <tr>
-                    <td>
-                        Referred success on referral txn
-                    </td>
-                    <td>@ReferredSuccess</td>
-                    <td>NA</td>
-                    <td></td>
-                    <td>@ReferredSuccess1</td>
-                    <td>NA</td>
-                </tr>
-            </table>
-
-
-        }
-        <div class="row" style="margin-top:20px;">
-            <div>
-                <table border="1" cellpadding="5" cellspacing="5">
-                    <tr>
-                        <td colspan="3" style="font-weight:bold;">Active DLC Links </td>
-
-                    </tr>
-                    <tr>
-                        <td>Source</td>
-                        <td>Source Description</td>
-                        <td>Link</td>
-                    </tr>
-                    @if (Model.objMWPSourceMaster != null)
+                    @foreach (var item in Model.lstOutlets)
                     {
-                        foreach (var item in Model.objMWPSourceMaster)
-                        {
+                <tr>
+                    <td>@item.OutletName</td>
+                    <td style="text-align:center;">--</td>
+                    <td>@item.OwnerName</td>
+                    <td>@item.MobileNo</td>
+                    <td>@item.EmailId</td>
+                    <td>@item.Address</td>
+                    <td>@item.City</td>
+                    <td>@item.Pincode</td>
+                    <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
+                    <td style="text-align:center;">--</td>
+                    @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramStartDate)))
+                    {
+                        <td>@item.ProgramStartDate.Value.ToString("dd-MM-yyyy")</td>
+                    }
+                    else
+                    {
+                        <td>--</td>
+                    }
+                    @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramRenewalDate)))
+                    {
+                        <td>@item.ProgramRenewalDate.Value.ToString("dd-MM-yyyy")</td>
+                    }
+                    else
+                    {
+                        <td>--</td>
+                    }
+                    @if (!string.IsNullOrEmpty(Convert.ToString(item.TransactionPerDay)))
+                    {
+                        <td>@item.TransactionPerDay</td>
+                    }
+                    else
+                    {
+                        <td>--</td>
+                    }
+
+                </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="two-panel1">
+            <table border="1" cellpadding="5" cellspacing="5">
+                <tr>
+                    <td>
+                    </td>
+                    @foreach (var item in Model.lstBrandDetails)
+                    {
+                        <td style="font-weight:bold;">@item.BrandName</td>
+                    }
+                </tr>
+                <tr>
+                    <td>
+                        1 point is Rs.
+                    </td>
+                    @foreach (var item in Model.objEarnConfig)
+                    {
+                        <td>@item.PointsAllocation</td>
+                    }
+                </tr>
+                <tr>
+                    <td>
+                        Expiry (months)
+                    </td>
+                    @foreach (var item in Model.objEarnConfig)
+                    {
+                        <td>@item.PointsExpiryMonths</td>
+                    }
+                </tr>
+                <tr>
+                    <td>
+                        Type
+                    </td>
+                    <td>NA</td>
+                </tr>
+            </table>
+            <div class="row">
+                <div style="margin-right:20px;">
+                    @if (Model.lstBrandDetails.Count > 0)
+                    {
+                        var cellCount = Model.lstBrandDetails.Count + 1;
+                        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
                             <tr>
-                                <td>@item.SourceCode</td>
-                                <td>@item.SourceDesc</td>
-                                <td>
-                                    <a href="@item.SourceLink" target="_blank">@item.SourceLink</a>
+                                <td style="text-align:center;background-color:lightgray;font-weight:bold;" colspan="@cellCount">
+                                    EARN RULES
                                 </td>
                             </tr>
-                        }
-                    }
-                </table>
-            </div>
-            <div style="margin-left:20px;">
-                <table border="1" cellpadding="5" cellspacing="5">
-
-                    <tr>
-                        <td>Outlet Name</td>
-                        <td>Geo Lat Long</td>
-
-                    </tr>
-                    @if (Model.lstOutlets != null)
-                    {
-                        foreach (var item in Model.lstOutlets)
-                        {
                             <tr>
-                                <td>@item.OutletName</td>
-                                <td>@item.Latitude / @item.Longitude</td>
-                                
+                                <td>
+                                </td>
+                                @foreach (var item in Model.lstBrandDetails)
+                                {
+                                    <td style="font-weight:bold;">@item.BrandName</td>
+                                }
                             </tr>
-                        }
+                            <tr>
+                                <td>Min Earn Txn Amt</td>
+                                @foreach (var item in Model.objEarnConfig)
+                                {
+                                    <td>@item.EarnMinTxnAmt</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Max Pts Earned (per txn)</td>
+                                @foreach (var item in Model.objEarnConfig)
+                                {
+                                    <td>@item.MaxPointsEarned</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Earn on Invoice / Category, Sub-Category,  Products
+                                </td>
+                                @foreach (var item in Model.objEarnConfig)
+                                {
+                                    <td>@item.RuleType</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Earn on Products
+                                </td>
+                                @foreach (var item in Model.objEarnConfig)
+                                 {
+                                    <td>@item.ProductRuleType</td>
+                                 }
+                            </tr>
+                            
+                            <tr>
+                                <td>
+                                    Earn % Rate
+                                </td>
+                                @foreach (var item in Model.objEarnConfig)
+                                {
+                                    <td>@item.PointsPercentage</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Multiple Earn % Rate
+                                </td>
+                                @foreach (var item in Model.objEarnConfig)
+                                {
+                                    <td>NA</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Earn Block on
+                                </td>
+                                @foreach (var item in Model.objEarnConfig)
+                                {
+                                    <td>NA</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Block Codes
+                                </td>
+                                @foreach (var item in Model.objEarnConfig)
+                                {
+                                    <td>NA</td>
+                                }
+                            </tr>
+                        </table>
                     }
-                </table>
+                </div>
+                <div>
+                    @if (Model.lstBrandDetails.Count > 0)
+                    {
+                        var cellCount = Model.lstBrandDetails.Count + 1;
+                        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                            <tr>
+                                <td style="text-align:center;background-color:lightgray;font-weight:bold;" colspan="@cellCount">
+                                    BURN RULES
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                </td>
+                                @foreach (var item in Model.lstBrandDetails)
+                                {
+                                    <td style="font-weight:bold;">@item.BrandName</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Min Points Threshold (1st time)
+                                </td>
+                                @foreach (var item in Model.objBurnConfig)
+                                {
+                                    <td>@item.MinRedemptionPtsFirstTime</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Min Points Threshold (Subsequent time)
+                                </td>
+                                @foreach (var item in Model.objBurnConfig)
+                                {
+                                    <td>@item.MinRedemptionPts</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Min Invoice Amt
+                                </td>
+                                @foreach (var item in Model.objBurnConfig)
+                                {
+                                    <td>@item.BurnMinTxnAmt</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Points as a % of Invoice Amt
+                                </td>
+                                @foreach (var item in Model.objBurnConfig)
+                                {
+                                    <td>@item.BurnInvoiceAmtPercentage</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Earn while Burn
+                                </td>
+                                @foreach (var item in Model.objBurnConfig)
+                                {
+                                    <td>Yes</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Burn Block on
+                                </td>
+                                @foreach (var item in Model.objBurnConfig)
+                                {
+                                    <td>NA</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>
+                                    Block Codes
+                                </td>
+                                @foreach (var item in Model.objBurnConfig)
+                                {
+                                    <td>NA</td>
+                                }
+                            </tr>
+                        </table>
+                    }
+                </div>
             </div>
         </div>
-    </div>
-    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="six-panel1">
-        <div class="row">
-            <div style="margin-right:20px;">
-                <table border="1" cellpadding="10" cellspacing="10">
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="three-panel1">
+            @Html.HiddenFor(model => model.SMSDetailsCount, new { @id = "hdnSMSDetailsCount" })
+            @Html.DropDownListFor(x => Model.lstOutletList.Count, new SelectList(Model.lstOutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutlets", style = "margin-top:20px;" })
+
+        <div style="margin-top:10px;">
+            <b>Communication Preference </b>
+        </div>
+    <div class="row" style="margin-top:20px;">
+                <div style="margin-right:20px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td>SMS</td>
+                            @*<td>NA</td>*@
+                        </tr>
+                        <tr>
+                            <td>
+                                SMS Sender ID
+                            </td>
+                            @if (Model.objSMSDetails != null)
+                            {
+                                <td>@Model.objSMSDetails.SMSSenderId</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+
+                        </tr>
+                        <tr>
+                            <td>
+                                SMS Username
+                            </td>
+                            @if (Model.objSMSDetails != null)
+                            {
+                                <td>@Model.objSMSDetails.SMSLoginId</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                SMS Password
+                            </td>
+                            @if (Model.objSMSDetails != null)
+                            {
+                                <td>@Model.objSMSDetails.SMSPassword</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                SMS link
+                            </td>
+                            @if (Model.objSMSDetails != null)
+                            {
+                                <td>@Model.objSMSDetails.SMSUrl</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                    </table>
+                </div>
+                <div style="margin-left:20px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td>Whatsapp </td>
+                            @*<td>NA</td>*@
+                        </tr>
+                        <tr>
+                            <td>
+                                Whatsapp Number
+                            </td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                WA Username
+                            </td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                WA Password
+                            </td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                WA link
+                            </td>
+                            @if (Model.objSMSDetails != null)
+                             {
+                                 <td>@Model.objSMSDetails.WhatsAppUrl</td>
+                             }
+                            else
+                             {
+                                  <td></td>
+                             }
+                                @*<td>NA</td>*@
+                            </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:20px;">
+                <div style="margin-right:20px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr style="background-color: lightgray; font-weight: bold;">
+                            <td>Element</td>
+                            <td>
+                                SMS Script
+                            </td>
+                            <td style="width:50px;"></td>
+                            <td>WA Script</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Enrolment
+                            </td>
+                            @if (Model.objSMSConfig != null)
+                            {
+                                <td>@Model.objSMSConfig.Enrolment</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td></td>
+                            @if (Model.objWAConfig != null)
+                            {
+                                <td>@Model.objWAConfig.Enrolment</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+
+                        </tr>
+                        <tr>
+                            <td>
+                                Earn
+                            </td>
+                            @if (Model.objSMSConfig != null)
+                            {
+                                <td>@Model.objSMSConfig.Earn</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td></td>
+                            @if (Model.objWAConfig != null)
+                            {
+                                <td>@Model.objWAConfig.Earn</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Burn
+                            </td>
+                            @if (Model.objSMSConfig != null)
+                            {
+                                <td>@Model.objSMSConfig.Burn</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td></td>
+                            @if (Model.objWAConfig != null)
+                            {
+                                <td>@Model.objWAConfig.Burn</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Cancel Earn
+                            </td>
+                            @if (Model.objSMSConfig != null)
+                            {
+                                <td>@Model.objSMSConfig.CancelEarn</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td></td>
+                            @if (Model.objWAConfig != null)
+                            {
+                                <td>@Model.objWAConfig.CancelEarn</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Cancel Burn
+                            </td>
+                            @if (Model.objSMSConfig != null)
+                            {
+                                <td>@Model.objSMSConfig.CancelBurn</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td></td>
+                            @if (Model.objWAConfig != null)
+                            {
+                                <td>@Model.objWAConfig.CancelBurn</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                OTP
+                            </td>
+                            @if (Model.objSMSConfig != null)
+                            {
+                                <td>@Model.objSMSConfig.OTP</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td></td>
+                            @if (Model.objWAConfig != null)
+                            {
+                                <td>@Model.objWAConfig.OTP</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Balance > 0
+                            </td>
+                            @if (Model.objSMSConfig != null)
+                            {
+                                <td>@Model.objSMSConfig.BalanceInquiry</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td></td>
+                            @if (Model.objWAConfig != null)
+                            {
+                                <td>@Model.objWAConfig.BalanceInquiry</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>
+                                Balance < 0
+                            </td>
+                            @if (Model.objSMSConfig != null)
+                            {
+                                <td>@Model.objSMSConfig.BalanceInquiryNew</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            <td></td>
+                            @if (Model.objWAConfig != null)
+                            {
+                                <td>@Model.objWAConfig.BalanceInquiryNew</td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="four-panel1">
+            <div class="row">
+                <div>
+                    @if (Model.lstCelebrationRule != null)
+                    {
+                        var BirthdayPoints = Model.lstCelebrationRule.Where(x => x.Id == 1).Select(y => y.Value).FirstOrDefault();
+                        var AnniversaryPoints = Model.lstCelebrationRule.Where(x => x.Id == 2).Select(y => y.Value).FirstOrDefault();
+                        var PointsValidity = Model.lstCelebrationRule.Where(x => x.Id == 3).Select(y => y.Value).FirstOrDefault();
+                        var BirthdayMinInvAmt = Model.lstCelebrationRule.Where(x => x.Id == 4).Select(y => y.Value).FirstOrDefault();
+                        var AnniversaryMinInvAmt = Model.lstCelebrationRule.Where(x => x.Id == 5).Select(y => y.Value).FirstOrDefault();
+
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <td rowspan="10" style="text-align:center; width:100px;font-size:18px;font-weight:bold;">1 <br /> Birthday</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthday Points
+                                </td>
+                                <td>@BirthdayPoints</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Anniversary Points
+                                </td>
+                                <td>@AnniversaryPoints</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Points Validity
+                                </td>
+                                <td>@PointsValidity</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthday Min Inv Amt
+                                </td>
+                                <td>@BirthdayMinInvAmt</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Anniversary Min Inv Amt
+                                </td>
+                                <td>@AnniversaryMinInvAmt</td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+                <div style="margin-left:20px;">
+                    @if (Model.lstBirthdaySMSWAScript != null)
+                    {
+                        var ScriptSMS1 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 1).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS2 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 2).Select(y => y.SMSScript).FirstOrDefault();
+                        //var ScriptSMS3 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 3).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS3 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 4).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS4 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 5).Select(y => y.SMSScript).FirstOrDefault();
+                        //var ScriptSMS6 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 6).Select(y => y.SMSScript).FirstOrDefault();
+                        //var ScriptSMS7 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 7).Select(y => y.SMSScript).FirstOrDefault();
+
+
+                        var Days1 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 1).Select(y => y.Days).FirstOrDefault();
+                        var Days2 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 2).Select(y => y.Days).FirstOrDefault();
+                        //var When3 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 3).Select(y => y.Days).FirstOrDefault();
+                        var Days3 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 4).Select(y => y.Days).FirstOrDefault();
+                        var Days4 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 5).Select(y => y.Days).FirstOrDefault();
+                        //var When6 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 6).Select(y => y.Days).FirstOrDefault();
+                        //var When7 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 7).Select(y => y.Days).FirstOrDefault();
+
+                        var WAScript1 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 1).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript2 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 2).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript3 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 4).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript4 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 5).Select(y => y.WAScript).FirstOrDefault();
+
+                        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                            
+                            <tr>
+                                <th>Element</th>
+                                <th>Days</th>
+                                <th style="width:300px !important;">SMS Script</th>
+                                <th style="width:30px !important;"></th>
+                                <th style="width:300px !important;">WA Script</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 1
+                                </td>
+                                <td>@Days1</td>
+                                <td>@ScriptSMS1</td>
+                                <td></td>
+                                <td>@WAScript1</td>
+
+                            </tr>                            
+                            <tr>
+                                <td>
+                                    Message 2
+                                </td>
+                                <td>@Days2</td>
+                                <td>@ScriptSMS2</td>
+                                <td></td>
+                                <td>@WAScript2</td>
+                            </tr>                            
+                            <tr>
+                                <td>
+                                    Message 3
+                                </td>
+                                <td>@Days3</td>
+                                <td>@ScriptSMS3</td>
+                                <td></td>
+                                <td>@WAScript3</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 5
+                                </td>
+                                <td>@Days4</td>
+                                <td>@ScriptSMS4</td>
+                                <td></td>
+                                <td>@WAScript4</td>
+                            </tr>                            
+                        </table>
+                    }
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:20px;">
+                <div>
+                    @if (Model.lstCelebrationRule != null)
+                    {
+                        var BirthdayPoints = Model.lstCelebrationRule.Where(x => x.Id == 1).Select(y => y.Value).FirstOrDefault();
+                        var AnniversaryPoints = Model.lstCelebrationRule.Where(x => x.Id == 2).Select(y => y.Value).FirstOrDefault();
+                        var PointsValidity = Model.lstCelebrationRule.Where(x => x.Id == 3).Select(y => y.Value).FirstOrDefault();
+                        var BirthdayMinInvAmt = Model.lstCelebrationRule.Where(x => x.Id == 4).Select(y => y.Value).FirstOrDefault();
+                        var AnniversaryMinInvAmt = Model.lstCelebrationRule.Where(x => x.Id == 5).Select(y => y.Value).FirstOrDefault();
+
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <td rowspan="10" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
+                                    2 <br /> Anniversary
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthday Points
+                                </td>
+                                <td>@BirthdayPoints</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Anniversary Points
+                                </td>
+                                <td>@AnniversaryPoints</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Points Validity
+                                </td>
+                                <td>@PointsValidity</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthday Min Inv Amt
+                                </td>
+                                <td>@BirthdayMinInvAmt</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    AnniversaryMinInvAmt
+                                </td>
+                                <td>@AnniversaryMinInvAmt</td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+                <div style="margin-left:20px;">
+                    @if (Model.lstAnniversarySMSWAScript != null)
+                    {
+                        var ScriptSMS1 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 1).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS2 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 2).Select(y => y.SMSScript).FirstOrDefault();
+                        //var ScriptSMS3 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 3).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS3 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 4).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS4 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 5).Select(y => y.SMSScript).FirstOrDefault();
+                        //var ScriptSMS6 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 6).Select(y => y.SMSScript).FirstOrDefault();
+                        //var ScriptSMS7 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 7).Select(y => y.SMSScript).FirstOrDefault();
+
+
+                        var Days1 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 1).Select(y => y.Days).FirstOrDefault();
+                        var Days2 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 2).Select(y => y.Days).FirstOrDefault();
+                        //var When3 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 3).Select(y => y.Days).FirstOrDefault();
+                        var Days3 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 4).Select(y => y.Days).FirstOrDefault();
+                        var Days4 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 5).Select(y => y.Days).FirstOrDefault();
+                        //var When6 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 6).Select(y => y.Days).FirstOrDefault();
+                        //var When7 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 7).Select(y => y.Days).FirstOrDefault();
+
+                        var WAScript1 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 1).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript2 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 2).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript3 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 4).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript4 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 5).Select(y => y.WAScript).FirstOrDefault();                        
+
+                        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                            
+                            <tr>
+                                <th>Element</th>
+                                <th>Days</th>
+                                <th style="width:300px !important;">SMS Script</th>
+                                <th style="width:30px !important;"></th>
+                                <th style="width:300px !important;">WA Script</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 1
+                                </td>
+                                <td>@Days1</td>
+                                <td>@ScriptSMS1</td>
+                                <td></td>
+                                <td>@WAScript1</td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 2
+                                </td>
+                                <td>@Days2</td>
+                                <td>@ScriptSMS2</td>
+                                <td></td>
+                                <td>@WAScript2</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 3
+                                </td>
+                                <td>@Days3</td>
+                                <td>@ScriptSMS3</td>
+                                <td></td>
+                                <td>@WAScript3</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 5
+                                </td>
+                                <td>@Days4</td>
+                                <td>@ScriptSMS4</td>
+                                <td></td>
+                                <td>@WAScript4</td>
+                            </tr>
+                        </table>
+                     }
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:20px;">
+                <div>
+                    @if (Model.lstInActiveSMSWAScript != null)
+                    {
+                        var ScriptSMS1 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 1).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS2 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 2).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS3 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 3).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS4 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 4).Select(y => y.SMSScript).FirstOrDefault();
+
+                        var Days1 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 1).Select(y => y.Days).FirstOrDefault();
+                        var Days2 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 2).Select(y => y.Days).FirstOrDefault();
+                        var Days3 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 3).Select(y => y.Days).FirstOrDefault();
+                        var Days4 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 4).Select(y => y.Days).FirstOrDefault();
+
+                        var WAScript1 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 1).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript2 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 2).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript3 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 3).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript4 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 4).Select(y => y.WAScript).FirstOrDefault();
+                    
+                        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                            <tr>
+                                <td rowspan="10" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
+                                    3 <br /> Inactive
+                                </td>
+
+                            
+                            <tr>
+                                <th>Element</th>
+                                <th>Days Since Last txn</th>
+                                <th style="width:300px !important;">SMS Script</th>
+                                <th style="width:30px !important;"></th>
+                                <th style="width:300px !important;">WA Script</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 1
+                                </td>
+                                <td>@Days1</td>
+                                <td>@ScriptSMS1</td>
+                                <td></td>
+                                <td>@WAScript1</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 2
+                                </td>
+                                <td>@Days2</td>
+                                <td>@ScriptSMS2</td>
+                                <td></td>
+                                <td>@WAScript2</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message3
+                                </td>
+                                <td>@Days3</td>
+                                <td>@ScriptSMS3</td>
+                                <td></td>
+                                <td>@WAScript3</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message4
+                                </td>
+                                <td>@Days4</td>
+                                <td>@ScriptSMS4</td>
+                                <td></td>
+                                <td>@WAScript4</td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+
+            </div>
+
+            <div class="row" style="margin-top:20px;">
+                <div>
+                    @if (Model.lstPointsExpirySMSWAScript != null)
+                    {
+                        var ScriptSMS1 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 1).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS2 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 2).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS3 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 3).Select(y => y.SMSScript).FirstOrDefault();
+                        var ScriptSMS4 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 4).Select(y => y.SMSScript).FirstOrDefault();
+
+                        var Days1 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 1).Select(y => y.Days).FirstOrDefault();
+                        var Days2 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 2).Select(y => y.Days).FirstOrDefault();
+                        var Days3 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 3).Select(y => y.Days).FirstOrDefault();
+                        var Days4 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 4).Select(y => y.Days).FirstOrDefault();
+
+                        var WAScript1 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 1).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript2 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 2).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript3 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 3).Select(y => y.WAScript).FirstOrDefault();
+                        var WAScript4 = Model.lstPointsExpirySMSWAScript.Where(x => x.Id == 4).Select(y => y.WAScript).FirstOrDefault();
+
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <td rowspan="10" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
+                                    4 <br /> Points Expiry
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th>Element</th>
+                                <th>Days Since Last txn</th>
+                                <th style="width:300px !important;">SMS Script</th>
+                                <th style="width:30px !important;"></th>
+                                <th style="width:300px !important;">WA Script</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 1
+                                </td>
+                                <td>@Days1</td>
+                                <td>@ScriptSMS1</td>
+                                <td></td>
+                                <td>@WAScript1</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message 2
+                                </td>
+                                <td>@Days2</td>
+                                <td>@ScriptSMS2</td>
+                                <td></td>
+                                <td>@WAScript2</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message3
+                                </td>
+                                <td>@Days3</td>
+                                <td>@ScriptSMS3</td>
+                                <td></td>
+                                <td>@WAScript3</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Message4
+                                </td>
+                                <td>@Days4</td>
+                                <td>@ScriptSMS4</td>
+                                <td></td>
+                                <td>@WAScript4</td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+
+            </div>
+
+            @*<div class="row" style="margin-top:20px;">
+                <div>
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td rowspan="5" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
+                                5 <br /> Non - redeem campaign
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>Count</td>
+                            <td>Days Since Last txn</td>
+                            <td>Script</td>
+                        </tr>
+                        <tr>
+                            <td>Message 1 </td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Message 2
+                            </td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Message3
+                            </td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>*@
+        </div>
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="five-panel1">
+
+            @if (Model.lstDLCDetails != null)
+            {
+                var RefereePoints = Model.lstDLCDetails.Where(x => x.DLCId == 1).Select(y => y.DLCValue).FirstOrDefault();
+                var ReferredMemberPts = Model.lstDLCDetails.Where(x => x.DLCId == 2).Select(y => y.DLCValue).FirstOrDefault();
+                var ProfileUpdatePts = Model.lstDLCDetails.Where(x => x.DLCId == 3).Select(y => y.DLCValue).FirstOrDefault();
+                var DLCLink = Model.lstDLCDetails.Where(x => x.DLCId == 4).Select(y => y.DLCValue).FirstOrDefault();
+
+                <table border="1" cellpadding="5" cellspacing="5">
                     <tr>
-                        <td colspan="4" style="text-align:center;background-color:lightgray;font-weight:bold;">Based on TXN COUNT</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            Txn Count
+                        <td>
+                            Referee Points
                         </td>
-                        <td rowspan="2">Last XX days</td>
-                        <td rowspan="2">Action</td>
+                        <td>@RefereePoints</td>
                     </tr>
                     <tr>
                         <td>
-                            From
+                            Referred Member Points
                         </td>
-                        <td>To</td>
-                    </tr>
-                    <tr style="text-align:center;">
-                        <td>NA</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div style="margin-right:20px;">
-                <table border="1" cellpadding="10" cellspacing="10">
-                    <tr>
-                        <td colspan="4" style="text-align: center; background-color: lightgray; font-weight: bold; ">
-                            Based on INVOICE AMOUNT (CUMM)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            Inv Amt
-                        </td>
-                        <td rowspan="2">Last XX days</td>
-                        <td rowspan="2">Action</td>
+                        <td>@ReferredMemberPts</td>
                     </tr>
                     <tr>
                         <td>
-                            From
+                            Profile Update Points
                         </td>
-                        <td>To</td>
-                    </tr>
-                    <tr style="text-align:center;">
-                        <td>NA</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                        <td>NA</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div>
-                <table border="1" cellpadding="10" cellspacing="10">
-                    <tr>
-                        <td colspan="3" style="text-align: center; background-color: lightgray; font-weight: bold; ">
-                            Based on INVOICE AMOUNT
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            Single Txn Amt
-                        </td>
-                        <td rowspan="2">Action</td>
+                        <td>@ProfileUpdatePts</td>
                     </tr>
                     <tr>
                         <td>
-                            From
+                            DLCLink
                         </td>
-                        <td>To</td>
+                        <td>@DLCLink</td>
                     </tr>
-                    <tr style="text-align:center;">
+                    <tr>
+                        <td>
+                            Max no of referrals
+                        </td>
                         <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Validity of Referral points
+                        </td>
                         <td>NA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Referral Reminder (days before expiry)
+                        </td>
                         <td>NA</td>
-
                     </tr>
                 </table>
+
+                var Referee = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 101).Select(y => y.DLCSMSScript).FirstOrDefault();
+                var ReferredMember = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 102).Select(y => y.DLCSMSScript).FirstOrDefault();
+                var ReferredMemberRemainder = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 103).Select(y => y.DLCSMSScript).FirstOrDefault();
+                var GiftPointsSender = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 104).Select(y => y.DLCSMSScript).FirstOrDefault();
+                var GiftPointsReceiver = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 105).Select(y => y.DLCSMSScript).FirstOrDefault();
+                var GiftPointsReceiverRemainder = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 106).Select(y => y.DLCSMSScript).FirstOrDefault();
+                var DLCOTP = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 107).Select(y => y.DLCSMSScript).FirstOrDefault();
+                var GiftPointsOTP = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 108).Select(y => y.DLCSMSScript).FirstOrDefault();
+
+                var RefereeWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 101).Select(y => y.DLCWAScript).FirstOrDefault();
+                var ReferredMemberWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 102).Select(y => y.DLCWAScript).FirstOrDefault();
+                var ReferredMemberRemainderWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 103).Select(y => y.DLCWAScript).FirstOrDefault();
+                var GiftPointsSenderWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 104).Select(y => y.DLCWAScript).FirstOrDefault();
+                var GiftPointsReceiverWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 105).Select(y => y.DLCWAScript).FirstOrDefault();
+                var GiftPointsReceiverRemainderWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 106).Select(y => y.DLCWAScript).FirstOrDefault();
+                var DLCOTPWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 107).Select(y => y.DLCWAScript).FirstOrDefault();
+                var GiftPointsOTPWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 108).Select(y => y.DLCWAScript).FirstOrDefault();
+                
+
+                <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
+                    <tr>
+                        <th>Element</th>
+                        <th style="width:300px !important;">SMS Script</th>
+                        <th style="width:30px !important;"></th>
+                        <th style="width:300px !important;">WA Script</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Referee
+                        </td>
+                        <td>@Referee</td>
+                        <td></td>
+                        <td>@RefereeWA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Referred Member
+                        </td>
+                        <td>@ReferredMember</td>
+                        <td></td>
+                        <td>@ReferredMemberWA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Referred Member Remainder
+                        </td>
+                        <td>@ReferredMemberRemainder</td>
+                        <td></td>
+                        <td>@ReferredMemberRemainderWA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Gift Points Sender
+                        </td>
+                        <td>@GiftPointsSender</td>
+                        <td></td>
+                        <td>@GiftPointsSenderWA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Gift Points Receiver
+                        </td>
+                        <td>@GiftPointsReceiver</td>
+                        <td></td>
+                        <td>@GiftPointsReceiverWA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Gift Points Receiver Remainder
+                        </td>
+                        <td>@GiftPointsReceiverRemainder</td>
+                        <td></td>
+                        <td>@GiftPointsReceiverRemainderWA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            DLC OTP
+                        </td>
+                        <td>@DLCOTP</td>
+                        <td></td>
+                        <td>@DLCOTPWA</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Gift Points OTP
+                        </td>
+                        <td>@GiftPointsOTP</td>
+                        <td></td>
+                        <td>@GiftPointsOTPWA</td>
+                    </tr>
+                </table>
+            }
+            <div class="row" style="margin-top:20px;">
+                <div>
+                    @*<table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td colspan="3" style="font-weight:bold;">Active DLC Links </td>
+
+                        </tr>
+                        <tr>
+                            <td>Source</td>
+                            <td>Source Description</td>
+                            <td>Link</td>
+                        </tr>
+                        @if (Model.objMWPSourceMaster != null)
+                        {
+                            foreach (var item in Model.objMWPSourceMaster)
+                            {
+                                <tr>
+                                    <td>@item.SourceCode</td>
+                                    <td>@item.SourceDesc</td>
+                                    <td>
+                                        <a href="@item.SourceLink" target="_blank">@item.SourceLink</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>*@
+                </div>
+                <div style="margin-left:20px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td>Outlet Name</td>
+                            <td>Geo Lat Long</td>
+
+                        </tr>
+                        @if (Model.lstOutlets != null)
+                        {
+                            foreach (var item in Model.lstOutlets)
+                            {
+                                <tr>
+                                    <td>@item.OutletName</td>
+                                    <td>@item.Latitude / @item.Longitude</td>
+
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="six-panel1">
+            <div class="row">
+                <div style="margin-right:20px;">
+                    <table border="1" cellpadding="10" cellspacing="10">
+                        <tr>
+                            <td colspan="4" style="text-align:center;background-color:lightgray;font-weight:bold;">Based on TXN COUNT</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                Txn Count
+                            </td>
+                            <td rowspan="2">Last XX days</td>
+                            <td rowspan="2">Action</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                From
+                            </td>
+                            <td>To</td>
+                        </tr>
+                        <tr style="text-align:center;">
+                            <td>NA</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="margin-right:20px;">
+                    <table border="1" cellpadding="10" cellspacing="10">
+                        <tr>
+                            <td colspan="4" style="text-align: center; background-color: lightgray; font-weight: bold; ">
+                                Based on INVOICE AMOUNT (CUMM)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                Inv Amt
+                            </td>
+                            <td rowspan="2">Last XX days</td>
+                            <td rowspan="2">Action</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                From
+                            </td>
+                            <td>To</td>
+                        </tr>
+                        <tr style="text-align:center;">
+                            <td>NA</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                            <td>NA</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div>
+                    <table border="1" cellpadding="10" cellspacing="10">
+                        <tr>
+                            <td colspan="3" style="text-align: center; background-color: lightgray; font-weight: bold; ">
+                                Based on INVOICE AMOUNT
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                Single Txn Amt
+                            </td>
+                            <td rowspan="2">Action</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                From
+                            </td>
+                            <td>To</td>
+                        </tr>
+                        <tr style="text-align:center;">
+                            <td>NA</td>
+                            <td>NA</td>
+                            <td>NA</td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="seven-panel1">
+            <div id="dvDiscussionList" style="overflow-x:auto;">
+
             </div>
         </div>
     </div>
 
-    <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="seven-panel1">
-        <div id="dvDiscussionList" style="overflow-x:auto;">
-
-        </div>
-    </div>
 </div>

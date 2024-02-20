@@ -156,7 +156,8 @@ namespace BOTS_BL.Models
         public virtual DbSet<tblSalesReturnProDetailsMaster_Clone> tblSalesReturnProDetailsMaster_Clone { get; set; }
         public virtual DbSet<tblTxnProDetailsMaster> tblTxnProDetailsMasters { get; set; }
         public virtual DbSet<tblTxnProDetailsMaster_Clone> tblTxnProDetailsMaster_Clone { get; set; }
-        
+        public virtual DbSet<tblCelebrationRuleMaster> tblCelebrationRuleMasters { get; set; }
+
 
 
 

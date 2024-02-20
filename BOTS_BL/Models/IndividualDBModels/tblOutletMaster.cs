@@ -57,5 +57,17 @@ namespace BOTS_BL.Models
         [Column(TypeName = "date")]
         public DateTime? LiveDate { get; set; }
         public DateTime? StoreAnniversaryDate { get; set; }
+        [NotMapped]
+        public DateTime? ProgramStartDate { get; set; }
+        [NotMapped]
+        public DateTime? ProgramRenewalDate { get; set; }
+        [NotMapped]
+        public double TransactionPerDay { get; set; }
+        [NotMapped]
+        public string OwnerName { get; set; }
+        [NotMapped]
+        public string MobileNo { get; set; }
+        [NotMapped]
+        public string EmailId { get; set; }
     }
 }

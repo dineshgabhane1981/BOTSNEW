@@ -8,7 +8,7 @@ namespace WebApp.ViewModel
 {
     public class BrandAndOutletViewModel
     {
-        public List<BrandDetail> lstBrands { get; set; }
-        public List<OutletDetail> lstOutlets { get; set; }
+        public List<tblBrandMaster> lstBrands { get; set; }
+        public List<tblOutletMaster> lstOutlets { get; set; }
     }
 }

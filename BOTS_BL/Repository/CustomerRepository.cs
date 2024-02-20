@@ -17,6 +17,7 @@ using System.Web.Script.Serialization;
 using DocumentFormat.OpenXml.InkML;
 using System.Runtime.Remoting.Contexts;
 using System.Data.Entity.Infrastructure;
+using BOTS_BL.Models.IndividualDBModels;
 
 namespace BOTS_BL.Repository
 {
@@ -363,7 +364,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     //var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault(); 
+                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
                     if (DBDetails != null)
                     {
                         ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
@@ -514,8 +515,12 @@ namespace BOTS_BL.Repository
                 var connStr = GetCustomerConnString(Convert.ToString(GroupId));
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var ticketSize = contextNew.TransactionMasters.Average(x => x.InvoiceAmt);
-                    objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(ticketSize), 2);
+                    //var ticketSize = contextNew.tblTxnDetailsMasters.Average(x => x.InvoiceAmt);
+                    //objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(ticketSize), 2);
+
+                    var TotalTransaction = contextNew.tblSmartSlicerMasters.Count();
+                    var TicketSize = contextNew.tblSmartSlicerMasters.Sum(x => x.AvgTicketSize) / TotalTransaction;
+                    objGroupDetail.AverageTicket = Math.Round(Convert.ToDouble(TicketSize), 2);
                 }
             }
             catch (Exception ex)
@@ -819,20 +824,21 @@ namespace BOTS_BL.Repository
 
         }
 
-        public List<BrandDetail> GetAllBrandsByGroupId(string GroupId)
+        public List<tblBrandMaster> GetAllBrandsByGroupId(string GroupId)
         {
-            List<BrandDetail> lstBrands = new List<BrandDetail>();
+            List<tblBrandMaster> lstBrands = new List<tblBrandMaster>();
             try
             {
                 string ConnectionString = string.Empty;
                 using (var context = new CommonDBContext())
                 {
-                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    //var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
                     ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                 }
                 using (var contextNew = new BOTSDBContext(ConnectionString))
                 {
-                    lstBrands = contextNew.BrandDetails.Where(x => x.GroupId == GroupId).ToList();
+                    lstBrands = contextNew.tblBrandMasters.Where(x => x.GroupId == GroupId).ToList();
                 }
             }
             catch (Exception ex)
@@ -842,24 +848,27 @@ namespace BOTS_BL.Repository
             return lstBrands;
         }
 
-        public List<OutletDetail> GetAllOutletsByGroupId(string GroupId)
+        public List<tblOutletMaster> GetAllOutletsByGroupId(string GroupId)
         {
-            List<OutletDetail> lstOutlets = new List<OutletDetail>();
+            List<tblOutletMaster> lstOutlets = new List<tblOutletMaster>();
             try
             {
                 string ConnectionString = string.Empty;
-
                 using (var context = new CommonDBContext())
                 {
-                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
                     ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                 }
                 using (var contextNew = new BOTSDBContext(ConnectionString))
                 {
-                    lstOutlets = contextNew.OutletDetails.Where(x => x.GroupId == GroupId).ToList();
+                    lstOutlets = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId).ToList();
                     foreach (var item in lstOutlets)
                     {
-                        item.ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
+                        item.OwnerName = contextNew.tblGroupMasters.Where(x => x.GroupId == GroupId).Select(y => y.AuthorisedPerson).FirstOrDefault();
+                        item.MobileNo = contextNew.tblGroupMasters.Where(x => x.GroupId == GroupId).Select(y => y.Phone).FirstOrDefault();
+                        item.EmailId = contextNew.tblGroupMasters.Where(x => x.GroupId == GroupId).Select(y => y.Email).FirstOrDefault();
+
+                        item.ProgramStartDate = contextNew.tblTxnDetailsMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderBy(y => y.TxnDatetime).Select(z => z.TxnDatetime).FirstOrDefault();
                         item.ProgramRenewalDate = item.ProgramStartDate.Value.AddYears(1);
                         var day = item.ProgramStartDate.Value.Day;
                         var month = item.ProgramStartDate.Value.Month;
@@ -876,25 +885,16 @@ namespace BOTS_BL.Repository
                             item.ProgramRenewalDate = nextRenewal;
                         }
 
-
-                        var totalTransaction = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).Count();
-                        var FirstDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
-                        var LastDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderByDescending(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
-
+                        var totalTransaction = contextNew.tblTxnDetailsMasters.Where(x => x.CounterId.Contains(item.OutletId)).Count();
+                        var FirstDate = contextNew.tblTxnDetailsMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderBy(y => y.TxnDatetime).Select(z => z.TxnDatetime).FirstOrDefault();
+                        var LastDate = contextNew.tblTxnDetailsMasters.Where(x => x.CounterId.Contains(item.OutletId)).OrderByDescending(y => y.TxnDatetime).Select(z => z.TxnDatetime).FirstOrDefault();
 
                         var Days = (LastDate.Value - FirstDate.Value).TotalDays;
                         var Average = totalTransaction / Days;
                         var TransactionPerDay = Average;
                         item.TransactionPerDay = Math.Round(Convert.ToDouble(Average), 2);
-
-
                     }
-                    //var ProgramStartDate = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(OutletId)).OrderBy(y => y.Datetime).Select(z => z.Datetime).FirstOrDefault();
-                    //var totalTransaction = contextNew.TransactionMasters.Where(x => x.CounterId.Contains(item.OutletId)).Count();
-
-
                 }
-
             }
             catch (Exception ex)
             {
@@ -1031,11 +1031,12 @@ namespace BOTS_BL.Repository
                 string ConnectionString = string.Empty;
                 using (var context = new CommonDBContext())
                 {
-                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    //var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
                     ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                     using (var contextNew = new BOTSDBContext(ConnectionString))
                     {
-                        MemberBase = contextNew.CustomerDetails.Count();
+                        MemberBase = contextNew.tblCustDetailsMasters.Count();
                     }
                 }
             }
@@ -1076,12 +1077,13 @@ namespace BOTS_BL.Repository
                 string ConnectionString = string.Empty;
                 using (var context = new CommonDBContext())
                 {
-                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    //var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
                     ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                     using (var contextNew = new BOTSDBContext(ConnectionString))
                     {
-                        var lstBrands = contextNew.BrandDetails.OrderBy(x => x.BrandId).ToList();
-                        var lstEarnData = contextNew.EarnRules.OrderBy(x => x.RuleId).ToList();
+                        var lstBrands = contextNew.tblBrandMasters.OrderBy(x => x.BrandId).ToList();
+                        var lstEarnData = contextNew.tblRuleMasters.OrderBy(x => x.RuleId).ToList();
 
                         int count = 0;
                         foreach (var item in lstBrands)
@@ -1091,11 +1093,15 @@ namespace BOTS_BL.Repository
                                 PointsRulesEarnConfig objItem = new PointsRulesEarnConfig();
                                 var objEarnData = lstEarnData.ElementAt(count);
                                 objItem.PointsAllocation = objEarnData.PointsAllocation.Value;
-                                objItem.PointsExpiryVariableDate = objEarnData.PointsExpiryVariableDate.Value;
-                                objItem.MinTxnAmt = objEarnData.MinTxnAmt.Value;
-                                objItem.MaxPointsEarned = objEarnData.MaxPointsEarned.Value;
-                                objItem.PointsProductORBase = item.PointsProductORBase;
-                                objItem.PointsPrecentage = objEarnData.PointsPrecentage.Value;
+                                objItem.PointsExpiryMonths = objEarnData.PointsExpiryMonths.Value;
+                                objItem.EarnMinTxnAmt = objEarnData.EarnMinTxnAmt.Value;
+                                var RuleType = contextNew.tblRuleMasters.Where(x => x.GroupId == groupId).Select(y => y.RuleType).FirstOrDefault();
+                                objItem.RuleType = objEarnData.RuleType;
+                                var ProductRuleType = contextNew.tblRuleMasters.Where(x => x.GroupId == groupId).Select(y => y.ProductRuleType).FirstOrDefault();
+                                objItem.ProductRuleType = objEarnData.ProductRuleType;
+                                //objItem.MaxPointsEarned = objEarnData.MaxPointsEarned.Value;
+                                //objItem.PointsProductORBase = item.PointsProductORBase;
+                                objItem.PointsPercentage = objEarnData.PointsPercentage.Value;
 
                                 objData.Add(objItem);
                                 count++;
@@ -1118,12 +1124,13 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    //var DBDetails = context.DatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
                     ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
                     using (var contextNew = new BOTSDBContext(ConnectionString))
                     {
-                        var lstBurnData = contextNew.BurnRules.OrderBy(x => x.RuleId).ToList();
-                        var lstBrands = contextNew.BrandDetails.OrderBy(x => x.BrandId).ToList();
+                        var lstBurnData = contextNew.tblRuleMasters.OrderBy(x => x.RuleId).ToList();
+                        var lstBrands = contextNew.tblBrandMasters.OrderBy(x => x.BrandId).ToList();
                         int count = 0;
                         foreach (var item in lstBrands)
                         {
@@ -1131,10 +1138,11 @@ namespace BOTS_BL.Repository
                             {
                                 PointsRulesBurnConfig objItem = new PointsRulesBurnConfig();
                                 var objBurnData = lstBurnData.ElementAt(count);
-                                objItem.MinThresholdPointsFirstTime = objBurnData.MinThresholdPointsFirstTime.Value;
-                                objItem.MinThresholdPointsEveryTime = objBurnData.MinThresholdPointsEveryTime.Value;
-                                objItem.MinTxnAmt = objBurnData.MinTxnAmt.Value;
-                                objItem.EarnFullWhileBurnFlag = objBurnData.EarnFullWhileBurnFlag;
+                                objItem.MinRedemptionPtsFirstTime = objBurnData.MinRedemptionPtsFirstTime.Value;
+                                objItem.MinRedemptionPts = objBurnData.MinRedemptionPts.Value;
+                                objItem.BurnMinTxnAmt = objBurnData.BurnMinTxnAmt.Value;
+                                objItem.BurnInvoiceAmtPercentage = objBurnData.BurnInvoiceAmtPercentage.Value;
+                                //objItem.EarnFullWhileBurnFlag = objBurnData.EarnFullWhileBurnFlag;
 
                                 objData.Add(objItem);
                                 count++;
@@ -1150,18 +1158,18 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public SMSDetail GetAllSMSDetails(string groupId)
+        public tblSMSWhatsAppCredential GetAllSMSDetails(string groupId)
         {
-            SMSDetail SMSDetails = new SMSDetail();
+            tblSMSWhatsAppCredential SMSDetails = new tblSMSWhatsAppCredential();
             var connectionString = GetCustomerConnString(groupId);
             try
             {
                 using (var contextNew = new BOTSDBContext(connectionString))
                 {
-                    var lstSMSDetails = contextNew.SMSDetails.ToList();
+                    var lstSMSDetails = contextNew.tblSMSWhatsAppCredentials.ToList();
                     if (lstSMSDetails != null)
                     {
-                        if (lstSMSDetails.Count == 1)
+                        if (lstSMSDetails.Count > 0)
                         {
                             SMSDetails = lstSMSDetails.ElementAt(0);
                         }
@@ -1183,17 +1191,17 @@ namespace BOTS_BL.Repository
                 var connectionString = GetCustomerConnString(groupId);
                 using (var contextNew = new BOTSDBContext(connectionString))
                 {
-                    var lstSMSEmail = contextNew.SMSEmailMasters.ToList();
+                    var lstSMSEmail = contextNew.tblSMSWhatsAppScriptMasters.ToList();
                     if (lstSMSEmail != null)
                     {
-                        objData.Enrollment = lstSMSEmail.Where(x => x.MessageId == "100").Select(y => y.SMS).FirstOrDefault();
-                        objData.Earn = lstSMSEmail.Where(x => x.MessageId == "101").Select(y => y.SMS).FirstOrDefault();
-                        objData.Burn = lstSMSEmail.Where(x => x.MessageId == "102").Select(y => y.SMS).FirstOrDefault();
-                        objData.CancelEarn = lstSMSEmail.Where(x => x.MessageId == "103").Select(y => y.SMS).FirstOrDefault();
-                        objData.CancelBurn = lstSMSEmail.Where(x => x.MessageId == "104").Select(y => y.SMS).FirstOrDefault();
-                        objData.OTP = lstSMSEmail.Where(x => x.MessageId == "105").Select(y => y.SMS).FirstOrDefault();
-                        objData.BalanceInquiry = lstSMSEmail.Where(x => x.MessageId == "106").Select(y => y.SMS).FirstOrDefault();
-                        objData.EnrollmentAndEarn = lstSMSEmail.Where(x => x.MessageId == "107").Select(y => y.SMS).FirstOrDefault();
+                        objData.Enrolment = lstSMSEmail.Where(x => x.Id == "100").Select(y => y.SMSScript).FirstOrDefault();
+                        objData.Earn = lstSMSEmail.Where(x => x.Id == "101").Select(y => y.SMSScript).FirstOrDefault();
+                        objData.Burn = lstSMSEmail.Where(x => x.Id == "102").Select(y => y.SMSScript).FirstOrDefault();
+                        objData.CancelEarn = lstSMSEmail.Where(x => x.Id == "103").Select(y => y.SMSScript).FirstOrDefault();
+                        objData.CancelBurn = lstSMSEmail.Where(x => x.Id == "104").Select(y => y.SMSScript).FirstOrDefault();
+                        objData.OTP = lstSMSEmail.Where(x => x.Id == "105").Select(y => y.SMSScript).FirstOrDefault();
+                        objData.BalanceInquiry = lstSMSEmail.Where(x => x.Id == "106").Select(y => y.SMSScript).FirstOrDefault();
+                        objData.BalanceInquiryNew = lstSMSEmail.Where(x => x.Id == "107").Select(y => y.SMSScript).FirstOrDefault();
                     }
                 }
             }
@@ -1216,21 +1224,21 @@ namespace BOTS_BL.Repository
                          .SqlQuery<int?>(@"
                          SELECT 1 FROM sys.tables AS T
                          INNER JOIN sys.schemas AS S ON T.schema_id = S.schema_id
-                         WHERE S.Name = 'dbo' AND T.Name = 'WhatsAppSMSMaster'")
+                         WHERE S.Name = 'dbo' AND T.Name = 'tblSMSWhatsAppScriptMaster'")
                          .SingleOrDefault() != null;
                     if (exists)
                     {
-                        var lstWAEmail = contextNew.WhatsAppSMSMasters.ToList();
+                        var lstWAEmail = contextNew.tblSMSWhatsAppScriptMasters.ToList();
                         if (lstWAEmail != null)
                         {
-                            objData.Enrollment = lstWAEmail.Where(x => x.MessageId == "100").Select(y => y.SMS).FirstOrDefault();
-                            objData.Earn = lstWAEmail.Where(x => x.MessageId == "101").Select(y => y.SMS).FirstOrDefault();
-                            objData.Burn = lstWAEmail.Where(x => x.MessageId == "102").Select(y => y.SMS).FirstOrDefault();
-                            objData.CancelEarn = lstWAEmail.Where(x => x.MessageId == "103").Select(y => y.SMS).FirstOrDefault();
-                            objData.CancelBurn = lstWAEmail.Where(x => x.MessageId == "104").Select(y => y.SMS).FirstOrDefault();
-                            objData.OTP = lstWAEmail.Where(x => x.MessageId == "105").Select(y => y.SMS).FirstOrDefault();
-                            objData.BalanceInquiry = lstWAEmail.Where(x => x.MessageId == "106").Select(y => y.SMS).FirstOrDefault();
-                            objData.EnrollmentAndEarn = lstWAEmail.Where(x => x.MessageId == "107").Select(y => y.SMS).FirstOrDefault();
+                            objData.Enrolment = lstWAEmail.Where(x => x.Id == "100").Select(y => y.WhatsAppScript).FirstOrDefault();
+                            objData.Earn = lstWAEmail.Where(x => x.Id == "101").Select(y => y.WhatsAppScript).FirstOrDefault();
+                            objData.Burn = lstWAEmail.Where(x => x.Id == "102").Select(y => y.WhatsAppScript).FirstOrDefault();
+                            objData.CancelEarn = lstWAEmail.Where(x => x.Id == "103").Select(y => y.WhatsAppScript).FirstOrDefault();
+                            objData.CancelBurn = lstWAEmail.Where(x => x.Id == "104").Select(y => y.WhatsAppScript).FirstOrDefault();
+                            objData.OTP = lstWAEmail.Where(x => x.Id == "105").Select(y => y.WhatsAppScript).FirstOrDefault();
+                            objData.BalanceInquiry = lstWAEmail.Where(x => x.Id == "106").Select(y => y.WhatsAppScript).FirstOrDefault();
+                            objData.BalanceInquiryNew = lstWAEmail.Where(x => x.Id == "107").Select(y => y.WhatsAppScript).FirstOrDefault();
                         }
                     }
                 }
@@ -1242,15 +1250,15 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public List<MWP_Details> GetDLCDetails(string groupId)
+        public List<tblDLCRuleMaster> GetDLCDetails(string groupId)
         {
-            List<MWP_Details> lstData = new List<MWP_Details>();
+            List<tblDLCRuleMaster> lstData = new List<tblDLCRuleMaster>();
             try
             {
                 var connectionString = GetCustomerConnString(groupId);
                 using (var contextNew = new BOTSDBContext(connectionString))
                 {
-                    lstData = contextNew.MWP_Details.ToList();
+                    lstData = contextNew.tblDLCRuleMasters.ToList();
                 }
             }
             catch (Exception ex)
@@ -1260,20 +1268,105 @@ namespace BOTS_BL.Repository
             return lstData;
         }
 
-        public List<MWPSourceMaster> GetMWPSourceMaster(string groupId)
+        public List<tblDLCSMSWAScriptMaster> GetMWPSourceMaster(string groupId)
         {
-            List<MWPSourceMaster> objData = new List<MWPSourceMaster>();
+            List<tblDLCSMSWAScriptMaster> objData = new List<tblDLCSMSWAScriptMaster>();
             try
             {
                 var connectionString = GetCustomerConnString(groupId);
                 using (var contextNew = new BOTSDBContext(connectionString))
                 {
-                    objData = contextNew.MWPSourceMasters.ToList();
+                    objData = contextNew.tblDLCSMSWAScriptMasters.ToList();
                 }
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "GetMWPSourceMaster");
+            }
+            return objData;
+        }
+        public List<tblCelebrationRuleMaster> GetCelebrationRules(string groupId)
+        {
+            List<tblCelebrationRuleMaster> lstData = new List<tblCelebrationRuleMaster>();
+            try
+            {
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    lstData = contextNew.tblCelebrationRuleMasters.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCDetails");
+            }
+            return lstData;
+        }
+        public List<tblAnniversarySMSWAScript> GetAnniversaryScript(string groupId)
+        {
+            List<tblAnniversarySMSWAScript> objData = new List<tblAnniversarySMSWAScript>();
+            try
+            {
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    objData = contextNew.tblAnniversarySMSWAScript.Where(x => x.IsActive == true).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMWPSourceMaster");
+            }
+            return objData;
+        }
+        public List<tblBirthdaySMSWAScript> GetBirthdayScript(string groupId)
+        {
+            List<tblBirthdaySMSWAScript> objData = new List<tblBirthdaySMSWAScript>();
+            try
+            {
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    objData = contextNew.tblBirthdaySMSWAScript.Where(x => x.IsActive == true).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMWPSourceMaster");
+            }
+            return objData;
+        }
+        public List<tblInActiveSMSWAScript> GetInActiveScript(string groupId)
+        {
+            List<tblInActiveSMSWAScript> objData = new List<tblInActiveSMSWAScript>();
+            try
+            {
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    objData = contextNew.tblInActiveSMSWAScripts.Where(x => x.IsActive == true).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetMWPSourceMaster");
+            }
+            return objData;
+        }
+        public List<tblPointsExpirySMSWAScript> GetPointsExpiryScript(string groupId)
+        {
+            List<tblPointsExpirySMSWAScript> objData = new List<tblPointsExpirySMSWAScript>();
+            try
+            {
+                var connectionString = GetCustomerConnString(groupId);
+                using (var contextNew = new BOTSDBContext(connectionString))
+                {
+                    objData = contextNew.tblPointsExpirySMSWAScript.Where(x => x.IsActive == true).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetPointsExpiryScript");
             }
             return objData;
         }

@@ -15,8 +15,8 @@ namespace BOTS_BL.Models
         [StringLength(100)]
         public string DLCName { get; set; }
 
-        [Column(TypeName = "numeric")]
-        public decimal? DLCValue { get; set; }
+         
+        public string DLCValue { get; set; }
 
         [StringLength(50)]
         public string GroupId { get; set; }
