@@ -304,6 +304,7 @@
     <Compile Include="Models\DLCCreation.cs" />
     <Compile Include="Models\DocLibraryUploadFile.cs" />
     <Compile Include="Models\EarnRule.cs" />
+    <Compile Include="Models\EReceipt\EReceipt.cs" />
     <Compile Include="Models\EReceipt\tblTempTxnJSON.cs" />
     <Compile Include="Models\EventDetail.cs" />
     <Compile Include="Models\EventManagementReport.cs" />

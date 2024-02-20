@@ -391,6 +391,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
+                    context.Database.CommandTimeout = 300;
                     if (GroupId == "1086")
                     {
                         lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
@@ -411,7 +412,7 @@ namespace BOTS_BL.Repository
                         {
                             if (EnrolmentDataFlag == "4")
                             {
-                                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster").ToList();
+                                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM tblTxnDetailsMaster(nolock) order by txndatetime desc").ToList();
                                 foreach (var item in LstTxnData)
                                 {
                                     OutletwiseTransaction Obj = new OutletwiseTransaction();
@@ -432,7 +433,7 @@ namespace BOTS_BL.Repository
                             }
                             else if (EnrolmentDataFlag == "2")
                             {
-                                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Earn'").ToList();
+                                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster(nolock) where TxnType = 'Earn' order by txndatetime desc").ToList();
                                 foreach (var item in LstTxnData)
                                 {
                                     OutletwiseTransaction Obj = new OutletwiseTransaction();
@@ -454,7 +455,7 @@ namespace BOTS_BL.Repository
                             }
                             else if (EnrolmentDataFlag == "3")
                             {
-                                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster where TxnType = 'Burn'").ToList();
+                                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster(nolock) where TxnType = 'Burn' order by txndatetime desc").ToList();
                                 foreach (var item in LstTxnData)
                                 {
                                     OutletwiseTransaction Obj = new OutletwiseTransaction();

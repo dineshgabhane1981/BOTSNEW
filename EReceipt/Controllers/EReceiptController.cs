@@ -13,6 +13,7 @@ namespace EReceipt.Controllers
 {
     public class EReceiptController : Controller
     {
+        CouponRepository CR = new CouponRepository();
         // GET: EReceipt
         public ActionResult Index()
         {
