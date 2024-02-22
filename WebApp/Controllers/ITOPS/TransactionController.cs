@@ -198,15 +198,15 @@ namespace WebApp.Controllers.ITOPS
                 bool IsSMS = false;
 
                 string CustomerId = "";
-                string MobileNo = "";             
+                string MobileNo = "";
                 string NewMobileNo = "";
-                
+
 
                 foreach (Dictionary<string, object> item in objData)
                 {
                     CustomerId = Convert.ToString(item["CustomerId"]);
-                    MobileNo = Convert.ToString(item["MobileNo"]);                   
-                    NewMobileNo = Convert.ToString(item["NewMobileNo"]);                   
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    NewMobileNo = Convert.ToString(item["NewMobileNo"]);
                     objAudit.GroupId = groupId;
                     objAudit.RequestedFor = "Mobile Number Change";
                     objAudit.RequestedEntity = "CustomerId - " + CustomerId;
@@ -495,7 +495,24 @@ namespace WebApp.Controllers.ITOPS
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult DeleteTestTxn()
+        {
+            var groupId = (string)Session["GroupId"];
+            ViewBag.GroupId = groupId;
+            return View();
+        }
 
+        public ActionResult DeleteTestTxnData(string GroupId, string MobileNo)
+        {
+           
+            SPResponse result = new SPResponse();
+            result = NEWITOPS.DeleteTestTxnData(GroupId, MobileNo);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult ChangeInvoiceMobileNo()
+        {
+            return View();
+        }
 
     }
 }

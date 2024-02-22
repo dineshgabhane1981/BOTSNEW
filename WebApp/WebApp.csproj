@@ -675,6 +675,8 @@
     <Content Include="Views\Coupon\Report.cshtml" />
     <Content Include="Views\Coupon\Configure.cshtml" />
     <Content Include="Views\Coupon\_RedeemCouponReport.cshtml" />
+    <Content Include="Views\Transaction\DeleteTestTxn.cshtml" />
+    <Content Include="Views\Transaction\ChangeInvoiceMobileNo.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

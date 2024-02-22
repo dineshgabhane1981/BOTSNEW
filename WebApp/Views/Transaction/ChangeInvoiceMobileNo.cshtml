@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "ChangeInvoiceMobileNo";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+
+<script src="~/Content/scriptSteps.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+<div class="multisteps-form__panel shadow p-4 list-box bg-white" style="height:auto !important;" id="sec7" data-animation="scaleIn">
+    <h4 class="multisteps-form__title" style="color:blue;">Change Invoice Mobile No</h4><br />
+    <div class="multisteps-form__content">
+        <input type="hidden" id="hdnGroupId" />
+        <div>
+            <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+            <label style="padding-right:5px;padding-top:10px;">Enter Invoice Number </label>
+            <input type="text" id="txtInvoiceNoCancel" class="input50" />
+            <button type="button" id="btnSearch" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+
+    var tableData = [];
+    //<a href="~/Content/bootstrap.css.map">~/Content/bootstrap.css.map</a>
+    var tableLogData = [];
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $('#btnSearch').on("click", function () {
+            GetInvoiceData();
+        });       
+        $('#btnCancelTxn').on("click", function () {
+            DeleteTxnData();
+        });
+    });
+
+    function GetInvoiceData() {
+
+    }
+</script>

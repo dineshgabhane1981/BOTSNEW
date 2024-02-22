@@ -17,7 +17,6 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
         DashboardRepository DR = new DashboardRepository();
-        //string connstr = CustomerConnString.ConnectionStringCustomer;
         public OnlyOnce GetOnlyOnceData(string GroupId, string outletId, string connstr, string loginId)
         {
             OnlyOnce objOnlyOnce = new OnlyOnce();
@@ -35,57 +34,6 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_OutletId", outletId),
                         new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<OnlyOnce>();
                 }
-                //using (var context = new BOTSDBContext(connstr))
-                //{
-
-                //    objOnlyOnce = context.Database.SqlQuery<OnlyOnce>("sp_OnlyOnceNew @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_DBName", 
-                //        new SqlParameter("@pi_GroupId", GroupId), 
-                //        new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), 
-                //        new SqlParameter("@pi_LoginId", loginId), 
-                //        new SqlParameter("@pi_OutletId", outletId),
-                //        new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<OnlyOnce>();
-
-                //else if (GroupId == "1087")
-                //{
-                //var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
-                //var date150 = DateTime.Today.AddDays(-150);
-                //var date180 = DateTime.Today.AddDays(-180);
-                //var date30 = DateTime.Today.AddDays(-30);
-                //if (outletId == "")
-                //{
-
-                //    objOnlyOnce.TotalMember = AllData.Count();
-                //    objOnlyOnce.OnlyOnceMember = AllData.Where(x => x.TotalTxnCount == 1 && x.LastTxnDate < date30).Count();
-                //    objOnlyOnce.OnlyOncePercentage = Math.Round((Convert.ToDecimal(objOnlyOnce.OnlyOnceMember) * 100) / Convert.ToDecimal(objOnlyOnce.TotalMember), 2);
-
-                //    var DBTotalSpend = AllData.Where(x => x.TotalTxnCount == 1 && x.LastTxnDate < date30).Sum(x => x.TotalSpend);
-                //    var AvgAmt = DBTotalSpend / objOnlyOnce.OnlyOnceMember;
-
-                //    objOnlyOnce.RecentVisitHigh = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend > AvgAmt && x.LastTxnDate < date30 && x.LastTxnDate >= date150).Count();
-                //    objOnlyOnce.RecentVisitLow = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LastTxnDate < date30 && x.LastTxnDate >= date150).Count();
-                //    objOnlyOnce.NotSeenHigh = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend > AvgAmt && x.LastTxnDate < date180).Count();
-                //    objOnlyOnce.NotSeenLow = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LastTxnDate < date180).Count();
-                //}
-                //else
-                //{
-                //    objOnlyOnce.TotalMember = AllData.Where(x => x.CurrentEnrolledOutlet == outletId).Count();
-                //    objOnlyOnce.OnlyOnceMember = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.LastTxnDate < date30).Count();
-                //    objOnlyOnce.OnlyOncePercentage = Math.Round((Convert.ToDecimal(objOnlyOnce.OnlyOnceMember) * 100) / Convert.ToDecimal(objOnlyOnce.TotalMember), 2);
-
-                //    var DBTotalSpend = AllData.Where(x => x.CurrentEnrolledOutlet == outletId && x.TotalTxnCount == 1).Sum(x => x.TotalSpend);
-                //    var AvgAmt = DBTotalSpend / objOnlyOnce.OnlyOnceMember;
-
-                //    objOnlyOnce.RecentVisitHigh = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LastTxnDate < date30 && x.LastTxnDate >= date150).Count();
-                //    objOnlyOnce.RecentVisitLow = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LastTxnDate < date30 && x.LastTxnDate >= date150).Count();
-                //    objOnlyOnce.NotSeenHigh = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LastTxnDate < date180).Count();
-                //    objOnlyOnce.NotSeenLow = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LastTxnDate < date180).Count();
-                //}
-                //}
-                //else
-                //{
-                //    objOnlyOnce = context.Database.SqlQuery<OnlyOnce>("sp_BOTS_OnlyOnce @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<OnlyOnce>();
-                //}
-                //}
             }
             catch (Exception ex)
             {
@@ -110,111 +58,7 @@ namespace BOTS_BL.Repository
                   new SqlParameter("@pi_OutletId", outletId),
                   new SqlParameter("@pi_Type", type),
                   new SqlParameter("@pi_DBName", DBName)).ToList<OnlyOnceTxn>();
-                }
-                //using (var context = new BOTSDBContext(connstr))
-                //{
-                //    //if (GroupId == "1086")
-                //    //{
-                //    //    objOnlyOnceTxn = context.Database.SqlQuery<OnlyOnceTxn>("sp_BOTS_OnlyOnce1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
-                //    //   new SqlParameter("@pi_GroupId", GroupId),
-                //    //   new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                //    //   new SqlParameter("@pi_LoginId", loginId),
-                //    //   new SqlParameter("@pi_OutletId", outletId),
-                //    //   new SqlParameter("@pi_Type", type)).ToList<OnlyOnceTxn>();
-                //    //}
-                //    //else if (GroupId == "1087")
-                //    //{
-                //    List<MemberListAllData> AllData = new List<MemberListAllData>();
-
-                //    AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
-
-                //    var onlyOnceData = AllData.Where(x => x.TotalTxnCount == 1).ToList();
-                //    var DBTotalSpend = AllData.Where(x => x.TotalTxnCount == 1).Sum(x => x.TotalSpend);
-                //    var AvgAmt = DBTotalSpend / onlyOnceData.Count();
-                //    var date150 = DateTime.Today.AddDays(-150);
-                //    List<MemberListAllData> highRecentData = new List<MemberListAllData>();
-                //    if (type == "1")
-                //    {
-                //        if (outletId == "")
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend > AvgAmt && x.LasTTxnDate >= date150).ToList();
-                //        }
-                //        else
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LasTTxnDate >= date150).ToList();
-                //        }
-                //    }
-                //    if (type == "2")
-                //    {
-                //        if (outletId == "")
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LasTTxnDate >= date150).ToList();
-                //        }
-                //        else
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LasTTxnDate >= date150).ToList();
-                //        }
-                //    }
-                //    if (type == "3")
-                //    {
-                //        if (outletId == "")
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend > AvgAmt && x.LasTTxnDate < date150).ToList();
-                //        }
-                //        else
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend > AvgAmt && x.LasTTxnDate < date150).ToList();
-                //        }
-                //    }
-                //    if (type == "4")
-                //    {
-                //        if (outletId == "")
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.TotalSpend <= AvgAmt && x.LasTTxnDate < date150).ToList();
-                //        }
-                //        else
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId && x.TotalSpend <= AvgAmt && x.LasTTxnDate < date150).ToList();
-                //        }
-                //    }
-                //    if (type == "5")
-                //    {
-                //        if (outletId == "")
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1).ToList();
-                //        }
-                //        else
-                //        {
-                //            highRecentData = AllData.Where(x => x.TotalTxnCount == 1 && x.CurrentEnrolledOutlet == outletId).ToList();
-                //        }
-                //    }
-                //    foreach (var item in highRecentData)
-                //    {
-                //        OnlyOnceTxn newItem = new OnlyOnceTxn();
-                //        newItem.EnrolledOutlet = item.OutletName;
-                //        newItem.MobileNo = item.MobileNo;
-                //        newItem.MaskedMobileNo = item.MaskedMobileNo;
-                //        newItem.MemberName = item.Name;
-                //        newItem.Type = item.Type;
-                //        newItem.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                //        newItem.TotalVisit = item.TotalTxnCount;
-                //        newItem.AvlBalPoints = item.AvlPts;
-                //        newItem.LastTxnDate = Convert.ToString(item.LasTTxnDate);
-
-                //        objOnlyOnceTxn.Add(newItem);
-                //    }
-                //    //}
-                //    //else
-                //    //{
-                //    //    objOnlyOnceTxn = context.Database.SqlQuery<OnlyOnceTxn>("sp_BOTS_OnlyOnce1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
-                //    //   new SqlParameter("@pi_GroupId", GroupId),
-                //    //   new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                //    //   new SqlParameter("@pi_LoginId", ""),
-                //    //   new SqlParameter("@pi_OutletId", outletId),
-                //    //   new SqlParameter("@pi_Type", type)).ToList<OnlyOnceTxn>();
-                //    //}
-
-                //}
+                }                
             }
             catch (Exception ex)
             {
@@ -238,44 +82,7 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_LoginId", loginId), 
                         new SqlParameter("@pi_OutletId", outletId), 
                         new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<NonTransactingCls>();
-                }
-                //using (var context = new BOTSDBContext(connstr))
-                //{
-                //    //if (GroupId == "1086")
-                //    //{
-                //    //    objNonTransacting = context.Database.SqlQuery<NonTransactingCls>("sp_BOTS_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<NonTransactingCls>();
-                //    //}
-                //    //else if (GroupId == "1087")
-                //    //{
-                //    List<MemberListAllData> AllData = new List<MemberListAllData>();
-
-                //    AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
-                //    if (outletId == "")
-                //    {
-                //        objNonTransacting._Within30Days = AllData.Where(x => x.LasTTxnDate >= DateTime.Today.AddDays(-30)).Count();
-                //        objNonTransacting._31to60Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-30) && x.LasTTxnDate >= DateTime.Today.AddDays(-60)).Count();
-                //        objNonTransacting._61to90Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-61) && x.LasTTxnDate >= DateTime.Today.AddDays(-90)).Count();
-                //        objNonTransacting._91to180Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-91) && x.LasTTxnDate >= DateTime.Today.AddDays(-180)).Count();
-                //        objNonTransacting._181to365Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-181) && x.LasTTxnDate >= DateTime.Today.AddDays(-365)).Count();
-                //        objNonTransacting._MoreThanYear = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-365)).Count();
-                //    }
-                //    else
-                //    {
-                //        objNonTransacting._Within30Days = AllData.Where(x => x.LasTTxnDate >= DateTime.Today.AddDays(-30) && x.CurrentEnrolledOutlet == outletId).Count();
-                //        objNonTransacting._31to60Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-30) && x.LasTTxnDate >= DateTime.Today.AddDays(-60) && x.CurrentEnrolledOutlet == outletId).Count();
-                //        objNonTransacting._61to90Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-61) && x.LasTTxnDate >= DateTime.Today.AddDays(-90) && x.CurrentEnrolledOutlet == outletId).Count();
-                //        objNonTransacting._91to180Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-91) && x.LasTTxnDate >= DateTime.Today.AddDays(-180) && x.CurrentEnrolledOutlet == outletId).Count();
-                //        objNonTransacting._181to365Days = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-181) && x.LasTTxnDate >= DateTime.Today.AddDays(-365) && x.CurrentEnrolledOutlet == outletId).Count();
-                //        objNonTransacting._MoreThanYear = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-365) && x.CurrentEnrolledOutlet == outletId).Count();
-                //    }
-                //    //}
-                //    //else
-                //    //{
-                //    //    objNonTransacting = context.Database.SqlQuery<NonTransactingCls>("sp_BOTS_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).FirstOrDefault<NonTransactingCls>();
-                //    //}
-
-
-                //}
+                }                
             }
             catch (Exception ex)
             {
@@ -301,81 +108,7 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_DBName", DBName),
                         new SqlParameter("@pi_Type", type)).ToList<NonTransactingTxn>();
                     objNonTransactingTxn = objNonTransactingTxn.OrderBy(x => x.LastTxnDate).ToList();
-                    //objNonTransactingTxn = objNonTransactingTxn.Where(x => !x.EnrolledOutletName.ToLower().Contains("admin")).ToList();
-                }
-                //using (var context = new BOTSDBContext(connstr))
-                //{
-                //    //if (GroupId == "1086")
-                //    //{
-                //    //    objNonTransactingTxn = context.Database.SqlQuery<NonTransactingTxn>("sp_BOTS_NonTransacting1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
-                //    //    new SqlParameter("@pi_GroupId", GroupId),
-                //    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                //    //    new SqlParameter("@pi_LoginId", loginId),
-                //    //    new SqlParameter("@pi_OutletId", outletId),
-                //    //    new SqlParameter("@pi_Type", type)).ToList<NonTransactingTxn>();
-                //    //}
-                //    //else if (GroupId == "1087")
-                //    //{
-                //    List<MemberListAllData> AllData = new List<MemberListAllData>();
-
-                //    AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
-                //    if (outletId != "")
-                //    {
-                //        if (type == "1")
-                //            AllData = AllData.Where(x => x.LasTTxnDate >= DateTime.Today.AddDays(-30) && x.CurrentEnrolledOutlet == outletId).ToList();
-                //        if (type == "2")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-30) && x.LasTTxnDate >= DateTime.Today.AddDays(-60) && x.CurrentEnrolledOutlet == outletId).ToList();
-                //        if (type == "3")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-61) && x.LasTTxnDate >= DateTime.Today.AddDays(-90) && x.CurrentEnrolledOutlet == outletId).ToList();
-                //        if (type == "4")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-91) && x.LasTTxnDate >= DateTime.Today.AddDays(-180) && x.CurrentEnrolledOutlet == outletId).ToList();
-                //        if (type == "5")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-181) && x.LasTTxnDate >= DateTime.Today.AddDays(-365) && x.CurrentEnrolledOutlet == outletId).ToList();
-                //        if (type == "6")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-365) && x.CurrentEnrolledOutlet == outletId).ToList();
-                //    }
-                //    else
-                //    {
-                //        if (type == "1")
-                //            AllData = AllData.Where(x => x.LasTTxnDate >= DateTime.Today.AddDays(-30)).ToList();
-                //        if (type == "2")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-30) && x.LasTTxnDate >= DateTime.Today.AddDays(-60)).ToList();
-                //        if (type == "3")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-61) && x.LasTTxnDate >= DateTime.Today.AddDays(-90)).ToList();
-                //        if (type == "4")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-91) && x.LasTTxnDate >= DateTime.Today.AddDays(-180)).ToList();
-                //        if (type == "5")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-181) && x.LasTTxnDate >= DateTime.Today.AddDays(-365)).ToList();
-                //        if (type == "6")
-                //            AllData = AllData.Where(x => x.LasTTxnDate < DateTime.Today.AddDays(-365)).ToList();
-                //    }
-
-                //    foreach (var item in AllData)
-                //    {
-                //        NonTransactingTxn objItem = new NonTransactingTxn();
-                //        objItem.EnrolledOutlet = item.OutletName;
-                //        objItem.MobileNo = item.MobileNo;
-                //        objItem.MaskedMobileNo = item.MaskedMobileNo;
-                //        objItem.MemberName = item.Name;
-                //        objItem.Type = item.Type;
-                //        objItem.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                //        objItem.TotalVisit = item.TotalTxnCount;
-                //        objItem.AvlBalPoints = item.AvlPts;
-                //        objItem.LastTxnDate = item.LasTTxnDate.HasValue ? item.LasTTxnDate.Value.ToString("MM/dd/yyyy") : "";
-                //        objNonTransactingTxn.Add(objItem);
-                //    }
-                //    //}
-                //    //else
-                //    //{
-                //    //    objNonTransactingTxn = context.Database.SqlQuery<NonTransactingTxn>("sp_BOTS_NonTransacting1 @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId, @pi_Type",
-                //    //    new SqlParameter("@pi_GroupId", GroupId),
-                //    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                //    //    new SqlParameter("@pi_LoginId", ""),
-                //    //    new SqlParameter("@pi_OutletId", outletId),
-                //    //    new SqlParameter("@pi_Type", type)).ToList<NonTransactingTxn>();
-                //    //}
-
-                //}
+                }                
             }
             catch (Exception ex)
             {
@@ -391,13 +124,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {
-                    //if (GroupId == "1086")
-                    //{
-                    //    objNonRedemption = context.Database.SqlQuery<NonRedemptionCls>("sp_BOTS_NonRedeeming @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<NonRedemptionCls>();
-                    //}
-                    //if (GroupId == "1087")
-                    //{
+                {                   
                     List<MemberListAllData> AllData = new List<MemberListAllData>();
 
                     AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
@@ -425,13 +152,7 @@ namespace BOTS_BL.Repository
                     objNonRedemption.MoreThan180DaysLow = AllData.Where(x => x.AvlPts < Low && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
                     objNonRedemption.MoreThan180DaysMedium = AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
                     objNonRedemption.MoreThan180DaysHigh = AllData.Where(x => x.AvlPts >= Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
-                    //}
-                    //else
-                    //{
-                    //    objNonRedemption = context.Database.SqlQuery<NonRedemptionCls>("sp_BOTS_NonRedeeming @pi_GroupId, @pi_Date, @pi_LoginId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<NonRedemptionCls>();
-                    //}
-
-
+                    
                 }
             }
             catch (Exception ex)
@@ -448,18 +169,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {
-                    //if (GroupId == "1086")
-                    //{
-                    //    objNonRedemptionTxn = context.Database.SqlQuery<NonRedemptionTxn>("sp_BOTS_NonRedeeming1 @pi_GroupId, @pi_Date, @pi_LoginId,@pi_Type,@pi_DaysType",
-                    //    new SqlParameter("@pi_GroupId", GroupId),
-                    //    new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                    //    new SqlParameter("@pi_LoginId", loginId),
-                    //    new SqlParameter("@pi_Type", type),
-                    //    new SqlParameter("@pi_DaysType", daysType)).ToList<NonRedemptionTxn>();
-                    //}
-                    //if (GroupId == "1087")
-                    //{
+                {                    
                     List<MemberListAllData> AllData = new List<MemberListAllData>();
                     List<MemberListAllData> FilteredData = new List<MemberListAllData>();
 
@@ -604,9 +314,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {
-                    //if (GroupId == "1087")
-                    //{
+                {                    
                     var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
                     var ReferralBase = context.Database.SqlQuery<tblDLCReportingData>("select ReferredByMobileNo,ReferredByName,ReferredDate,ReferralMobileNo,ReferralName,ConvertedStatus,ReferralTotalTxnCount,ReferralTotalSpend from tblDLCReporting").ToList();
 
@@ -633,13 +341,7 @@ namespace BOTS_BL.Repository
                     if (objMemberPage.ProfileUpdateCount > 0)
                     {
                         objMemberPage.ProfileUpdatePercentage = ((objMemberPage.ProfileUpdateCount / TotalBase) * 100);
-                    }
-                    //}
-                    //else
-                    //{
-                    //    objMemberPage = context.Database.SqlQuery<MemberPage>("sp_BOTS_MemberWebPage1 @pi_GroupId, @pi_Date, @pi_LoginId",
-                    //    new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", "")).FirstOrDefault<MemberPage>();
-                    //}                   
+                    }                  
                 }
             }
             catch (Exception ex)
@@ -708,22 +410,11 @@ namespace BOTS_BL.Repository
         public MembersInformation GetMemberMisinformationData(string GroupId, string connstr, string loginId)
         {
             MembersInformation objMembersInformation = new MembersInformation();
-
             List<CustInformatonData> LstCustInfo = new List<CustInformatonData>();
-
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {
-                    //if (GroupId == "1086")
-                    //{
-                    //    objMembersInformation = context.Database.SqlQuery<MembersInformation>("sp_BOTS_MemberInformation @pi_GroupId, @pi_Date, @pi_LoginId",
-                    //   new SqlParameter("@pi_GroupId", GroupId),
-                    //   new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()),
-                    //   new SqlParameter("@pi_LoginId", loginId)).FirstOrDefault<MembersInformation>();
-                    //}
-                    //else if(GroupId == "1087")
-                    //{
+                {                    
                     DateTime DummyDate = new DateTime(1900, 1, 1);
                     DateTime Today = DateTime.Now;
                     var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);

@@ -234,34 +234,35 @@
                             {
                                 if (item.Section == "FeedbackQuestions")
                                 {
-                                    <div class="col-md-12 col-sm-12 pt-1 pl-3 pr-3" style="text-align:center;">
-                                        @if (Model.GroupId != "1051")
+                        <div class="col-md-12 col-sm-12 pt-1 pl-3 pr-3" style="text-align:center;">
+                            @if (Model.GroupId != "1051")
+                            {
+                                if (item.Type == "Heading")
+                                {
+                                    if (item.TypeId == 1)
+                                    {
+                                        if (Model.GroupId != "1051")
                                         {
-                                            if (item.Type == "Heading")
-                                            {
-                                                if (item.TypeId == 1)
-                                                {
-                                                    if (Model.GroupId != "1051")
-                                                    {
-                                                        <h1 style="font-size: 34px; color: green; font-weight:bold;">Welcome <span id="spnCustomerName"></span></h1>
-                                                    }
-                                                }
-
-                                                if (item.TypeId == 2)
-                                                {
-                                                    if (Model.GroupId != "1051")
-                                                    {
-                                                        <h2 style="font-size: 34px;"> @Html.Raw(@item.Text)</h2>
-                                                    }
-                                                    else
-                                                    {
-                                                        <h2 style="font-size: 34px; color: green; font-weight: bold; "> @Html.Raw(@item.Text)</h2>
-                                                    }
-                                                }
-                                            }
+                                            <h1 style="font-size: 34px; color: green; font-weight:bold;">Welcome <span id="spnCustomerName"></span></h1>
+                                            <h2 style="font-size: 34px;"> @Html.Raw(@item.Text)</h2>
                                         }
+                                    }
 
-                                    </div>
+                                    if (item.TypeId == 2)
+                                    {
+                                        if (Model.GroupId != "1051")
+                                        {
+                                            <h2 style="font-size: 34px;"> @Html.Raw(@item.Text)</h2>
+                                        }
+                                        else
+                                        {
+                                            <h2 style="font-size: 34px; color: green; font-weight: bold; "> @Html.Raw(@item.Text)</h2>
+                                        }
+                                    }
+                                }
+                            }
+
+                        </div>
                                 }
 
 

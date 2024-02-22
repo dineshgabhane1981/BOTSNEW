@@ -141,6 +141,18 @@
                                 Delete User
                             </a>
                         </li>
+                        <li class="@Html.IsSelected(controller: "Transaction", action: "DeleteTestTxn")">
+                            <a href="@Url.Action("DeleteTestTxn", "Transaction")" class="@Html.IsSelected(controller: "Transaction", action: "DeleteTestTxn")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Delete Test Txn
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: "Transaction", action: "ChangeInvoiceMobileNo")">
+                            <a href="@Url.Action("ChangeInvoiceMobileNo", "Transaction")" class="@Html.IsSelected(controller: "Transaction", action: "ChangeInvoiceMobileNo")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Change Invoice Mobile No
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

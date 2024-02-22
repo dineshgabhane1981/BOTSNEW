@@ -542,6 +542,7 @@
     <Compile Include="Repository\DLCRepository.cs" />
     <Compile Include="Repository\DocumentLibraryRepository.cs" />
     <Compile Include="Repository\EmployeeRepository.cs" />
+    <Compile Include="Repository\EReceiptRepository.cs" />
     <Compile Include="Repository\EventsRepository.cs" />
     <Compile Include="Repository\ExhibitionRepository.cs" />
     <Compile Include="Repository\FeedbackModuleRepository.cs" />

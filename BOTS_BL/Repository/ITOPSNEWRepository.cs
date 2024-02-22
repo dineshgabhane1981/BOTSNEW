@@ -1534,5 +1534,34 @@ namespace BOTS_BL.Repository
 
             return lstOutlets;
         }
+
+        public SPResponse DeleteTestTxnData(string GroupId, string MobileNo)
+        {
+            
+            SPResponse result = new SPResponse();
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);
+            try
+            {               
+                string connStr = GetCustomerConnString(GroupId);
+                using (var contextNew = new CommonDBContext())
+                {
+                    var DBName = contextNew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                    result = contextNew.Database.SqlQuery<SPResponse>("sp_DeleteTestTxn @pi_GroupId,  @pi_Date, @pi_LoginId, @pi_MobileNo,@pi_DBName",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                        new SqlParameter("@pi_LoginId", ""),
+                        new SqlParameter("@pi_MobileNo", MobileNo),
+                        new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<SPResponse>();
+
+                }                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DeleteTestTxnData");
+            }
+            return result;
+        }
+
     }
 }

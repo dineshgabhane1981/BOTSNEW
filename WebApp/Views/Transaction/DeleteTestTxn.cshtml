@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "DeleteTestTxn";
+    Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
+}
+
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+<div class="multisteps-form__panel shadow p-4 list-box bg-white" style="height:auto !important;" id="sec7" data-animation="scaleIn">
+    <h4 class="multisteps-form__title" style="color:blue;">Change Invoice Mobile No</h4><br />
+    <div class="multisteps-form__content">
+        <input type="hidden" id="hdnGroupId" />
+        <div>
+            <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
+            <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
+            <input type="text" id="txtMobileNoDelete" class="input50" />
+            <button type="button" id="btnDeleteTxn" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
+    $(document).ready(function () {
+        $('#btnDeleteTxn').on("click", function () {
+            DeleteData();
+        });
+
+    });
+
+    function DeleteData() {
+    $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteTestTxnData", "Transaction")',
+            data: '{GroupId: ' + JSON.stringify($('#hdnGroupId').val()) + ', MobileNo: ' + JSON.stringify($('#txtMobileNoDelete').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                if (result.ResponseCode == "00") {
+                    toastr.success("Transaction Deleted Successfully");
+                    $("#divLoader").hide();
+                }
+                else {
+                    toastr.error(result.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+</script>

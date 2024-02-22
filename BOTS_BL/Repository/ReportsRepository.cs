@@ -412,7 +412,7 @@ namespace BOTS_BL.Repository
                         {
                             if (EnrolmentDataFlag == "4")
                             {
-                                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM tblTxnDetailsMaster(nolock) order by txndatetime desc").ToList();
+                                var LstTxnData = context.Database.SqlQuery<TransactionSummaryData>("SELECT top(26) * FROM View_TxnDetailsMaster(nolock) order by txndatetime desc").ToList();
                                 foreach (var item in LstTxnData)
                                 {
                                     OutletwiseTransaction Obj = new OutletwiseTransaction();
