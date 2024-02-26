@@ -1,8 +1,9 @@
 ﻿@model WebApp.ViewModel.CustomerDashboardViewModel
 @using BOTS_BL.Models;
-
+@using System.Configuration;
 
 @{
+    string baseURL = ConfigurationManager.AppSettings["BaseDocUrl"];
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
     var roleId = userDetails.LoginType;
 }
@@ -93,8 +94,6 @@
 
 <script>
     $(document).ready(function () {
-
-
         $('#groupListTable').DataTable({
             "aaSorting": [[1, "asc"]],
             "paging": true,
@@ -131,7 +130,6 @@
 
     function OpenStatusPopup(id) {
         $("#divLoader").show();
-
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetCustomerConfigDetails", "CustomerManagement")',
@@ -151,32 +149,82 @@
                 $("#dvGroupConfigDetails").html("");
                 $("#dvGroupConfigDetails").html(response.responseText);
                 $("#divLoader").hide();
-
-                BindListing(id);
+                BindDocListing(id);
+                DownLoadDocFile(SLno);
             }
 
         });
 
         $("#configModal").show(1000);
     }
-    function BindListing(id) {
-
-         $.ajax({
+    function BindDocListing(id) {
+        
+        $.ajax({
             type: "POST",
-            url: '@Url.Action("GetDiscussionList", "Discussion")',
-            data: '{groupId: ' + JSON.stringify(id) + '}',
+            url: '@Url.Action("ListDocuments", "DocumentLibrary")',
+            data: '{GroupId: ' + JSON.stringify(id) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (responce) {
-                $("#dvDiscussionList").html(responce);
+            success: function (result) {
+                console.log(result)
+                $("#Table").show();
+                tableData = [];
+                $.map(result, function (item) {
+                    optionItem = {}
+                    optionItem["SlNo"] = item.SlNo;
+                    optionItem["DocumentType"] = item.DocumentType;
+                    optionItem["UploadDate"] = item.UploadDateStr;
+                    optionItem["Comments"] = item.Comments;
+                    tableData.push(optionItem);
+                });
+                console.log(tableData)
+                DrawTable();
                 $("#divLoader").hide();
             },
-            error: function (responce) {
-                $("#dvDiscussionList").html(responce.responseText);
-                $("#divLoader").hide();
-
+            error: function (result) {
+               
+                console.log(result.responseText)
             }
         });
+    }
+    function DrawTable() {
+
+        var table1 = $('#InstanceTable').DataTable();
+        table1.destroy();
+
+        var table = $('#InstanceTable').DataTable({
+            "aaSorting": [[0, "asc"]],
+            "data": tableData,
+            "paging": true,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 10,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "DocumentType" },
+                { data: "UploadDate" },
+                { data: "Comments" },
+                {
+                    "mData": "SlNo",
+                    "mRender": function (data, type, row) {
+                        return '<a href="#" onclick="DownLoadDocFile(\'' + data + '\')" class="login" title="Edit"><img src ="../Content/assets/images/Download.png" /></a>';
+
+                    }
+                }
+            ],
+            aoColumnDefs: [
+                {
+                    bSortable: false,
+                    aTargets: []
+                }
+            ]
+
+        });
+
+        var table = $('#InstanceTable').DataTable();
+        table.draw();
+
     }
     function ShowActivities(id) {
       //  var pType = "Distributors";
@@ -206,7 +254,31 @@
             });
         }
     }
-
+    function DownLoadDocFile(SLno) {
+        var FilterData = [];
+        item = {};
+        item["SLno"] = SLno;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+         $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDownloadDetails", "DocumentLibrary")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var BaseUrl = $("#baseURL").val();
+                    console.log(result)
+                    var docurl = '@baseURL' + result;
+                    window.open(docurl);
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                 console.log(result.responseText)
+                }
+            });
+    }
     function BindActivities(id,data) {
         if (data != "") {
             var htmlStr = "<table border=\"2\" style=\"background-color:gray;margin-left: 11px;width: 98%;\" class=\"table\">";

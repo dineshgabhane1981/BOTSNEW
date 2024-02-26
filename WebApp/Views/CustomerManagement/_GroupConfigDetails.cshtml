@@ -231,11 +231,11 @@
                             <td><b>Unique Requirement</b></td>
                         </tr>
                         @foreach (var item in Model.lstUniquePoints)
-                {
-                    <tr>
-                        <td>@item.Description</td>
-                    </tr>
-                }
+                        {
+                            <tr>
+                                <td>@item.Description</td>
+                            </tr>
+                        }
                     </table>
                 </div>
 
@@ -259,43 +259,43 @@
                     </tr>
                     @foreach (var item in Model.lstOutlets)
                     {
-                <tr>
-                    <td>@item.OutletName</td>
-                    <td style="text-align:center;">--</td>
-                    <td>@item.OwnerName</td>
-                    <td>@item.MobileNo</td>
-                    <td>@item.EmailId</td>
-                    <td>@item.Address</td>
-                    <td>@item.City</td>
-                    <td>@item.Pincode</td>
-                    <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
-                    <td style="text-align:center;">--</td>
-                    @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramStartDate)))
-                    {
-                        <td>@item.ProgramStartDate.Value.ToString("dd-MM-yyyy")</td>
-                    }
-                    else
-                    {
-                        <td>--</td>
-                    }
-                    @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramRenewalDate)))
-                    {
-                        <td>@item.ProgramRenewalDate.Value.ToString("dd-MM-yyyy")</td>
-                    }
-                    else
-                    {
-                        <td>--</td>
-                    }
-                    @if (!string.IsNullOrEmpty(Convert.ToString(item.TransactionPerDay)))
-                    {
-                        <td>@item.TransactionPerDay</td>
-                    }
-                    else
-                    {
-                        <td>--</td>
-                    }
+                        <tr>
+                            <td>@item.OutletName</td>
+                            <td style="text-align:center;">--</td>
+                            <td>@item.OwnerName</td>
+                            <td>@item.MobileNo</td>
+                            <td>@item.EmailId</td>
+                            <td>@item.Address</td>
+                            <td>@item.City</td>
+                            <td>@item.Pincode</td>
+                            <td>Latitude - @item.Latitude <br /> Longitude - @item.Longitude</td>
+                            <td style="text-align:center;">--</td>
+                            @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramStartDate)))
+                            {
+                                <td>@item.ProgramStartDate.Value.ToString("dd-MM-yyyy")</td>
+                            }
+                            else
+                            {
+                                <td>--</td>
+                            }
+                            @if (!string.IsNullOrEmpty(Convert.ToString(item.ProgramRenewalDate)))
+                            {
+                                <td>@item.ProgramRenewalDate.Value.ToString("dd-MM-yyyy")</td>
+                            }
+                            else
+                            {
+                                <td>--</td>
+                            }
+                            @if (!string.IsNullOrEmpty(Convert.ToString(item.TransactionPerDay)))
+                            {
+                                <td>@item.TransactionPerDay</td>
+                            }
+                            else
+                            {
+                                <td>--</td>
+                            }
 
-                </tr>
+                        </tr>
                     }
                 </table>
             </div>
@@ -383,11 +383,11 @@
                                     Earn on Products
                                 </td>
                                 @foreach (var item in Model.objEarnConfig)
-                                 {
+                                {
                                     <td>@item.ProductRuleType</td>
-                                 }
+                                }
                             </tr>
-                            
+
                             <tr>
                                 <td>
                                     Earn % Rate
@@ -517,10 +517,10 @@
             @Html.HiddenFor(model => model.SMSDetailsCount, new { @id = "hdnSMSDetailsCount" })
             @Html.DropDownListFor(x => Model.lstOutletList.Count, new SelectList(Model.lstOutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutlets", style = "margin-top:20px;" })
 
-        <div style="margin-top:10px;">
-            <b>Communication Preference </b>
-        </div>
-    <div class="row" style="margin-top:20px;">
+            <div style="margin-top:10px;">
+                <b>Communication Preference </b>
+            </div>
+            <div class="row" style="margin-top:20px;">
                 <div style="margin-right:20px;">
                     <table border="1" cellpadding="5" cellspacing="5">
                         <tr>
@@ -611,15 +611,15 @@
                                 WA link
                             </td>
                             @if (Model.objSMSDetails != null)
-                             {
-                                 <td>@Model.objSMSDetails.WhatsAppUrl</td>
-                             }
+                            {
+                                <td>@Model.objSMSDetails.WhatsAppUrl</td>
+                            }
                             else
-                             {
-                                  <td></td>
-                             }
-                                @*<td>NA</td>*@
-                            </tr>
+                            {
+                                <td></td>
+                            }
+                            @*<td>NA</td>*@
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -890,7 +890,7 @@
                         var WAScript4 = Model.lstBirthdaySMSWAScript.Where(x => x.Id == 5).Select(y => y.WAScript).FirstOrDefault();
 
                         <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
-                            
+
                             <tr>
                                 <th>Element</th>
                                 <th>Days</th>
@@ -907,7 +907,7 @@
                                 <td></td>
                                 <td>@WAScript1</td>
 
-                            </tr>                            
+                            </tr>
                             <tr>
                                 <td>
                                     Message 2
@@ -916,7 +916,7 @@
                                 <td>@ScriptSMS2</td>
                                 <td></td>
                                 <td>@WAScript2</td>
-                            </tr>                            
+                            </tr>
                             <tr>
                                 <td>
                                     Message 3
@@ -934,7 +934,7 @@
                                 <td>@ScriptSMS4</td>
                                 <td></td>
                                 <td>@WAScript4</td>
-                            </tr>                            
+                            </tr>
                         </table>
                     }
                 </div>
@@ -1012,10 +1012,10 @@
                         var WAScript1 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 1).Select(y => y.WAScript).FirstOrDefault();
                         var WAScript2 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 2).Select(y => y.WAScript).FirstOrDefault();
                         var WAScript3 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 4).Select(y => y.WAScript).FirstOrDefault();
-                        var WAScript4 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 5).Select(y => y.WAScript).FirstOrDefault();                        
+                        var WAScript4 = Model.lstAnniversarySMSWAScript.Where(x => x.Id == 5).Select(y => y.WAScript).FirstOrDefault();
 
                         <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
-                            
+
                             <tr>
                                 <th>Element</th>
                                 <th>Days</th>
@@ -1061,7 +1061,7 @@
                                 <td>@WAScript4</td>
                             </tr>
                         </table>
-                     }
+                    }
                 </div>
             </div>
 
@@ -1083,14 +1083,14 @@
                         var WAScript2 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 2).Select(y => y.WAScript).FirstOrDefault();
                         var WAScript3 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 3).Select(y => y.WAScript).FirstOrDefault();
                         var WAScript4 = Model.lstInActiveSMSWAScript.Where(x => x.Id == 4).Select(y => y.WAScript).FirstOrDefault();
-                    
+
                         <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
                             <tr>
                                 <td rowspan="10" style="text-align: center; width: 100px; font-size: 18px; font-weight: bold;">
                                     3 <br /> Inactive
                                 </td>
 
-                            
+
                             <tr>
                                 <th>Element</th>
                                 <th>Days Since Last txn</th>
@@ -1324,7 +1324,7 @@
                 var GiftPointsReceiverRemainderWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 106).Select(y => y.DLCWAScript).FirstOrDefault();
                 var DLCOTPWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 107).Select(y => y.DLCWAScript).FirstOrDefault();
                 var GiftPointsOTPWA = Model.objMWPSourceMaster.Where(x => x.DLCMessageId == 108).Select(y => y.DLCWAScript).FirstOrDefault();
-                
+
 
                 <table border="1" cellpadding="5" cellspacing="5" style="margin-top:20px;">
                     <tr>
@@ -1426,7 +1426,7 @@
                         }
                     </table>*@
                 </div>
-                <div style="margin-left:20px;">
+                @*<div style="margin-left:20px;">
                     <table border="1" cellpadding="5" cellspacing="5">
                         <tr>
                             <td>Outlet Name</td>
@@ -1445,7 +1445,7 @@
                             }
                         }
                     </table>
-                </div>
+                </div>*@
             </div>
         </div>
         <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="six-panel1">
@@ -1536,9 +1536,24 @@
             </div>
         </div>
 
-        <div class="multisteps-form__panel  p-3 m-3 list-box bg-white panel1" id="seven-panel1">
-            <div id="dvDiscussionList" style="overflow-x:auto;">
-
+        <div  id="seven-panel1">
+            <div id="dvDocumentList" style="overflow-x:auto;">
+                <div class="container-fluid pt-12 pl-12 pr-3 pb-3" style="padding-top:20px;" id="Tabl">
+                    <div class="table-responsive">
+                        <table class="table" id="InstanceTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="text-align:center;">DocType</th>
+                                    <th scope="col" style="text-align:center;">Uploaded Date</th>
+                                    <th scope="col" style="text-align:center;">Comments</th>
+                                    <th scope="col" style="text-align:center;">Download</th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align:center;">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
