@@ -1,7 +1,9 @@
 ﻿@model BOTS_BL.Models.TelecallerCustomerData
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
 }
 <style>
 
@@ -25,88 +27,159 @@
             </button>
             <br /><br />
         </div>
+
     </div>
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3" id="divdata" style="display:none;padding-left:300px !important;">
-            <div class="row mb-3">
-                <div class="col-md-4 col-xl-4">
-                    <b>Mobile No: </b><span id="spMobileNo"></span>
-                </div>
-                <div class="col-md-4 col-xl-4">
-                    <b>Customer Name: </b> <input type="text" id="spCustName" class="input100" />
-                    @*<span id="spCustName"></span>*@
-                </div>
+        <div class="container-fluid pt-3 pl-3 pr-3" id="divdata" style="display:none;">
+            <div class="col-md-12 col-lg-12 row">
+                <div class="col-md-12 col-lg-12 mt-2" style="border: 1px solid gray; border-radius: 5px; padding-bottom:10px;">
+                    <div class="col-md-12 col-lg-12 row mt-3">
+                        <div class="col-md-6 col-lg-6 row ">
+                            <div class="col-md-4 col-lg-4">
+                                <b>Mobile No: </b>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <span id="spMobileNo"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 row">
+                            <div class="col-md-6 col-lg-6">
+                                <b>Enrollment Date: </b>
+                            </div>
+                            <div class="col-md-4 col-lg-4">
+                                <span id="spenrolldt"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 row mt-3">
+                        <div class="col-md-6 col-lg-6 row ">
+                            <div class="col-md-4 col-lg-4">
+                                <b>Total Balance Points: </b>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <span id="sptotalpoints"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 row">
+                            <div class="col-md-6 col-lg-6">
+                                <b>Outlet Name:</b>
+                            </div>
+                            <div class="col-md-4 col-lg-4">
+                                <span id="spoutletNm"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 row mt-3">
+                        <div class="col-md-6 col-lg-6 row ">
+                            <div class="col-md-4 col-lg-4">
+                                <b>Last Txn Date: </b>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <span id="spLasttxndt"></span>
+                            </div>
+                        </div>
 
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4 col-xl-4">
-                    <b>Enrollment Date: </b><span id="spenrolldt"></span>
-                </div>
-                <div class="col-md-4 col-xl-4">
-                    @*Gender:<span id="spGender"></span>*@
-                    <b> Gender </b><br /> @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlgender" })
+                    </div>
+                    <div class="col-md-12 col-lg-12 row mt-3">
+                        <div class="col-md-6 col-lg-6 row ">
+                            <div class="col-md-4 col-lg-4">
+                                <b>Customer Name: </b>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <input type="text" id="spCustName" class="input100" />
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 row">
+                            <div class="col-md-6 col-lg-6">
+                                <b>Gender:</b>
+                            </div>
+                            <div class="col-md-4 col-lg-4">
+                                @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlgender" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 row mt-3">
+                        <div class="col-md-6 col-lg-6 row ">
+                            <div class="col-md-4 col-lg-4">
+                                <b>Date Of Birth: </b>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <input type="date" id="txtDOB" class="input50" />
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 row">
+                            <div class="col-md-6 col-lg-6">
+                                <b>Date Of Anniversary:</b>
+                            </div>
+                            <div class="col-md-4 col-lg-4">
+                                <input type="date" id="txtDOA" class="input50" />
+                            </div>
+                        </div>
+                    </div>
 
+                    @if (userDetails.GroupId == "1263")
+                    {
+                        <div class="col-md-12 col-lg-12 row mt-3">
+                            <div class="col-md-6 col-lg-6 row ">
+                                <div class="col-md-4 col-lg-4">
+                                    <b>Bonus Points: </b>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    <input id="bonusPointsOld" type="number" class="input50" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4 row">
+                                <div class="col-md-6 col-lg-6">
+                                    <b>Point Validity (in days):</b>
+                                </div>
+                                <div class="col-md-4 col-lg-4">
+                                    <input id="PointsValidityOld" type="number" class="input50" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 row mt-3">
+                            <div class="col-md-6 col-lg-6 row ">
+                                <div class="col-md-4 col-lg-4">
+                                    <b>Redeeming Outlet: </b>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
+                                    @Html.DropDownList("Gender", new SelectList(Model.lstOutlet, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlOutletOld" })
+                                </div>
+                            </div>                           
+                        </div>
+                    }
+                    <div class="col-md-12 col-lg-12 row mt-3">
+                        <div class="col-md-6 col-lg-6 row ">
+                            <div class="col-md-4 col-lg-4">
+                                <b>Comments: </b>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <textarea class="input100" id="txtcomment" cols="80" rows="5" placeholder="Enter Comments"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col-md-4 col-xl-4">
-                    <b>Total Balance Points: </b> <span id="sptotalpoints"></span>
-                </div>
-                <div class="col-md-4 col-xl-4">
-                    <b>Date Of Anniversary: </b><br /><input type="date" id="txtDOA" class="input50" />
-                </div>
-               
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4 col-xl-4">
-                    <b>
-                        Outlet Name:
-                    </b>
-                    <span id="spoutletNm"></span>
-                    <span style="display:none;" id="spoutletId"></span>
-                </div>
-                <div class="col-md-4 col-xl-4">
-                    <b>Date Of Birth: </b> <br /><input type="date" id="txtDOB" class="input50" />
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4 col-xl-4">
-                    <b>Last Txn Date: </b><span id="spLasttxndt"></span>
-                </div>
-                <div class="col-md-4 col-xl-4">
-
-                    <b> Comments: </b> <textarea class="input100" id="txtcomment" cols="80" rows="5" placeholder="Enter Comments"></textarea>
-
-                </div>
-            </div>
-            <div class="row">
-
-                <div class="col-md-6 col-xl-6" style="text-align:center;margin-bottom:20px;">
-                    <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="SaveData();">
-                        Save
-                    </button>
+           
+            <div class="col-md-12 col-lg-12 row mt-4">
+                <div class="col-md-12 col-lg-12" style="text-align:right;">
+                    <button type="button" id="btnSave" class="btn btn-primary" onclick="SaveData();" style="margin-right:10px;"> Save</button>
                 </div>
             </div>
         </div>
 
         <div class="container-fluid pt-3 pl-3 pr-3" id="divEnrolldata" style="display:none;padding-left:300px !important;">
             <div class="row mb-3">
-                @*<div class="col-md-2 col-xl-2">
-            <b>Mobile No: </b>
-        </div>
-        <div class="col-md-2 col-xl-2">
-            <input type="text" id="NewMobileNo" class="input100" />
-        </div>*@
                 <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    <div class="col-md-3 col-sm-3" style="margin-top:10px;">
                         Mobile No:
                     </div>
-                    <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <div class="col-md-5 col-sm-5" style="margin-top:10px;">
                         <input id="NewMobileNo" type="text" class="input50" />
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    <div class="col-md-3 col-sm-3" style="margin-top:10px;">
                         Card No:
                     </div>
                     <div class="col-md-4 col-sm-4" style="margin-top:10px;">
@@ -114,7 +187,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    <div class="col-md-3 col-sm-3" style="margin-top:10px;">
                         Name:
                     </div>
                     <div class="col-md-4 col-sm-4" style="margin-top:10px;">
@@ -122,7 +195,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    <div class="col-md-3 col-sm-3" style="margin-top:10px;">
                         BirthDay:
                     </div>
                     <div class="col-md-4 col-sm-4" style="margin-top:10px;">
@@ -130,7 +203,7 @@
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    <div class="col-md-3 col-sm-3" style="margin-top:10px;">
                         Anniversary:
                     </div>
                     <div class="col-md-4 col-sm-4" style="margin-top:10px;">
@@ -139,16 +212,43 @@
                 </div>
 
                 <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    <div class="col-md-3 col-sm-3" style="margin-top:10px;">
                         Gender:
                     </div>
                     <div class="col-md-4 col-xl-4" style="margin-top:10px;">
                         @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlenrolgender" })
                     </div>
                 </div>
+                @if (userDetails.GroupId == "1263")
+                {
+                    <div class="col-md-12 col-sm-12 row">
+                        <div class="col-md-3 col-sm-3" style="margin-top:10px;">
+                            Bonus Points:
+                        </div>
+                        <div class="col-md-4 col-xl-4" style="margin-top:10px;">
+                            <input id="bonusPointsNew" type="number" class="input50" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 row">
+                        <div class="col-md-3 col-sm-3" style="margin-top:10px;">
+                            Point Validity (in days):
+                        </div>
+                        <div class="col-md-4 col-xl-4" style="margin-top:10px;">
+                            <input id="PointsValidityNew" type="number" class="input50" />
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 row">
+                        <div class="col-md-3 col-sm-3" style="margin-top:10px;">
+                            Redeeming Outlet:
+                        </div>
+                        <div class="col-md-4 col-xl-4" style="margin-top:10px;">
+                            @Html.DropDownList("Gender", new SelectList(Model.lstOutlet, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlOutletNew" })
+                        </div>
+                    </div>
+                }
 
                 <div class="col-md-12 col-sm-12 row">
-                    <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    <div class="col-md-3 col-sm-3" style="margin-top:10px;">
                         Comments:
                     </div>
                     <div class="col-md-4 col-sm-4" style="margin-top:10px;">
@@ -292,6 +392,9 @@
         item["DOB"] = $("#NewDOB").val();
         item["DOA"] = $("#NewDOA").val();
         item["Comment"] = $("#Newcomment").val();
+        item["BonusPoints"] = $("#bonusPointsNew").val();
+        item["PointsValidity"] = $("#PointsValidityNew").val();
+        item["RedeemingOutlet"] = $("#ddlOutletNew").val();
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
          $.ajax({
@@ -351,6 +454,16 @@
         item["Points"] = 0;
         item["outletId"] = $("#spoutletId").text();
         item["Comments"] = $("#txtcomment").val();
+        if ($("#bonusPointsNew").val() != null) {
+            item["Points"] = $("#bonusPointsOld").val();
+            item["PointsValidity"] = $("#PointsValidityOld").val();
+            item["RedeemingOutlet"] = $("#ddlOutletOld").val();
+        }
+        else {
+            item["Points"] = 0;
+            item["PointsValidity"] = 0;
+            item["RedeemingOutlet"] = 0;
+        }
         FilterData.push(item);
         var data = JSON.stringify(FilterData);
             $.ajax({

@@ -591,7 +591,7 @@ namespace BOTS_BL.Repository
                 var connStr = CR.GetCustomerConnString((GroupId));
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var Outlets = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId && !x.OutletName.ToLower().Contains("admin")).ToList();
+                    var Outlets = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId).ToList();
 
                     foreach (var item in Outlets)
                     {

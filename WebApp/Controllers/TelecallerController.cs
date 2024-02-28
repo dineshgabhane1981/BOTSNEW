@@ -23,8 +23,9 @@ namespace WebApp.Controllers
         public ActionResult Index()
         {
             TelecallerCustomerData objteledata = new TelecallerCustomerData();
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
             var lstGenderList = RR.GetGenderList(userDetails.GroupId, userDetails.connectionString);
+            objteledata.lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             ViewBag.lstGenderList = lstGenderList;
             return View(objteledata);
         }
@@ -38,7 +39,7 @@ namespace WebApp.Controllers
         public JsonResult GetCustomerData(string MobileNo)
         {
             TelecallerCustomerData objteledata = new TelecallerCustomerData();
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
             objteledata = TR.GetTelecallerCustomer(MobileNo, userDetails.GroupId, userDetails.connectionString);
             return new JsonResult() { Data = objteledata, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
@@ -48,6 +49,8 @@ namespace WebApp.Controllers
             bool status = false;
             DateTime? DateofBirth = null;
             DateTime? DateOfAnni = null;
+            string PointsValidity = string.Empty;
+            string RedeemingOutlet = string.Empty;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -66,10 +69,17 @@ namespace WebApp.Controllers
                     DateOfAnni = Convert.ToDateTime(item["DOA"]);
                 }
                 int PointsGiven = Convert.ToInt32(item["Points"]);
+                if (userDetails.GroupId == "1263")
+                {
+                    PointsGiven = Convert.ToInt32(item["Points"]);
+                    PointsValidity = Convert.ToString(item["PointsValidity"]);
+                    RedeemingOutlet = Convert.ToString(item["RedeemingOutlet"]);
+
+                }
                 string OutletId = Convert.ToString(item["outletId"]);
                 string Comments = Convert.ToString(item["Comments"]);
 
-                status = TR.SaveTelecallerTracking(userDetails.connectionString, userDetails.LoginId, mobileNo, CustomerNm, Gender, DateofBirth, DateOfAnni, PointsGiven, OutletId, Comments);
+                status = TR.SaveTelecallerTracking(userDetails.connectionString, userDetails.LoginId, mobileNo, CustomerNm, Gender, DateofBirth, DateOfAnni, PointsGiven, OutletId, Comments, PointsValidity, RedeemingOutlet, userDetails.GroupId);
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
@@ -108,6 +118,9 @@ namespace WebApp.Controllers
             bool status = false;
             DateTime? DateofBirth = null;
             DateTime? DateOfAnni = null;
+            string BonusPoints = string.Empty;
+            string PointsValidity = string.Empty;
+            string RedeemingOutlet = string.Empty;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
@@ -121,6 +134,13 @@ namespace WebApp.Controllers
                 string DOB = Convert.ToString(item["DOB"]);
                 string DOA = Convert.ToString(item["DOA"]);
                 string Comment = Convert.ToString(item["Comment"]);
+                if(userDetails.GroupId == "1263")
+                {
+                    BonusPoints = Convert.ToString(item["BonusPoints"]);
+                    PointsValidity = Convert.ToString(item["PointsValidity"]);
+                    RedeemingOutlet = Convert.ToString(item["RedeemingOutlet"]);
+
+                }
                 //if (!string.IsNullOrEmpty(Convert.ToString(item["DOB"])))
                 //{
                 //    DateofBirth = Convert.ToDateTime(item["DOB"]);
@@ -133,10 +153,10 @@ namespace WebApp.Controllers
                 //string OutletId = Convert.ToString(item["outletId"]);
                 //string Comments = Convert.ToString(item["Comments"]);
 
-                Obj = TR.SaveEnroll(userDetails.connectionString, userDetails.LoginId, userDetails.OutletOrBrandId, mobileNo, CustomerNm, CrdNo, Gender, DOB, DOA, Comment);
+                status = TR.SaveEnroll(userDetails.connectionString, userDetails.LoginId, userDetails.OutletOrBrandId, mobileNo, CustomerNm, CrdNo, Gender, DOB, DOA, Comment, BonusPoints, PointsValidity, RedeemingOutlet, userDetails.GroupId);
             }
 
-            return new JsonResult() { Data = Obj, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
         public ActionResult ExportToExcelTelecallerReport(DateTime fromdt, DateTime Todt,string ReportName)

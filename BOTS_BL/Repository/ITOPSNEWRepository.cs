@@ -616,65 +616,19 @@ namespace BOTS_BL.Repository
             return result;
         }
 
-        public SPResponse AddBulkCustomerData(string GroupId, tblCustDetailsMaster objCustomer, tblCustInfo objcustInfo, tblCustTxnSummaryMaster objtblCustTxn, tblBulkCustList objtblBulkCust)
+        public SPResponse AddBulkCustomerData(string GroupId, tblBulkCustList objtblBulkCust)
         {
             SPResponse result = new SPResponse();
             try
             {
                 string connStr = GetCustomerConnString(GroupId);
                 using (var contextNew = new BOTSDBContext(connStr))
-                {
-                    var ObjMobileNo = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == objCustomer.MobileNo).FirstOrDefault();
-                    if (ObjMobileNo == null)
-                    {
-                        var NewGroupId = GroupId;
-                        var NewMobileNo = objCustomer.MobileNo;
-                        var NewId = Convert.ToInt64(string.Format("{0}{1}", NewGroupId, NewMobileNo));
-                        objCustomer.Id = Convert.ToString(NewId);
+                {                    
 
-                        contextNew.tblCustDetailsMasters.AddOrUpdate(objCustomer);
-                        contextNew.SaveChanges();
-                        result.ResponseCode = "00";
-                        result.ResponseMessage = "Member Added Successfully";
-                    }
-                    else
-                    {
-                        result.ResponseCode = "01";
-                        result.ResponseMessage = "Mobile Number Already Exist";
-                    }
-
-                    var ObjMobileNo1 = contextNew.tblCustInfoes.Where(x => x.MobileNo == objCustomer.MobileNo).FirstOrDefault();
-                    if (ObjMobileNo1 == null)
-                    {
-                        contextNew.tblCustInfoes.AddOrUpdate(objcustInfo);
-                        contextNew.SaveChanges();
-                        result.ResponseCode = "00";
-                        result.ResponseMessage = "Member Added Successfully";
-                    }
-                    else
-                    {
-                        result.ResponseCode = "01";
-                        result.ResponseMessage = "Mobile Number Already Exist";
-                    }
-
-                    var ObjMobileNoNew = contextNew.tblCustTxnSummaryMasters.Where(x => x.MobileNo == objCustomer.MobileNo).FirstOrDefault();
-                    if (ObjMobileNoNew == null)
-                    {
-                        contextNew.tblCustTxnSummaryMasters.AddOrUpdate(objtblCustTxn);
-                        contextNew.SaveChanges();
-                        result.ResponseCode = "00";
-                        result.ResponseMessage = "Member Added Successfully";
-                    }
-                    else
-                    {
-                        result.ResponseCode = "01";
-                        result.ResponseMessage = "Mobile Number Already Exist";
-                    }
-
-                    var ObjMobileNoNew1 = contextNew.tblBulkCustLists.Where(x => x.MobileNo == objCustomer.MobileNo).FirstOrDefault();
+                    var ObjMobileNoNew1 = contextNew.tblBulkCustLists.Where(x => x.MobileNo == objtblBulkCust.MobileNo).FirstOrDefault();
                     if (ObjMobileNoNew1 == null)
                     {
-                        contextNew.tblBulkCustLists.AddOrUpdate(objtblBulkCust);
+                        contextNew.tblBulkCustLists.Add(objtblBulkCust);
                         contextNew.SaveChanges();
                         result.ResponseCode = "00";
                         result.ResponseMessage = "Member Added Successfully";

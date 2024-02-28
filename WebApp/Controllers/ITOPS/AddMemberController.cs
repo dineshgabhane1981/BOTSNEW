@@ -526,37 +526,7 @@ namespace WebApp.Controllers.ITOPS
                                 Regex regex = new Regex(@"[0-9]{10}");
                                 Match match = regex.Match(Convert.ToString(dr["MobileNo"]));
                                 if (match.Success)
-                                {
-                                    objCustomer.Name = Convert.ToString(dr["CustomerName"]);
-                                    objCustomer.MobileNo = Convert.ToString(dr["MobileNo"]);
-                                    objCustomer.Tier = "Base";
-                                    objCustomer.DOJ = DateTime.Now;
-                                    objCustomer.IsActive = true;
-                                    objCustomer.DisableTxn = false;
-                                    objCustomer.DisableSMSWAPromo = false;
-                                    objCustomer.CountryCode = "91";
-                                    objCustomer.DisableSMSWATxn = false;
-                                    objCustomer.EnrolledOutlet = OutletId;
-                                    objCustomer.EnrolledBy = Source;
-                                    objCustomer.CurrentEnrolledOutlet = Source;
-
-                                    objcustInfo.Name = Convert.ToString(dr["CustomerName"]);
-                                    objcustInfo.MobileNo = Convert.ToString(dr["MobileNo"]);
-
-                                    objtblCustTxn.MobileNo = Convert.ToString(dr["MobileNo"]);
-                                    objtblCustTxn.TotalSpend = 0;
-                                    objtblCustTxn.TotalTxnCount = 0;
-                                    objtblCustTxn.EarnCount = 0;
-                                    objtblCustTxn.BurnCount = 0;
-                                    objtblCustTxn.SalesReturnCount = 0;
-                                    objtblCustTxn.SalesReturnAmt = 0;
-                                    objtblCustTxn.BurnAmtWithPts = 0;
-                                    objtblCustTxn.BurnAmtWithoutPts = 0;
-                                    objtblCustTxn.BurnPts = 0;
-                                    objtblCustTxn.EarnPts = 0;
-                                    objtblCustTxn.SalesReturnPtsGiven = 0;
-                                    objtblCustTxn.SalesReturnPtsRemoved = 0;
-
+                                {                                   
                                     objtblBulkCust.MobileNo = Convert.ToString(dr["MobileNo"]);
                                     objtblBulkCust.CustName = Convert.ToString(dr["CustomerName"]);
                                     objtblBulkCust.EnrolledOutlet = OutletId;
@@ -565,7 +535,7 @@ namespace WebApp.Controllers.ITOPS
                                     objtblBulkCust.IsActive = true;
                                     objtblBulkCust.ConvertedStatus = false;
 
-                                    result = NewITOPS.AddBulkCustomerData(groupId, objCustomer, objcustInfo, objtblCustTxn, objtblBulkCust);
+                                    result = NewITOPS.AddBulkCustomerData(groupId, objtblBulkCust);
                                     if (result.ResponseCode == "00")
                                     {
                                         TotalRows++;

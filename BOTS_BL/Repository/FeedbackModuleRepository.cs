@@ -375,7 +375,7 @@ namespace BOTS_BL.Repository
 
                 using (var contextdb = new BOTSDBContext(connStr))
                 {
-                    var objgroupDetail = contextdb.GroupDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                    var objgroupDetail = contextdb.tblGroupMasters.Where(x => x.GroupId == groupId).FirstOrDefault();
                     GroupNm = objgroupDetail.GroupName;
                 }
             }

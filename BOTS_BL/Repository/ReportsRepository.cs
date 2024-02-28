@@ -150,8 +150,7 @@ namespace BOTS_BL.Repository
             {
                 using (var contextnew = new CommonDBContext())
                 {
-                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupId).FirstOrDefault();
-
+                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupId).FirstOrDefault();                    
                 }
                 using (var context = new BOTSDBContext(connstr))
                 {

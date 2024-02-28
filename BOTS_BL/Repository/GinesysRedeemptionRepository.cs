@@ -253,9 +253,15 @@ namespace BOTS_BL.Repository
 
                             if (!string.IsNullOrEmpty(Convert.ToString(dt1.Rows[0]["OfferCode"])))
                                 obj.OfferCode = Convert.ToString(dt1.Rows[0]["OfferCode"]);
+                            if (!string.IsNullOrEmpty(Convert.ToString(dt1.Rows[0]["MinRedemptionValue"])))
+                                obj.MinVal = Convert.ToString(dt1.Rows[0]["MinRedemptionValue"]);
+                            else
+                                obj.MinVal = "0";
 
-                            obj.MinVal = Convert.ToString(dt.Rows[0]["MinRedemptionValue"]);
-                            obj.MaxVal = Convert.ToString(dt.Rows[0]["MaxRedemptionValue"]);
+                            if (!string.IsNullOrEmpty(Convert.ToString(dt1.Rows[0]["MaxRedemptionValue"])))
+                                obj.MaxVal = Convert.ToString(dt1.Rows[0]["MaxRedemptionValue"]);
+                            else
+                                obj.MaxVal = "0";
 
                             //if (dt2.Rows.Count > 0)
                             //{

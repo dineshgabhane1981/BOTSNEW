@@ -5,6 +5,7 @@ namespace BOTS_BL.Models
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+    using System.Web.Mvc;
 
     [Table("TelecallerTracking")]
     public partial class TelecallerTracking
@@ -49,11 +50,12 @@ namespace BOTS_BL.Models
         public string Gender { get; set; }
         public string DOB { get; set; }
         public string DOA { get; set; }
-        public decimal? TotalBalPoints { get; set; }
+        public Int64 TotalBalPoints { get; set; }
         public string outletid { get; set; }
         public string OutletName { get; set; }
         public string EnrollmentDate { get; set; }
         public string LastTxnDate { get; set; }
+        public List<SelectListItem> lstOutlet { get; set; }
     }
 
 }

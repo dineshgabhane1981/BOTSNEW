@@ -18,7 +18,7 @@
                     <div class="multisteps-form__content">
                         <div>
                             <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
-                            <input type="hidden" id="hdnGroupId" />                            
+                            <input type="hidden" id="hdnGroupId" />
                             <label style="padding-right:5px;padding-top:10px;">Enter Mobile Number </label>
                             <input type="number" id="txtMobileNoModify" class="input50" />
 
@@ -30,7 +30,7 @@
                         </div>
 
                         <div style="display:flex; height:auto !important;margin-top:50px;">
-                            <input type="hidden" id="hdnTransactionIdModify" />                            
+                            <input type="hidden" id="hdnTransactionIdModify" />
                             <table border="1" cellpadding="5" cellspacing="5">
                                 <tr position: absolute top: -9999px; left: -9998px;>
                                     <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
@@ -126,7 +126,7 @@
                         <div class="button-row d-flex mt-5" style="display:none !important;" id="dvModifyBtn">
                             <button class="btn btn-primary ml-auto" type="button" title="Delete" id="btnModifyTxn" tabindex="20">Update</button>
                         </div>
-                        <div class="row mt-3" id="dvActivityDataModify" style="height:800px;">
+                        <div class="row mt-3" id="dvActivityDataModify">
                             <div class="table-responsive">
                                 <table class="table" id="activityTableModify">
                                     <thead style="text-align:center;">
@@ -141,7 +141,6 @@
                                         </tr>
                                     </thead>
                                     <tbody style="text-align:center;">
-                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -155,7 +154,7 @@
 
 
 <script>
-    $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));   
+    $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
       var tableData = [];
       var tableLogData = [];
     $(document).ready(function () {
@@ -167,15 +166,16 @@
           });
 
          $("#txtRequestedDateModify").datepicker({
-                        dateFormat: "yy-mm-dd",
-                        maxDate: today,
+            dateFormat: "yy-mm-dd",
+            maxDate: today,
          });
          $('#btnModifyTxn').on("click", function () {
               ModifyTransaction();
          });
-        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));      
+        $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
       });
-                function DrawTableModify() {
+
+    function DrawTableModify() {
                     var table1 = $('#activityTableModify').DataTable();
                     table1.destroy();
 
@@ -253,16 +253,16 @@
             dataType: "json",
             success: function (result) {
 
-                if (result.objMemberData != null) {                    
+                if (result.objMemberData != null) {
                     $("#spnMemberNameModify").text(result.objMemberData.MemberName);
                     $("#spnMobilenoModify").text(result.objMemberData.MobileNo);
                     $("#spnOldMobilenoModify").text(result.objMemberData.OldMobileNo);
                     $("#spnCardNoModify").text(result.objMemberData.CardNumber);
                     $("#spnPtBalanceModify").text(result.objMemberData.PointsBalance);
 
-                    if (result.objCancelTxnModel != null) {                        
+                    if (result.objCancelTxnModel != null) {
                         tableData.length = 0;
-                        $("#hdnTransactionIdModify").val(result.objCancelTxnModel.TransactionId);                        
+                        $("#hdnTransactionIdModify").val(result.objCancelTxnModel.TransactionId);
                         $("#spnTransactionModify").text(result.objCancelTxnModel.TransactionName);
                         $("#spnInvoiceNoModify").text(result.objCancelTxnModel.InvoiceNo);
                         var index = result.objCancelTxnModel.InvoiceAmt.toString().indexOf('.');
@@ -328,7 +328,7 @@
             success: function (result) {
 
                 if (result.objCancelTxnModel != null) {
-                        $("#hdnTransactionIdModify").val(TransactionId);                    
+                        $("#hdnTransactionIdModify").val(TransactionId);
                         $("#spnTransactionModify").text(result.objCancelTxnModel.TransactionName);
                         $("#spnInvoiceNoModify").text(result.objCancelTxnModel.InvoiceNo);
                         var index = result.objCancelTxnModel.InvoiceAmt.toString().indexOf('.');
@@ -374,9 +374,9 @@
             $('#txtRequestedDateModify').focus();
             return false;
         }
-        else {            
+        else {
             var MemberData = [];
-            item = {}            
+            item = {}
             item["Points"] = $("#txtPointsModify").val();
             item["TransactionId"] = $("#hdnTransactionIdModify").val();
             item["RequestedBy"] = $("#txtRequestedByNameModify").val();
