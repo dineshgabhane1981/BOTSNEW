@@ -1,0 +1,133 @@
+﻿@model BOTS_BL.Models.GinesysRedeemCouponModel
+@{
+    ViewBag.Title = "Index";
+
+}
+
+<h3>Redeem Coupon</h3>
+<div class="col-md-12 col-lg-12">
+    <table cellpadding="10" cellspacing="10" style="background-color: #FAF9F6; " width="90%">
+        <tr>
+            <td>Customer Name</td>
+            @if (Model.CustomerName != null)
+            {
+                <td><b>@Model.CustomerName</b></td>
+            }
+            else
+            {
+                <td></td>
+            }
+        </tr>
+        <tr>
+            <td>Invoice Amount</td>
+            <td>@Model.InvoiceAmount</td>
+        </tr>
+        <tr>
+            <td>Mobile No</td>
+            <td>@Model.MobileNo</td>
+        </tr>
+
+    </table>
+    <div class="col-md-12 col-lg-12" style="background-color:#fff;width:90%;text-align:center;padding-top:20px;">
+        <input id="hdnInvoiceAmt" value=@Model.InvoiceAmount hidden />
+        <input id="hdnMobileNo" value=@Model.MobileNo hidden />
+        <input id="hdnStoreId" value=@Model.StoreId hidden />
+        <input id="hdnbillGUID" value=@Model.billGUID hidden />
+        <input id="hdnOTP" hidden />
+        <input id="hdnBurnAmt" hidden />
+        <input id="redemptionResponse" hidden />
+        <div style="padding:10px;"><input type="text" class="input50" id="txtCoupon" /><button class="btn btn-primary" style="margin-left:10px;" id="btnApply">Apply</button></div>
+
+    </div>
+</div>
+<script>
+    $("#btnApply").click(function () {
+        if ($("#txtCoupon").val() != "") {
+            var Coupon = $("#txtCoupon").val();
+            var InvoiceAmt = $("#hdnInvoiceAmt").val();
+            var MobileNo = $("#hdnMobileNo").val();
+            var StoreId = $("#hdnStoreId").val();
+            var BillGUID = $("#hdnbillGUID").val();
+            
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RedeemCoupon", "CouponRedeem")',
+                data: '{Coupon: ' + JSON.stringify(Coupon) + ',InvoiceAmt: ' + JSON.stringify(InvoiceAmt) + ',MobileNo: ' + JSON.stringify(MobileNo) + ',StoreId: ' + JSON.stringify(StoreId) + ',BillGUID: ' + JSON.stringify(BillGUID) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result.ResponseCode == "00") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Coupon Verification Success",
+                            message: "Coupon for Redemption is Successfully Applied",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            const obj = {
+                                'REFERENCENO': $("#hdnbillGUID").val(),
+                                'OFFERCODE': result.OfferCode,
+                                'BASIS': '1',
+                                'FACTOR': result.BurnCouponAmount,
+                                'MIN_PURCHASE_VALUE': result.MinVal,
+                                'MAX_REDEEM_VALUE': result.MaxVal,
+                                'ALLOW_POINT_ACCRUAL': result.AllowPointAccrual,
+                                'MOBILENO': $("#hdnMobileNo").val(),
+                                'ALLOW_REDEMPTION_ON_PROMO_ITEM': 1, 
+                                'ALLOW_POINT_REDEMPTION': 0,                                
+                                'COUPONCODE': Coupon,
+                                'ALLOW_POINT_REDEMPTION_BEFORE_BILL_SAVE': true,
+                                'status': 'success'
+                            }
+                            var myJSON = JSON.stringify(obj);
+                            $("#redemptionResponse").val(myJSON);
+                            console.log(myJSON);
+
+                            $("#txtCoupon").attr("disabled", "disabled");
+                            $("#btnApply").attr("disabled", "disabled");
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Failed",
+                            message: result.ResponseMessage,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            const obj = {
+                                'REFERENCENO': $("#hdnbillGUID").val(),
+                                'MOBILENO': $("#hdnMobileNo").val(),
+                                'status': 'Failed',
+                                'errormessage': result.ResponseMessage                                
+                            }
+                            var myJSON = JSON.stringify(obj);
+                            $("#redemptionResponse").val(myJSON);
+                            console.log(myJSON);                            
+                        })
+                        
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                }
+            });
+            
+
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "OOPS..",
+                message: "Please enter coupon to redeem !!!",
+                buttonText: "Okay"
+            })
+        }
+    });
+   
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+
+

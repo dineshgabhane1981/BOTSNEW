@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 64 (101010) - https://sketch.com -->
+    <title>841D50E4-D552-4222-935B-29E7532E3EA4</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home" transform="translate(-601.000000, -1624.000000)" fill-rule="nonzero">
+            <g id="Group-34" transform="translate(601.000000, 1624.000000)">
+                <g id="emoji-(2)">
+                    <circle id="Oval" fill="#FFD93B" cx="19" cy="19" r="19"></circle>
+                    <path d="M38,19 C38,29.4975 29.4915625,38 19,38 C13.026875,38 7.695,35.245 4.2096875,30.9284375 C7.469375,33.5646875 11.6196875,35.138125 16.138125,35.138125 C26.6296875,35.138125 35.138125,26.635625 35.138125,16.138125 C35.138125,11.6196875 33.5646875,7.469375 30.9284375,4.2096875 C35.2390625,7.695 38,13.026875 38,19 Z" id="Path" fill="#F4C534"></path>
+                    <circle id="Oval" fill="#3E4347" cx="25.989625" cy="16.74375" r="2.9818125"></circle>
+                    <ellipse id="Oval" fill="#5A5F63" transform="translate(26.835444, 15.422594) rotate(-156.082889) translate(-26.835444, -15.422594) " cx="26.8354439" cy="15.4225937" rx="1" ry="1"></ellipse>
+                    <circle id="Oval" fill="#3E4347" cx="12.010375" cy="16.74375" r="2.9818125"></circle>
+                    <ellipse id="Oval" fill="#5A5F63" transform="translate(12.855313, 15.422109) rotate(-156.082889) translate(-12.855313, -15.422109) " cx="12.8553131" cy="15.4221095" rx="1" ry="1"></ellipse>
+                    <path d="M11.217125,26.50025 C10.8585,26.163 10.841875,25.5989375 11.179125,25.2415 C11.516375,24.8840625 12.07925,24.86625 12.437875,25.2035 C16.1179375,28.6674375 21.8820625,28.6674375 25.562125,25.2035 C25.92075,24.86625 26.483625,24.8840625 26.820875,25.2415 C27.158125,25.600125 27.1415,26.163 26.782875,26.50025 C22.4188125,30.609 15.5811875,30.609 11.217125,26.50025 Z" id="Path" fill="#3E4347"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

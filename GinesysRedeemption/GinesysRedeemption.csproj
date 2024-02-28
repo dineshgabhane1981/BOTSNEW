@@ -98,6 +98,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\assets\BlueocktopusLoadingGIF.gif" />
     <Content Include="Content\assets\Blue_Ocktopus-TLC_blue.png" />
     <Content Include="Content\main.css" />
     <Content Include="Content\main.js" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <Compile Include="App_Start\CommonFunctions.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CouponRedeemController.cs" />
     <Compile Include="Controllers\RedeemController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -148,6 +150,8 @@
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Views\CouponRedeem\Index.cshtml" />
+    <Content Include="Views\CouponRedeem\GetURL.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

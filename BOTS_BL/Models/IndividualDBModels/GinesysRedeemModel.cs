@@ -25,8 +25,10 @@ namespace BOTS_BL.Models
         public string BurnPointsAsAmount { get; set; }
         public string PointsValue { get; set; }
         public string BurnCouponAmount { get; set; }
-        public bool AllowPointAccrual { get; set; }
+        public int AllowPointAccrual { get; set; }
         public string OfferCode { get; set; }
+        public string MinVal { get; set; }
+        public string MaxVal { get; set; }
 
     }
     public class GinesysRedeemCouponModel

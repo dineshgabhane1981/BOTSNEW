@@ -1,0 +1,358 @@
+﻿
+/* left align orientation */
+.feedbackOrientation_left {
+    text-align: left;
+}
+
+    .feedbackOrientation_left .textchoicetype h6 {
+        text-align: left;
+    }
+    .feedbackOrientation_left .error_cont .pull-left{
+        text-align:left;
+    }
+    .feedbackOrientation_left .feedback .questionHeading {
+        text-align: left !important;
+    }
+.left_div .error_cont {
+    text-align: left !important;
+}
+/* .feedbackOrientation_left .form-group .pull-right { */
+/* float: left !important; */
+/* display: inline-block; */
+/* } */
+/* .feedbackOrientation_left .form-group .btn { */
+/* margin-left: 16px; */
+/* } */
+/* .feedbackOrientation_left .submit-btn .btn { */
+/* float: left !important; */
+/* } */
+/* left align orientation ends*/
+/* right align orientation */
+.feedbackOrientation_right .fdbckdiv {
+    text-align: right !important;
+}
+
+    .feedbackOrientation_right .fdbckdiv span {
+        margin-right: 10px;
+    }
+
+.feedbackOrientation_right .fdbck_profile label {
+    text-align: right !important;
+    width: 100% !important;
+	padding-right: 10px;
+}
+.feedbackOrientation_right .fdbck_profile input, .feedbackOrientation_right .fdbck_profile textarea {
+    text-align: right !important;
+    width: 100% !important;
+}
+.feedbackOrientation_right .prfl-mdry {
+    position: absolute;
+    right: 16px;
+}
+
+.feedbackOrientation_right .fdbckdiv i {
+    float: left;
+}
+
+.feedbackOrientation_right .Feedback_question {
+    text-align: right;
+    float: right;
+}
+
+.feedbackOrientation_right .textchoicetype .input-sm, .feedbackOrientation_right select, .feedbackOrientation_right .textchoicetype h6 {
+    text-align: right;
+}
+
+/* .feedbackOrientation_right .submit-btn .btn { */
+    /* float: right !important; */
+/* } */
+
+.feedbackOrientation-right .ratingtextChoice label:before, .feedbackOrientation-right .checkbox label:before {
+    left: auto !important;
+    right: 0 !important;
+}
+
+.feedbackOrientation-right .singlechoice label {
+    padding-right: 30px;
+    padding-left: 0;
+}
+
+.feedbackOrientation-right .alphachoice .multiItem label {
+    text-align: right;
+}
+
+.feedbackOrientation-right .NPSNumber .tf-spnChoice input[type="radio"] + label:before,
+.feedbackOrientation-right .multiItem .tf-spnChoice input[type="radio"] + label:before {
+    right: 15px;
+}
+
+.feedbackOrientation-right .mcq-NewStructure .cards, .feedbackOrientation-right .list-inline,
+.feedbackOrientation-right .parent-StarRating .list-inline, .feedbackOrientation-right .Rating-Parent .list-inline {
+    justify-content: right !important;
+    display: flex !important;
+    text-align: right !important;
+}
+
+.feedbackOrientation-right .error_cont {
+    float:right;
+    text-align:right;
+}
+.feedbackOrientation-right .ui-datepicker-trigger {
+    right: 18px !important;
+}
+
+.feedbackOrientation-right .feedback .questionHeading {
+    text-align: right !important;
+}
+
+.feedbackOrientation-right .Rating_Question .imgicon-mrgn.Rating-Parent {
+    text-align: right !important;
+    justify-content: right !important;
+    display: flex !important;
+}
+.right_div .parent-StarRating .list-inline {
+    display: flex !important;
+    margin-left: 8px !important;
+    float: right;
+    text-align: right;
+}
+.right_div .span-chk input[type="checkbox"]:before {
+    left: 48.4%;
+}
+
+.right_div .span-chk input[type="checkbox"]:checked:after {
+    left: 49%;
+}
+
+.feedbackOrientation-right .mcq-NewStructure .cards, .feedbackOrientation-right .parent-StarRating .list-inline, .feedbackOrientation-right .Rating-Parent .list-inline {
+    justify-content: right;
+}
+.feedbackOrientation_right .pull-left {
+    justify-content: right;
+    display: flex;
+}
+.feedbackOrientation_right .prfl-mdry {
+    display: inherit;
+}
+    .feedbackOrientation_right .error_cont {
+        width: 100%;
+        display: flex;
+        text-align: right;
+        justify-content: right;
+        float: right;
+    }
+.right_div .feedback .questionHeading{
+    text-align:right;
+}
+.feedbackOrientation_right .term_conditions .collect_ctrl label {
+    padding-top: 13px;
+    padding-left: 30px;
+    width: 100% !important;
+}
+.right_div .term_conditions .collect_ctrl .span-chk {
+    left: 23px !important;
+}
+.right_div #divErrorMessage ul li {
+    text-align: right;
+}
+.right_div .Rating_Question .imgicon-mrgn.Rating-Parent {
+    position: relative;
+}
+
+.right_div .parent-StarRating .card__content .card__title {
+    position: absolute;
+    right: -36px;
+    bottom: -17px;
+}
+.right_div .ui-datepicker {
+    right: 414.5px !important;
+}
+.right_div .ui-datepicker-trigger {
+    right: 15px !important;
+    left: auto !important;
+}
+.right_div .ui-datepicker {
+    right: 414.5px !important;
+    left: auto !important;
+}
+.right_div .ui-datepicker-header {
+    position: absolute !important;
+    right: -241px !important;
+    width: 100% !important;
+    top: -36px !important;
+}
+.right_div .ui-datepicker-calendar {
+    position: absolute !important;
+    right: -241px !important;
+    left: auto !important;
+}
+
+@media screen and (max-width:998px){
+    .right_div .ui-datepicker-trigger {
+        right: 2px !important;
+        left: auto !important;
+    }
+    .right_div .term_conditions .collect_ctrl .span-chk {
+        left: -76px !important;
+    }
+    .right_div .feedbackOrientation_right .prfl-mdry {
+        position: absolute;
+        right: 10px;
+        margin: -4px;
+    }
+    .right_div .list-inline .RatingIcon, .mcq-NewStructure .list-inline .RatingIcon {
+        justify-content: right;
+    }
+    .right_div .rangetext .lblrange {
+        float: right !important;
+    }
+    .right_div .select-btn .rowmargin {
+        margin: 0;
+    }
+    .right_div .feedback .questionHeading { 
+        text-align: right !important;
+    }
+    .left_div .mcq-NewStructure .list-inline .RatingIcon {
+        justify-content: left;
+    }
+    .left_div .Rating_Icon-parent .rowmargin .cards.Rating-Parent {
+        margin-left: -33px !important;
+    }
+    .left_div .rangetext {
+        text-align: left;
+        margin: 0 0px 0 -40px !important;
+    }
+    .feedbackOrientation_center .mcq-NewStructure .list-inline .RatingIcon {
+        justify-content: center;
+    }
+    .left_div .select-btn .rowmargin {
+        margin: 0px 35px;
+    }
+    .left_div .txtalpha textarea {
+        margin-left: -40px;
+    }
+    .feedbackOrientation_left h6{
+        display:block;
+         margin-left: -40px !important;
+    }
+
+    .feedbackOrientation_left .ErrorAllowMsg {
+        text-align: left;
+    }
+
+    .feedbackOrientation_center .ErrorAllowMsg {
+        text-align: center;
+    }
+
+    .feedbackOrientation_right .ErrorAllowMsg {
+        text-align: right;
+    }
+}
+/* right align orientation ends*/
+/* center align orientation */
+.feedbackOrientation_center .fdbckdiv, .feedbackOrientation_center .textchoicetype h6 {
+    text-align: center !important;
+}
+
+    .feedbackOrientation_center .fdbckdiv span {
+        margin-right: 10px;
+    }
+
+ .feedbackOrientation_center .txtalpha textarea {
+    text-align: center !important;
+    width: 100% !important;
+}
+
+/* .feedbackOrientation_center .prfl-mdry { */
+    /* position: absolute; */
+    /* right: 85px; */
+/* } */
+
+.feedbackOrientation_center .Feedback_question {
+    text-align: center;
+    float: none;
+    display: inline-block;
+}
+/* .feedbackOrientation_center .textchoicetype h6 */
+ .feedbackOrientation_center .textchoicetype .input-sm,.feedbackOrientation_center .feedback .questionHeading  { 
+     text-align: center; 
+ } 
+
+/* .feedbackOrientation_center .form-group .pull-right { */
+    /* float: none !important; */
+    /* display: inline-block; */
+/* } */
+
+.feedbackOrientation-center .alphachoice .multiItem label {
+    width: 32% !important;
+    display: inline-block !important;
+    text-align: left;
+}
+
+.feedbackOrientation-center .NPSNumber .tf-spnChoice input[type="radio"] + label:before,
+.feedbackOrientation-center .multiItem .tf-spnChoice input[type="radio"] + label:before {
+    left: 142px;
+}
+
+.feedbackOrientation-center .mcq-NewStructure .cards, .feedbackOrientation-center .list-inline,
+.feedbackOrientation-center .parent-StarRating .list-inline,.feedbackOrientation-center .mcq-NewStructure .cards,
+.feedbackOrientation-center .Rating-Parent .list-inline{
+    justify-content: center;
+}
+.feedbackOrientation-center .ui-datepicker-trigger{
+	    left: 196px !important;
+}
+.feedbackOrientation-center .input-sm.form-control{
+	text-align: center;
+}
+.feedbackOrientation-center #divErrorMessage ul li{
+	text-align: center;
+}
+.feedbackOrientation-center .pull-left {
+    justify-content:center;
+    display:flex;
+    width:100%;
+}
+.center_div .parent-StarRating .list-inline {
+    margin-left: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.center_div .Rating-Parent .iconradio ul {
+    display: flex;
+    justify-content: center;
+}
+.center_div .feedback .questionHeading {
+    text-align: center !important;
+}
+.center_div .mcq-NewStructure .cards {
+    justify-content: center !important;
+}
+.center_div #divErrorMessage ul li {
+    text-align:center;
+}
+.center_div .select-btn span {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+/* center align orientation ends*/
+
+.fdbck_profile .btn {
+	width:auto !important;
+}
+
+
+.feedbackOrientation_left .ErrorAllowMsg {
+    text-align: left;
+}
+
+.feedbackOrientation_center .ErrorAllowMsg {
+    text-align: center;
+}
+
+.feedbackOrientation_right .ErrorAllowMsg {
+    text-align: right;
+}

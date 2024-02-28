@@ -1,0 +1,132 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <title>receipt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="./Content/EReceipt/CSS/css2" rel="stylesheet">
+    <link href="./Content/EReceipt/CSS/css2(1)" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/owl.carousel.css">
+    <link id="lnkCSS" rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/blue.css">
+    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/blue.css">
+    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/Bata.css">
+    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/Loading.css">
+    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/developer.css">
+
+    <script src="./Content/EReceipt/JS/jquery.min.js.download"></script>
+
+
+    @*<script>function fncPDFErrorMessageVisible() {
+            $("#divSendMailPDFErrorMessage").css('display', 'block');
+            //$("#divSendMailPDFErrorMessage").show();
+        }
+
+        function fncPDFErrorMessageClose() {
+            $("#divSendMailPDFErrorMessage").css('display', 'none');
+            //$("#divSendMailPDFErrorMessage").hide();
+        }</script>*@
+</head>
+<body>
+    <div class="pre-loader-block" id="loading" style="display: none;">
+        <div class="loader-inner">
+            <div class="loader-text">
+                <img src="./Content/EReceipt/SVG/preloader.svg" alt="" height="60" width="60">
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="divReceipt" class="template_section">
+                        <div id="divHeader" class="invoice_header_section portlet" style="display:block;">
+                            <div class="edit_border_wrap">
+                                <!-- Edit Highlight Tool -->
+                                <div class="invoice_heading">
+                                    <h3>
+                                        <span id="lblInvoiceHeading">E - RECEIPT</span>
+                                    </h3>
+                                </div>
+                                <div class="invoice_heading">
+                                    <div class="invoice_logo mb-2" style="margin-bottom: 23px !important;">
+                                        <img id="imgHeaderImage" class="img-fluid" src="./receipt_files/logo23.png" style="border-width:0px;">
+
+                                    </div>
+
+
+
+                                    <!--  New template change -->
+
+                                    <h2 id="h2UniversalStoreName" class="StoreName">BATA INDIA LIMITED</h2>
+                                    <!-- new template chnage -->
+                                    <!-- Show more & Show less  dropdown Start -->
+
+                                    <h6 id="show_more_content" onclick="showmorefn()" class="show-more-content">
+                                        <u>Show More</u>
+                                        <img src="./receipt_files/showmore.svg" alt="Down arrow">
+                                    </h6>
+                                    <div id="comp_address" style="display: none">
+                                        <div class="invoice_map">
+
+                                            <p class="text-center">
+                                                <span id="lblStoreDetails">GROUND FLOOR PRIDE CORNOET OPP. FOOD BAZAR BANER ROAD MAHARASTRA 411045,PUNE,MAHARASTRA,411045, Tel:8087877921</span>
+                                            </p>
+                                        </div>
+
+                                        <div id="divUniversalTemplateStoreDetails" style="display:;">
+                                            <ul id="ulStoreTiming" style="display: none;">
+                                                <li id="liStoreTiming" style="display: none;">
+                                                    <span id="lblStoreTiming"></span>
+                                                </li>
+                                                <li id="liStoreCutomercare" style="display:inline-block;">
+                                                    <span id="lblStoreCutomercare">72 899 00000</span>
+                                                </li>
+                                            </ul>
+                                            <div id="divStoreCINAndPAN" class="d-store" style="display:flex;">
+                                                <div class="store-details">
+
+                                                    <div id="divStoreCIN" class="" style="display:block;">
+                                                        <h4 id="h4StorePan"><span id="spnLabelStorePAN">Store PAN:</span><span id="lblStorePANMasterValue">AABCB1043Q</span></h4>
+                                                        <h4 id="h4StoreCIN"><span id="spnLabelStoreCIN">Store CIN:</span> <span id="lblStoreCIN">L19201WB1931PLC007261</span></h4>
+                                                        <p id="lblStoreGSTIN">GSTIN # 27AABCB1043Q1ZM</p>
+                                                        <p id="pStoreCode" class="fass-reg"><span id="spnStoreCodeLabel">Store Code:</span> <span id="spnStoreCode">smb2499</span></p>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h6 id="show_less_content" onclick="showlessfn()" style="display: none" class="show-more-content">
+                                        <u>Show Less</u>
+                                        <img src="./receipt_files/showmore.svg" class="rotate_img" alt="Down arrow">
+                                    </h6>
+
+                                    <!-- Show more & Show less  dropdown emd -->
+
+                                    <span id="spnvisitusTitle">Visit us at </span><a href="https://www.bata.com/" id="ancvisitUSURL" style="text-decoration: none; font-size: 14px;" target="_blank">
+                                        <span id="lblvisitUSURL">www.bata.com</span>
+                                    </a><br>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

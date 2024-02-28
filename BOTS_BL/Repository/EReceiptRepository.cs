@@ -4,31 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BOTS_BL.Models;
+using BOTS_BL.Models.CommonDB;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
-using System.Net;
-using System.IO;
-using BOTS_BL.Models.CommonDB;
 using System.Web.Mvc;
-using System.Configuration;
-using System.Threading;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Globalization;
-using System.Xml;
+using System.IO;
+using BOTS_BL;
+using System.Data.Entity.Validation;
+using System.Net;
 using System.Web.Script.Serialization;
+using DocumentFormat.OpenXml.InkML;
+using System.Runtime.Remoting.Contexts;
+using System.Data.Entity.Infrastructure;
+using BOTS_BL.Models.IndividualDBModels;
 
 namespace BOTS_BL.Repository
 {
     public class EReceiptRepository
     {
+        CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
-        public tblTempTxnJSON GetEReceiptJSON(string invoiceNo, string connStr)
+        public tblTempTxnJSON GetEReceiptJSON(string invoiceNo, string groupId)
         {
             tblTempTxnJSON objData = new tblTempTxnJSON();
             try
             {
+                string connStr = CR.GetCustomerConnString(groupId);
                 using (var context = new BOTSDBContext(connStr))
                 {
                     invoiceNo = "TMB-Dec23-022909";

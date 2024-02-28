@@ -247,77 +247,80 @@ namespace BOTS_BL.Repository
                            // DataTable dt2 = retVal.Tables[2];
                             obj.BurnCouponAmount = Convert.ToString(dt1.Rows[0]["CouponAmt"]);
                             if (Convert.ToBoolean(dt1.Rows[0]["AllowPointAccrual"]))
-                                obj.AllowPointAccrual = false;
+                                obj.AllowPointAccrual = 0;
                             else
-                                obj.AllowPointAccrual = true;
+                                obj.AllowPointAccrual = 1;
 
                             if (!string.IsNullOrEmpty(Convert.ToString(dt1.Rows[0]["OfferCode"])))
                                 obj.OfferCode = Convert.ToString(dt1.Rows[0]["OfferCode"]);
+
+                            obj.MinVal = Convert.ToString(dt.Rows[0]["MinRedemptionValue"]);
+                            obj.MaxVal = Convert.ToString(dt.Rows[0]["MaxRedemptionValue"]);
 
                             //if (dt2.Rows.Count > 0)
                             //{
                             //    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSWASendStatus"]);
 
-                                //    //if (SMSStatus == "SMS")
-                                //    //{
-                                //    //    string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
-                                //    //    string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
-                                //    //    string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
-                                //    //    string _Password = dt2.Rows[0]["SMSPassword"].ToString();
-                                //    //    string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
-                                //    //    string _Url = dt2.Rows[0]["SMSUrl"].ToString();
-                                //    //    //string _SMSBrandId = dt2.Rows[0]["SMSBrandId"].ToString();
-                                //    //    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
-                                //    //    _job.Start();
-                                //    //}
+                            //    //if (SMSStatus == "SMS")
+                            //    //{
+                            //    //    string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
+                            //    //    string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
+                            //    //    string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
+                            //    //    string _Password = dt2.Rows[0]["SMSPassword"].ToString();
+                            //    //    string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
+                            //    //    string _Url = dt2.Rows[0]["SMSUrl"].ToString();
+                            //    //    //string _SMSBrandId = dt2.Rows[0]["SMSBrandId"].ToString();
+                            //    //    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
+                            //    //    _job.Start();
+                            //    //}
 
-                                //    switch (SMSStatus)
-                                //    {
-                                //        case "SMS":
-                                //            string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
-                                //            string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
-                                //            string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
-                                //            string _Password = dt2.Rows[0]["SMSPassword"].ToString();
-                                //            string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
-                                //            string _Url = dt2.Rows[0]["SMSUrl"].ToString();
-                                //            string _SMSVendor = dt2.Rows[0]["SMSVendor"].ToString();
-                                //            string _SMSScriptType = dt2.Rows[0]["SMSScriptType"].ToString();
+                            //    switch (SMSStatus)
+                            //    {
+                            //        case "SMS":
+                            //            string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
+                            //            string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
+                            //            string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
+                            //            string _Password = dt2.Rows[0]["SMSPassword"].ToString();
+                            //            string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
+                            //            string _Url = dt2.Rows[0]["SMSUrl"].ToString();
+                            //            string _SMSVendor = dt2.Rows[0]["SMSVendor"].ToString();
+                            //            string _SMSScriptType = dt2.Rows[0]["SMSScriptType"].ToString();
 
-                                //            Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSVendor, _SMSScriptType));
-                                //            _job.Start();
-                                //            break;
-                                //        case "WA":
-                                //            string _MobileNoWA = dt2.Rows[0]["MobileNo"].ToString();
-                                //            string _MobileMessageWA = dt2.Rows[0]["SMSScript"].ToString();
-                                //            string _WATokenId = dt2.Rows[0]["WhatsAppTokenId"].ToString();
-                                //            string _WAUrl = dt2.Rows[0]["WhatsAppUrl"].ToString();
+                            //            Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSVendor, _SMSScriptType));
+                            //            _job.Start();
+                            //            break;
+                            //        case "WA":
+                            //            string _MobileNoWA = dt2.Rows[0]["MobileNo"].ToString();
+                            //            string _MobileMessageWA = dt2.Rows[0]["SMSScript"].ToString();
+                            //            string _WATokenId = dt2.Rows[0]["WhatsAppTokenId"].ToString();
+                            //            string _WAUrl = dt2.Rows[0]["WhatsAppUrl"].ToString();
 
-                                //            Thread _jobWA = new Thread(() => SendWA(_MobileNoWA, _MobileMessageWA, _WATokenId, _WAUrl));
-                                //            _jobWA.Start();
-                                //            break;
-                                //        default:
+                            //            Thread _jobWA = new Thread(() => SendWA(_MobileNoWA, _MobileMessageWA, _WATokenId, _WAUrl));
+                            //            _jobWA.Start();
+                            //            break;
+                            //        default:
 
-                                //            string _MobileNoSMSWA = dt2.Rows[0]["MobileNo"].ToString();
-                                //            string _MobileMessageSMS = dt2.Rows[0]["SMSScript"].ToString();
-                                //            string _UserNameSMSWA = dt2.Rows[0]["SMSLoginId"].ToString();
-                                //            string _PasswordSMSWA = dt2.Rows[0]["SMSPassword"].ToString();
-                                //            string _SenderSMSWA = dt2.Rows[0]["SMSSenderId"].ToString();
-                                //            string _UrlSMSWA = dt2.Rows[0]["SMSUrl"].ToString();
-                                //            string _SMSAPIKey = dt2.Rows[0]["SMSAPIKey"].ToString();
-                                //            string _SMSVendorSMSWA = dt2.Rows[0]["SMSVendor"].ToString();
-                                //            string _SMSScriptTypeSMSWA = dt2.Rows[0]["SMSScriptType"].ToString();
-                                //            string _MobileMessageWASMSWA = dt2.Rows[0]["WhatsAppScript"].ToString();
-                                //            string _WATokenIdSMSWA = dt2.Rows[0]["WhatsAppTokenId"].ToString();
-                                //            string _WAUrlSMSWA = dt2.Rows[0]["WhatsAppUrl"].ToString();
-                                //            string _SMSTemplateId = string.Empty;
-                                //            string _DisableSMS = string.Empty;
+                            //            string _MobileNoSMSWA = dt2.Rows[0]["MobileNo"].ToString();
+                            //            string _MobileMessageSMS = dt2.Rows[0]["SMSScript"].ToString();
+                            //            string _UserNameSMSWA = dt2.Rows[0]["SMSLoginId"].ToString();
+                            //            string _PasswordSMSWA = dt2.Rows[0]["SMSPassword"].ToString();
+                            //            string _SenderSMSWA = dt2.Rows[0]["SMSSenderId"].ToString();
+                            //            string _UrlSMSWA = dt2.Rows[0]["SMSUrl"].ToString();
+                            //            string _SMSAPIKey = dt2.Rows[0]["SMSAPIKey"].ToString();
+                            //            string _SMSVendorSMSWA = dt2.Rows[0]["SMSVendor"].ToString();
+                            //            string _SMSScriptTypeSMSWA = dt2.Rows[0]["SMSScriptType"].ToString();
+                            //            string _MobileMessageWASMSWA = dt2.Rows[0]["WhatsAppScript"].ToString();
+                            //            string _WATokenIdSMSWA = dt2.Rows[0]["WhatsAppTokenId"].ToString();
+                            //            string _WAUrlSMSWA = dt2.Rows[0]["WhatsAppUrl"].ToString();
+                            //            string _SMSTemplateId = string.Empty;
+                            //            string _DisableSMS = string.Empty;
 
 
-                                //            Thread _jobSMSWA = new Thread(() => SendSMSWA(_MobileNoSMSWA, _MobileMessageWASMSWA, _WATokenIdSMSWA, _WAUrlSMSWA, _MobileMessageSMS, _SMSTemplateId, _SMSScriptTypeSMSWA, _SMSVendorSMSWA, _UrlSMSWA, _UserNameSMSWA, _PasswordSMSWA, _SMSAPIKey, _DisableSMS, _SenderSMSWA, SMSStatus));
-                                //            _jobSMSWA.Start();
-                                //            break;
-                                //    }
-                                //}
+                            //            Thread _jobSMSWA = new Thread(() => SendSMSWA(_MobileNoSMSWA, _MobileMessageWASMSWA, _WATokenIdSMSWA, _WAUrlSMSWA, _MobileMessageSMS, _SMSTemplateId, _SMSScriptTypeSMSWA, _SMSVendorSMSWA, _UrlSMSWA, _UserNameSMSWA, _PasswordSMSWA, _SMSAPIKey, _DisableSMS, _SenderSMSWA, SMSStatus));
+                            //            _jobSMSWA.Start();
+                            //            break;
+                            //    }
+                            //}
                         }
                         else
                         {

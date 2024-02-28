@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="115px" height="30px" viewBox="0 0 115 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>Group 10</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home" transform="translate(-678.000000, -2795.000000)">
+            <g id="Group-26" transform="translate(548.000000, 2775.000000)">
+                <g id="Group-10" transform="translate(130.000000, 20.000000)">
+                    <rect id="Rectangle_27" fill="#000000" fill-rule="nonzero" x="0" y="0" width="115" height="30" rx="5"></rect>
+                    <g id="Get_it_on" transform="translate(29.000000, 2.000000)" fill="#FFFFFF" font-family="Inter-Medium, Inter" font-size="9" font-weight="400">
+                        <text id="Get-it-on">
+                            <tspan x="0" y="9">Get it on</tspan>
+                        </text>
+                    </g>
+                    <g id="Google_Play" transform="translate(29.000000, 12.000000)" fill="#FFFFFF" font-family="Inter-Medium, Inter" font-size="12" font-weight="400" letter-spacing="0.95">
+                        <text id="Google-Play">
+                            <tspan x="0" y="12">Google Play</tspan>
+                        </text>
+                    </g>
+                    <path d="M16.549,14.239 L8.788,6.457 L18.662,12.125 L16.549,14.239 Z M6.763,6 C6.29107198,6.23240053 5.99436763,6.71498257 5.9999212,7.241 L5.9999212,22.759 C5.99436763,23.2850174 6.29107198,23.7675995 6.763,24 L15.786,15 L6.763,6 Z M21.714,13.933 L19.643,12.733 L17.333,15 L19.643,17.268 L21.756,16.068 C22.0619484,15.7938941 22.2332568,15.4000691 22.2251889,14.9893705 C22.2171209,14.5786718 22.0304776,14.1918786 21.714,13.93 L21.714,13.933 Z M8.788,23.546 L18.662,17.878 L16.549,15.765 L8.788,23.546 Z" id="Icon_awesome-google-play" fill="#FFFFFF" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

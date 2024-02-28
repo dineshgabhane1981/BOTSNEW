@@ -381,7 +381,15 @@
             changeYear: true,
             yearRange: "-80:+0"
         })
+        //$("input").val();
+        $("input").on('blur', function (e) {
+            $(this).css("text-transform", "uppercase");            
+        });
+        $("textarea").on('blur', function (e) {
+            $(this).css("text-transform", "uppercase");
+        });
 
+        
         $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
         });
 
