@@ -35,43 +35,43 @@
                 <div class="col-md-12 col-lg-12 mt-2" style="border: 1px solid gray; border-radius: 5px; padding-bottom:10px;">
                     <div class="col-md-12 col-lg-12 row mt-3">
                         <div class="col-md-6 col-lg-6 row ">
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <b>Mobile No: </b>
                             </div>
                             <div class="col-md-6 col-lg-6">
                                 <span id="spMobileNo"></span>
                             </div>
                         </div>
-                        <div class="col-md-4 col-lg-4 row">
+                        <div class="col-md-6 col-lg-6 row">
                             <div class="col-md-6 col-lg-6">
                                 <b>Enrollment Date: </b>
                             </div>
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <span id="spenrolldt"></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-12 row mt-3">
                         <div class="col-md-6 col-lg-6 row ">
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <b>Total Balance Points: </b>
                             </div>
                             <div class="col-md-6 col-lg-6">
                                 <span id="sptotalpoints"></span>
                             </div>
                         </div>
-                        <div class="col-md-4 col-lg-4 row">
+                        <div class="col-md-6 col-lg-6 row ">
                             <div class="col-md-6 col-lg-6">
                                 <b>Outlet Name:</b>
                             </div>
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <span id="spoutletNm"></span>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-12 row mt-3">
                         <div class="col-md-6 col-lg-6 row ">
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <b>Last Txn Date: </b>
                             </div>
                             <div class="col-md-6 col-lg-6">
@@ -82,36 +82,36 @@
                     </div>
                     <div class="col-md-12 col-lg-12 row mt-3">
                         <div class="col-md-6 col-lg-6 row ">
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <b>Customer Name: </b>
                             </div>
                             <div class="col-md-6 col-lg-6">
-                                <input type="text" id="spCustName" class="input100" />
+                                <input type="text" id="spCustName" class="input50" />
                             </div>
                         </div>
-                        <div class="col-md-4 col-lg-4 row">
+                        <div class="col-md-6 col-lg-6 row ">
                             <div class="col-md-6 col-lg-6">
                                 <b>Gender:</b>
                             </div>
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 @Html.DropDownList("Gender", new SelectList(ViewBag.lstGenderList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlgender" })
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-12 row mt-3">
                         <div class="col-md-6 col-lg-6 row ">
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <b>Date Of Birth: </b>
                             </div>
                             <div class="col-md-6 col-lg-6">
                                 <input type="date" id="txtDOB" class="input50" />
                             </div>
                         </div>
-                        <div class="col-md-4 col-lg-4 row">
+                        <div class="col-md-6 col-lg-6 row ">
                             <div class="col-md-6 col-lg-6">
                                 <b>Date Of Anniversary:</b>
                             </div>
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <input type="date" id="txtDOA" class="input50" />
                             </div>
                         </div>
@@ -121,36 +121,36 @@
                     {
                         <div class="col-md-12 col-lg-12 row mt-3">
                             <div class="col-md-6 col-lg-6 row ">
-                                <div class="col-md-4 col-lg-4">
+                                <div class="col-md-6 col-lg-6">
                                     <b>Bonus Points: </b>
                                 </div>
                                 <div class="col-md-6 col-lg-6">
                                     <input id="bonusPointsOld" type="number" class="input50" />
                                 </div>
                             </div>
-                            <div class="col-md-4 col-lg-4 row">
+                            <div class="col-md-6 col-lg-6 row ">
                                 <div class="col-md-6 col-lg-6">
                                     <b>Point Validity (in days):</b>
                                 </div>
-                                <div class="col-md-4 col-lg-4">
+                                <div class="col-md-6 col-lg-6">
                                     <input id="PointsValidityOld" type="number" class="input50" />
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12 col-lg-12 row mt-3">
                             <div class="col-md-6 col-lg-6 row ">
-                                <div class="col-md-4 col-lg-4">
+                                <div class="col-md-6 col-lg-6">
                                     <b>Redeeming Outlet: </b>
                                 </div>
                                 <div class="col-md-6 col-lg-6">
                                     @Html.DropDownList("Gender", new SelectList(Model.lstOutlet, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlOutletOld" })
                                 </div>
-                            </div>                           
+                            </div>
                         </div>
                     }
                     <div class="col-md-12 col-lg-12 row mt-3">
                         <div class="col-md-6 col-lg-6 row ">
-                            <div class="col-md-4 col-lg-4">
+                            <div class="col-md-6 col-lg-6">
                                 <b>Comments: </b>
                             </div>
                             <div class="col-md-6 col-lg-6">
@@ -160,7 +160,7 @@
                     </div>
                 </div>
             </div>
-           
+
             <div class="col-md-12 col-lg-12 row mt-4">
                 <div class="col-md-12 col-lg-12" style="text-align:right;">
                     <button type="button" id="btnSave" class="btn btn-primary" onclick="SaveData();" style="margin-right:10px;"> Save</button>
