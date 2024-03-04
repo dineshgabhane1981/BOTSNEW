@@ -29,12 +29,17 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new CommonDBContext())
-                {                   
+                {
                     var DBDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    var DBOld = context.DatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
                     if (DBDetails != null)
-                    {                        
+                    {
                         ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
-                    }                    
+                    }
+                    else
+                    {
+                        ConnectionString = "Data Source = " + DBOld.IPAddress + "; Initial Catalog = " + DBOld.DBName + "; user id = " + DBOld.DBId + "; password = " + DBOld.DBPassword + "";
+                    }
                 }
             }
             catch (Exception ex)

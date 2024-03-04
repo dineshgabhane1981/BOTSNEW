@@ -386,10 +386,15 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     var DBDetails = context.DatabaseDetails.Where(x => x.CounterId == CounterId).FirstOrDefault();
+                    var NewDBDetails = context.tblDatabaseDetails.Where(x => x.CounterId == CounterId).FirstOrDefault();
                     //CustomerConnString.ConnectionStringCustomer = DBDetails.DBName;
                     if (DBDetails != null)
                     {
                         ConnectionString = "Data Source = " + DBDetails.IPAddress + "; Initial Catalog = " + DBDetails.DBName + "; user id = " + DBDetails.DBId + "; password = " + DBDetails.DBPassword + "";
+                    }
+                    else
+                    {
+                        ConnectionString = "Data Source = " + NewDBDetails.IPAddress + "; Initial Catalog = " + NewDBDetails.DBName + "; user id = " + NewDBDetails.DBId + "; password = " + NewDBDetails.DBPassword + "";
                     }
                 }
             }
