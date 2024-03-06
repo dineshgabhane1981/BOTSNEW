@@ -61,6 +61,8 @@ namespace BOTS_BL.Repository
                     {
                         context.tblCouponMappings.Add(item);
                         context.SaveChanges();
+
+                        SendSMS(item, conStr);
                     }
                     status = true;
                 }
@@ -125,8 +127,59 @@ namespace BOTS_BL.Repository
             }
             return objRedeemData;
         }
-    
         
-    
+        public void SendSMS(tblCouponMapping SMSData,string conStr)
+        {
+            //conStr For Testing 
+            conStr = "Server=" + "13.233.58.231" + ";Initial Catalog=" + "MoolchandNew" + ";User Id=" + "Renaldo" + ";Password=" + "F59VM$KDE@KF!AW";
+            
+            try
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    var SMSCredentialData = context.tblSMSWhatsAppCredentials.FirstOrDefault();
+                    var SMSScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.Id == "121").FirstOrDefault();
+
+                    switch (SMSCredentialData.SMSVendor)
+                    {
+                        case "Vision":
+                            string _MobileMessage = SMSScript.SMSScript;
+                            _MobileMessage = _MobileMessage.Replace("#46", SMSData.CouponCode);
+                            var httpWebRequest = (HttpWebRequest)WebRequest.Create(SMSCredentialData.SMSUrl);
+                            httpWebRequest.ContentType = "application/json";
+                            httpWebRequest.Method = "POST";
+
+                            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+                            {
+
+                                string json = "{\"Account\":" +
+                                                "{\"APIKey\":\"" + SMSCredentialData.SMSAPIKey + "\"," +
+                                                "\"SenderId\":\"" + SMSCredentialData.SMSSenderId + "\"," +
+                                                "\"Channel\":\"Trans\"," +
+                                                "\"DCS\":\"8\"," +
+                                                "\"SchedTime\":null," +
+                                                "\"GroupId\":null}," +
+                                                "\"Messages\":[{\"Number\":\"91" + SMSData.MobileNo + "\"," +
+                                                "\"Text\":\"" + _MobileMessage + "\"}]" +
+                                                "}";
+                                streamWriter.Write(json);
+                            }
+
+                            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                            {
+                                var result = streamReader.ReadToEnd();
+                            }
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SendSMS");
+            }
+        }
+
+
     }
 }
