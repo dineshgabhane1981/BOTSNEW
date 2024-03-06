@@ -166,7 +166,7 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connstr))
                 {
                     lsttelereportdata = (from t in context.TelecallerTrackings
-                                         join o in context.OutletDetails on t.OutletId equals o.OutletId
+                                         join o in context.tblOutletMasters on t.OutletId equals o.OutletId
                                          where t.AddedDate > fromdt && t.AddedDate < todate
                                          select new TelecallerReport
                                          {

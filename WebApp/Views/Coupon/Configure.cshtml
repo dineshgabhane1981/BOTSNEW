@@ -85,6 +85,15 @@
                         @Html.DropDownListFor(x => Model.dummyProduct, new SelectList(Model.lstOutlet, "Value", "Text"), "All Outlets", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })&nbsp;
                     </div>
                 </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Offer Code :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="text" class="input50" id="txtOfferCode" />
+                    </div>
+               
+                </div>
 
             </div>
         </div>
@@ -252,7 +261,7 @@
                 return false;
             }
         }
-        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "") {
+        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "" && $("#txtOfferCode").val() == "") {
             if ($("#ddlProduct").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -314,6 +323,7 @@
             item["RedeemCategory"] = $("#ddlCategory").val();
             item["RedeemProduct"] = $("#ddlProduct").val();
             item["RedeemOutlet"] = $("#ddlOutlet").val();
+            item["OfferCode"] = $("#txtOfferCode").val();
             if ($('#chkIsCouponOnly').is(':checked'))
                 item["IsOnlyCoupon"] = true;
             else

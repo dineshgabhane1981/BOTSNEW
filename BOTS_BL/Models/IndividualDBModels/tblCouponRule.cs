@@ -55,5 +55,7 @@ namespace BOTS_BL.Models
 
         public decimal? RedeemInvoiceAmountTo { get; set; }
         public int? ExpiryDays { get; set; }
+        [StringLength(50)]
+        public string OfferCode { get; set; }
     }
 }
