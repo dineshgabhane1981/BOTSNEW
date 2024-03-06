@@ -237,7 +237,7 @@ namespace BOTS_BL.Repository
                 {
                     //var Proddata = context.ProductMasters.Select(o => o.CategoryCode && o.CategoryName).Distinct().ToList();
 
-                    objProd = context.Database.SqlQuery<ProductDetailsMaster>("select CategoryCode,CategoryName from tblProductMaster Group by CategoryCode,CategoryName").ToList();
+                    objProd = context.Database.SqlQuery<ProductDetailsMaster>("select CategoryCode,CategoryName from tblProductMaster Group by CategoryCode,CategoryName order by CategoryName").ToList();
 
                     foreach (var item in objProd)
                     {
@@ -266,7 +266,7 @@ namespace BOTS_BL.Repository
                 {
                     //var Proddata = context.ProductMasters.Select(o => o.CategoryCode && o.CategoryName).Distinct().ToList();
 
-                    objProd = context.Database.SqlQuery<ProductDetailsMaster>("select SubCategoryCode,SubCategoryName from tblProductMaster Group by SubCategoryCode,SubCategoryName").ToList();
+                    objProd = context.Database.SqlQuery<ProductDetailsMaster>("select SubCategoryCode,SubCategoryName from tblProductMaster Group by SubCategoryCode,SubCategoryName order by SubCategoryName").ToList();
 
                     foreach (var item in objProd)
                     {
