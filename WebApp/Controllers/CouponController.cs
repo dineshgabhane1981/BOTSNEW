@@ -93,7 +93,8 @@ namespace WebApp.Controllers
                         objData.ExpiryDate = Convert.ToDateTime(ExpiryDate);
                         objData.CreatedDate = DateTime.Now;
                         objData.CreatedBy = userDetails.LoginId;
-                        objData.ReminderDate = Convert.ToDateTime(ExpiryDate).AddDays(-Convert.ToInt32(Reminder));
+                        if (!string.IsNullOrEmpty(Reminder))
+                            objData.ReminderDate = Convert.ToDateTime(ExpiryDate).AddDays(-Convert.ToInt32(Reminder));
                         if (!string.IsNullOrEmpty(InvoiceValueFrom))
                             objData.RedeemInvoiceAmountFrom = Convert.ToDecimal(InvoiceValueFrom);
                         if (!string.IsNullOrEmpty(InvoiceValueTo))

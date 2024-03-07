@@ -48,6 +48,15 @@
                         Search Customer
                     </a>
                 </li>
+                @if (gId == "1364")
+                {
+                    <li class="@Html.IsSelected(controller: "Membership", action: "Index")">
+                        <a class="@Html.IsSelected(controller: "Membership", action: "Index")" href="@Url.Action("Index", "Membership")">
+                            <i class="metismenu-icon"></i>
+                            Membership
+                        </a>
+                    </li>
+                }
                 <li class="@Html.IsSelected(controller: "Home", action: "DailySummaryReport")">
                     <a class="@Html.IsSelected(controller: "Home", action: "DailySummaryReport")" href="@Url.Action("DailySummaryReport", "Home")">
                         <i class="metismenu-icon"></i>

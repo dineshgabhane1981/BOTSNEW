@@ -131,6 +131,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\MembershipController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -295,6 +296,7 @@
     <Content Include="Views\Home\DailySummaryReport.cshtml" />
     <Content Include="Views\Home\MemberDetailedReport.cshtml" />
     <Content Include="Views\Home\CancelTxn.cshtml" />
+    <Content Include="Views\Membership\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
