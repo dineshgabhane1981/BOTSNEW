@@ -1521,6 +1521,64 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+        public tblTxnDetailsMaster GetTxnDetailsByInvoiceNo(string GroupId, string InvoiceNo, string OutletId)
+        {
+            tblTxnDetailsMaster objDataNew = new tblTxnDetailsMaster();
+            try
+            {
+                var connStr = GetCustomerConnString(GroupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objDataNew= context.tblTxnDetailsMasters.Where(x => x.InvoiceNo == InvoiceNo && x.OutletId == OutletId).FirstOrDefault();
+                    objDataNew.TxnDatetimeStr = objDataNew.TxnReceivedDatetime.Value.ToString("dd-MMM-yyy hh mm ss");
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "GetTxnDetailsByInvoiceNo");
 
+            }
+
+            return objDataNew;
+        }
+
+        public SPResponse UpdateInvoiceData(string GroupId, string InvoiceNo, string OutletId,string NewMobileNo)
+        {
+            SPResponse result = new SPResponse();
+            string DBName = string.Empty;
+
+            TimeZoneInfo IND_ZONE = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime Date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, IND_ZONE);            
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                }
+
+                var connStr = GetCustomerConnString(GroupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                   var objDataNew = context.tblTxnDetailsMasters.Where(x => x.InvoiceNo == InvoiceNo && x.OutletId == OutletId).FirstOrDefault();
+
+                    result = context.Database.SqlQuery<SPResponse>("sp_ITOPSUpdateInvoiceMobileNo @pi_MobileNo, @pi_OutletId, @pi_InvoiceNo, @pi_TxnDate,@pi_DBName, @pi_LoginId, @pi_INDDatetime",
+                              new SqlParameter("@pi_MobileNo", NewMobileNo),
+                              new SqlParameter("@pi_OutletId", OutletId),
+                              new SqlParameter("@pi_InvoiceNo", InvoiceNo),
+                              new SqlParameter("@pi_TxnDate", objDataNew.TxnDatetime),
+                              new SqlParameter("@pi_DBName", DBName),
+                              new SqlParameter("@pi_LoginId", ""),
+                              new SqlParameter("@pi_INDDatetime", Date)
+                              ).FirstOrDefault<SPResponse>();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateInvoiceData");
+            }
+
+            return result;
+        }
     }
 }

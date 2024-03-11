@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "ChangeInvoiceMobileNo";
+    ViewBag.Title = "Change Invoice Mobile No";
     Layout = "~/Views/Shared/_LayoutITOPS.cshtml";
 }
 
@@ -17,29 +17,130 @@
         <div>
             <meta name="viewport" content="width=devicewidth, initial-scaled=1.0">
             <label style="padding-right:5px;padding-top:10px;">Enter Invoice Number </label>
-            <input type="text" id="txtInvoiceNoCancel" class="input50" />
-            <button type="button" id="btnSearch" style="margin-left:15px;margin-top:10px;" class="btn btn-primary">Go</button>
+            <input type="text" id="txtInvoiceNo" class="input50" />
+            @Html.DropDownList("Outlet", new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "ddlOutletList" })
+            <button type="button" id="btnSearch" style="margin-left:15px;" class="btn btn-primary">Go</button>
         </div>
+    </div>
+</div>
+<div class="card p-2 pb-3 pl-4 mb-2 ml-1 mt-3 row" id="dvTxnData" style="display:none;">
+    <table border="1" cellpadding="5" cellspacing="5" width="500px">
+        <tr>
+            <th colspan="2" style="padding:10px;text-align:center;">Invoice Details</th>
+        </tr>
+        <tr>
+            <td style="padding:10px;">Mobile No</td>
+            <td style="padding:10px;"><span id="spnMobileNo"></span></td>
+        </tr>
+        <tr>
+            <td style="padding:10px;">Invoice Amount</td>
+            <td style="padding:10px;"><span id="spnInvAmount"></span></td>
+        </tr>
+        <tr>
+            <td style="padding:10px;">Transaction Datetime</td>
+            <td style="padding:10px;"><span id="spnTxnDateTime"></span></td>
+        </tr>
+        <tr>
+            <td style="padding:10px;">Counter Id</td>
+            <td style="padding:10px;"><span id="spnCounterId"></span></td>
+        </tr>
+    </table>
+    <div class="mt-3">        
+        <label style="padding-right:5px;padding-top:10px;">Enter New Mobile Number </label>
+        <input type="text" id="txtNewMobileNo" class="input50" />        
+        <button type="button" id="btnUpdate" style="margin-left:15px;" class="btn btn-primary">Update</button>
     </div>
 </div>
 
 <script type="text/javascript">
-    $("#hdnGroupId").val(@Html.Raw(ViewBag.GroupId));
-
-    var tableData = [];
-    //<a href="~/Content/bootstrap.css.map">~/Content/bootstrap.css.map</a>
-    var tableLogData = [];
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $('#btnSearch').on("click", function () {
             GetInvoiceData();
-        });       
-        $('#btnCancelTxn').on("click", function () {
-            DeleteTxnData();
+        });
+        $('#btnUpdate').on("click", function () {
+            UpdateInvoiceData();
         });
     });
 
     function GetInvoiceData() {
-
+        var returnStatus = true;
+        if ($('#txtInvoiceNo').val() == "") {
+            toastr.error('Please enter Invoice Number');
+            returnStatus = false;
+            return false
+        }
+        if ($('#ddlOutletList').val() == "") {
+            toastr.error('Please select Outlet');
+            returnStatus = false;
+            return false
+        }
+        if (returnStatus) {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetInvoiceDetails", "Transaction")',
+                data: '{InvoiceNo: ' + JSON.stringify($('#txtInvoiceNo').val()) + ',OutletId: ' + JSON.stringify($('#ddlOutletList').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result != null) {
+                        $("#spnMobileNo").text(result.MobileNo);
+                        $("#spnInvAmount").text(result.InvoiceAmt);
+                        $("#spnTxnDateTime").text(result.TxnDatetimeStr);
+                        $("#spnCounterId").text(result.CounterId);
+                        $("#dvTxnData").show();                        
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                    $("#divLoader").hide();
+                }
+            });
+        }
     }
+
+    function UpdateInvoiceData() {
+        var returnStatus = true;
+        if ($('#txtNewMobileNo').val() == "") {
+            toastr.error('Please enter Mobile Number');
+            returnStatus = false;
+            return false
+        }
+
+        if (returnStatus) {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateInvoiceData", "Transaction")',
+                data: '{InvoiceNo: ' + JSON.stringify($('#txtInvoiceNo').val()) + ',OutletId: ' + JSON.stringify($('#ddlOutletList').val()) + ',NewMobileNo: ' + JSON.stringify($('#txtNewMobileNo').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+                    if (result != null) {
+                        if (result.ResponseCode == "00") {
+                            toastr.success('Mobile No changed successfully !!!');
+                        }
+                        else {
+                            toastr.error(result.ResponseMessage);
+                        }
+                    }
+                    else {
+                        toastr.error(result.ResponseMessage);
+                    }
+
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(222)
+                    //console.log(result.responseText)
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
 </script>

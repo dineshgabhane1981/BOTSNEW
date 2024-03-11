@@ -28,7 +28,13 @@ namespace RetailerApp.Controllers
         {
             CustomerDetails objData = new CustomerDetails();            
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objData = RWR.GetCustomerDetails(userDetails.OutletOrBrandId, MobileNo);            
+            objData = RWR.GetCustomerDetails(userDetails.OutletOrBrandId, MobileNo);
+            var data = RWR.GetMembershipDetail(userDetails.connectionString, MobileNo);
+            if(data!=null)
+            {
+                objData.PackageAmount = Convert.ToString(data.PackageType);
+                objData.PackageRemainingAmount= Convert.ToString(data.RemainingAmount);
+            }
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult RegisterNewUser(string jsonData)
@@ -36,7 +42,9 @@ namespace RetailerApp.Controllers
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             tblMembershipDetail objDetails = new tblMembershipDetail();
-            tblCouponRule objRule = new tblCouponRule();
+            tblCustDetailsMaster objCustDetails = new tblCustDetailsMaster();
+            tblCustInfo objCustInfo = new tblCustInfo();
+            tblCustTxnSummaryMaster objCustTxnSummary = new tblCustTxnSummaryMaster();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -44,37 +52,31 @@ namespace RetailerApp.Controllers
             {
                 foreach (Dictionary<string, object> item in objData)
                 {
-                    objRule.EarnRuleName = Convert.ToString(item["CustomerName"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["EarnInvoiceAmountFrom"])))
-                        objRule.EarnInvoiceAmountFrom = Convert.ToDecimal(item["EarnInvoiceAmountFrom"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["EarnInvoiceAmountTo"])))
-                        objRule.EarnInvoiceAmountTo = Convert.ToDecimal(item["EarnInvoiceAmountTo"]);
-                    objRule.EarnDay = Convert.ToString(item["EarnDay"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["EarnCategory"])) && Convert.ToString(item["EarnCategory"]) != "All Category")
-                        objRule.EarnCategory = Convert.ToInt32(item["EarnCategory"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["EarnProduct"])) && Convert.ToString(item["EarnProduct"]) != "All Product")
-                        objRule.EarnProduct = Convert.ToInt32(item["EarnProduct"]);
-                    objRule.EarnOutlet = Convert.ToString(item["EarnOutlet"]);
+                    objDetails.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objDetails.PackageType = Convert.ToDecimal(item["Package"]);
+                    objDetails.PackageValidity = Convert.ToDateTime(item["Validity"]);
+                    
 
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemInvoiceAmountFrom"])))
-                        objRule.RedeemInvoiceAmountFrom = Convert.ToDecimal(item["RedeemInvoiceAmountFrom"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemInvoiceAmountTo"])))
-                        objRule.RedeemInvoiceAmountTo = Convert.ToDecimal(item["RedeemInvoiceAmountTo"]);
-                    objRule.RedeemDay = Convert.ToString(item["RedeemDay"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemCategory"])) && Convert.ToString(item["RedeemCategory"]) != "All Category")
-                        objRule.RedeemCategory = Convert.ToInt32(item["RedeemCategory"]);
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["RedeemProduct"])) && Convert.ToString(item["RedeemProduct"]) != "All Product")
-                        objRule.RedeemProduct = Convert.ToInt32(item["RedeemProduct"]);
-                    objRule.RedeemOutlet = Convert.ToString(item["RedeemOutlet"]);
-                    objRule.IsActive = true;
-                    objRule.AddedDate = DateTime.Now;
-                    objRule.AddedBy = userDetails.LoginId;
-                    objRule.IsOnlyCoupon = Convert.ToBoolean(item["IsOnlyCoupon"]);
-                    objRule.CouponValue = Convert.ToInt32(item["CouponValue"]);
-                    objRule.ExpiryDays = Convert.ToInt32(item["ExpiryDays"]);
-                    objRule.OfferCode = Convert.ToString(item["OfferCode"]);
+                    objDetails.CreatedDate = DateTime.Now;
+                    objDetails.CreatedBy = userDetails.LoginId;
+
+                    objCustDetails.MobileNo= Convert.ToString(item["MobileNo"]);
+                    objCustDetails.Name = Convert.ToString(item["CustomerName"]);
+                    objCustDetails.Gender = Convert.ToString(item["Gender"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["DOB"])))
+                        objCustDetails.DOB = Convert.ToDateTime(item["DOB"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["DOA"])))
+                        objCustDetails.AnniversaryDate = Convert.ToDateTime(item["DOA"]);
+
+                    objCustInfo.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objCustInfo.Name = Convert.ToString(item["CustomerName"]);
+
+                    objCustTxnSummary.MobileNo= Convert.ToString(item["MobileNo"]);
+
+
+
                 }
-                //result = CR.SaveCouponEarnRule(objRule, userDetails.connectionString);
+                result = RWR.AddMembership(objDetails, objCustDetails, objCustInfo, objCustTxnSummary, userDetails.connectionString);
             }
             catch (Exception ex)
             {

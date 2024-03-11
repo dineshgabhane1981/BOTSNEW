@@ -511,7 +511,39 @@ namespace WebApp.Controllers.ITOPS
         }
         public ActionResult ChangeInvoiceMobileNo()
         {
+            var groupId = (string)Session["GroupId"];
+            string connStr = objCustRepo.GetCustomerConnString(groupId);
+            var lstOutlet = RR.GetOutletList(groupId, connStr);
+            ViewBag.OutletList = lstOutlet;
             return View();
+        }
+        public ActionResult GetInvoiceDetails(string InvoiceNo,string OutletId)
+        {           
+            var groupId = (string)Session["GroupId"];
+            tblTxnDetailsMaster objData = new tblTxnDetailsMaster();
+            try
+            {
+                objData = NEWITOPS.GetTxnDetailsByInvoiceNo(groupId, InvoiceNo, OutletId);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetModifyTxnDataNew");
+            }
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UpdateInvoiceData(string InvoiceNo, string OutletId,string NewMobileNo)
+        {
+            var groupId = (string)Session["GroupId"];
+            SPResponse status = new SPResponse();
+            try
+            {
+                status = NEWITOPS.UpdateInvoiceData(groupId, InvoiceNo, OutletId, NewMobileNo);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetModifyTxnDataNew");
+            }
+            return Json(status, JsonRequestBehavior.AllowGet);
         }
 
     }

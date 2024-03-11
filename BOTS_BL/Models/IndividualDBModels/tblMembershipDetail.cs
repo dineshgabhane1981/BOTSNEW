@@ -19,11 +19,13 @@ namespace BOTS_BL.Models
         public decimal? PackageType { get; set; }
 
         [Column(TypeName = "date")]
-        public DateTime? PackageValidy { get; set; }
+        public DateTime? PackageValidity { get; set; }
 
         [StringLength(50)]
         public string CreatedBy { get; set; }
 
         public DateTime? CreatedDate { get; set; }
+        [Column(TypeName = "numeric")]
+        public decimal? RemainingAmount { get; set; }
     }
 }

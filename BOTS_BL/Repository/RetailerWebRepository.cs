@@ -1094,6 +1094,50 @@ namespace BOTS_BL.Repository
             return R;
         }
 
+        public bool AddMembership(tblMembershipDetail objDetails, tblCustDetailsMaster objCustDetails, tblCustInfo objCustInfo, tblCustTxnSummaryMaster objCustTxnSummary, string connstr)
+        {
+            bool result = false;
+            try
+            {                
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    context.tblMembershipDetails.Add(objDetails);
+                    context.SaveChanges();
+
+                    context.tblCustDetailsMasters.Add(objCustDetails);
+                    context.SaveChanges();
+
+                    context.tblCustInfoes.Add(objCustInfo);
+                    context.SaveChanges();
+
+                    context.tblCustTxnSummaryMasters.Add(objCustTxnSummary);
+                    context.SaveChanges();
+
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddMembership");
+            }
+            return result;
+        }
+        public tblMembershipDetail GetMembershipDetail(string connstr, string MobileNo)
+        {
+            tblMembershipDetail objData = new tblMembershipDetail();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    objData = context.tblMembershipDetails.Where(x => x.MobileNo == MobileNo).OrderByDescending(y=>y.CreatedDate).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddMembership");
+            }
+            return objData;
+        }
         public void SendSMSandWA(DataTable dt3)
         {
             string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();

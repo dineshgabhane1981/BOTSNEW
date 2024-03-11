@@ -46,6 +46,7 @@
                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                     </a>
                     <ul>
+
                         <li class="@Html.IsSelected(controller: "NameAndMobile", action: "IndexNew")">
                             <a href="@Url.Action("IndexNew", "NameAndMobile")" class="@Html.IsSelected(controller: "NameAndMobile", action: "IndexNew,AddNewCustomer")">
                                 <i class="metismenu-icon pe-7s-rocket"></i>
@@ -57,6 +58,12 @@
                             <a href="@Url.Action("ChangeMobileNew", "NameAndMobile")" class="@Html.IsSelected(controller: "NameAndMobile", action: "ChangeMobileNew")">
                                 <i class="metismenu-icon pe-7s-rocket"></i>
                                 Change Mobile No
+                            </a>
+                        </li>
+                        <li class="@Html.IsSelected(controller: "Transaction", action: "ChangeInvoiceMobileNo")">
+                            <a href="@Url.Action("ChangeInvoiceMobileNo", "Transaction")" class="@Html.IsSelected(controller: "Transaction", action: "ChangeInvoiceMobileNo")">
+                                <i class="metismenu-icon pe-7s-rocket"></i>
+                                Change Invoice Mobile No
                             </a>
                         </li>
                         <li class="@Html.IsSelected(controller: "EarnBurn", action: "IndexNew")">
@@ -145,12 +152,6 @@
                             <a href="@Url.Action("DeleteTestTxn", "Transaction")" class="@Html.IsSelected(controller: "Transaction", action: "DeleteTestTxn")">
                                 <i class="metismenu-icon pe-7s-rocket"></i>
                                 Delete Test Txn
-                            </a>
-                        </li>
-                        <li class="@Html.IsSelected(controller: "Transaction", action: "ChangeInvoiceMobileNo")">
-                            <a href="@Url.Action("ChangeInvoiceMobileNo", "Transaction")" class="@Html.IsSelected(controller: "Transaction", action: "ChangeInvoiceMobileNo")">
-                                <i class="metismenu-icon pe-7s-rocket"></i>
-                                Change Invoice Mobile No
                             </a>
                         </li>
                     </ul>

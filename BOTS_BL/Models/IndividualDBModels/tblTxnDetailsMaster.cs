@@ -57,5 +57,7 @@ namespace BOTS_BL.Models
         [Key]
         [StringLength(100)]
         public string MobileNoInvId { get; set; }
+        [NotMapped]
+        public string TxnDatetimeStr { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace BOTS_BL.Models.RetailerWeb
         public string PointBalance { get; set; }
         public string TotalSpend { get; set; }
         public string LastTxnDate { get; set; }
+        public string PackageAmount { get; set; }
+        public string PackageRemainingAmount { get; set; }
         public string ResponseCode { get; set; }
         public string ResponseMessage { get; set; }
 

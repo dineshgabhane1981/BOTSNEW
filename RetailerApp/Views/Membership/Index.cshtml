@@ -26,10 +26,41 @@
             </div>
         </div>
     </div>
-    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px;display:none;" id="dvCustomerDetails">
-        <div class="col-md-12 col-sm-12 row" id="dvCustBasicDetails">
-            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
-            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Available Points : <span id="spnPointsBalance" style="font-weight:bold;"></span></div>
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px;display:none;" id="dvCustBasicDetails">
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
+            <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Available Points : <span id="spnPointsBalance" style="font-weight:bold;"></span></div>
+            <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Package Amount : <span id="spnPackageAmount" style="font-weight:bold;"></span></div>
+            <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Remaining Amount : <span id="spnRemainingAmount" style="font-weight:bold;"></span></div>
+        </div>
+        <div class="col-md-12 col-lg-12 row mt-3">
+            <div class="col-md-2 col-lg-2">
+                Package Type:
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <input type="number" id="txtPackageOld" class="input50" />
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 row mt-3">
+            <div class="col-md-2 col-lg-2">
+                Package Validity:
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <input type="date" id="txtValidityOld" class="input50" />
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 row mt-3">
+            <div class="col-md-2 col-lg-2">
+                Points Redeem:
+            </div>
+            <div class="col-md-6 col-lg-6">
+                <input type="number" id="txtPointsRedeem" class="input50" />
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 row mt-4">
+            <div class="col-md-12 col-lg-12" style="text-align:center;">
+                <button type="button" id="btnSaveOldCustomer" class="btn btn-primary" onclick="SaveNewCustomer();" style="margin-right:10px;"> Save</button>
+            </div>
         </div>
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px;display:none;" id="dvNewCustomer">
@@ -94,6 +125,11 @@
 </div>
 
 <script>
+    $(document).ready(function () {
+        $("#txtPointsRedeem").on('blur', function (e) {
+            SendOTP();
+        });
+    })
     function phoneno() {
             $('#txtMobileNo').keypress(function (e) {
                 var a = [];
@@ -178,9 +214,13 @@
                     console.log(response);
                     if (response.ResponseCode == "00") {
                         $("#divSearchHeading").hide();
-                        $("#divSearch").hide();
-                        $("#spnMobileNo").text(response.MobileNo);
+                        $("#dvNewCustomer").hide();
+                        $("#dvCustBasicDetails").show(1000);
+
                         $("#spnCustName").text(response.CustomerName);
+                        $("#spnPointsBalance").text(response.PointBalance);
+                        $("#spnPackageAmount").text(response.PackageAmount);
+                        $("#spnRemainingAmount").text(response.PackageRemainingAmount);
 
                         $("#divLoader").hide();
                     }
@@ -289,10 +329,43 @@
                     $("#divLoader").hide();
                 },
                 error: function (result) {
-                    
-
                 }
             });
         }
     }
+
+    function SendOTP() {
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("RegisterNewUser", "Membership")',
+                data: '{MobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Sent",
+                            message: "OTP sent Successfully!!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "There is problem in sending OTP!!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                }
+            });
+    }
+
+
+
+
 </script>
