@@ -38,115 +38,118 @@ namespace BOTS_BL.Repository
         }
         public ExecutiveSummary GetDashboardData(string GroupId, string connstr, string LoginId, string frmDate, string toDate)
         {
-
             ExecutiveSummary dataDashboard = new ExecutiveSummary();
-
             try
             {
-                if (GroupId != "1341")
-                {
-                    using (var context = new CommonDBContext()) 
-                    {
-                        context.Database.CommandTimeout = 120;
-                        var DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-                        dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_LoyaltyPerfromance @pi_GroupId, @pi_DBName,@pi_Date,@pi_LoginId",
-                            new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_DBName", DBName),
-                            new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                            new SqlParameter("@pi_LoginId", LoginId)).FirstOrDefault<ExecutiveSummary>();
-                        using (var contextnew = new BOTSDBContext(connstr))
-                        {
-                            var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
-                            var outletList = contextnew.tblOutletMasters.ToList();
-                            List<OutletDetails> lstOutletDetails = new List<OutletDetails>();
-                            foreach (var item in outletList)
-                            {
-                                OutletDetails newItem = new OutletDetails();
-                                newItem.OutletName = item.OutletName;
-                                newItem.EnrollmentCount = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                                lstOutletDetails.Add(newItem);
-                            }
-                            dataDashboard.lstOutletDetails = lstOutletDetails;
-                        }
-                    }
-                }
-                else
-                {
-                    using (var context = new BOTSDBContext(connstr))
-                    {
-                        context.Database.CommandTimeout = 120;
-                        
-                        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
-                        dataDashboard.TotalBiz = Convert.ToInt64(AllData.Sum(x => x.TotalSpend));
-                        dataDashboard.Redemption = AllData.Sum(x => x.BurnAmtWithPts);
-                        dataDashboard.Referrals = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCReferral").Sum(y => y.TotalSpend));
-                        dataDashboard.NewMWPRegistration = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCWalkIn").Sum(y => y.TotalSpend));
-                        dataDashboard.Campaign = 0;
-                        dataDashboard.SMSBlastWA = 0;
-                        dataDashboard.LoyaltyBiz = dataDashboard.Redemption + dataDashboard.Referrals + dataDashboard.NewMWPRegistration + dataDashboard.Campaign + dataDashboard.SMSBlastWA;
-                        var outletList = context.tblOutletMasters.ToList();
-                        List<OutletDetails> lstOutletDetails = new List<OutletDetails>();
-                        foreach (var item in outletList)
-                        {
-                            OutletDetails newItem = new OutletDetails();
-                            newItem.OutletName = item.OutletName;
-                            newItem.EnrollmentCount = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                            lstOutletDetails.Add(newItem);
-                        }
-                        dataDashboard.lstOutletDetails = lstOutletDetails;                        
-                    }
-                }
                 using (var context = new CommonDBContext())
                 {
                     context.Database.CommandTimeout = 120;
-                    var gId = Convert.ToInt32(GroupId);
-                    var livedate = context.tblGroupDetails.Where(x => x.GroupId == gId).Select(y => y.WentLiveDate).FirstOrDefault();
-                    if (livedate.HasValue)
-                    {
-                        var day = livedate.Value.Day;
-                        var month = livedate.Value.Month;
-                        var year = livedate.Value.Year;
-                        var currentYear = DateTime.Today.Year;
+                    var DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                    dataDashboard = context.Database.SqlQuery<ExecutiveSummary>("sp_LoyaltyPerfromance @pi_GroupId, @pi_DBName,@pi_Date,@pi_LoginId",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_DBName", DBName),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                        new SqlParameter("@pi_LoginId", LoginId)).FirstOrDefault<ExecutiveSummary>();
 
-                        DateTime nextRenewal = new DateTime(currentYear, month, day);
-                        DateTime ProgramRenewalDate = new DateTime();
-                        if (nextRenewal < DateTime.Today)
-                        {
-                            ProgramRenewalDate = nextRenewal.AddYears(1);
-                        }
-                        else
-                        {
-                            ProgramRenewalDate = nextRenewal;
-                        }
-                        dataDashboard.RenewalDate = ProgramRenewalDate.ToString("dd-MMM-yyyy");
-                        dataDashboard.RemainingDaysForRenewal = (ProgramRenewalDate - DateTime.Today).Days;
-                    }
+                    dataDashboard.lstOutletDetails = context.Database.SqlQuery<OutletDetails>("sp_DashboardOutletEnrolCount @pi_GroupId, @pi_DBName,@pi_DateRangeFlag,@pi_FromDate,@pi_ToDate",
+                       new SqlParameter("@pi_GroupId", GroupId),
+                       new SqlParameter("@pi_DBName", DBName),
+                       new SqlParameter("@pi_DateRangeFlag", "0"),
+                       new SqlParameter("@pi_FromDate", ""),
+                       new SqlParameter("@pi_ToDate", "")).ToList<OutletDetails>();
+
+                    //using (var contextnew = new BOTSDBContext(connstr))
+                    //{
+                    //    var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
+                    //    var outletList = contextnew.tblOutletMasters.ToList();
+                    //    List<OutletDetails> lstOutletDetails = new List<OutletDetails>();
+                    //    foreach (var item in outletList)
+                    //    {
+                    //        OutletDetails newItem = new OutletDetails();
+                    //        newItem.OutletName = item.OutletName;
+                    //        newItem.EnrollmentCount = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                    //        lstOutletDetails.Add(newItem);
+                    //    }
+                    //    dataDashboard.lstOutletDetails = lstOutletDetails;
+                    //}
                 }
+                #region
+                //    using (var context = new BOTSDBContext(connstr))
+                //    {
+                //        context.Database.CommandTimeout = 120;
 
-                using (var context = new CommonDBContext())
-                {
-                    var GrpId = GroupId;
-                    //var RenewDate = context.tblRenewalDatas.Where(x => x.GroupId == GrpId).Select(y => y.PaymentDate).FirstOrDefault();
-                    var RenewDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "Renewal" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
-                    var VerifiedDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "VerifiedWA" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
+                //        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
+                //        dataDashboard.TotalBiz = Convert.ToInt64(AllData.Sum(x => x.TotalSpend));
+                //        dataDashboard.Redemption = AllData.Sum(x => x.BurnAmtWithPts);
+                //        dataDashboard.Referrals = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCReferral").Sum(y => y.TotalSpend));
+                //        dataDashboard.NewMWPRegistration = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCWalkIn").Sum(y => y.TotalSpend));
+                //        dataDashboard.Campaign = 0;
+                //        dataDashboard.SMSBlastWA = 0;
+                //        dataDashboard.LoyaltyBiz = dataDashboard.Redemption + dataDashboard.Referrals + dataDashboard.NewMWPRegistration + dataDashboard.Campaign + dataDashboard.SMSBlastWA;
+                //        var outletList = context.tblOutletMasters.ToList();
+                //        List<OutletDetails> lstOutletDetails = new List<OutletDetails>();
+                //        foreach (var item in outletList)
+                //        {
+                //            OutletDetails newItem = new OutletDetails();
+                //            newItem.OutletName = item.OutletName;
+                //            newItem.EnrollmentCount = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
+                //            lstOutletDetails.Add(newItem);
+                //        }
+                //        dataDashboard.lstOutletDetails = lstOutletDetails;                        
+                //    }
 
-                    if (RenewDate == null)
-                    {
-                        dataDashboard.RenewDate = "";
-                    }
-                    else
-                    {
-                        dataDashboard.RenewDate = RenewDate.ToString();
-                    }
-                    if (VerifiedDate == null)
-                    {
-                        dataDashboard.VerifiedWARenewalDate = "";
-                    }
-                    else
-                    {
-                        dataDashboard.VerifiedWARenewalDate = VerifiedDate.ToString();
-                    }
-                }
+                //using (var context = new CommonDBContext())
+                //{
+                //    context.Database.CommandTimeout = 120;
+                //    var gId = Convert.ToInt32(GroupId);
+                //    var livedate = context.tblGroupDetails.Where(x => x.GroupId == gId).Select(y => y.WentLiveDate).FirstOrDefault();
+                //    if (livedate.HasValue)
+                //    {
+                //        var day = livedate.Value.Day;
+                //        var month = livedate.Value.Month;
+                //        var year = livedate.Value.Year;
+                //        var currentYear = DateTime.Today.Year;
+
+                //        DateTime nextRenewal = new DateTime(currentYear, month, day);
+                //        DateTime ProgramRenewalDate = new DateTime();
+                //        if (nextRenewal < DateTime.Today)
+                //        {
+                //            ProgramRenewalDate = nextRenewal.AddYears(1);
+                //        }
+                //        else
+                //        {
+                //            ProgramRenewalDate = nextRenewal;
+                //        }
+                //        dataDashboard.RenewalDate = ProgramRenewalDate.ToString("dd-MMM-yyyy");
+                //        dataDashboard.RemainingDaysForRenewal = (ProgramRenewalDate - DateTime.Today).Days;
+                //    }
+                //}
+
+                //using (var context = new CommonDBContext())
+                //{
+                //    var GrpId = GroupId;
+                //    //var RenewDate = context.tblRenewalDatas.Where(x => x.GroupId == GrpId).Select(y => y.PaymentDate).FirstOrDefault();
+                //    var RenewDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "Renewal" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
+                //    var VerifiedDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "VerifiedWA" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
+
+                //    if (RenewDate == null)
+                //    {
+                //        dataDashboard.RenewDate = "";
+                //    }
+                //    else
+                //    {
+                //        dataDashboard.RenewDate = RenewDate.ToString();
+                //    }
+                //    if (VerifiedDate == null)
+                //    {
+                //        dataDashboard.VerifiedWARenewalDate = "";
+                //    }
+                //    else
+                //    {
+                //        dataDashboard.VerifiedWARenewalDate = VerifiedDate.ToString();
+                //    }
+                //}
+                #endregion
             }
             catch (Exception ex)
             {
@@ -412,17 +415,27 @@ namespace BOTS_BL.Repository
             {
                 using (var contextnew = new CommonDBContext())
                 {
+                    if (monthFlag == "")
+                        monthFlag = "0";
+                    
                     contextnew.Database.CommandTimeout = 300;
                     var DBName = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
 
-                    dashboardOutletEnrolment = contextnew.Database.SqlQuery<DashboardOutletEnrolment>("sp_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate,@pi_DBName",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                        new SqlParameter("@pi_Flag", monthFlag),
-                        new SqlParameter("@pi_LoginId", loginId),
-                        new SqlParameter("@pi_FromDate", frmDate),
-                        new SqlParameter("@pi_ToDate", toDate),
-                        new SqlParameter("@pi_DBName", DBName)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
+                    dashboardOutletEnrolment = contextnew.Database.SqlQuery<DashboardOutletEnrolment>("sp_DashboardOutletEnrolCount @pi_GroupId, @pi_DBName,@pi_DateRangeFlag,@pi_FromDate,@pi_ToDate",
+                       new SqlParameter("@pi_GroupId", GroupId),
+                       new SqlParameter("@pi_DBName", DBName),
+                       new SqlParameter("@pi_DateRangeFlag", monthFlag),
+                       new SqlParameter("@pi_FromDate", ""),
+                       new SqlParameter("@pi_ToDate", "")).ToList<DashboardOutletEnrolment>();
+
+                    //dashboardOutletEnrolment = contextnew.Database.SqlQuery<DashboardOutletEnrolment>("sp_DashboardOutletEnrolment @pi_GroupId, @pi_Date, @pi_Flag, @pi_LoginId,@pi_FromDate,@pi_ToDate,@pi_DBName",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                    //    new SqlParameter("@pi_Flag", monthFlag),
+                    //    new SqlParameter("@pi_LoginId", loginId),
+                    //    new SqlParameter("@pi_FromDate", frmDate),
+                    //    new SqlParameter("@pi_ToDate", toDate),
+                    //    new SqlParameter("@pi_DBName", DBName)).OrderByDescending(s => s.EnrollmentCount).ToList<DashboardOutletEnrolment>();
                 }
             }
             catch (Exception ex)
