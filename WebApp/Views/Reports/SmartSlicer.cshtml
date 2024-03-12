@@ -1388,287 +1388,297 @@
     }
 
     function SaveFilterCriteria() {
-        var AllData = [];
+        if ($("#txtDSName").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS..",
+                message: "Please enter Dataset name",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            var AllData = [];
 
-        //First, Second and Third level Radio buttons or Checkboxes
-        item = {}
-        item["SecondChkCumu"] = "No";
-        item["SecondChk"] = "No";
-        item["MAFinal"] = "No";
-        if ($("#chkTransacting").is(":checked")) {
-            item["FirstChk"] = "Transacting";
-            if ($("#chkAll").is(":checked")) {
-                item["SecondChk"] = "All";
-            }
-            if ($("#chkTxnOnlyOnce").is(":checked")) {
-                item["SecondChk"] = "OnlyOnce";
-                item["OnlyOnceSegment"] = $("#ddlOnlyOnce").val();
-            }
-            if ($("#chkTxnInactive").is(":checked")) {
-                item["SecondChk"] = "Inactive";
-                item["InactiveSegment"] = $("#ddlInactive").val();
-                item["ExcludeOnlyOnce"] = $("#chkExcludeOnlyOnce").is(":checked");
-            }
-            if ($("#chkTxnCumiulative").is(":checked")) {
-                item["SecondChk"] = "Cumulative";
-                if ($("#rbtnCTxnCount").is(":checked")) {
-                    item["SecondChkCumu"] = "TxnCount";
-                    item["LSGT"] = $("#ddlTxnCumulative").val();
-                    item["TxnCount"] = $("#txtCTxnCount").val();
-                    item["Months"] = $("#txtCTxnMonths").val();
-                    item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
+            //First, Second and Third level Radio buttons or Checkboxes
+            item = {}
+            item["SecondChkCumu"] = "No";
+            item["SecondChk"] = "No";
+            item["MAFinal"] = "No";
+            if ($("#chkTransacting").is(":checked")) {
+                item["FirstChk"] = "Transacting";
+                if ($("#chkAll").is(":checked")) {
+                    item["SecondChk"] = "All";
                 }
-                if ($("#rbtnCSpend").is(":checked")) {
-                    item["SecondChkCumu"] = "CSpend";
-                    item["LSGT"] = $("#ddlSpendCumulative").val();
-                    item["TxnCount"] = $("#txtCSpendCount").val();
-                    item["Months"] = $("#txtCSpendMonths").val();
-                    item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
+                if ($("#chkTxnOnlyOnce").is(":checked")) {
+                    item["SecondChk"] = "OnlyOnce";
+                    item["OnlyOnceSegment"] = $("#ddlOnlyOnce").val();
                 }
-            }
-        }
-        if ($("#chkNonTransacting").is(":checked")) {
-            item["FirstChk"] = "NonTransacting";
-            if ($("#chkNonTxnAll").is(":checked")) {
-                item["SecondChk"] = "All";
-            }
-            if ($("#chkNonTxnEnrolled").is(":checked")) {
-                item["SecondChk"] = "Enrolled";
-            }
-            if ($("#chkNonTxnBulkUpload").is(":checked")) {
-                item["SecondChk"] = "BulkUpload";
-            }
-            if ($("#chkNonTxnReferal").is(":checked")) {
-                item["SecondChk"] = "Referal";
-            }
-            if ($("#chkNonTxnDLC").is(":checked")) {
-                item["SecondChk"] = "DLC";
-                item["QRSource"] = $("#ddlDLCSourceNT").val();
-            }
-        }
-        if ($("#chkMemberAcquition").is(":checked")) {
-            item["FirstChk"] = "MemberAcquition";
-            if ($("#chkMReferal").is(":checked")) {
-                item["SecondChk"] = "Referal";
-                if ($("#chkMAAll").is(":checked")) {
-                    item["MAFinal"] = "All";
+                if ($("#chkTxnInactive").is(":checked")) {
+                    item["SecondChk"] = "Inactive";
+                    item["InactiveSegment"] = $("#ddlInactive").val();
+                    item["ExcludeOnlyOnce"] = $("#chkExcludeOnlyOnce").is(":checked");
                 }
-                if ($("#chkMATransacting").is(":checked")) {
-                    item["MAFinal"] = "Transacting";
-                }
-                if ($("#chkMANonTransacting").is(":checked")) {
-                    item["MAFinal"] = "NonTransacting";
+                if ($("#chkTxnCumiulative").is(":checked")) {
+                    item["SecondChk"] = "Cumulative";
+                    if ($("#rbtnCTxnCount").is(":checked")) {
+                        item["SecondChkCumu"] = "TxnCount";
+                        item["LSGT"] = $("#ddlTxnCumulative").val();
+                        item["TxnCount"] = $("#txtCTxnCount").val();
+                        item["Months"] = $("#txtCTxnMonths").val();
+                        item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
+                    }
+                    if ($("#rbtnCSpend").is(":checked")) {
+                        item["SecondChkCumu"] = "CSpend";
+                        item["LSGT"] = $("#ddlSpendCumulative").val();
+                        item["TxnCount"] = $("#txtCSpendCount").val();
+                        item["Months"] = $("#txtCSpendMonths").val();
+                        item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
+                    }
                 }
             }
-            if ($("#chkMDLC").is(":checked")) {
-                item["SecondChk"] = "DLC";
-                if ($("#chkMAAll").is(":checked")) {
-                    item["MAFinal"] = "All";
+            if ($("#chkNonTransacting").is(":checked")) {
+                item["FirstChk"] = "NonTransacting";
+                if ($("#chkNonTxnAll").is(":checked")) {
+                    item["SecondChk"] = "All";
                 }
-                if ($("#chkMATransacting").is(":checked")) {
-                    item["MAFinal"] = "Transacting";
+                if ($("#chkNonTxnEnrolled").is(":checked")) {
+                    item["SecondChk"] = "Enrolled";
                 }
-                if ($("#chkMANonTransacting").is(":checked")) {
-                    item["MAFinal"] = "NonTransacting";
+                if ($("#chkNonTxnBulkUpload").is(":checked")) {
+                    item["SecondChk"] = "BulkUpload";
                 }
-                item["QRSource"] = $("#ddlDLCSource").val();
+                if ($("#chkNonTxnReferal").is(":checked")) {
+                    item["SecondChk"] = "Referal";
+                }
+                if ($("#chkNonTxnDLC").is(":checked")) {
+                    item["SecondChk"] = "DLC";
+                    item["QRSource"] = $("#ddlDLCSourceNT").val();
+                }
             }
-        }
-        AllData.push(item);
-
-        //Transactional Filters
-        item1 = {}
-        item1["IsAvgTicket"] = "No";
-        item1["IsEnrolledRange"] = "No";
-        item1["IsInactiveSince"] = "No";
-        item1["IsSpend"] = "No";
-        item1["IsTxnCount"] = "No";
-        item1["IsPointBalance"] = "No";
-        item1["IsRedeemed"] = "";
-
-        if ($("#chkAvgTicket").is(":checked")) {
-            item1["IsAvgTicket"] = "Yes";
-            item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
-            item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
-        }
-
-        if ($("#chkEnrolledRange").is(":checked")) {
-            item1["IsEnrolledRange"] = "Yes";
-            item1["Enrollfromdt"] = $("#txtEnrollfromdt").val();
-            item1["Enrolltodt"] = $("#txtEnrolltodt").val();
-        }
-
-        if ($("#chkInactiveSince").is(":checked")) {
-            item1["IsInactiveSince"] = "Yes";
-            item1["NonTransactedSince"] = $("#txtNonTransactedMax").val();
-        }
-
-        if ($("#chkSpend").is(":checked")) {
-            item1["IsSpend"] = "Yes";
-            item1["SpendMin"] = $("#txtSpendMin").val();
-            item1["SpendMax"] = $("#txtSpendMax").val();
-        }
-
-        if ($("#chkTxnCount").is(":checked")) {
-            item1["IsTxnCount"] = "Yes";
-            item1["CountMin"] = $("#txtTxnCountMin").val();
-            item1["CountMax"] = $("#txtTxnCountMax").val();
-        }
-
-        if ($("#chkPointBalance").is(":checked")) {
-            item1["IsPointBalance"] = "Yes";
-            item1["PointsBalMin"] = $("#txtPointsBalMin").val();
-            item1["PointsBalMax"] = $("#txtPointsBalMax").val();
-        }
-
-        if ($("#chkRedeemed").is(":checked")) {
-            if ($("#rbtnRedeemed").is(":checked")) {
-                item1["IsRedeemed"] = "Yes";
+            if ($("#chkMemberAcquition").is(":checked")) {
+                item["FirstChk"] = "MemberAcquition";
+                if ($("#chkMReferal").is(":checked")) {
+                    item["SecondChk"] = "Referal";
+                    if ($("#chkMAAll").is(":checked")) {
+                        item["MAFinal"] = "All";
+                    }
+                    if ($("#chkMATransacting").is(":checked")) {
+                        item["MAFinal"] = "Transacting";
+                    }
+                    if ($("#chkMANonTransacting").is(":checked")) {
+                        item["MAFinal"] = "NonTransacting";
+                    }
+                }
+                if ($("#chkMDLC").is(":checked")) {
+                    item["SecondChk"] = "DLC";
+                    if ($("#chkMAAll").is(":checked")) {
+                        item["MAFinal"] = "All";
+                    }
+                    if ($("#chkMATransacting").is(":checked")) {
+                        item["MAFinal"] = "Transacting";
+                    }
+                    if ($("#chkMANonTransacting").is(":checked")) {
+                        item["MAFinal"] = "NonTransacting";
+                    }
+                    item["QRSource"] = $("#ddlDLCSource").val();
+                }
             }
-            if ($("#rbtnNonRedeemed").is(":checked")) {
-                item1["IsRedeemed"] = "No";
+            AllData.push(item);
+
+            //Transactional Filters
+            item1 = {}
+            item1["IsAvgTicket"] = "No";
+            item1["IsEnrolledRange"] = "No";
+            item1["IsInactiveSince"] = "No";
+            item1["IsSpend"] = "No";
+            item1["IsTxnCount"] = "No";
+            item1["IsPointBalance"] = "No";
+            item1["IsRedeemed"] = "";
+
+            if ($("#chkAvgTicket").is(":checked")) {
+                item1["IsAvgTicket"] = "Yes";
+                item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
+                item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
             }
-        }
 
-        AllData.push(item1);
+            if ($("#chkEnrolledRange").is(":checked")) {
+                item1["IsEnrolledRange"] = "Yes";
+                item1["Enrollfromdt"] = $("#txtEnrollfromdt").val();
+                item1["Enrolltodt"] = $("#txtEnrolltodt").val();
+            }
 
-        //Product Filter
-        item2 = {}
-        item2["IsNeverPurchased"] = "No";
-        item2["IsPurchased"] = "No";
+            if ($("#chkInactiveSince").is(":checked")) {
+                item1["IsInactiveSince"] = "Yes";
+                item1["NonTransactedSince"] = $("#txtNonTransactedMax").val();
+            }
 
-        if ($("#chkNeverPurchased").is(":checked")) {
-            item2["IsNeverPurchased"] = "Yes";
-            item2["NPCategory"] = $("#ddlNPCategory").val();
-            item2["NPSubCategory"] = $("#ddlNPSubCategory").val();
-            item2["NPProduct"] = $("#ddlNPProduct").val();
+            if ($("#chkSpend").is(":checked")) {
+                item1["IsSpend"] = "Yes";
+                item1["SpendMin"] = $("#txtSpendMin").val();
+                item1["SpendMax"] = $("#txtSpendMax").val();
+            }
 
-            item2["NPCategoryName"] = $("#ddlNPCategory option:selected").text();
-            item2["NPSubCategoryName"] = $("#ddlNPSubCategory option:selected").text();
-            item2["NPProductName"] = $("#ddlNPProduct option:selected").text();
-        }
+            if ($("#chkTxnCount").is(":checked")) {
+                item1["IsTxnCount"] = "Yes";
+                item1["CountMin"] = $("#txtTxnCountMin").val();
+                item1["CountMax"] = $("#txtTxnCountMax").val();
+            }
 
-        if ($("#chkPurchased").is(":checked")) {
-            item2["IsPurchased"] = "Yes";
-            item2["PCategory"] = $("#ddlPCategory").val();
-            item2["PSubCategory"] = $("#ddlPSubCategory").val();
-            item2["PProduct"] = $("#ddlPProduct").val();
+            if ($("#chkPointBalance").is(":checked")) {
+                item1["IsPointBalance"] = "Yes";
+                item1["PointsBalMin"] = $("#txtPointsBalMin").val();
+                item1["PointsBalMax"] = $("#txtPointsBalMax").val();
+            }
 
-            item2["PCategoryName"] = $("#ddlPCategory option:selected").text();
-            item2["PSubCategoryName"] = $("#ddlPSubCategory option:selected").text();
-            item2["PProductName"] = $("#ddlPProduct option:selected").text();
-        }
-        AllData.push(item2);
+            if ($("#chkRedeemed").is(":checked")) {
+                if ($("#rbtnRedeemed").is(":checked")) {
+                    item1["IsRedeemed"] = "Yes";
+                }
+                if ($("#rbtnNonRedeemed").is(":checked")) {
+                    item1["IsRedeemed"] = "No";
+                }
+            }
 
-        //Product Filter
-        item3 = {}
-        item3["IsBrands"] = "No";
-        item3["IsOutlet"] = "No";
-        item3["IsTOutlet"] = "No";
-        item3["TOutletsAnyLast"] = "No";
+            AllData.push(item1);
 
-        if ($("#chkBrands").is(":checked")) {
-            item3["IsBrands"] = "Yes";
-            item3["Zone"] = $("#ddlBrands").val();
-        }
+            //Product Filter
+            item2 = {}
+            item2["IsNeverPurchased"] = "No";
+            item2["IsPurchased"] = "No";
 
-        if ($("#chkOutlet").is(":checked")) {
-            item3["IsOutlet"] = "Yes";
-            console.log($("#lstBoxOutlet").val());
-            var selectedVal = [];
-            var selectedIds = [];
-            $('#lstBoxOutlet :selected').each(function (i, selected) {
-                selectedVal[i] = $(selected).text();
-                selectedIds[i] = $(selected).val();
-            });
-            item3["Outlets"] = selectedVal;
-            item3["OutletIds"] = selectedIds;
-        }
+            if ($("#chkNeverPurchased").is(":checked")) {
+                item2["IsNeverPurchased"] = "Yes";
+                item2["NPCategory"] = $("#ddlNPCategory").val();
+                item2["NPSubCategory"] = $("#ddlNPSubCategory").val();
+                item2["NPProduct"] = $("#ddlNPProduct").val();
 
-        if ($("#chkTOutlet").is(":checked")) {
-            item3["IsTOutlet"] = "Yes";
-            var selectedVal = [];
-            var selectedIds = [];
-            $('#lstBoxTOutlet :selected').each(function (i, selected) {
-                selectedVal[i] = $(selected).text();
-                selectedIds[i] = $(selected).val();
-            });
-            item3["TransactingOutlets"] = selectedVal;
-            item3["TransactingOutletIds"] = selectedIds;
-        }
+                item2["NPCategoryName"] = $("#ddlNPCategory option:selected").text();
+                item2["NPSubCategoryName"] = $("#ddlNPSubCategory option:selected").text();
+                item2["NPProductName"] = $("#ddlNPProduct option:selected").text();
+            }
 
-        if ($("#chkTOutletAnyOne").is(":checked")) {
-            item3["TOutletsAnyLast"] = "Anyone";
-        }
+            if ($("#chkPurchased").is(":checked")) {
+                item2["IsPurchased"] = "Yes";
+                item2["PCategory"] = $("#ddlPCategory").val();
+                item2["PSubCategory"] = $("#ddlPSubCategory").val();
+                item2["PProduct"] = $("#ddlPProduct").val();
 
-        if ($("#chkTOutletLast").is(":checked")) {
-            item3["TOutletsAnyLast"] = "Last";
-        }
+                item2["PCategoryName"] = $("#ddlPCategory option:selected").text();
+                item2["PSubCategoryName"] = $("#ddlPSubCategory option:selected").text();
+                item2["PProductName"] = $("#ddlPProduct option:selected").text();
+            }
+            AllData.push(item2);
 
-        AllData.push(item3);
+            //Product Filter
+            item3 = {}
+            item3["IsBrands"] = "No";
+            item3["IsOutlet"] = "No";
+            item3["IsTOutlet"] = "No";
+            item3["TOutletsAnyLast"] = "No";
 
-        //Demographic Filter
-        item4 = {}
-        item4["IsTier"] = "No";
-        item4["IsGender"] = "No";
-        item4["IsCity"] = "No";
-        item4["IsAge"] = "No";
+            if ($("#chkBrands").is(":checked")) {
+                item3["IsBrands"] = "Yes";
+                item3["Zone"] = $("#ddlBrands").val();
+            }
 
-        if ($("#chkTier").is(":checked")) {
-            item4["IsTier"] = "Yes";
-            item4["Tier"] = $("#ddlTier").val();
-        }
-
-        if ($("#chkGender").is(":checked")) {
-            item4["IsGender"] = "Yes";
-            item4["Gender"] = $("#ddlGender").val();
-        }
-
-        if ($("#chkCity").is(":checked")) {
-            item4["IsCity"] = "Yes";
-            item4["City"] = $("#txtCity").val();
-        }
-
-        if ($("#chkAge").is(":checked")) {
-            item4["IsAge"] = "Yes";
-            item4["AgeFrom"] = $("#txtAgefrom").val();
-            item4["AgeTo"] = $("#txtAgeTo").val();
-        }
-
-        AllData.push(item4);
-
-        var data = JSON.stringify(AllData);
-
-         $.ajax({
-            type: "POST",
-            url: '@Url.Action("SaveDataset", "Reports")',
-             data: "{'JsonData': '" + JSON.stringify(AllData) + "','DSName': '" + $('#txtDSName').val() + "'}",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (response) {
-                 cuteAlert({
-                     type: "success",
-                     title: "Saved",
-                     message: "Dataset Saved Successfully!!!",
-                     buttonText: "Okay"
-                }).then((e) => {
-                    window.location.reload();
+            if ($("#chkOutlet").is(":checked")) {
+                item3["IsOutlet"] = "Yes";
+                console.log($("#lstBoxOutlet").val());
+                var selectedVal = [];
+                var selectedIds = [];
+                $('#lstBoxOutlet :selected').each(function (i, selected) {
+                    selectedVal[i] = $(selected).text();
+                    selectedIds[i] = $(selected).val();
                 });
-
-                $("#divLoader").hide();
-            },
-            failure: function (response) {
-                $("#divLoader").hide();
-            },
-             error: function (response) {
-                 alert(222)
-                $('#dvMemberData').html(response.responseText);
-                $("#divLoader").hide();
+                item3["Outlets"] = selectedVal;
+                item3["OutletIds"] = selectedIds;
             }
-        });
 
-        document.getElementById("btnGenerate").disabled = "";
-        document.getElementById("btnSave").disabled = "";
+            if ($("#chkTOutlet").is(":checked")) {
+                item3["IsTOutlet"] = "Yes";
+                var selectedVal = [];
+                var selectedIds = [];
+                $('#lstBoxTOutlet :selected').each(function (i, selected) {
+                    selectedVal[i] = $(selected).text();
+                    selectedIds[i] = $(selected).val();
+                });
+                item3["TransactingOutlets"] = selectedVal;
+                item3["TransactingOutletIds"] = selectedIds;
+            }
+
+            if ($("#chkTOutletAnyOne").is(":checked")) {
+                item3["TOutletsAnyLast"] = "Anyone";
+            }
+
+            if ($("#chkTOutletLast").is(":checked")) {
+                item3["TOutletsAnyLast"] = "Last";
+            }
+
+            AllData.push(item3);
+
+            //Demographic Filter
+            item4 = {}
+            item4["IsTier"] = "No";
+            item4["IsGender"] = "No";
+            item4["IsCity"] = "No";
+            item4["IsAge"] = "No";
+
+            if ($("#chkTier").is(":checked")) {
+                item4["IsTier"] = "Yes";
+                item4["Tier"] = $("#ddlTier").val();
+            }
+
+            if ($("#chkGender").is(":checked")) {
+                item4["IsGender"] = "Yes";
+                item4["Gender"] = $("#ddlGender").val();
+            }
+
+            if ($("#chkCity").is(":checked")) {
+                item4["IsCity"] = "Yes";
+                item4["City"] = $("#txtCity").val();
+            }
+
+            if ($("#chkAge").is(":checked")) {
+                item4["IsAge"] = "Yes";
+                item4["AgeFrom"] = $("#txtAgefrom").val();
+                item4["AgeTo"] = $("#txtAgeTo").val();
+            }
+
+            AllData.push(item4);
+
+            var data = JSON.stringify(AllData);
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveDataset", "Reports")',
+                data: "{'JsonData': '" + JSON.stringify(AllData) + "','DSName': '" + $('#txtDSName').val() + "'}",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Dataset Saved Successfully!!!",
+                        buttonText: "Okay"
+                    }).then((e) => {
+                        window.location.reload();
+                    });
+
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    alert(222)
+                    $('#dvMemberData').html(response.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+
+            document.getElementById("btnGenerate").disabled = "";
+            document.getElementById("btnSave").disabled = "";
+        }
     }
 
     function GetReport() {
