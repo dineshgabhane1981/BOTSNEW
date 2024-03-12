@@ -87,7 +87,8 @@ namespace RetailerApp.Controllers
 
         public JsonResult SendMemberOTP(string MobileNo)
         {
-            bool result = false;
+            string result;
+            result = "1234";
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }
