@@ -26,14 +26,14 @@ namespace RetailerApp.Controllers
         [HttpPost]
         public ActionResult GetCustomerBasicDetails(string MobileNo)
         {
-            CustomerDetails objData = new CustomerDetails();            
+            CustomerDetails objData = new CustomerDetails();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objData = RWR.GetCustomerDetails(userDetails.OutletOrBrandId, MobileNo);
             var data = RWR.GetMembershipDetail(userDetails.connectionString, MobileNo);
-            if(data!=null)
+            if (data != null)
             {
                 objData.PackageAmount = Convert.ToString(data.PackageType);
-                objData.PackageRemainingAmount= Convert.ToString(data.RemainingAmount);
+                objData.PackageRemainingAmount = Convert.ToString(data.RemainingAmount);
             }
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -55,12 +55,12 @@ namespace RetailerApp.Controllers
                     objDetails.MobileNo = Convert.ToString(item["MobileNo"]);
                     objDetails.PackageType = Convert.ToDecimal(item["Package"]);
                     objDetails.PackageValidity = Convert.ToDateTime(item["Validity"]);
-                    
+
 
                     objDetails.CreatedDate = DateTime.Now;
                     objDetails.CreatedBy = userDetails.LoginId;
 
-                    objCustDetails.MobileNo= Convert.ToString(item["MobileNo"]);
+                    objCustDetails.MobileNo = Convert.ToString(item["MobileNo"]);
                     objCustDetails.Name = Convert.ToString(item["CustomerName"]);
                     objCustDetails.Gender = Convert.ToString(item["Gender"]);
                     if (!string.IsNullOrEmpty(Convert.ToString(item["DOB"])))
@@ -71,7 +71,7 @@ namespace RetailerApp.Controllers
                     objCustInfo.MobileNo = Convert.ToString(item["MobileNo"]);
                     objCustInfo.Name = Convert.ToString(item["CustomerName"]);
 
-                    objCustTxnSummary.MobileNo= Convert.ToString(item["MobileNo"]);
+                    objCustTxnSummary.MobileNo = Convert.ToString(item["MobileNo"]);
 
 
 
@@ -82,6 +82,12 @@ namespace RetailerApp.Controllers
             {
                 newexception.AddException(ex, "GetFilteredData");
             }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public JsonResult SendMemberOTP(string MobileNo)
+        {
+            bool result = false;
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

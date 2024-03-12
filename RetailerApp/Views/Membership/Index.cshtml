@@ -9,6 +9,7 @@
 <div class="app-main__inner">
     <div class="row" style="margin-top : 20px; padding-bottom : 20px" id="divSearchHeading">
         <input id="UserName" value=@ViewBag.UserName hidden />
+        <input id="hdnOTP" hidden />
     </div>
     <div class="col-md-12 col-sm-12 card" style="padding: 10px; margin: 5px; margin-right: 20px !important;  border-radius: 10px;" id="divSearch">
         <div class="col-sm-4">
@@ -337,18 +338,19 @@
     function SendOTP() {
         $.ajax({
                 type: "POST",
-                url: '@Url.Action("RegisterNewUser", "Membership")',
+                url: '@Url.Action("SendMemberOTP", "Membership")',
                 data: '{MobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    if (result) {
+                    if (result != null && result != "") {
                         cuteAlert({
                             type: "success",
                             title: "Sent",
                             message: "OTP sent Successfully!!!",
                             buttonText: "Okay"
                         })
+                        $("#hdnOTP").val(result);
                     }
                     else {
                         cuteAlert({
