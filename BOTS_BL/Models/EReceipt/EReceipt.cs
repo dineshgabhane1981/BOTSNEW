@@ -14,6 +14,7 @@ namespace BOTS_BL.Models
         public string ISDCode { get; set; }
         public POSCustomer objCustomer { get; set; }
         public POSBILL objPOSBILL { get; set; }
+        public POSBillMOP objPOSBillMOP { get; set; }
         public List<POSBillItems> lstPOSBillItems { get; set; }
 
     }

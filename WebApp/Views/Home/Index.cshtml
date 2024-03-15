@@ -224,7 +224,7 @@
                                     </div>
                                 </div>
                                 <h6 class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal" style="color:blue !important; cursor:pointer;" id="btnExpand" onclick="ToggleKeyPointers();"><b>Expand to see key pointers</b></h6>
-                                <div class="scroll-area-sm" id="dvKeyPointers" style="display:none;">
+                                <div id="dvKeyPointers" style="display:none;">
 
                                 </div>
                             </div>
@@ -435,34 +435,7 @@
             </div>
         </div>
 
-        <div class="row">
-            <!--<div class="col-md-12 col-lg-6">
-                <div class="mb-3 card">
-                    <div class="card-header-tab card-header-tab-animation card-header">
-                        <div class="card-header-title">
-                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                            CAMPAIGN REPORT
-                        </div>
-                        <ul class="nav">
-                            <li class="nav-item"><a href="javascript:void(0);" class="active nav-link">Till Date</a></li>
-                            <li class="nav-item"><a href="javascript:void(0);" class="nav-link second-tab-toggle">Current Month</a></li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="tabs-eg-77">
-                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                    <div class="widget-chat-wrapper-outer">
-                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">-->
-            @*<canvas id="cvOutlet"></canvas>*@
-            <!--</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>-->
+        <div class="row">            
             <div class="col-md-12 col-lg-6">
                 <div class="mb-3 card">
                     <div class="card-header-tab card-header-tab-animation card-header">
@@ -732,9 +705,8 @@
                         success: function (response) {
                             if (response != null) {
                                 var tableHTML = "<table border=\"1\" cellpadding=\"10\" cellspacing=\"10\" style=\"width:100%;\">";
-                                tableHTML += "<tr style=\"text-align:center; background-color:lightgrey;font-weight: bold;\">";
+                                tableHTML += "<tr style=\"text-align:right; background-color:lightgrey;font-weight: bold;\">";
                                 tableHTML += "<td>Title</td>";
-                                tableHTML += "<td>Unit</td>";
                                 tableHTML += "<td>Total Base</td>";
                                 tableHTML += "<td>Repeat Redeemed</td>";
                                 tableHTML += "<td>Repeat Non-Redeemed</td>";
@@ -742,22 +714,21 @@
                                 tableHTML += "<td>Only Once</td>";
                                 tableHTML += "</tr>";
 
-                                tableHTML += "<tr style=\"text-align:center;\">";
-                                tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">No of Unique Members</td>";
-                                tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">Nos</td>";
-                                tableHTML += "<td>" + addComma(resp[0]) + "</td>";
-                                tableHTML += "<td>" + addComma(resp[1]) + "</td>";
-                                tableHTML += "<td>" + addComma(resp[2]) + "</td>";
-                                tableHTML += "<td>" + addComma(resp[3]) + "</td>";
-                                tableHTML += "<td>" + addComma(resp[4]) + "</td>";
-                                tableHTML += "</tr>";
+                                //tableHTML += "<tr style=\"text-align:center;\">";
+                                //tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">No of Unique Members</td>";
+                                //tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">Nos</td>";
+                                //tableHTML += "<td>" + addComma(resp[0]) + "</td>";
+                                //tableHTML += "<td>" + addComma(resp[1]) + "</td>";
+                                //tableHTML += "<td>" + addComma(resp[2]) + "</td>";
+                                //tableHTML += "<td>" + addComma(resp[3]) + "</td>";
+                                //tableHTML += "<td>" + addComma(resp[4]) + "</td>";
+                                //tableHTML += "</tr>";
 
 
 
                                 $.map(response, function (item) {
-                                    tableHTML += "<tr style=\"text-align:center;\">";
-                                    tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Title + "</td>";
-                                    tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Unit + "</td>";
+                                    tableHTML += "<tr style=\"text-align:right;\">";
+                                    tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;text-align:left;\">" + item.Title + "</td>";
                                     if (item.Unit == "Times") {
                                         tableHTML += "<td>" + item.TotalBase + "</td>";
                                         tableHTML += "<td>" + item.RepeatBase + "</td>";

@@ -766,7 +766,7 @@
         }
         if (result) {            
             if (Desc != "") {
-
+                alert(Desc)
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
@@ -774,6 +774,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
+                        console.log(result)
                         if (result == "True") {
                             cuteAlert({
                                 type: "success",

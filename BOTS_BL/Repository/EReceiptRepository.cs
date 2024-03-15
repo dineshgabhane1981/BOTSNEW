@@ -28,6 +28,7 @@ namespace BOTS_BL.Repository
         public tblTempTxnJSON GetEReceiptJSON(string invoiceNo, string groupId)
         {
             tblTempTxnJSON objData = new tblTempTxnJSON();
+            EReceipt receipt = new EReceipt();
             try
             {
                 string connStr = CR.GetCustomerConnString(groupId);
@@ -42,7 +43,58 @@ namespace BOTS_BL.Repository
                         object[] receiptObj = (object[])json_serializer.DeserializeObject(objData.JSON);
                         foreach (Dictionary<string, object> item in receiptObj)
                         {
-                            
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["ISDCode"])))
+                            {
+                                receipt.ISDCode= Convert.ToString(item["ISDCode"]);
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CounterId"])))
+                            {
+                                receipt.CounterId = Convert.ToString(item["CounterId"]);
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["Datetime"])))
+                            {
+                                receipt.InvoiceDate = Convert.ToDateTime(item["Datetime"]);
+                            }
+                            object[] objCust = new object[1];
+                            objCust[0]= item["POSCustomer"];
+                            POSCustomer objCustomer = new POSCustomer();
+                            //var POSCustomer = item["POSCustomer"];
+                            foreach (Dictionary<string, object> itemCustomer in (object[])objCust)
+                            {
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address2 = Convert.ToString(itemCustomer["Address2"]);
+                                objCustomer.Address3 = Convert.ToString(itemCustomer["Address3"]);
+                                objCustomer.Country = Convert.ToString(itemCustomer["Country"]);
+                                objCustomer.ISDCode = Convert.ToString(itemCustomer["ISDCode"]);
+                                objCustomer.LPCardNo = Convert.ToString(itemCustomer["LPCardNo"]);
+                                objCustomer.MName = Convert.ToString(itemCustomer["MName"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                                objCustomer.Address1 = Convert.ToString(itemCustomer["Address1"]);
+                            }
+
+                             
+
+                            foreach (Dictionary<string, object> itemPOSBILL in (object[])item["POSBILL"])
+                            {
+                            }
+                            foreach (Dictionary<string, object> itemBillMOP in (object[])item["POSBillMOP"])
+                            {
+                            }
+                            foreach (Dictionary<string, object> itemPOSBillItems in (object[])item["POSBillItems"])
+                            {
+                            }
                         }
                     }
                 }

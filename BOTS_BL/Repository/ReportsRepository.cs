@@ -268,7 +268,7 @@ namespace BOTS_BL.Repository
                 {
                     context.Database.CommandTimeout = 300;
                     var DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-                    lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_OutletwiseSummary @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_DBName",
+                    lstOutletWise = context.Database.SqlQuery<OutletWise>("sp_OutletwiseSummaryNew @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_DBName",
                             new SqlParameter("@pi_GroupId", GroupId),
                             new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                             new SqlParameter("@pi_LoginId", ""),
@@ -2913,7 +2913,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
                     {
                         Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                        WhereClause += " and a.InActiveDays > " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
                     }
                     if (Convert.ToString(item["IsSpend"]) == "Yes")
                     {
@@ -3194,7 +3194,7 @@ namespace BOTS_BL.Repository
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
                             if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
                             {
-                                WhereClause += " a.InActiveDays < 30 ";
+                                WhereClause += " a.InActiveDays <= 30 ";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
                             {
@@ -3345,7 +3345,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
                     {
                         Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                        WhereClause += " and a.InActiveDays > " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
                     }
                     if (Convert.ToString(item["IsSpend"]) == "Yes")
                     {
@@ -3800,7 +3800,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
                     {
                         Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                        WhereClause += " and a.InActiveDays > " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
                     }
                     if (Convert.ToString(item["IsSpend"]) == "Yes")
                     {

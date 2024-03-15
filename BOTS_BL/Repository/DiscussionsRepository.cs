@@ -34,34 +34,34 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     //objData = context.BOTS_TblDiscussion.Where(x => x.GroupId == GroupId).ToList();
-                    if (LoginType == "9" || LoginType == "10")
-                    {
-                        objData = (from c in context.BOTS_TblDiscussion
-                                   join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
-                                   join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
-                                   where c.GroupId == GroupId && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.CallType == 1)
-                                   select new DiscussionDetails
-                                   {
-                                       Id = c.Id,
-                                       AddedDate = c.AddedDate,
-                                       SpokenTo = c.SpokenTo,
-                                       ContactNo = c.ContactNo,
-                                       CallType = ct.CallType,
-                                       CustomerType = c.CustomerType,
-                                       FollowupDate = c.FollowupDate,
-                                       CallMode = c.CallMode,
-                                       Description = c.Description,
-                                       ActionItems = c.ActionItems,
-                                       AddedBy = cld.UserName,
-                                       Status = c.Status,
-                                       AssignedMember = c.AssignedMember,
-                                       Priority = c.Priority
+                    //if (LoginType == "9" || LoginType == "10")
+                    //{
+                    //    objData = (from c in context.BOTS_TblDiscussion
+                    //               join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
+                    //               join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
+                    //               where c.GroupId == GroupId && (c.CallType == 12 || c.CallType == 9 || c.CallType == 10 || c.CallType == 18 || c.CallType == 1)
+                    //               select new DiscussionDetails
+                    //               {
+                    //                   Id = c.Id,
+                    //                   AddedDate = c.AddedDate,
+                    //                   SpokenTo = c.SpokenTo,
+                    //                   ContactNo = c.ContactNo,
+                    //                   CallType = ct.CallType,
+                    //                   CustomerType = c.CustomerType,
+                    //                   FollowupDate = c.FollowupDate,
+                    //                   CallMode = c.CallMode,
+                    //                   Description = c.Description,
+                    //                   ActionItems = c.ActionItems,
+                    //                   AddedBy = cld.UserName,
+                    //                   Status = c.Status,
+                    //                   AssignedMember = c.AssignedMember,
+                    //                   Priority = c.Priority
 
 
-                                   }).OrderBy(y => y.Priority).OrderByDescending(x => x.AddedDate).ToList();
-                    }
-                    else
-                    {
+                    //               }).OrderBy(y => y.Priority).OrderByDescending(x => x.AddedDate).ToList();
+                    //}
+                    //else
+                    //{
                         objData = (from c in context.BOTS_TblDiscussion
                                    join ct in context.BOTS_TblCallTypes on c.CallType equals ct.Id
                                    join cld in context.CustomerLoginDetails on c.AddedBy equals cld.LoginId
@@ -84,7 +84,7 @@ namespace BOTS_BL.Repository
                                        Priority = c.Priority
 
                                    }).OrderBy(y => y.Priority).OrderByDescending(x => x.AddedDate).ToList();
-                    }
+                    //}
 
                 }
             }

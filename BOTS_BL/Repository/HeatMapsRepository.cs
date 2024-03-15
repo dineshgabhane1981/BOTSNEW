@@ -33,6 +33,17 @@ namespace BOTS_BL.Repository
                 }
                 else
                 {
+                    using (var context = new CommonDBContext())
+                    {
+                        context.Database.CommandTimeout = 120;
+                        DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                        objDaywiseHourwise = context.Database.SqlQuery<DaywiseHourwise>("sp_HeatMap @pi_GroupId,@pi_Date,@pi_LoginId,@pi_OutletId,@pi_DBName",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                            new SqlParameter("@pi_LoginId", ""),
+                            new SqlParameter("@pi_OutletId", ""),
+                            new SqlParameter("@pi_DBName", DBName)).ToList<DaywiseHourwise>();
+                    }
                     using (var context = new BOTSDBContext(connstr))
                     {
                         objDaywiseHourwise = context.Database.SqlQuery<DaywiseHourwise>("sp_BOTS_HeatMap @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", outletId)).ToList<DaywiseHourwise>();

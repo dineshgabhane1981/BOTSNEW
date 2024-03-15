@@ -30,7 +30,7 @@ namespace BOTS_BL.Models
         public string MobileNo { get; set; }
         public string CustName { get; set; }
         public string Tier { get; set; }
-        public long? Spends { get; set; }
+        public decimal? Spends { get; set; }
         public long? PointsBalance { get; set; }
         public string LastTxnDate { get; set; }
         public long? TotalVisit { get; set; }

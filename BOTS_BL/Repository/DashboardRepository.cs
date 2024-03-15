@@ -206,7 +206,12 @@ namespace BOTS_BL.Repository
                     }
                     else
                     {
-                        dashboardMemberSegmentTxnDB = context.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_BOTS_DashboardMemberSegment1 @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate)).ToList<DashboardMemberSegmentTxnDB>();
+                        using (var contextNew = new CommonDBContext())
+                        {
+                            context.Database.CommandTimeout = 120;
+                            var DBName = contextNew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                            dashboardMemberSegmentTxnDB = contextNew.Database.SqlQuery<DashboardMemberSegmentTxnDB>("sp_DashboardKeyPoints @pi_GroupId, @pi_Date, @pi_OutletId,@pi_LoginId,@pi_FromDate,@pi_ToDate,@pi_DBName", new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), new SqlParameter("@pi_OutletId", OutletId), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_FromDate", frmDate), new SqlParameter("@pi_ToDate", toDate), new SqlParameter("@pi_DBName", DBName)).ToList<DashboardMemberSegmentTxnDB>();
+                        }
                     }
                     if (GroupId != "1087")
                     {
@@ -216,28 +221,27 @@ namespace BOTS_BL.Repository
                             DashboardMemberSegmentTxn newItem = new DashboardMemberSegmentTxn();
                             if (count == 1)
                             {
-                                newItem.Title = "No of Transactions";
-                                newItem.Unit = "Nos";
+                                newItem.Title = "Total Member";                                
                             }
                             if (count == 2)
                             {
-                                newItem.Title = "Txns per Member";
-                                newItem.Unit = "Nos";
+                                newItem.Title = "Txn Count";
                             }
                             if (count == 3)
                             {
-                                newItem.Title = "Avg Days b/w Txns";
-                                newItem.Unit = "Days";
+                                newItem.Title = "Count Per Member";
                             }
                             if (count == 4)
                             {
-                                newItem.Title = "Average Bill Size";
-                                newItem.Unit = "Rs.";
+                                newItem.Title = "Business Vol";
                             }
                             if (count == 5)
                             {
-                                newItem.Title = "Per Member Spends";
-                                newItem.Unit = "Rs.";
+                                newItem.Title = "ATS";
+                            }
+                            if (count == 6)
+                            {
+                                newItem.Title = "Spend Per Member";
                             }
 
                             newItem.TotalBase = item.TotalBase;
