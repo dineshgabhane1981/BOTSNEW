@@ -349,23 +349,26 @@ namespace WebApp.Controllers
                     objEventDetail.EventId = Convert.ToInt32(item["EventId"]);
                     objEventDetail.Place = Convert.ToString(item["Place"]);
                     objEventDetail.Mobileno = Convert.ToString(item["Mobileno"]);
-                    if(!string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])) && !string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
-                    {
-                        objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]) + " " + Convert.ToString(item["SurName"]);
-                    }
-                    else if (string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])) && string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
-                    {
-                        objEventDetail.Name = Convert.ToString(item["FirstName"]);
-                    }
-                    else if(string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])))
-                    {
-                        objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["SurName"]);
-                    }
-                    else if(string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
-                    {
-                        objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]);
-                    }
-                    objEventDetail.Name = Convert.ToString(item["FirstName"]) +" "+ Convert.ToString(item["MiddleName"]) +" "+ Convert.ToString(item["SurName"]);
+
+                    var FullName = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]) + " " + Convert.ToString(item["SurName"]);
+
+                    //if (!string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])) && !string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
+                    //{
+                    //    objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]) + " " + Convert.ToString(item["SurName"]);
+                    //}
+                    //else if (string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])) && string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
+                    //{
+                    //    objEventDetail.Name = Convert.ToString(item["FirstName"]);
+                    //}
+                    //else if(string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])))
+                    //{
+                    //    objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["SurName"]);
+                    //}
+                    //else if(string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
+                    //{
+                    //    objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]);
+                    //}
+                    objEventDetail.Name = FullName;// Convert.ToString(item["FirstName"]) +" "+ Convert.ToString(item["MiddleName"]) +" "+ Convert.ToString(item["SurName"]);
                     objEventDetail.FirstName = Convert.ToString(item["FirstName"]);
                     objEventDetail.MiddleName = Convert.ToString(item["MiddleName"]);
                     objEventDetail.SurName = Convert.ToString(item["SurName"]);

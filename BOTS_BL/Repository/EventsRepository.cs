@@ -208,7 +208,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connectionString))
                 {
-                    var statusavailable = context.EventMemberDetails.Where(e => e.EventId == eventId && e.Mobileno == Mobileno).Select(y => y.Mobileno).FirstOrDefault();
+                    var statusavailable = context.EventMemberDetails.Where(e => e.Mobileno == Mobileno).Select(y => y.Mobileno).FirstOrDefault();
                     var pointsexp = context.EarnRules.Select(e => e.PointsExpiryVariableDate).FirstOrDefault();
                     int PointExp = Convert.ToInt32(pointsexp);
                     obj = context.Database.SqlQuery<EventModuleData>("select C.MobileNo,C.Points,C.CustomerName,C.Gender,C.DOB,C.AnniversaryDate,C.EmailId,min(CC.Address) as Address,min(C.OldMobileno) as AlternateMobileNo, CASE WHEN Max(cast(TM.Datetime as date)) = NULL THEN Max(cast(TM.Datetime as date)) ELSE Min(C.DOJ) END as LastTxnDate,DATEADD(MONTH, @PointExp, Max(cast(TM.Datetime as date))) as PointExp from CustomerDetails C Left join TransactionMaster TM on C.MobileNo = TM.MobileNo left join CustomerChild CC on CC.MobileNo = C.MobileNo and C.Status = '00' group by C.MobileNo, C.Points, C.CustomerName, C.EnrollingOutlet, C.Gender, C.DOB, C.AnniversaryDate, C.EmailId Having C.MobileNo = @Mobileno", new SqlParameter("@Mobileno", Mobileno), new SqlParameter("@PointExp", PointExp)).FirstOrDefault();
@@ -288,7 +288,7 @@ namespace BOTS_BL.Repository
                         var existingCust = context.CustomerDetails.Where(x => x.MobileNo == objCustomerDetail.MobileNo).FirstOrDefault();
 
                         var ExpiryDays = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.PointsExpiryDays).FirstOrDefault();
-                        var Status = context.EventMemberDetails.Where(x => x.EventId == objData.EventId && x.Mobileno == objData.Mobileno).Select(y => y.Mobileno).FirstOrDefault();
+                        var Status = context.EventMemberDetails.Where(x => x.Mobileno == objData.Mobileno).Select(y => y.Mobileno).FirstOrDefault();
                         var EventName = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.EventName).FirstOrDefault();
                         if (existingCust == null)
                         {
@@ -309,9 +309,9 @@ namespace BOTS_BL.Repository
                         }
                         else
                         {
-                            objData.PointsGiven = bonusPoints;
+                            bonusPoints = 0;
 
-                            objData.PointsGiven = 0;
+                            objData.PointsGiven = bonusPoints;
 
                             var objEventDetails = context.EventDetails.Where(e => e.EventId == objData.EventId).FirstOrDefault();
 

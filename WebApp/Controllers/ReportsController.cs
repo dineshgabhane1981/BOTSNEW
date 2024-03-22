@@ -668,31 +668,31 @@ namespace WebApp.Controllers
             {
                 lstOutletWiseTransaction = RR.GetOutletWiseTransactionList(userDetails.GroupId, DateRangeFlag, fromDate, toDate, outletId, EnrolmentDataFlag, userDetails.connectionString, userDetails.LoginId);
                 var GroupDetails = CR.GetGroupDetails(Convert.ToInt32(userDetails.GroupId));
-                decimal? amt = 0;
-                decimal? epts = 0;
-                decimal? bpts = 0;
-                foreach (var item in lstOutletWiseTransaction)
-                {
-                    amt += item.InvoiceAmt;
-                    epts += item.PointsEarned;
-                    bpts += item.PointsBurned;
-                }
-                OutletwiseTransaction totalObj = new OutletwiseTransaction();
-                totalObj.InvoiceAmt = amt;
-                totalObj.PointsEarned = epts;
-                totalObj.PointsBurned = bpts;
-                totalObj.OutletName = "<b>Total</b>";
-                totalObj.MobileNo = "-";
-                totalObj.MaskedMobileNo = "-";
-                totalObj.MemberName = "-";
-                totalObj.Type = "-";
-                totalObj.InvoiceNo = "-";
-                totalObj.TxnType = "-";
-                totalObj.TxnDatetime = "-";
-                totalObj.TxnUpdateDate = "-";
+                //decimal? amt = 0;
+                //decimal? epts = 0;
+                //decimal? bpts = 0;
+                //foreach (var item in lstOutletWiseTransaction)
+                //{
+                //    amt += item.InvoiceAmt;
+                //    epts += item.PointsEarned;
+                //    bpts += item.PointsBurned;
+                //}
+                //OutletwiseTransaction totalObj = new OutletwiseTransaction();
+                //totalObj.InvoiceAmt = amt;
+                //totalObj.PointsEarned = epts;
+                //totalObj.PointsBurned = bpts;
+                //totalObj.OutletName = "<b>Total</b>";
+                //totalObj.MobileNo = "-";
+                //totalObj.MaskedMobileNo = "-";
+                //totalObj.MemberName = "-";
+                //totalObj.Type = "-";
+                //totalObj.InvoiceNo = "-";
+                //totalObj.TxnType = "-";
+                //totalObj.TxnDatetime = "-";
+                //totalObj.TxnUpdateDate = "-";
 
 
-                lstOutletWiseTransaction.Add(totalObj);
+                //lstOutletWiseTransaction.Add(totalObj);
 
                 if (!GroupDetails.IsMasked)
                 {

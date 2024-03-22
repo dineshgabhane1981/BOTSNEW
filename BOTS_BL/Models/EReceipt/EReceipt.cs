@@ -16,6 +16,17 @@ namespace BOTS_BL.Models
         public POSBILL objPOSBILL { get; set; }
         public POSBillMOP objPOSBillMOP { get; set; }
         public List<POSBillItems> lstPOSBillItems { get; set; }
+        public string StoreAddress { get; set; }
+        public string BrandLogo { get; set; }
+        public string WebsiteURL { get; set; }
+        public string BrandName { get; set; }
+        public string StoreContact { get; set; }
+        public int ItemCount { get; set; }
+        public string TotalTaxableValue { get; set; }
+        public string TotalTaxValue { get; set; }
+        public string TotalMRPValue { get; set; }
+        public string PointsEarnedWithThisBill { get; set; }
+        public string TotalAvailablePoints { get; set; }
 
     }
     public class POSCustomer
@@ -45,6 +56,7 @@ namespace BOTS_BL.Models
         public string mobile { get; set; }
         public string pincode { get; set; }
         public string profession { get; set; }
+        public string HashedMobile { get; set; }
     }
 
     public class POSBillMOP
@@ -155,15 +167,18 @@ namespace BOTS_BL.Models
         public string TaxDescription { get; set; }
         public string TaxPercent { get; set; }
         public string TaxableAmt { get; set; }
+        
     }
     public class POSBILL
     {
         public DateTime BillDate { get; set; }
+        public string BillOnlyDate { get; set; }
+        public string BillOnlyTime { get; set; }
         public string AllowPointAccrual { get; set; }
         public string BasicAmt { get; set; }
         public string BillGUID { get; set; }
         public string BillId { get; set; }
-        public DateTime BillNo { get; set; }
+        public string BillNo { get; set; }
         public string CashierName { get; set; }
         public string ChargeAmt { get; set; }
         public string CouponCode { get; set; }

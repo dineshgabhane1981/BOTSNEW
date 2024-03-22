@@ -1,6 +1,7 @@
-﻿
+﻿@model BOTS_BL.Models.EReceipt
 @{
     Layout = null;
+    int count = 1;
 }
 
 <!DOCTYPE html>
@@ -23,8 +24,41 @@
     <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/Loading.css">
     <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/developer.css">
 
-    <script src="./Content/EReceipt/JS/jquery.min.js.download"></script>
+    @*<script src="./Content/EReceipt/JS/jquery.min.js.download"></script>*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+    <style>
+        .fw-500 {
+            font-weight: 500 !important;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .circle-bg {            
+            background: url('../../Content/EReceipt/Images/tier-bg.png') no-repeat;
+            background-size: contain;
+            background-position: center;
+            height: 100%;
+        }
+        .d-table {
+            display: table !important;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+        .Point-Summary {
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            margin: 20px 2px;
+        }
+    </style>
 
     @*<script>function fncPDFErrorMessageVisible() {
             $("#divSendMailPDFErrorMessage").css('display', 'block');
@@ -60,49 +94,39 @@
                                 </div>
                                 <div class="invoice_heading">
                                     <div class="invoice_logo mb-2" style="margin-bottom: 23px !important;">
-                                        <img id="imgHeaderImage" class="img-fluid" src="./receipt_files/logo23.png" style="border-width:0px;">
-
+                                        <img id="imgHeaderImage" class="img-fluid" src="@Model.BrandLogo" width="100px" style="border-width:0px;">
                                     </div>
-
-
-
                                     <!--  New template change -->
 
-                                    <h2 id="h2UniversalStoreName" class="StoreName">BATA INDIA LIMITED</h2>
+                                    <h2 id="h2UniversalStoreName" class="StoreName">@Model.BrandName</h2>
                                     <!-- new template chnage -->
                                     <!-- Show more & Show less  dropdown Start -->
-
                                     <h6 id="show_more_content" onclick="showmorefn()" class="show-more-content">
                                         <u>Show More</u>
-                                        <img src="./receipt_files/showmore.svg" alt="Down arrow">
+                                        <img src="./Content/EReceipt/SVG/showmore.svg" alt="Down arrow">
                                     </h6>
                                     <div id="comp_address" style="display: none">
                                         <div class="invoice_map">
-
                                             <p class="text-center">
-                                                <span id="lblStoreDetails">GROUND FLOOR PRIDE CORNOET OPP. FOOD BAZAR BANER ROAD MAHARASTRA 411045,PUNE,MAHARASTRA,411045, Tel:8087877921</span>
+                                                <span id="lblStoreDetails">@Model.StoreAddress, Tel:@Model.StoreContact</span>
                                             </p>
                                         </div>
-
                                         <div id="divUniversalTemplateStoreDetails" style="display:;">
                                             <ul id="ulStoreTiming" style="display: none;">
                                                 <li id="liStoreTiming" style="display: none;">
                                                     <span id="lblStoreTiming"></span>
                                                 </li>
                                                 <li id="liStoreCutomercare" style="display:inline-block;">
-                                                    <span id="lblStoreCutomercare">72 899 00000</span>
+                                                    <span id="lblStoreCutomercare">@Model.StoreContact</span>
                                                 </li>
                                             </ul>
                                             <div id="divStoreCINAndPAN" class="d-store" style="display:flex;">
                                                 <div class="store-details">
-
                                                     <div id="divStoreCIN" class="" style="display:block;">
-                                                        <h4 id="h4StorePan"><span id="spnLabelStorePAN">Store PAN:</span><span id="lblStorePANMasterValue">AABCB1043Q</span></h4>
-                                                        <h4 id="h4StoreCIN"><span id="spnLabelStoreCIN">Store CIN:</span> <span id="lblStoreCIN">L19201WB1931PLC007261</span></h4>
-                                                        <p id="lblStoreGSTIN">GSTIN # 27AABCB1043Q1ZM</p>
-                                                        <p id="pStoreCode" class="fass-reg"><span id="spnStoreCodeLabel">Store Code:</span> <span id="spnStoreCode">smb2499</span></p>
-
-
+                                                        @*<h4 id="h4StorePan"><span id="spnLabelStorePAN">Store PAN:</span><span id="lblStorePANMasterValue">AABCB1043Q</span></h4>
+                                                            <h4 id="h4StoreCIN"><span id="spnLabelStoreCIN">Store CIN:</span> <span id="lblStoreCIN">L19201WB1931PLC007261</span></h4>*@
+                                                        <p id="lblStoreGSTIN">GSTIN # @Model.objPOSBILL.OwnerGSTINNo</p>
+                                                        @*<p id="pStoreCode" class="fass-reg"><span id="spnStoreCodeLabel">Store Code:</span> <span id="spnStoreCode">smb2499</span></p>*@
                                                     </div>
                                                 </div>
                                             </div>
@@ -110,15 +134,416 @@
                                     </div>
                                     <h6 id="show_less_content" onclick="showlessfn()" style="display: none" class="show-more-content">
                                         <u>Show Less</u>
-                                        <img src="./receipt_files/showmore.svg" class="rotate_img" alt="Down arrow">
+                                        <img src="./Content/EReceipt/SVG/showmore.svg" class="rotate_img" alt="Down arrow">
                                     </h6>
-
                                     <!-- Show more & Show less  dropdown emd -->
-
-                                    <span id="spnvisitusTitle">Visit us at </span><a href="https://www.bata.com/" id="ancvisitUSURL" style="text-decoration: none; font-size: 14px;" target="_blank">
-                                        <span id="lblvisitUSURL">www.bata.com</span>
+                                    <span id="spnvisitusTitle">Visit us at </span><a href="https://@Model.WebsiteURL" target="_blank" id="ancvisitUSURL" style="text-decoration: none; font-size: 14px;" target="_blank">
+                                        <span id="lblvisitUSURL">@Model.WebsiteURL</span>
                                     </a><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="divUniversalAdressBlock">
+                            <div id="divUniVersalTemplateHeaderBlock" class="col-12 addressBlock">
+                                <p class="mb-0" style="text-align: center"></p>
+                                <h2 class="mt-3" style="font-weight: 700 !important;">
+                                    <span id="lblHeaderTitle2">Dear Member</span>
+                                </h2>
+                                <h2 class="m-0 d-block w-100">
+                                    <a href="#" id="ancHederMemberContact" class="m-0 d-block w-100 position-static">
+                                        <span id="lblHederMemberContact"><b>Mobile No:</b> @Model.objCustomer.HashedMobile</span>
+                                    </a>
+                                </h2>
+                                <a href="#" id="ancEditProfileURL" style="font-weight: 400 !important;" target="_blank">
+                                    <img src="./Content/EReceipt/images/edit.png" alt="Click to Edit your profile details" title="Click to Edit your profile details" style="width: 23px;">
+                                    Edit Profile
+                                </a>
+                                <p class="m-0 d-block w-100">
+                                    <a href="#" id="ancHeaderMemberEmail" class="m-0 d-block w-100 position-static">
+                                        <span id="lblHeaderMemberEmail"></span>
+                                    </a>
+                                </p>
+                                <p>
+                                    <span id="lblHeaderBodyText2">
+                                        Thank You for Shopping at Blueocktopus<br>
+                                        Scroll down to Experience New Blueocktopus Club <br> privileges specially curated for you.
+                                    </span>
+                                </p>
+                            </div>
+                            <div id="divUniVersalTemplateInvoiceBlockInner" class="col-12 invoiceBlockMain">
+                                <div class="col-12 invoiceBlock">
+                                    <div class="row">
+                                        <div id="divamtPaid" class="col-4 invoiceBlockInner" style="display:;">
+                                            <div id="divAmountPaid" class="divdropDownData" onclick="fncAmountslide('divTenderDetailRep')" style="display:;">
+                                                <label id="lblAmountPaid">Amount Paid</label>
+                                                <span id="spnAmountPaidMasterValue">₹&nbsp;@Model.objPOSBILL.GrossAmt</span>
+                                            </div>
+                                        </div>
+                                        <div id="divTotalQuantity" class="col-4 quanity" style="display:;">
+                                            <label>Quantity</label>
+                                            <span id="spnQuantityMasterValue">@Model.ItemCount</span>
+                                        </div>
+                                        <div class="col-4 downloadBtn">
+                                            <div id="divPdfDownloadPopUp" style="display: none">
+                                                <div id="upnlPdFDownload">
+                                                    <a id="lnkDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
+                                                </div>
+                                            </div>
+                                            <div id="divPdfDownload" style="display:block;">
+                                                <a id="lnkPdfDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkPdfDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="divTenderDetailRep" class="totalPointBlock" style="display: none;">
+                                <div class="col-12 totalPointBlock" style="display: none;">
+                                    <ul>
+                                        <li>
+                                            <label id="rptTenderDetails_ctl01_lblTenderName">
+                                                @Model.objPOSBillMOP.MOPName<span>
+                                                    &nbsp;
+                                                    <span id="rptTenderDetails_ctl01_lblTenderValue"><span id="rptTenderDetails_ctl01_spnTenderValue">₹&nbsp;</span>@Model.objPOSBILL.GrossAmt</span>
+                                                </span>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
 
+                            <div id="divInvoiceDetail" class="invoice_section_wrap portlet" style="display:block;">
+                                <div class=" showless">
+                                    <!-- Edit Highlight Tool -->
+                                    <div class="invoice_deatils_wrap">
+                                        <div class="invoice_details row">
+                                            <div class="col-sm-4 order-det col-6">
+                                                <h6 id="h6InvoiceDetailDate">Date</h6>
+                                                <p>
+                                                    <span id="lblOrderDate">@Model.objPOSBILL.BillOnlyDate</span>
+                                                </p>
+                                            </div>
+                                            <div id="divOrdertime" class="col-sm-4 order-det col-6">
+                                                <h6 id="h6InvoiceDetailTime">Order Time</h6>
+                                                <p>
+                                                    <span id="lblOrdertime">@Model.objPOSBILL.BillOnlyTime</span>
+                                                </p>
+                                            </div>
+                                            <div class="col-sm-4 order-det col-6">
+                                                <h6 id="h6InvoiceDetailGSTInvoiceNo">GST Invoice No.</h6>
+                                                <p>
+                                                    <span id="lblGSTInvoiceNO">@Model.objPOSBILL.GSTDocNumber</span>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- new template change !-->
+                                        <div id="divInvoiceUniverseTemplate" class="round_corner_wrap">
+                                            <div class="watermark">
+                                                <span id="lblUniversalInvoiceDetailwaterMark"></span>
+                                            </div>
+                                            <img src="./Content/EReceipt/images/round-corner.png" class="round_img" width="100%">
+                                            <table class="table table-borderless invoice_table">
+                                                <tbody>
+                                                    @foreach (var item in Model.lstPOSBillItems)
+                                                    {
+
+                                                        <tr>
+                                                            <td colspan="4">
+                                                                <div class="product_sec_tbl">
+                                                                    <div class="img_sec_product">
+                                                                        <!-- <img src="images/product.svg" width="100%"> -->
+                                                                        <span id="rptUniversalinvoiceDetails_ctl00_lblRowNumber">@count</span>
+                                                                    </div>
+                                                                    <div style="min-width: 230px;">
+                                                                        <!-- <p class="order_code">192283120190</p> -->
+
+                                                                        <b class="product_name">
+
+                                                                            @item.ItemName &nbsp;
+                                                                            <div class="tooltip">
+                                                                                <img src="./Content/EReceipt/SVG/alert.svg" alt="Alert">
+                                                                                <div class="tooltiptext">
+                                                                                    <span class="d-flex justify-content-between">
+                                                                                        <span>
+                                                                                            Code
+
+                                                                                        </span>
+                                                                                        <span>@item.BarCode</span>
+                                                                                    </span>
+                                                                                    <span class="d-flex justify-content-between">
+                                                                                        <span id="rptUniversalinvoiceDetails_ctl00_spnHSNHeader">
+                                                                                            HSN
+
+                                                                                        </span>
+                                                                                        <span id="rptUniversalinvoiceDetails_ctl00_spnHSN">@item.HSNCode</span>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </b>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <p class="order_qty align-items-center">
+                                                                                <span>
+                                                                                    <label id="rptUniversalinvoiceDetails_ctl00_lbllabelMRP">MRP:</label>
+                                                                                    <span id="rptUniversalinvoiceDetails_ctl00_spnMRP" class="p-0">₹&nbsp;</span>@item.MRP
+                                                                                </span>
+                                                                                <b>
+                                                                                    <label id="rptUniversalinvoiceDetails_ctl00_lbllabelDiscount">Quantity:</label>@item.Qty
+                                                                                </b>
+                                                                                @*<b>Brand:Bata</b>
+                                                    <b>UOM:Prs</b>*@
+                                                                            </p>
+                                                                            <div id="rptUniversalinvoiceDetails_ctl00_divTaxalert" class="tooltip">
+                                                                                <img src="./Content/EReceipt/SVG/alert.svg" alt="Alert">
+                                                                                <div class="tooltiptext">
+                                                                                    <span class="d-flex justify-content-between">
+                                                                                        <span>CGST</span> <span>(@item.CGSTRate %)</span>
+                                                                                        <span><span id="rptUniversalinvoiceDetails_ctl00_rptItemQuantityInfoGstSummary_ctl00_spnTaxAmount">₹&nbsp;</span>@item.SGSTAmt</span>
+                                                                                    </span>
+                                                                                    <span class="d-flex justify-content-between">
+                                                                                        <span>SGST</span> <span>(@item.SGSTRate %)</span>
+                                                                                        <span><span id="rptUniversalinvoiceDetails_ctl00_rptItemQuantityInfoGstSummary_ctl01_spnTaxAmount">₹&nbsp;</span>@item.SGSTAmt</span>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div>
+                                                                        </div>
+                                                                        <p class="order_size">
+                                                                            <span>Net Amount</span>
+                                                                            <!-- <b>Size:12</b> -->
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <p class="rate_sec">
+                                                                    <span>
+                                                                        <span id="rptUniversalinvoiceDetails_ctl00_spnSellingPrice">₹&nbsp;</span>
+                                                                        @item.NetAmt
+                                                                    </span>
+                                                                    <span class="flex-column">
+                                                                        <span>
+                                                                            <span id="rptUniversalinvoiceDetails_ctl00_spnAmount2">₹&nbsp;</span>
+                                                                            @item.NetAmt
+                                                                        </span>
+                                                                    </span>
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        count++;
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- new template change !-->
+
+                                        <div id="divShowMoreToggle" class="show_more_toggle" style="display: none;">
+                                            <div class="gst_summary">
+                                                <h4 id="h4TaxSummary" style="padding-top: 0px;">TAX Summary</h4>
+                                                <div id="divTaxSummaryAttributes"></div>
+
+                                                <div id="divTaxDetails">
+                                                    <table class="table table-borderless">
+                                                        <thead>
+                                                            <tr id="trTaxDetails">
+                                                                <th id="thHSNHeader" scope="col" style="font-weight: 700;">HSN</th>
+                                                                <th id="thTAXHeader" scope="col" style="font-weight: 700;">TAX</th>
+                                                                <th id="thPercentage" scope="col" style="font-weight: 700;">Rate</th>
+                                                                <th id="thTaxableAmountHeader" scope="col" style="font-weight: 700;">Taxable Amt</th>
+                                                                <th id="thTaxPaidHeader" scope="col" style="font-weight: 700;">TAX Paid</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach (var item in Model.lstPOSBillItems)
+                                                            {
+                                                                <tr id="rptGSTDetails_ctl00_trTaxDetails">
+                                                                    <td id="rptGSTDetails_ctl00_tdHSN">
+                                                                        @item.HSNCode
+                                                                        <br>
+                                                                        @item.Article
+                                                                    </td>
+                                                                    <td>
+                                                                        CGST
+                                                                    </td>
+                                                                    <td id="rptGSTDetails_ctl00_tdtaxPercentage">
+                                                                        <span id="rptGSTDetails_ctl00_spntaxPercentage">@item.CGSTRate</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.TaxableAmt
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.CGSTAmt
+                                                                    </td>
+                                                                </tr>
+                                                                <tr id="rptGSTDetails_ctl01_trTaxDetails">
+                                                                    <td id="rptGSTDetails_ctl01_tdHSN">
+                                                                        @item.HSNCode
+                                                                        <br>
+                                                                        @item.Article
+                                                                    </td>
+                                                                    <td>
+                                                                        SGST
+                                                                    </td>
+                                                                    <td id="rptGSTDetails_ctl01_tdtaxPercentage">
+                                                                        <span id="rptGSTDetails_ctl01_spntaxPercentage">@item.SGSTRate</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.TaxableAmt
+                                                                    </td>
+                                                                    <td>
+                                                                        @item.SGSTAmt
+                                                                    </td>
+                                                                </tr>
+                                                            }
+
+                                                            <tr>
+                                                                <td colspan="12">
+                                                                    <div class="devider" style="display: none;"></div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!--Added for New Template !-->
+                                                <div id="divUniversalInvoiceTotalSummary" class="earned_coin_section portlet">
+                                                    <ul class="subtotal">
+                                                        <li>
+                                                            <label id="lblsubtotal">Total RP Value</label>
+                                                            <span id="spnSubTotal">₹&nbsp;@Model.TotalTaxableValue</span>
+                                                        </li>
+                                                        <li>
+                                                            <label id="lbltotaltax">Total Tax</label>
+                                                            <span id="spnTotalTax">₹&nbsp;@Model.TotalTaxValue</span>
+                                                        </li>
+                                                        <li>
+                                                            <label id="lbltotalamountpaid">Total Amount Paid</label>
+                                                            <span id="SpnTotalAmountPaid">₹&nbsp;@Model.objPOSBILL.NetAmt</span>
+                                                        </li>
+                                                        <li>
+                                                            <span id="spnRoundOffAmount"></span>
+                                                        </li>
+                                                        <li>
+                                                            <span id="spnChangeReturned"></span>
+                                                        </li>
+                                                        <li>
+                                                            <label id="rptPaymentAttributes_ctl00_lblPaymentAttributeName">Total MRP Value</label>
+                                                            <span id="rptPaymentAttributes_ctl00_spnPaymentAttributeValue">₹&nbsp;@Model.TotalMRPValue</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <!--Added for New Template !-->
+                                                <div id="divAmountSavedPoint" class="earned_coin_section portlet" style="display:none;">
+                                                    <div>
+                                                        <!-- Edit Highlight Tool -->
+                                                        <div class="editorTool"></div>
+                                                        <!-- <i class="oval_wrap_left"></i>
+                        <i class="oval_wrap_right"></i>
+                        <div class="invoice_edit_icon">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    <i class="fa fa-arrows" aria-hidden="true"></i>
+                                    <i class="fa fa-clone" aria-hidden="true"></i>
+                        </div> -->
+                                                        <!-- Edit Highlight Tool -->
+                                                        <h4 class="coins_para">
+                                                            <span id="spnPointsEarned" style="display:block;">
+                                                                <img src="./Content/EReceipt/SVG/coins.svg" alt="coins">
+                                                                <span id="lblPoitsEarned"> 14</span>
+                                                            </span>
+                                                            <span id="spnCouponsEarned" style="display: none">
+                                                                <img src="./Content/EReceipt/SVG/coins.svg" alt="coins">
+                                                                <span id="lblCouponsEarned"></span>
+                                                            </span>
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- DisplayStoreTerminalDetails section start -->
+                                            <div id="divDisplayStoreTerminalDetailsCenter" class="sales_person">
+                                                <div id="divTerminalId" class="sales_person_details">
+                                                    <h4 id="h6terminalId">Terminal ID</h4>
+                                                    <p>
+                                                        <span id="lblTerminalIDMasterValue">@Model.objPOSBILL.TerminalId</span>
+                                                    </p>
+                                                </div>
+                                                @*<div id="divPOSNumber" class="sales_person_details">
+                        <h4 id="h6PosNumber">POS Number</h4>
+                        <p>
+                            <span id="lblPOsNumberMasterValue">2499</span>
+                        </p>
+                    </div>*@
+                                                <div id="divSalesAssociateNumber" class="sales_person_details">
+                                                    <h4 id="h6SalesAssociate">Sales Associate name</h4>
+                                                    <p>
+                                                        <span id="lblSaleAssiociateMasterValue">@Model.objPOSBILL.CashierName</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <!-- DisplayStoreTerminalDetails section end -->
+                                        </div>
+
+                                        <a onclick="showMoreLess();" id="lbtnShowMore" class="btn button_wrap button_type2" style="font-size:14px;" href="javascript:void(0);"><span id="spnInvoice">Show More</span></a>
+                                    </div>
+                                    <div id="divFeedBack" class="FeedBackmodal-content feedback_wrap2 mt-3" style="display:block;">
+                                        <div class="feedback_wrap2_header">
+                                            <!-- modal header  -->
+                                            <h4 id="h4Feedback">Please rate your experience</h4>
+                                        </div>
+                                        <div class="feedback_wrap2_body">
+                                            <!-- begin modal body content  -->
+
+                                            <iframe src="F:\BOTS_Code\BOTSA\WebApp\Views\EReceipt\Feedback.html" id="IFrameCollectaURL" width="100%" style="border:none;display:block;height:350px;"></iframe>
+
+                                            <!-- end modal body content  -->
+                                        </div>
+                                    </div>
+                                    <div id="divAvailableAndEarnedOnThisBillPoints" class="Point-Summary" style="display:;">
+                                        <div id="h6PointsSummary" class="Point-Summary-header">
+                                            Points Summary
+                                        </div>
+                                        <div class="row Point-Summary-details">
+                                            <div class="row text-center fw-500 pt-2 ng-star-inserted col-12" style="height: 10rem;">
+                                                <div class="col-6 circle-bg p-4 d-table" style="margin-left:-20px;">
+                                                    <div class="align-middle">
+                                                        <div style="line-height: 1;">
+                                                            <div class="text-green-dark fs-md">Points</div>
+                                                            <div class="text-green-dark fs-md">This Bill</div>
+                                                        </div>
+                                                        <span style="width: 20px; display: inline-block;"></span>
+                                                        <div class="text-green-dark">
+                                                            <h3 class="m-0 fw-700 text-green-dark">@Model.PointsEarnedWithThisBill</h3>
+                                                            <div class="text-green-dark fs-md"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6 circle-bg p-4 d-table" style="margin-left:20px;">
+                                                    <div class="align-middle">
+                                                        <div class="fs-md" style="line-height: 1;">
+                                                            <div class="text-green-dark">Total</div>
+                                                            <div class="text-green-dark">Points</div>
+                                                        </div>
+                                                        <span style="width: 20px; display: inline-block;"></span>
+                                                        <div class="text-green-dark ng-star-inserted">
+                                                            <h3 class="m-0 fw-700 text-green-dark"> @Model.TotalAvailablePoints </h3>
+                                                            <div class="text-green-dark"> </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="divProfileUpdate" class="banner_bg" style="display:block;margin-top:20px;margin-bottom:20px;" background="">
+                                        <img src="~/EReceiptBanners/UpdateProfileBGImage.png" id="imgProfileUpdate" style="margin-left:0px;" class=" banner_img_text banner_img_text1" alt="banner">
+                                        <div class="bg_content_details">
+                                            <h3>
+                                                <span id="lblProfileUpdateTitle">Update Profile and Earn reward</span>
+                                            </h3>
+                                            <h6>
+                                                <span id="lblProfileUpdateBodyText">Rs 100 off on min shopping of Rs 999 (valid on fresh articles)</span>
+                                            </h6>
+                                            <button id="btnProfileUpdate" class="update_btn"><a href="#" id="ancProfileUpdate" target="_blank">Update Your Profile</a></button>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>
@@ -128,5 +553,45 @@
             </div>
         </div>
     </div>
+    <script>
+        function showmorefn() {
+            document.getElementById("comp_address").style.display = "block";
+            document.getElementById("show_more_content").style.display = "none";
+            document.getElementById("show_less_content").style.display = "block";
+        }
+        function showlessfn() {
+            document.getElementById("comp_address").style.display = "none";
+            document.getElementById("show_more_content").style.display = "block";
+            document.getElementById("show_less_content").style.display = "none";
+        }
+
+        function fncAmountslide(id, current) {
+            var nextEle = $('#' + id).css('display');
+            if (nextEle == 'block') {
+                $('#' + id).slideDown();
+                $('.totalPointBlock').hide();
+            }
+            else {
+                $('.totalPointBlock').slideUp();
+                $('.totalPointBlock').show();
+            }
+        }
+        function showMoreLess() {
+            let isVisible = true;
+            //$("#ctl00_ContentPlaceHolder1_lbtnShowMore").click(function () {
+            isVisible = !isVisible;
+            if ($('#spnInvoice').text() == "Show Less") {
+                $('#spnInvoice').text('Show More');
+            }
+            else {
+                $('#spnInvoice').text('Show Less');
+            }
+
+            $(".show_more_toggle").slideToggle();
+            $(".invoice_section_wrap").find('.edit_border_wrap').toggleClass('showless');
+            //});
+        }
+    </script>
 </body>
+
 </html>

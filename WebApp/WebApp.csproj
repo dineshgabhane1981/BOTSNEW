@@ -398,6 +398,7 @@
     <Content Include="Content\EReceipt\Images\mail-outline.png" />
     <Content Include="Content\EReceipt\Images\phone-portrait-outline.png" />
     <Content Include="Content\EReceipt\Images\round-corner.png" />
+    <Content Include="Content\EReceipt\Images\tier-bg.png" />
     <Content Include="Content\EReceipt\Images\UnlimitedSneakers_WebsiteBanner-Desktop.jpg" />
     <Content Include="Content\EReceipt\SVG\alert.svg" />
     <Content Include="Content\EReceipt\SVG\apple-store.svg" />
@@ -470,6 +471,7 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="DiscussionFileUpload\ChintamanisLogo.jpeg" />
     <Content Include="DiscussionScripts.xml" />
+    <Content Include="EReceiptBanners\UpdateProfileBGImage.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -587,6 +589,7 @@
     <Content Include="Views\Discussion\_CommonDiscussionList.cshtml" />
     <Content Include="Views\CustomerMaster\_ChannelPartnerMaster.cshtml" />
     <Content Include="Views\CustomerMaster\ChannelPartnerMaster.cshtml" />
+    <Content Include="Views\EReceipt\Feedback.html" />
     <Content Include="Views\Feedback\Index.cshtml" />
     <Content Include="Views\Feedback\_NeverOptedFor.cshtml" />
     <Content Include="Views\Feedback\_ActiveGroup.cshtml" />
