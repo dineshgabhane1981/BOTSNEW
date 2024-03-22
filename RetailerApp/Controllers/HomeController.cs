@@ -100,8 +100,7 @@ namespace RetailerApp.Controllers
             object[] obj = (object[])json_serializer.DeserializeObject(jsonData);
             foreach (Dictionary<string, object> item in obj)
             {
-                string MobileNo = Convert.ToString(item["MobileNo"]);
-                
+                string MobileNo = Convert.ToString(item["MobileNo"]); 
                 string InvoiceNo = Convert.ToString(item["InvoiceNo"]);
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]);
                 string DynamicData = Convert.ToString(item["DynamicData"]);

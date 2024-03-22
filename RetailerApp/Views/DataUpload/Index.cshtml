@@ -1,0 +1,100 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var userDetails = (CustomerLoginDetail)Session["UserSession"];
+}
+
+<div class="app-main__inner">
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px;" id="dvDataUpload">
+        <div class="col-md-12 col-sm-12 row mt-2">
+            <div class="col-md-2 col-lg-2">
+                 Upload :
+            </div>
+            <div class="col-md-3 col-lg-3">
+                <input type="file" id="uploadfile" />
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 row mt-5">
+            <div class="col-md-2 col-lg-2">
+                <input type="button" id="btnUpload1" class="btn btn-primary" style="margin-left: 10px; background-color: #2651be;" value="UploadData" />
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#btnUpload1").on("click", function () {
+        UploadData();
+    });
+    function UploadData() {
+
+        if (window.FormData !== undefined) {
+            var fileUpload = $("#uploadfile").get(0);
+
+            var files = fileUpload.files;
+            if (files.length > 0) {
+                var fileData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                /*fileData.append("groupId", $('#hdnGroupID').val());*/
+
+                $("#divLoader").show();
+                $.ajax({
+                    url: '@Url.Action("UploadData", "DataUpload")',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        if (result.Status == 1) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Uploaded",
+                                message: "Data Uploaded <br/> Total Rows in Excel  " + result.TbleRWCount + " <br/>  Total Inserted Rows  " + result.DBInsertCount,
+                                buttonText: "Okay"
+                            }).then(() => {
+
+                                var urlLink = "@Url.Action("UploadData", "Index")";
+                                window.location.href = urlLink;
+                                })
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "There is some problem in uploading data",
+                                buttonText: "Okay"
+                            })
+                            $("#divLoader").hide();
+                        }
+                    },
+
+                    error: function (err) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem in uploading data",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                        //alert(err.statusText);
+                    }
+                });
+            }
+
+
+            else {
+                /*alert("No File");*/
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please select file to upload",
+                    buttonText: "Okay"
+                });
+            }
+        }
+
+    }
+</script>

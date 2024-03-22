@@ -39,7 +39,8 @@
       <HintPath>..\packages\AWSSDK.Core.3.7.302.12\lib\net45\AWSSDK.Core.dll</HintPath>
     </Reference>
     <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.S3.3.7.305.28\lib\net45\AWSSDK.S3.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.S3.3.7.103.29\lib\net45\AWSSDK.S3.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.15.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
@@ -559,6 +560,7 @@
     <Compile Include="Repository\LoyaltyKPIsRepository.cs" />
     <Compile Include="Repository\ManagementDashboardRepository.cs" />
     <Compile Include="Repository\MedrationRepository.cs" />
+    <Compile Include="Repository\MelcomUploadRepository.cs" />
     <Compile Include="Repository\MoolchandRedemptionRepository.cs" />
     <Compile Include="Repository\NoActionRepository.cs" />
     <Compile Include="Repository\NPCRepository.cs" />
@@ -706,10 +708,10 @@
     <Content Include="bin\Release\System.Web.WebPages.Razor.xml" />
     <Content Include="bin\Release\System.Web.WebPages.xml" />
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.305.28\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.305.28\analyzers\dotnet\cs\SharedAnalysisCode.dll" />
-  </ItemGroup>
+  </ItemGroup>-->
   <!-- <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.201.6\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
     <Analyzer Include="..\packages\AWSSDK.S3.3.7.201.6\analyzers\dotnet\cs\SharedAnalysisCode.dll" />

@@ -14,6 +14,7 @@ namespace RetailerApp.Controllers
         LoginRepository LR = new LoginRepository();
         DashboardRepository DR = new DashboardRepository();
         Exceptions newexception = new Exceptions();
+        
         // GET: Login
         public ActionResult Index()
         {

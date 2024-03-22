@@ -14,6 +14,8 @@ using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Web.Script.Serialization;
+using System.Configuration;
+using System.Globalization;
 
 namespace BOTS_BL.Repository
 {
@@ -1137,6 +1139,213 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "AddMembership");
             }
             return objData;
+        }
+
+        public AudioPalace BulkTransaction(DataTable dt,string CounterId)
+        {
+            AudioPalace Obj = new AudioPalace();
+            int c = 0;
+            Obj.Status = false;
+            string StrDate, Strtime,TDatetime;
+            CultureInfo culture = new CultureInfo("en-IN");
+            DateTime tempDatetime, TDate; 
+
+            try
+            {
+                Obj.TbleRWCount = Convert.ToString(dt.Rows.Count);
+
+                for (int i = 0; i < dt.Rows.Count; i ++)
+                {
+                    if(Convert.ToString(dt.Rows[i]["mobile"]) != "")
+                    {
+                        //var conStr = ConfigurationManager.ConnectionStrings["BOTSDBContext"].ToString();
+                        var conStr = CR.GetRetailWebConnString(CounterId);
+
+                        using (var context = new BOTSDBContext(conStr))
+                        {
+                            SqlConnection _Con = new SqlConnection(conStr);
+                            DataSet retVal = new DataSet();
+                            SqlCommand cmdReport = new SqlCommand("sp_RetailAppTxnUpload", _Con);
+                            SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                            using (cmdReport)
+                            {
+                                SqlParameter param1 = new SqlParameter("pi_CounterId", CounterId);
+                                SqlParameter param2 = new SqlParameter("pi_MobileNo", Convert.ToString(dt.Rows[i]["mobile"]));
+                                SqlParameter param3 = new SqlParameter("pi_CustomerName", Convert.ToString(dt.Rows[i]["csname"]));
+                                StrDate = Convert.ToString(dt.Rows[i]["vdate"]);
+                                Strtime = Convert.ToString(dt.Rows[i]["ctime"]);
+                                TDatetime = StrDate + " " + Strtime;
+                                tempDatetime = Convert.ToDateTime(TDatetime, culture);
+                                SqlParameter param4 = new SqlParameter("pi_Datetime", tempDatetime);
+                                SqlParameter param5 = new SqlParameter("pi_Mode", dt.Rows[i]["mode"]);
+                                SqlParameter param6 = new SqlParameter("pi_InvoiceAmt", dt.Rows[i]["amt"]);
+                                SqlParameter param7 = new SqlParameter("pi_InvoiceNo", dt.Rows[i]["billno"]);
+
+                                cmdReport.CommandType = CommandType.StoredProcedure;
+                                cmdReport.Parameters.Add(param1);
+                                cmdReport.Parameters.Add(param2);
+                                cmdReport.Parameters.Add(param3);
+                                cmdReport.Parameters.Add(param4);
+                                cmdReport.Parameters.Add(param5);
+                                cmdReport.Parameters.Add(param6);
+                                cmdReport.Parameters.Add(param7);
+
+                                daReport.Fill(retVal);
+                                DataTable Data = retVal.Tables[0];
+
+                                Obj.Status = true;
+                                
+                                if (Convert.ToString(Data.Rows[0]["ResponseCode"]) == "00")
+                                {
+                                    c++;
+                                    DataTable dt1 = retVal.Tables[1];
+                                    
+
+                                    if (dt1.Rows.Count > 0)
+                                    {
+                                        string SMSStatus = Convert.ToString(dt1.Rows[0]["SMSStatusTxn"]);
+                                        string WAStatus = Convert.ToString(dt1.Rows[0]["WAStatusTxn"]);
+
+                                        if (SMSStatus == "1" && WAStatus == "1")
+                                        {
+                                            DataTable dt2 = retVal.Tables[2];
+
+                                            //Thread _job = new Thread(() => SendSMSandWA(dt2));
+                                            //_job.Start();
+                                        }
+                                        else if (SMSStatus == "1" && WAStatus == "0")
+                                        {
+                                            DataTable dt2 = retVal.Tables[2];
+
+                                            string _MobileNo = dt2.Rows[0]["CommMobileNoTxn"].ToString();
+                                            string _MobileMessage = dt2.Rows[0]["MessageTxn"].ToString();
+                                            string _UserName = dt2.Rows[0]["UserNameTxn"].ToString();
+                                            string _Password = dt2.Rows[0]["PasswordTxn"].ToString();
+                                            string _Sender = dt2.Rows[0]["SenderIdTxn"].ToString();
+                                            string _Url = dt2.Rows[0]["UrlTxn"].ToString();
+                                            string _SMSBrandId = dt2.Rows[0]["SMSBrandId"].ToString();
+                                            //Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                            //_job.Start();
+                                        }
+                                        else if (SMSStatus == "0" && WAStatus == "1")
+                                        {
+                                            DataTable dt2 = retVal.Tables[2];
+
+                                            //Thread _job = new Thread(() => SendWAMessage(dt2));
+                                            //_job.Start();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }  
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "BulkInsert");
+            }
+            Obj.DBInsertCount = Convert.ToString(c);
+            Obj.DBFailedCount = Convert.ToString(c);
+            return Obj;
+        }
+
+        public BurnValidationResponse BurnValidationRatnaEnterprise(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string PointsBurn, string DynamicData)
+        {
+            BurnValidationResponse R = new BurnValidationResponse();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    string groupId = CounterId.Substring(0, 4);
+                    var conStr = CR.GetRetailWebConnString(CounterId);
+
+                    SqlConnection _Con = new SqlConnection(conStr);
+                    DataSet retVal = new DataSet();
+                    SqlCommand cmdReport = new SqlCommand("sp_Web_BurnValidation", _Con);
+                    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+                    using (cmdReport)
+                    {
+                        SqlParameter param1 = new SqlParameter("pi_CounterId", CounterId);
+                        SqlParameter param2 = new SqlParameter("pi_MobileNo", Mobileno);
+                        SqlParameter param3 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
+                        SqlParameter param4 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
+                        SqlParameter param5 = new SqlParameter("pi_BurnPoints", PointsBurn);
+                        SqlParameter param6 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                        SqlParameter param7 = new SqlParameter("pi_jsondata", DynamicData);
+
+
+                        cmdReport.CommandType = CommandType.StoredProcedure;
+                        cmdReport.Parameters.Add(param1);
+                        cmdReport.Parameters.Add(param2);
+                        cmdReport.Parameters.Add(param3);
+                        cmdReport.Parameters.Add(param4);
+                        cmdReport.Parameters.Add(param5);
+                        cmdReport.Parameters.Add(param6);
+                        cmdReport.Parameters.Add(param7);
+                        daReport.Fill(retVal);
+
+                        DataTable dt = retVal.Tables[0];
+                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                        {
+                            R.ResponseCode = "00";
+                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            DataTable dt1 = retVal.Tables[1];
+                            DataTable dt2 = retVal.Tables[2];
+                            R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
+                            R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
+                            R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
+
+
+
+                            if (dt2.Rows.Count > 0)
+                            {
+                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
+                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+
+                                if (SMSStatus == "1" && WAStatus == "1")
+                                {
+                                    DataTable dt3 = retVal.Tables[3];
+
+                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                    _job.Start();
+                                }
+                                else if (SMSStatus == "1" && WAStatus == "0")
+                                {
+                                    DataTable dt3 = retVal.Tables[3];
+
+                                    string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
+                                    string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
+                                    string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
+                                    string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
+                                    string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
+                                    string _Url = dt3.Rows[0]["UrlOTP"].ToString();
+                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                    _job.Start();
+                                }
+                                else if (SMSStatus == "0" && WAStatus == "1")
+                                {
+                                    DataTable dt3 = retVal.Tables[3];
+
+                                    Thread _job = new Thread(() => SendWAMessage(dt3));
+                                    _job.Start();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "BurnValidation");
+            }
+            return R;
         }
         public void SendSMSandWA(DataTable dt3)
         {
