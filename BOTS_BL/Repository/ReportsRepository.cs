@@ -2954,13 +2954,15 @@ namespace BOTS_BL.Repository
                             WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
                         }
                     }
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["IsRedeemed"])))
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
                     {
                         Criteria += "<br/>Redeemed : " + Convert.ToString(item["IsRedeemed"]);
                         int isR = 0;
-                        if (Convert.ToString(item["IsRedeemed"]) == "Yes")
+                        if (Convert.ToString(item["Redeemed"]) == "Multiple")
+                            isR = 2;
+                        if (Convert.ToString(item["Redeemed"]) == "Single")
                             isR = 1;
-                        WhereClause += " and a.RedeemStatus < " + isR;
+                        WhereClause += " and a.burncount >= " + isR;
                     }
                 }
                 if (index == 3)
@@ -3131,9 +3133,30 @@ namespace BOTS_BL.Repository
             return lstCount;
         }
 
-        public bool SaveDataset(object[] objData, CustomerLoginDetail userDetails, string DSName, string connstr)
+        public int[] GetSavedDSCount(string DSId,string connstr)
         {
-            bool status = false;
+            int[] lstCount = new int[2];
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    var id = Convert.ToInt32(DSId);
+                    var query = context.tblCRDatasets.Where(x => x.DSId == id).Select(y => y.DSCriteriaForQuery).FirstOrDefault();
+
+                    lstCount[0] = context.Database.SqlQuery<int>(query).FirstOrDefault();
+                    lstCount[1] = context.tblSmartSlicerMasters.Count();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "errorofgetting data");
+            }
+            return lstCount;
+        }
+
+        public string SaveDataset(object[] objData, CustomerLoginDetail userDetails, string DSName, string connstr)
+        {
+            string status = "false";
             string Criteria = string.Empty;
             string query = "select count(*) from tblSmartSlicerMaster as a where ";
             string WhereClause = string.Empty;
@@ -3565,7 +3588,7 @@ namespace BOTS_BL.Repository
                     objDataset.AddedDate = DateTime.Now;
                     context.tblCRDatasets.Add(objDataset);
                     context.SaveChanges();
-                    status = true;
+                    status = "true";
                 }
             }
             catch (Exception ex)
@@ -3584,6 +3607,19 @@ namespace BOTS_BL.Repository
             }
 
             return lstData;
+        }
+        public string CheckCRDatasetExist(string DSName, string connectionString)
+        {
+            string status = "";
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                var objData = context.tblCRDatasets.Where(x => x.DSName == DSName).FirstOrDefault();
+                if (objData != null)
+                    status = "Exist";
+                else
+                    status = "NotExist";
+            }
+            return status;
         }
 
         public List<CustomerTypeReport> GetSSFilterReport(object[] objData, string columns, string loginId, string connstr)

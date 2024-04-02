@@ -13,16 +13,17 @@ namespace WebApp.Controllers
     {
         LoginRepository LR = new LoginRepository();
         DashboardRepository DR = new DashboardRepository();
+        CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         // GET: Login
+        
         public ActionResult Index(string MobileNo, string LeadId, string LoginID)
         {
             try
             {
-                
                 if (!string.IsNullOrEmpty(LoginID) && !string.IsNullOrEmpty(LeadId))
                 {
-                    var userDetails = LR.GetUserDetailsByLoginID(LoginID);                    
+                    var userDetails = LR.GetUserDetailsByLoginID(LoginID);
                     Session["UserSession"] = userDetails;
                     return RedirectToAction("Index", "CustomerOnBoarding", new { @LeadId = LeadId });
                 }
@@ -39,8 +40,8 @@ namespace WebApp.Controllers
                     }
                 }
             }
-            catch(Exception ex)
-            {               
+            catch (Exception ex)
+            {
                 newexception.AddException(ex, "Index");
             }
             LoginModel objLogin = new LoginModel();
@@ -80,7 +81,7 @@ namespace WebApp.Controllers
                         objLogData.LoggedInTime = DateTime.Now;
                         LR.AddLoginLog(objLogData);
 
-                        if(userDetails.LoginId== "8698877771")
+                        if (userDetails.LoginId == "8698877771")
                         {
                             return RedirectToAction("MemberPage", "KeyIndicators");
                         }
@@ -128,11 +129,11 @@ namespace WebApp.Controllers
                 var userDetail = LR.CheckUserType(LoginID);
                 if (userDetail != null)
                 {
-                    if(userDetail.LoginId== "9922333332" || userDetail.LoginId == "8248934837" || userDetail.LoginId == "552672063") 
+                    if (userDetail.PasswordOrOTP == "Password")
                     {
                         returnString = "Password";
                     }
-                    else if (userDetail.LoginType != "1" && userDetail.LoginType != "5" && userDetail.LoginType != "6" && userDetail.LoginType != "7" && userDetail.LoginType != "9" && userDetail.LoginType != "10" && userDetail.LoginType != "11" && string.IsNullOrEmpty(userDetail.OutletOrBrandId))
+                    else
                     {
                         var result = new HomeController().SendOTP(LoginID);
                         if (result)
@@ -143,10 +144,6 @@ namespace WebApp.Controllers
                         {
                             returnString = "error in sending OTP";
                         }
-                    }
-                    else
-                    {
-                        returnString = "Password";
                     }
                 }
                 else

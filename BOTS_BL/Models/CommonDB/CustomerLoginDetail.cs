@@ -47,6 +47,8 @@ namespace BOTS_BL.Models
 
         [StringLength(10)]
         public string OutletOrBrandId { get; set; }
+        [StringLength(50)]
+        public string PasswordOrOTP { get; set; }
 
         [NotMapped]
         public string CustomerName { get; set; }

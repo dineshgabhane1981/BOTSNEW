@@ -1529,7 +1529,7 @@ namespace BOTS_BL.Repository
                 var connStr = GetCustomerConnString(GroupId);
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    objDataNew= context.tblTxnDetailsMasters.Where(x => x.InvoiceNo == InvoiceNo && x.OutletId == OutletId).FirstOrDefault();
+                    objDataNew= context.tblTxnDetailsMasters.Where(x => x.InvoiceNo == InvoiceNo && x.OutletId == OutletId).OrderByDescending(y=>y.SlNo).FirstOrDefault();
                     objDataNew.TxnDatetimeStr = objDataNew.TxnReceivedDatetime.Value.ToString("dd-MMM-yyy hh mm ss");
                 }
             }

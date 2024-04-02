@@ -129,95 +129,88 @@
             <div id="dvSmartSlicer">
 
                 <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;">
-                    <h5>Transactional Filter</h5>
-
                     <div class="row mt-4 col-md-12 col-xl-12 ml-0">
-                        <input type="radio" id="chkTransacting" name="firstFilters" style="width:20px; cursor:pointer;" /> &nbsp; Transacting
-                        <input type="radio" id="chkNonTransacting" name="firstFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Non Transacting
+                        <input type="radio" id="chkTransacting" name="firstFilters" style="width:20px; cursor:pointer;" /> &nbsp; Loyalty Transacting Base
+                        <input type="radio" id="chkNonTransacting" name="firstFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Multiple Sources Non Transacting Base
                         <input type="radio" id="chkMemberAcquition" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Member Acquition
+                        <input type="radio" id="chkPastTransTrendAnalysis" name="firstFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Past Transacting Trend Analysis
                     </div>
+                    <div style="display:none;" id="dvBaseFilters">
+                        <hr id="hrBaseFilter" style="border-top: dashed 1px;" />
+                        <h6 style="font-weight:bold;">Base Filter</h6>
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnFilters" style="display:none;">
+                            <input type="radio" id="chkAll" name="secondFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
+                            <input type="radio" id="chkTxnAIsegment" name="secondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp; AI segment
+                            <input type="radio" id="chkTxnTier" name="secondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Tier
+                            <input type="radio" id="chkTxnOnlyOnce" name="secondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp; Only Once
+                            <input type="radio" id="chkTxnInactive" name="secondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Inactive
+                        </div>
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnOnlyOnce" style="display:none;">
+                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.OnlyOnceDDL(), "Value", "Text"), htmlAttributes: new { @class = "input100", @id = "ddlOnlyOnce" })&nbsp;
+                        </div>
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnInactive" style="display:none;">
+                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.InactiveDDL(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlInactive" })&nbsp;
+                            <input type="checkbox" id="chkExcludeOnlyOnce" style="width:20px; height:20px; margin-top:10px; margin-left:10px; cursor:pointer;" /><span style="margin-top:10px;margin-left:3px;">Exclude Only Once</span>
+                        </div>
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnAIsegment" style="display:none;">
+                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.AISegment(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlAIsegment" })&nbsp;
+                        </div>
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnTier" style="display:none;">
+                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstTiers, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlTier" })&nbsp;
+                        </div>
+                        <div style="border:1px solid lightgrey; border-radius:5px; margin-top:20px; margin-left:20px;display:none;" id="dvCumulative">
+                            <div class="row mt-2 col-md-12 col-xl-12 ml-0">
+                                <input type="radio" id="rbtnCTxnCount" name="CumulativeFilters" style="width: 20px; height: 20px;cursor:pointer;" /> &nbsp;Txn Count &nbsp;
+                                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.LessThanMoreThan(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTxnCumulative" })&nbsp;
+                                <input type="number" id="txtCTxnCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
+                                <input type="number" id="txtCTxnMonths" class="input20" placeholder="months" disabled style="margin-right:10px;" />
+                                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.CumulativeFrequency(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTxnCumulativeFrequency" })&nbsp;
+                            </div>
 
-                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnFilters" style="display:none;">
-                        <input type="radio" id="chkAll" name="secondFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
-                        <input type="radio" id="chkTxnOnlyOnce" name="secondFilters" style="width:20px; cursor:pointer;" /> &nbsp; Only Once
-                        <input type="radio" id="chkTxnInactive" name="secondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Inactive
-                        <input type="radio" id="chkTxnCumiulative" name="secondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Cumulative Count/Spend
-                    </div>
-
-                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnOnlyOnce" style="display:none;">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.OnlyOnceDDL(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlOnlyOnce" })&nbsp;
-                    </div>
-
-                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvTxnInactive" style="display:none;">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.InactiveDDL(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlInactive" })&nbsp;
-                        <input type="checkbox" id="chkExcludeOnlyOnce" style="width:20px; height:20px; margin-top:10px; margin-left:10px; cursor:pointer;" /><span style="margin-top:10px;margin-left:3px;">Exclude Only Once</span>
-                    </div>
-
-                    <div style="border:1px solid lightgrey; border-radius:5px; margin-top:20px; margin-left:20px;display:none;" id="dvCumulative">
-                        <div class="row mt-2 col-md-12 col-xl-12 ml-0">
-                            <input type="radio" id="rbtnCTxnCount" name="CumulativeFilters" style="width: 20px; height: 20px;cursor:pointer;" /> &nbsp;Txn Count &nbsp;
-                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.LessThanMoreThan(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTxnCumulative" })&nbsp;
-                            <input type="number" id="txtCTxnCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
-                            <input type="number" id="txtCTxnMonths" class="input20" placeholder="months" disabled style="margin-right:10px;" />
-                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.CumulativeFrequency(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTxnCumulativeFrequency" })&nbsp;
+                            <div class="row mt-4 mb-2 col-md-12 col-xl-12 ml-0">
+                                <input type="radio" id="rbtnCSpend" name="CumulativeFilters" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;Spend&nbsp;
+                                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.LessThanMoreThan(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlSpendCumulative" })&nbsp;
+                                <input type="number" id="txtCSpendCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
+                                <input type="number" id="txtCSpendMonths" class="input20" placeholder="months" disabled style="margin-right:10px;" />
+                                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.CumulativeFrequency(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlSpendCumulativeFrequency" })&nbsp;
+                            </div>
+                        </div>
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvNonTxnFilters" style="display:none;">
+                            <input type="radio" id="chkNonTxnAll" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
+                            <input type="radio" id="chkNonTxnEnrolled" name="NonTxnsecondFilters" style="width:20px; cursor:pointer;" /> &nbsp; Enrolled
+                            <input type="radio" id="chkNonTxnBulkUpload" name="NonTxnsecondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Bulk Upload
+                            <input type="radio" id="chkNonTxnReferal" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Referal
+                            <input type="radio" id="chkNonTxnDLC" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;DLC
                         </div>
 
-                        <div class="row mt-4 mb-2 col-md-12 col-xl-12 ml-0">
-                            <input type="radio" id="rbtnCSpend" name="CumulativeFilters" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;Spend&nbsp;
-                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.LessThanMoreThan(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlSpendCumulative" })&nbsp;
-                            <input type="number" id="txtCSpendCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
-                            <input type="number" id="txtCSpendMonths" class="input20" placeholder="months" disabled style="margin-right:10px;" />
-                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.CumulativeFrequency(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlSpendCumulativeFrequency" })&nbsp;
-                        </div>
-                    </div>
-
-                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvNonTxnFilters" style="display:none;">
-                        <input type="radio" id="chkNonTxnAll" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
-                        <input type="radio" id="chkNonTxnEnrolled" name="NonTxnsecondFilters" style="width:20px; cursor:pointer;" /> &nbsp; Enrolled Non Transacting
-                        <input type="radio" id="chkNonTxnBulkUpload" name="NonTxnsecondFilters" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Bulk Upload
-                        <input type="radio" id="chkNonTxnReferal" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Referal
-                        <input type="radio" id="chkNonTxnDLC" name="NonTxnsecondFilters" style="width: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;DLC
-                    </div>
-
-                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvNonTxnDLC" style="display:none;">
-                        <span style="margin-top:10px;margin-right:5px;">QR Source</span> @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstDLCSource, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDLCSourceNT" })&nbsp;
-                    </div>
-
-                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvMemberAFilters" style="display:none;">
-                        <input type="radio" id="chkMReferal" name="MemberAFilters" style="width: 20px; cursor: pointer;" /> &nbsp;Referal &nbsp;
-                        <input type="radio" id="chkMDLC" name="MemberAFilters" style="width:20px; cursor:pointer;" /> &nbsp; DLC
-                    </div>
-
-                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvMemberAThirdFilters" style="display:none;">
-                        <input type="radio" id="chkMAAll" name="MemberAThirdFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
-                        <input type="radio" id="chkMATransacting" name="MemberAThirdFilters" style="width:20px; cursor:pointer;" /> &nbsp; Transacting &nbsp;
-                        <input type="radio" id="chkMANonTransacting" name="MemberAThirdFilters" style="width:20px; cursor:pointer;" /> &nbsp; Only Registered
-                    </div>
-
-                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvMDLCSource" style="display:none;">
-                        <span style="margin-top:10px;margin-right:5px;">QR Source</span> @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstDLCSource, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDLCSource" })&nbsp;
-                    </div>
-
-                    <div class="row mt-4 col-md-12 col-xl-12" id="dvAvgTicket">
-                        <div class="col-xl-1">
-                            <input type="checkbox" id="chkAvgTicket" style="width:20px; height:20px; cursor:pointer;" />
-                        </div>
-                        <div class="col-xl-3" style="margin-left:-40px;">
-                            Average Ticket Size
-                        </div>
-                        <div class="col-xl-8">
-                            <input type="number" id="txtAvgTicketFrm" class="input40" placeholder="Ticket size from" disabled />
-                            <input type="number" id="txtAvgTicketTo" class="input40" placeholder="Ticket size to" disabled />
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvNonTxnDLC" style="display:none;">
+                            <span style="margin-top:10px;margin-right:5px;">QR Source</span> @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstDLCSource, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDLCSourceNT" })&nbsp;
                         </div>
 
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvMemberAFilters" style="display:none;">
+                            <input type="radio" id="chkMReferal" name="MemberAFilters" style="width: 20px; cursor: pointer;" /> &nbsp;Referal &nbsp;
+                            <input type="radio" id="chkMDLC" name="MemberAFilters" style="width:20px; cursor:pointer;" /> &nbsp; DLC
+                        </div>
+
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvMemberAThirdFilters" style="display:none;">
+                            <input type="radio" id="chkMAAll" name="MemberAThirdFilters" style="width: 20px; cursor: pointer;" /> &nbsp;All &nbsp;
+                            <input type="radio" id="chkMATransacting" name="MemberAThirdFilters" style="width:20px; cursor:pointer;" /> &nbsp; Transacting &nbsp;
+                            <input type="radio" id="chkMANonTransacting" name="MemberAThirdFilters" style="width:20px; cursor:pointer;" /> &nbsp; Only Registered
+                        </div>
+
+                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvMDLCSource" style="display:none;">
+                            <span style="margin-top:10px;margin-right:5px;">QR Source</span> @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstDLCSource, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlDLCSource" })&nbsp;
+                        </div>
                     </div>
+                    <hr id="hrTxnFilter" style="border-top: dashed 1px;" />
+                    <h6 style="font-weight:bold;" id="TxnFilterText">Transactional Filter</h6>
 
                     <div class="row mt-4 col-md-12 col-xl-12" id="dvEnrolledRange">
                         <div class="col-xl-1">
                             <input type="checkbox" id="chkEnrolledRange" style="width:20px; height:20px; cursor:pointer;" />
                         </div>
                         <div class="col-xl-3" style="margin-left:-40px;">
-                            Enrolled Range
+                            Enrolled/Upload/Registration Range
                         </div>
                         <div class="col-xl-8 row" id="divDateRange" style="margin-left:0px;">
                             <input type="date" id="txtEnrollfromdt" class="input40" placeholder="From Enrolled" disabled />
@@ -237,16 +230,16 @@
                         </div>
                     </div>
 
-                    <div class="row mt-2 col-md-12 col-xl-12" id="dvSpend">
+                    <div class="row mt-2 col-md-12 col-xl-12" id="dvPointBalance">
                         <div class="col-xl-1">
-                            <input type="checkbox" id="chkSpend" style="width:20px; height:20px; cursor:pointer;" />
+                            <input type="checkbox" id="chkPointBalance" style="width:20px; height:20px; cursor:pointer;" />
                         </div>
                         <div class="col-xl-3" style="margin-left:-40px;">
-                            Spends (Rs.)
+                            Points Balance
                         </div>
                         <div class="col-xl-6">
-                            <input type="number" id="txtSpendMin" class="input40" placeholder="From/Less than" disabled />
-                            <input type="number" id="txtSpendMax" class="input40" placeholder="To/More than" disabled />
+                            <input type="number" id="txtPointsBalMin" class="input40" placeholder="From/Less than" disabled />
+                            <input type="number" id="txtPointsBalMax" class="input40" placeholder="To/More than" disabled />
                         </div>
                     </div>
 
@@ -263,16 +256,49 @@
                         </div>
                     </div>
 
-                    <div class="row mt-2 col-md-12 col-xl-12" id="dvPointBalance">
+                    <div class="row mt-2 col-md-12 col-xl-12" id="dvSpend">
                         <div class="col-xl-1">
-                            <input type="checkbox" id="chkPointBalance" style="width:20px; height:20px; cursor:pointer;" />
+                            <input type="checkbox" id="chkSpend" style="width:20px; height:20px; cursor:pointer;" />
                         </div>
                         <div class="col-xl-3" style="margin-left:-40px;">
-                            Points Balance
+                            Cumulative Spends (Rs.)
                         </div>
-                        <div class="col-xl-6">
-                            <input type="number" id="txtPointsBalMin" class="input40" placeholder="From/Less than" disabled />
-                            <input type="number" id="txtPointsBalMax" class="input40" placeholder="To/More than" disabled />
+                        <div class="col-xl-8">
+                            <input type="number" id="txtSpendMin" class="input40" placeholder="From/Less than" disabled />
+                            <input type="number" id="txtSpendMax" class="input40" placeholder="To/More than" disabled />
+                            <input type="date" id="txtCumuSpendfromdt" class="input40" placeholder="From" disabled />
+                            <input type="date" id="txtCumuSpendtodt" class="input40" placeholder="To" disabled style="margin-left:5px;" />
+
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 col-md-12 col-xl-12" id="dvInvoiceValue">
+                        <div class="col-xl-1">
+                            <input type="checkbox" id="chkInvoiceValue" style="width:20px; height:20px; cursor:pointer;" />
+                        </div>
+                        <div class="col-xl-3" style="margin-left:-40px;">
+                            Invoice Value (Rs.)
+                        </div>
+                        <div class="col-xl-8">
+                            <input type="number" id="txtInvoiceValueMin" class="input40" placeholder="From/Less than" disabled />
+                            <input type="number" id="txtInvoiceValueMax" class="input40" placeholder="To/More than" disabled />
+                            <input type="date" id="txtInvoiceValuefromdt" class="input40" placeholder="From" disabled />
+                            <input type="date" id="txtInvoiceValuetodt" class="input40" placeholder="To" disabled style="margin-left:5px;" />
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 col-md-12 col-xl-12" id="dvAvgTicket">
+                        <div class="col-xl-1">
+                            <input type="checkbox" id="chkAvgTicket" style="width:20px; height:20px; cursor:pointer;" />
+                        </div>
+                        <div class="col-xl-3" style="margin-left:-40px;">
+                            Average Ticket Size
+                        </div>
+                        <div class="col-xl-8">
+                            <input type="number" id="txtAvgTicketFrm" class="input40" placeholder="Ticket size from" disabled />
+                            <input type="number" id="txtAvgTicketTo" class="input40" placeholder="Ticket size to" disabled />
+                            <input type="date" id="txtAvgTicketfromdt" class="input40" placeholder="From" disabled />
+                            <input type="date" id="txtAvgTickettodt" class="input40" placeholder="To" disabled style="margin-left:5px;" />
                         </div>
                     </div>
 
@@ -283,14 +309,16 @@
                         <div class="col-xl-3" style="margin-left:-40px;">
                             Redeemed
                         </div>
-                        <div class="col-xl-3">
-                            <input type="radio" id="rbtnRedeemed" name="RedeemedOrNot" style="width:20px;height:20px; cursor:pointer;" disabled />&nbsp; Yes
+                        <div class="col-xl-4">
+                            <input type="radio" id="rbtnRedeemedMultiple" name="RedeemedOrNot" style="width:20px;height:20px; cursor:pointer;" disabled />&nbsp; Multiple
+                            <input type="radio" id="rbtnRedeemedSingle" name="RedeemedOrNot" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" disabled />&nbsp; Single
                             <input type="radio" id="rbtnNonRedeemed" name="RedeemedOrNot" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" disabled />&nbsp; No
                         </div>
                     </div>
 
                     <hr id="hrProduct" style="border-top: dashed 1px;" />
-                    <h5 id="headingProduct">Product Filter</h5>
+                    @*<h5 id="headingProduct">Product Filter</h5>*@
+                    <h6 id="headingProduct" style="font-weight:bold;">Product Filter</h6>
 
                     <div class="row mt-2 col-md-12 col-xl-12" id="dvNeverPurchased">
                         <div class="col-xl-1">
@@ -321,7 +349,7 @@
                     </div>
 
                     <hr id="hrBrand" style="border-top: dashed 1px;" />
-                    <h5> Store Filter</h5>
+                    <h6 style="font-weight:bold;">Store Filter</h6>
 
                     <div class="row mt-2 col-md-12 col-xl-12" style="border-top:dashed solid grey;">
                         <div class="col-xl-1">
@@ -348,7 +376,7 @@
                         </div>
                     </div>
 
-                    <div class="row mt-2 col-md-12 col-xl-12">
+                    <div class="row mt-2 col-md-12 col-xl-12" id="dvTransactingOutlet">
                         <div class="col-xl-1">
                             <input type="checkbox" id="chkTOutlet" style="width:20px; height:20px; cursor:pointer;" />
                         </div>
@@ -365,20 +393,20 @@
                     </div>
 
                     <hr id="hrDemography" style="border-top: dashed 1px;" />
-                    <h5>Demographic Filter</h5>
+                    <h6 style="font-weight:bold;">Demographic Filter</h6>
 
-                    <div class="row mt-4 col-md-12 col-xl-12" id="dvTier">
-                        <div class="col-xl-1">
-                            <input type="checkbox" id="chkTier" style="width:20px; height:20px; cursor:pointer;" />
-                        </div>
-                        <div class="col-xl-3" style="margin-left:-40px;">
-                            Tier
-                        </div>
-                        <div class="row col-xl-8 ml-0">
-                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstTiers, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTier" })&nbsp;
+                    @*<div class="row mt-4 col-md-12 col-xl-12" id="dvTier">
+                            <div class="col-xl-1">
+                                <input type="checkbox" id="chkTier" style="width:20px; height:20px; cursor:pointer;" />
+                            </div>
+                            <div class="col-xl-3" style="margin-left:-40px;">
+                                Tier
+                            </div>
+                            <div class="row col-xl-8 ml-0">
+                                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstTiers, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTier" })&nbsp;
 
-                        </div>
-                    </div>
+                            </div>
+                        </div>*@
 
                     <div class="row mt-2 col-md-12 col-xl-12" id="dvGender">
                         <div class="col-xl-1">
@@ -416,6 +444,31 @@
                             <input type="number" id="txtAgeTo" class="input40" placeholder="Age To" disabled style="margin-left:5px;" />
                         </div>
                     </div>
+
+                    <div class="row mt-2 col-md-12 col-xl-12" id="dvBirthday">
+                        <div class="col-xl-1">
+                            <input type="checkbox" id="chkBirthday" style="width:20px; height:20px; cursor:pointer;" />
+                        </div>
+                        <div class="col-xl-3" style="margin-left:-40px;">
+                            Birthday
+                        </div>
+                        <div class="col-xl-8 row" style="margin-left:0px;">
+                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.BAMonths(), "Value", "Text"), "All", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlBirthday" })&nbsp;
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 col-md-12 col-xl-12" id="dvAnniversary">
+                        <div class="col-xl-1">
+                            <input type="checkbox" id="chkAnniversary" style="width:20px; height:20px; cursor:pointer;" />
+                        </div>
+                        <div class="col-xl-3" style="margin-left:-40px;">
+                            Anniversary
+                        </div>
+                        <div class="col-xl-8 row" style="margin-left:0px;">
+                            @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.BAMonths(), "Value", "Text"), "All", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlAnniversary" })&nbsp;
+                        </div>
+                    </div>
+
 
                     <hr id="hrButtons" style="border-top: dashed 1px;" />
 
@@ -505,7 +558,7 @@
                                                 <td>
                                                     <button class="ml-3 btn btn-primary login-btn" onclick='GenerateReportFromDS("@item.DSId");' type="button" id="btnGenerateReport">
                                                         Generate Report
-                                                    </button>                                                
+                                                    </button>
                                                 </td>
                                             </tr>
                                         }
@@ -519,12 +572,12 @@
             <div class="mb-3 pr-3 pt-3 pl-3 card col-md-12 col-xl-12" style="padding-bottom:20px;display:none;" id="dvShowReport">
                 <h5>Customize Report</h5>
 
-                <div id="divcolumns" class="row mt-3 ml-3 col-md-10 col-xl-10 ">
+                <div id="divcolumns" class="row mt-3 ml-3 col-md-12 col-xl-12 ">
                     <div>
                         <select id="ChooseLeft1" multiple="multiple" style="height: 200px; width: 200px;">
                         </select>
                     </div>
-                    <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
+                    <div style="margin-top:140px;margin-left:20px;margin-right:20px;">
                         <input id="ShiftRight1" type="button" value="ShiftRight >>" class="btn btn-primary login-btn" style="margin-right:10px;font-weight:bold;" />
                         <input id="ShiftLeft1" type="button" value="ShiftLeft << " class="btn btn-primary login-btn" style="font-weight:bold;" />
                     </div>
@@ -532,8 +585,21 @@
                         <select id="ChooseRight1" multiple="multiple" style="height:200px;width:200px;">
                         </select>
                     </div>
+                    <div class="ml-3">
+                        <table id="tblDSFilterDetails" border="1" cellpadding="10" cellspacing="10">
+                            <tr>
+                                <td>Total Base Count</td>
+                                <td style="text-align:right;"><span id="spnDSTotalCount"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Filter Count</td>
+                                <td style="text-align:right;"><span id="spnDSQueryCount"></span></td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-                <div class="row mt-5">
+                <div class="row mt-5 pl-5">
+                    <button type="button" id="btnPopupClose" class="btn btn-outline-primary cancel-btn" onclick="CloseGenerateReport();"> Close</button>
                     <button class=" ml-3 btn btn-primary login-btn" type="button" id="btnGetReport1" onclick="GetReportDS();" style="text-align:right;">
                         Get Report
                     </button>
@@ -610,14 +676,10 @@
             $('#ChooseLeft1').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
         });
 
-        $('input[type="radio"]').on('change', function () {
-            $('input[name="' + this.name + '"]').not(this).prop('checked', false);
-            ShowSecondFilters();
-        });
+        OnchangeMethods();
 
         $("#btnFilter").click(function () {
             GetDataToFilter();
-
         });
 
         $("#btnGenerate").click(function () {
@@ -635,16 +697,261 @@
         document.getElementById("btnSave").disabled = "disabled";
     });
 
+    function OnchangeMethods() {
+        $("#chkTransacting").on('change', function () {
+            if ($("#chkTxnOnlyOnce").is(":checked")) {
+            }
+            else
+             ShowAll();
+            $("#dvBaseFilters").show();
+            $("#ddlOnlyOnce").val($("#ddlOnlyOnce option:first").val());
+            $("#dvNonTxnFilters").hide();
+            $("#dvNonTxnDLC").hide();
+            $("#dvTxnFilters").show();
+            $("#dvDLCReferalFilters").hide();
+            $("#dvMemberAFilters").hide();
+            $("#dvMemberAThirdFilters").hide();
+            $("#dvMDLCSource").hide();
+            $("#dvTransactingOutlet").show();
+            $("#dvCumulative").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkNonTransacting").on('change', function () {
+            //ShowAll();
+            HideAll();
+            $("#dvBaseFilters").show();
+            $("#dvTransactingOutlet").hide();
+            $("#dvTxnFilters").hide();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnInactive").hide();
+            $("#dvCumulative").hide();
+            $("#dvMemberAFilters").hide();
+            $("#dvNonTxnFilters").show();
+            $("#dvMemberAThirdFilters").hide();
+            $("#dvMDLCSource").hide();
+            $("#dvCumulative").hide();
+            if ($("#chkNonTxnAll").is(":checked") || $("#chkNonTxnEnrolled").is(":checked") || $("#chkNonTxnBulkUpload").is(":checked") || $("#chkNonTxnReferal").is(":checked") || $("#chkNonTxnDLC").is(":checked")) {
+                HideAll();
+                $("#dvEnrolledRange").show();
+                if ($("#chkNonTxnDLC").is(":checked")) {
+                    $("#dvNonTxnDLC").show();
+                }
+                else {
+                    $("#dvNonTxnDLC").hide();
+                }
+            }
+            ResetTransactionFilters();
+        });
+        $("#chkMemberAcquition").on('change', function () {
+            ShowAll();
+            $("#dvBaseFilters").show();
+            $("#dvTxnFilters").hide();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnInactive").hide();
+            $("#dvCumulative").hide();
+            $("#dvNonTxnFilters").hide();
+            $("#dvNonTxnDLC").hide();
+            $("#dvMemberAFilters").show();
+            $("#dvTransactingOutlet").show();
+            $("#dvCumulative").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkPastTransTrendAnalysis").on('change', function () {
+            HideAll();
+            $("#dvBaseFilters").show();
+            $("#dvCumulative").show();
+            $("#dvTxnFilters").hide();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnInactive").hide();
+            $("#dvTransactingOutlet").hide();
+            $("#dvNonTxnFilters").hide();
+            $("#dvNonTxnDLC").hide();
+            $("#dvMemberAFilters").hide();
+            $("#dvTxnFilters").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkAll").on('change', function () {
+            /*$("#txnSection").show();*/
+            $("#dvEnrolledRange").show();
+            $("#dvTxnCount").show();
+            $("#dvPointBalance").show();
+            $("#dvRedeemed").show();
+            $("#dvNeverPurchased").show();
+            $("#headingProduct").show();
+            $("#dvPurchased").show();
+            $("#dvInactive").show();
+            $("#dvSpend").show();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnInactive").hide();
+            $("#hrTxnFilter").show();
+            $("#TxnFilterText").show();
+            $("#dvTxnTier").hide();
+            $("#dvTxnAIsegment").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkTxnAIsegment").on('change', function () {
+            /*$("#txnSection").show();*/
+            $("#dvEnrolledRange").show();
+            $("#dvTxnCount").show();
+            $("#dvPointBalance").show();
+            $("#dvRedeemed").show();
+            $("#dvNeverPurchased").show();
+            $("#headingProduct").show();
+            $("#dvPurchased").show();
+            $("#dvInactive").show();
+            $("#dvSpend").show();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnInactive").hide();
+            $("#hrTxnFilter").show();
+            $("#TxnFilterText").show();
+            ResetTransactionFilters();
+        });
+        $("#chkTxnTier").on('change', function () {
+            $("#ddlAIsegment").val($("#ddlAIsegment option:first").val());
+            $("#dvTxnAIsegment").show();
+            /*$("#txnSection").show();*/
+            $("#dvEnrolledRange").show();
+            $("#dvTxnCount").show();
+            $("#dvPointBalance").show();
+            $("#dvRedeemed").show();
+            $("#dvNeverPurchased").show();
+            $("#headingProduct").show();
+            $("#dvPurchased").show();
+            $("#dvInactive").show();
+            $("#dvSpend").show();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnInactive").hide();
+            $("#hrTxnFilter").show();
+            $("#TxnFilterText").show();
+            ResetTransactionFilters();
+        });
+        $("#chkTxnOnlyOnce").on('change', function () {
+            $("#ddlOnlyOnce").val($("#ddlOnlyOnce option:first").val());
+            $("#dvTxnOnlyOnce").show();
+            $("#dvTxnInactive").hide();
+            HideAll();
+            $("#headingProduct").show();
+            $("#dvPurchased").show();
+            $("#dvNeverPurchased").show();
+            $("#hrProduct").show();
+            $("#dvTxnTier").hide();
+            $("#dvTxnAIsegment").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkTxnInactive").on('change', function () {
+            $("#hrTxnFilter").show();
+            $("#TxnFilterText").show();
+            if ($("#chkTxnInactive").is(":checked")) {
+                $("#dvTxnInactive").show();
+                $("#ddlInactive").val($("#ddlInactive option:first").val());
+            }
+            else {
+                $("#dvTxnInactive").hide();
+            }
+            $("#dvEnrolledRange").show();
+            $("#dvTxnCount").show();
+            $("#dvPointBalance").show();
+            $("#dvRedeemed").show();
+            $("#dvNeverPurchased").show();
+            $("#headingProduct").show();
+            $("#dvPurchased").show();
+            $("#dvInactive").show();
+            $("#dvSpend").show();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnTier").hide();
+            $("#dvTxnAIsegment").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkTxnAIsegment").on('change', function () {
+            $("#ddlAIsegment").val($("#ddlAIsegment option:first").val());
+            $("#dvTxnAIsegment").show();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnInactive").hide();
+            $("#dvTxnTier").hide();
+            HideAll();
+            $("#headingProduct").show();
+            $("#dvPurchased").show();
+            $("#dvNeverPurchased").show();
+            $("#hrProduct").show();
+            ResetTransactionFilters();
+        });
+        $("#chkTxnTier").on('change', function () {
+            $("#ddlTier").val($("#ddlTier option:first").val());
+            $("#dvTxnTier").show();
+            $("#dvTxnOnlyOnce").hide();
+            $("#dvTxnInactive").hide();
+            $("#dvTxnAIsegment").hide();
+            HideAll();
+            $("#headingProduct").show();
+            $("#dvPurchased").show();
+            $("#dvNeverPurchased").show();
+            $("#hrProduct").show();
+            ResetTransactionFilters();
+        });
+
+
+        $("#chkNonTxnAll").on('change', function () {
+            $("#dvNonTxnDLC").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkNonTxnEnrolled").on('change', function () {
+            $("#dvNonTxnDLC").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkNonTxnBulkUpload").on('change', function () {
+            $("#dvNonTxnDLC").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkNonTxnReferal").on('change', function () {
+            $("#dvNonTxnDLC").hide();
+            ResetTransactionFilters();
+        });
+        $("#chkNonTxnDLC").on('change', function () {
+            $("#dvNonTxnDLC").show();
+            ResetTransactionFilters();
+        });
+        $("#chkMReferal").on('change', function () {
+            ResetTransactionFilters();
+            $("#dvMemberAThirdFilters").show();
+            $("#dvMDLCSource").hide();
+        });
+        $("#chkMDLC").on('change', function () {
+            ResetTransactionFilters();
+            $("#dvMemberAThirdFilters").show();
+            $("#dvMDLCSource").show();
+        });
+        $("#rbtnCSpend").on('change', function () {
+            $("#hrTxnFilter").show();
+            $("#TxnFilterText").show();
+            $("#dvSpend").show();
+            ResetTransactionFilters();
+        });
+        $("#rbtnCTxnCount").on('change', function () {
+            $("#hrTxnFilter").hide();
+            $("#TxnFilterText").hide();
+            $("#dvSpend").hide();
+            ResetTransactionFilters();
+        });
+    }
+
     function EnableDisableControls() {
 
         $("#chkAvgTicket").on('change', function () {
             if ($("#chkAvgTicket").is(":checked")) {
                 $("#txtAvgTicketFrm").prop('disabled', false);
                 $("#txtAvgTicketTo").prop('disabled', false);
+                $("#txtAvgTicketfromdt").prop('disabled', false);
+                $("#txtAvgTickettodt").prop('disabled', false);
             }
             else {
                 $("#txtAvgTicketFrm").prop('disabled', true);
                 $("#txtAvgTicketTo").prop('disabled', true);
+                $("#txtAvgTicketfromdt").prop('disabled', true);
+                $("#txtAvgTickettodt").prop('disabled', true);
+                $('#txtAvgTicketFrm').val("");
+                $('#txtAvgTicketTo').val("");
+                $('#txtAvgTicketfromdt').val("");
+                $('#txtAvgTickettodt').val("");
             }
         });
 
@@ -656,6 +963,8 @@
             else {
                 $("#txtEnrollfromdt").prop('disabled', true);
                 $("#txtEnrolltodt").prop('disabled', true);
+                $('#txtEnrollfromdt').val("");
+                $('#txtEnrolltodt').val("");
             }
         });
 
@@ -665,6 +974,7 @@
             }
             else {
                 $("#txtNonTransactedMax").prop('disabled', true);
+                $('#txtNonTransactedMax').val("");
             }
         });
 
@@ -672,10 +982,37 @@
             if ($("#chkSpend").is(":checked")) {
                 $("#txtSpendMin").prop('disabled', false);
                 $("#txtSpendMax").prop('disabled', false);
+                $("#txtCumuSpendfromdt").prop('disabled', false);
+                $("#txtCumuSpendtodt").prop('disabled', false);
             }
             else {
                 $("#txtSpendMin").prop('disabled', true);
                 $("#txtSpendMax").prop('disabled', true);
+                $("#txtCumuSpendfromdt").prop('disabled', true);
+                $("#txtCumuSpendtodt").prop('disabled', true);
+                $('#txtSpendMin').val("");
+                $('#txtSpendMax').val("");
+                $('#txtCumuSpendfromdt').val("");
+                $('#txtCumuSpendtodt').val("");
+            }
+        });
+
+        $("#chkInvoiceValue").on('change', function () {
+            if ($("#chkInvoiceValue").is(":checked")) {
+                $("#txtInvoiceValueMin").prop('disabled', false);
+                $("#txtInvoiceValueMax").prop('disabled', false);
+                $("#txtInvoiceValuefromdt").prop('disabled', false);
+                $("#txtInvoiceValuetodt").prop('disabled', false);
+            }
+            else {
+                $("#txtInvoiceValueMin").prop('disabled', true);
+                $("#txtInvoiceValueMax").prop('disabled', true);
+                $("#txtInvoiceValuefromdt").prop('disabled', true);
+                $("#txtInvoiceValuetodt").prop('disabled', true);
+                $('#txtInvoiceValueMin').val("");
+                $('#txtInvoiceValueMax').val("");
+                $('#txtInvoiceValuefromdt').val("");
+                $('#txtInvoiceValuetodt').val("");
             }
         });
 
@@ -687,6 +1024,8 @@
             else {
                 $("#txtTxnCountMin").prop('disabled', true);
                 $("#txtTxnCountMax").prop('disabled', true);
+                $('#txtTxnCountMin').val("");
+                $('#txtTxnCountMax').val("");
             }
         });
 
@@ -698,17 +1037,25 @@
             else {
                 $("#txtPointsBalMin").prop('disabled', true);
                 $("#txtPointsBalMax").prop('disabled', true);
+                $('#txtPointsBalMin').val("");
+                $('#txtPointsBalMax').val("");
             }
         });
 
         $("#chkRedeemed").on('change', function () {
             if ($("#chkRedeemed").is(":checked")) {
-                $("#rbtnRedeemed").prop('disabled', false);
+                $("#rbtnRedeemedMultiple").prop('disabled', false);
+                $("#rbtnRedeemedSingle").prop('disabled', false);
                 $("#rbtnNonRedeemed").prop('disabled', false);
             }
             else {
-                $("#rbtnRedeemed").prop('disabled', true);
+                $("#rbtnRedeemedMultiple").prop('disabled', true);
+                $("#rbtnRedeemedSingle").prop('disabled', true);
                 $("#rbtnNonRedeemed").prop('disabled', true);
+                $("#rbtnRedeemedMultiple").prop('checked', false);
+                $("#rbtnRedeemedSingle").prop('checked', false);
+                $("#rbtnNonRedeemed").prop('checked', false);
+                
             }
         });
 
@@ -726,6 +1073,9 @@
                 $("#ddlNPCategory").prop('disabled', true);
                 $("#ddlNPSubCategory").prop('disabled', true);
                 $("#ddlNPProduct").prop('disabled', true);
+                $("#ddlNPCategory").val($("#ddlNPCategory option:first").val());
+                $("#ddlNPSubCategory").val($("#ddlNPSubCategory option:first").val());
+                $("#ddlNPProduct").val($("#ddlNPProduct option:first").val());
             }
         });
 
@@ -744,6 +1094,9 @@
                 $("#ddlPCategory").prop('disabled', true);
                 $("#ddlPSubCategory").prop('disabled', true);
                 $("#ddlPProduct").prop('disabled', true);
+                $("#ddlPCategory").val($("#ddlPCategory option:first").val());
+                $("#ddlPSubCategory").val($("#ddlPSubCategory option:first").val());
+                $("#ddlPProduct").val($("#ddlPProduct option:first").val());
             }
         });
 
@@ -762,6 +1115,7 @@
             }
             else {
                 $("#ddlBrands").prop('disabled', true);
+                $("#ddlBrands").val($("#ddlBrands option:first").val());
             }
         });
 
@@ -797,6 +1151,7 @@
             }
             else {
                 $("#ddlGender").prop('disabled', true);
+                $("#ddlGender").val($("#ddlGender option:first").val());
             }
         });
 
@@ -806,6 +1161,7 @@
             }
             else {
                 $("#txtCity").prop('disabled', true);
+                $("#txtCity").val("");
             }
         });
 
@@ -817,107 +1173,72 @@
             else {
                 $("#txtAgefrom").prop('disabled', true);
                 $("#txtAgeTo").prop('disabled', true);
+                $("#txtAgefrom").val("");
+                $("#txtAgeTo").val("");
             }
         });
 
-    }
-
-    function ShowSecondFilters() {
-        if ($("#chkTxnCumiulative").is(":checked")) {
-            $("#dvCumulative").show();
-
-            $("#dvTxnOnlyOnce").hide();
-            $("#dvTxnInactive").hide();
-        }
-        else {
-            $("#dvCumulative").hide();
-        }
-
-        if ($("#chkTransacting").is(":checked")) {
-            ShowAll();
-            $("#ddlOnlyOnce").val($("#ddlOnlyOnce option:first").val());
-            $("#dvNonTxnFilters").hide();
-            $("#dvNonTxnDLC").hide();
-            $("#dvTxnFilters").show();
-            $("#dvDLCReferalFilters").hide();
-            $("#dvMemberAFilters").hide();
-            $("#dvMemberAThirdFilters").hide();
-            $("#dvMDLCSource").hide();
-
-            if ($("#chkTxnCumiulative").is(":checked")) {
-                $("#dvCumulative").show();
+        $("#chkBirthday").on('change', function () {
+            if ($("#chkBirthday").is(":checked")) {
+                $("#ddlBirthday").prop('disabled', false);
             }
             else {
-                $("#dvCumulative").hide();
+                $("#ddlBirthday").prop('disabled', true);
+                $("#ddlBirthday").val($("#ddlBirthday option:first").val());
             }
-        }
-        else if ($("#chkNonTransacting").is(":checked")) {
-            ShowAll();
-            $("#dvTxnFilters").hide();
-            $("#dvTxnOnlyOnce").hide();
-            $("#dvTxnInactive").hide();
-            $("#dvCumulative").hide();
-            $("#dvMemberAFilters").hide();
-            $("#dvNonTxnFilters").show();
-            $("#dvMemberAThirdFilters").hide();
-            $("#dvMDLCSource").hide();
-            if ($("#chkNonTxnAll").is(":checked") || $("#chkNonTxnEnrolled").is(":checked") || $("#chkNonTxnBulkUpload").is(":checked") || $("#chkNonTxnReferal").is(":checked") || $("#chkNonTxnDLC").is(":checked")) {
-                HideAll();
-                $("#dvEnrolledRange").show();
-                if ($("#chkNonTxnDLC").is(":checked")) {
-                    $("#dvNonTxnDLC").show();
-                }
-                else {
-                    $("#dvNonTxnDLC").hide();
-                }
+        });
+
+        $("#chkAnniversary").on('change', function () {
+            if ($("#chkAnniversary").is(":checked")) {
+                $("#ddlAnniversary").prop('disabled', false);
             }
-        }
-        else if ($("#chkMemberAcquition").is(":checked")) {
-            ShowAll();
-            $("#dvTxnFilters").hide();
-            $("#dvTxnOnlyOnce").hide();
-            $("#dvTxnInactive").hide();
-            $("#dvCumulative").hide();
-            $("#dvNonTxnFilters").hide();
-            $("#dvNonTxnDLC").hide();
-            $("#dvMemberAFilters").show();
-            if ($("#chkMReferal").is(":checked") || $("#chkMDLC").is(":checked")) {
-                $("#dvMemberAThirdFilters").show();
-                if ($("#chkMDLC").is(":checked"))
-                    $("#dvMDLCSource").show();
-                else
-                    $("#dvMDLCSource").hide();
+            else {
+                $("#ddlAnniversary").prop('disabled', true);
+                $("#ddlAnniversary").val($("#ddlAnniversary option:first").val());
             }
-            if ($("#chkMANonTransacting").is(":checked")) {
-                HideAll();
-                $("#dvEnrolledRange").show();
-            }
-        }
+        });       
+
     }
 
-    $("#chkTxnOnlyOnce").on('change', function () {
-        if ($("#chkTxnOnlyOnce").is(":checked")) {
-            $("#dvTxnOnlyOnce").show();
-            $("#dvTxnInactive").hide();
-        }
-        else {
-            $("#dvTxnOnlyOnce").hide();
-        }
-    })
+    function ResetTransactionFilters() {
+        $('#chkEnrolledRange').prop('checked', false);
+        $('#txtEnrollfromdt').val("");
+        $('#txtEnrolltodt').val("");
 
-    $("#chkTxnInactive").on('change', function () {
-        if ($("#chkTxnInactive").is(":checked")) {
-            $("#dvTxnInactive").show();
-        }
-        else {
-            $("#dvTxnInactive").hide();
-        }
-    })
+        $('#chkInactiveSince').prop('checked', false);
+        $('#txtNonTransactedMax').val("");
 
+        $('#chkPointBalance').prop('checked', false);
+        $('#txtPointsBalMin').val("");
+        $('#txtPointsBalMax').val("");
+
+        $('#chkTxnCount').prop('checked', false);
+        $('#txtTxnCountMin').val("");
+        $('#txtTxnCountMax').val("");
+
+        $('#chkSpend').prop('checked', false);
+        $('#txtSpendMin').val("");
+        $('#txtSpendMax').val("");
+
+        $('#chkInvoiceValue').prop('checked', false);
+        $('#txtInvoiceValueMin').val("");
+        $('#txtInvoiceValueMax').val("");
+        $('#txtInvoiceValuefromdt').val("");
+        $('#txtInvoiceValuetodt').val("");
+
+        $('#chkAvgTicket').prop('checked', false);
+        $('#txtAvgTicketFrm').val("");
+        $('#txtAvgTicketTo').val("");
+
+        $('#chkRedeemed').prop('checked', false);
+        $('#rbtnRedeemedMultiple').prop('checked', false);
+        $('#rbtnRedeemedSingle').prop('checked', false);
+        $('#rbtnNonRedeemed').prop('checked', false);
+    }
+    
     $("#ddlOnlyOnce").change(function () {
         if ($("#ddlOnlyOnce").val() != "") {
             if ($("#ddlOnlyOnce").val() != "Custom") {
-                /* $("#txnSection").hide();*/
                 $("#dvEnrolledRange").hide();
                 $("#dvTxnCount").hide();
                 $("#dvPointBalance").hide();
@@ -927,12 +1248,15 @@
                 $("#dvPurchased").hide();
                 $("#dvInactive").hide();
                 $("#dvSpend").hide();
-                $("#hrProduct").hide();
+
                 $("#dvAvgTicket").hide();
+                $("#dvInvoiceValue").hide();
+                $("#hrProduct").hide();
+                $("#hrTxnFilter").hide();
+                $("#TxnFilterText").hide();
 
             }
             else {
-                /*$("#txnSection").show();*/
                 $("#dvEnrolledRange").hide();
                 $("#dvTxnCount").hide();
                 $("#dvPointBalance").hide();
@@ -940,71 +1264,54 @@
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
                 $("#dvPurchased").hide();
-                $("#dvInactive").show();
-                $("#dvAvgTicket").show();
                 $("#dvSpend").hide();
                 $("#hrProduct").hide();
+                $("#dvAvgTicket").hide();
+                $("#dvInvoiceValue").hide();
+
+                $("#hrTxnFilter").show();
+                $("#TxnFilterText").show();
+                $("#dvInactive").show();
+                $("#dvInvoiceValue").show();
             }
         }
         else {
+            alert(333)
             ShowAll();
         }
     });
 
     $("#ddlInactive").change(function () {
         if ($("#ddlInactive").val() != "") {
-            if ($("#ddlInactive").val() != "8") {
-                /*$("#txnSection").hide();*/
+            if ($("#ddlInactive").val() == "Custom") {
                 $("#dvEnrolledRange").hide();
                 $("#dvTxnCount").hide();
-                $("#dvPointBalance").hide();
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
                 $("#dvPurchased").hide();
                 $("#hrProduct").hide();
-                //$("#dvInactive").show();
-                //$("#dvSpend").show();
+                $("#dvSpend").hide();
+                $("#dvInvoiceValue").hide();
+                $("#dvAvgTicket").hide();
+
+                $("#dvPointBalance").show();
+                $("#dvInactive").show();
 
             }
             else {
                 ShowAll();
+                $("#dvSpend").hide();
+                $("#dvAvgTicket").hide();
             }
         }
         else {
             ShowAll();
+            $("#dvSpend").hide();
+            $("#dvAvgTicket").hide();
         }
     });
-
-    $("#chkAll").change(function () {
-        /*$("#txnSection").show();*/
-        $("#dvEnrolledRange").show();
-        $("#dvTxnCount").show();
-        $("#dvPointBalance").show();
-        $("#dvRedeemed").show();
-        $("#dvNeverPurchased").show();
-        $("#headingProduct").show();
-        $("#dvPurchased").show();
-        $("#dvInactive").show();
-        $("#dvSpend").show();
-        $("#dvTxnOnlyOnce").hide();
-        $("#dvTxnInactive").hide();
-    });
-
-    $("#chkTxnInactive").change(function () {
-        /*$("#txnSection").show();*/
-        $("#dvEnrolledRange").show();
-        $("#dvTxnCount").show();
-        $("#dvPointBalance").show();
-        $("#dvRedeemed").show();
-        $("#dvNeverPurchased").show();
-        $("#headingProduct").show();
-        $("#dvPurchased").show();
-        $("#dvInactive").show();
-        $("#dvSpend").show();
-        $("#dvTxnOnlyOnce").hide();
-    });
-
+    
     function ShowAll() {
         $("#dvAvgTicket").show();
         $("#dvEnrolledRange").show();
@@ -1017,6 +1324,8 @@
         $("#dvInactive").show();
         $("#dvSpend").show();
         $("#hrProduct").show();
+        $("#hrTxnFilter").show();
+        $("#TxnFilterText").show();
     }
 
     function HideAll() {
@@ -1031,6 +1340,9 @@
         $("#dvInactive").hide();
         $("#dvSpend").hide();
         $("#hrProduct").hide();
+        $("#dvInvoiceValue").hide();
+        $("#hrTxnFilter").hide();
+        $("#TxnFilterText").hide();
     }
 
     $("#ddlSpend").change(function () {
@@ -1225,7 +1537,7 @@
         item1["IsSpend"] = "No";
         item1["IsTxnCount"] = "No";
         item1["IsPointBalance"] = "No";
-        item1["IsRedeemed"] = "";
+        item1["Redeemed"] = "";
 
         if ($("#chkAvgTicket").is(":checked")) {
             item1["IsAvgTicket"] = "Yes";
@@ -1263,11 +1575,14 @@
         }
 
         if ($("#chkRedeemed").is(":checked")) {
-            if ($("#rbtnRedeemed").is(":checked")) {
-                item1["IsRedeemed"] = "Yes";
+            if ($("#rbtnRedeemedMultiple").is(":checked")) {
+                item1["Redeemed"] = "Multiple";
+            }
+            if ($("#rbtnRedeemedSingle").is(":checked")) {
+                item1["Redeemed"] = "Single";
             }
             if ($("#rbtnNonRedeemed").is(":checked")) {
-                item1["IsRedeemed"] = "No";
+                item1["Redeemed"] = "No";
             }
         }
 
@@ -1493,7 +1808,7 @@
             item1["IsSpend"] = "No";
             item1["IsTxnCount"] = "No";
             item1["IsPointBalance"] = "No";
-            item1["IsRedeemed"] = "";
+            item1["Redeemed"] = "";
 
             if ($("#chkAvgTicket").is(":checked")) {
                 item1["IsAvgTicket"] = "Yes";
@@ -1531,11 +1846,14 @@
             }
 
             if ($("#chkRedeemed").is(":checked")) {
-                if ($("#rbtnRedeemed").is(":checked")) {
-                    item1["IsRedeemed"] = "Yes";
+                if ($("#rbtnRedeemedMultiple").is(":checked")) {
+                    item1["Redeemed"] = "Multiple";
+                }
+                if ($("#rbtnRedeemedSingle").is(":checked")) {
+                    item1["Redeemed"] = "Single";
                 }
                 if ($("#rbtnNonRedeemed").is(":checked")) {
-                    item1["IsRedeemed"] = "No";
+                    item1["Redeemed"] = "No";
                 }
             }
 
@@ -1655,14 +1973,32 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    cuteAlert({
-                        type: "success",
-                        title: "Saved",
-                        message: "Dataset Saved Successfully!!!",
-                        buttonText: "Okay"
-                    }).then((e) => {
-                        window.location.reload();
-                    });
+                    if (response == "Exist") {
+                        cuteAlert({
+                            type: "warning",
+                            title: "Exist",
+                            message: "Dataset Already Exist, Try with different name!!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    if (response == "true") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Saved",
+                            message: "Dataset Saved Successfully!!!",
+                            buttonText: "Okay"
+                        }).then((e) => {
+                            window.location.reload();
+                        });
+                    }
+                    if (response == "false") {
+                        cuteAlert({
+                            type: "error",
+                            title: "Saved",
+                            message: "Problem with saving Dataset!!!",
+                            buttonText: "Okay"
+                        })
+                    }
 
                     $("#divLoader").hide();
                 },
@@ -1779,7 +2115,7 @@
         item1["IsSpend"] = "No";
         item1["IsTxnCount"] = "No";
         item1["IsPointBalance"] = "No";
-        item1["IsRedeemed"] = "";
+        item1["Redeemed"] = "";
 
         if ($("#chkAvgTicket").is(":checked")) {
             item1["IsAvgTicket"] = "Yes";
@@ -1817,11 +2153,14 @@
         }
 
         if ($("#chkRedeemed").is(":checked")) {
-            if ($("#rbtnRedeemed").is(":checked")) {
-                item1["IsRedeemed"] = "Yes";
+            if ($("#rbtnRedeemedMultiple").is(":checked")) {
+                item1["Redeemed"] = "Multiple";
+            }
+            if ($("#rbtnRedeemedSingle").is(":checked")) {
+                item1["Redeemed"] = "Single";
             }
             if ($("#rbtnNonRedeemed").is(":checked")) {
-                item1["IsRedeemed"] = "No";
+                item1["Redeemed"] = "No";
             }
         }
 
@@ -1935,7 +2274,7 @@
         var selecteddata = JSON.stringify(AllData);
             var Array = [];
             var ArrayColumnName = [];
-            $('#ChooseRight :selected').each(function (i, selected) {
+        $('#ChooseRight').each(function (i, selected) {
                 Array.push($(selected).val());
                 ArrayColumnName.push($(selected).text());
             });
@@ -1992,14 +2331,44 @@
 
     function GenerateReportFromDS(id) {
         $("#hdnDSID").val(id);
-        $("#dvShowReport").show();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDSQueryCount", "Reports")',
+            data: "{'DSId': '" + id + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#spnDSQueryCount").text(addComma(response[0]));
+                $("#spnDSTotalCount").text(addComma(response[1]));
+                $("#dvShowReport").slideDown("slow");
+                $("#dvDataset").hide();
+                $("#dvListing1").hide();
+                $("#btnExport1").hide();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $('#dvMemberData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function CloseGenerateReport() {
+        $("#hdnDSID").val("");
+        $("#dvShowReport").hide();
+        $("#dvDataset").slideDown("slow");
     }
 
     function GetReportDS() {
         var returnStatus = true;
         var Array = [];
-            var ArrayColumnName = [];
-            $('#ChooseRight1 :selected').each(function (i, selected) {
+        var ArrayColumnName = [];
+        
+        $('#ChooseRight1 > option').each(function (i, selected) {
                 Array.push($(selected).val());
                 ArrayColumnName.push($(selected).text());
             });
@@ -2025,7 +2394,7 @@
                     if (response != null) {
                         $("#dvListing1").html(response);
                         $("#dvListing1").show();
-                        $("#btnExport").show();
+                        $("#btnExport1").show();
                         $("#divLoader").hide();
                     }
                     else {
@@ -2036,7 +2405,7 @@
                     console.log(response.responseText);
                     $("#dvListing1").html(response.responseText);
                     $("#dvListing1").show();
-                    $("#btnExport").show();
+                    $("#btnExport1").show();
                     $("#divLoader").hide();
                 }
             });

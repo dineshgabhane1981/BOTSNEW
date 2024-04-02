@@ -1701,12 +1701,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public JsonResult SaveDataset(string jsonData, string DSName)
         {
+            string status = string.Empty;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
-
-            bool status = RR.SaveDataset(objData, userDetails, DSName, userDetails.connectionString);
+            status = RR.CheckCRDatasetExist(DSName, userDetails.connectionString);
+            if (status != "Exist")
+                status = RR.SaveDataset(objData, userDetails, DSName, userDetails.connectionString);
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -1889,6 +1891,13 @@ namespace WebApp.Controllers
             return PartialView("_CreateOwnReportCustomerWise", createownviewmodel);
         }
 
+        [HttpPost]
+        public JsonResult GetDSQueryCount(string DSId)
+        {           
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var count = RR.GetSavedDSCount(DSId, userDetails.connectionString);
+            return new JsonResult() { Data = count, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
     }
 }
