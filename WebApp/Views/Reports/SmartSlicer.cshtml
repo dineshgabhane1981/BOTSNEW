@@ -640,41 +640,9 @@
         });
     });
     $(document).ready(function () {
-        $("#ChooseLeft").empty();
-        $("#ChooseRight").empty();
-        let myOptions = [
-
-            { "ColumnId": "EnrolledOutletName", "ColumnName": "Outlet Name" },
-            { "ColumnId": "MobileNo", "ColumnName": "Mobile No" },
-            { "ColumnId": "CustName", "ColumnName": "Customer Name" },
-            { "ColumnId": "FirstTxnDate", "ColumnName": "First Txn Date" },
-            { "ColumnId": "LastTxnDate", "ColumnName": "Last Txn Date" },
-            { "ColumnId": "TotalTxnCount", "ColumnName": "No Of Txn" },
-            { "ColumnId": "EnrolledDate", "ColumnName": "Enrolled Date" },
-            { "ColumnId": "PointsBalance", "ColumnName": "Total Available Points" },
-            { "ColumnId": "Spends", "ColumnName": "Total Spend" },
-        ];
-
-        myOptions.forEach(function (e, i) {
-            $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
-        });
-
-        $("#ChooseLeft1").empty();
-        $("#ChooseRight1").empty();
-        let myOptions1 = [
-            { "ColumnId": "EnrolledOutletName", "ColumnName": "Outlet Name" },
-            { "ColumnId": "MobileNo", "ColumnName": "Mobile No" },
-            { "ColumnId": "CustName", "ColumnName": "Customer Name" },
-            { "ColumnId": "FirstTxnDate", "ColumnName": "First Txn Date" },
-            { "ColumnId": "LastTxnDate", "ColumnName": "Last Txn Date" },
-            { "ColumnId": "TotalTxnCount", "ColumnName": "No Of Txn" },
-            { "ColumnId": "EnrolledDate", "ColumnName": "Enrolled Date" },
-            { "ColumnId": "PointsBalance", "ColumnName": "Total Available Points" },
-            { "ColumnId": "Spends", "ColumnName": "Total Spend" },
-        ];
-        myOptions1.forEach(function (e, i) {
-            $('#ChooseLeft1').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
-        });
+        
+        FillColumns();
+        FillColumns1();
 
         OnchangeMethods();
 
@@ -697,6 +665,45 @@
         document.getElementById("btnSave").disabled = "disabled";
     });
 
+    function FillColumns() {
+        $("#ChooseLeft").empty();
+        $("#ChooseRight").empty();
+        let myOptions = [
+
+            { "ColumnId": "EnrolledOutletName", "ColumnName": "Outlet Name" },
+            { "ColumnId": "MobileNo", "ColumnName": "Mobile No" },
+            { "ColumnId": "CustName", "ColumnName": "Customer Name" },
+            { "ColumnId": "FirstTxnDate", "ColumnName": "First Txn Date" },
+            { "ColumnId": "LastTxnDate", "ColumnName": "Last Txn Date" },
+            { "ColumnId": "TotalTxnCount", "ColumnName": "No Of Txn" },
+            { "ColumnId": "EnrolledDate", "ColumnName": "Enrolled Date" },
+            { "ColumnId": "PointsBalance", "ColumnName": "Total Available Points" },
+            { "ColumnId": "Spends", "ColumnName": "Total Spend" },
+        ];
+
+        myOptions.forEach(function (e, i) {
+            $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
+        });
+    }
+
+    function FillColumns1() {
+        $("#ChooseLeft1").empty();
+        $("#ChooseRight1").empty();
+        let myOptions1 = [
+            { "ColumnId": "EnrolledOutletName", "ColumnName": "Outlet Name" },
+            { "ColumnId": "MobileNo", "ColumnName": "Mobile No" },
+            { "ColumnId": "CustName", "ColumnName": "Customer Name" },
+            { "ColumnId": "FirstTxnDate", "ColumnName": "First Txn Date" },
+            { "ColumnId": "LastTxnDate", "ColumnName": "Last Txn Date" },
+            { "ColumnId": "TotalTxnCount", "ColumnName": "No Of Txn" },
+            { "ColumnId": "EnrolledDate", "ColumnName": "Enrolled Date" },
+            { "ColumnId": "PointsBalance", "ColumnName": "Total Available Points" },
+            { "ColumnId": "Spends", "ColumnName": "Total Spend" },
+        ];
+        myOptions1.forEach(function (e, i) {
+            $('#ChooseLeft1').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
+        });
+    }
     function OnchangeMethods() {
         $("#chkTransacting").on('change', function () {
             if ($("#chkTxnOnlyOnce").is(":checked")) {
@@ -2331,6 +2338,8 @@
 
     function GenerateReportFromDS(id) {
         $("#hdnDSID").val(id);
+        FillColumns1();
+        
         $("#divLoader").show();
         $.ajax({
             type: "POST",
