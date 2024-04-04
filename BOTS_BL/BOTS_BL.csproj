@@ -574,6 +574,7 @@
     <Compile Include="Repository\RedemptionRepository.cs" />
     <Compile Include="Repository\ReferencesRepository.cs" />
     <Compile Include="Repository\ReportsRepository.cs" />
+    <Compile Include="Repository\RetailBulkResponse.cs" />
     <Compile Include="Repository\RetailerWebRepository.cs" />
     <Compile Include="Repository\SalesLeadRepository.cs" />
     <Compile Include="Repository\SinglePageRepository.cs" />
