@@ -1,0 +1,1863 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "Change Script";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .rbtnClass {
+        height: 20px;
+        width: 20px;
+        vertical-align: middle;
+        cursor: pointer;
+        margin-left: 10px;
+    }
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+    .tabs {
+        padding-left: 25px;
+    }
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+    .radio {
+        display: none;
+    }
+    #one:checked ~ .panels #one-panel,
+    #two:checked ~ .panels #two-panel {
+        display: block
+    }
+    #one:checked ~ .tabs #one-tab,
+    #two:checked ~ .tabs #two-tab {
+        background: #fff !important;
+        color: #000;
+        border-top: 3px solid #fff;
+        border-left: 3px solid #fff;
+        border-right: 3px solid #fff;
+        font-weight: bold;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+</style>
+<div class="app-main__inner">
+    <input class="radio" id="one" name="group" type="radio" checked>
+    <input class="radio" id="two" name="group" type="radio">
+
+    <div class="tabs">
+        <label class="tab" id="one-tab" for="one">WA Script</label>
+        <label class="tab" id="two-tab" for="two">SMS Script</label>
+    </div>
+    <div class="panels">
+        <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="one-panel">
+            <div style="margin-bottom:15px;margin-top:15px;">
+                <input id="rbtnTransactional" name="campaignWA" type="radio" checked class="rbtnClass"> Transactional
+                <input id="rbtnBirthday" name="campaignWA" type="radio" class="rbtnClass"> Birthday
+                <input id="rbtnAnniversary" name="campaignWA" type="radio" class="rbtnClass"> Anniversary
+                <input id="rbtnInactive" name="campaignWA" type="radio" class="rbtnClass"> Inactive
+                <input id="rbtnPointExpiry" name="campaignWA" type="radio" class="rbtnClass"> PointExpiry
+                <input id="rbtnDLC" name="campaignWA" type="radio" class="rbtnClass"> DLC
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvTransactional">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3 ">
+                        Outlet Name
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblOutletMaster.OutletName, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutletMaster" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3 ">
+                        WA Script
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblSMSWhatsAppScriptMaster.MessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblSMSWhatsAppScriptMaster" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objSMSWhatsAppScriptMaster.WhatsAppScript, new { @id = "txtScript", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvBirthday" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Birthday Script
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblBirthdaySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblBirthdaySMSWAScript" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvBirthdayScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objBirthdaySMSWAScript.WAScript, new { @id = "txtScript1", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnBirthdayWAUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvAnniversary" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Anniversary Script
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblAnniversarySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblAnniversarySMSWAScript" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvAnniversaryScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objAnniversarySMSWAScript.WAScript, new { @id = "txtScript2", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnAnniversaryWAUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvInactive" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Inactive Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.DropDownListFor(model => model.tblInActiveSMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblInActiveSMSWAScript" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvInactiveScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objInActiveSMSWAScript.WAScript, new { @id = "txtScript3", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnInactiveWAUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvPointsExpiry" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Points Expiry Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.DropDownListFor(model => model.tblPointsExpirySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblPointsExpirySMSWAScript" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvPointsExpiryScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objPointsExpirySMSWAScript.WAScript, new { @id = "txtScript4", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnPointsExpiryWAUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvDLC" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        DLC Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.DropDownListFor(model => model.tblDLCSMSWAScriptMaster.DLCMessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblDLCSMSWAScriptMaster" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvDLCScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objDLCSMSWAScriptMaster.DLCWAScript, new { @id = "txtDLCScript", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnDLCWAUpdate">Update</button>
+                </div>
+            </div>
+        </div>
+        <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="two-panel">
+            <div style="margin-bottom:15px;margin-top:15px;">
+                <input id="rbtnTransactionalNew" name="campaign" type="radio" checked class="rbtnClass"> Transactional
+                <input id="rbtnBirthdayNew" name="campaign" type="radio" class="rbtnClass"> Birthday
+                <input id="rbtnAnniversaryNew" name="campaign" type="radio" class="rbtnClass"> Anniversary
+                <input id="rbtnInactiveNew" name="campaign" type="radio" class="rbtnClass"> Inactive
+                <input id="rbtnPointExpiryNew" name="campaign" type="radio" class="rbtnClass"> PointExpiry
+                <input id="rbtnDLCNew" name="campaign" type="radio" class="rbtnClass"> DLC
+                <input id="rbtnSMSCredentialNew" name="campaign" type="radio" class="rbtnClass"> SMS Credentials
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvTransactionalNew">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3 ">
+                        Outlet Name
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblOutletMaster.OutletName, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutletMasterNew" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3 ">
+                        SMS Script
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblSMSWhatsAppScriptMaster.MessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblSMSWhatsAppScriptMasterNew" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objSMSWhatsAppScriptMaster.SMSScript, new { @id = "txtScriptNew", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnUpdateNew">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvBirthdayNew" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Birthday Script
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        @Html.DropDownListFor(model => model.tblBirthdaySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblBirthdaySMSWAScriptNew" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvBirthdayScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objBirthdaySMSWAScript.SMSScript, new { @id = "txtScriptNew1", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnBirthdaySMSUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvAnniversaryNew" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Anniversary Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.DropDownListFor(model => model.tblAnniversarySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblAnniversarySMSWAScriptNew" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvAnniversaryScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objAnniversarySMSWAScript.SMSScript, new { @id = "txtScriptNew2", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnAnniversarySMSUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvInactiveNew" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Inactive Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.DropDownListFor(model => model.tblInActiveSMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblInActiveSMSWAScriptNew" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvInactiveScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objInActiveSMSWAScript.SMSScript, new { @id = "txtScriptNew3", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnInactiveSMSUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvPointExpiryNew" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Points Expiry Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.DropDownListFor(model => model.tblPointsExpirySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblPointsExpirySMSWAScriptNew" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvPointsExpiryScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objPointsExpirySMSWAScript.SMSScript, new { @id = "txtScriptNew4", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnPointsExpirySMSUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvDLCNew" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        DLC Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.DropDownListFor(model => model.tblDLCSMSWAScriptMaster.DLCMessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblDLCSMSWAScriptMasterNew" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvDLCScript">
+                    <div class="col-lg-3 col-md-3">
+                        Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objDLCSMSWAScriptMaster.DLCSMSScript, new { @id = "txtDLCScriptNew", @class = "input150", @rows = 10 })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnDLCSMSUpdate">Update</button>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvSMSCredentialNew" style="display:none;">
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-3 col-md-3">
+                        Outlet Name
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.DropDownListFor(model => model.tblOutletMaster.OutletName, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutletMasterNew1" })
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-2 col-md-2">
+                        OutletId
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        @Html.TextBoxFor(model => model.objSMSCredential.OutletId, new { @class = "input50", @id = "txtOutletId", tabindex = 1 })
+                    </div>
+                    <div class="col-lg-2 col-md-2" style="margin-left:80px;">
+                        SMSVendor
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        @Html.TextBoxFor(model => model.objSMSCredential.SMSVendor, new { @class = "input50", @id = "txtSMSVendor", tabindex = 2 })
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-2 col-md-2">
+                        SMS Url
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        @Html.TextBoxFor(model => model.objSMSCredential.SMSUrl, new { @class = "input50", @id = "txtSMSUrl", tabindex = 3 })
+                    </div>
+                    <div class="col-md-2 col-xl-2" style="margin-left:80px;">
+                        SMS LoginId
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        @Html.TextBoxFor(model => model.objSMSCredential.SMSLoginId, new { @class = "input50", @id = "txtSMSLoginId", tabindex = 4 })
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-2 col-md-2">
+                        SMS Password
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        @Html.TextBoxFor(model => model.objSMSCredential.SMSPassword, new { @class = "input50", @id = "txtSMSPassword", tabindex = 5 })
+                    </div>
+                    <div class="col-lg-2 col-md-2" style="margin-left:80px;">
+                        SMS API Key
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        @Html.TextBoxFor(model => model.objSMSCredential.SMSAPIKey, new { @class = "input50", @id = "txtSMSAPIKey", tabindex = 6 })
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row mt-4 pl-6 mb-6">
+                    <div class="col-lg-2 col-md-2">
+                        SMS SenderId
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        @Html.TextBoxFor(model => model.objSMSCredential.SMSSenderId, new { @class = "input50", @id = "txtSMSSenderId", tabindex = 7 })
+                    </div>
+                    <div class="col-lg-2 col-md-2" style="margin-left:80px;">
+                        IsActiveSMS
+                    </div>
+                    <div class="col-md-2 col-xl-2">
+                        <input type="checkbox" id="chkIsActive" style="cursor: pointer; margin-right: 5px;width:25px;height:25px;margin-top:5px;" />
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-left:5px;">
+                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnCredential">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#btnUpdate').on("click", function () {
+            SaveWATransactionalScripts();
+        });
+        $('#btnUpdateNew').on("click", function () {
+            SaveSMSTransactionalScripts();
+        });
+        $('#btnBirthdayWAUpdate').on("click", function () {
+            SaveWABirthdayScripts();
+        });
+        $('#btnBirthdaySMSUpdate').on("click", function () {
+            SaveSMSBirthdayScripts();
+        });
+        $('#btnAnniversaryWAUpdate').on("click", function () {
+            SaveWAAnniversaryScripts();
+        });
+        $('#btnAnniversarySMSUpdate').on("click", function () {
+            SaveSMSAnniversaryScripts();
+        });
+        $('#btnInactiveWAUpdate').on("click", function () {
+            SaveWAInactiveScripts();
+        });
+        $('#btnInactiveSMSUpdate').on("click", function () {
+            SaveSMSInactiveScripts();
+        });
+        $('#btnPointsExpiryWAUpdate').on("click", function () {
+            SaveWAPointsExpiryScripts();
+        });
+        $('#btnPointsExpirySMSUpdate').on("click", function () {
+            SaveSMSPointsExpiryScripts();
+        });
+        $('#btnDLCWAUpdate').on("click", function () {
+            SaveWADLCScripts();
+        });
+        $('#btnDLCSMSUpdate').on("click", function () {
+            SaveSMSDLCScripts();
+        });
+        $('#btnCredential').on("click", function () {
+            SaveSMSCredentials();
+        });
+        $("#rbtnTransactional").on("click", function () {
+            $("#dvTransactional").show();
+            $("#dvBirthday").hide();
+            $("#dvAnniversary").hide();
+            $("#dvInactive").hide();
+            $("#dvPointsExpiry").hide();
+            $("#dvDLC").hide();
+        });
+        $("#rbtnBirthday").on("click", function () {
+            $("#dvTransactional").hide();
+            $("#dvBirthday").show();
+            $("#dvAnniversary").hide();
+            $("#dvInactive").hide();
+            $("#dvPointsExpiry").hide();
+            $("#dvDLC").hide();
+        });
+        $("#rbtnAnniversary").on("click", function () {
+            $("#dvTransactional").hide();
+            $("#dvBirthday").hide();
+            $("#dvAnniversary").show();
+            $("#dvInactive").hide();
+            $("#dvPointsExpiry").hide();
+            $("#dvDLC").hide();
+        });
+        $("#rbtnInactive").on("click", function () {
+            $("#dvTransactional").hide();
+            $("#dvBirthday").hide();
+            $("#dvAnniversary").hide();
+            $("#dvInactive").show();
+            $("#dvPointsExpiry").hide();
+            $("#dvDLC").hide();
+        });
+        $("#rbtnPointExpiry").on("click", function () {
+            $("#dvTransactional").hide();
+            $("#dvBirthday").hide();
+            $("#dvAnniversary").hide();
+            $("#dvInactive").hide();
+            $("#dvPointsExpiry").show();
+            $("#dvDLC").hide();
+        });
+        $("#rbtnDLC").on("click", function () {
+            $("#dvTransactional").hide();
+            $("#dvBirthday").hide();
+            $("#dvAnniversary").hide();
+            $("#dvInactive").hide();
+            $("#dvPointsExpiry").hide();
+            $("#dvDLC").show();
+        });
+        $("#rbtnTransactionalNew").on("click", function () {
+            $("#dvTransactionalNew").show();
+            $("#dvBirthdayNew").hide();
+            $("#dvAnniversaryNew").hide();
+            $("#dvInactiveNew").hide();
+            $("#dvPointExpiryNew").hide();
+            $("#dvDLCNew").hide();
+            $("#dvSMSCredentialNew").hide();
+        });
+        $("#rbtnBirthdayNew").on("click", function () {
+            $("#dvTransactionalNew").hide();
+            $("#dvBirthdayNew").show();
+            $("#dvAnniversaryNew").hide();
+            $("#dvInactiveNew").hide();
+            $("#dvPointExpiryNew").hide();
+            $("#dvDLCNew").hide();
+            $("#dvSMSCredentialNew").hide();
+        });
+        $("#rbtnAnniversaryNew").on("click", function () {
+            $("#dvTransactionalNew").hide();
+            $("#dvBirthdayNew").hide();
+            $("#dvAnniversaryNew").show();
+            $("#dvInactiveNew").hide();
+            $("#dvPointExpiryNew").hide();
+            $("#dvDLCNew").hide();
+            $("#dvSMSCredentialNew").hide();
+        });
+        $("#rbtnInactiveNew").on("click", function () {
+            $("#dvTransactionalNew").hide();
+            $("#dvBirthdayNew").hide();
+            $("#dvAnniversaryNew").hide();
+            $("#dvInactiveNew").show();
+            $("#dvPointExpiryNew").hide();
+            $("#dvDLCNew").hide();
+            $("#dvSMSCredentialNew").hide();
+        });
+        $("#rbtnPointExpiryNew").on("click", function () {
+            $("#dvTransactionalNew").hide();
+            $("#dvBirthdayNew").hide();
+            $("#dvAnniversaryNew").hide();
+            $("#dvInactiveNew").hide();
+            $("#dvPointExpiryNew").show();
+            $("#dvDLCNew").hide();
+            $("#dvSMSCredentialNew").hide();
+        });
+        $("#rbtnDLCNew").on("click", function () {
+            $("#dvTransactionalNew").hide();
+            $("#dvBirthdayNew").hide();
+            $("#dvAnniversaryNew").hide();
+            $("#dvInactiveNew").hide();
+            $("#dvPointExpiryNew").hide();
+            $("#dvDLCNew").show();
+            $("#dvSMSCredentialNew").hide();
+        });
+        $("#rbtnSMSCredentialNew").on("click", function () {
+            $("#dvTransactionalNew").hide();
+            $("#dvBirthdayNew").hide();
+            $("#dvAnniversaryNew").hide();
+            $("#dvInactiveNew").hide();
+            $("#dvPointExpiryNew").hide();
+            $("#dvDLCNew").hide();
+            $("#dvSMSCredentialNew").show();
+        });
+        GetOutlets();
+        function GetOutlets() {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    $("#ddlOutletMaster").empty();
+                    $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+                    $.each(result, function () {
+                        $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
+                    });
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    });
+    $("#ddlOutletMaster").change(function () {
+        var OutletId = $("#ddlOutletMaster").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetScript", "IndividualDBConfig")',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblSMSWhatsAppScriptMaster").empty();
+                $("#ddltblSMSWhatsAppScriptMaster").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblSMSWhatsAppScriptMaster").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    $("#ddltblSMSWhatsAppScriptMaster").change(function () {
+        var OutletId = $("#ddlOutletMaster").val();
+        var MessageType = ($("#ddltblSMSWhatsAppScriptMaster option:selected").text());
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetTransactionalScripts", "IndividualDBConfig")',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',MessageType: ' + JSON.stringify(MessageType) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objSMSWhatsAppScriptMaster != null) {
+                    if (result.objSMSWhatsAppScriptMaster.WhatsAppScript != null && result.objSMSWhatsAppScriptMaster.OutletId != null) {
+                        $("#dvScript").show();
+                        $("#txtScript").text(result.objSMSWhatsAppScriptMaster.WhatsAppScript);
+                    }
+                    else {
+                        toastr.error('WA Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('WA Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveWATransactionalScripts() {
+        if ($('#ddlOutletMaster').val() == "" || $('#ddltblSMSWhatsAppScriptMaster').val() == "") {
+            toastr.error('Please select Outlet and Message Type');
+            return false
+        }
+        var OutletId = $('#ddlOutletMaster').val();
+        var Script = $("#txtScript").val();
+        var MassageType = $('#ddltblSMSWhatsAppScriptMaster option:selected').text();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveWATransactionalScripts", "IndividualDBConfig")',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ', Script: ' + JSON.stringify(Script) + ', MessageType: ' + JSON.stringify(MassageType) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetOutlets();
+    function GetOutlets() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddlOutletMasterNew").empty();
+                $("#ddlOutletMasterNew").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddlOutletMasterNew").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddlOutletMasterNew").change(function () {
+        var OutletId = $("#ddlOutletMasterNew").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetScript", "IndividualDBConfig")',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblSMSWhatsAppScriptMasterNew").empty();
+                $("#ddltblSMSWhatsAppScriptMasterNew").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblSMSWhatsAppScriptMasterNew").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    $("#ddltblSMSWhatsAppScriptMasterNew").change(function () {
+        var OutletId = $("#ddlOutletMasterNew").val();
+        var MessageType = ($("#ddltblSMSWhatsAppScriptMasterNew option:selected").text());
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetTransactionalScripts", "IndividualDBConfig")',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ',MessageType: ' + JSON.stringify(MessageType) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objSMSWhatsAppScriptMaster != null) {
+                    if (result.objSMSWhatsAppScriptMaster.SMSScript != null && result.objSMSWhatsAppScriptMaster.OutletId != null) {
+                        $("#dvScript").show();
+                        $("#txtScriptNew").text(result.objSMSWhatsAppScriptMaster.SMSScript);
+                    }
+                    else {
+                        toastr.error('SMS Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('SMS Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveSMSTransactionalScripts() {
+        if ($('#ddlOutletMasterNew').val() == "" || $('#ddltblSMSWhatsAppScriptMasterNew').val() == "") {
+            toastr.error('Please select Outlet and Message Type');
+            return false
+        }
+        var OutletId = $('#ddlOutletMasterNew').val();
+        var Script = $("#txtScriptNew").val();
+        var MassageType = $('#ddltblSMSWhatsAppScriptMasterNew option:selected').text();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveSMSTransactionalScripts", "IndividualDBConfig")',
+            data: '{OutletId: ' + JSON.stringify(OutletId) + ', Script: ' + JSON.stringify(Script) + ', MessageType: ' + JSON.stringify(MassageType) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetBirthdayScripts();
+    function GetBirthdayScripts() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetBirthdayScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblBirthdaySMSWAScript").empty();
+                $("#ddltblBirthdaySMSWAScript").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblBirthdaySMSWAScript").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblBirthdaySMSWAScript").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetBirthdaySMSWAScript", "IndividualDBConfig")',
+            data: '{Name: ' + JSON.stringify($('#ddltblBirthdaySMSWAScript option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objBirthdaySMSWAScript != null) {
+                    if (result.objBirthdaySMSWAScript.Name != null) {
+                        $("#dvBirthdayScript").show();
+                        $("#txtScript1").text(result.objBirthdaySMSWAScript.WAScript);
+                    }
+                    else {
+                        toastr.error('SMS Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('SMS Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveWABirthdayScripts() {
+        if ($('#ddltblBirthdaySMSWAScript').val() == "") {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var Name1 = $('#ddltblBirthdaySMSWAScript option:selected').text();
+        var Script1 = $("#txtScript1").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveWABirthdayScripts", "IndividualDBConfig")',
+            data: '{Script1: ' + JSON.stringify(Script1) + ', Name1: ' + JSON.stringify(Name1) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetBirthdayScript();
+    function GetBirthdayScript() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetBirthdayScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblBirthdaySMSWAScriptNew").empty();
+                $("#ddltblBirthdaySMSWAScriptNew").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblBirthdaySMSWAScriptNew").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblBirthdaySMSWAScriptNew").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetBirthdaySMSWAScript", "IndividualDBConfig")',
+            data: '{Name: ' + JSON.stringify($('#ddltblBirthdaySMSWAScriptNew option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objBirthdaySMSWAScript != null) {
+                    if (result.objBirthdaySMSWAScript.Name != null) {
+                        $("#dvBirthdayScript").show();
+                        $("#txtScriptNew1").text(result.objBirthdaySMSWAScript.SMSScript);
+                    }
+                    else {
+                        toastr.error('SMS Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('SMS Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveSMSBirthdayScripts() {
+        if ($('#ddltblBirthdaySMSWAScriptNew').val() == "") {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var Name1 = $('#ddltblBirthdaySMSWAScriptNew option:selected').text();
+        var Script1 = $("#txtScriptNew1").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveSMSBirthdayScripts", "IndividualDBConfig")',
+            data: '{Script1: ' + JSON.stringify(Script1) + ', Name1: ' + JSON.stringify(Name1) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetAnniversaryScript();
+    function GetAnniversaryScript() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAnniversaryScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblAnniversarySMSWAScript").empty();
+                $("#ddltblAnniversarySMSWAScript").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblAnniversarySMSWAScript").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblAnniversarySMSWAScript").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAnniversarySMSWAScript", "IndividualDBConfig")',
+            data: '{Name: ' + JSON.stringify($('#ddltblAnniversarySMSWAScript option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objAnniversarySMSWAScript != null) {
+                    if (result.objAnniversarySMSWAScript.Name != null) {
+                        $("#dvAnniversaryScript").show();
+                        $("#txtScript2").text(result.objAnniversarySMSWAScript.WAScript);
+                    }
+                    else {
+                        toastr.error('WA Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('WA Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveWAAnniversaryScripts() {
+        if ($('#ddltblAnniversarySMSWAScript').val() == "") {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var Name2 = $('#ddltblAnniversarySMSWAScript option:selected').text();
+        var Script2 = $("#txtScript2").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveWAAnniversaryScripts", "IndividualDBConfig")',
+            data: '{Script2: ' + JSON.stringify(Script2) + ', Name2: ' + JSON.stringify(Name2) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetAnniversaryScripts();
+    function GetAnniversaryScripts() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAnniversaryScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblAnniversarySMSWAScriptNew").empty();
+                $("#ddltblAnniversarySMSWAScriptNew").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblAnniversarySMSWAScriptNew").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblAnniversarySMSWAScriptNew").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetAnniversarySMSWAScript", "IndividualDBConfig")',
+            data: '{Name: ' + JSON.stringify($('#ddltblAnniversarySMSWAScriptNew option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objAnniversarySMSWAScript != null) {
+                    if (result.objAnniversarySMSWAScript.Name != null) {
+                        $("#dvAnniversaryScript").show();
+                        $("#txtScriptNew2").text(result.objAnniversarySMSWAScript.SMSScript);
+                    }
+                    else {
+                        toastr.error('SMS Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('SMS Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveSMSAnniversaryScripts() {
+        if ($('#ddltblAnniversarySMSWAScriptNew').val() == "") {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var Name2 = $('#ddltblAnniversarySMSWAScriptNew option:selected').text();
+        var Script2 = $("#txtScriptNew2").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveSMSAnniversaryScripts", "IndividualDBConfig")',
+            data: '{Script2: ' + JSON.stringify(Script2) + ', Name2: ' + JSON.stringify(Name2) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetInactiveScript();
+    function GetInactiveScript() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetInactiveScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblInActiveSMSWAScript").empty();
+                $("#ddltblInActiveSMSWAScript").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblInActiveSMSWAScript").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblInActiveSMSWAScript").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetInactiveSMSWAScript", "IndividualDBConfig")',
+            data: '{Name: ' + JSON.stringify($('#ddltblInActiveSMSWAScript option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objInActiveSMSWAScript != null) {
+                    if (result.objInActiveSMSWAScript.Name != null) {
+                        $("#dvInactiveScript").show();
+                        $("#txtScript3").text(result.objInActiveSMSWAScript.WAScript);
+                    }
+                    else {
+                        toastr.error('WA Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('WA Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveWAInactiveScripts() {
+        if ($('#ddltblInActiveSMSWAScript').val() == "" ) {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var Name3 = $('#ddltblInActiveSMSWAScript option:selected').text();
+        var Script3 = $("#txtScript3").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveWAInactiveScripts", "IndividualDBConfig")',
+            data: '{Script3: ' + JSON.stringify(Script3) + ', Name3: ' + JSON.stringify(Name3) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetInactiveScripts();
+    function GetInactiveScripts() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetInactiveScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblInActiveSMSWAScriptNew").empty();
+                $("#ddltblInActiveSMSWAScriptNew").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblInActiveSMSWAScriptNew").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblInActiveSMSWAScriptNew").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetInactiveSMSWAScript", "IndividualDBConfig")',
+            data: '{Name: ' + JSON.stringify($('#ddltblInActiveSMSWAScriptNew option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objInActiveSMSWAScript != null) {
+                    if (result.objInActiveSMSWAScript.Name != null) {
+                        $("#dvInactiveScript").show();
+                        $("#txtScriptNew3").text(result.objInActiveSMSWAScript.SMSScript);
+                    }
+                    else {
+                        toastr.error('SMS Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('SMS Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveSMSInactiveScripts() {
+        if ($('#ddltblInActiveSMSWAScriptNew').val() == "" ) {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var Name3 = $('#ddltblInActiveSMSWAScriptNew option:selected').text();
+        var Script3 = $("#txtScriptNew3").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveSMSInactiveScripts", "IndividualDBConfig")',
+            data: '{Script3: ' + JSON.stringify(Script3) + ', Name3: ' + JSON.stringify(Name3) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetPointsExpiryScript();
+    function GetPointsExpiryScript() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPointsExpiryScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblPointsExpirySMSWAScript").empty();
+                $("#ddltblPointsExpirySMSWAScript").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblPointsExpirySMSWAScript").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblPointsExpirySMSWAScript").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPointsExpirySMSWAScripts", "IndividualDBConfig")',
+            data: '{Name: ' + JSON.stringify($('#ddltblPointsExpirySMSWAScript option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objPointsExpirySMSWAScript != null) {
+                    if (result.objPointsExpirySMSWAScript.Name != null) {
+                        $("#dvPointsExpiryScript").show();
+                        $("#txtScript4").text(result.objPointsExpirySMSWAScript.WAScript);
+                    }
+                    else {
+                        toastr.error('WA Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('WA Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveWAPointsExpiryScripts() {
+        if ($('#ddltblPointsExpirySMSWAScript').val() == "" ) {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var Name4 = $('#ddltblPointsExpirySMSWAScript option:selected').text();
+        var Script4 = $("#txtScript4").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveWAPointsExpiryScripts", "IndividualDBConfig")',
+            data: '{Script4: ' + JSON.stringify(Script4) + ', Name4: ' + JSON.stringify(Name4) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetPointsExpiryScripts();
+    function GetPointsExpiryScripts() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPointsExpiryScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblPointsExpirySMSWAScriptNew").empty();
+                $("#ddltblPointsExpirySMSWAScriptNew").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblPointsExpirySMSWAScriptNew").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblPointsExpirySMSWAScriptNew").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetPointsExpirySMSWAScripts", "IndividualDBConfig")',
+            data: '{Name: ' + JSON.stringify($('#ddltblPointsExpirySMSWAScriptNew option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objPointsExpirySMSWAScript != null) {
+                    if (result.objPointsExpirySMSWAScript.Name != null) {
+                        $("#dvPointsExpiryScript").show();
+                        $("#txtScriptNew4").text(result.objPointsExpirySMSWAScript.SMSScript);
+                    }
+                    else {
+                        toastr.error('SMS Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('SMS Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveSMSPointsExpiryScripts() {
+        if ($('#ddltblPointsExpirySMSWAScriptNew').val() == "" ) {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var Name4 = $('#ddltblPointsExpirySMSWAScriptNew option:selected').text();
+        var Script4 = $("#txtScriptNew4").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveSMSPointsExpiryScripts", "IndividualDBConfig")',
+            data: '{Script4: ' + JSON.stringify(Script4) + ', Name4: ' + JSON.stringify(Name4) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            }
+        });
+    }
+    GetDLCScript();
+    function GetDLCScript() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDLCScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblDLCSMSWAScriptMaster").empty();
+                $("#ddltblDLCSMSWAScriptMaster").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblDLCSMSWAScriptMaster").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblDLCSMSWAScriptMaster").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDLCSMSWAScripts", "IndividualDBConfig")',
+            data: '{DLCMessageType: ' + JSON.stringify($('#ddltblDLCSMSWAScriptMaster option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objDLCSMSWAScriptMaster != null) {
+                    if (result.objDLCSMSWAScriptMaster.DLCWAScript != null) {
+                        $("#dvDLCScript").show();
+                        $("#txtDLCScript").text(result.objDLCSMSWAScriptMaster.DLCWAScript);
+                    }
+                    else {
+                        toastr.error('WA Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('WA Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveWADLCScripts() {
+        if ($('#ddltblDLCSMSWAScriptMaster').val() == "") {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var DLCMessageType = $('#ddltblDLCSMSWAScriptMaster option:selected').text();
+        var DLCScript = $("#txtDLCScript").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveWADLCScripts", "IndividualDBConfig")',
+            data: '{DLCMessageType: ' + JSON.stringify(DLCMessageType) + ', DLCScript: ' + JSON.stringify(DLCScript) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                   $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            },
+        });
+    }
+    GetDLCScripts();
+    function GetDLCScripts() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDLCScript", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddltblDLCSMSWAScriptMasterNew").empty();
+                $("#ddltblDLCSMSWAScriptMasterNew").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddltblDLCSMSWAScriptMasterNew").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddltblDLCSMSWAScriptMasterNew").change(function () {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDLCSMSWAScripts", "IndividualDBConfig")',
+            data: '{DLCMessageType: ' + JSON.stringify($('#ddltblDLCSMSWAScriptMasterNew option:selected').text()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objDLCSMSWAScriptMaster != null) {
+                    if (result.objDLCSMSWAScriptMaster.DLCSMSScript != null) {
+                        $("#dvDLCScript").show();
+                        $("#txtDLCScriptNew").text(result.objDLCSMSWAScriptMaster.DLCSMSScript);
+                    }
+                    else {
+                        toastr.error('SMS Script for this Outlet is not present');
+                    }
+                }
+                else {
+                    toastr.error('SMS Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveSMSDLCScripts() {
+        if ($('#ddltblDLCSMSWAScriptMasterNew').val() == "") {
+            toastr.error('Please select Message Type');
+            return false
+        }
+        var DLCMessageType = $('#ddltblDLCSMSWAScriptMasterNew option:selected').text();
+        var DLCScript = $("#txtDLCScriptNew").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveSMSDLCScripts", "IndividualDBConfig")',
+            data: '{DLCMessageType: ' + JSON.stringify(DLCMessageType) + ', DLCScript: ' + JSON.stringify(DLCScript) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Script Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                   $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Saving Script",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            },
+        });
+    }
+    GetOutletDetails();
+    function GetOutletDetails() {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOutletDetails", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddlOutletMasterNew1").empty();
+                $("#ddlOutletMasterNew1").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddlOutletMasterNew1").append($("<option />").val(this.Value).text(this.Text));
+                });
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+    $("#ddlOutletMasterNew1").change(function () {
+        $("#divLoader").show();
+        var selectedOutletId = $('#ddlOutletMasterNew1 option:selected').val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSMSCredentials", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({ OutletId: selectedOutletId }),
+            success: function (result) {
+                console.log(result);
+                console.log(result.objSMSCredential);
+                if (result.objSMSCredential != null) {
+                    $("#dvCredential").show();
+                    $("#txtOutletId").val(result.objSMSCredential.OutletId);
+                    $("#txtSMSVendor").val(result.objSMSCredential.SMSVendor);
+                    $("#txtSMSUrl").val(result.objSMSCredential.SMSUrl);
+                    $("#txtSMSLoginId").val(result.objSMSCredential.SMSLoginId);
+                    $("#txtSMSPassword").val(result.objSMSCredential.SMSPassword);
+                    $("#txtSMSAPIKey").val(result.objSMSCredential.SMSAPIKey);
+                    $("#txtSMSSenderId").val(result.objSMSCredential.SMSSenderId);
+                    if (result.objSMSCredential.IsActiveSMS) {
+                        $("#chkIsActive").prop("checked", true)
+                    }
+                }
+                else {
+                     toastr.error('SMS Script for this Outlet is not present');
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    });
+    function SaveSMSCredentials() {
+        if ($('#ddlOutletMasterNew1').val() == "") {
+            toastr.error('Please select Outlet');
+            return false
+        }
+        var OutletId = $("#txtOutletId").val();
+        var SMSVendor = $("#txtSMSVendor").val();
+        var SMSUrl = $("#txtSMSUrl").val();
+        var SMSLoginId = $("#txtSMSLoginId").val();
+        var SMSPassword = $("#txtSMSPassword").val();
+        var SMSAPIKey = $("#txtSMSAPIKey").val();
+        var SMSSenderId = $("#txtSMSSenderId").val();
+        var IsActiveSMS = $("chkIsActive").val();
+        var FilterData = [];
+        item = {};
+        item["OutletId"] = OutletId;
+        item["SMSVendor"] = SMSVendor;
+        item["SMSUrl"] = SMSUrl;
+        item["SMSLoginId"] = SMSLoginId;
+        item["SMSPassword"] = SMSPassword;
+        item["SMSAPIKey"] = SMSAPIKey;
+        item["SMSSenderId"] = SMSSenderId;
+        if ($("#chkIsActive").is(":checked")) {
+            IsActiveSMS = true;
+        }
+        else {
+            IsActiveSMS = false;
+        }
+        item["IsActiveSMS"] = IsActiveSMS;
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveSMSCredentials", "IndividualDBConfig")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                if (result = true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "SMS Credentials Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("ChangeScript", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#divLoader").hide();
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Error in Changing Script",
+                        buttonText: "Okay"
+                    })
+                }
+
+            }
+        });
+    }
+</script>
+
+
+

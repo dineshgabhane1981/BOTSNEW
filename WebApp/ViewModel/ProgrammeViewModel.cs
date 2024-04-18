@@ -36,10 +36,6 @@ namespace WebApp.ViewModel
         public tblOutletMaster tblOutletMaster { get; set; }
         public string Message { get; set; }
         public List<SelectListItem> lstOutletMaster { get; set; }
-        //public SelectListItem[] MessageType()
-        //{
-        //    return new SelectListItem[8] { new SelectListItem() { Text = "Enrollment", Value = "Enrollment" }, new SelectListItem() { Text = "Earn", Value = "Earn" }, new SelectListItem() { Text = "Burn", Value = "Burn" }, new SelectListItem() { Text = "CancelEarn", Value = "CancelEarn" }, new SelectListItem() { Text = "CancelBurn", Value = "CancelBurn" }, new SelectListItem() { Text = "OTP", Value = "OTP" }, new SelectListItem() { Text = "Balance>0", Value = "Balance>0" }, new SelectListItem() { Text = "Balance<0", Value = "Balance<0" } };
-        //}
         public tblSMSWhatsAppScriptMaster tblSMSWhatsAppScriptMaster { get; set; }
         public tblSMSWhatsAppScriptMaster  objSMSWhatsAppScriptMaster { get; set; }
         public GroupDetails objGroupDetail { get; set; }
@@ -47,6 +43,7 @@ namespace WebApp.ViewModel
         public tblGroupOwnerInfo objtblGroupOwnerInfo { get; set; }
         public DemographicData objDemographicData { get; set; }
         public tblRuleMaster objtblRuleMaster { get; set; }
+        public tblSMSWhatsAppCredential objtblSMSWhatsAppCredential { get; set; }
         public Earndata objEarndata { get; set; }
         public string TxnAmt { get; set; }
         public string RevolvingExpiry { get; set; }
@@ -54,6 +51,7 @@ namespace WebApp.ViewModel
         public string PointsInRs { get; set; }
         public bool Revolving { get; set; }
         public BurnData objBurnData { get; set; }
+        public SMSCredential objSMSCredential { get; set; }
         public OTPData objOTPData { get; set; }
         public List<tblCustDetailsMaster> lstMember { get; set; }
         public List<SelectListItem> lstTierDetails { get; set; }

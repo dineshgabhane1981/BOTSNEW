@@ -20,7 +20,7 @@ namespace BOTS_BL.Models
 
         public virtual DbSet<EventManagementReport> EventManagementReports { get; set; }
         public virtual DbSet<tblSMSCostMaster> tblSMSCostMasters { get; set; }
-
+        public virtual DbSet<tblDeactivatedGroupList> tblDeactivatedGroupLists { get; set; }
         public virtual DbSet<tblAuditBOPromo> tblAuditBOPromoes { get; set; }
         public virtual DbSet<CommonOTPCredentialMaster> CommonOTPCredentialMasters { get; set; }
         public virtual DbSet<tblAuditC> tblAuditCS { get; set; }
