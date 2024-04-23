@@ -8,7 +8,7 @@ namespace BOTS_BL.Models
 {
     public class MemberData
     {
-        public string MemberName { get; set; }
+        public string MemberName { get; set; }  
         public string MobileNo { get; set; }
         public string OldMobileNo { get; set; }
         public string CardNo { get; set; }
@@ -59,7 +59,17 @@ namespace BOTS_BL.Models
         public string OutletId { get; set; }
         public string OTP { get; set; }
     }
-
+    public class SMSCredential
+    {
+        public string OutletId { get; set; }
+        public string SMSVendor { get; set; }
+        public string SMSUrl { get; set; }
+        public string SMSLoginId { get; set; }
+        public string SMSPassword { get; set; }
+        public string SMSAPIKey { get; set; }
+        public string SMSSenderId { get; set; }
+        public bool IsActiveSMS { get; set; }
+    }
     public class CommonOTPDetails
     { 
         public string LoginId { get; set; }
