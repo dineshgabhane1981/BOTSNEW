@@ -275,6 +275,7 @@
     <Compile Include="ViewModel\CelebrationFileUpload.cs" />
     <Compile Include="ViewModel\CampaignMgmt.cs" />
     <Compile Include="ViewModel\CommunicationConfigViewModel.cs" />
+    <Compile Include="ViewModel\CouponReportViewModel.cs" />
     <Compile Include="ViewModel\CreateOwnReportViewModel.cs" />
     <Compile Include="ViewModel\CSWiseDataViewModel.cs" />
     <Compile Include="ViewModel\CustomerDashboardViewModel.cs" />
@@ -765,6 +766,8 @@
     <Content Include="Views\Transaction\DeleteTestTxn.cshtml" />
     <Content Include="Views\Transaction\ChangeInvoiceMobileNo.cshtml" />
     <Content Include="Views\EReceipt\Index.cshtml" />
+    <Content Include="Views\IndividualDBConfig\ChangeScript.cshtml" />
+    <Content Include="Views\Coupon\CouponReport.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

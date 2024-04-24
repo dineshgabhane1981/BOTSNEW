@@ -39,6 +39,22 @@
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
                     <div class="col-md-4 col-lg-4">
+                        Earn Brand :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="text" id="earnBrand" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Earn Dept :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="text" id="earnDept" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
                         Outlet :
                     </div>
                     <div class="col-md-6 col-lg-6">
@@ -79,6 +95,22 @@
                 </div>
                 <div class="col-md-12 col-lg-12 row mt-3">
                     <div class="col-md-4 col-lg-4">
+                        Redeem Brand :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="text" id="burnBrand" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
+                        Redeem Dept :
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="text" id="burnDept" class="input50" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12 row mt-3">
+                    <div class="col-md-4 col-lg-4">
                         Outlet :
                     </div>
                     <div class="col-md-6 col-lg-6">
@@ -92,7 +124,7 @@
                     <div class="col-md-6 col-lg-6">
                         <input type="text" class="input50" id="txtOfferCode" />
                     </div>
-               
+
                 </div>
 
             </div>
@@ -249,7 +281,7 @@
         var returnStatus = true;
 
 
-        if ($("#earnInvoiceValue1").val() == "" && $("#earnInvoiceValue2").val() == "" && $("#earnddlDays").val() == "" && $("#earnddlCategory").val() == "" && $("#earnddlOutlet").val() == "") {
+        if ($("#earnInvoiceValue1").val() == "" && $("#earnInvoiceValue2").val() == "" && $("#earnddlDays").val() == "" && $("#earnddlCategory").val() == "" && $("#earnddlOutlet").val() == "" && $("#earnBrand").val() == "" && $("#earnDept").val() == "") {
             if ($("#earnddlProduct").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -261,7 +293,7 @@
                 return false;
             }
         }
-        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "" && $("#txtOfferCode").val() == "") {
+        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "" && $("#txtOfferCode").val() == "" && $("#burnBrand").val() == "" && $("#burnDept").val() == "") {
             if ($("#ddlProduct").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -330,6 +362,11 @@
                 item["IsOnlyCoupon"] = false;
             item["CouponValue"] = $("#couponValue").val();
             item["ExpiryDays"] = $("#expiryDays").val();
+
+            item["EarnBrand"] = $("#earnBrand").val();
+            item["EarnDept"] = $("#earnDept").val();
+            item["BurnBrand"] = $("#burnBrand").val();
+            item["BurnDept"] = $("#burnDept").val();
             
             data.push(item);
             var datanew = JSON.stringify(data);

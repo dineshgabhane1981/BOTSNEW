@@ -1,0 +1,207 @@
+﻿@model WebApp.ViewModel.CouponReportViewModel
+@{
+    ViewBag.Title = "CouponReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="col-sm-10" style="display:flex;padding-bottom: 10px;margin-top:5px;">
+            <div class="col-md-3 col-xl-3">
+                From Date <br /><input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="col-md-3 col-xl-3">
+                To Date <br /><input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
+            </div>
+        </div>
+        <div class="col-sm-10" style="display:flex;padding-bottom: 10px;margin-top:5px;">
+            <div class="col-md-4 col-xl-4">
+                Earn Outlet <br />@Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "EarnOutletList" })
+            </div>
+            <div class="col-md-4 col-xl-4">
+                Redeem Outlet <br />@Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "BurnOutletList" })
+            </div>
+        </div>
+        <div class="col-sm-10 pull-right" style="padding-bottom: 10px;margin-top:5px;">
+            <button id="btnFilter" class="btn btn-primary login-btn " style="margin-left:20px;">Filter</button>
+        </div>
+        </div>
+
+        <div id="dvCouponData">
+            <div class="row mb-3 card">
+                <div class="container-fluid pt-3 pl-3 pr-3">
+                    <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                        <div class="row">
+                            <div class="col search-container">
+                                <i class="fas fa-search"></i>
+                                <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                            </div>
+
+                            @*<div class="col text-right">
+                                <ul class="list-inline progress-list mt-2">
+                                    <li class="list-inline-item">
+                                        <div class="dropdown">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Export
+                                            </button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>*@
+                        </div>
+                        <div class="row mt-3" id="dvActivityData">
+
+                            <div class="table-responsive">
+                                <table class="table" id="activityTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Issued Outlet</th>
+                                            <th scope="col">Mobile Number</th>
+                                            <th scope="col">IssuedInvoiceNo</th>
+                                            <th scope="col">CouponCode</th>
+                                            <th scope="col">CouponValue</th>
+                                            <th scope="col">ExpiryDate</th>
+                                            <th scope="col">CreatedDate</th>
+                                            <th scope="col">RedeemDate</th>
+                                            <th scope="col">RedeemedInvoiceNo</th>
+                                            <th scope="col">RedeemedInvoiceAmt</th>
+                                            <th scope="col">OfferCode</th>
+                                            <th scope="col">RedeemedOutlet</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script>
+    var tableData = [];
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $("#dtFrom").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+    $("#dtTo").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+    $(document).ready(function () {
+        GetData();
+        $("#btnFilter").click(function () {
+            GetData();
+        });
+    });
+
+    function GetData() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCouponReport", "Coupon")',
+            //url: "../Reports/GetOutletWiseTransactionResult",
+            data: "{'fromDate': '" + $("#dtFrom").val() + "','toDate': '" + $("#dtTo").val() + "','earnOutletId': '" + $("#EarnOutletList").val() + "','burnOutletId': '" + $("#BurnOutletList").val() + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tableData.length = 0;
+                //tableData = [];
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["IssuedOutlet"] = item.IssuedOutlet;
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["IssuedInvoiceNo"] = item.IssuedInvoiceNo;
+                    optionItem["CouponCode"] = item.CouponCode;
+                    optionItem["CouponValue"] = item.CouponValue;
+                    optionItem["ExpiryDate"] = item.ExpiryDateStr;
+                    optionItem["CreatedDate"] = item.CreatedDateStr;
+                    optionItem["RedeemDate"] = item.RedeemDateStr;
+                    optionItem["RedeemedInvoiceNo"] = item.RedeemedInvoiceNo;
+                    optionItem["RedeemedInvoiceAmt"] = item.RedeemedInvoiceAmt;
+                    optionItem["OfferCode"] = item.OfferCode;
+                    optionItem["RedeemedOutlet"] = item.RedeemedOutlet;
+                    tableData.push(optionItem);
+                });
+                DrawTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                //$('#dvOutletWiseData').html(response.responseText);
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function DrawTable() {
+
+        var table1 = $('#activityTable').DataTable();
+        table1.destroy();
+
+        var table = $('#activityTable').DataTable({
+            "data": tableData,
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "IssuedOutlet" },
+                { data: "MobileNo" },
+                { data: "IssuedInvoiceNo" },
+                { data: "CouponCode" },
+                { data: "CouponValue" },
+                { data: "ExpiryDate" },
+                { data: "CreatedDate" },
+                { data: "RedeemDate" },
+                { data: "RedeemedInvoiceNo" },
+                { data: "RedeemedInvoiceAmt" },
+                { data: "OfferCode" },
+                { data: "RedeemedOutlet" }
+
+            ]
+        });
+        $('#activityTable_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+    }
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
+

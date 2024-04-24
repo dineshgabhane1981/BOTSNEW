@@ -194,6 +194,11 @@ namespace WebApp.Controllers
                     objRule.CouponValue = Convert.ToInt32(item["CouponValue"]);
                     objRule.ExpiryDays = Convert.ToInt32(item["ExpiryDays"]);
                     objRule.OfferCode = Convert.ToString(item["OfferCode"]);
+
+                    objRule.EarnBrand = Convert.ToString(item["EarnBrand"]);
+                    objRule.EarnDept = Convert.ToString(item["EarnDept"]);
+                    objRule.BurnBrand = Convert.ToString(item["BurnBrand"]);
+                    objRule.BurnDept = Convert.ToString(item["BurnDept"]);
                 }
                 result = CR.SaveCouponEarnRule(objRule, userDetails.connectionString);
             }
@@ -218,6 +223,21 @@ namespace WebApp.Controllers
             return PartialView("_RedeemCouponReport", objData);
         }
 
+        public ActionResult CouponReport()
+        {
+            CouponReportViewModel objData = new CouponReportViewModel();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            ViewBag.OutletList = lstOutlet;
+            return View(objData);
+        }
+    
+        public JsonResult GetCouponReport(string fromDate,string toDate,string earnOutletId,string burnOutletId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var data = CR.GetCouponReport(fromDate, toDate, earnOutletId, burnOutletId, userDetails.GroupId);
+            return new JsonResult() { Data = data, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
 
     }
 }

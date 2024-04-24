@@ -650,7 +650,13 @@
                                         <i class="metismenu-icon pe-7s-rocket"></i>
                                         Configure Coupon
                                     </a>
-                                </li>                                
+                                </li>   
+                                <li class="@Html.IsSelected(controller: "Coupon", action: "CouponReport")">
+                                    <a href="@Url.Action("CouponReport", "Coupon")" class="@Html.IsSelected(controller: "Coupon", action: "CouponReport")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Report
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 

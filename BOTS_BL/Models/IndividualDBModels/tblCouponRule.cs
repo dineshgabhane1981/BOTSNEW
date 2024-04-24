@@ -57,5 +57,14 @@ namespace BOTS_BL.Models
         public int? ExpiryDays { get; set; }
         [StringLength(50)]
         public string OfferCode { get; set; }
+        [StringLength(50)]
+        public string EarnBrand { get; set; }
+        [StringLength(50)]
+        public string BurnBrand { get; set; }
+        [StringLength(50)]
+        public string EarnDept { get; set; }
+        [StringLength(50)]
+        public string BurnDept { get; set; }
+
     }
 }

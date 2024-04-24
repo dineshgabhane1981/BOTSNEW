@@ -180,6 +180,43 @@ namespace BOTS_BL.Repository
             }
         }
 
+        public List<CouponReportModel> GetCouponReport(string fromDate, string toDate, string earnOutletId, string burnOutletId, string GroupId)
+        {
+            List<CouponReportModel> lstData = new List<CouponReportModel>();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    context.Database.CommandTimeout = 300;
+                    var DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                    lstData = context.Database.SqlQuery<CouponReportModel>("sp_CouponReport @pi_GroupId, @pi_INDDatetime, @pi_FromDate, @pi_ToDate, @pi_EarnOutletId, @pi_BurnOutletId, @pi_DBName",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_INDDatetime", DateTime.Now.ToString("yyyy-MM-dd")),
+                            new SqlParameter("@pi_FromDate", fromDate),
+                            new SqlParameter("@pi_ToDate", toDate),
+                            new SqlParameter("@pi_EarnOutletId", earnOutletId),
+                            new SqlParameter("@pi_BurnOutletId", burnOutletId),
+                            new SqlParameter("@pi_DBName", DBName)).ToList<CouponReportModel>();
+
+                    foreach(var item in lstData)
+                    {
+                        if (item.CreatedDate.HasValue)
+                            item.CreatedDateStr = item.CreatedDate.Value.ToString("dd-MM-yyy");
+                        if (item.ExpiryDate.HasValue)
+                            item.ExpiryDateStr = item.ExpiryDate.Value.ToString("dd-MM-yyy");
+                        if (item.RedeemDate.HasValue)
+                            item.RedeemDateStr = item.RedeemDate.Value.ToString("dd-MM-yyy");
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+
+            }
+
+
+            return lstData;
+        }
 
     }
 }
