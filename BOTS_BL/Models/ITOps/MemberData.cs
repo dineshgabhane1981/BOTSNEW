@@ -20,6 +20,7 @@ namespace BOTS_BL.Models
         public bool DisableSMSWATxn { get; set; }
         public string Tier { get; set; }
         public string LastTxnDate { get; set; }
+        public bool DisableTxn { get; set; }
     }
     public class SlabData
     {

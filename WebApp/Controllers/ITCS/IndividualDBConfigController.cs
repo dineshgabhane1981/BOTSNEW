@@ -459,12 +459,12 @@ namespace WebApp.Controllers.ITCS
             return Json(result, JsonRequestBehavior.AllowGet);
 
         }
-        public ActionResult DisableTransactions()
+        public ActionResult DisableTxnSMS()
         {
-            ProgrammeViewModel objData = new ProgrammeViewModel();            
+            ProgrammeViewModel objData = new ProgrammeViewModel();
             return View(objData);
         }
-        public ActionResult BlockTransaction(string jsonData)
+        public ActionResult DisableTransactionalSMS(string jsonData)
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             var result = false;
@@ -484,7 +484,7 @@ namespace WebApp.Controllers.ITCS
                     DisableSMSWATxn = Convert.ToBoolean(item["DisableSMSWATxn"]);
                 }
 
-                result = ITCSR.BlockTransaction(GroupId, MobileNo, DisableSMSWATxn);
+                result = ITCSR.DisableTransactionalSMS(GroupId, MobileNo, DisableSMSWATxn);
                 tblAuditC obj = new tblAuditC();
                 obj.GroupId = Convert.ToString(userDetails.GroupId);
                 obj.RequestedFor = "Disable Txn -" + MobileNo;
@@ -494,7 +494,46 @@ namespace WebApp.Controllers.ITCS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "BlockTransaction");
+                newexception.AddException(ex, "DisableTransactionalSMS");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult DisableTransactions()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            return View(objData);
+        }
+        public ActionResult DisablePointsEarning(string jsonData)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var result = false;
+            string GroupId, MobileNo;
+            GroupId = string.Empty;
+            MobileNo = string.Empty;
+            bool DisableTxn = default;
+            try
+            {
+                JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+                json_serializer.MaxJsonLength = int.MaxValue;
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    GroupId = userDetails.GroupId;
+                    MobileNo = Convert.ToString(item["MobileNo"]);
+                    DisableTxn = Convert.ToBoolean(item["DisableTxn"]);
+                }
+
+                result = ITCSR.DisableTransactions(GroupId, MobileNo, DisableTxn);
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Disable Txn -" + MobileNo;
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DisablePointsEarning");
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }

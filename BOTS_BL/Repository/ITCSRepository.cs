@@ -964,6 +964,7 @@ namespace BOTS_BL.Repository
                     objMemberData.MobileNo = objtblCustDetailsMaster.MobileNo;
                     objMemberData.DisableSMSWAPromo = Convert.ToBoolean(objtblCustDetailsMaster.DisableSMSWAPromo);
                     objMemberData.DisableSMSWATxn = Convert.ToBoolean(objtblCustDetailsMaster.DisableSMSWATxn);
+                    objMemberData.DisableTxn = Convert.ToBoolean(objtblCustDetailsMaster.DisableTxn);
                 }
             }
             catch (Exception ex)
@@ -1299,7 +1300,7 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-        public bool BlockTransaction(string GroupId, string MobileNo, bool DisableSMSWATxn)
+        public bool DisableTransactionalSMS(string GroupId, string MobileNo, bool DisableSMSWATxn)
         {
             bool status = false;
             try
@@ -1320,7 +1321,32 @@ namespace BOTS_BL.Repository
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "BlockTransaction");
+                newexception.AddException(ex, "DisableTransactionalSMS");
+            }
+            return status;
+        }
+        public bool DisableTransactions(string GroupId, string MobileNo, bool DisableTxn)
+        {
+            bool status = false;
+            try
+            {
+                tblCustDetailsMaster objtblCustDetailsMaster = new tblCustDetailsMaster();
+                tblGroupMaster obj1 = new tblGroupMaster();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objtblCustDetailsMaster = contextNew.tblCustDetailsMasters.Where(x => x.MobileNo == MobileNo).FirstOrDefault();
+                    objtblCustDetailsMaster.DisableTxn = DisableTxn;
+
+                    contextNew.tblCustDetailsMasters.AddOrUpdate(objtblCustDetailsMaster);
+                    contextNew.SaveChanges();
+                    status = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "DisableTransactions");
             }
             return status;
         }

@@ -4,54 +4,111 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <div class="app-main__inner">
     <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">            
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
-                <div class="col-lg-3 col-md-3 ">
-                    <b>Mobile No</b>
+                <div class="col-lg-4 col-md-4 ">
+                    <input id="rbtnPromotional" name="SMS" type="radio" checked class="rbtnClass" style="height: 18px; width: 18px;"> <b> Disable Promotional SMS </b>
                 </div>
-                <div class="col-lg-3 col-md-3 " style="margin-left:15px;">
-                    <input id="txtMobileNo" class="input50" />
+                <div class="col-lg-4 col-md-4 ">
+                    <input id="rbtnTxn" name="SMS" type="radio" class="rbtnClass" style="height: 18px; width: 18px;"> <b> Disable Txn SMS </b>
+                </div>                
+            </div>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvPromotionalSMS">
+                <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
+                    <div class="col-lg-2 col-md-3 ">
+                        <b>Mobile No</b>
+                    </div>
+                    <div class="col-lg-3 col-md-3 " style="margin-left:15px;">
+                        <input id="txtMobileNo" class="input50" />
+                    </div>
+                    <div class="col-lg-3 col-md-3 " style="margin-left:50px;">
+                        <button type="button" id="btnSearchMemberPromoSMS" style="margin-right: 130px; margin-top: 5px;" class="btn btn-primary">Show</button>
+                    </div>
                 </div>
-                <div class="col-lg-3 col-md-3 " style="margin-left:50px;">
-                    <button type="button" id="btnSearchMember1" style="margin-left:10px;" class="btn btn-primary">Show</button>
+
+                <div class="col-md-12 col-lg-12" style="padding-left: 0px !important;margin-top:30px;margin-left:80px;display:none;" id="dvMemberDetails">
+                    <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Member Name</td>
+                                <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName"></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Enable/Disable Promotional SMS</td>
+                                <td>
+                                    <button id="btnEnableDisablePromoSMS" class="btn btn-primary ml-auto mt-3" value=""></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
-            
-            <div class="col-md-12 col-lg-12" style="padding-left: 0px !important;margin-top:30px;margin-left:80px;display:none;" id="dvMemberDetails">
-                <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
-                    <table border="1" cellpadding="5" cellspacing="5">
-                        <tr>
-                            <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
-                        </tr>
-                        <tr>
-                            <td style="padding:10px;">Member Name</td>
-                            <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName"></span></td>
-                        </tr>
-                        <tr>
-                            <td style="padding:10px;">Enable/Disable Promotional SMS</td>
-                            <td>
-                                <button id="btnEnableDisable" class="btn btn-primary ml-auto mt-3" value=""></button>
-                            </td>
-                        </tr>
-                    </table>
+            <div class="container-fluid pt-3 pl-3 pr-3 pb-3" id="dvTransactionalSMS" style="display:none">
+                <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4">
+                    <div class="col-lg-2 col-md-3" style=" margin-top: 5px;">
+                        <b>Mobile No</b>
+                    </div>
+                    <div class="col-lg-3 col-md-3 " style="margin-left:15px;">
+                        <input id="txtMobileNo2" class="input50" />
+                    </div>
+                    <div class="col-lg-3 col-md-3 " style="margin-left:50px;">
+                        <button type="button" id="btnSearchMemberTxnSMS" style="margin-right:130px; margin-top:5px;" class="btn btn-primary">Show</button>
+                    </div>
                 </div>
-            </div>          
+                <div class="col-md-12 col-lg-12" style="padding-left: 0px !important;margin-top:30px;margin-left:80px;display:none;" id="dvMemberDetails2">
+                    <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
+                        <table border="1" cellpadding="5" cellspacing="5">
+                            <tr>
+                                <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Member Name</td>
+                                <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName2"></span></td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Enable/Disable Txn SMS</td>
+                                <td>
+                                    <button id="btnEnableDisableTxnSMS" class="btn btn-primary ml-auto mt-3" value=""></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>            
         </div>
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
-        $('#btnSearchMember1').on("click", function () {
-                GetChangeNameData();
+        $('#btnSearchMemberPromoSMS').on("click", function () {
+            GetChangeNameDataForPromoSMS();
         });
-        $('#btnEnableDisable').on("click", function () {
+        $('#btnSearchMemberTxnSMS').on("click", function () {
+            GetChangeNameDataForTxnSMS();
+        });        
+        $('#btnEnableDisablePromoSMS').on("click", function () {
             DisablePromotionalSMS();
         });
+        $('#btnEnableDisableTxnSMS').on("click", function () {
+            DisableTransactionalSMS();
+        });        
+        $("#rbtnPromotional").on("click", function () {
+            $("#dvPromotionalSMS").show();
+            $("#dvTransactionalSMS").hide();           
+        });
+        $("#rbtnTxn").on("click", function () {
+            $("#dvPromotionalSMS").hide();
+            $("#dvTransactionalSMS").show();            
+        });        
     });
-    function GetChangeNameData() {
+    function GetChangeNameDataForPromoSMS() {
         if ($('#txtMobileNo').val() == "") {
             toastr.error('Please Enter Mobile No');
             return false
@@ -69,10 +126,10 @@
                 $("#spnMemberName").text(result.MemberName);
                 $("#spnMobileno").text(result.MobileNo);
                     if (result.DisableSMSWAPromo) {
-                        $("#btnEnableDisable").text("Enable");
+                        $("#btnEnableDisablePromoSMS").text("Enable");
                     }
                     else {
-                        $("#btnEnableDisable").text("Disable");
+                        $("#btnEnableDisablePromoSMS").text("Disable");
                     }
                 }
                 else {
@@ -96,17 +153,64 @@
             }
         });
     }
+
+
+    function GetChangeNameDataForTxnSMS() {
+        if ($('#txtMobileNo2').val() == "") {
+            toastr.error('Please Enter Mobile No');
+            return false
+        }
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetChangeNameData", "IndividualDBConfig")',
+            data: '{MobileNo: ' + JSON.stringify($('#txtMobileNo2').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.MobileNo != null) {
+                    $("#dvMemberDetails2").show();
+                $("#spnMemberName2").text(result.MemberName);
+                $("#spnMobileno2").text(result.MobileNo);
+                    if (result.DisableSMSWATxn) {
+                        $("#btnEnableDisableTxnSMS").text("Enable");
+                    }
+                    else {
+                        $("#btnEnableDisableTxnSMS").text("Disable");
+                    }
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Member Not Present",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
+                        window.location.href = urlLink;
+                    });
+                    $("#spnMemberName2").text("");
+                    $("#spnMobileno2").text("");
+                }
+                $("#divLoader").hide();
+                },
+            error: function (result) {
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }   
     function DisablePromotionalSMS() {
         var DisableSMSWAPromo = true;
-        if ($("#btnEnableDisable").text() == "Enable") {
+        if ($("#btnEnableDisablePromoSMS").text() == "Enable") {
             DisableSMSWAPromo = false;
         }
         var message = '';
         if (DisableSMSWAPromo) {
-            message = 'Do you want to disable Transactional Message?';
+            message = 'Do you want to disable Promotional Message?';
         }
         else {
-            message = 'Do you want to enable Transactional Message?';
+            message = 'Do you want to enable Promotional Message?';
         }
         cuteAlert({
             type: "question",
@@ -126,10 +230,10 @@
                 $("#divLoader").show();
                 var message1 = ''
                 if (DisableSMSWAPromo) {
-                    message1 = 'Transactional Message Disabled Successfully';
+                    message1 = 'Promotional Message Disabled Successfully';
                 }
                 else {
-                    message1 = 'Transactional Message Enabled Successfully';
+                    message1 = 'Promotional Message Enabled Successfully';
                 }
                 $.ajax({
                     type: "POST",
@@ -155,6 +259,67 @@
             }
         })
     }
+    function DisableTransactionalSMS() {
+        var DisableSMSWATxn = true;
+        if ($("#btnEnableDisableTxnSMS").text() == "Enable") {
+                DisableSMSWATxn = false;
+        }
+          var message = '';
+        if (DisableSMSWATxn) {
+                message = 'Do you want to disable Transactional Message?';
+        }
+        else {
+                message = 'Do you want to enable Transactional Message?';
+        }
+        cuteAlert({
+                type: "question",
+                title: "Confirmation",
+                message: message,
+                confirmText: "Yes",
+                cancelText: "No"
+        }).then((e) => {
+        if (e == ("confirm")) {
+        var MemberData = [];
+            item = {}
+            item["MobileNo"] = $("#txtMobileNo2").val();
+            item["DisableSMSWATxn"] = DisableSMSWATxn;
+            MemberData.push(item);
+            var data = JSON.stringify(MemberData);
+            console.log(data)
+            $("#divLoader").show();
+            var message1 = ''
+            if (DisableSMSWATxn) {
+                 message1 = 'Transactional Message Disabled Successfully';
+            }
+            else {
+                 message1 = 'Transactional Message Enabled Successfully';
+            }
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("DisableTransactionalSMS", "IndividualDBConfig")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: function (result) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Success",
+                            message: message1,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("DisableSMS", "IndividualDBConfig")";
+                            window.location.href = urlLink;
+                        });
+                 },
+                 error: function (result) {
+                        console.log(result.responseText)
+                 }
+            });
+
+        }
+
+        })
+    }    
 </script>
 
 
