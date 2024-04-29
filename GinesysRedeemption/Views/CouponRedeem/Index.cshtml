@@ -64,24 +64,53 @@
                             message: "Coupon for Redemption is Successfully Applied",
                             buttonText: "Okay"
                         }).then(() => {
-                            const obj = {
-                                'REFERENCENO': $("#hdnbillGUID").val(),
-                                'OFFERCODE': result.OfferCode,
-                                'BASIS': '1',
-                                'FACTOR': result.BurnCouponAmount,
-                                'MIN_PURCHASE_VALUE': result.MinVal,
-                                'MAX_REDEEM_VALUE': result.MaxVal,
-                                'ALLOW_POINT_ACCRUAL': result.AllowPointAccrual,
-                                'MOBILENO': $("#hdnMobileNo").val(),
-                                'ALLOW_REDEMPTION_ON_PROMO_ITEM': 1, 
-                                'ALLOW_POINT_REDEMPTION': 0,                                
-                                'COUPONCODE': Coupon,
-                                'ALLOW_POINT_REDEMPTION_BEFORE_BILL_SAVE': true,
-                                'status': 'success'
+                            if (result.IsZwing == "True") {
+                                const obj = {
+                                    "REFERENCENO": $("#hdnbillGUID").val(),
+                                    "ISVALID": "0",
+                                    "OFFERCODE": result.OfferCode,
+                                    "BASIS": "1",
+                                    "FACTOR": result.BurnCouponAmount,
+                                    "MIN_PURCHASE_VALUE": result.MinVal,
+                                    "MAX_REDEEM_VALUE": result.MaxVal,
+                                    "ALLOW_POINT_ACCRUAL": result.AllowPointAccrual,
+                                    "MOBILENO": $("#hdnMobileNo").val(),
+                                    "ALLOW_REDEMPTION_ON_PROMO_ITEM": 1,
+                                    "ALLOW_POINT_REDEMPTION": 0,
+                                    "COUPONCODE": Coupon,
+                                    "ALLOW_COUPON_REDEMPTION_BEFORE_BILL_SAVE": true,
+                                    "STATUS": "Success"
+                                }
+                                var myJSON = JSON.stringify(obj);
+                                myJSON = myJSON + "'" + ",'*');";
+                                var finalString = "window.parent.postMessage('" + myJSON;
+                                var finalStringAnd = "AndroidInterface.postMessage('" + myJSON;
+                                var finalJson = finalString + "  " + finalStringAnd
+                                $("#redemptionResponse").val(finalJson);
+                                console.log(finalJson);
                             }
-                            var myJSON = JSON.stringify(obj);
-                            $("#redemptionResponse").val(myJSON);
-                            console.log(myJSON);
+                            else {
+                                const obj = {
+                                    'REFERENCENO': $("#hdnbillGUID").val(),
+                                    'OFFERCODE': result.OfferCode,
+                                    'BASIS': '1',
+                                    'FACTOR': result.BurnCouponAmount,
+                                    'MIN_PURCHASE_VALUE': result.MinVal,
+                                    'MAX_REDEEM_VALUE': result.MaxVal,
+                                    'ALLOW_POINT_ACCRUAL': result.AllowPointAccrual,
+                                    'MOBILENO': $("#hdnMobileNo").val(),
+                                    'ALLOW_REDEMPTION_ON_PROMO_ITEM': 1,
+                                    'ALLOW_POINT_REDEMPTION': 0,
+                                    'COUPONCODE': Coupon,
+                                    'ALLOW_POINT_REDEMPTION_BEFORE_BILL_SAVE': true,
+                                    'status': 'success'
+                                }
+                                var myJSON = JSON.stringify(obj);
+                                $("#redemptionResponse").val(myJSON);
+                                console.log(myJSON);
+                            }
+                                                      
+                            
 
                             $("#txtCoupon").attr("disabled", "disabled");
                             $("#btnApply").attr("disabled", "disabled");

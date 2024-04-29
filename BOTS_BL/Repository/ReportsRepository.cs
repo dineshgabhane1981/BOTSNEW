@@ -30,116 +30,105 @@ namespace BOTS_BL.Repository
                   string ToPts, string FrmSpend, string ToSpend)
         {
             List<MemberList> lstMember = new List<MemberList>();
+            List<MemberList> lstMemberNew = new List<MemberList>();
             List<MemberListAllData> lstTempMemberData = new List<MemberListAllData>();
             try
             {
-                using (var context = new BOTSDBContext(connstr))
+                using (var contextNew = new CommonDBContext())
                 {
-                    if (GroupId == "1086")
+                    contextNew.Database.CommandTimeout = 300;
+                    var DBName = contextNew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+
+                    lstMember = contextNew.Database.SqlQuery<MemberList>("sp_MemberList @pi_GroupId, @pi_INDDatetime, @pi_LoginId, @pi_OutletId, @pi_DBName",
+                    new SqlParameter("@pi_GroupId", GroupId),
+                    new SqlParameter("@pi_INDDatetime", DateTime.Now.ToShortDateString()),
+                    new SqlParameter("@pi_LoginId", loginId),
+                    new SqlParameter("@pi_OutletId", OutletId),
+                    new SqlParameter("@pi_DBName", DBName)).Take(50).ToList<MemberList>();
+                }
+
+                //if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
+                //{
+                //    var fDate = Convert.ToDateTime(FromDate);
+                //    var tDate = Convert.ToDateTime(ToDate);
+                //    lstMember = lstMember.Where(x => x.txnDate >= fDate && x.txnDate <= tDate).ToList();
+                //}
+                //else if (!string.IsNullOrEmpty(FromDate))
+                //{
+                //    var fDate = Convert.ToDateTime(FromDate);
+                //    lstMember = lstMember.Where(x => x.txnDate >= fDate).ToList();
+                //}
+                //else if (!string.IsNullOrEmpty(ToDate))
+                //{
+                //    var tDate = Convert.ToDateTime(ToDate);
+                //    lstMember = lstMember.Where(x => x.txnDate <= tDate).ToList();
+                //}
+
+                //if (!string.IsNullOrEmpty(FrmPts) && !string.IsNullOrEmpty(ToPts))
+                //{
+                //    var fPts = Convert.ToInt64(FrmPts);
+                //    var tPts = Convert.ToInt64(ToPts);
+                //    lstMember = lstMember.Where(x => x.AvlBalPoints >= fPts && x.AvlBalPoints <= tPts).ToList();
+                //}
+                //else if (!string.IsNullOrEmpty(FrmPts))
+                //{
+                //    var fPts = Convert.ToInt64(FrmPts);
+                //    lstMember = lstMember.Where(x => x.AvlBalPoints >= fPts).ToList();
+                //}
+                //else if (!string.IsNullOrEmpty(ToPts))
+                //{
+                //    var tPts = Convert.ToInt64(ToPts);
+                //    lstMember = lstMember.Where(x => x.AvlBalPoints <= tPts).ToList();
+                //}
+
+                //if (!string.IsNullOrEmpty(FrmSpend) && !string.IsNullOrEmpty(ToSpend))
+                //{
+                //    var fSpend = Convert.ToDecimal(FrmSpend);
+                //    var tSpend = Convert.ToDecimal(ToSpend);
+                //    lstMember = lstMember.Where(x => x.TotalSpend >= fSpend && x.TotalSpend <= tSpend).ToList();
+                //}
+                //else if (!string.IsNullOrEmpty(FrmSpend))
+                //{
+                //    var fSpend = Convert.ToDecimal(FrmSpend);
+                //    lstMember = lstMember.Where(x => x.TotalSpend >= fSpend).ToList();
+                //}
+                //else if (!string.IsNullOrEmpty(ToSpend))
+                //{
+                //    var tSpend = Convert.ToDecimal(ToSpend);
+                //    lstMember = lstMember.Where(x => x.TotalSpend <= tSpend).ToList();
+                //}
+
+                foreach (var item in lstMember)
+                {
+                    MemberList Obj = new MemberList();
+                    Obj.EnrooledOutlet = item.EnrooledOutlet;
+                    Obj.EnrolledDate = item.EnrolledDate;
+                    Obj.MaskedMobileNo = item.MaskedMobileNo;
+                    Obj.MobileNo = item.MobileNo;
+                    Obj.MemberName = item.MemberName;
+                    Obj.Type = item.Type;
+                    Obj.TxnCount = item.TxnCount;
+                    Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
+                    Obj.TotalBurnTxn = item.TotalBurnTxn;
+                    Obj.TotalBurnPoints = Convert.ToInt64(item.TotalBurnPoints);
+                    Obj.AvlBalPoints = item.AvlBalPoints;
+                    if (item.txnDate.HasValue)
                     {
-                        lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
-                        new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", loginId), new SqlParameter("@pi_OutletId", OutletId)).ToList<MemberList>();
-                    }
-                    //else if (GroupId == "1087")
-                    //{
-                    if (OutletId == "")
-                    {
-                        lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
+                        Obj.LastTxnDate = item.txnDate.Value.ToString("yyyy-MM-dd");
                     }
                     else
                     {
-                        lstTempMemberData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts where CurrentEnrolledOutlet = @pi_OutletId", new SqlParameter("@pi_OutletId", OutletId)).ToList();
-                    }
-                    if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
-                    {
-                        var fDate = Convert.ToDateTime(FromDate);
-                        var tDate = Convert.ToDateTime(ToDate);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.LasTTxnDate >= fDate && x.LasTTxnDate <= tDate).ToList();
-                    }
-                    else if (!string.IsNullOrEmpty(FromDate))
-                    {
-                        var fDate = Convert.ToDateTime(FromDate);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.LasTTxnDate >= fDate).ToList();
-                    }
-                    else if (!string.IsNullOrEmpty(ToDate))
-                    {
-                        var tDate = Convert.ToDateTime(ToDate);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.LasTTxnDate <= tDate).ToList();
+                        Obj.LastTxnDate = item.EnrolledDate;
                     }
 
-                    if (!string.IsNullOrEmpty(FrmPts) && !string.IsNullOrEmpty(ToPts))
-                    {
-                        var fPts = Convert.ToInt64(FrmPts);
-                        var tPts = Convert.ToInt64(ToPts);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.AvlPts >= fPts && x.AvlPts <= tPts).ToList();
-                    }
-                    else if (!string.IsNullOrEmpty(FrmPts))
-                    {
-                        var fPts = Convert.ToInt64(FrmPts);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.AvlPts >= fPts).ToList();
-                    }
-                    else if (!string.IsNullOrEmpty(ToPts))
-                    {
-                        var tPts = Convert.ToInt64(ToPts);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.AvlPts <= tPts).ToList();
-                    }
-
-
-                    if (!string.IsNullOrEmpty(FrmSpend) && !string.IsNullOrEmpty(ToSpend))
-                    {
-                        var fSpend = Convert.ToDecimal(FrmSpend);
-                        var tSpend = Convert.ToDecimal(ToSpend);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.TotalSpend >= fSpend && x.TotalSpend <= tSpend).ToList();
-                    }
-                    else if (!string.IsNullOrEmpty(FrmSpend))
-                    {
-                        var fSpend = Convert.ToDecimal(FrmSpend);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.TotalSpend >= fSpend).ToList();
-                    }
-                    else if (!string.IsNullOrEmpty(ToSpend))
-                    {
-                        var tSpend = Convert.ToDecimal(ToSpend);
-                        lstTempMemberData = lstTempMemberData.Where(x => x.TotalSpend <= tSpend).ToList();
-                    }
-
-                    foreach (var item in lstTempMemberData)
-                    {
-                        MemberList Obj = new MemberList();
-                        Obj.EnrooledOutlet = item.OutletName;
-                        Obj.EnrolledDate = item.DOJ.Value.ToString("MM/dd/yyyy");
-                        Obj.MaskedMobileNo = item.MaskedMobileNo;
-                        Obj.MobileNo = item.MobileNo;
-                        Obj.MemberName = item.Name;
-                        Obj.Type = item.Type;
-                        Obj.TxnCount = item.TotalTxnCount;
-                        Obj.TotalSpend = Convert.ToInt64(item.TotalSpend);
-                        Obj.TotalBurnTxn = item.BurnCount;
-                        Obj.TotalBurnPoints = Convert.ToInt64(item.BurnPts);
-                        Obj.AvlBalPoints = item.AvlPts;
-                        if (item.LasTTxnDate.HasValue)
-                        {
-                            Obj.LastTxnDate = item.LasTTxnDate.Value.ToString("MM/dd/yyyy");
-                        }
-                        else
-                        {
-                            Obj.LastTxnDate = item.DOJ.Value.ToString("MM/dd/yyyy");
-                        }
-
-                        lstMember.Add(Obj);
-                    }
-                    //}
-                    //else
-                    //{
-                    //    lstMember = context.Database.SqlQuery<MemberList>("sp_BOTS_MemberList @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId",
-                    //    new SqlParameter("@pi_GroupId", GroupId), new SqlParameter("@pi_Date", DateTime.Now.ToShortDateString()), new SqlParameter("@pi_LoginId", ""), new SqlParameter("@pi_OutletId", OutletId)).ToList<MemberList>();
-                    //}
+                    lstMemberNew.Add(Obj);
                 }
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "GetMemberList");
             }
-            return lstMember;
+            return lstMemberNew;
         }
 
         public List<SelectListItem> GetOutletList(string GroupId, string connstr)
@@ -150,7 +139,7 @@ namespace BOTS_BL.Repository
             {
                 using (var contextnew = new CommonDBContext())
                 {
-                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupId).FirstOrDefault();                    
+                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupId).FirstOrDefault();
                 }
                 using (var context = new BOTSDBContext(connstr))
                 {
@@ -2702,7 +2691,7 @@ namespace BOTS_BL.Repository
             int count = 0;
             int index = 1;
             string Criteria = string.Empty;
-            string query = "select count(*) from tblSmartSlicerMaster as a where ";
+            string query = "select count(*) from tblSmartSlicerMaster as a where a.MobileNo != '111111111' and ";
             string WhereClause = string.Empty;
 
             foreach (Dictionary<string, object> item in objData)
@@ -2774,11 +2763,11 @@ namespace BOTS_BL.Repository
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";                               
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";                                
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
                             {
@@ -2902,7 +2891,7 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
                         {
                             Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
-                            WhereClause += " and a.EnrolledDate > '" + Convert.ToString(item["Enrollfromdt"] +"'");
+                            WhereClause += " and a.EnrolledDate > '" + Convert.ToString(item["Enrollfromdt"] + "'");
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
                         {
@@ -3133,7 +3122,7 @@ namespace BOTS_BL.Repository
             return lstCount;
         }
 
-        public int[] GetSavedDSCount(string DSId,string connstr)
+        public int[] GetSavedDSCount(string DSId, string connstr)
         {
             int[] lstCount = new int[2];
             try
@@ -3626,7 +3615,7 @@ namespace BOTS_BL.Repository
         {
             int index = 1;
             string Criteria = string.Empty;
-            string query = "select " + columns + " from tblSmartSlicerMaster as a where ";
+            string query = "select " + columns + " from tblSmartSlicerMaster as a where a.MobileNo != '111111111' and ";
             string WhereClause = string.Empty;
 
             foreach (Dictionary<string, object> item in objData)
@@ -3877,13 +3866,23 @@ namespace BOTS_BL.Repository
                             WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
                         }
                     }
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["IsRedeemed"])))
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
                     {
-                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["IsRedeemed"]);
-                        int isR = 0;
+                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["Redeemed"]);
+                        
                         if (Convert.ToString(item["IsRedeemed"]) == "Yes")
-                            isR = 1;
-                        WhereClause += " and a.RedeemStatus < " + isR;
+                        {                            
+                            WhereClause += " and a.BurnCount >= 1 ";
+                        }
+                        if (Convert.ToString(item["IsRedeemed"]) == "Multiple")
+                        {
+                            WhereClause += " and a.BurnCount > 1 ";
+                        }
+                        if (Convert.ToString(item["IsRedeemed"]) == "No")
+                        {
+                            WhereClause += " and a.BurnCount = 0 ";
+                        }
+
                     }
                 }
                 if (index == 3)

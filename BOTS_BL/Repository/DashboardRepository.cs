@@ -221,7 +221,7 @@ namespace BOTS_BL.Repository
                             DashboardMemberSegmentTxn newItem = new DashboardMemberSegmentTxn();
                             if (count == 1)
                             {
-                                newItem.Title = "Total Member";                                
+                                newItem.Title = "Total Member";
                             }
                             if (count == 2)
                             {
@@ -421,7 +421,7 @@ namespace BOTS_BL.Repository
                 {
                     if (monthFlag == "")
                         monthFlag = "0";
-                    
+
                     contextnew.Database.CommandTimeout = 300;
                     var DBName = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
 
@@ -753,6 +753,20 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "SendOTPMessage");
             }
             return status;
+        }
+
+        public string GetStartDate(string connStr)
+        {
+            string StartDate = string.Empty;
+            using (var context = new BOTSDBContext(connStr))
+            {
+                var SDate = context.tblSmartSlicerMasters.OrderBy(x => x.FirstTxnDate).Select(y => y.FirstTxnDate).FirstOrDefault();
+                if(SDate.HasValue)
+                {
+                    StartDate = SDate.Value.ToString("MM-dd-yyyy");
+                }
+            }
+            return StartDate;
         }
     }
 }

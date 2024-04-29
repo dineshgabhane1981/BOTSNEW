@@ -2,7 +2,7 @@
 @using System.Globalization
 @using BOTS_BL.Models;
 @{
-   
+
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
     var logintype = userDetails.LoginType;
 }
@@ -91,18 +91,38 @@
                                         {
                                             <tr style="text-align:end;font-weight:bold;">
                                                 <td style="border-top:1px solid black;text-align:left;">@outlet.OutletName</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                @if (userDetails.GroupId == "1341")
+                                                {
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                }
+
                                                 <td style="border-top:1px solid black;">-</td>
                                                 <td style="border-top:1px solid black;">-</td>
                                                 <td style="border-top:1px solid black;">-</td>
                                                 <td style="border-top:1px solid black;">-</td>
                                                 <td style="border-top:1px solid black;">-</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
-                                                <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                @if (userDetails.GroupId == "1341")
+                                                {
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                }
                                             </tr>
                                         }
                                         else
@@ -117,54 +137,148 @@
                                             }
                                             <tr style="text-align:end;">
                                                 <td style="text-align:left;"><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.BizShare))%</td>
+                                                @if (userDetails.GroupId == "1341")
+                                                {
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.BizShare))%</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.BizShare))%</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
+                                                }
 
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
+
                                                 @if (outlet.NonActiveColor == "Red")
                                                 {
-                                                    <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
                                                 }
                                                 @if (outlet.NonActiveColor == "Orange")
                                                 {
-                                                    <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+
                                                 }
                                                 @if (outlet.NonActiveColor == "Green")
                                                 {
-                                                    <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+
                                                 }
 
                                                 @if (outlet.OnlyOnceColor == "Red")
                                                 {
-                                                    <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+
                                                 }
                                                 @if (outlet.OnlyOnceColor == "Orange")
                                                 {
-                                                    <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+
                                                 }
                                                 @if (outlet.OnlyOnceColor == "Green")
                                                 {
-                                                    <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+
                                                 }
 
                                                 @if (outlet.RedemptionRateColor == "Red")
                                                 {
-                                                    <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+
                                                 }
                                                 @if (outlet.RedemptionRateColor == "Orange")
                                                 {
-                                                    <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+
                                                 }
                                                 @if (outlet.RedemptionRateColor == "Green")
                                                 {
-                                                    <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+
                                                 }
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
-                                                <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                @if (userDetails.GroupId == "1341")
+                                                {
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                }
+
                                             </tr>
                                         }
                                     }
@@ -172,14 +286,14 @@
                                 else
                                 {
                                     <tr>
-                                        <td colspan="13" align="center">No Learning Available</td>
+                                        <td colspan="13" align="center">No Data Available</td>
                                     </tr>
                                 }
                             }
                             else
                             {
                                 <tr>
-                                    <td colspan="13">No Learning Available</td>
+                                    <td colspan="13">No Data Available</td>
                                 </tr>
                             }
                         </tbody>

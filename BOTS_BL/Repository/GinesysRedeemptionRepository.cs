@@ -121,6 +121,10 @@ namespace BOTS_BL.Repository
                             obj.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
                             obj.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["PointsAsAmt"]);
                             obj.PointsValue = Convert.ToString(dt1.Rows[0]["PointsAsAmt"]);
+                            if (groupId == "1378")
+                                obj.IsZwing = "True";
+                            else
+                                obj.IsZwing = "False";
                             if (dt2.Rows.Count > 0)
                             {
                                 string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSWASendStatus"]);
@@ -262,6 +266,11 @@ namespace BOTS_BL.Repository
                                 obj.MaxVal = Convert.ToString(dt1.Rows[0]["MaxRedemptionValue"]);
                             else
                                 obj.MaxVal = "0";
+
+                            if (groupId == "1378")
+                                obj.IsZwing = "True";
+                            else
+                                obj.IsZwing = "False";
 
                             //if (dt2.Rows.Count > 0)
                             //{

@@ -51,6 +51,7 @@
         <input id="hdnOTP" hidden />
         <input id="hdnBurnAmt" hidden />
         <input id="redemptionResponse" hidden />
+        <input id="hdnIsZwing" hidden />
         Customer has a reward balance of <b>&#8377;@value, (@Model.Points)</b> Points
         <div style="padding:10px;"><input type="number" class="input50" id="txtPoints" /><button class="btn btn-primary" style="margin-left:10px;" id="btnApply">Apply</button></div>
         <div style="padding:10px; display:none" id="divOTP"><input type="password" class="input50" id="txtOTP" /><button class="btn btn-primary" style="margin-left:10px;" id="btnVerify">Verify</button></div>
@@ -76,6 +77,7 @@
                     console.log(result);
                     if (result.ResponseCode == "00") {
                         $("#hdnOTP").val(result.OTPValue);
+                        $("#hdnIsZwing").val(result.IsZwing);
                         $("#divOTP").show();
                         $("#txtPoints").attr("disabled", "disabled");
                         $("#btnApply").attr("disabled", "disabled");
@@ -106,6 +108,8 @@
     });
     $("#btnVerify").click(function () {
         var points = $("#txtPoints").val();
+        var IsZwing = $("#hdnIsZwing").val()
+        
         var multiply = '@Model.PointsValue';
 
         var BurnAmount = points * multiply;
@@ -120,21 +124,44 @@
             }).then(() => {
                 $("#txtOTP").attr("disabled", "disabled");
                 $("#btnVerify").attr("disabled", "disabled");
-                const obj = {
-                    'mobileNo': $("#hdnMobileNo").val(),
-                    'referenceNo': $("#hdnbillGUID").val(),
-                    'redeemedPoints': $("#txtPoints").val(),
-                    'redeemedValue': BurnAmount,
-                    'Allow_Point_Accrual': 1,
-                    'OTP': $("#hdnOTP").val(),
-                    'ALLOW_POINT_REDEMPTION_BEFORE_BILL_SAVE': true,
-                    'status': 'success'
+                if (IsZwing == "True") {alert(111)
+                    const obj = {
+                        "Mobileno": $("#hdnMobileNo").val(),
+                        "couponCode": "",
+                        "referenceNo": $("#hdnbillGUID").val(),
+                        "discountValue": BurnAmount,
+                        "maxValue": "0",
+                        "discountType": "Rs",
+                        "couponOfferCode": "0",
+                        "allowLoyaltyRedemption": "yes",
+                        "redeemedPoints": $("#txtPoints").val(),
+                        "redeemedValue": BurnAmount,
+                        "redemptionMode": "Discount",
+                        "Status": "success"
+                    }
+                    var myJSON = JSON.stringify(obj);
+                    myJSON = myJSON + "'" + ",'*');";
+                    var finalString = "window.parent.postMessage('" + myJSON;
+                    var finalStringAnd = "AndroidInterface.postMessage('" + myJSON;
+                    var finalJson = finalString + "  " + finalStringAnd
+                    $("#redemptionResponse").val(finalJson);
+                    console.log(finalJson);
                 }
-                var myJSON = JSON.stringify(obj);
-                $("#redemptionResponse").val(myJSON);
-                console.log(myJSON);
-
-
+                else {alert(222)
+                    const obj = {
+                        'mobileNo': $("#hdnMobileNo").val(),
+                        'referenceNo': $("#hdnbillGUID").val(),
+                        'redeemedPoints': $("#txtPoints").val(),
+                        'redeemedValue': BurnAmount,
+                        'Allow_Point_Accrual': 1,
+                        'OTP': $("#hdnOTP").val(),
+                        'ALLOW_POINT_REDEMPTION_BEFORE_BILL_SAVE': true,
+                        'status': 'success'
+                    }
+                    var myJSON = JSON.stringify(obj);
+                    $("#redemptionResponse").val(myJSON);
+                    console.log(myJSON);
+                }
              })
         }
         else {

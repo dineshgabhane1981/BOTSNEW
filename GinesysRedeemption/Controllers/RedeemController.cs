@@ -77,9 +77,9 @@ namespace GinesysRedeemption.Controllers
         public ActionResult GetURL()
         {
             var BaseUrl = ConfigurationManager.AppSettings["RedeemBaseUrl"];
-            string storeid = "1063888888";
+            string storeid = "1378100101";
             string billGUID = "D4E8010B-7164-46ED-8F3D-43F8B257291820180309143018907";
-            string mobileno = "7709303625";
+            string mobileno = "6232666427";
             string billvalue = "1780";
             string CustomerName = "Dinesh";
             decimal? Points = 10;

@@ -20,7 +20,8 @@ namespace BOTS_BL.Models
         public string RenewDate { get; set; }
         public string VerifiedWARenewalDate { get; set; }
         public int RemainingDaysForRenewal { get; set; }
-
+        public string StartDate { get; set; }
+        public string ToDate { get; set; }
         public List<OutletDetails> lstOutletDetails { get; set; }
 
     }

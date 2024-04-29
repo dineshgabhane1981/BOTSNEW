@@ -345,7 +345,7 @@ namespace BOTS_BL.Repository
                 {
                     using (var contextdb = new BOTSDBContext(connStr))
                     {
-                        var objbrandDetail = contextdb.BrandDetails.Where(x => x.GroupId == groupId).FirstOrDefault();
+                        var objbrandDetail = contextdb.tblBrandMasters.Where(x => x.GroupId == groupId).FirstOrDefault();
                         logoUrl = objbrandDetail.BrandLogoUrl;
                     }
                 }

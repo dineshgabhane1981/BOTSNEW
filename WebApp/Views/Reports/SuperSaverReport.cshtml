@@ -16,30 +16,34 @@
                     <tr style="text-align:left;">
                         <th>Elements</th>
                         <th>Total Base</th>
+                        <th>Non-SS Base</th>
                         <th>SS Base</th>
                         <th>SS Cont %</th>
-                        <th>Non-SS Base</th>
+
                     </tr>
                     <tr>
                         <td style="font-weight: bold; text-align: left;">Business</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.TotalBiz))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSBiz))</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.SSBiz))</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.SSBizPercentage))%</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSBiz))</td>
+
                     </tr>
                     <tr>
                         <td style="font-weight: bold; text-align: left;">Txn Count</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.TotalTxnCount))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSTxnCount))</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.SSTxnCount))</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(countPer))%</td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSTxnCount))</td>
+
                     </tr>
                     <tr>
                         <td style="font-weight: bold; text-align: left;">Average Ticket Size</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.ATS))</td>
+                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSATS))</td>
                         <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.SSATS))</td>
                         <td></td>
-                        <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.objSSNonSSReport.NonSSATS))</td>
+
                     </tr>
                 </table>
                 <div class="row mt-3 ml-1">
@@ -52,16 +56,18 @@
                         <tr style="text-align:left;">
                             <th>Elements</th>
                             <th>Total Base</th>
+                            <th>Non-SS Base</th>
                             <th>SS Base</th>
                             <th>SS Cont %</th>
-                            <th>Non-SS Base</th>
+
                         </tr>
                         <tr>
                             <td style="font-weight: bold; text-align: left;">Business</td>
                             <td><span id="spnTotalBase"></span></td>
+                            <td><span id="spnNonSSBase"></span></td>
                             <td><span id="spnSSBase"></span></td>
                             <td><span id="spnSSCont"></span></td>
-                            <td><span id="spnNonSSBase"></span></td>
+                            @*<td><span id="spnNonSSBase"></span></td>*@
                         </tr>
                     </table>
                 </div>

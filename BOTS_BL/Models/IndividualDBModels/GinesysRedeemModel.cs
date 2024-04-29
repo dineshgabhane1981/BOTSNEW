@@ -29,6 +29,7 @@ namespace BOTS_BL.Models
         public string OfferCode { get; set; }
         public string MinVal { get; set; }
         public string MaxVal { get; set; }
+        public string IsZwing { get; set; }
 
     }
     public class GinesysRedeemCouponModel
@@ -38,6 +39,7 @@ namespace BOTS_BL.Models
         public string InvoiceAmount { get; set; }
         public string billGUID { get; set; }
         public string StoreId { get; set; }        
+
     }
 }
 

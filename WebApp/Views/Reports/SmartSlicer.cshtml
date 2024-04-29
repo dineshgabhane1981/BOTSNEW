@@ -1577,7 +1577,7 @@
                 return false;
             }
             if ($("#rbtnCTxnCount").is(":checked")) {
-                if ($("#ddlTxnCumulative").val() == "" && ($("#txtCTxnCount").val() == "" && ($("#txtCTxnMonths").val() == "" && $("#ddlTxnCumulativeFrequency").val() == "") {
+                if ($("#ddlTxnCumulative").val() == "" && $("#txtCTxnCount").val() == "" && $("#txtCTxnMonths").val() == "" && $("#ddlTxnCumulativeFrequency").val() == "") {
                     cuteAlert({
                         type: "error",
                         title: "OOPS...",
@@ -1590,12 +1590,235 @@
             }
 
             if ($("#rbtnCSpend").is(":checked")) {
-
+                if ($("#ddlSpendCumulative").val() == "" && $("#txtCSpendCount").val() == "" && $("#txtCSpendMonths").val() == "" && $("#ddlSpendCumulativeFrequency").val() == "") {
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS...",
+                        message: "Please select base filter",
+                        buttonText: "Okay"
+                    })
+                    status = false;
+                    return false;
+                }
             }
             
         }
-
-
+        if ($("#chkEnrolledRange").is(":checked")) {
+            if ($("#txtEnrollfromdt").val() == "" && $("#txtEnrolltodt").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter enrolled date",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkInactiveSince").is(":checked")) {
+            if ($("#txtNonTransactedMax").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter inactive since days",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkPointBalance").is(":checked")) {
+            if ($("#txtPointsBalMin").val() == "" && $("#txtPointsBalMax").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter point balance min or max",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkTxnCount").is(":checked")) {
+            if ($("#txtTxnCountMin").val() == "" && $("#txtTxnCountMax").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter transaction count min or max",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkSpend").is(":checked")) {
+            if ($("#txtSpendMin").val() == "" && $("#txtSpendMax").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter transaction count min or max",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkInvoiceValue").is(":checked")) {
+            if ($("#txtInvoiceValueMin").val() == "" && $("#txtInvoiceValueMax").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter invoice value min or max",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkAvgTicket").is(":checked")) {
+            if ($("#txtAvgTicketFrm").val() == "" && $("#txtAvgTicketTo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter average ticket size min or max",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkRedeemed").is(":checked")) {
+            if (!$("#rbtnRedeemedMultiple").is(":checked") && !$("#rbtnRedeemedSingle").is(":checked") && !$("#rbtnNonRedeemed").is(":checked")) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Redeemed",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkNeverPurchased").is(":checked")) {            
+            if ($("#ddlNPCategory").val() == "" && $("#ddlNPSubCategory").val()=="") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Never Purchased Category/Sub-Category/Product",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkPurchased").is(":checked")) {
+            if ($("#ddlPCategory").val() == "" && $("#ddlPSubCategory").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Purchased Category/Sub-Category/Product",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkBrands").is(":checked")) {
+            if ($("#ddlBrands").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Zone",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkOutlet").is(":checked")) {            
+            if ($("#lstBoxOutlet").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Enrolled Outlet",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }        
+        if ($("#chkTOutlet").is(":checked")) {
+            if ($("#lstBoxTOutlet").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Transacting Outlet",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkGender").is(":checked")) {
+            if ($("#ddlGender").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Gender",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkCity").is(":checked")) {
+            if ($("#txtCity").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter City",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkAge").is(":checked")) {
+            if ($("#txtAgefrom").val() == "" && $("#txtAgeTo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Age",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkBirthday").is(":checked")) {
+            if ($("#ddlBirthday").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Birthday",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
+        if ($("#chkAnniversary").is(":checked")) {
+            if ($("#ddlAnniversary").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please select Anniversary",
+                    buttonText: "Okay"
+                })
+                status = false;
+                return false;
+            }
+        }
 
 
         return status;
@@ -1605,9 +1828,9 @@
         $("#divLoader").show();
         var result = Validation();
         result = false;
-        alert("OK");
+        /*alert("OK");*/
         if (result) {
-            alert(111)
+            //alert(111)
             var AllData = [];
 
             //First, Second and Third level Radio buttons or Checkboxes
@@ -1633,22 +1856,7 @@
                 if ($("#chkTxnTier").is(":checked")) {
                     item["SecondChk"] = "Tier";
                     item["Tier"] = $("#ddlTier").val();                    
-                }
-                //if ($("#chkTxnCumiulative").is(":checked")) {
-                //    item["SecondChk"] = "Cumiulative";
-                //    if ($("#rbtnCTxnCount").is(":checked")) {
-                //        item["LSGT"] = $("#ddlTxnCumulative").val();
-                //        item["TxnCount"] = $("#txtCTxnCount").val();
-                //        item["Months"] = $("#txtCTxnMonths").val();
-                //        item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
-                //    }
-                //    if ($("#rbtnCSpend").is(":checked")) {
-                //        item["LSGT"] = $("#ddlSpendCumulative").val();
-                //        item["TxnCount"] = $("#txtCSpendCount").val();
-                //        item["Months"] = $("#txtCSpendMonths").val();
-                //        item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
-                //    }
-                //}
+                }                
             }
             if ($("#chkNonTransacting").is(":checked")) {
                 item["FirstChk"] = "NonTransacting";
@@ -1839,9 +2047,7 @@
             }
 
             AllData.push(item4);
-
-            var data = JSON.stringify(AllData);
-
+            
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetSSFilterCount", "Reports")',
@@ -1849,14 +2055,9 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-
                     $("#spnFilterCount").text(addComma(response[0]));
                     $("#spnTotalCount").text(addComma(response[1]));
-
                     $("#tblFilterDetails").show();
-
-
-
                     $("#divLoader").hide();
                 },
                 failure: function (response) {
@@ -1867,12 +2068,13 @@
                     $("#divLoader").hide();
                 }
             });
+
+            document.getElementById("btnGenerate").disabled = "";
+            document.getElementById("btnSave").disabled = "";
         }
         else {
             $("#divLoader").hide();
-        }
-        document.getElementById("btnGenerate").disabled = "";
-        document.getElementById("btnSave").disabled = "";
+        }        
     }
 
     function SaveFilterCriteria() {
@@ -2447,7 +2649,7 @@
         var selecteddata = JSON.stringify(AllData);
             var Array = [];
             var ArrayColumnName = [];
-        $('#ChooseRight').each(function (i, selected) {
+        $('#ChooseRight > option').each(function (i, selected) {
                 Array.push($(selected).val());
                 ArrayColumnName.push($(selected).text());
             });
@@ -2462,6 +2664,7 @@
                 //item["reporttype"] = type;
                 FilterData.push(item);
                 var data = JSON.stringify(FilterData);
+                console.log(data);
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("GetSlicerReport", "Reports")',

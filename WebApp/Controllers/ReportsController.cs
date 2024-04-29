@@ -384,24 +384,7 @@ namespace WebApp.Controllers
                 {
                     OutletId = "";
                 }
-                //if (!string.IsNullOrEmpty(Convert.ToString(item["FrmDate"])))
-                //    fromDate = Convert.ToString(item["FrmDate"]);
-
-                //if (!string.IsNullOrEmpty(Convert.ToString(item["ToDate"])))
-                //    ToDate = Convert.ToString(item["ToDate"]);
-
-                //if (!string.IsNullOrEmpty(Convert.ToString(item["FrmPts"])))
-                //    FrmPts = Convert.ToString(item["FrmPts"]);
-
-                //if (!string.IsNullOrEmpty(Convert.ToString(item["ToPts"])))
-                //    ToPts = Convert.ToString(item["ToPts"]);
-
-                //if (!string.IsNullOrEmpty(Convert.ToString(item["FrmSpend"])))
-                //    FrmSpend = Convert.ToString(item["FrmSpend"]);
-
-                //if (!string.IsNullOrEmpty(Convert.ToString(item["ToSpend"])))
-                //    ToSpend = Convert.ToString(item["ToSpend"]);
-
+                
                 lstMember = RR.GetMemberList(userDetails.GroupId, OutletId, userDetails.connectionString, userDetails.LoginId, fromDate, ToDate, FrmPts,
                     ToPts, FrmSpend, ToSpend);
             }
@@ -1228,23 +1211,23 @@ namespace WebApp.Controllers
                     {
                         dr["AvlPointsStr"] = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(dr["AvlPoints"]));
                     }
-                    if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
-                    {
-                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                    //if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
+                    //{
+                    //    //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
 
-                        var subDate = Convert.ToString(dr["LastTxnDate"]).Substring(0, 10);
+                    //    var subDate = Convert.ToString(dr["LastTxnDate"]).Substring(0, 10);
 
-                        dr["LastTxnDate"] = DateTime.ParseExact(subDate, "MM/dd/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                    }
-                    if (!string.IsNullOrEmpty(Convert.ToString(dr["CelebrationDate"])))
-                    {
-                        //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        var subDate = Convert.ToString(dr["CelebrationDate"]).Substring(0, 10);
+                    //    dr["LastTxnDate"] = DateTime.ParseExact(subDate, "MM/dd/yyyy", CultureInfo.InvariantCulture)
+                    //    .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    //}
+                    //if (!string.IsNullOrEmpty(Convert.ToString(dr["CelebrationDate"])))
+                    //{
+                    //    //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
+                    //    var subDate = Convert.ToString(dr["CelebrationDate"]).Substring(0, 10);
 
-                        dr["CelebrationDate"] = DateTime.ParseExact(subDate, "MM/dd/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
-                    }
+                    //    dr["CelebrationDate"] = DateTime.ParseExact(subDate, "MM/dd/yyyy", CultureInfo.InvariantCulture)
+                    //    .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                    //}
                 }
 
                 table.Columns.Remove("TotalSpend");
@@ -1739,10 +1722,13 @@ namespace WebApp.Controllers
                 }
                 
                 foreach (var itemNew1 in (ColumnId))
-                {                    
-                    string name = Convert.ToString(itemNew1);//string.Concat(Convert.ToString(itemNew1).Where(c => !char.IsWhiteSpace(c)));
-                    lstcolumnIdlist.Add(name);
-                    columns += itemNew1 + ",";
+                {
+                    //foreach (Dictionary<string, object> itemNew2 in itemNew1)
+                    //{
+                        string name = Convert.ToString(itemNew1);//string.Concat(Convert.ToString(itemNew1).Where(c => !char.IsWhiteSpace(c)));
+                        lstcolumnIdlist.Add(name);
+                        columns += itemNew1 + ",";
+                    //}
                 }
             }
 

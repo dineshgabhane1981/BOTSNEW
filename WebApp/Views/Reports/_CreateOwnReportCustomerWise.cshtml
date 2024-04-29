@@ -1,5 +1,10 @@
 ﻿@model WebApp.ViewModel.CreateOwnReportViewModel
-
+@using System.Globalization
+@using BOTS_BL.Models;
+@{
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var GroupId = userDetails.GroupId;
+}
 
 <div class="row mb-3 card">
     <div class="container-fluid pt-3 pl-3 pr-3">
@@ -32,34 +37,30 @@
                                         foreach (var customer in Model.listCustR)
                                         {
                                             <tr>
-                                                @*@foreach (var property in customer.GetType().GetProperties())
-                                                {
-                                                    var isExist = Model.lstcolumnIdlist.Contains(property.Name);
-                                                    if (isExist)
-                                                    {
-                                                        <td>@property.GetValue(customer)</td>
-                                                    }
-                                                }*@
-
                                                 @foreach (var item in Model.lstcolumnIdlist)
                                                 {
                                                     foreach (var property in customer.GetType().GetProperties())
                                                     {
                                                         if (item == property.Name)
                                                         {
-                                                            <td>@property.GetValue(customer)</td>
+                                                            if (item == "TotalTxnCount" || item == "PointsBalance" || item == "Spends")
+                                                            {
+                                                                if (GroupId == "1341")
+                                                                {
+                                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDouble(property.GetValue(customer)))</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(property.GetValue(customer)))</td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>@property.GetValue(customer)</td>
+                                                            }
                                                         }
                                                     }
                                                 }
-                                                @*@foreach (var property in customer.GetType().GetProperties())
-                                                {
-                                                    var isExist = Model.lstcolumnIdlist.Contains(property.Name);
-                                                    if (isExist)
-                                                    {
-                                                        <td>@property.GetValue(customer)</td>
-                                                    }
-                                                }*@
-
                                             </tr>
                                         }
                                     }

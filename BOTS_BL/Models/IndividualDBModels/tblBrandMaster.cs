@@ -47,7 +47,7 @@ namespace BOTS_BL.Models
 
         [Column(TypeName = "date")]
         public DateTime? CreatedDate { get; set; }
-
+        [NotMapped]
         [StringLength(150)]
         public string WebsiteURL { get; set; }
     }
