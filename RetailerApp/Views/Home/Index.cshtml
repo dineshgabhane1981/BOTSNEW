@@ -294,7 +294,7 @@
 
 </div>
 <script>
-    var object,c;
+    var object,c,D;
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#txtDOB").datepicker({
@@ -586,8 +586,8 @@
                                 //$("#dvEnrollment").show();
 
                                 object = response;
-                                var c = Object.keys(response.objJsonData.JsonList1).length;
-                                var D = Object.keys(response.objJsonCustData.JsonListCust).length;
+                                 c = Object.keys(response.objJsonData.JsonList1).length;
+                                 D = Object.keys(response.objJsonCustData.JsonListCust).length;
 
                                 //alert(c)
                                 //alert(D)
@@ -596,152 +596,154 @@
 
                                 if (($("#dvEnrollment").is(":visible")) == false) {
                                     $("#dvEnrollment").show();
-                                  //Dynamic Data for Enrollment
-                                   var count2, E1, items;
-                                   E1 = '';
-                                    for (k = 0; k < D; k++) {
-                                        dropdownval = 0;
-                                        var IddivEnrollrow = [];
-                                        IddivEnrollrow[k] = "ddlCustomEnroll" + k;
-                                        var IdEnrollName = [];
-                                        IdEnrollName[k] = "dynCustEnrollName" + k;
-                                        var IdEnrolldiv = [];
-                                        IdEnrolldiv[k] = "dynCustEnrollElement" + k;
 
-                                        var innerCount1 = Object.keys(response.objJsonCustData.JsonListCust[k]).length;
+                                    if (D != 1000) {
+                                        //Dynamic Data for Enrollment
+                                        var count2, E1, items;
+                                        E1 = '';
+                                        for (k = 0; k < D; k++) {
+                                            dropdownval = 0;
+                                            var IddivEnrollrow = [];
+                                            IddivEnrollrow[k] = "ddlCustomEnroll" + k;
+                                            var IdEnrollName = [];
+                                            IdEnrollName[k] = "dynCustEnrollName" + k;
+                                            var IdEnrolldiv = [];
+                                            IdEnrolldiv[k] = "dynCustEnrollElement" + k;
 
-                                        if (innerCount1 > 1) {
-                                            //Dropdown
-                                            var DynamicnameEnroll;
-                                            var MandField;
-                                            var ctrlId = "ddlCustomCtrlEnroll" + k;
-                                            var items = "";
-                                            var newCtrl = '<select id="' + ctrlId + '"></select>';
-                                            $.each(response.objJsonCustData.JsonListCust[k], function (i, item) {
-                                                DynamicnameEnroll = item.FieldName;
-                                                MandField = item.FieldTypeId;
-                                                items += "<option value='" + dropdownval + "'>" + item.FieldValue + "</option>";
-                                                dropdownval++;
-                                            });
+                                            var innerCount1 = Object.keys(response.objJsonCustData.JsonListCust[k]).length;
 
-                                            if (k == 0) {
-                                                $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
-                                                ControlId2 = IddivEnrollrow[k];
-                                                if (MandField == '1') {
-                                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                            if (innerCount1 > 1) {
+                                                //Dropdown
+                                                var DynamicnameEnroll;
+                                                var MandField;
+                                                var ctrlId = "ddlCustomCtrlEnroll" + k;
+                                                var items = "";
+                                                var newCtrl = '<select id="' + ctrlId + '"></select>';
+                                                $.each(response.objJsonCustData.JsonListCust[k], function (i, item) {
+                                                    DynamicnameEnroll = item.FieldName;
+                                                    MandField = item.FieldTypeId;
+                                                    items += "<option value='" + dropdownval + "'>" + item.FieldValue + "</option>";
+                                                    dropdownval++;
+                                                });
+
+                                                if (k == 0) {
+                                                    $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
+                                                    ControlId2 = IddivEnrollrow[k];
+                                                    if (MandField == '1') {
+                                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                                    }
+                                                    else {
+                                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                                    }
+                                                    $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                                    $("#" + IdEnrolldiv[k]).append(newCtrl);
+                                                    $("#" + ctrlId).attr("class", "input50");
+                                                    $("#" + ctrlId).attr("style", "margin-top:10px");
+                                                    $("#" + ctrlId).html(items);
                                                 }
                                                 else {
-                                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                                    $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
+                                                    ControlId2 = IddivEnrollrow[k];
+                                                    if (MandField == '1') {
+                                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                                    }
+                                                    else {
+                                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                                    }
+                                                    $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                                    $("#" + IdEnrolldiv[k]).append(newCtrl);
+                                                    $("#" + ctrlId).attr("class", "input50");
+                                                    $("#" + ctrlId).attr("style", "margin-top:10px");
+                                                    $("#" + ctrlId).html(items);
                                                 }
-                                                $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
-                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
-                                                $("#" + IdEnrolldiv[k]).append(newCtrl);
-                                                $("#" + ctrlId).attr("class", "input50");
-                                                $("#" + ctrlId).attr("style", "margin-top:10px");
-                                                $("#" + ctrlId).html(items);
                                             }
                                             else {
-                                                $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
-                                                ControlId2 = IddivEnrollrow[k];
-                                                if (MandField == '1') {
-                                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
-                                                }
-                                                else {
-                                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
-                                                }
-                                                $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
-                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
-                                                $("#" + IdEnrolldiv[k]).append(newCtrl);
-                                                $("#" + ctrlId).attr("class", "input50");
-                                                $("#" + ctrlId).attr("style", "margin-top:10px");
-                                                $("#" + ctrlId).html(items);
+                                                //Textbox or date
+                                                $.each(response.objJsonCustData.JsonListCust[k], function (i, item) {
+                                                    var DynamicnameEnroll, MandField;
+                                                    DynamicnameEnroll = item.FieldName
+                                                    MandField = item.FieldTypeId;
+                                                    if (item.FieldOptionId == "1") {
+                                                        if (k == 0) {
+                                                            var ctrlId1 = "txtCustomeEnroll" + k;
+
+                                                            //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
+                                                            $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
+                                                            ControlId2 = IddivEnrollrow[k];
+
+                                                            if (MandField == '1') {
+                                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                                            }
+                                                            else {
+                                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                                            }
+                                                            $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                                            $("#" + IdEnrolldiv[k]).append('<input id="' + ctrlId1 + '" class=\"input50\" />');
+                                                            $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
+                                                        }
+                                                        else {
+                                                            var ctrlId1 = "txtCustomeEnroll" + k;
+
+                                                            //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
+                                                            $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
+                                                            ControlId2 = IddivEnrollrow[k];
+                                                            if (MandField == '1') {
+                                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                                            }
+                                                            else {
+                                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                                            }
+                                                            $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                                            $("#" + IdEnrolldiv[k]).append('<input id="' + ctrlId1 + '" class=\"input50\" />');
+                                                            $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
+                                                        }
+                                                    }
+                                                    else if (item.FieldOptionId == "2") {
+                                                        if (k == 0) {
+                                                            var ctrlId2 = "txtDateEnroll" + k;
+                                                            var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
+
+                                                            $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
+                                                            ControlId2 = IddivEnrollrow[k];
+                                                            if (MandField == '1') {
+                                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                                            }
+                                                            else {
+                                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                                            }
+                                                            $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                                            $("#" + IdEnrolldiv[k]).append(txtDate);
+                                                            $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
+
+
+                                                        }
+                                                        else {
+                                                            var ctrlId2 = "txtDateEnroll" + k;
+                                                            var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
+
+                                                            $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
+                                                            ControlId2 = IddivEnrollrow[k];
+                                                            if (MandField == '1') {
+                                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                                            }
+                                                            else {
+                                                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                                            }
+                                                            $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                                            $("#" + IdEnrolldiv[k]).append(txtDate);
+                                                            $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
+                                                        }
+                                                    }
+                                                });
                                             }
                                         }
-                                        else {
-                                            //Textbox or date
-                                            $.each(response.objJsonCustData.JsonListCust[k], function (i, item) {
-                                                var DynamicnameEnroll, MandField;
-                                                DynamicnameEnroll = item.FieldName
-                                                MandField = item.FieldTypeId;
-                                                if (item.FieldOptionId == "1") {
-                                                    if (k == 0) {
-                                                        var ctrlId1 = "txtCustomeEnroll" + k;
-
-                                                        //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
-                                                        $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
-                                                        ControlId2 = IddivEnrollrow[k];
-
-                                                        if (MandField == '1') {
-                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
-                                                        }
-                                                        else {
-                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
-                                                        }
-                                                        $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
-                                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
-                                                        $("#" + IdEnrolldiv[k]).append('<input id="' + ctrlId1 + '" class=\"input50\" />');
-                                                        $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
-                                                    }
-                                                    else {
-                                                        var ctrlId1 = "txtCustomeEnroll" + k;
-
-                                                        //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
-                                                        $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
-                                                        ControlId2 = IddivEnrollrow[k];
-                                                        if (MandField == '1') {
-                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
-                                                        }
-                                                        else {
-                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
-                                                        }
-                                                        $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
-                                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
-                                                        $("#" + IdEnrolldiv[k]).append('<input id="' + ctrlId1 + '" class=\"input50\" />');
-                                                        $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
-                                                    }
-                                                }
-                                                else if (item.FieldOptionId == "2") {
-                                                    if (k == 0) {
-                                                        var ctrlId2 = "txtDateEnroll" + k;
-                                                        var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
-
-                                                        $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
-                                                        ControlId2 = IddivEnrollrow[k];
-                                                        if (MandField == '1') {
-                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
-                                                        }
-                                                        else {
-                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
-                                                        }
-                                                        $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
-                                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
-                                                        $("#" + IdEnrolldiv[k]).append(txtDate);
-                                                        $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
-
-
-                                                    }
-                                                    else {
-                                                        var ctrlId2 = "txtDateEnroll" + k;
-                                                        var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
-
-                                                        $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
-                                                        ControlId2 = IddivEnrollrow[k];
-                                                        if (MandField == '1') {
-                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
-                                                        }
-                                                        else {
-                                                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
-                                                        }
-                                                        $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
-                                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
-                                                        $("#" + IdEnrolldiv[k]).append(txtDate);
-                                                        $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
-                                                    }
-                                                }
-                                            });
-                                        }
                                     }
-
                                 }
                                 /*alert($("#CusNewContain").is(":visible"));*/
                                 /*if (($("#CusNewContain").is(":visible")) == false) {*/
@@ -911,13 +913,19 @@
 
     $("#btnSubmit").click(function () {
 
-        var ResltInvoiceSelect = ValidateMandatorySelect();
-        var ResltInvoiceText = ValidateMandatoryText();
-        var ResltInvoiceDate = ValidateMandatoryDate();
+        if (c != 1000) {
+            var ResltInvoiceSelect = ValidateMandatorySelect();
+            var ResltInvoiceText = ValidateMandatoryText();
+            var ResltInvoiceDate = ValidateMandatoryDate();
+        }
+       
 
-        var ResltEnrollSelect = ValidateMandEnrollSelect();
-        var ResltEnrollText = ValidateMandEnrollText();
-        var ResltEnrollDate = ValidateMandEnrollDate();
+        if (D != 1000) {
+            var ResltEnrollSelect = ValidateMandEnrollSelect();
+            var ResltEnrollText = ValidateMandEnrollText();
+            var ResltEnrollDate = ValidateMandEnrollDate();
+        }
+        
 
             if ($("#txtInvoiceNo").val() == "") {
                 cuteAlert({
@@ -935,7 +943,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true)) {
+            else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true) && (c != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -944,7 +952,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true)) {
+            else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true) && (c != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -953,7 +961,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true)) {
+            else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true) && (c != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -962,7 +970,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltEnrollSelect != "0") && (ResltEnrollSelect != true)) {
+            else if ((ResltEnrollSelect != "0") && (ResltEnrollSelect != true) && (D != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -971,7 +979,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltEnrollText != "0") && (ResltEnrollText != true)) {
+            else if ((ResltEnrollText != "0") && (ResltEnrollText != true) && (D != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -980,7 +988,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltEnrollDate != "0") && (ResltEnrollDate != true)) {
+            else if ((ResltEnrollDate != "0") && (ResltEnrollDate != true) && (D != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -1039,13 +1047,19 @@
 
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         var DynamicData = [];
-        var DynamicCustData = [];
+        var DynamicCustData = [], Result1 = [], Result = [];
 
-        DynamicCustData = EnrolDynCustData();
-        DynamicData = InvoiceDynData();
-        var Result1 = ConcatData(DynamicCustData);
-        var Result = ConcatData(DynamicData);
-        //alert(Result1);
+        if (D != 1000) {
+            DynamicCustData = EnrolDynCustData();
+            Result1 = ConcatData(DynamicCustData);
+        }
+        
+        if (c != 1000) {
+            DynamicData = InvoiceDynData();
+            Result = ConcatData(DynamicData);
+        }
+
+
             var FilterData = [];
             item = {};
             item["MobileNo"] = $("#txtMobileNo").val();

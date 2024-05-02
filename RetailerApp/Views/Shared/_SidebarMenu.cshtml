@@ -65,31 +65,40 @@
                             Daily Summary Report
                         </a>
                     </li>
+                }
+                @if (gId != "1366")
+                {
                     <li class="@Html.IsSelected(controller: "Home", action: "MemberDetailedReport")">
                         <a class="@Html.IsSelected(controller: "Home", action: "MemberDetailedReport")" href="@Url.Action("MemberDetailedReport", "Home")">
                             <i class="metismenu-icon"></i>
                             Member Detailed Report
                         </a>
                     </li>
-                    <li class="@Html.IsSelected(controller: "Home", action: "CancelTxn")">
-                        <a class="@Html.IsSelected(controller: "Home", action: "CancelTxn")" href="@Url.Action("CancelTxn", "Home")">
-                            <i class="metismenu-icon"></i>
-                            Cancel Txn
-                        </a>
-                    </li>
                 }
+                    @if (gId != "1364" && gId != "1366")
+                    {
+                        <li class="@Html.IsSelected(controller: "Home", action: "CancelTxn")">
+                            <a class="@Html.IsSelected(controller: "Home", action: "CancelTxn")" href="@Url.Action("CancelTxn", "Home")">
+                                <i class="metismenu-icon"></i>
+                                Cancel Txn
+                            </a>
+                        </li>
 
-                @if (gId == "1366")
-                {
-                    <li class="@Html.IsSelected(controller: "DataUpload", action: "Index")">
-                        <a class="@Html.IsSelected(controller: "DataUpload", action: "Index")" href="@Url.Action("Index", "DataUpload")">
-                            <i class="metismenu-icon"></i>
-                            DataUpload
-                        </a>
-                    </li>
-                }
+                    }
 
-            </ul>
+
+
+                    @if (gId == "1366")
+                    {
+                        <li class="@Html.IsSelected(controller: "DataUpload", action: "Index")">
+                            <a class="@Html.IsSelected(controller: "DataUpload", action: "Index")" href="@Url.Action("Index", "DataUpload")">
+                                <i class="metismenu-icon"></i>
+                                DataUpload
+                            </a>
+                        </li>
+                    }
+
+                </ul>
 
         </div>
     </div>

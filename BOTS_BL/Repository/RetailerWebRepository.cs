@@ -23,6 +23,8 @@ namespace BOTS_BL.Repository
     {
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
+        string Stringdtmessage;
+        int Status;
 
         public List<DynamicFieldInfo>[] DynamicData(string connectionString)
         {
@@ -203,7 +205,7 @@ namespace BOTS_BL.Repository
                             //DataTable dt3 = retVal.Tables[3];
                             objData.MobileNo = Convert.ToString(dt2.Rows[0]["MobileNo"]);
                             objData.CustomerName = Convert.ToString(dt2.Rows[0]["CustomerName"]);
-                            objData.PointBalance = Convert.ToString(dt2.Rows[0]["AvailablePoints"]);
+                            objData.PointBalance = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
 
                             objData.CardNo = Convert.ToString(dt1.Rows[0]["LoyaltyCard"]);
                             objData.TotalSpend = Convert.ToString(dt1.Rows[0]["TotalSpendText"]);
@@ -228,12 +230,18 @@ namespace BOTS_BL.Repository
         public EarnResponse InsertEarnData(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string DynamicData,string DynamicCustData)
         {
             EarnResponse R = new EarnResponse();
+            
             try
             {
                 using (var context = new CommonDBContext())
                 {
                     string groupId = CounterId.Substring(0, 4);
                     var conStr = CR.GetRetailWebConnString(CounterId);
+
+                    using (var tempcontext = new CommonDBContext())
+                    {
+                        Status = tempcontext.tblDatabaseDetails.Where(x => x.GroupId == groupId).Count();
+                    }
 
                     SqlConnection _Con = new SqlConnection(conStr);
                     DataSet retVal = new DataSet();
@@ -261,73 +269,100 @@ namespace BOTS_BL.Repository
                         daReport.Fill(retVal);
 
                         DataTable dt = retVal.Tables[0];
-                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+
+                        if(Status > 0)
                         {
-                            R.ResponseCode = "00";
-                            DataTable dt1 = retVal.Tables[1];
-                            DataTable dt2 = retVal.Tables[2];
-                            R.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
-                            R.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
-                            R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
-                            R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
-
-                            if (dt2.Rows.Count > 0)
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
-                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);                               
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.ResponseCode = "00";
+                                R.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
+                                R.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
+                                R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+                                R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
 
-                                if (SMSStatus == "1" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-                                    
-                                    if(groupId == "1007")
-                                    {
-                                        Thread _job1 = new Thread(() => SendBOTSVideo(dt3));
-                                        _job1.Start();
-                                    }
-                                    else
-                                    {
-                                        Thread _job = new Thread(() => SendSMSandWA(dt3));
-                                        _job.Start();
-                                    }                                  
-                                }
-                                else if (SMSStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
-                                    string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
-                                    string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
-                                    string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
-                                    string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
-                                    string _Url = dt3.Rows[0]["UrlTxn"].ToString();
-                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
-                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
-                                    _job.Start();
-                                }
-                                else if (WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-                                    
-                                    if (groupId == "1007")
-                                    {
-                                        Thread _job1 = new Thread(() => SendBOTSVideo(dt3));
-                                        _job1.Start();
-                                    }
-                                    else
-                                    {
-                                        Thread _job = new Thread(() => SendWAMessage(dt3));
-                                        _job.Start();
-
-                                    }
-                                }
+                                Thread _JobMessage = new Thread(() => MessageDataTable(dt2));
+                                _JobMessage.Start();
                             }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            }
+
                         }
                         else
                         {
-                            R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                            {
+                                R.ResponseCode = "00";
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
+                                R.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
+                                R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+                                R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
+
+                                if (dt2.Rows.Count > 0)
+                                {
+                                    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
+                                    string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+
+                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        if (groupId == "1007")
+                                        {
+                                            Thread _job1 = new Thread(() => SendBOTSVideo(dt3));
+                                            _job1.Start();
+                                        }
+                                        else
+                                        {
+                                            Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                            _job.Start();
+                                        }
+                                    }
+                                    else if (SMSStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+                                        string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+                                        string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+                                        string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+                                        string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+                                        string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+                                        string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                        Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                        _job.Start();
+                                    }
+                                    else if (WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        if (groupId == "1007")
+                                        {
+                                            Thread _job1 = new Thread(() => SendBOTSVideo(dt3));
+                                            _job1.Start();
+                                        }
+                                        else
+                                        {
+                                            Thread _job = new Thread(() => SendWAMessage(dt3));
+                                            _job.Start();
+
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            }
                         }
+                        
                     }
                 }
             }
@@ -341,12 +376,18 @@ namespace BOTS_BL.Repository
         public EarnResponse InsertEarnDataOld(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string DynamicData)
         {
             EarnResponse R = new EarnResponse();
+            
             try
             {
                 using (var context = new CommonDBContext())
                 {
                     string groupId = CounterId.Substring(0, 4);
                     var conStr = CR.GetRetailWebConnString(CounterId);
+
+                    using (var tempcontext = new CommonDBContext())
+                    {
+                        Status = tempcontext.tblDatabaseDetails.Where(x => x.GroupId == groupId).Count();
+                    }
 
                     SqlConnection _Con = new SqlConnection(conStr);
                     DataSet retVal = new DataSet();
@@ -372,58 +413,83 @@ namespace BOTS_BL.Repository
                         daReport.Fill(retVal);
 
                         DataTable dt = retVal.Tables[0];
-                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+
+                        if (Status > 0)
                         {
-                            R.ResponseCode = "00";
-                            DataTable dt1 = retVal.Tables[1];
-                            DataTable dt2 = retVal.Tables[2];
-                            R.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
-                            R.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
-                            R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
-                            R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
-
-                            
-
-                            if (dt2.Rows.Count > 0)
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
-                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.ResponseCode = "00";
+                                R.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
+                                R.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
+                                R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+                                R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
 
-                                if (SMSStatus == "1" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "1" && WAStatus == "0")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
-                                    string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
-                                    string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
-                                    string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
-                                    string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
-                                    string _Url = dt3.Rows[0]["UrlTxn"].ToString();
-                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
-                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "0" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendWAMessage(dt3));
-                                    _job.Start();
-                                }
+                                Thread _JobMessage = new Thread(() => MessageDataTable(dt2));
+                                _JobMessage.Start();
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                             }
                         }
                         else
                         {
-                            R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
-                        }
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                            {
+                                R.ResponseCode = "00";
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
+                                R.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
+                                R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+                                R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
+
+
+
+                                if (dt2.Rows.Count > 0)
+                                {
+                                    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
+                                    string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+
+                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "1" && WAStatus == "0")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+                                        string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+                                        string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+                                        string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+                                        string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+                                        string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+                                        string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                        Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "0" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendWAMessage(dt3));
+                                        _job.Start();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            }
+                        }     
                     }
                 }
             }
@@ -443,6 +509,11 @@ namespace BOTS_BL.Repository
                 {
                     string groupId = CounterId.Substring(0, 4);
                     var conStr = CR.GetRetailWebConnString(CounterId);
+
+                    using (var tempcontext = new CommonDBContext())
+                    {
+                        Status = tempcontext.tblDatabaseDetails.Where(x => x.GroupId == groupId).Count();
+                    }
 
                     SqlConnection _Con = new SqlConnection(conStr);
                     DataSet retVal = new DataSet();
@@ -470,58 +541,86 @@ namespace BOTS_BL.Repository
                         daReport.Fill(retVal);
 
                         DataTable dt = retVal.Tables[0];
-                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+
+                        if (Status > 0)
                         {
-                            R.ResponseCode = "00";
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
-                            DataTable dt1 = retVal.Tables[1];
-                            DataTable dt2 = retVal.Tables[2];
-                            R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
-                            R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
-                            R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
-
-                            
-
-                            if (dt2.Rows.Count > 0)
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
-                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.ResponseCode = "00";
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
+                                R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
+                                R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
 
-                                if (SMSStatus == "1" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "1" && WAStatus == "0")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
-                                    string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
-                                    string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
-                                    string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
-                                    string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
-                                    string _Url = dt3.Rows[0]["UrlOTP"].ToString();
-                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
-                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "0" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendWAMessage(dt3));
-                                    _job.Start();
-                                }
+                                Thread _JobMessage = new Thread(() => MessageDataTable(dt2));
+                                _JobMessage.Start();
                             }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            }
+
                         }
                         else
                         {
-                            R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                            {
+                                R.ResponseCode = "00";
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
+                                R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
+                                R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
+
+
+
+                                if (dt2.Rows.Count > 0)
+                                {
+                                    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
+                                    string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+
+                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "1" && WAStatus == "0")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
+                                        string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
+                                        string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
+                                        string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
+                                        string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
+                                        string _Url = dt3.Rows[0]["UrlOTP"].ToString();
+                                        string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                        Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "0" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendWAMessage(dt3));
+                                        _job.Start();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            }
                         }
+
+                        
                     }
                 }
             }
@@ -541,6 +640,11 @@ namespace BOTS_BL.Repository
                 {
                     string groupId = CounterId.Substring(0, 4);
                     var conStr = CR.GetRetailWebConnString(CounterId);
+
+                    using (var tempcontext = new CommonDBContext())
+                    {
+                        Status = tempcontext.tblDatabaseDetails.Where(x => x.GroupId == groupId).Count();
+                    }
 
                     SqlConnection _Con = new SqlConnection(conStr);
                     DataSet retVal = new DataSet();
@@ -568,58 +672,86 @@ namespace BOTS_BL.Repository
 
                         DataTable dt = retVal.Tables[0];
 
-                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                        if (Status > 0)
                         {
-                            R.ResponseCode = "00";
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
-                            DataTable dt1 = retVal.Tables[1];
-                            DataTable dt2 = retVal.Tables[2];
-                            R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
-                            R.PointsRedeemed = Convert.ToString(dt1.Rows[0]["PointsRedeemed"]);
-                            R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
-
-
-                            if (dt2.Rows.Count > 0)
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                               
+                                
+                                    DataTable dt1 = retVal.Tables[1];
+                                    DataTable dt2 = retVal.Tables[2];
+                                    R.ResponseCode = "00";
+                                    R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
+                                R.PointsRedeemed = Convert.ToString(dt1.Rows[0]["PointsRedeemed"]);
+                                R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
 
-                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
-                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
-                                if (SMSStatus == "1" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "1" && WAStatus == "0")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
-                                    string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
-                                    string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
-                                    string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
-                                    string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
-                                    string _Url = dt3.Rows[0]["UrlTxn"].ToString();
-                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
-                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "0" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendWAMessage(dt3));
-                                    _job.Start();
-                                }
+                                Thread _JobMessage = new Thread(() => MessageDataTable(dt2));
+                                    _JobMessage.Start();
+                                
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                             }
                         }
                         else
                         {
-                            R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                            {
+                                R.ResponseCode = "00";
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.PointsEarned = Convert.ToString(dt1.Rows[0]["PointsEarned"]);
+                                R.PointsRedeemed = Convert.ToString(dt1.Rows[0]["PointsRedeemed"]);
+                                R.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+
+
+                                if (dt2.Rows.Count > 0)
+                                {
+
+
+                                    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
+                                    string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "1" && WAStatus == "0")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+                                        string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+                                        string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+                                        string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+                                        string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+                                        string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+                                        string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                        Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "0" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendWAMessage(dt3));
+                                        _job.Start();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            }
                         }
+
+                        
                     }
                 }
             }
@@ -912,6 +1044,12 @@ namespace BOTS_BL.Repository
                     string outletId = CounterId.Substring(0, 8);
                     var conStr = CR.GetRetailWebConnString(CounterId);
 
+                    using (var tempcontext = new CommonDBContext())
+                    {
+                        Status = tempcontext.tblDatabaseDetails.Where(x => x.GroupId == groupId).Count();
+                    }
+
+
                     SqlConnection _Con = new SqlConnection(conStr);
                     DataSet retVal = new DataSet();
                     SqlCommand cmdReport = new SqlCommand("sp_Web_Cancel", _Con);
@@ -935,72 +1073,100 @@ namespace BOTS_BL.Repository
                         daReport.Fill(retVal);
 
                         DataTable dt = retVal.Tables[0];
-                        //if (retVal.Tables.Count > 1)
-                        //{
-                        //    dt1 = retVal.Tables[1];
-                        //    dt2 = retVal.Tables[2];
-                        //}
 
-                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                        if (Status > 0)
                         {
-                            objResponse.ResponseCode = "00";
-                            objResponse.ResponseMessage = "Success";
-                            dt1 = retVal.Tables[1];
-                            dt2 = retVal.Tables[2];
-                            ObjCancel.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
-                            ObjCancel.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
-                            ObjCancel.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
-                            ObjCancel.InvoiceNo = Convert.ToString(dt1.Rows[0]["InvoiceNo"]);
-                            ObjCancel.PointsCredited = Convert.ToString(dt1.Rows[0]["PointsCredited"]);
-                            ObjCancel.PointsDebited = Convert.ToString(dt1.Rows[0]["PointsDebited"]);
-
-                            ObjCanData.Cancelresponse = objResponse;
-                            ObjCanData.CancelTxn = ObjCancel;
-
-                            if (dt2.Rows.Count > 0)
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
-                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+                                dt1 = retVal.Tables[1];
+                                dt2 = retVal.Tables[2];
+                                objResponse.ResponseCode = "00";
+                                objResponse.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                ObjCancel.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
+                                ObjCancel.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
+                                ObjCancel.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+                                ObjCancel.InvoiceNo = Convert.ToString(dt1.Rows[0]["InvoiceNo"]);
+                                ObjCancel.PointsCredited = Convert.ToString(dt1.Rows[0]["PointsCredited"]);
+                                ObjCancel.PointsDebited = Convert.ToString(dt1.Rows[0]["PointsDebited"]);
 
-                                
+                                ObjCanData.Cancelresponse = objResponse;
+                                ObjCanData.CancelTxn = ObjCancel;
 
-                                if (SMSStatus == "1" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
+                                Thread _JobMessage = new Thread(() => MessageDataTable(dt2));
+                                _JobMessage.Start();
+                            }
+                            else
+                            {
+                                objResponse.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                objResponse.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
 
-                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
-                                    string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
-                                    string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
-                                    string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
-                                    string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
-                                    string _Url = dt3.Rows[0]["UrlTxn"].ToString();
-                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
-                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
-                                    _job.Start();
-                                }
-                                else if (WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendWAMessage(dt3));
-                                    _job.Start();
-                                }
+                                ObjCanData.Cancelresponse = objResponse;
                             }
                         }
                         else
                         {
-                            objResponse.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
-                            objResponse.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                            {
+                                objResponse.ResponseCode = "00";
+                                objResponse.ResponseMessage = "Success";
+                                dt1 = retVal.Tables[1];
+                                dt2 = retVal.Tables[2];
+                                ObjCancel.MobileNo = Convert.ToString(dt1.Rows[0]["MobileNo"]);
+                                ObjCancel.CustomerName = Convert.ToString(dt1.Rows[0]["CustomerName"]);
+                                ObjCancel.AvailablePoints = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+                                ObjCancel.InvoiceNo = Convert.ToString(dt1.Rows[0]["InvoiceNo"]);
+                                ObjCancel.PointsCredited = Convert.ToString(dt1.Rows[0]["PointsCredited"]);
+                                ObjCancel.PointsDebited = Convert.ToString(dt1.Rows[0]["PointsDebited"]);
 
-                            ObjCanData.Cancelresponse = objResponse;
+                                ObjCanData.Cancelresponse = objResponse;
+                                ObjCanData.CancelTxn = ObjCancel;
+
+                                if (dt2.Rows.Count > 0)
+                                {
+                                    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusTxn"]);
+                                    string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusTxn"]);
+
+
+
+                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
+                                        string _MobileMessage = dt3.Rows[0]["MessageTxn"].ToString();
+                                        string _UserName = dt3.Rows[0]["UserNameTxn"].ToString();
+                                        string _Password = dt3.Rows[0]["PasswordTxn"].ToString();
+                                        string _Sender = dt3.Rows[0]["SenderIdTxn"].ToString();
+                                        string _Url = dt3.Rows[0]["UrlTxn"].ToString();
+                                        string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                        Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                        _job.Start();
+                                    }
+                                    else if (WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendWAMessage(dt3));
+                                        _job.Start();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                objResponse.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                objResponse.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+
+                                ObjCanData.Cancelresponse = objResponse;
+                            }
                         }
+                        
                     }
                 }
             }
@@ -1020,6 +1186,12 @@ namespace BOTS_BL.Repository
                     string groupId = CounterId.Substring(0, 4);
                     var conStr = CR.GetRetailWebConnString(CounterId);
 
+
+                    using (var tempcontext = new CommonDBContext())
+                    {
+                        Status = tempcontext.tblDatabaseDetails.Where(x => x.GroupId == groupId).Count();
+                    }
+
                     SqlConnection _Con = new SqlConnection(conStr);
                     DataSet retVal = new DataSet();
                     SqlCommand cmdReport = new SqlCommand("sp_Web_OTP", _Con);
@@ -1038,54 +1210,79 @@ namespace BOTS_BL.Repository
                         daReport.Fill(retVal);
 
                         DataTable dt = retVal.Tables[0];
-                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+
+                        if (Status > 0)
                         {
-                            R.ResponseCode = "00";
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
-                            DataTable dt1 = retVal.Tables[1];
-                            DataTable dt2 = retVal.Tables[2];
-                            R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
-
-                            if (dt2.Rows.Count > 0)
+                            if(Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
-                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+                                R.ResponseCode = "00";
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
 
-                                if (SMSStatus == "1" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "1" && WAStatus == "0")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
-                                    string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
-                                    string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
-                                    string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
-                                    string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
-                                    string _Url = dt3.Rows[0]["UrlOTP"].ToString();
-                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
-                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "0" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendWAMessage(dt3));
-                                    _job.Start();
-                                }
+                                Thread _JobMessage = new Thread(() => MessageDataTable(dt2));
+                                _JobMessage.Start();
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                             }
                         }
                         else
                         {
-                            R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                            {
+                                R.ResponseCode = "00";
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
+
+                                if (dt2.Rows.Count > 0)
+                                {
+                                    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
+                                    string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+
+                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "1" && WAStatus == "0")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
+                                        string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
+                                        string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
+                                        string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
+                                        string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
+                                        string _Url = dt3.Rows[0]["UrlOTP"].ToString();
+                                        string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                        Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "0" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendWAMessage(dt3));
+                                        _job.Start();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            }
                         }
+
+                        
                     }
                 }
             }
@@ -1131,7 +1328,7 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objData = context.tblMembershipDetails.Where(x => x.MobileNo == MobileNo).OrderByDescending(y=>y.CreatedDate).FirstOrDefault();
+                    objData = context.tblMembershipDetails.Where(x => x.MobileNo == MobileNo && x.IsActive == true).OrderByDescending(y=>y.CreatedDate).FirstOrDefault();
                 }
             }
             catch (Exception ex)
@@ -1261,7 +1458,7 @@ namespace BOTS_BL.Repository
             return Obj;
         }
 
-        public BurnValidationResponse BurnValidationRatnaEnterprise(string CounterId, string Mobileno, string InvoiceNo, string InvoiceAmt, string PointsBurn, string DynamicData)
+        public BurnValidationResponse BurnValidationRatnaEnterprise(string CounterId, string Mobileno, string InvoiceAmt, string PointsBurn)
         {
             BurnValidationResponse R = new BurnValidationResponse();
             try
@@ -1271,19 +1468,22 @@ namespace BOTS_BL.Repository
                     string groupId = CounterId.Substring(0, 4);
                     var conStr = CR.GetRetailWebConnString(CounterId);
 
+                    using (var tempcontext = new CommonDBContext())
+                    {
+                        Status = tempcontext.tblDatabaseDetails.Where(x => x.GroupId == groupId).Count();
+                    }
+
                     SqlConnection _Con = new SqlConnection(conStr);
                     DataSet retVal = new DataSet();
-                    SqlCommand cmdReport = new SqlCommand("sp_Web_BurnValidation", _Con);
+                    SqlCommand cmdReport = new SqlCommand("sp_Web_BurnValidationMembership", _Con);
                     SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
                     using (cmdReport)
                     {
                         SqlParameter param1 = new SqlParameter("pi_CounterId", CounterId);
                         SqlParameter param2 = new SqlParameter("pi_MobileNo", Mobileno);
-                        SqlParameter param3 = new SqlParameter("pi_InvoiceNo", InvoiceNo);
-                        SqlParameter param4 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
-                        SqlParameter param5 = new SqlParameter("pi_BurnPoints", PointsBurn);
-                        SqlParameter param6 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
-                        SqlParameter param7 = new SqlParameter("pi_jsondata", DynamicData);
+                        SqlParameter param3 = new SqlParameter("pi_InvoiceAmt", InvoiceAmt);
+                        SqlParameter param4 = new SqlParameter("pi_BurnPoints", PointsBurn);
+                        SqlParameter param5 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
 
 
                         cmdReport.CommandType = CommandType.StoredProcedure;
@@ -1292,63 +1492,86 @@ namespace BOTS_BL.Repository
                         cmdReport.Parameters.Add(param3);
                         cmdReport.Parameters.Add(param4);
                         cmdReport.Parameters.Add(param5);
-                        cmdReport.Parameters.Add(param6);
-                        cmdReport.Parameters.Add(param7);
                         daReport.Fill(retVal);
 
                         DataTable dt = retVal.Tables[0];
-                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+
+                        if (Status > 0)
                         {
-                            R.ResponseCode = "00";
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
-                            DataTable dt1 = retVal.Tables[1];
-                            DataTable dt2 = retVal.Tables[2];
-                            R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
-                            R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
-                            R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
-
-
-
-                            if (dt2.Rows.Count > 0)
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
                             {
-                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
-                                string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+                                R.ResponseCode = "00";
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
+                                R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
+                                R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
 
-                                if (SMSStatus == "1" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendSMSandWA(dt3));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "1" && WAStatus == "0")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
-                                    string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
-                                    string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
-                                    string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
-                                    string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
-                                    string _Url = dt3.Rows[0]["UrlOTP"].ToString();
-                                    string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
-                                    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
-                                    _job.Start();
-                                }
-                                else if (SMSStatus == "0" && WAStatus == "1")
-                                {
-                                    DataTable dt3 = retVal.Tables[3];
-
-                                    Thread _job = new Thread(() => SendWAMessage(dt3));
-                                    _job.Start();
-                                }
+                                Thread _JobMessage = new Thread(() => MessageDataTable(dt2));
+                                _JobMessage.Start();
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                             }
                         }
                         else
                         {
-                            R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
-                            R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                            {
+                                R.ResponseCode = "00";
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                                DataTable dt1 = retVal.Tables[1];
+                                DataTable dt2 = retVal.Tables[2];
+                                R.OTPValue = Convert.ToString(dt1.Rows[0]["OTPValue"]);
+                                R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
+                                R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
+
+                                if (dt2.Rows.Count > 0)
+                                {
+                                    string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSStatusOTP"]);
+                                    string WAStatus = Convert.ToString(dt2.Rows[0]["WAStatusOTP"]);
+
+                                    if (SMSStatus == "1" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendSMSandWA(dt3));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "1" && WAStatus == "0")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        string _MobileNo = dt3.Rows[0]["CommMobileNoOTP"].ToString();
+                                        string _MobileMessage = dt3.Rows[0]["MessageOTP"].ToString();
+                                        string _UserName = dt3.Rows[0]["UserNameOTP"].ToString();
+                                        string _Password = dt3.Rows[0]["PasswordOTP"].ToString();
+                                        string _Sender = dt3.Rows[0]["SenderIdOTP"].ToString();
+                                        string _Url = dt3.Rows[0]["UrlOTP"].ToString();
+                                        string _SMSBrandId = dt3.Rows[0]["SMSBrandId"].ToString();
+                                        Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSBrandId));
+                                        _job.Start();
+                                    }
+                                    else if (SMSStatus == "0" && WAStatus == "1")
+                                    {
+                                        DataTable dt3 = retVal.Tables[3];
+
+                                        Thread _job = new Thread(() => SendWAMessage(dt3));
+                                        _job.Start();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                R.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                                R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                            }
                         }
+
+                        
                     }
                 }
             }
@@ -1358,6 +1581,39 @@ namespace BOTS_BL.Repository
             }
             return R;
         }
+
+        public bool SaveMembershipRedeemPoints(string CounterId, string Mobileno, tblMembershipDetail ObjData, string RedeemPoints)
+        {
+            bool Status;
+
+            Status = default;
+
+            string groupId = CounterId.Substring(0, 4);
+            var conStr = CR.GetRetailWebConnString(CounterId);
+
+            tblMembershipDetail objMemberAdd = new tblMembershipDetail();
+
+
+            using (var context = new BOTSDBContext(conStr))
+            {
+                var obj = context.tblMembershipDetails.Where(x => x.MobileNo == Mobileno && x.IsActive == true).FirstOrDefault();
+                obj.IsActive = false;
+                context.SaveChanges();
+
+                var objPoints = context.tblCustPointsMasters.Where(x => x.MobileNo == Mobileno && x.IsActive == true && x.PointsDesc == "Membership").FirstOrDefault();
+                objPoints.Points = objPoints.Points - Convert.ToDecimal(RedeemPoints);
+                context.SaveChanges();
+
+                context.tblMembershipDetails.Add(ObjData);
+                context.SaveChanges();
+
+                Status = true;
+
+            }
+
+            return Status;
+        }
+
         public void SendSMSandWA(DataTable dt3)
         {
             string _MobileNo = dt3.Rows[0]["CommMobileNoTxn"].ToString();
@@ -1745,833 +2001,504 @@ namespace BOTS_BL.Repository
                     }       
         }
 
+        public void MessageDataTable(DataTable _dtmessage)
+        {
+            try
+            {
+                if (_dtmessage.Rows.Count > 0)
+                {
+                    string SMSScript, SMSSenderId, WhatsAppScript, OutletId, SMSTemplateId, SMSScriptType, WhatsAppScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, WhatsAppVendor, WhatsAppUrl, WhatsAppTokenId, IsActiveWhatsApp, IsActiveSMS, VerifiedWhatsAppUrl, VerifiedWhatsAppLoginId, VerifiedWhatsAppPassword, VerifiedWhatsAppAPIKey, DisableCustSMSWA, WhatsAppMessageType, MobileNo, WhatsAppImgUrl, SMSWASendStatus, WhatsAppUserName, WhatsAppPassword;
+                    for (int i = 0; i < _dtmessage.Rows.Count; i++)
+                    {
+                        MobileNo = _dtmessage.Rows[i]["MobileNo"].ToString();
+                        SMSScript = _dtmessage.Rows[i]["SMSScript"].ToString();
+                        SMSSenderId = _dtmessage.Rows[i]["SMSSenderId"].ToString();
+                        WhatsAppScript = _dtmessage.Rows[i]["WhatsAppScript"].ToString();
+                        OutletId = _dtmessage.Rows[i]["OutletId"].ToString();
+                        SMSTemplateId = _dtmessage.Rows[i]["SMSTemplateId"].ToString();
+                        SMSScriptType = _dtmessage.Rows[i]["SMSScriptType"].ToString();
+                        WhatsAppScriptType = _dtmessage.Rows[i]["WhatsAppScriptType"].ToString();
+                        SMSVendor = _dtmessage.Rows[i]["SMSVendor"].ToString();
+                        SMSUrl = _dtmessage.Rows[i]["SMSUrl"].ToString();
+                        SMSLoginId = _dtmessage.Rows[i]["SMSLoginId"].ToString();
+                        SMSPassword = _dtmessage.Rows[i]["SMSPassword"].ToString();
+                        SMSAPIKey = _dtmessage.Rows[i]["SMSAPIKey"].ToString();
+                        WhatsAppVendor = _dtmessage.Rows[i]["WhatsAppVendor"].ToString();
+                        WhatsAppUrl = _dtmessage.Rows[i]["WhatsAppUrl"].ToString();
+                        WhatsAppTokenId = _dtmessage.Rows[i]["WhatsAppTokenId"].ToString();
+                        IsActiveWhatsApp = _dtmessage.Rows[i]["IsActiveWhatsApp"].ToString();
+                        IsActiveSMS = _dtmessage.Rows[i]["IsActiveSMS"].ToString();
+                        VerifiedWhatsAppUrl = _dtmessage.Rows[i]["VerifiedWhatsAppUrl"].ToString();
+                        VerifiedWhatsAppLoginId = _dtmessage.Rows[i]["VerifiedWhatsAppLoginId"].ToString();
+                        VerifiedWhatsAppPassword = _dtmessage.Rows[i]["VerifiedWhatsAppPassword"].ToString();
+                        VerifiedWhatsAppAPIKey = _dtmessage.Rows[i]["VerifiedWhatsAppAPIKey"].ToString();
+                        WhatsAppMessageType = _dtmessage.Rows[i]["WhatsAppMessageType"].ToString();
+                        SMSWASendStatus = _dtmessage.Rows[i]["SMSWASendStatus"].ToString();
 
-        //public void SendSMSMessageTxn(string _MobileNo, string _MobileMessage, string _UserName, string _Password, string _Sender, string _Url, string _CounterId)
-        //{
-        //    string _responseData;
-        //    try
-        //    {
-        //        switch (_CounterId.Substring(0, 5))
-        //        {
-        //            case "10851"://Govind Dande
-        //                var httpWebRequest_10851 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_10851.ContentType = "application/json";
-        //                httpWebRequest_10851.Method = "POST";
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                using (var streamWriter_10851 = new StreamWriter(httpWebRequest_10851.GetRequestStream()))
-        //                {
-        //                    string json_10851 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"8\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_10851.Write(json_10851);
-        //                }
-        //                var httpResponse_10851 = (HttpWebResponse)httpWebRequest_10851.GetResponse();
-        //                using (var streamReader_10851 = new StreamReader(httpResponse_10851.GetResponseStream()))
-        //                {
-        //                    var result_10851 = streamReader_10851.ReadToEnd();
-        //                }
-        //                break;
-        //            case "10931": // Banthiya
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                //_MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_10931 = "TEXT";
-        //                StringBuilder sbposdata_10931 = new StringBuilder();
-        //                sbposdata_10931.AppendFormat("apikey={0}", _UserName);
-        //                sbposdata_10931.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_10931.AppendFormat("&dest_mobileno={0}", _MobileNo);
-        //                sbposdata_10931.AppendFormat("&msgtype={0}", "UNI");
-        //                sbposdata_10931.AppendFormat("&message={0}", _MobileMessage);
-        //                sbposdata_10931.AppendFormat("&response={0}", "Y");
+                        if (IsActiveWhatsApp == "1")
+                        {
+                            if (SMSWASendStatus == "Both" || SMSWASendStatus == "WA")
+                            {
+                                switch (WhatsAppVendor)
+                                {
+                                    case "TechnoCore":
+                                        if (WhatsAppMessageType == "Text")
+                                        {
+                                            SendWAText_TechnoCore(MobileNo, WhatsAppScript, WhatsAppTokenId, WhatsAppUrl, SMSScript, SMSTemplateId, SMSScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, IsActiveSMS, SMSSenderId, SMSWASendStatus);
+                                        }
+                                        else if (WhatsAppMessageType == "TextWithImage")
+                                        {
+                                            WhatsAppImgUrl = _dtmessage.Rows[i]["WhatsAppImgUrl"].ToString();
+                                            SendWATextWithImage_TechnoCore(MobileNo, WhatsAppScript, WhatsAppTokenId, WhatsAppUrl, SMSScript, SMSTemplateId, SMSScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, IsActiveSMS, SMSSenderId, WhatsAppImgUrl, SMSWASendStatus);
+                                        }
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                SendSMSMessage(MobileNo, SMSScript, SMSTemplateId, SMSScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, IsActiveSMS, SMSSenderId);
+                            }
+                        }
+                        else if (IsActiveSMS == "1")
+                        {
+                            SendSMSMessage(MobileNo, SMSScript, SMSTemplateId, SMSScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, IsActiveSMS, SMSSenderId);
+                        }
 
-        //                HttpWebRequest httpWReq_10931 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_10931 = new UTF8Encoding();
-        //                byte[] data_10931 = encoding_10931.GetBytes(sbposdata_10931.ToString());
-        //                httpWReq_10931.Method = "POST";
-        //                httpWReq_10931.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_10931.ContentLength = data_10931.Length;
-        //                using (Stream stream_10931 = httpWReq_10931.GetRequestStream())
-        //                {
-        //                    stream_10931.Write(data_10931, 0, data_10931.Length);
-        //                }
-        //                HttpWebResponse response_10931 = (HttpWebResponse)httpWReq_10931.GetResponse();
-        //                StreamReader reader_10931 = new StreamReader(response_10931.GetResponseStream());
-        //                responseString = reader_10931.ReadToEnd();
-        //                reader_10931.Close();
-        //                response_10931.Close();
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                Stringdtmessage = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                Stringdtmessage = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Stringdtmessage = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
 
-        //                break;
-        //            case "11321": // Sree swami Purandare Jewellers
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11321 = "TEXT";
-        //                StringBuilder sbposdata_11321 = new StringBuilder();
-        //                sbposdata_11321.AppendFormat("user={0}", _UserName);
-        //                sbposdata_11321.AppendFormat("&pwd={0}", _Password);
-        //                sbposdata_11321.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11321.AppendFormat("&CountryCode={0}", "91");
-        //                sbposdata_11321.AppendFormat("&mobileno={0}", _MobileNo);
-        //                sbposdata_11321.AppendFormat("&msgtext={0}", _MobileMessage);
-        //                sbposdata_11321.AppendFormat("&smstype={0}", "0");
-        //                sbposdata_11321.AppendFormat("&pe_id={0}", "1701161580963320685");
-        //                HttpWebRequest httpWReq_11321 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11321 = new UTF8Encoding();
-        //                byte[] data_11321 = encoding_11321.GetBytes(sbposdata_11321.ToString());
-        //                httpWReq_11321.Method = "POST";
-        //                httpWReq_11321.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11321.ContentLength = data_11321.Length;
-        //                using (Stream stream_11321 = httpWReq_11321.GetRequestStream())
-        //                {
-        //                    stream_11321.Write(data_11321, 0, data_11321.Length);
-        //                }
-        //                HttpWebResponse response_11321 = (HttpWebResponse)httpWReq_11321.GetResponse();
-        //                StreamReader reader_11321 = new StreamReader(response_11321.GetResponseStream());
-        //                responseString = reader_11321.ReadToEnd();
-        //                reader_11321.Close();
-        //                response_11321.Close();
-        //                break;
-        //            case "11561"://MGKajaelSons
-        //                string date_11561 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11561 = "unicode";
-        //                StringBuilder sbposdata_11561 = new StringBuilder();
-        //                sbposdata_11561.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11561.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11561.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11561.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11561.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11561.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11561.AppendFormat("&msgType={0}", type_11561);
-        //                sbposdata_11561.AppendFormat("&format={0}", type_11561);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11561 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11561 = new UTF8Encoding();
-        //                byte[] data_11561 = encoding_11561.GetBytes(sbposdata_11561.ToString());
-        //                httpWReq_11561.Method = "POST";
-        //                httpWReq_11561.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11561.ContentLength = data_11561.Length;
-        //                using (Stream stream_11561 = httpWReq_11561.GetRequestStream())
-        //                {
-        //                    stream_11561.Write(data_11561, 0, data_11561.Length);
-        //                }
-        //                HttpWebResponse response_11561 = (HttpWebResponse)httpWReq_11561.GetResponse();
-        //                StreamReader reader_11561 = new StreamReader(response_11561.GetResponseStream());
-        //                string responseString_11561 = reader_11561.ReadToEnd();
-        //                reader_11561.Close();
-        //                response_11561.Close();
-        //                break;
-        //            case "11441": // Mhaswadkar Jewellers
-        //                string date_11441 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11441 = "text";
-        //                StringBuilder sbposdata_11441 = new StringBuilder();
-        //                sbposdata_11441.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11441.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11441.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11441.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11441.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11441.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11441.AppendFormat("&msgType={0}", type_11441);
-        //                sbposdata_11441.AppendFormat("&format={0}", type_11441);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11441 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11441 = new UTF8Encoding();
-        //                byte[] data_11441 = encoding_11441.GetBytes(sbposdata_11441.ToString());
-        //                httpWReq_11441.Method = "POST";
-        //                httpWReq_11441.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11441.ContentLength = data_11441.Length;
-        //                using (Stream stream_11441 = httpWReq_11441.GetRequestStream())
-        //                {
-        //                    stream_11441.Write(data_11441, 0, data_11441.Length);
-        //                }
-        //                HttpWebResponse response_11441 = (HttpWebResponse)httpWReq_11441.GetResponse();
-        //                StreamReader reader_11441 = new StreamReader(response_11441.GetResponseStream());
-        //                string responseString_11441 = reader_11441.ReadToEnd();
-        //                reader_11441.Close();
-        //                response_11441.Close();
-        //                break;
-        //            case "11491": // Ratnatray Jewellers
-        //                string date_11491 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11491 = "unicode";
-        //                StringBuilder sbposdata_11491 = new StringBuilder();
-        //                sbposdata_11491.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11491.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11491.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11491.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11491.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11491.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11491.AppendFormat("&msgType={0}", type_11491);
-        //                sbposdata_11491.AppendFormat("&format={0}", type_11491);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11491 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11491 = new UTF8Encoding();
-        //                byte[] data_11491 = encoding_11491.GetBytes(sbposdata_11491.ToString());
-        //                httpWReq_11491.Method = "POST";
-        //                httpWReq_11491.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11491.ContentLength = data_11491.Length;
-        //                using (Stream stream_11491 = httpWReq_11491.GetRequestStream())
-        //                {
-        //                    stream_11491.Write(data_11491, 0, data_11491.Length);
-        //                }
-        //                HttpWebResponse response_11491 = (HttpWebResponse)httpWReq_11491.GetResponse();
-        //                StreamReader reader_11491 = new StreamReader(response_11491.GetResponseStream());
-        //                string responseString_11491 = reader_11491.ReadToEnd();
-        //                reader_11491.Close();
-        //                response_11491.Close();
-        //                break;
-        //            case "11791": // Kiran Jewellers
-        //                string date_11791 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11791 = "text";
-        //                StringBuilder sbposdata_11791 = new StringBuilder();
-        //                sbposdata_11791.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11791.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11791.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11791.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11791.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11791.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11791.AppendFormat("&msgType={0}", type_11791);
-        //                sbposdata_11791.AppendFormat("&format={0}", type_11791);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11791 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11791 = new UTF8Encoding();
-        //                byte[] data_11791 = encoding_11791.GetBytes(sbposdata_11791.ToString());
-        //                httpWReq_11791.Method = "POST";
-        //                httpWReq_11791.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11791.ContentLength = data_11791.Length;
-        //                using (Stream stream_11791 = httpWReq_11791.GetRequestStream())
-        //                {
-        //                    stream_11791.Write(data_11791, 0, data_11791.Length);
-        //                }
-        //                HttpWebResponse response_11791 = (HttpWebResponse)httpWReq_11791.GetResponse();
-        //                StreamReader reader_11791 = new StreamReader(response_11791.GetResponseStream());
-        //                string responseString_11791 = reader_11791.ReadToEnd();
-        //                reader_11791.Close();
-        //                response_11791.Close();
-        //                break;
-        //            case "11821": // Devi Jewellers
-        //                string date_11821 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11821 = "text";
-        //                StringBuilder sbposdata_11821 = new StringBuilder();
-        //                sbposdata_11821.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11821.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11821.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11821.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11821.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11821.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11821.AppendFormat("&msgType={0}", type_11821);
-        //                sbposdata_11821.AppendFormat("&format={0}", type_11821);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11821 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11821 = new UTF8Encoding();
-        //                byte[] data_11821 = encoding_11821.GetBytes(sbposdata_11821.ToString());
-        //                httpWReq_11821.Method = "POST";
-        //                httpWReq_11821.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11821.ContentLength = data_11821.Length;
-        //                using (Stream stream_11821 = httpWReq_11821.GetRequestStream())
-        //                {
-        //                    stream_11821.Write(data_11821, 0, data_11821.Length);
-        //                }
-        //                HttpWebResponse response_11821 = (HttpWebResponse)httpWReq_11821.GetResponse();
-        //                StreamReader reader_11821 = new StreamReader(response_11821.GetResponseStream());
-        //                string responseString_11821 = reader_11821.ReadToEnd();
-        //                reader_11821.Close();
-        //                response_11821.Close();
-        //                break;
-        //            case "11841": // Om Jewellers
-        //                string date_11841 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11841 = "text";
-        //                StringBuilder sbposdata_11841 = new StringBuilder();
-        //                sbposdata_11841.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11841.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11841.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11841.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11841.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11841.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11841.AppendFormat("&msgType={0}", type_11841);
-        //                sbposdata_11841.AppendFormat("&format={0}", type_11841);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11841 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11841 = new UTF8Encoding();
-        //                byte[] data_11841 = encoding_11841.GetBytes(sbposdata_11841.ToString());
-        //                httpWReq_11841.Method = "POST";
-        //                httpWReq_11841.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11841.ContentLength = data_11841.Length;
-        //                using (Stream stream_11841 = httpWReq_11841.GetRequestStream())
-        //                {
-        //                    stream_11841.Write(data_11841, 0, data_11841.Length);
-        //                }
-        //                HttpWebResponse response_11841 = (HttpWebResponse)httpWReq_11841.GetResponse();
-        //                StreamReader reader_11841 = new StreamReader(response_11841.GetResponseStream());
-        //                string responseString_11841 = reader_11841.ReadToEnd();
-        //                reader_11841.Close();
-        //                response_11841.Close();
-        //                break;
-        //            case ""://VisionHLT English
-        //                var httpWebRequest_11671 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_11671.ContentType = "application/json";
-        //                httpWebRequest_11671.Method = "POST";
+        public void SendWAText_TechnoCore(string _MobileNo, string _WAMessage, string _WATokenId, string _WAUrl, string _SMSScript, string _SMSTemplateId, string _SMSScriptType, string _SMSVendor, string _SMSUrl, string _SMSLoginId, string _SMSPassword, string _SMSAPIKey, string _DisableSMS, string _SMSSenderId, string _SMSWASendStatus)
+        {
+            string responseString;
+            try
+            {
+                _WAMessage = _WAMessage.Replace("#99", "&");
+                _WAMessage = HttpUtility.UrlEncode(_WAMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_WAUrl);
+                sbposdata.AppendFormat("token={0}", _WATokenId);
+                sbposdata.AppendFormat("&phone={0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _WAMessage);
+                sbposdata.AppendFormat("&wacheck={0}", "true");
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
 
-        //                using (var streamWriter_11671 = new StreamWriter(httpWebRequest_11671.GetRequestStream()))
-        //                {
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+                }
+            }
+            catch (WebException ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+                }
+            }
+        }
 
-        //                    string json_11671 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_11671.Write(json_11671);
-        //                }
+        public void SendWATextWithImage_TechnoCore(string _MobileNo, string _WAMessage, string _WATokenId, string _WAUrl, string _SMSScript, string _SMSTemplateId, string _SMSScriptType, string _SMSVendor, string _SMSUrl, string _SMSLoginId, string _SMSPassword, string _SMSAPIKey, string _DisableSMS, string _SMSSenderId, string _WhatsAppImgUrl, string _SMSWASendStatus)
+        {
+            string responseString;
+            try
+            {
+                _WAMessage = _WAMessage.Replace("#99", "&");
+                _WAMessage = HttpUtility.UrlEncode(_WAMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_WAUrl);
+                sbposdata.AppendFormat("token={0}", _WATokenId);
+                sbposdata.AppendFormat("&phone={0}", _MobileNo);
+                sbposdata.AppendFormat("&link={0}", _WhatsAppImgUrl);
+                sbposdata.AppendFormat("&message={0}", _WAMessage);
+                sbposdata.AppendFormat("&wacheck={0}", "true");
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                //var J = JObject.Parse(responseString);
+                //string J1 = J["status"].ToString();
+                //if (J1 == "error")
+                //{
+                //    Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _CounterId));
+                //    _job.Start();
+                //}
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+                }
+            }
+            catch (WebException ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+                }
+            }
+        }
 
-        //                var httpResponse_11671 = (HttpWebResponse)httpWebRequest_11671.GetResponse();
-        //                using (var streamReader_11671 = new StreamReader(httpResponse_11671.GetResponseStream()))
-        //                {
-        //                    var result_11671 = streamReader_11671.ReadToEnd();
-        //                }
+        public void SendSMSMessage(string _MobileNo, string _SMSScript, string _SMSTemplateId, string _SMSScriptType, string _SMSVendor, string _SMSUrl, string _SMSLoginId, string _SMSPassword, string _SMSAPIKey, string _DisableSMS, string _SMSSenderId)
+        {
+            string responseString;
+            try
+            {
+                switch (_SMSVendor)
+                {
+                    case "TechnoCore":
+                        if (_SMSScriptType == "Text")
+                        {
+                            string date_TechnoCoreText = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            _SMSScript = HttpUtility.UrlEncode(_SMSScript);
+                            string type_TechnoCoreText = "text";
+                            StringBuilder sbposdata_TechnoCoreText = new StringBuilder();
+                            sbposdata_TechnoCoreText.AppendFormat("userid={0}", _SMSLoginId);
+                            sbposdata_TechnoCoreText.AppendFormat("&password={0}", _SMSPassword);
+                            sbposdata_TechnoCoreText.AppendFormat("&sendMethod={0}", "quick");
+                            sbposdata_TechnoCoreText.AppendFormat("&mobile={0}", _MobileNo);
+                            sbposdata_TechnoCoreText.AppendFormat("&msg={0}", _SMSScript);
+                            sbposdata_TechnoCoreText.AppendFormat("&senderid={0}", _SMSSenderId);
+                            sbposdata_TechnoCoreText.AppendFormat("&msgType={0}", type_TechnoCoreText);
+                            sbposdata_TechnoCoreText.AppendFormat("&format={0}", type_TechnoCoreText);
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            HttpWebRequest httpWReq_TechnoCoreText = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            UTF8Encoding encoding_TechnoCoreText = new UTF8Encoding();
+                            byte[] data_TechnoCoreText = encoding_TechnoCoreText.GetBytes(sbposdata_TechnoCoreText.ToString());
+                            httpWReq_TechnoCoreText.Method = "POST";
+                            httpWReq_TechnoCoreText.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq_TechnoCoreText.ContentLength = data_TechnoCoreText.Length;
+                            using (Stream stream_TechnoCoreText = httpWReq_TechnoCoreText.GetRequestStream())
+                            {
+                                stream_TechnoCoreText.Write(data_TechnoCoreText, 0, data_TechnoCoreText.Length);
+                            }
+                            HttpWebResponse response_TechnoCoreText = (HttpWebResponse)httpWReq_TechnoCoreText.GetResponse();
+                            StreamReader reader_TechnoCoreText = new StreamReader(response_TechnoCoreText.GetResponseStream());
+                            string responseString_TechnoCoreText = reader_TechnoCoreText.ReadToEnd();
+                            reader_TechnoCoreText.Close();
+                            response_TechnoCoreText.Close();
+                        }
+                        else
+                        {
+                            string date_TechnoCoreUnicode = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            _SMSScript = HttpUtility.UrlEncode(_SMSScript);
+                            string type_TechnoCoreUnicode = "unicode";
+                            StringBuilder sbposdata_TechnoCoreUnicode = new StringBuilder();
+                            sbposdata_TechnoCoreUnicode.AppendFormat("userid={0}", _SMSLoginId);
+                            sbposdata_TechnoCoreUnicode.AppendFormat("&password={0}", _SMSPassword);
+                            sbposdata_TechnoCoreUnicode.AppendFormat("&sendMethod={0}", "quick");
+                            sbposdata_TechnoCoreUnicode.AppendFormat("&mobile={0}", _MobileNo);
+                            sbposdata_TechnoCoreUnicode.AppendFormat("&msg={0}", _SMSScript);
+                            sbposdata_TechnoCoreUnicode.AppendFormat("&senderid={0}", _SMSSenderId);
+                            sbposdata_TechnoCoreUnicode.AppendFormat("&msgType={0}", type_TechnoCoreUnicode);
+                            sbposdata_TechnoCoreUnicode.AppendFormat("&format={0}", type_TechnoCoreUnicode);
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            HttpWebRequest httpWReq_TechnoCoreUnicode = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            UTF8Encoding encoding_TechnoCoreUnicode = new UTF8Encoding();
+                            byte[] data_TechnoCoreUnicode = encoding_TechnoCoreUnicode.GetBytes(sbposdata_TechnoCoreUnicode.ToString());
+                            httpWReq_TechnoCoreUnicode.Method = "POST";
+                            httpWReq_TechnoCoreUnicode.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq_TechnoCoreUnicode.ContentLength = data_TechnoCoreUnicode.Length;
+                            using (Stream stream_TechnoCoreUnicode = httpWReq_TechnoCoreUnicode.GetRequestStream())
+                            {
+                                stream_TechnoCoreUnicode.Write(data_TechnoCoreUnicode, 0, data_TechnoCoreUnicode.Length);
+                            }
+                            HttpWebResponse response_TechnoCoreUnicode = (HttpWebResponse)httpWReq_TechnoCoreUnicode.GetResponse();
+                            StreamReader reader_TechnoCoreUnicode = new StreamReader(response_TechnoCoreUnicode.GetResponseStream());
+                            string responseString_TechnoCoreUnicode = reader_TechnoCoreUnicode.ReadToEnd();
+                            reader_TechnoCoreUnicode.Close();
+                            response_TechnoCoreUnicode.Close();
+                        }
+                        break;
+                    case "Vision":
+                        if (_SMSScriptType == "Text")
+                        {
+                            var httpWebRequest_VisionText = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            httpWebRequest_VisionText.ContentType = "application/json";
+                            httpWebRequest_VisionText.Method = "POST";
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            using (var streamWriter_VisionText = new StreamWriter(httpWebRequest_VisionText.GetRequestStream()))
+                            {
+                                string json_VisionText = "{\"Account\":" +
+                                                "{\"APIKey\":\"" + _SMSAPIKey + "\"," +
+                                                "\"SenderId\":\"" + _SMSSenderId + "\"," +
+                                                "\"Channel\":\"Trans\"," +
+                                                "\"DCS\":\"0\"," +
+                                                "\"SchedTime\":null," +
+                                                "\"GroupId\":null}," +
+                                                "\"Messages\":[{\"Number\":\"" + _MobileNo + "\"," +
+                                                "\"Text\":\"" + _SMSScript + "\"}]" +
+                                                "}";
+                                streamWriter_VisionText.Write(json_VisionText);
+                            }
+                            var httpResponse_VisionText = (HttpWebResponse)httpWebRequest_VisionText.GetResponse();
+                            using (var streamReader_VisionText = new StreamReader(httpResponse_VisionText.GetResponseStream()))
+                            {
+                                var result_VisionText = streamReader_VisionText.ReadToEnd();
+                            }
+                        }
+                        else
+                        {
+                            var httpWebRequest_VisionUniCode = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            httpWebRequest_VisionUniCode.ContentType = "application/json";
+                            httpWebRequest_VisionUniCode.Method = "POST";
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            using (var streamWriter_VisionUniCode = new StreamWriter(httpWebRequest_VisionUniCode.GetRequestStream()))
+                            {
+                                string json_VisionUniCode = "{\"Account\":" +
+                                                "{\"APIKey\":\"" + _SMSAPIKey + "\"," +
+                                                "\"SenderId\":\"" + _SMSSenderId + "\"," +
+                                                "\"Channel\":\"Trans\"," +
+                                                "\"DCS\":\"8\"," +
+                                                "\"SchedTime\":null," +
+                                                "\"GroupId\":null}," +
+                                                "\"Messages\":[{\"Number\":\"" + _MobileNo + "\"," +
+                                                "\"Text\":\"" + _SMSScript + "\"}]" +
+                                                "}";
+                                streamWriter_VisionUniCode.Write(json_VisionUniCode);
+                            }
+                            var httpResponse_VisionUniCode = (HttpWebResponse)httpWebRequest_VisionUniCode.GetResponse();
+                            using (var streamReader_VisionUniCode = new StreamReader(httpResponse_VisionUniCode.GetResponseStream()))
+                            {
+                                var result_VisionUniCode = streamReader_VisionUniCode.ReadToEnd();
+                            }
+                        }
+                        break;
+                    case "Pinnacle":
+                        if (_SMSScriptType == "Text")
+                        {
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            var httpWebRequest_PinnacleText = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            httpWebRequest_PinnacleText.ContentType = "application/json";
+                            httpWebRequest_PinnacleText.Headers.Add("Apikey", _SMSPassword);
+                            httpWebRequest_PinnacleText.Method = "POST";
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            using (var streamWriter_PinnacleText = new StreamWriter(httpWebRequest_PinnacleText.GetRequestStream()))
+                            {
+                                string json_PinnacleText = "{\"sender\":\"" + _SMSSenderId + "\"," +
+                                "\"message\":[{\"number\":\"" + _MobileNo + "\"," +
+                                 "\"text\":\"" + _SMSScript + "\"}]," + "\"messagetype\":\"TXT\"," + "\"dltentityid\":null ," + "\"dlttempid\":null}";
+                                streamWriter_PinnacleText.Write(json_PinnacleText);
+                            }
+                            var httpResponse_PinnacleText = (HttpWebResponse)httpWebRequest_PinnacleText.GetResponse();
+                            using (var streamReader_PinnacleText = new StreamReader(httpResponse_PinnacleText.GetResponseStream()))
+                            {
+                                var result_PinnacleText = streamReader_PinnacleText.ReadToEnd();
+                            }
+                        }
+                        else
+                        {
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            var httpWebRequest_PinnacleUnicode = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            httpWebRequest_PinnacleUnicode.ContentType = "application/json";
+                            httpWebRequest_PinnacleUnicode.Headers.Add("Apikey", _SMSPassword);
+                            httpWebRequest_PinnacleUnicode.Method = "POST";
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            using (var streamWriter_PinnacleUnicode = new StreamWriter(httpWebRequest_PinnacleUnicode.GetRequestStream()))
+                            {
+                                string json_PinnacleUnicode = "{\"sender\":\"" + _SMSSenderId + "\"," +
+                                "\"message\":[{\"number\":\"" + _MobileNo + "\"," +
+                                 "\"text\":\"" + _SMSScript + "\"}]," + "\"messagetype\":\"UNI\"," + "\"dltentityid\":null ," + "\"dlttempid\":null}";
+                                streamWriter_PinnacleUnicode.Write(json_PinnacleUnicode);
+                            }
+                            var httpResponse_PinnacleUnicode = (HttpWebResponse)httpWebRequest_PinnacleUnicode.GetResponse();
+                            using (var streamReader_PinnacleUnicode = new StreamReader(httpResponse_PinnacleUnicode.GetResponseStream()))
+                            {
+                                var result_PinnacleUnicode = streamReader_PinnacleUnicode.ReadToEnd();
+                            }
+                        }
+                        break;
+                    case "ValueFirst":
+                        if (_SMSScriptType == "Text")
+                        {
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            _SMSScript = HttpUtility.UrlEncode(_SMSScript);
+                            string type_ValueFirstText = "TEXT";
+                            StringBuilder sbposdata_ValueFirstText = new StringBuilder();
+                            sbposdata_ValueFirstText.AppendFormat("username={0}", _SMSLoginId);
+                            sbposdata_ValueFirstText.AppendFormat("&password={0}", _SMSPassword);
+                            sbposdata_ValueFirstText.AppendFormat("&to={0}", _MobileNo);
+                            sbposdata_ValueFirstText.AppendFormat("&from={0}", _SMSSenderId);
+                            sbposdata_ValueFirstText.AppendFormat("&text={0}", _SMSScript);
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            HttpWebRequest httpWReq_ValueFirstText = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            UTF8Encoding encoding_ValueFirstText = new UTF8Encoding();
+                            byte[] data_ValueFirstText = encoding_ValueFirstText.GetBytes(sbposdata_ValueFirstText.ToString());
+                            httpWReq_ValueFirstText.Method = "POST";
+                            httpWReq_ValueFirstText.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq_ValueFirstText.ContentLength = data_ValueFirstText.Length;
+                            using (Stream stream_ValueFirstText = httpWReq_ValueFirstText.GetRequestStream())
+                            {
+                                stream_ValueFirstText.Write(data_ValueFirstText, 0, data_ValueFirstText.Length);
+                            }
+                            HttpWebResponse response_ValueFirstText = (HttpWebResponse)httpWReq_ValueFirstText.GetResponse();
+                            StreamReader reader_ValueFirstText = new StreamReader(response_ValueFirstText.GetResponseStream());
+                            string responseString_ValueFirstText = reader_ValueFirstText.ReadToEnd();
+                            reader_ValueFirstText.Close();
+                            response_ValueFirstText.Close();
+                        }
+                        else
+                        {
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            _SMSScript = HttpUtility.UrlEncode(_SMSScript);
+                            string type_ValueFirstUnicode = "UNICODE";
+                            StringBuilder sbposdata_ValueFirstUnicode = new StringBuilder();
+                            sbposdata_ValueFirstUnicode.AppendFormat("username={0}", _SMSLoginId);
+                            sbposdata_ValueFirstUnicode.AppendFormat("&password={0}", _SMSPassword);
+                            sbposdata_ValueFirstUnicode.AppendFormat("&to={0}", _MobileNo);
+                            sbposdata_ValueFirstUnicode.AppendFormat("&from={0}", _SMSSenderId);
+                            sbposdata_ValueFirstUnicode.AppendFormat("&text={0}", _SMSScript);
+                            sbposdata_ValueFirstUnicode.AppendFormat("&code={0}", "3");
+                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                            HttpWebRequest httpWReq_ValueFirstUnicode = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            UTF8Encoding encoding_ValueFirstUnicode = new UTF8Encoding();
+                            byte[] data_ValueFirstUnicode = encoding_ValueFirstUnicode.GetBytes(sbposdata_ValueFirstUnicode.ToString());
+                            httpWReq_ValueFirstUnicode.Method = "POST";
+                            httpWReq_ValueFirstUnicode.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq_ValueFirstUnicode.ContentLength = data_ValueFirstUnicode.Length;
+                            using (Stream stream_ValueFirstUnicode = httpWReq_ValueFirstUnicode.GetRequestStream())
+                            {
+                                stream_ValueFirstUnicode.Write(data_ValueFirstUnicode, 0, data_ValueFirstUnicode.Length);
+                            }
+                            HttpWebResponse response_ValueFirstUnicode = (HttpWebResponse)httpWReq_ValueFirstUnicode.GetResponse();
+                            StreamReader reader_ValueFirstUnicode = new StreamReader(response_ValueFirstUnicode.GetResponseStream());
+                            string responseString_ValueFirstUnicode = reader_ValueFirstUnicode.ReadToEnd();
+                            reader_ValueFirstUnicode.Close();
+                            response_ValueFirstUnicode.Close();
+                        }
+                        break;
+                    case "ThirdParty":
+                        if (_SMSScriptType == "Text")
+                        {
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            _SMSScript = HttpUtility.UrlEncode(_SMSScript);
+                            string type3 = "TEXT";
+                            StringBuilder sbposdata3 = new StringBuilder();
+                            sbposdata3.AppendFormat("username={0}", _SMSLoginId);
+                            sbposdata3.AppendFormat("&pass={0}", _SMSPassword);
+                            sbposdata3.AppendFormat("&route={0}", "trans1");
+                            sbposdata3.AppendFormat("&senderid={0}", _SMSSenderId);
+                            sbposdata3.AppendFormat("&numbers={0}", _MobileNo);
+                            sbposdata3.AppendFormat("&message={0}", _SMSScript);
+                            HttpWebRequest httpWReq3 = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            UTF8Encoding encoding3 = new UTF8Encoding();
+                            byte[] data3 = encoding3.GetBytes(sbposdata3.ToString());
+                            httpWReq3.Method = "POST";
+                            httpWReq3.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq3.ContentLength = data3.Length;
+                            using (Stream stream = httpWReq3.GetRequestStream())
+                            {
+                                stream.Write(data3, 0, data3.Length);
+                            }
+                            HttpWebResponse response3 = (HttpWebResponse)httpWReq3.GetResponse();
+                            StreamReader reader3 = new StreamReader(response3.GetResponseStream());
+                            string responseString3 = reader3.ReadToEnd();
+                            reader3.Close();
+                            response3.Close();
+                            break;
+                        }
+                        break;
+                }
 
-        //                break;
-        //            case "12061": // Shuddhohum Jewellers
-        //                string date_12061 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_12061 = "text";
-        //                StringBuilder sbposdata_12061 = new StringBuilder();
-        //                sbposdata_12061.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_12061.AppendFormat("&password={0}", _Password);
-        //                sbposdata_12061.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_12061.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_12061.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_12061.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_12061.AppendFormat("&msgType={0}", type_12061);
-        //                sbposdata_12061.AppendFormat("&format={0}", type_12061);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_12061 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_12061 = new UTF8Encoding();
-        //                byte[] data_12061 = encoding_12061.GetBytes(sbposdata_12061.ToString());
-        //                httpWReq_12061.Method = "POST";
-        //                httpWReq_12061.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_12061.ContentLength = data_12061.Length;
-        //                using (Stream stream_12061 = httpWReq_12061.GetRequestStream())
-        //                {
-        //                    stream_12061.Write(data_12061, 0, data_12061.Length);
-        //                }
-        //                HttpWebResponse response_12061 = (HttpWebResponse)httpWReq_12061.GetResponse();
-        //                StreamReader reader_12061 = new StreamReader(response_12061.GetResponseStream());
-        //                string responseString_12061 = reader_12061.ReadToEnd();
-        //                reader_12061.Close();
-        //                response_12061.Close();
-        //                break;
-        //            case "12081"://NVDeviSaraf
-        //                var httpWebRequest_12081 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12081.ContentType = "application/json";
-        //                httpWebRequest_12081.Method = "POST";
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+            }
+            catch (WebException ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+            }
+        }
 
-        //                using (var streamWriter_12081 = new StreamWriter(httpWebRequest_12081.GetRequestStream()))
-        //                {
 
-        //                    string json_12081 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12081.Write(json_12081);
-        //                }
-
-        //                var httpResponse_12081 = (HttpWebResponse)httpWebRequest_12081.GetResponse();
-        //                using (var streamReader_12081 = new StreamReader(httpResponse_12081.GetResponseStream()))
-        //                {
-        //                    var result_12081 = streamReader_12081.ReadToEnd();
-        //                }
-
-        //                break;
-        //            case "10741"://MBAshtekar
-        //                var httpWebRequest_10741 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_10741.ContentType = "application/json";
-        //                httpWebRequest_10741.Method = "POST";
-
-        //                using (var streamWriter_10741 = new StreamWriter(httpWebRequest_10741.GetRequestStream()))
-        //                {
-
-        //                    string json_10741 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_10741.Write(json_10741);
-        //                }
-
-        //                var httpResponse_10741 = (HttpWebResponse)httpWebRequest_10741.GetResponse();
-        //                using (var streamReader_10741 = new StreamReader(httpResponse_10741.GetResponseStream()))
-        //                {
-        //                    var result_10741 = streamReader_10741.ReadToEnd();
-        //                }
-
-        //                break;
-        //            case "11251": // HemantJewellers
-        //                string date_11251 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11251 = "text";
-        //                StringBuilder sbposdata_11251 = new StringBuilder();
-        //                sbposdata_11251.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11251.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11251.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11251.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11251.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11251.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11251.AppendFormat("&msgType={0}", type_11251);
-        //                sbposdata_11251.AppendFormat("&format={0}", type_11251);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11251 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11251 = new UTF8Encoding();
-        //                byte[] data_11251 = encoding_11251.GetBytes(sbposdata_11251.ToString());
-        //                httpWReq_11251.Method = "POST";
-        //                httpWReq_11251.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11251.ContentLength = data_11251.Length;
-        //                using (Stream stream_11251 = httpWReq_11251.GetRequestStream())
-        //                {
-        //                    stream_11251.Write(data_11251, 0, data_11251.Length);
-        //                }
-        //                HttpWebResponse response_11251 = (HttpWebResponse)httpWReq_11251.GetResponse();
-        //                StreamReader reader_11251 = new StreamReader(response_11251.GetResponseStream());
-        //                string responseString_11251 = reader_11251.ReadToEnd();
-        //                reader_11251.Close();
-        //                response_11251.Close();
-        //                break;
-        //            case "12051"://HKSarafSons
-        //                var httpWebRequest_12051 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12051.ContentType = "application/json";
-        //                httpWebRequest_12051.Method = "POST";
-
-        //                using (var streamWriter_12051 = new StreamWriter(httpWebRequest_12051.GetRequestStream()))
-        //                {
-
-        //                    string json_12051 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12051.Write(json_12051);
-        //                }
-
-        //                var httpResponse_12051 = (HttpWebResponse)httpWebRequest_12051.GetResponse();
-        //                using (var streamReader_12051 = new StreamReader(httpResponse_12051.GetResponseStream()))
-        //                {
-        //                    var result_12051 = streamReader_12051.ReadToEnd();
-        //                }
-
-        //                break;
-        //            case "12181"://Darshan
-        //                var httpWebRequest_12181 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12181.ContentType = "application/json";
-        //                httpWebRequest_12181.Method = "POST";
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                using (var streamWriter_12181 = new StreamWriter(httpWebRequest_12181.GetRequestStream()))
-        //                {
-
-        //                    string json_12181 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12181.Write(json_12181);
-        //                }
-
-        //                var httpResponse_12181 = (HttpWebResponse)httpWebRequest_12181.GetResponse();
-        //                using (var streamReader_12181 = new StreamReader(httpResponse_12181.GetResponseStream()))
-        //                {
-        //                    var result_12181 = streamReader_12181.ReadToEnd();
-        //                }
-
-        //                break;
-        //            case "12021"://JyotichandBhaichandSaraf
-        //                var httpWebRequest_12021 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12021.ContentType = "application/json";
-        //                httpWebRequest_12021.Method = "POST";
-
-        //                using (var streamWriter_12021 = new StreamWriter(httpWebRequest_12021.GetRequestStream()))
-        //                {
-
-        //                    string json_12021 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12021.Write(json_12021);
-        //                }
-
-        //                var httpResponse_12021 = (HttpWebResponse)httpWebRequest_12021.GetResponse();
-        //                using (var streamReader_12021 = new StreamReader(httpResponse_12021.GetResponseStream()))
-        //                {
-        //                    var result_12021 = streamReader_12021.ReadToEnd();
-        //                }
-
-        //                break;
-        //            case "11801": // JK Devi Jewellers
-        //                string date_11801 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11801 = "text";
-        //                StringBuilder sbposdata_11801 = new StringBuilder();
-        //                sbposdata_11801.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11801.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11801.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11801.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11801.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11801.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11801.AppendFormat("&msgType={0}", type_11801);
-        //                sbposdata_11801.AppendFormat("&format={0}", type_11801);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11801 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11801 = new UTF8Encoding();
-        //                byte[] data_11801 = encoding_11801.GetBytes(sbposdata_11801.ToString());
-        //                httpWReq_11801.Method = "POST";
-        //                httpWReq_11801.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11801.ContentLength = data_11801.Length;
-        //                using (Stream stream_11801 = httpWReq_11801.GetRequestStream())
-        //                {
-        //                    stream_11801.Write(data_11801, 0, data_11801.Length);
-        //                }
-        //                HttpWebResponse response_11801 = (HttpWebResponse)httpWReq_11801.GetResponse();
-        //                StreamReader reader_11801 = new StreamReader(response_11801.GetResponseStream());
-        //                string responseString_11801 = reader_11801.ReadToEnd();
-        //                reader_11801.Close();
-        //                response_11801.Close();
-        //                break;
-        //            case "11781": // Londe Jewellers
-        //                string date_11781 = DateTime.Now.ToString("MM/dd/yyyy HH:mm");
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type_11781 = "unicode";
-        //                StringBuilder sbposdata_11781 = new StringBuilder();
-        //                sbposdata_11781.AppendFormat("userid={0}", _UserName);
-        //                sbposdata_11781.AppendFormat("&password={0}", _Password);
-        //                sbposdata_11781.AppendFormat("&sendMethod={0}", "quick");
-        //                sbposdata_11781.AppendFormat("&mobile={0}", _MobileNo);
-        //                sbposdata_11781.AppendFormat("&msg={0}", _MobileMessage);
-        //                sbposdata_11781.AppendFormat("&senderid={0}", _Sender);
-        //                sbposdata_11781.AppendFormat("&msgType={0}", type_11781);
-        //                sbposdata_11781.AppendFormat("&format={0}", type_11781);
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq_11781 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding_11781 = new UTF8Encoding();
-        //                byte[] data_11781 = encoding_11781.GetBytes(sbposdata_11781.ToString());
-        //                httpWReq_11781.Method = "POST";
-        //                httpWReq_11781.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq_11781.ContentLength = data_11781.Length;
-        //                using (Stream stream_11781 = httpWReq_11781.GetRequestStream())
-        //                {
-        //                    stream_11781.Write(data_11781, 0, data_11781.Length);
-        //                }
-        //                HttpWebResponse response_11781 = (HttpWebResponse)httpWReq_11781.GetResponse();
-        //                StreamReader reader_11781 = new StreamReader(response_11781.GetResponseStream());
-        //                string responseString_11781 = reader_11781.ReadToEnd();
-        //                reader_11781.Close();
-        //                response_11781.Close();
-        //                break;
-        //            case "12221"://OmkarGoldandSilverPalace
-        //                var httpWebRequest_12221 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12221.ContentType = "application/json";
-        //                httpWebRequest_12221.Method = "POST";
-
-        //                using (var streamWriter_12221 = new StreamWriter(httpWebRequest_12221.GetRequestStream()))
-        //                {
-
-        //                    string json_12221 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"8\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12221.Write(json_12221);
-        //                }
-
-        //                var httpResponse_12221 = (HttpWebResponse)httpWebRequest_12221.GetResponse();
-        //                using (var streamReader_12221 = new StreamReader(httpResponse_12221.GetResponseStream()))
-        //                {
-        //                    var result_12221 = streamReader_12221.ReadToEnd();
-        //                }
-
-        //                break;
-        //            case "12351"://OdhekarJeweller
-        //                var httpWebRequest_12351 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12351.ContentType = "application/json";
-        //                httpWebRequest_12351.Method = "POST";
-        //                using (var streamWriter_12351 = new StreamWriter(httpWebRequest_12351.GetRequestStream()))
-        //                {
-        //                    string json_12351 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12351.Write(json_12351);
-        //                }
-        //                var httpResponse_12351 = (HttpWebResponse)httpWebRequest_12351.GetResponse();
-        //                using (var streamReader_12351 = new StreamReader(httpResponse_12351.GetResponseStream()))
-        //                {
-        //                    var result_12351 = streamReader_12351.ReadToEnd();
-        //                }
-        //                break;
-        //            case "12381"://KheradkarSaraf
-        //                var httpWebRequest_12381 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12381.ContentType = "application/json";
-        //                httpWebRequest_12381.Method = "POST";
-        //                using (var streamWriter_12381 = new StreamWriter(httpWebRequest_12381.GetRequestStream()))
-        //                {
-        //                    string json_12381 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12381.Write(json_12381);
-        //                }
-        //                var httpResponse_12381 = (HttpWebResponse)httpWebRequest_12381.GetResponse();
-        //                using (var streamReader_12381 = new StreamReader(httpResponse_12381.GetResponseStream()))
-        //                {
-        //                    var result_12381 = streamReader_12381.ReadToEnd();
-        //                }
-        //                break;
-        //            case "12441"://SBJewellersBaramatikar
-        //                var httpWebRequest_12441 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12441.ContentType = "application/json";
-        //                httpWebRequest_12441.Method = "POST";
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                using (var streamWriter_12441 = new StreamWriter(httpWebRequest_12441.GetRequestStream()))
-        //                {
-        //                    string json_12441 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12441.Write(json_12441);
-        //                }
-        //                var httpResponse_12441 = (HttpWebResponse)httpWebRequest_12441.GetResponse();
-        //                using (var streamReader_12441 = new StreamReader(httpResponse_12441.GetResponseStream()))
-        //                {
-        //                    var result_12441 = streamReader_12441.ReadToEnd();
-        //                }
-        //                break;
-        //            case "11481"://MTD
-        //                var httpWebRequest_11481 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_11481.ContentType = "application/json";
-        //                httpWebRequest_11481.Method = "POST";
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                using (var streamWriter_11481 = new StreamWriter(httpWebRequest_11481.GetRequestStream()))
-        //                {
-        //                    string json_11481 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"0\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_11481.Write(json_11481);
-        //                }
-        //                var httpResponse_11481 = (HttpWebResponse)httpWebRequest_11481.GetResponse();
-        //                using (var streamReader_11481 = new StreamReader(httpResponse_11481.GetResponseStream()))
-        //                {
-        //                    var result_11481 = streamReader_11481.ReadToEnd();
-        //                }
-        //                break;
-        //            case "12531"://OmarsonsJewellers Pinnacle
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                var httpWebRequest_12531 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12531.ContentType = "application/json";
-        //                httpWebRequest_12531.Headers.Add("Apikey", _Password);
-        //                httpWebRequest_12531.Method = "POST";
-
-        //                using (var streamWriter_12531 = new StreamWriter(httpWebRequest_12531.GetRequestStream()))
-        //                {
-
-        //                    string json_12531 = "{\"sender\":\"" + _Sender + "\"," +
-        //                    "\"message\":[{\"number\":\"91" + _MobileNo + "\"," +
-        //                     "\"text\":\"" + _MobileMessage + "\"}]," + "\"messagetype\":\"TXT\"," + "\"dltentityid\":null ," + "\"dlttempid\":null}";
-        //                    streamWriter_12531.Write(json_12531);
-        //                }
-
-        //                var httpResponse_12531 = (HttpWebResponse)httpWebRequest_12531.GetResponse();
-        //                using (var streamReader_12531 = new StreamReader(httpResponse_12531.GetResponseStream()))
-        //                {
-        //                    var result_12531 = streamReader_12531.ReadToEnd();
-        //                }
-        //                break;
-        //            case "12611"://BedreBandhuSuvarnkar
-        //                var httpWebRequest_12611 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12611.ContentType = "application/json";
-        //                httpWebRequest_12611.Method = "POST";
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                // _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                using (var streamWriter_12611 = new StreamWriter(httpWebRequest_12611.GetRequestStream()))
-        //                {
-        //                    string json_12611 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"8\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12611.Write(json_12611);
-        //                }
-        //                var httpResponse_12611 = (HttpWebResponse)httpWebRequest_12611.GetResponse();
-        //                using (var streamReader_12611 = new StreamReader(httpResponse_12611.GetResponseStream()))
-        //                {
-        //                    var result_12611 = streamReader_12611.ReadToEnd();
-        //                }
-        //                break;
-        //            case "12641"://RatnaparkhiJewellers
-        //                var httpWebRequest_12641 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                httpWebRequest_12641.ContentType = "application/json";
-        //                httpWebRequest_12641.Method = "POST";
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                // _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                using (var streamWriter_12641 = new StreamWriter(httpWebRequest_12641.GetRequestStream()))
-        //                {
-        //                    string json_12641 = "{\"Account\":" +
-        //                                    "{\"APIKey\":\"" + _Password + "\"," +
-        //                                    "\"SenderId\":\"" + _Sender + "\"," +
-        //                                    "\"Channel\":\"Trans\"," +
-        //                                    "\"DCS\":\"8\"," +
-        //                                    "\"SchedTime\":null," +
-        //                                    "\"GroupId\":null}," +
-        //                                    "\"Messages\":[{\"Number\":\"91" + _MobileNo + "\"," +
-        //                                    "\"Text\":\"" + _MobileMessage + "\"}]" +
-        //                                    "}";
-        //                    streamWriter_12641.Write(json_12641);
-        //                }
-        //                var httpResponse_12641 = (HttpWebResponse)httpWebRequest_12641.GetResponse();
-        //                using (var streamReader_12641 = new StreamReader(httpResponse_12641.GetResponseStream()))
-        //                {
-        //                    var result_12641 = streamReader_12641.ReadToEnd();
-        //                }
-        //                break;
-        //            default:
-        //                _MobileMessage = _MobileMessage.Replace("#99", "&");
-        //                _MobileMessage = HttpUtility.UrlEncode(_MobileMessage);
-        //                string type1 = "TEXT";
-        //                StringBuilder sbposdata1 = new StringBuilder();
-        //                sbposdata1.AppendFormat("username={0}", _UserName);
-        //                sbposdata1.AppendFormat("&password={0}", _Password);
-        //                sbposdata1.AppendFormat("&to={0}", _MobileNo);
-        //                sbposdata1.AppendFormat("&from={0}", _Sender);
-        //                sbposdata1.AppendFormat("&text={0}", _MobileMessage);
-        //                sbposdata1.AppendFormat("&dlr-mask={0}", "19");
-        //                sbposdata1.AppendFormat("&dlr-url");
-        //                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-        //                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-        //                HttpWebRequest httpWReq1 = (HttpWebRequest)WebRequest.Create(_Url);
-        //                UTF8Encoding encoding1 = new UTF8Encoding();
-        //                byte[] data1 = encoding1.GetBytes(sbposdata1.ToString());
-        //                httpWReq1.Method = "POST";
-        //                httpWReq1.ContentType = "application/x-www-form-urlencoded";
-        //                httpWReq1.ContentLength = data1.Length;
-        //                using (Stream stream1 = httpWReq1.GetRequestStream())
-        //                {
-        //                    stream1.Write(data1, 0, data1.Length);
-        //                }
-        //                HttpWebResponse response1 = (HttpWebResponse)httpWReq1.GetResponse();
-        //                StreamReader reader1 = new StreamReader(response1.GetResponseStream());
-        //                string responseString1 = reader1.ReadToEnd();
-        //                reader1.Close();
-        //                response1.Close();
-        //                break;
-        //        }
-        //    }
-        //    catch (ArgumentException ex)
-        //    {
-        //        _responseData = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
-        //    }
-        //    catch (WebException ex)
-        //    {
-        //        _responseData = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _responseData = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
-        //    }
-        //}
 
     }
 

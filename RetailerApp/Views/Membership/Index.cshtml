@@ -32,48 +32,56 @@
             <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
             <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Available Points : <span id="spnPointsBalance" style="font-weight:bold;"></span></div>
             <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Package Amount : <span id="spnPackageAmount" style="font-weight:bold;"></span></div>
+            
+        </div>
+        <div class="col-md-12 col-sm-12 row">
             <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Remaining Amount : <span id="spnRemainingAmount" style="font-weight:bold;"></span></div>
+            <div class="col-md-3 col-sm-3" style="margin-top: 10px;">Package Validity : <span id="spnPackageValidity" style="font-weight:bold;"></span></div>
+            <div class="col-md-3 col-sm-3" style="margin-top: 10px;"> <span style="font-weight:bold;"></span></div>
         </div>
-        <div class="col-md-12 col-lg-12 row mt-3">
-            <div class="col-md-2 col-lg-2">
-                Package Type:
+
+        
+            <div class="col-md-12 col-lg-12 row mt-5">
+                <div class="col-md-2 col-lg-2">
+                    Package Type:
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="number" id="txtPackageOld" class="input50" />
+                </div>
             </div>
-            <div class="col-md-6 col-lg-6">
-                <input type="number" id="txtPackageOld" class="input50" />
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-2 col-lg-2">
+                    Package Validity:
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="date" id="txtValidityOld" class="input50" />
+                </div>
             </div>
-        </div>
-        <div class="col-md-12 col-lg-12 row mt-3">
-            <div class="col-md-2 col-lg-2">
-                Package Validity:
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-2 col-lg-2">
+                    Points Redeem:
+                </div>
+                <div class="col-md-2 col-lg-2">
+                    <input type="number" id="txtPointsRedeem" class="input50" />
+                </div>
+                <div class="col-md-2 col-lg-2 mt-2">
+                    <button type="button" id="btnSendOTP" class="btn btn-primary" onclick="SendOTP();">Send OTP</button>
+                </div>
             </div>
-            <div class="col-md-6 col-lg-6">
-                <input type="date" id="txtValidityOld" class="input50" />
+            <div id="divEnterOTP" class="col-md-12 col-lg-12 row mt-3" style="display:none">
+                <div class="col-md-2 col-lg-2">
+                    Enter OTP:
+                </div>
+                <div class="col-md-2 col-lg-2">
+                    <input type="number" id="txtOTPRedeem" class="input50" />
+                </div>
             </div>
-        </div>
-        <div class="col-md-12 col-lg-12 row mt-3">
-            <div class="col-md-2 col-lg-2">
-                Points Redeem:
+            <div class="col-md-12 col-lg-12 row mt-4">
+                <div class="col-md-12 col-lg-12" style="text-align:center;">
+                    <button type="button" id="btnSaveOldCustomer" class="btn btn-primary" onclick="SaveOldCustomer();" style="margin-right:10px;" disabled> Save</button>
+                </div>
             </div>
-            <div class="col-md-2 col-lg-2">
-                <input type="number" id="txtPointsRedeem" class="input50" />
-            </div>
-            <div class="col-md-2 col-lg-2 mt-2">
-                <button type="button" id="btnSendOTP" class="btn btn-primary" onclick="SendOTP();">Send OTP</button>
-            </div>
-        </div>
-        <div  id ="divEnterOTP" class="col-md-12 col-lg-12 row mt-3" style="display:none">
-            <div class="col-md-2 col-lg-2">
-                Enter OTP:
-            </div>
-            <div class="col-md-2 col-lg-2">
-                <input type="number" id="txtOTPRedeem" class="input50" />
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12 row mt-4">
-            <div class="col-md-12 col-lg-12" style="text-align:center;">
-                <button type="button" id="btnSaveOldCustomer" class="btn btn-primary" onclick="SaveOldCustomer();" style="margin-right:10px;" disabled> Save</button>
-            </div>
-        </div>
+        
     </div>
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px;display:none;" id="dvNewCustomer">
         <div class="col-md-12 col-lg-12 row mt-3">
@@ -233,6 +241,7 @@
                         $("#spnPointsBalance").text(response.PointBalance);
                         $("#spnPackageAmount").text(response.PackageAmount);
                         $("#spnRemainingAmount").text(response.PackageRemainingAmount);
+                        $("#spnPackageValidity").text(response.PackageValidity);
 
                         $("#divLoader").hide();
                     }
@@ -397,7 +406,7 @@
                             message: "OTP sent Successfully!!!",
                             buttonText: "Okay"
                         })
-                        $("#hdnOTP").val(result);
+                        $("#hdnOTP").val(result.OTPValue);
                         $("#divEnterOTP").show();
                         $("#btnSendOTP").prop('disabled', true);
                         $("#btnSaveOldCustomer").prop('disabled', false);
@@ -437,15 +446,47 @@
             return false;
         }
         if (returnStatus) {
-            cuteAlert({
-                type: "success",
-                title: "Oops..",
-                message: "OTP is correct",
-                buttonText: "Okay"
-            })
+            //cuteAlert({
+            //    type: "success",
+            //    title: "Oops..",
+            //    message: "OTP is correct",
+            //    buttonText: "Okay"
+            //})
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("RedeemMembershipPoints", "Membership")',
+                data: '{MobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + ', Packageamount: ' + JSON.stringify($("#txtPackageOld").val()) + ', ValidityOld: ' + JSON.stringify($("#txtValidityOld").val()) + ', PointsRedeem: ' + JSON.stringify($("#txtPointsRedeem").val()) +'}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result != null && result == true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Sent",
+                            message: "Member Package Details Saved Successfully !!!",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("Index", "Membership")";
+                            window.location.href = urlLink;
+                        })
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "Problem in saving member pakage details!!!",
+                            buttonText: "Okay"
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                }
+            });
         }
 
     }
+
 
 
 
