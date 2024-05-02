@@ -573,6 +573,7 @@
     <Compile Include="Repository\ParticipantRepository.cs" />
     <Compile Include="Repository\PointsLedgerRepository.cs" />
     <Compile Include="Repository\PromoCampaignRepository.cs" />
+    <Compile Include="Repository\RatnaEnterprisesRepository.cs" />
     <Compile Include="Repository\RedemptionRepository.cs" />
     <Compile Include="Repository\ReferencesRepository.cs" />
     <Compile Include="Repository\ReportsRepository.cs" />

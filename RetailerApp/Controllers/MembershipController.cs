@@ -35,6 +35,9 @@ namespace RetailerApp.Controllers
             {
                 objData.PackageAmount = Convert.ToString(data.PackageType);
                 objData.PackageRemainingAmount = Convert.ToString(data.RemainingAmount);
+                DateTime strDate = Convert.ToDateTime(data.PackageValidity);
+                objData.PackageValidity = strDate.ToString("yyyy-MM-dd");
+                objData.PointBalance = Convert.ToString(objData.PointBalance);
             }
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -48,6 +51,7 @@ namespace RetailerApp.Controllers
             tblCustDetailsMaster objCustDetails = new tblCustDetailsMaster();
             tblCustInfo objCustInfo = new tblCustInfo();
             tblCustTxnSummaryMaster objCustTxnSummary = new tblCustTxnSummaryMaster();
+            tblCustPointsMaster objCustPointsMaster = new tblCustPointsMaster();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
@@ -58,6 +62,8 @@ namespace RetailerApp.Controllers
                     objDetails.MobileNo = Convert.ToString(item["MobileNo"]);
                     objDetails.PackageType = Convert.ToDecimal(item["Package"]);
                     objDetails.PackageValidity = Convert.ToDateTime(item["Validity"]);
+                    objDetails.RemainingAmount = Convert.ToDecimal(item["Package"]);
+                    objDetails.IsActive = true;
                     objDetails.CreatedDate = DateTime.Now;
                     objDetails.CreatedBy = userDetails.LoginId;
 
@@ -97,6 +103,16 @@ namespace RetailerApp.Controllers
                     objCustTxnSummary.EarnPts = 0;
                     objCustTxnSummary.SalesReturnPtsGiven = 0;
                     objCustTxnSummary.SalesReturnPtsRemoved = 0;
+
+                    objCustPointsMaster.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objCustPointsMaster.Points = 0;
+                    objCustPointsMaster.PointsType = "Base";
+                    objCustPointsMaster.PointsDesc = "Base";
+                    objCustPointsMaster.StartDate = ER.IndianDatetime();
+                    objCustPointsMaster.EndDate = Convert.ToDateTime(item["Validity"]);
+                    objCustPointsMaster.IsActive = true;
+                    objCustPointsMaster.MinInvoiceAmtRequired = 0;
+                    objCustPointsMaster.MobileNoPtsId = Convert.ToString(item["MobileNo"])+ "Base";
                 }
                 result = RWR.AddMembership(objDetails, objCustDetails, objCustInfo, objCustTxnSummary, userDetails.connectionString);
             }
@@ -109,13 +125,37 @@ namespace RetailerApp.Controllers
 
         public JsonResult SendMemberOTP(string MobileNo,string Packageamount,string ValidityOld,string PointsRedeem)
         {
-            string result, DummyInvoiceNo;
+            BurnValidationResponse result = new BurnValidationResponse();
+            string  DummyInvoiceNo;
             DummyInvoiceNo = string.Empty;
-            result = "1234";
+            //result = "1234";
             CustomerDetails objData = new CustomerDetails();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
-            //result = RWR.BurnValidationRatnaEnterprise(userDetails.OutletOrBrandId, MobileNo, DummyInvoiceNo, Packageamount,);
+            result = RWR.BurnValidationRatnaEnterprise(userDetails.OutletOrBrandId, MobileNo, Packageamount, PointsRedeem);
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult RedeemMembershipPoints(string MobileNo, string Packageamount, string ValidityOld, string PointsRedeem)
+        {
+            bool result;
+            tblMembershipDetail objDetails = new tblMembershipDetail();
+
+            //result = "1234";
+            DateTime DateToday = ER.IndianDatetime();
+            CustomerDetails objData = new CustomerDetails();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            objDetails.MobileNo = MobileNo;
+            objDetails.PackageType = Convert.ToDecimal(Packageamount);
+            //objDetails.PackageValidity = DateToday.AddYears(1);
+            objDetails.PackageValidity = Convert.ToDateTime(ValidityOld);
+            //decimal Pakagevalue = Convert.ToDecimal(Packageamount) - Convert.ToDecimal(PointsRedeem);
+            objDetails.RemainingAmount = Convert.ToDecimal(Packageamount);
+            objDetails.IsActive = true;
+            objDetails.CreatedDate = DateToday;
+            objDetails.CreatedBy = userDetails.LoginId;
+
+            result = RWR.SaveMembershipRedeemPoints(userDetails.OutletOrBrandId, MobileNo, objDetails, PointsRedeem);
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

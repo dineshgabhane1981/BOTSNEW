@@ -27,5 +27,7 @@ namespace BOTS_BL.Models
         public DateTime? CreatedDate { get; set; }
         [Column(TypeName = "numeric")]
         public decimal? RemainingAmount { get; set; }
+
+        public bool IsActive { get; set; }
     }
 }
