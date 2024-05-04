@@ -365,7 +365,8 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
-                    objProd = context.Database.SqlQuery<ProductDetailsMaster>("select ProductCode,ProductName from tblProductMaster where Categorycode = @Categorycode",new SqlParameter("@Categorycode", Categorycode)).ToList();
+                    string query= "select ProductCode,ProductName from tblProductMaster where Categorycode in ("+ Categorycode + ")";
+                    objProd = context.Database.SqlQuery<ProductDetailsMaster>(query).ToList();
                     foreach (var item in objProd)
                     {
                         lstProd.Add(new SelectListItem

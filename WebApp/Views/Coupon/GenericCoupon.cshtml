@@ -1,144 +1,118 @@
 ﻿@model  WebApp.ViewModel.UploadCouponViewModel
 @{
-    ViewBag.Title = "Configure";
+    ViewBag.Title = "GenericCoupon";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner" style="margin-top:-10px;display:none;" id="dvAddCoupon">
     <div class="card p-2 pb-3 pl-4 mb-2">
         <div class="col-md-12 col-lg-12 row">
-            <div class="col-md-6 col-lg-6" style="border:1px solid gray;border-radius:5px ">
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <h5>Earn Criteria</h5>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Invoice Value :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="number" id="earnInvoiceValue1" class="input50" />
-                        <input type="number" id="earnInvoiceValue2" class="input50" style="margin-top:10px;" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Day :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.RedeemDays(), "Value", "Text"), "All Days", htmlAttributes: new { @class = "input50", @id = "earnddlDays" })&nbsp;
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Caregory/ Product :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstCategory, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "earnddlCategory" })
-                        @Html.ListBoxFor(x => Model.dummyProduct, new MultiSelectList(Model.lstProduct, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "earnddlProduct" })
-                        
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Earn Brand :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="text" id="earnBrand" class="input50" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Earn Dept :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="text" id="earnDept" class="input50" />
-                    </div>
-                </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Outlet :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        
-                        @Html.ListBoxFor(x => Model.dummyProduct, new MultiSelectList(Model.lstOutlet, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "earnddlOutlet" })
-                    </div>
-                </div>
-
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <h5>Coupon Details</h5>
             </div>
-            <div class="col-md-6 col-lg-6 pb-2" style="border:1px solid gray;border-radius:5px ">
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <h5>Redeemption Criteria</h5>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Coupon Code :
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Invoice Value :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="number" id="redeemInvoiceValue1" class="input50" />
-                        <input type="number" id="redeemInvoiceValue2" class="input50" style="margin-top:10px;" />
-                    </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="text" id="txtCouponCode" class="input50" />
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Day :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.RedeemDays(), "Value", "Text"), "All Days", htmlAttributes: new { @class = "input50", @id = "ddlDays" })&nbsp;
-                    </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Value Type :
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Caregory/ Product :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstCategory, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "ddlCategory" })
-                        @Html.ListBoxFor(x => Model.dummyProduct, new MultiSelectList(Model.lstProduct, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "ddlProduct" })
-                        
-                    </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="radio" id="chkValue" name="ValueType" style="width:20px; cursor:pointer;" checked /> Value
+                    <input type="radio" id="chkPercentage" name="ValueType" style="width:20px; cursor:pointer;margin-left:20px;" /> Percentage
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Redeem Brand :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="text" id="burnBrand" class="input50" />
-                    </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Coupon Value :
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Redeem Dept :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="text" id="burnDept" class="input50" />
-                    </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="number" id="txtCouponValue" class="input50" />
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Outlet :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        @Html.ListBoxFor(x => Model.dummyProduct, new MultiSelectList(Model.lstOutlet, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "ddlOutlet" })                        
-                    </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Expiry days :
                 </div>
-                <div class="col-md-12 col-lg-12 row mt-3">
-                    <div class="col-md-4 col-lg-4">
-                        Offer Code :
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <input type="text" class="input50" id="txtOfferCode" />
-                    </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="number" id="txtExpiryDays" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
 
                 </div>
-
+                <div class="col-md-6 col-lg-6">
+                    <input type="checkbox" id="chkIsCouponOnly" style="cursor:pointer;width:20px;height:20px;" /> Apply Coupon Only
+                </div>
             </div>
         </div>
-        <div class="col-md-12 col-lg-12 row mt-4">
-            <div class="col-md-12 col-lg-12" style="text-align:right;">
-                <input type="number" id="expiryDays" class="input50" placeholder="Expiry Days" />
-                <input type="number" id="couponValue" class="input50" placeholder="Coupon Value" />
-                <input type="checkbox" id="chkIsCouponOnly" style="cursor:pointer;width:20px;height:20px;" /> Apply Coupon Only &nbsp;&nbsp;&nbsp;
-                <input id="txtRuleName" type="text" class="input100" placeholder="Rule Name" />
-                <button type="button" id="btnSaveCouponRule" class="btn btn-primary" onclick="SaveCouponRule();" style="margin-right:10px;"> Save</button>
+        <hr id="hrTxnFilter" style="border-top: dashed 1px;" />
+        <div class="col-md-12 col-lg-12 row">
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <h5>Redeemption Criteria</h5>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Invoice Value :
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="number" id="redeemInvoiceValue1" class="input50" />
+                    <input type="number" id="redeemInvoiceValue2" class="input50" style="margin-top:10px;" />
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Day :
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.RedeemDays(), "Value", "Text"), "All Days", htmlAttributes: new { @class = "input50", @id = "ddlDays" })&nbsp;
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Caregory/ Product :
+                </div>
+                <div class="col-md-9 col-lg-9">
+                    @Html.ListBoxFor(x => Model.dummyCategory, new MultiSelectList(Model.lstCategory, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "ddlCategory" })
+                    @Html.ListBoxFor(x => Model.dummyProduct, new MultiSelectList(Model.lstProduct, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "ddlProduct" })
+
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Redeem Brand :
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="text" id="burnBrand" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Redeem Dept :
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <input type="text" id="burnDept" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-3">
+                <div class="col-md-3 col-lg-3">
+                    Outlet :
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    @Html.ListBoxFor(x => Model.dummyProduct, new MultiSelectList(Model.lstOutlet, "Value", "Text"), new { @class = "input100", Multiple = "multiple", @id = "ddlOutlet" })
+                </div>
+            </div>
+            <div class="col-md-12 col-lg-12 row mt-4">
+                <div class="col-md-12 col-lg-12" style="text-align:left;">
+                    <input id="txtRuleName" type="text" class="input100" placeholder="Rule Name" />
+                    <button type="button" id="btnSaveCouponRule" class="btn btn-primary" onclick="SaveCouponRule();" style="margin-right:10px;"> Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -157,6 +131,8 @@
                     <thead>
                         <tr>
                             <th scope="col">Rule Name</th>
+                            <th scope="col">Coupon Code</th>
+                            <th scope="col">Coupon Value</th>
                             <th scope="col">Is Coupon Only</th>
                             <th scope="col">Added Date</th>
                             <th scope="col">Action</th>
@@ -171,6 +147,15 @@
                                 {
                                     <tr>
                                         <td>@item.EarnRuleName</td>
+                                        <td>@item.CouponCode</td>
+                                        @if (item.ValueType == "Percentage")
+                                        {
+                                            <td>@item.CouponValue%</td>
+                                        }
+                                        else
+                                        {
+                                                <td>@item.CouponValue</td>
+                                        }
                                         <td>@item.IsOnlyCoupon.ToString()</td>
                                         <td>@item.AddedDate.Value.ToString("dd-MM-yyy")</td>
                                         @if (item.IsActive.Value == true)
@@ -204,6 +189,7 @@
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function () {
         $('#activityTable').DataTable({
@@ -240,6 +226,7 @@
             GetProductData(2);
         });
     });
+
     function AddCouponRule() {
         $("#dvAddCoupon").show(1000)
     }
@@ -291,21 +278,37 @@
 
     function SaveCouponRule() {
         var returnStatus = true;
-
-
-        if ($("#earnInvoiceValue1").val() == "" && $("#earnInvoiceValue2").val() == "" && $("#earnddlDays").val() == "" && $("#earnddlCategory").val() == "" && $("#earnddlOutlet").val() == "" && $("#earnBrand").val() == "" && $("#earnDept").val() == "") {
-            if ($("#earnddlProduct").val() == "") {
-                cuteAlert({
-                    type: "error",
-                    title: "Oops..",
-                    message: "Please add at least one Earn criteria",
-                    buttonText: "Okay"
-                })
-                returnStatus = false;
-                return false;
-            }
+        if ($("#txtCouponCode").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Coupon Code",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+            return false;
         }
-        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "" && $("#txtOfferCode").val() == "" && $("#burnBrand").val() == "" && $("#burnDept").val() == "") {
+        if ($("#txtExpiryDays").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Expiry days",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+            return false;
+        }
+        if ($("#txtCouponValue").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter Coupon value",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+            return false;
+        }
+        if ($("#redeemInvoiceValue1").val() == "" && $("#redeemInvoiceValue2").val() == "" && $("#ddlDays").val() == "" && $("#ddlCategory").val() == "" && $("#ddlOutlet").val() == "" && $("#burnBrand").val() == "" && $("#burnDept").val() == "") {
             if ($("#ddlProduct").val() == "") {
                 cuteAlert({
                     type: "error",
@@ -317,26 +320,6 @@
                 return false;
             }
         }
-        if ($("#expiryDays").val() == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Expiry days",
-                buttonText: "Okay"
-            })
-            returnStatus = false;
-            return false;
-        }
-        if ($("#couponValue").val() == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter Coupon value",
-                buttonText: "Okay"
-            })
-            returnStatus = false;
-            return false;
-        }
         if ($("#txtRuleName").val() == "") {
             cuteAlert({
                 type: "error",
@@ -347,40 +330,41 @@
             returnStatus = false;
             return false;
         }
-
-
-
-
         if (returnStatus) {
             var data = [];
             item = {}
             item["EarnRuleName"] = $("#txtRuleName").val();
-            item["EarnInvoiceAmountFrom"] = $("#earnInvoiceValue1").val();
-            item["EarnInvoiceAmountTo"] = $("#earnInvoiceValue2").val();
-            item["EarnDay"] = $("#earnddlDays").val();
-            item["EarnCategory"] = $("#earnddlCategory").val();
-            item["EarnProduct"] = $("#earnddlProduct").val();
-            item["EarnOutlet"] = $("#earnddlOutlet").val();
+            item["EarnInvoiceAmountFrom"] = "";
+            item["EarnInvoiceAmountTo"] = "";
+            item["EarnDay"] = "";
+            item["EarnCategory"] = "";
+            item["EarnProduct"] = "";
+            item["EarnOutlet"] = "";
             item["RedeemInvoiceAmountFrom"] = $("#redeemInvoiceValue1").val();
             item["RedeemInvoiceAmountTo"] = $("#redeemInvoiceValue2").val();
             item["RedeemDay"] = $("#ddlDays").val();
             item["RedeemCategory"] = $("#ddlCategory").val();
             item["RedeemProduct"] = $("#ddlProduct").val();
             item["RedeemOutlet"] = $("#ddlOutlet").val();
-            item["OfferCode"] = $("#txtOfferCode").val();
+            item["OfferCode"] = "";
             if ($('#chkIsCouponOnly').is(':checked'))
                 item["IsOnlyCoupon"] = true;
             else
                 item["IsOnlyCoupon"] = false;
-            item["CouponValue"] = $("#couponValue").val();
-            item["ExpiryDays"] = $("#expiryDays").val();
 
-            item["EarnBrand"] = $("#earnBrand").val();
-            item["EarnDept"] = $("#earnDept").val();
+            if ($('#chkValue').is(':checked'))
+                item["ValueType"] = "Value";
+            else
+                item["ValueType"] = "Percentage";
+
+            item["CouponCode"] = $("#txtCouponCode").val();
+            item["CouponValue"] = $("#txtCouponValue").val();
+            item["ExpiryDays"] = $("#txtExpiryDays").val();
+
+            item["EarnBrand"] = "";
+            item["EarnDept"] = "";
             item["BurnBrand"] = $("#burnBrand").val();
             item["BurnDept"] = $("#burnDept").val();
-            item["ValueType"] = "";
-            item["CouponCode"] = "";
 
             data.push(item);
             var datanew = JSON.stringify(data);
@@ -422,7 +406,7 @@
     }
 
     function ShowEnableDetails(Id) {
-        
+
         $("#divLoader").show();
             $.ajax({
                 type: "POST",
@@ -457,5 +441,4 @@
                 }
             });
     }
-
 </script>

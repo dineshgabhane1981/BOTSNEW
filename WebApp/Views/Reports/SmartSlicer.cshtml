@@ -1909,20 +1909,15 @@
 
             //Transactional Filters
             item1 = {}
-            item1["IsAvgTicket"] = "No";
             item1["IsEnrolledRange"] = "No";
             item1["IsInactiveSince"] = "No";
-            item1["IsSpend"] = "No";
-            item1["IsTxnCount"] = "No";
             item1["IsPointBalance"] = "No";
+            item1["IsTxnCount"] = "No";
+            item1["IsSpend"] = "No";
+            item1["IsInvoiceValue"] = "No";
+            item1["IsAvgTicket"] = "No";
             item1["Redeemed"] = "";
-
-            if ($("#chkAvgTicket").is(":checked")) {
-                item1["IsAvgTicket"] = "Yes";
-                item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
-                item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
-            }
-
+            
             if ($("#chkEnrolledRange").is(":checked")) {
                 item1["IsEnrolledRange"] = "Yes";
                 item1["Enrollfromdt"] = $("#txtEnrollfromdt").val();
@@ -1934,22 +1929,40 @@
                 item1["NonTransactedSince"] = $("#txtNonTransactedMax").val();
             }
 
-            if ($("#chkSpend").is(":checked")) {
-                item1["IsSpend"] = "Yes";
-                item1["SpendMin"] = $("#txtSpendMin").val();
-                item1["SpendMax"] = $("#txtSpendMax").val();
+            if ($("#chkPointBalance").is(":checked")) {
+                item1["IsPointBalance"] = "Yes";
+                item1["PointsBalMin"] = $("#txtPointsBalMin").val();
+                item1["PointsBalMax"] = $("#txtPointsBalMax").val();
             }
-
+                        
             if ($("#chkTxnCount").is(":checked")) {
                 item1["IsTxnCount"] = "Yes";
                 item1["CountMin"] = $("#txtTxnCountMin").val();
                 item1["CountMax"] = $("#txtTxnCountMax").val();
             }
 
-            if ($("#chkPointBalance").is(":checked")) {
-                item1["IsPointBalance"] = "Yes";
-                item1["PointsBalMin"] = $("#txtPointsBalMin").val();
-                item1["PointsBalMax"] = $("#txtPointsBalMax").val();
+            if ($("#chkSpend").is(":checked")) {
+                item1["IsSpend"] = "Yes";
+                item1["SpendMin"] = $("#txtSpendMin").val();
+                item1["SpendMax"] = $("#txtSpendMax").val();
+                item1["SpendDTFrm"] = $("#txtCumuSpendfromdt").val();
+                item1["SpendDTTo"] = $("#txtCumuSpendtodt").val();
+            }
+
+            if ($("#chkInvoiceValue").is(":checked")) {
+                item1["IsInvoiceValue"] = "Yes";
+                item1["InvoiceValueFrm"] = $("#txtInvoiceValueMin").val();
+                item1["InvoiceValueTo"] = $("#txtInvoiceValueMax").val();
+                item1["InvoiceValueDTFrm"] = $("#txtInvoiceValuefromdt").val();
+                item1["InvoiceValueDTTo"] = $("#txtInvoiceValuetodt").val();
+            }
+
+            if ($("#chkAvgTicket").is(":checked")) {
+                item1["IsAvgTicket"] = "Yes";
+                item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
+                item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
+                item1["AvgTicketDTFrm"] = $("#txtAvgTicketfromdt").val();
+                item1["AvgTicketDTTo"] = $("#txtAvgTickettodt").val();
             }
 
             if ($("#chkRedeemed").is(":checked")) {
@@ -2020,15 +2033,12 @@
 
             //Demographic Filter
             item4 = {}
-            item4["IsTier"] = "No";
+            
             item4["IsGender"] = "No";
             item4["IsCity"] = "No";
             item4["IsAge"] = "No";
-
-            if ($("#chkTier").is(":checked")) {
-                item4["IsTier"] = "Yes";
-                item4["Tier"] = $("#ddlTier").val();
-            }
+            item4["IsBirthday"] = "No";
+            item4["IsAnniversary"] = "No";
 
             if ($("#chkGender").is(":checked")) {
                 item4["IsGender"] = "Yes";
@@ -2044,6 +2054,16 @@
                 item4["IsAge"] = "Yes";
                 item4["AgeFrom"] = $("#txtAgefrom").val();
                 item4["AgeTo"] = $("#txtAgeTo").val();
+            }
+
+            if ($("#chkBirthday").is(":checked")) {
+                item4["IsBirthday"] = "Yes";
+                item4["BirthdayMonth"] = $("#ddlBirthday").val();
+            }
+
+            if ($("#chkAnniversary").is(":checked")) {
+                item4["IsAnniversary"] = "Yes";
+                item4["AnniversaryMonth"] = $("#ddlAnniversary").val();
             }
 
             AllData.push(item4);

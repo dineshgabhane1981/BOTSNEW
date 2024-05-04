@@ -94,6 +94,32 @@ namespace BOTS_BL.Repository
 
             return result;
         }
+
+        public bool EnableDisableCouponEarnRule(int ruleId, string conStr)
+        {
+            bool result = false;
+            try
+            {
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    var objData = context.tblCouponRules.Where(x => x.EarnRuleId == ruleId).FirstOrDefault();
+                    if (objData.IsActive == true)                   
+                        objData.IsActive = false;
+                    else
+                        objData.IsActive = true;
+
+                    context.tblCouponRules.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveCouponEarnRule");
+            }
+
+            return result;
+        }
         public List<tblCouponRule> GetAllCouponRule(string conStr)
         {
             List<tblCouponRule> lstData = new List<tblCouponRule>();

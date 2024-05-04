@@ -20,24 +20,24 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string EarnDay { get; set; }
+        [StringLength(150)]
+        public string EarnCategory { get; set; }
+        [StringLength(150)]
+        public string EarnProduct { get; set; }
 
-        public int? EarnCategory { get; set; }
-
-        public int? EarnProduct { get; set; }
-
-        [StringLength(50)]
+        [StringLength(150)]
         public string EarnOutlet { get; set; }
 
         public decimal? RedeemInvoiceAmountFrom { get; set; }
 
         [StringLength(50)]
         public string RedeemDay { get; set; }
+        [StringLength(150)]
+        public string RedeemCategory { get; set; }
+        [StringLength(150)]
+        public string RedeemProduct { get; set; }
 
-        public int? RedeemCategory { get; set; }
-
-        public int? RedeemProduct { get; set; }
-
-        [StringLength(50)]
+        [StringLength(150)]
         public string RedeemOutlet { get; set; }
 
         public bool? IsActive { get; set; }
@@ -65,6 +65,10 @@ namespace BOTS_BL.Models
         public string EarnDept { get; set; }
         [StringLength(50)]
         public string BurnDept { get; set; }
+        [StringLength(50)]
+        public string ValueType { get; set; }
+        [StringLength(50)]
+        public string CouponCode { get; set; }
 
     }
 }
