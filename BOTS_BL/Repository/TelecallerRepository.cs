@@ -22,11 +22,21 @@ namespace BOTS_BL.Repository
             TelecallerCustomerData objteledata = new TelecallerCustomerData();
             try
             {
-                using (var context = new BOTSDBContext(connstr))
+                using (var contextNew = new CommonDBContext())
                 {
-                    objteledata = context.Database.SqlQuery<TelecallerCustomerData>("SP_BOTS_TelecallerData @pi_mobileNo",
-                           new SqlParameter("@pi_mobileNo", MobileNo)).FirstOrDefault<TelecallerCustomerData>();
+                    contextNew.Database.CommandTimeout = 300;
+                    var DBName = contextNew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                    objteledata = contextNew.Database.SqlQuery<TelecallerCustomerData>("SP_BOTS_TelecallerData @pi_GroupId, @pi_Date, @pi_MobileNo, @pi_DBName",
+                          new SqlParameter("@pi_GroupId", MobileNo),
+                          new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                          new SqlParameter("@pi_MobileNo", MobileNo),
+                          new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<TelecallerCustomerData>();
                 }
+                //using (var context = new BOTSDBContext(connstr))
+                //{
+                //    objteledata = context.Database.SqlQuery<TelecallerCustomerData>("SP_BOTS_TelecallerData @pi_mobileNo",
+                //           new SqlParameter("@pi_mobileNo", MobileNo)).FirstOrDefault<TelecallerCustomerData>();
+                //}
             }
             catch (Exception ex)
             {
@@ -35,7 +45,7 @@ namespace BOTS_BL.Repository
             return objteledata;
 
         }
-        public bool SaveTelecallerTracking(string connstr, string AddedBy, string MobileNo, string CustomerNm, string Gender, DateTime? DateofBirth, DateTime? DateOfAnni, int PointsGiven, string OutletId, string Comments,string PointsValidity,string RedeemingOutlet,string GroupId)
+        public bool SaveTelecallerTracking(string connstr, string AddedBy, string MobileNo, string CustomerNm, string Gender, DateTime? DateofBirth, DateTime? DateOfAnni, int PointsGiven, string OutletId, string Comments, string PointsValidity, string RedeemingOutlet, string GroupId)
         {
             bool status = false;
             bool updatetable = false;
@@ -167,7 +177,7 @@ namespace BOTS_BL.Repository
                 {
                     lsttelereportdata = (from t in context.TelecallerTrackings
                                          join o in context.tblOutletMasters on t.OutletId equals o.OutletId
-                                         where t.AddedDate > fromdt && t.AddedDate < todate
+                                         where t.AddedDate > fromdt && t.AddedDate < todate && t.MobileNo !=""
                                          select new TelecallerReport
                                          {
                                              MobileNo = t.MobileNo,
