@@ -7,6 +7,7 @@
 
 <div class="app-main__inner">
     <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px;" id="dvDataUpload">
+        <input type="text" id="hdnGroupId" value=@ViewBag.GroupId hidden/>
         <div class="col-md-12 col-sm-12 row mt-2">
             <div class="col-md-2 col-lg-2">
                  Upload :
@@ -39,8 +40,55 @@
                 }
                 /*fileData.append("groupId", $('#hdnGroupID').val());*/
 
+                var hdnGroupid = $("#hdnGroupId").val();
+
                 $("#divLoader").show();
-                $.ajax({
+                if (hdnGroupid == '1364') {
+                    $.ajax({
+                    url: '@Url.Action("UploadDataRatnaEnterprises", "DataUpload")',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        if (result.Status == 1) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Uploaded",
+                                message: "Data Uploaded <br/> Total Rows in Excel  " + result.TbleRWCount + " <br/>  Total Inserted Rows  " + result.DBInsertCount,
+                                buttonText: "Okay"
+                            }).then(() => {
+
+                                var urlLink = "@Url.Action("Index", "DataUpload")";
+                                window.location.href = urlLink;
+                                })
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "There is some problem in uploading data",
+                                buttonText: "Okay"
+                            })
+                            $("#divLoader").hide();
+                        }
+                    },
+
+                    error: function (err) {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "There is some problem in uploading data",
+                            buttonText: "Okay"
+                        })
+                        $("#divLoader").hide();
+                        //alert(err.statusText);
+                    }
+                });
+                }
+                else {
+                    $.ajax({
                     url: '@Url.Action("UploadData", "DataUpload")',
                     type: "POST",
                     contentType: false, // Not to set any content header
@@ -82,6 +130,8 @@
                         //alert(err.statusText);
                     }
                 });
+                }
+
             }
 
 

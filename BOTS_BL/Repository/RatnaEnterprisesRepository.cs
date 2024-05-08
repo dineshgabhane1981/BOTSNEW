@@ -60,14 +60,8 @@ namespace BOTS_BL.Repository
                     {
                         if (Convert.ToString(dt.Rows[i]["Mobile"]) != "" && Convert.ToString(dt.Rows[i]["Mobile"]) != "Mobile" && i > 0)
                         {
-                            //var conStr = ConfigurationManager.ConnectionStrings["BOTSDBContext"].ToString();
-                            var conStr = CR.GetRetailWebConnString(CounterId);
-
-                        //using (var tempcontext = new CommonDBContext())
-                        //{
-                        //    Status = tempcontext.tblDatabaseDetails.Where(x => x.GroupId == TGroupId).Count();
-                        //}
-
+                            
+                        var conStr = CR.GetRetailWebConnString(CounterId);
                         using (var context = new BOTSDBContext(conStr))
                         {
                             SqlConnection _Con = new SqlConnection(conStr);

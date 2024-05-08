@@ -23,6 +23,10 @@ namespace RetailerApp.Controllers
         // GET: DataUpload
         public ActionResult Index()
         {
+            CustomerLoginDetail userDetails = new CustomerLoginDetail();
+
+            userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ViewBag.GroupId = userDetails.GroupId;
             return View();
         }
 
@@ -150,6 +154,70 @@ namespace RetailerApp.Controllers
                     newexception.AddException(ex, "UploadTransaction");
                 }
 
+            }
+            return Json("File Not Uploaded Successfully!");
+        }
+        public ActionResult UploadDataRatnaEnterprises()
+        {
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    RetailBulkResponse ObjA = new RetailBulkResponse();
+                    RatnaEnterprisesRepository RER = new RatnaEnterprisesRepository();
+                    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                    SPResponse result = new SPResponse();
+                    DataSet ds = new DataSet();
+                    HttpPostedFileBase file = Request.Files[0];
+
+                    using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
+                    {
+
+                        IXLWorksheet workSheet = workBook.Worksheet(1);
+                        workSheet.Columns("A,F:H,J,M").Delete();
+                        //workSheet.Columns(9, 25).Delete();
+                        //workSheet.Columns(27, 31).Delete();
+
+                        DataTable dt = new DataTable();
+                        dt.Columns.Add("Date", typeof(string));
+                        dt.Columns.Add("Invoice Number", typeof(string));
+                        dt.Columns.Add("Name", typeof(string));
+                        dt.Columns.Add("Mobile", typeof(string));
+                        dt.Columns.Add("Total", typeof(string));
+                        dt.Columns.Add("Payment", typeof(string));
+                        dt.Columns.Add("Redemption", typeof(string));
+
+                        foreach (IXLRow row in workSheet.Rows())
+                        {
+                            int i = 0;
+                            DataRow toInsert = dt.NewRow();
+                            foreach (IXLCell cell in row.Cells(1, 7))
+                            {
+                                try
+                                {
+                                    toInsert[i] = cell.Value.ToString();
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                                i++;
+                            }
+                            dt.Rows.Add(toInsert);
+
+                        }
+
+                        if (dt.Rows.Count > 0)
+                        {
+                            ObjA = RER.BulkTransaction(dt, userDetails.OutletOrBrandId);
+                        }
+
+                    }
+                }
+                catch(Exception ex)
+                {
+                    newexception.AddException(ex, "UploadDataRatnaEnterprises");
+                }
             }
             return Json("File Not Uploaded Successfully!");
         }
