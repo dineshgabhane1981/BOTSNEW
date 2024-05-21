@@ -2586,6 +2586,24 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
+        public List<SelectListItem> GetCRDatasetList(string connectionString)
+        {
+            List<SelectListItem> lstData = new List<SelectListItem>();
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                var Data = context.tblCRDatasets.ToList();
+                foreach (var item in Data)
+                {
+                    lstData.Add(new SelectListItem
+                    {
+                        Text = item.DSName,
+                        Value = Convert.ToString(item.DSId)
+                    });
+                }
+            }
+
+            return lstData;
+        }
     }
 
 }

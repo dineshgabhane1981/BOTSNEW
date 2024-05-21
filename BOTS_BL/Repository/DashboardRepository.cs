@@ -73,83 +73,7 @@ namespace BOTS_BL.Repository
                     //    dataDashboard.lstOutletDetails = lstOutletDetails;
                     //}
                 }
-                #region
-                //    using (var context = new BOTSDBContext(connstr))
-                //    {
-                //        context.Database.CommandTimeout = 120;
-
-                //        var AllData = GetExecutiveSummaryAllData(GroupId, connstr);
-                //        dataDashboard.TotalBiz = Convert.ToInt64(AllData.Sum(x => x.TotalSpend));
-                //        dataDashboard.Redemption = AllData.Sum(x => x.BurnAmtWithPts);
-                //        dataDashboard.Referrals = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCReferral").Sum(y => y.TotalSpend));
-                //        dataDashboard.NewMWPRegistration = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCWalkIn").Sum(y => y.TotalSpend));
-                //        dataDashboard.Campaign = 0;
-                //        dataDashboard.SMSBlastWA = 0;
-                //        dataDashboard.LoyaltyBiz = dataDashboard.Redemption + dataDashboard.Referrals + dataDashboard.NewMWPRegistration + dataDashboard.Campaign + dataDashboard.SMSBlastWA;
-                //        var outletList = context.tblOutletMasters.ToList();
-                //        List<OutletDetails> lstOutletDetails = new List<OutletDetails>();
-                //        foreach (var item in outletList)
-                //        {
-                //            OutletDetails newItem = new OutletDetails();
-                //            newItem.OutletName = item.OutletName;
-                //            newItem.EnrollmentCount = AllData.Where(x => x.CurrentEnrolledOutlet == item.OutletId).Count();
-                //            lstOutletDetails.Add(newItem);
-                //        }
-                //        dataDashboard.lstOutletDetails = lstOutletDetails;                        
-                //    }
-
-                //using (var context = new CommonDBContext())
-                //{
-                //    context.Database.CommandTimeout = 120;
-                //    var gId = Convert.ToInt32(GroupId);
-                //    var livedate = context.tblGroupDetails.Where(x => x.GroupId == gId).Select(y => y.WentLiveDate).FirstOrDefault();
-                //    if (livedate.HasValue)
-                //    {
-                //        var day = livedate.Value.Day;
-                //        var month = livedate.Value.Month;
-                //        var year = livedate.Value.Year;
-                //        var currentYear = DateTime.Today.Year;
-
-                //        DateTime nextRenewal = new DateTime(currentYear, month, day);
-                //        DateTime ProgramRenewalDate = new DateTime();
-                //        if (nextRenewal < DateTime.Today)
-                //        {
-                //            ProgramRenewalDate = nextRenewal.AddYears(1);
-                //        }
-                //        else
-                //        {
-                //            ProgramRenewalDate = nextRenewal;
-                //        }
-                //        dataDashboard.RenewalDate = ProgramRenewalDate.ToString("dd-MMM-yyyy");
-                //        dataDashboard.RemainingDaysForRenewal = (ProgramRenewalDate - DateTime.Today).Days;
-                //    }
-                //}
-
-                //using (var context = new CommonDBContext())
-                //{
-                //    var GrpId = GroupId;
-                //    //var RenewDate = context.tblRenewalDatas.Where(x => x.GroupId == GrpId).Select(y => y.PaymentDate).FirstOrDefault();
-                //    var RenewDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "Renewal" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
-                //    var VerifiedDate = (from S in context.tblRenewalDatas where S.GroupId == GrpId && S.PaymentType == "VerifiedWA" orderby S.Id descending select S.NextPaymentDate).FirstOrDefault();
-
-                //    if (RenewDate == null)
-                //    {
-                //        dataDashboard.RenewDate = "";
-                //    }
-                //    else
-                //    {
-                //        dataDashboard.RenewDate = RenewDate.ToString();
-                //    }
-                //    if (VerifiedDate == null)
-                //    {
-                //        dataDashboard.VerifiedWARenewalDate = "";
-                //    }
-                //    else
-                //    {
-                //        dataDashboard.VerifiedWARenewalDate = VerifiedDate.ToString();
-                //    }
-                //}
-                #endregion
+                
             }
             catch (Exception ex)
             {
@@ -699,6 +623,7 @@ namespace BOTS_BL.Repository
                     objOTPDetail.EmailId = emailId;
                     objOTPDetail.OTP = OTP;
                     objOTPDetail.SentDate = DateTime.Now;
+                    objOTPDetail.IsUsed = false;
 
                     context.OTPDetails.Add(objOTPDetail);
                     context.SaveChanges();
@@ -721,10 +646,17 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     OTPDetail objOTPDetail = new OTPDetail();
-                    objOTPDetail = context.OTPDetails.Where(x => x.EmailId == emailId && x.OTP == OTP).OrderByDescending(y => y.SentDate).FirstOrDefault();
+                    objOTPDetail = context.OTPDetails.Where(x => x.EmailId == emailId).OrderByDescending(y => y.ID).FirstOrDefault();
                     if (objOTPDetail != null)
                     {
-                        status = true;
+                        if (objOTPDetail.OTP == OTP && objOTPDetail.IsUsed == false && objOTPDetail.SentDate > DateTime.Now.AddMinutes(-10))
+                        {
+                            objOTPDetail.IsUsed = true;
+                            context.OTPDetails.AddOrUpdate(objOTPDetail);
+                            context.SaveChanges();
+
+                            status = true;
+                        }
                     }
                 }
             }

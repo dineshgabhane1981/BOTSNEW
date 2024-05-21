@@ -26,7 +26,7 @@ namespace BOTS_BL.Repository
                 {
                     contextNew.Database.CommandTimeout = 300;
                     var DBName = contextNew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-                    objteledata = contextNew.Database.SqlQuery<TelecallerCustomerData>("SP_BOTS_TelecallerData @pi_GroupId, @pi_Date, @pi_MobileNo, @pi_DBName",
+                    objteledata = contextNew.Database.SqlQuery<TelecallerCustomerData>("sp_TelecallerData @pi_GroupId, @pi_Date, @pi_MobileNo, @pi_DBName",
                           new SqlParameter("@pi_GroupId", MobileNo),
                           new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
                           new SqlParameter("@pi_MobileNo", MobileNo),

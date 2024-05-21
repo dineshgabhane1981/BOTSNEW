@@ -96,17 +96,17 @@ namespace WebApp.Controllers
                     }
                     else
                     {
-                        if (!string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
+                        if (string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
                         {
-                            TempData["InvalidUserMessage"] = "User Does not Exist";
+                            TempData["InvalidUserMessage"] = "Please check OTP again";
                         }
                     }
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
+                    if (string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
                     {
-                        TempData["InvalidUserMessage"] = "User Does not Exist";
+                        TempData["InvalidUserMessage"] = "Please check OTP again";
                     }
                 }
             }

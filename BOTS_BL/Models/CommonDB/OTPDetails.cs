@@ -17,6 +17,7 @@
         public int OTP { get; set; }
         
         public DateTime SentDate { get; set; }
+        public bool? IsUsed { get; set; }
 
     }
 }

@@ -1677,7 +1677,7 @@ namespace WebApp.Controllers
             json_serializer.MaxJsonLength = int.MaxValue;
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
 
-            var count = RR.GetSSFilterCount(objData, userDetails.LoginId, IsCount, userDetails.connectionString);
+            var count = RR.GetSSFilterCount(objData, userDetails.LoginId, IsCount, userDetails.connectionString, userDetails.GroupId);
 
             return new JsonResult() { Data = count, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

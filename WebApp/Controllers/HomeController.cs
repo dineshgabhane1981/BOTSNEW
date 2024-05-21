@@ -40,8 +40,8 @@ namespace WebApp.Controllers
                 Session["UserSession"] = userDetails;
                 ViewBag.OutletList = lstOutlet;
                 ViewBag.OutletCount = lstOutlet.Count;
-                dataDashboard.StartDate = DR.GetStartDate(userDetails.connectionString);
-                dataDashboard.ToDate = DateTime.Now.ToString("MM-dd-yyyy");
+                //dataDashboard.StartDate = DR.GetStartDate(userDetails.connectionString);
+                //dataDashboard.ToDate = DateTime.Now.ToString("MM-dd-yyyy");
                 Session["buttons"] = "Dashboard";
 
             }

@@ -170,7 +170,7 @@
                             <div class="row mt-4 mb-2 col-md-12 col-xl-12 ml-0">
                                 <input type="radio" id="rbtnCSpend" name="CumulativeFilters" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;Spend&nbsp;
                                 @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.LessThanMoreThan(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlSpendCumulative" })&nbsp;
-                                <input type="number" id="txtCSpendCount" class="input40" placeholder="Txn Count" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
+                                <input type="number" id="txtCSpendCount" class="input40" placeholder="Amount" disabled /><span style="margin-left: 10px; margin-right: 10px;margin-top:10px;"> in last</span>
                                 <input type="number" id="txtCSpendMonths" class="input20" placeholder="months" disabled style="margin-right:10px;" />
                                 @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.CumulativeFrequency(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlSpendCumulativeFrequency" })&nbsp;
                             </div>
@@ -243,35 +243,39 @@
                         </div>
                     </div>
 
-                    <div class="row mt-2 col-md-12 col-xl-12" id="dvTxnCount">
-                        <div class="col-xl-1">
-                            <input type="checkbox" id="chkTxnCount" style="width:20px; height:20px; cursor:pointer;" />
+                    <div  class="row">
+                        <div class="col-xl-10">
+                            <div class="row mt-2 col-md-12 col-xl-12" id="dvTxnCount">
+                                <div class="col-xl-1">
+                                    <input type="checkbox" id="chkTxnCount" style="width:20px; height:20px; cursor:pointer;" />
+                                </div>
+                                <div class="col-xl-3" style="margin-left:-25px;">
+                                    Transaction Count
+                                </div>
+                                <div class="col-xl-6" style="margin-left:43px;">
+                                    <input type="number" id="txtTxnCountMin" class="input40" placeholder="From/Less than" disabled />
+                                    <input type="number" id="txtTxnCountMax" class="input40" placeholder="To/More than" disabled />                                    
+                                </div>
+                            </div>
+
+                            <div class="row mt-2 col-md-12 col-xl-12" id="dvSpend">
+                                <div class="col-xl-1">
+                                    <input type="checkbox" id="chkSpend" style="width:20px; height:20px; cursor:pointer;" />
+                                </div>
+                                <div class="col-xl-3" style="margin-left:-25px;">
+                                    Cumulative Spends (Rs.)
+                                </div>
+                                <div class="col-xl-6" style="margin-left:43px;">
+                                    <input type="number" id="txtSpendMin" class="input40" placeholder="From/Less than" disabled />
+                                    <input type="number" id="txtSpendMax" class="input40" placeholder="To/More than" disabled />
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-xl-3" style="margin-left:-40px;">
-                            Transaction Count
-                        </div>
-                        <div class="col-xl-6">
-                            <input type="number" id="txtTxnCountMin" class="input40" placeholder="From/Less than" disabled />
-                            <input type="number" id="txtTxnCountMax" class="input40" placeholder="To/More than" disabled />
+                        <div class="col-xl-4" style="margin-top:30px;margin-left:-200px;" id="dvCountSpendDt">
+                            <input type="date" id="txtTxnCountSpendfromdt" class="input40" placeholder="From" disabled />
+                            <input type="date" id="txtTxnCountSpendtodt" class="input40" placeholder="To" disabled style="margin-left:5px;" />
                         </div>
                     </div>
-
-                    <div class="row mt-2 col-md-12 col-xl-12" id="dvSpend">
-                        <div class="col-xl-1">
-                            <input type="checkbox" id="chkSpend" style="width:20px; height:20px; cursor:pointer;" />
-                        </div>
-                        <div class="col-xl-3" style="margin-left:-40px;">
-                            Cumulative Spends (Rs.)
-                        </div>
-                        <div class="col-xl-8">
-                            <input type="number" id="txtSpendMin" class="input40" placeholder="From/Less than" disabled />
-                            <input type="number" id="txtSpendMax" class="input40" placeholder="To/More than" disabled />
-                            <input type="date" id="txtCumuSpendfromdt" class="input40" placeholder="From" disabled />
-                            <input type="date" id="txtCumuSpendtodt" class="input40" placeholder="To" disabled style="margin-left:5px;" />
-
-                        </div>
-                    </div>
-
                     <div class="row mt-2 col-md-12 col-xl-12" id="dvInvoiceValue">
                         <div class="col-xl-1">
                             <input type="checkbox" id="chkInvoiceValue" style="width:20px; height:20px; cursor:pointer;" />
@@ -282,8 +286,6 @@
                         <div class="col-xl-8">
                             <input type="number" id="txtInvoiceValueMin" class="input40" placeholder="From/Less than" disabled />
                             <input type="number" id="txtInvoiceValueMax" class="input40" placeholder="To/More than" disabled />
-                            <input type="date" id="txtInvoiceValuefromdt" class="input40" placeholder="From" disabled />
-                            <input type="date" id="txtInvoiceValuetodt" class="input40" placeholder="To" disabled style="margin-left:5px;" />
                         </div>
                     </div>
 
@@ -297,8 +299,6 @@
                         <div class="col-xl-8">
                             <input type="number" id="txtAvgTicketFrm" class="input40" placeholder="Ticket size from" disabled />
                             <input type="number" id="txtAvgTicketTo" class="input40" placeholder="Ticket size to" disabled />
-                            <input type="date" id="txtAvgTicketfromdt" class="input40" placeholder="From" disabled />
-                            <input type="date" id="txtAvgTickettodt" class="input40" placeholder="To" disabled style="margin-left:5px;" />
                         </div>
                     </div>
 
@@ -317,7 +317,6 @@
                     </div>
 
                     <hr id="hrProduct" style="border-top: dashed 1px;" />
-                    @*<h5 id="headingProduct">Product Filter</h5>*@
                     <h6 id="headingProduct" style="font-weight:bold;">Product Filter</h6>
 
                     <div class="row mt-2 col-md-12 col-xl-12" id="dvNeverPurchased">
@@ -393,20 +392,7 @@
                     </div>
 
                     <hr id="hrDemography" style="border-top: dashed 1px;" />
-                    <h6 style="font-weight:bold;">Demographic Filter</h6>
-
-                    @*<div class="row mt-4 col-md-12 col-xl-12" id="dvTier">
-                            <div class="col-xl-1">
-                                <input type="checkbox" id="chkTier" style="width:20px; height:20px; cursor:pointer;" />
-                            </div>
-                            <div class="col-xl-3" style="margin-left:-40px;">
-                                Tier
-                            </div>
-                            <div class="row col-xl-8 ml-0">
-                                @Html.DropDownListFor(x => Model.dummyCategory, new SelectList(Model.lstTiers, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input40", @disabled = "disabled", @id = "ddlTier" })&nbsp;
-
-                            </div>
-                        </div>*@
+                    <h6 id="headingDemography" style="font-weight:bold;">Demographic Filter</h6>
 
                     <div class="row mt-2 col-md-12 col-xl-12" id="dvGender">
                         <div class="col-xl-1">
@@ -556,7 +542,7 @@
                                                 <td>@item.AddedDate</td>
                                                 <td>@item.AddedBy</td>
                                                 <td>
-                                                    <button class="ml-3 btn btn-primary login-btn" onclick='GenerateReportFromDS("@item.DSId");' type="button" id="btnGenerateReport">
+                                                    <button class="ml-3 btn btn-primary login-btn" onclick='GetReportDSCount("@item.DSId");' type="button" id="btnGenerateReport">
                                                         Generate Report
                                                     </button>
                                                 </td>
@@ -648,7 +634,7 @@
         OnchangeMethods();
 
         $("#btnFilter").click(function () {
-            GetDataToFilter();
+            GetFilterCount();
         });
 
         $("#btnGenerate").click(function () {
@@ -713,6 +699,7 @@
             else
              ShowAll();
             $("#dvBaseFilters").show();
+            $("#chkAll").prop("checked", true);
             $("#ddlOnlyOnce").val($("#ddlOnlyOnce option:first").val());
             $("#dvNonTxnFilters").hide();
             $("#dvNonTxnDLC").hide();
@@ -723,6 +710,15 @@
             $("#dvMDLCSource").hide();
             $("#dvTransactingOutlet").show();
             $("#dvCumulative").hide();
+
+            $("#hrDemography").show();
+            $("#headingDemography").show();
+            $("#dvGender").show();
+            $("#dvCity").show();
+            $("#dvAge").show();
+            $("#dvBirthday").show();
+            $("#dvAnniversary").show();
+            $("#dvCountSpendDt").show();
             ResetTransactionFilters();
         });
         $("#chkNonTransacting").on('change', function () {
@@ -731,6 +727,7 @@
             $("#dvBaseFilters").show();
             $("#dvTransactingOutlet").hide();
             $("#dvTxnFilters").hide();
+            $("#TxnFilterText").hide();
             $("#dvTxnOnlyOnce").hide();
             $("#dvTxnInactive").hide();
             $("#dvCumulative").hide();
@@ -739,6 +736,15 @@
             $("#dvMemberAThirdFilters").hide();
             $("#dvMDLCSource").hide();
             $("#dvCumulative").hide();
+            $("#hrDemography").show();
+            $("#headingDemography").show();
+            $("#dvGender").show();
+            $("#dvCity").show();
+            $("#dvAge").show();
+            $("#dvBirthday").show();
+            $("#dvAnniversary").show();
+            $("#dvCountSpendDt").hide();
+            $("#dvTxnAIsegment").hide();
             if ($("#chkNonTxnAll").is(":checked") || $("#chkNonTxnEnrolled").is(":checked") || $("#chkNonTxnBulkUpload").is(":checked") || $("#chkNonTxnReferal").is(":checked") || $("#chkNonTxnDLC").is(":checked")) {
                 HideAll();
                 $("#dvEnrolledRange").show();
@@ -763,6 +769,16 @@
             $("#dvMemberAFilters").show();
             $("#dvTransactingOutlet").show();
             $("#dvCumulative").hide();
+
+            $("#hrDemography").show();
+            $("#headingDemography").show();
+            $("#dvGender").show();
+            $("#dvCity").show();
+            $("#dvAge").show();
+            $("#dvBirthday").show();
+            $("#dvAnniversary").show();
+            $("#dvCountSpendDt").hide();
+            $("#dvTxnAIsegment").hide();
             ResetTransactionFilters();
         });
         $("#chkPastTransTrendAnalysis").on('change', function () {
@@ -779,6 +795,16 @@
             $("#dvTxnFilters").hide();
             $("#dvMemberAThirdFilters").hide();
             $("#dvMDLCSource").hide();
+
+            $("#hrDemography").hide();
+            $("#headingDemography").hide();
+            $("#dvGender").hide();
+            $("#dvCity").hide();
+            $("#dvAge").hide();
+            $("#dvBirthday").hide();
+            $("#dvAnniversary").hide();
+            $("#dvCountSpendDt").hide();
+            $("#dvTxnAIsegment").hide();
             ResetTransactionFilters();
         });
         $("#chkAll").on('change', function () {
@@ -798,6 +824,7 @@
             $("#TxnFilterText").show();
             $("#dvTxnTier").hide();
             $("#dvTxnAIsegment").hide();
+            $("#dvCountSpendDt").show();
             ResetTransactionFilters();
         });
         $("#chkTxnAIsegment").on('change', function () {
@@ -815,6 +842,7 @@
             $("#dvTxnInactive").hide();
             $("#hrTxnFilter").show();
             $("#TxnFilterText").show();
+            $("#dvCountSpendDt").hide();
             ResetTransactionFilters();
         });
         $("#chkTxnTier").on('change', function () {
@@ -834,6 +862,8 @@
             $("#dvTxnInactive").hide();
             $("#hrTxnFilter").show();
             $("#TxnFilterText").show();
+            $("#dvCountSpendDt").hide();
+            $("#dvTxnAIsegment").hide();
             ResetTransactionFilters();
         });
         $("#chkTxnOnlyOnce").on('change', function () {
@@ -846,6 +876,8 @@
             $("#dvNeverPurchased").show();
             $("#hrProduct").show();
             $("#dvTxnTier").hide();
+            $("#dvTxnAIsegment").hide();
+            $("#dvCountSpendDt").hide();
             $("#dvTxnAIsegment").hide();
             ResetTransactionFilters();
         });
@@ -870,6 +902,8 @@
             $("#dvSpend").show();
             $("#dvTxnOnlyOnce").hide();
             $("#dvTxnTier").hide();
+            $("#dvTxnAIsegment").hide();
+            $("#dvCountSpendDt").show();
             $("#dvTxnAIsegment").hide();
             ResetTransactionFilters();
         });
@@ -949,19 +983,15 @@
         $("#chkAvgTicket").on('change', function () {
             if ($("#chkAvgTicket").is(":checked")) {
                 $("#txtAvgTicketFrm").prop('disabled', false);
-                $("#txtAvgTicketTo").prop('disabled', false);
-                $("#txtAvgTicketfromdt").prop('disabled', false);
-                $("#txtAvgTickettodt").prop('disabled', false);
+                $("#txtAvgTicketTo").prop('disabled', false);                
             }
             else {
                 $("#txtAvgTicketFrm").prop('disabled', true);
                 $("#txtAvgTicketTo").prop('disabled', true);
-                $("#txtAvgTicketfromdt").prop('disabled', true);
-                $("#txtAvgTickettodt").prop('disabled', true);
+               
                 $('#txtAvgTicketFrm').val("");
                 $('#txtAvgTicketTo').val("");
-                $('#txtAvgTicketfromdt').val("");
-                $('#txtAvgTickettodt').val("");
+                
             }
         });
 
@@ -988,57 +1018,61 @@
             }
         });
 
+        $("#chkTxnCount").on('change', function () {
+            if ($("#chkTxnCount").is(":checked")) {
+                $("#txtTxnCountMin").prop('disabled', false);
+                $("#txtTxnCountMax").prop('disabled', false);
+                $("#txtTxnCountSpendfromdt").prop('disabled', false);
+                $("#txtTxnCountSpendtodt").prop('disabled', false);
+            }
+            else {
+                $("#txtTxnCountMin").prop('disabled', true);
+                $("#txtTxnCountMax").prop('disabled', true);                
+                $('#txtTxnCountMin').val("");
+                $('#txtTxnCountMax').val("");
+                if (!$("#chkSpend").is(":checked")) {
+                    $("#txtTxnCountSpendfromdt").prop('disabled', true);
+                    $("#txtTxnCountSpendtodt").prop('disabled', true);
+                    $('#txtTxnCountSpendfromdt').val("");
+                    $('#txtTxnCountSpendtodt').val("");
+                }
+            }
+        });
+
         $("#chkSpend").on('change', function () {
             if ($("#chkSpend").is(":checked")) {
                 $("#txtSpendMin").prop('disabled', false);
                 $("#txtSpendMax").prop('disabled', false);
-                $("#txtCumuSpendfromdt").prop('disabled', false);
-                $("#txtCumuSpendtodt").prop('disabled', false);
+                $("#txtTxnCountSpendfromdt").prop('disabled', false);
+                $("#txtTxnCountSpendtodt").prop('disabled', false);
             }
             else {
                 $("#txtSpendMin").prop('disabled', true);
                 $("#txtSpendMax").prop('disabled', true);
-                $("#txtCumuSpendfromdt").prop('disabled', true);
-                $("#txtCumuSpendtodt").prop('disabled', true);
                 $('#txtSpendMin').val("");
                 $('#txtSpendMax').val("");
-                $('#txtCumuSpendfromdt').val("");
-                $('#txtCumuSpendtodt').val("");
+                if (!$("#chkTxnCount").is(":checked")) {
+                    $("#txtTxnCountSpendfromdt").prop('disabled', true);
+                    $("#txtTxnCountSpendtodt").prop('disabled', true);
+                    $('#txtTxnCountSpendfromdt').val("");
+                    $('#txtTxnCountSpendtodt').val("");
+                }
             }
         });
 
         $("#chkInvoiceValue").on('change', function () {
             if ($("#chkInvoiceValue").is(":checked")) {
                 $("#txtInvoiceValueMin").prop('disabled', false);
-                $("#txtInvoiceValueMax").prop('disabled', false);
-                $("#txtInvoiceValuefromdt").prop('disabled', false);
-                $("#txtInvoiceValuetodt").prop('disabled', false);
+                $("#txtInvoiceValueMax").prop('disabled', false);               
             }
             else {
                 $("#txtInvoiceValueMin").prop('disabled', true);
-                $("#txtInvoiceValueMax").prop('disabled', true);
-                $("#txtInvoiceValuefromdt").prop('disabled', true);
-                $("#txtInvoiceValuetodt").prop('disabled', true);
+                $("#txtInvoiceValueMax").prop('disabled', true);                
                 $('#txtInvoiceValueMin').val("");
-                $('#txtInvoiceValueMax').val("");
-                $('#txtInvoiceValuefromdt').val("");
-                $('#txtInvoiceValuetodt').val("");
+                $('#txtInvoiceValueMax').val("");                
             }
         });
-
-        $("#chkTxnCount").on('change', function () {
-            if ($("#chkTxnCount").is(":checked")) {
-                $("#txtTxnCountMin").prop('disabled', false);
-                $("#txtTxnCountMax").prop('disabled', false);
-            }
-            else {
-                $("#txtTxnCountMin").prop('disabled', true);
-                $("#txtTxnCountMax").prop('disabled', true);
-                $('#txtTxnCountMin').val("");
-                $('#txtTxnCountMax').val("");
-            }
-        });
-
+        
         $("#chkPointBalance").on('change', function () {
             if ($("#chkPointBalance").is(":checked")) {
                 $("#txtPointsBalMin").prop('disabled', false);
@@ -1336,6 +1370,7 @@
         $("#hrProduct").show();
         $("#hrTxnFilter").show();
         $("#TxnFilterText").show();
+        $("#dvInvoiceValue").show();
     }
 
     function HideAll() {
@@ -1824,15 +1859,13 @@
         return status;
     }
 
-    function GetDataToFilter() {
+    function GetFilterCount() {
         $("#divLoader").show();
         var result = Validation();
-        result = false;
+        //result = false;
         /*alert("OK");*/
-        if (result) {
-            //alert(111)
+        if (result) {            
             var AllData = [];
-
             //First, Second and Third level Radio buttons or Checkboxes
             item = {}
             if ($("#chkTransacting").is(":checked")) {
@@ -1905,6 +1938,24 @@
                     item["QRSource"] = $("#ddlDLCSource").val();
                 }
             }
+            if ($("#chkPastTransTrendAnalysis").is(":checked")) {
+                item["FirstChk"] = "Cumulative";
+                if ($("#rbtnCTxnCount").is(":checked")) {
+                    item["SecondChk"] = "TxnCount";
+                    item["LSGT"] = $("#ddlTxnCumulative").val();
+                    item["TxnCount"] = $("#txtCTxnCount").val();
+                    item["Months"] = $("#txtCTxnMonths").val();
+                    item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
+                }
+                if ($("#rbtnCSpend").is(":checked")) {
+                    item["SecondChk"] = "CSpend";
+                    item["LSGT"] = $("#ddlSpendCumulative").val();
+                    item["Amount"] = $("#txtCSpendCount").val();
+                    item["Months"] = $("#txtCSpendMonths").val();
+                    item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
+                }
+            }
+
             AllData.push(item);
 
             //Transactional Filters
@@ -1939,30 +1990,28 @@
                 item1["IsTxnCount"] = "Yes";
                 item1["CountMin"] = $("#txtTxnCountMin").val();
                 item1["CountMax"] = $("#txtTxnCountMax").val();
+                item1["CountSpendDTFrm"] = $("#txtTxnCountSpendfromdt").val();
+                item1["CountSpendDTTo"] = $("#txtTxnCountSpendtodt").val();
             }
 
             if ($("#chkSpend").is(":checked")) {
                 item1["IsSpend"] = "Yes";
                 item1["SpendMin"] = $("#txtSpendMin").val();
                 item1["SpendMax"] = $("#txtSpendMax").val();
-                item1["SpendDTFrm"] = $("#txtCumuSpendfromdt").val();
-                item1["SpendDTTo"] = $("#txtCumuSpendtodt").val();
+                item1["CountSpendDTFrm"] = $("#txtTxnCountSpendfromdt").val();
+                item1["CountSpendDTTo"] = $("#txtTxnCountSpendtodt").val();
             }
 
             if ($("#chkInvoiceValue").is(":checked")) {
                 item1["IsInvoiceValue"] = "Yes";
                 item1["InvoiceValueFrm"] = $("#txtInvoiceValueMin").val();
-                item1["InvoiceValueTo"] = $("#txtInvoiceValueMax").val();
-                item1["InvoiceValueDTFrm"] = $("#txtInvoiceValuefromdt").val();
-                item1["InvoiceValueDTTo"] = $("#txtInvoiceValuetodt").val();
+                item1["InvoiceValueTo"] = $("#txtInvoiceValueMax").val();                
             }
 
             if ($("#chkAvgTicket").is(":checked")) {
                 item1["IsAvgTicket"] = "Yes";
                 item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
                 item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
-                item1["AvgTicketDTFrm"] = $("#txtAvgTicketfromdt").val();
-                item1["AvgTicketDTTo"] = $("#txtAvgTickettodt").val();
             }
 
             if ($("#chkRedeemed").is(":checked")) {
@@ -1989,6 +2038,10 @@
                 item2["NPCategory"] = $("#ddlNPCategory").val();
                 item2["NPSubCategory"] = $("#ddlNPSubCategory").val();
                 item2["NPProduct"] = $("#ddlNPProduct").val();
+
+                item2["NPCategoryName"] = $("#ddlNPCategory option:selected").text();
+                item2["NPSubCategoryName"] = $("#ddlNPSubCategory option:selected").text();
+                item2["NPProductName"] = $("#ddlNPProduct option:selected").text();
             }
 
             if ($("#chkPurchased").is(":checked")) {
@@ -1996,6 +2049,10 @@
                 item2["PCategory"] = $("#ddlPCategory").val();
                 item2["PSubCategory"] = $("#ddlPSubCategory").val();
                 item2["PProduct"] = $("#ddlPProduct").val();
+
+                item2["PCategoryName"] = $("#ddlPCategory option:selected").text();
+                item2["PSubCategoryName"] = $("#ddlPSubCategory option:selected").text();
+                item2["PProductName"] = $("#ddlPProduct option:selected").text();
             }
             AllData.push(item2);
 
@@ -2108,12 +2165,7 @@
         }
         else {
             var AllData = [];
-
-            //First, Second and Third level Radio buttons or Checkboxes
             item = {}
-            item["SecondChkCumu"] = "No";
-            item["SecondChk"] = "No";
-            item["MAFinal"] = "No";
             if ($("#chkTransacting").is(":checked")) {
                 item["FirstChk"] = "Transacting";
                 if ($("#chkAll").is(":checked")) {
@@ -2128,22 +2180,13 @@
                     item["InactiveSegment"] = $("#ddlInactive").val();
                     item["ExcludeOnlyOnce"] = $("#chkExcludeOnlyOnce").is(":checked");
                 }
-                if ($("#chkTxnCumiulative").is(":checked")) {
-                    item["SecondChk"] = "Cumulative";
-                    if ($("#rbtnCTxnCount").is(":checked")) {
-                        item["SecondChkCumu"] = "TxnCount";
-                        item["LSGT"] = $("#ddlTxnCumulative").val();
-                        item["TxnCount"] = $("#txtCTxnCount").val();
-                        item["Months"] = $("#txtCTxnMonths").val();
-                        item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
-                    }
-                    if ($("#rbtnCSpend").is(":checked")) {
-                        item["SecondChkCumu"] = "CSpend";
-                        item["LSGT"] = $("#ddlSpendCumulative").val();
-                        item["TxnCount"] = $("#txtCSpendCount").val();
-                        item["Months"] = $("#txtCSpendMonths").val();
-                        item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
-                    }
+                if ($("#chkTxnAIsegment").is(":checked")) {
+                    item["SecondChk"] = "AIsegment";
+                    item["AIsegment"] = $("#ddlAIsegment").val();
+                }
+                if ($("#chkTxnTier").is(":checked")) {
+                    item["SecondChk"] = "Tier";
+                    item["Tier"] = $("#ddlTier").val();
                 }
             }
             if ($("#chkNonTransacting").is(":checked")) {
@@ -2193,23 +2236,36 @@
                     item["QRSource"] = $("#ddlDLCSource").val();
                 }
             }
+            if ($("#chkPastTransTrendAnalysis").is(":checked")) {
+                item["FirstChk"] = "Cumulative";
+                if ($("#rbtnCTxnCount").is(":checked")) {
+                    item["SecondChk"] = "TxnCount";
+                    item["LSGT"] = $("#ddlTxnCumulative").val();
+                    item["TxnCount"] = $("#txtCTxnCount").val();
+                    item["Months"] = $("#txtCTxnMonths").val();
+                    item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
+                }
+                if ($("#rbtnCSpend").is(":checked")) {
+                    item["SecondChk"] = "CSpend";
+                    item["LSGT"] = $("#ddlSpendCumulative").val();
+                    item["TxnCount"] = $("#txtCSpendCount").val();
+                    item["Months"] = $("#txtCSpendMonths").val();
+                    item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
+                }
+            }
+
             AllData.push(item);
 
             //Transactional Filters
             item1 = {}
-            item1["IsAvgTicket"] = "No";
             item1["IsEnrolledRange"] = "No";
             item1["IsInactiveSince"] = "No";
-            item1["IsSpend"] = "No";
-            item1["IsTxnCount"] = "No";
             item1["IsPointBalance"] = "No";
+            item1["IsTxnCount"] = "No";
+            item1["IsSpend"] = "No";
+            item1["IsInvoiceValue"] = "No";
+            item1["IsAvgTicket"] = "No";
             item1["Redeemed"] = "";
-
-            if ($("#chkAvgTicket").is(":checked")) {
-                item1["IsAvgTicket"] = "Yes";
-                item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
-                item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
-            }
 
             if ($("#chkEnrolledRange").is(":checked")) {
                 item1["IsEnrolledRange"] = "Yes";
@@ -2222,22 +2278,38 @@
                 item1["NonTransactedSince"] = $("#txtNonTransactedMax").val();
             }
 
-            if ($("#chkSpend").is(":checked")) {
-                item1["IsSpend"] = "Yes";
-                item1["SpendMin"] = $("#txtSpendMin").val();
-                item1["SpendMax"] = $("#txtSpendMax").val();
+            if ($("#chkPointBalance").is(":checked")) {
+                item1["IsPointBalance"] = "Yes";
+                item1["PointsBalMin"] = $("#txtPointsBalMin").val();
+                item1["PointsBalMax"] = $("#txtPointsBalMax").val();
             }
 
             if ($("#chkTxnCount").is(":checked")) {
                 item1["IsTxnCount"] = "Yes";
                 item1["CountMin"] = $("#txtTxnCountMin").val();
                 item1["CountMax"] = $("#txtTxnCountMax").val();
+                item1["CountSpendDTFrm"] = $("#txtTxnCountSpendfromdt").val();
+                item1["CountSpendDTTo"] = $("#txtTxnCountSpendtodt").val();
             }
 
-            if ($("#chkPointBalance").is(":checked")) {
-                item1["IsPointBalance"] = "Yes";
-                item1["PointsBalMin"] = $("#txtPointsBalMin").val();
-                item1["PointsBalMax"] = $("#txtPointsBalMax").val();
+            if ($("#chkSpend").is(":checked")) {
+                item1["IsSpend"] = "Yes";
+                item1["SpendMin"] = $("#txtSpendMin").val();
+                item1["SpendMax"] = $("#txtSpendMax").val();
+                item1["CountSpendDTFrm"] = $("#txtTxnCountSpendfromdt").val();
+                item1["CountSpendDTTo"] = $("#txtTxnCountSpendtodt").val();
+            }
+
+            if ($("#chkInvoiceValue").is(":checked")) {
+                item1["IsInvoiceValue"] = "Yes";
+                item1["InvoiceValueFrm"] = $("#txtInvoiceValueMin").val();
+                item1["InvoiceValueTo"] = $("#txtInvoiceValueMax").val();
+            }
+
+            if ($("#chkAvgTicket").is(":checked")) {
+                item1["IsAvgTicket"] = "Yes";
+                item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
+                item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
             }
 
             if ($("#chkRedeemed").is(":checked")) {
@@ -2331,15 +2403,15 @@
 
             //Demographic Filter
             item4 = {}
-            item4["IsTier"] = "No";
+            /*item4["IsTier"] = "No";*/
             item4["IsGender"] = "No";
             item4["IsCity"] = "No";
             item4["IsAge"] = "No";
 
-            if ($("#chkTier").is(":checked")) {
-                item4["IsTier"] = "Yes";
-                item4["Tier"] = $("#ddlTier").val();
-            }
+            //if ($("#chkTier").is(":checked")) {
+            //    item4["IsTier"] = "Yes";
+            //    item4["Tier"] = $("#ddlTier").val();
+            //}
 
             if ($("#chkGender").is(":checked")) {
                 item4["IsGender"] = "Yes";
@@ -2415,12 +2487,7 @@
     function GetReport() {
         var returnStatus = true;
         var AllData = [];
-
-        //First, Second and Third level Radio buttons or Checkboxes
         item = {}
-        item["SecondChkCumu"] = "No";
-        item["SecondChk"] = "No";
-        item["MAFinal"] = "No";
         if ($("#chkTransacting").is(":checked")) {
             item["FirstChk"] = "Transacting";
             if ($("#chkAll").is(":checked")) {
@@ -2435,22 +2502,13 @@
                 item["InactiveSegment"] = $("#ddlInactive").val();
                 item["ExcludeOnlyOnce"] = $("#chkExcludeOnlyOnce").is(":checked");
             }
-            if ($("#chkTxnCumiulative").is(":checked")) {
-                item["SecondChk"] = "Cumulative";
-                if ($("#rbtnCTxnCount").is(":checked")) {
-                    item["SecondChkCumu"] = "TxnCount";
-                    item["LSGT"] = $("#ddlTxnCumulative").val();
-                    item["TxnCount"] = $("#txtCTxnCount").val();
-                    item["Months"] = $("#txtCTxnMonths").val();
-                    item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
-                }
-                if ($("#rbtnCSpend").is(":checked")) {
-                    item["SecondChkCumu"] = "CSpend";
-                    item["LSGT"] = $("#ddlSpendCumulative").val();
-                    item["TxnCount"] = $("#txtCSpendCount").val();
-                    item["Months"] = $("#txtCSpendMonths").val();
-                    item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
-                }
+            if ($("#chkTxnAIsegment").is(":checked")) {
+                item["SecondChk"] = "AIsegment";
+                item["AIsegment"] = $("#ddlAIsegment").val();
+            }
+            if ($("#chkTxnTier").is(":checked")) {
+                item["SecondChk"] = "Tier";
+                item["Tier"] = $("#ddlTier").val();
             }
         }
         if ($("#chkNonTransacting").is(":checked")) {
@@ -2500,23 +2558,36 @@
                 item["QRSource"] = $("#ddlDLCSource").val();
             }
         }
+        if ($("#chkPastTransTrendAnalysis").is(":checked")) {
+            item["FirstChk"] = "Cumulative";
+            if ($("#rbtnCTxnCount").is(":checked")) {
+                item["SecondChk"] = "TxnCount";
+                item["LSGT"] = $("#ddlTxnCumulative").val();
+                item["TxnCount"] = $("#txtCTxnCount").val();
+                item["Months"] = $("#txtCTxnMonths").val();
+                item["Frequency"] = $("#ddlTxnCumulativeFrequency").val();
+            }
+            if ($("#rbtnCSpend").is(":checked")) {
+                item["SecondChk"] = "CSpend";
+                item["LSGT"] = $("#ddlSpendCumulative").val();
+                item["TxnCount"] = $("#txtCSpendCount").val();
+                item["Months"] = $("#txtCSpendMonths").val();
+                item["Frequency"] = $("#ddlSpendCumulativeFrequency").val();
+            }
+        }
+
         AllData.push(item);
 
         //Transactional Filters
         item1 = {}
-        item1["IsAvgTicket"] = "No";
         item1["IsEnrolledRange"] = "No";
         item1["IsInactiveSince"] = "No";
-        item1["IsSpend"] = "No";
-        item1["IsTxnCount"] = "No";
         item1["IsPointBalance"] = "No";
+        item1["IsTxnCount"] = "No";
+        item1["IsSpend"] = "No";
+        item1["IsInvoiceValue"] = "No";
+        item1["IsAvgTicket"] = "No";
         item1["Redeemed"] = "";
-
-        if ($("#chkAvgTicket").is(":checked")) {
-            item1["IsAvgTicket"] = "Yes";
-            item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
-            item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
-        }
 
         if ($("#chkEnrolledRange").is(":checked")) {
             item1["IsEnrolledRange"] = "Yes";
@@ -2529,22 +2600,38 @@
             item1["NonTransactedSince"] = $("#txtNonTransactedMax").val();
         }
 
-        if ($("#chkSpend").is(":checked")) {
-            item1["IsSpend"] = "Yes";
-            item1["SpendMin"] = $("#txtSpendMin").val();
-            item1["SpendMax"] = $("#txtSpendMax").val();
+        if ($("#chkPointBalance").is(":checked")) {
+            item1["IsPointBalance"] = "Yes";
+            item1["PointsBalMin"] = $("#txtPointsBalMin").val();
+            item1["PointsBalMax"] = $("#txtPointsBalMax").val();
         }
 
         if ($("#chkTxnCount").is(":checked")) {
             item1["IsTxnCount"] = "Yes";
             item1["CountMin"] = $("#txtTxnCountMin").val();
             item1["CountMax"] = $("#txtTxnCountMax").val();
+            item1["CountSpendDTFrm"] = $("#txtTxnCountSpendfromdt").val();
+            item1["CountSpendDTTo"] = $("#txtTxnCountSpendtodt").val();
         }
 
-        if ($("#chkPointBalance").is(":checked")) {
-            item1["IsPointBalance"] = "Yes";
-            item1["PointsBalMin"] = $("#txtPointsBalMin").val();
-            item1["PointsBalMax"] = $("#txtPointsBalMax").val();
+        if ($("#chkSpend").is(":checked")) {
+            item1["IsSpend"] = "Yes";
+            item1["SpendMin"] = $("#txtSpendMin").val();
+            item1["SpendMax"] = $("#txtSpendMax").val();
+            item1["CountSpendDTFrm"] = $("#txtTxnCountSpendfromdt").val();
+            item1["CountSpendDTTo"] = $("#txtTxnCountSpendtodt").val();
+        }
+
+        if ($("#chkInvoiceValue").is(":checked")) {
+            item1["IsInvoiceValue"] = "Yes";
+            item1["InvoiceValueFrm"] = $("#txtInvoiceValueMin").val();
+            item1["InvoiceValueTo"] = $("#txtInvoiceValueMax").val();
+        }
+
+        if ($("#chkAvgTicket").is(":checked")) {
+            item1["IsAvgTicket"] = "Yes";
+            item1["AvgTicketFrm"] = $("#txtAvgTicketFrm").val();
+            item1["AvgTicketTo"] = $("#txtAvgTicketTo").val();
         }
 
         if ($("#chkRedeemed").is(":checked")) {
@@ -2725,7 +2812,7 @@
         }
     }
 
-    function GenerateReportFromDS(id) {
+    function GetReportDSCount(id) {
         $("#hdnDSID").val(id);
         FillColumns1();
         

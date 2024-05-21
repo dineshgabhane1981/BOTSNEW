@@ -1,0 +1,438 @@
+﻿@model WebApp.ViewModel.NewCampaignViewModel
+@{
+    ViewBag.Title = "New Campaign";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/styleSteps.css" rel="stylesheet" />
+<style>
+    .optionClass {
+        background-color: lightgray;
+    }
+
+    .grayed {
+        pointer-events: none;
+        opacity: 0.3;
+    }
+</style>
+
+<div class="app-main__inner" id="dvall">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+
+        <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+            <div class="multisteps-form">
+                <div class="row">
+                    <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
+                        <div class="multisteps-form__progress">
+                            <button class="multisteps-form__progress-btn js-active" type="button" title="Data Selection">Data Selection</button>
+                            <button class="multisteps-form__progress-btn" type="button" title="Campaign Details">Campaign Configuration</button>                            
+                            <button class="multisteps-form__progress-btn" type="button" title="Communication Details">Communication</button>
+                            <button class="multisteps-form__progress-btn" type="button" title="Preview">Preview</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-12 m-auto ">
+                        <form class="multisteps-form__form">
+                            <div class="multisteps-form__panel shadow p-4 list-box bg-white js-active" data-animation="scaleIn">
+                                <h5 class="multisteps-form__title"></h5>
+                                <div class="multisteps-form__content">
+                                    <div class="row col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-2">
+                                            Base Type
+                                        </div>
+                                        <div class="col-xl-6">
+                                            @Html.DropDownListFor(x => Model.dummyValue, new SelectList(Model.BaseType(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBaseType" })
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12 col-xl-12 ml-0" id="dvAvlPoints" style="display:none;">
+                                        <div class="col-xl-2">
+                                            Available Points
+                                        </div>
+                                        <div class="col-xl-10">
+                                            @Html.DropDownListFor(x => Model.dummyValue, new SelectList(Model.LessAndGreater(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAvailablePoints" })
+                                            <input type="number" id="txtFromPoints" class="input50" />
+                                            <input type="number" id="txtToPoints" class="input50" style="display:none;" />
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12 col-xl-12 ml-0" id="dvSlicerDS" style="display:none;">
+                                        <div class="col-xl-2">
+                                            Slicer Dataset
+                                        </div>
+                                        <div class="col-xl-6">
+                                            @Html.DropDownListFor(x => Model.dummyValue, new SelectList(Model.lstDataset, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlDataset" })
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-2">
+                                            <span id="dvOutletLabel"> Outlet</span>
+                                        </div>
+                                        <div class="col-xl-4">
+                                            @Html.DropDownListFor(x => Model.dummyValue, new SelectList(Model.lstOutlet, "Value", "Text"), "All", htmlAttributes: new { @class = "input50", @id = "ddlOutlet" })
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <table border="1" class="mt-5">
+                                                <tr style="background-color:lightgray;">
+                                                    <th style="padding:10px !important;">All Count</th>
+                                                    <th style="padding:10px !important;">Filtered Count</th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding:10px !important;font-size:18px;font-weight:bold;"><span id="spnTotalBase"></span></td>
+                                                    <td style="padding: 10px !important; font-size: 18px; font-weight: bold;color:darkgreen;"><span id="spnFilterBase"></span></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12 col-xl-12 ml-0 mt-2">
+                                        <div class="col-xl-6">
+                                            <button class="btn btn-primary ml-auto pull-right" type="button" id="btnGetCount" title="Get Count" tabindex="20">Get Count</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="button-row d-flex mt-4">
+                                    <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" tabindex="20">Next</button>
+                                </div>
+                            </div>
+
+                            <div class="multisteps-form__panel shadow p-4 list-box bg-white" data-animation="scaleIn">
+                                <h4 class="multisteps-form__title">Campaign Configuration</h4>
+                                <div class="multisteps-form__content">
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-2">
+                                            Campaign Type:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="radio" id="chkBlast" checked name="firstFilters" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;Promotion / Blast
+                                            <input type="radio" id="chkPointBased" name="firstFilters" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Points-based
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-2">
+                                            Campaign Name:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="text" id="txtCampaignName" class="input50" placeholder="Enter Campaign Name" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-2">
+                                            Campaign Period:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="date" id="txtCampaignfromdt" class="input50" placeholder="Start" />
+                                            <input type="date" id="txtCampaigntodt" class="input50" placeholder="End" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h5 class="multisteps-form__title mt-4" id="headingRewardPoints" style="display:none;">Reward Point Details</h5>
+                                <div class="multisteps-form__content" id="dvRewardPoints" style="display:none;">
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-2">
+
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="radio" id="chkPreIssue" name="RewardPoints" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Load / Pre-Issuance
+                                            <input type="radio" id="chkPostIssue" name="RewardPoints" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Post / On Activity Success
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPreIssue1" style="display:none;">
+                                        <div class="col-xl-3">
+                                            Load Bonus Points:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="text" id="txtLoadBonus" class="input50" placeholder="Bonus Points" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPreIssue2" style="display:none;">
+                                        <div class="col-xl-3">
+                                            Validity of Bonus Points:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="date" id="txtValidityBonus" class="input50" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns" style="display:none;">
+                                        <div class="col-xl-2">
+
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="radio" id="chkTxnCount" name="PostPoints" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Txn Count
+                                            <input type="radio" id="chkSpend" name="PostPoints" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Spend
+                                            <input type="radio" id="chkRedeemTxn" name="PostPoints" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Redemption txn
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns1" style="display:none;">
+                                        <div class="col-xl-3">
+                                            Qualifiying Txn counts:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="number" id="txtQTxnCount" class="input50" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns11" style="display:none;">
+                                        <div class="col-xl-3">
+                                            Min Invoice Value per Txn:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="number" id="txtQInvoiceValue" class="input50" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns2" style="display: none;">
+                                        <div class="col-xl-3">
+                                            Qualifiying Spends:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="number" id="txtQSpends" class="input50" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns3" style="display:none;">
+                                        <div class="col-xl-3">
+                                            Minimum Redeemed points:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="number" id="txtQRedeemPoints" class="input50" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns33" style="display:none;">
+                                        <div class="col-xl-3">
+                                            Min Invoice Value for Redemption txn:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="number" id="txtQInvoiceValueForRedeem" class="input50" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12 col-xl-12 ml-0 mt-5">
+                                    <div class="col-xl-12">
+                                        <button class="btn btn-primary ml-auto pull-right" type="button" style="margin-right:-30px;" id="btnValidateCampaignDetails" title="Check" tabindex="20">Check</button>
+                                    </div>
+                                </div>
+                                <div class="button-row d-flex mt-4">
+                                    <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                    <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" tabindex="37" disabled id="btnCampaignNext">Next</button>
+                                </div>
+                            </div>
+
+                            <div class="multisteps-form__panel shadow p-4 list-box bg-white" data-animation="scaleIn">
+                                <h5 class="multisteps-form__title">Communication</h5>
+                                <div class="multisteps-form__content">
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-3">
+                                            Channel to be used:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="radio" id="chkSMS" checked name="Channel" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;SMS
+                                            <input type="radio" id="chkRWA" name="Channel" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Regular WhatsApp
+                                            <input type="radio" id="chkVWA" name="Channel" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Verified WhatsApp
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-3">
+                                            Choose Language:
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <input type="radio" id="chkSMSEnglish" checked name="SMSChannel" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;English
+                                            <input type="radio" id="chkSMSNonEnglish" name="SMSChannel" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Non-English 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="button-row d-flex mt-4">
+                                    <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                    <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" tabindex="37">Next</button>
+                                </div>
+                            </div>
+
+                            <div class="multisteps-form__panel shadow p-4 list-box bg-white" data-animation="scaleIn">
+                                <h5 class="multisteps-form__title">Preview</h5>
+                                <div class="multisteps-form__content" style="display:flex;">
+                                    Where can I get some?
+                                    There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+                                </div>
+                                <div class="button-row d-flex mt-4">
+                                    <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
+                                    <button class="btn btn-primary ml-auto" type="button" title="Save" tabindex="37">Save Campaign</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/scriptSteps.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#ddlBaseType").change(function () {
+            ShowBaseType();
+        });
+        $("#ddlAvailablePoints").change(function () {
+            ShowHidePoints();
+        });
+        $("#btnGetCount").click(function () {
+            GetFilterCount();
+        });
+        $("#btnValidateCampaignDetails").click(function () {
+            ValidateCampaignDetails();
+        });
+
+        $("#chkBlast").click(function () {
+            ShowHideRewardSection(0);
+        });
+        $("#chkPointBased").click(function () {
+            ShowHideRewardSection(1);
+        });
+
+        $("#chkPreIssue").click(function () {
+            ShowRewardPoints(0);
+        });
+        $("#chkPostIssue").click(function () {
+            ShowRewardPoints(1);
+        });
+        $("#chkTxnCount").click(function () {
+            ShowPostRewardPoints(0);
+        });
+        $("#chkSpend").click(function () {
+            ShowPostRewardPoints(1);
+        });
+        $("#chkRedeemTxn").click(function () {
+            ShowPostRewardPoints(2);
+        });
+    });
+
+    function ShowBaseType() {
+        if ($("#ddlBaseType").val() == "4") {
+            $("#dvAvlPoints").show();
+            $("#dvFromPoints").show();
+            $("#dvOutletLabel").show();
+            $("#ddlOutlet").show();
+            $("#dvSlicerDS").hide();
+        }
+        if ($("#ddlBaseType").val() == "5") {
+            $("#dvSlicerDS").show();
+            $("#dvAvlPoints").hide();
+            $("#dvFromPoints").hide();
+            $("#dvOutletLabel").hide();
+            $("#ddlOutlet").hide();
+        }
+        if ($("#ddlBaseType").val() != "4" && $("#ddlBaseType").val() != "5") {
+            $("#dvAvlPoints").hide();
+            $("#dvFromPoints").hide();
+            $("#dvSlicerDS").hide();
+            $("#dvOutletLabel").show();
+            $("#ddlOutlet").show();
+        }
+    }
+
+    function ShowHidePoints() {
+        if ($("#ddlAvailablePoints").val() == "4") {
+            $("#txtToPoints").show();
+        }
+        else {
+            $("#txtToPoints").hide();
+        }
+    }
+
+    function GetFilterCount() {        
+        if (ValidateDataSelection()) {
+
+        }
+    }
+
+    function ValidateDataSelection() {
+        if ($("#ddlBaseType").val() == "4") {
+            if ($("#ddlAvailablePoints").val() == "4") {
+                if ($("#txtFromPoints").val() == "" && $("#txtToPoints").val() == "") {
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS...",
+                        message: "Please enter to and from points",
+                        buttonText: "Okay"
+                    })
+                    return false;
+                }
+            }
+            else {
+                if ($("#txtFromPoints").val() == "") {
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS...",
+                        message: "Please enter points",
+                        buttonText: "Okay"
+                    })
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    function ValidateCampaignDetails() {
+        var CampStatus = true;
+
+
+        if (CampStatus) {
+            $("#btnCampaignNext").prop('disabled', false);
+        }
+    }
+
+    function ShowHideRewardSection(type) {
+        if (type == 0) {
+            $("#headingRewardPoints").hide();
+            $("#dvRewardPoints").hide();
+        }
+        if (type == 1) {
+            $("#headingRewardPoints").show();
+            $("#dvRewardPoints").show();
+        }
+    }
+
+    function ShowRewardPoints(type) {
+        if (type == 0) {
+            $("#dvPreIssue1").show();
+            $("#dvPreIssue2").show();
+            $("#dvPostRbtns").hide();
+            $("#dvPostRbtns1").hide();
+            $("#dvPostRbtns11").hide();
+            $("#dvPostRbtns2").hide();
+            $("#dvPostRbtns3").hide();
+            $("#dvPostRbtns33").hide();
+
+            $("#chkTxnCount").prop('checked', false);
+            $("#chkSpend").prop('checked', false);
+            $("#chkRedeemTxn").prop('checked', false);
+        }
+        else {
+            $("#dvPreIssue1").hide();
+            $("#dvPreIssue2").hide();
+            $("#dvPostRbtns").show();
+        }
+    }
+
+    function ShowPostRewardPoints(type) {
+        if (type == 0) {
+            $("#dvPostRbtns1").show();
+            $("#dvPostRbtns11").show();
+            $("#dvPostRbtns2").hide();
+            $("#dvPostRbtns3").hide();
+            $("#dvPostRbtns33").hide();
+        }
+        if (type == 1) {
+            $("#dvPostRbtns2").show();
+            $("#dvPostRbtns1").hide();
+            $("#dvPostRbtns11").hide();
+            $("#dvPostRbtns3").hide();
+            $("#dvPostRbtns33").hide();
+        }
+        if (type == 2) {
+            $("#dvPostRbtns3").show();
+            $("#dvPostRbtns33").show();
+            $("#dvPostRbtns2").hide();
+            $("#dvPostRbtns1").hide();
+            $("#dvPostRbtns11").hide();
+        }
+    }
+
+</script>

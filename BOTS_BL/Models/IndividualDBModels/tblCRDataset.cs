@@ -23,5 +23,9 @@ namespace BOTS_BL.Models
         public DateTime AddedDate { get; set; }
 
         public string DSCriteriaForQuery { get; set; }
+        public string DSTxnQuery { get; set; }
+        public string DSCumuQuery { get; set; }
+        public string DSProdQuery { get; set; }
+
     }
 }

@@ -296,6 +296,7 @@
     <Compile Include="ViewModel\FeedbackGetFeedbackViewModel.cs" />
     <Compile Include="ViewModel\GroupConfigDetailsViewModel.cs" />
     <Compile Include="ViewModel\ITOPSNewViewModel.cs" />
+    <Compile Include="ViewModel\NewCampaignViewModel.cs" />
     <Compile Include="ViewModel\ProgrammeViewModel.cs" />
     <Compile Include="ViewModel\PromoCampaignViewModel.cs" />
     <Compile Include="ViewModel\SSvsNonSSViewModel.cs" />
@@ -769,6 +770,7 @@
     <Content Include="Views\IndividualDBConfig\ChangeScript.cshtml" />
     <Content Include="Views\Coupon\CouponReport.cshtml" />
     <Content Include="Views\Coupon\GenericCoupon.cshtml" />
+    <Content Include="Views\Campaigns\NewCampaign.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

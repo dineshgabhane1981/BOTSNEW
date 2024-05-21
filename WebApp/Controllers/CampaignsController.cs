@@ -544,19 +544,16 @@ namespace WebApp.Controllers
             LisCampaign CampLst = new LisCampaign();
             PromoLisCampaign PromoLst = new PromoLisCampaign();
             CampaignMgmt ObjCamp = new CampaignMgmt();
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];            
             try
             {
                 ObjCamp.LstCampaign = CMPR.GetCampList(userDetails.GroupId, userDetails.connectionString);
-                ObjCamp.LstPromo = CMPR.GetPromoBastList(userDetails.GroupId, userDetails.connectionString);
-                
+                ObjCamp.LstPromo = CMPR.GetPromoBastList(userDetails.GroupId, userDetails.connectionString);                
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "CampMgmtNew");
             }
-
             return View("CampMgmtNew", ObjCamp);
         }
 
@@ -1203,5 +1200,44 @@ namespace WebApp.Controllers
             return PartialView("_CampaignPromoBlastDetails", objData);
         }
 
+        public ActionResult NewCampaign()
+        {
+            NewCampaignViewModel objData = new NewCampaignViewModel();
+            SMSDetailsTemp SDT = new SMSDetailsTemp();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData.lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            var SMSGatewayDetails = CMPR.GatewayDetails(userDetails.GroupId, userDetails.connectionString);
+            objData.lstDataset = CMPR.GetCRDatasetList(userDetails.connectionString);
+            //var DataTemp = CMPR.GetWAInsData(userDetails.GroupId, userDetails.connectionString);
+            try
+            {
+
+                if (SMSGatewayDetails.Count() > 0)
+                {
+                    for (int i = 0; i <= SMSGatewayDetails.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            objData.SMSVendor = SMSGatewayDetails[i].BOCode;
+                        }
+                        if (i == 1)
+                        {
+                            objData.SMSBalance = SMSGatewayDetails[i].smsBalance;
+                        }
+                    }                    
+                }
+                else
+                {
+                    ViewBag.SMSVendor = "NA";
+                    ViewBag.SMSBalance = "NA";                    
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "NewCampaign");
+            }
+
+            return View(objData);
+        }
     }
 }
