@@ -58,5 +58,17 @@ namespace WebApp.ViewModel
         public tblCustDetailsMaster tblCustDetailsMaster { get; set; }
         public MemberData objMemberData { get; set; }
         public List<MemberData> lstMemberData { get; set; }
+        public SelectListItem[] WhatsAppScriptType()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Text", Value = "Text" }, new SelectListItem() { Text = "Unicode", Value = "Unicode" } };
+        }
+        public SelectListItem[] SMSScriptType()
+        {
+            return new SelectListItem[2] { new SelectListItem() { Text = "Text", Value = "Text" }, new SelectListItem() { Text = "Unicode", Value = "Unicode" } };
+        }
+        public SelectListItem[] SendStatus()
+        {
+            return new SelectListItem[3] { new SelectListItem() { Text = "SMS", Value = "SMS" }, new SelectListItem() { Text = "WA", Value = "WA" }, new SelectListItem() { Text = "Both", Value = "Both" } };
+        }
     }
 }

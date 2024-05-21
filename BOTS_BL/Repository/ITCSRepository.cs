@@ -296,7 +296,7 @@ namespace BOTS_BL.Repository
             }
             return objSMSWhatsAppScriptMaster;
         }
-        public bool SaveWATransactionalScripts(int GroupId, string OutletId, string Script, string MessageType)
+        public bool SaveWATransactionalScripts(int GroupId, string OutletId, string Script, string MessageType, string ScriptType)
         {
             bool result = false;
             string Id;
@@ -310,17 +310,18 @@ namespace BOTS_BL.Repository
                 {
                     var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
                     Script1.WhatsAppScript = Script;
+                    Script1.WhatsAppScriptType = ScriptType;
                     context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                     context.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "SaveTransactionalScripts");
+                newexception.AddException(ex, "SaveWATransactionalScripts");
             }
             return result;
         }
-        public bool SaveSMSTransactionalScripts(int GroupId, string OutletId, string Script, string MessageType)
+        public bool SaveSMSTransactionalScripts(int GroupId, string OutletId, string Script, string MessageType,string ScriptType)
         {
             bool result = false;
             string Id;
@@ -334,13 +335,59 @@ namespace BOTS_BL.Repository
                 {
                     var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
                     Script1.SMSScript = Script;
+                    Script1.SMSScriptType = ScriptType;
                     context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                     context.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "SaveTransactionalScripts");
+                newexception.AddException(ex, "SaveSMSTransactionalScripts");
+            }
+            return result;
+        }
+        public tblSMSWhatsAppScriptMaster GetTransactionalSMSWASendStatus(int GroupId, string OutletId, string MessageType)
+        {
+            tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objSMSWhatsAppScriptMaster = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetTransactionalSMSWASendStatus");
+            }
+            return objSMSWhatsAppScriptMaster;
+        }
+        public bool SaveSMSWASendStatus(int GroupId, string OutletId,string MessageType,string SendStatus)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblSMSWhatsAppScriptMaster objSMSWhatsAppScriptMaster = new tblSMSWhatsAppScriptMaster();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
+                    Script1.SMSWhatsAppSendStatus = SendStatus;
+                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveSMSWASendStatus");
             }
             return result;
         }
@@ -392,7 +439,7 @@ namespace BOTS_BL.Repository
             }
             return objBirthdaySMSWAScript;
         }
-        public bool SaveWABirthdayScripts(int GroupId, string Script1, string Name1)
+        public bool SaveWABirthdayScripts(int GroupId, string Script1, string Name1,string BirthdayWAScriptType)
         {
             bool result = false;
             string Id;
@@ -406,6 +453,7 @@ namespace BOTS_BL.Repository
                 {
                     var ScriptNew = context.tblBirthdaySMSWAScript.Where(x => x.Name == Name1).FirstOrDefault();
                     ScriptNew.WAScript = Script1;
+                    ScriptNew.WhatsAppScriptType = BirthdayWAScriptType;
                     context.tblBirthdaySMSWAScript.AddOrUpdate(ScriptNew);
                     context.SaveChanges();
                 }
@@ -416,7 +464,7 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool SaveSMSBirthdayScripts(int GroupId, string Script1, string Name1)
+        public bool SaveSMSBirthdayScripts(int GroupId, string Script1, string Name1,string BirthdaySMSScriptType)
         {
             bool result = false;
             string Id;
@@ -430,6 +478,7 @@ namespace BOTS_BL.Repository
                 {
                     var ScriptNew = context.tblBirthdaySMSWAScript.Where(x => x.Name == Name1).FirstOrDefault();
                     ScriptNew.SMSScript = Script1;
+                    ScriptNew.SMSScriptType = BirthdaySMSScriptType;
                     context.tblBirthdaySMSWAScript.AddOrUpdate(ScriptNew);
                     context.SaveChanges();
                 }
@@ -437,6 +486,51 @@ namespace BOTS_BL.Repository
             catch (Exception ex)
             {
                 newexception.AddException(ex, "SaveSMSBirthdayScripts");
+            }
+            return result;
+        }
+        public tblBirthdaySMSWAScript GetBirthdaySMSWASendStatus(int GroupId, string Name)
+        {
+            tblBirthdaySMSWAScript objBirthdaySMSWAScript = new tblBirthdaySMSWAScript();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objBirthdaySMSWAScript = context.tblBirthdaySMSWAScript.Where(x => x.Name == Name).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetBirthdaySMSWASendStatus");
+            }
+            return objBirthdaySMSWAScript;
+        }
+        public bool SaveBirthdaySMSWASendStatus(int GroupId, string Name1, string SendStatus)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblBirthdaySMSWAScript objBirthdaySMSWAScript = new tblBirthdaySMSWAScript();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var ScriptNew = context.tblBirthdaySMSWAScript.Where(x => x.Name == Name1).FirstOrDefault();
+                    ScriptNew.SMSWhatsAppSendStatus = SendStatus;
+                    context.tblBirthdaySMSWAScript.AddOrUpdate(ScriptNew);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveBirthdaySMSWASendStatus");
             }
             return result;
         }
@@ -487,7 +581,7 @@ namespace BOTS_BL.Repository
             }
             return objAnniversarySMSWAScript;
         }
-        public bool SaveWAAnniversaryScripts(int GroupId, string Script2, string Name2)
+        public bool SaveWAAnniversaryScripts(int GroupId, string Script2, string Name2,string AnniversaryWAScriptType)
         {
             bool result = false;
             string Id;
@@ -501,6 +595,7 @@ namespace BOTS_BL.Repository
                 {
                     var ScriptNew1 = context.tblAnniversarySMSWAScript.Where(x => x.Name == Name2).FirstOrDefault();
                     ScriptNew1.WAScript = Script2;
+                    ScriptNew1.WhatsAppScriptType = AnniversaryWAScriptType;
                     context.tblAnniversarySMSWAScript.AddOrUpdate(ScriptNew1);
                     context.SaveChanges();
                 }
@@ -511,7 +606,7 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool SaveSMSAnniversaryScripts(int GroupId, string Script2, string Name2)
+        public bool SaveSMSAnniversaryScripts(int GroupId, string Script2, string Name2,string AnniversarySMSScriptType)
         {
             bool result = false;
             string Id;
@@ -525,6 +620,7 @@ namespace BOTS_BL.Repository
                 {
                     var ScriptNew1 = context.tblAnniversarySMSWAScript.Where(x => x.Name == Name2).FirstOrDefault();
                     ScriptNew1.SMSScript = Script2;
+                    ScriptNew1.SMSScriptType = AnniversarySMSScriptType;
                     context.tblAnniversarySMSWAScript.AddOrUpdate(ScriptNew1);
                     context.SaveChanges();
                 }
@@ -535,13 +631,57 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+        public tblAnniversarySMSWAScript GetAnniversarySMSWASendStatus(int GroupId, string Name)
+        {
+            tblAnniversarySMSWAScript objAnniversarySMSWAScript = new tblAnniversarySMSWAScript();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objAnniversarySMSWAScript = context.tblAnniversarySMSWAScript.Where(x => x.Name == Name).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAnniversarySMSWASendStatus");
+            }
+            return objAnniversarySMSWAScript;
+        }
+        public bool SaveAnniversarySMSWASendStatus(int GroupId, string Name2, string SendStatus)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblAnniversarySMSWAScript objAnniversarySMSWAScript = new tblAnniversarySMSWAScript();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var ScriptNew1 = context.tblAnniversarySMSWAScript.Where(x => x.Name == Name2).FirstOrDefault();
+                    ScriptNew1.SMSWhatsAppSendStatus = SendStatus;
+                    context.tblAnniversarySMSWAScript.AddOrUpdate(ScriptNew1);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveAnniversarySMSWASendStatus");
+            }
+            return result;
+        }
         public List<SelectListItem> GetInactiveScript(string GroupId)
         {
             List<SelectListItem> lstInactive = new List<SelectListItem>();
             List<tblInActiveSMSWAScript> InactiveScript = new List<tblInActiveSMSWAScript>();
             try
             {
-
                 var connStr = CR.GetCustomerConnString((GroupId));
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
@@ -584,7 +724,7 @@ namespace BOTS_BL.Repository
             return objInActiveSMSWAScript;
 
         }
-        public bool SaveWAInactiveScripts(int GroupId, string Script3, string Name3)
+        public bool SaveWAInactiveScripts(int GroupId, string Script3, string Name3,string InactiveWAScriptType)
         {
             bool result = false;
             string Id;
@@ -598,8 +738,10 @@ namespace BOTS_BL.Repository
                 {
                     var ScriptNew2 = context.tblInActiveSMSWAScripts.Where(x => x.Name == Name3).FirstOrDefault();
                     ScriptNew2.WAScript = Script3;
+                    ScriptNew2.WhatsAppScriptType = InactiveWAScriptType;
                     context.tblInActiveSMSWAScripts.AddOrUpdate(ScriptNew2);
                     context.SaveChanges();
+                    result = true;
                 }
             }
             catch (Exception ex)
@@ -608,7 +750,7 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool SaveSMSInactiveScripts(int GroupId, string Script3, string Name3)
+        public bool SaveSMSInactiveScripts(int GroupId, string Script3, string Name3,string InactiveSMSScriptType)
         {
             bool result = false;
             string Id;
@@ -622,6 +764,7 @@ namespace BOTS_BL.Repository
                 {
                     var ScriptNew2 = context.tblInActiveSMSWAScripts.Where(x => x.Name == Name3).FirstOrDefault();
                     ScriptNew2.SMSScript = Script3;
+                    ScriptNew2.SMSScriptType = InactiveSMSScriptType;
                     context.tblInActiveSMSWAScripts.AddOrUpdate(ScriptNew2);
                     context.SaveChanges();
                 }
@@ -629,6 +772,51 @@ namespace BOTS_BL.Repository
             catch (Exception ex)
             {
                 newexception.AddException(ex, "SaveWAInactiveScripts");
+            }
+            return result;
+        }
+        public tblInActiveSMSWAScript GetInactiveSMSWASendStatus(int GroupId, string Name)
+        {
+            tblInActiveSMSWAScript objInActiveSMSWAScript = new tblInActiveSMSWAScript();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objInActiveSMSWAScript = context.tblInActiveSMSWAScripts.Where(x => x.Name == Name).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetInactiveSMSWASendStatus");
+            }
+            return objInActiveSMSWAScript;
+        }
+        public bool SaveInactiveSMSWASendStatus(int GroupId, string Name3, string SendStatus)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblInActiveSMSWAScript objInActiveSMSWAScript = new tblInActiveSMSWAScript();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var ScriptNew2 = context.tblInActiveSMSWAScripts.Where(x => x.Name == Name3).FirstOrDefault();
+                    ScriptNew2.SMSWhatsAppSendStatus = SendStatus;
+                    context.tblInActiveSMSWAScripts.AddOrUpdate(ScriptNew2);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveInactiveSMSWASendStatus");
             }
             return result;
         }
@@ -681,7 +869,7 @@ namespace BOTS_BL.Repository
             return objPointsExpirySMSWAScript;
 
         }
-        public bool SaveWAPointsExpiryScripts(int GroupId, string Script4, string Name4)
+        public bool SaveWAPointsExpiryScripts(int GroupId, string Script4, string Name4,string PointsExpiryWAScriptType)
         {
             bool result = false;
             string Id;
@@ -695,6 +883,7 @@ namespace BOTS_BL.Repository
                 {
                     var ScriptNew3 = context.tblPointsExpirySMSWAScript.Where(x => x.Name == Name4).FirstOrDefault();
                     ScriptNew3.WAScript = Script4;
+                    ScriptNew3.WhatsAppScriptType = PointsExpiryWAScriptType;
                     context.tblPointsExpirySMSWAScript.AddOrUpdate(ScriptNew3);
                     context.SaveChanges();
                 }
@@ -705,7 +894,7 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool SaveSMSPointsExpiryScripts(int GroupId, string Script4, string Name4)
+        public bool SaveSMSPointsExpiryScripts(int GroupId, string Script4, string Name4,string PointsExpirySMSScriptType)
         {
             bool result = false;
             string Id;
@@ -719,13 +908,59 @@ namespace BOTS_BL.Repository
                 {
                     var ScriptNew3 = context.tblPointsExpirySMSWAScript.Where(x => x.Name == Name4).FirstOrDefault();
                     ScriptNew3.SMSScript = Script4;
+                    ScriptNew3.SMSScriptType = PointsExpirySMSScriptType;
                     context.tblPointsExpirySMSWAScript.AddOrUpdate(ScriptNew3);
                     context.SaveChanges();
                 }
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "SaveWAPointsExpiryScripts");
+                newexception.AddException(ex, "SaveSMSPointsExpiryScripts");
+            }
+            return result;
+        }
+        public tblPointsExpirySMSWAScript GetPointsExpirySMSWASendStatus(int GroupId, string Name)
+        {
+            tblPointsExpirySMSWAScript objPointsExpirySMSWAScript = new tblPointsExpirySMSWAScript();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objPointsExpirySMSWAScript = context.tblPointsExpirySMSWAScript.Where(x => x.Name == Name).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetPointsExpirySMSWAScripts");
+            }
+            return objPointsExpirySMSWAScript;
+        }
+        public bool SavePointsExpirySMSWASendStatus(int GroupId, string Name4, string SendStatus)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblPointsExpirySMSWAScript objPointsExpirySMSWAScript = new tblPointsExpirySMSWAScript();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var ScriptNew3 = context.tblPointsExpirySMSWAScript.Where(x => x.Name == Name4).FirstOrDefault();
+                    ScriptNew3.SMSWhatsAppSendStatus = SendStatus;
+                    context.tblPointsExpirySMSWAScript.AddOrUpdate(ScriptNew3);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SavePointsExpirySMSWASendStatus");
             }
             return result;
         }
@@ -776,7 +1011,7 @@ namespace BOTS_BL.Repository
             }
             return objDLCSMSWAScriptMaster;
         }
-        public bool SaveWADLCScripts(int GroupId, string DLCMessageType, string DLCScript)
+        public bool SaveWADLCScripts(int GroupId, string DLCMessageType, string DLCScript,string DLCWAScriptType)
         {
             bool result = false;
             string Id;
@@ -790,6 +1025,7 @@ namespace BOTS_BL.Repository
                 {
                     var DLCSMSScriptNew = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCMessageType == DLCMessageType).FirstOrDefault();
                     DLCSMSScriptNew.DLCWAScript = DLCScript;
+                    DLCSMSScriptNew.WhatsAppScriptType = DLCWAScriptType;
                     context.tblDLCSMSWAScriptMasters.AddOrUpdate(DLCSMSScriptNew);
                     context.SaveChanges();
                 }
@@ -800,7 +1036,7 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool SaveSMSDLCScripts(int GroupId, string DLCMessageType, string DLCScript)
+        public bool SaveSMSDLCScripts(int GroupId, string DLCMessageType, string DLCScript,string DLCSMSScriptType)
         {
             bool result = false;
             string Id;
@@ -814,6 +1050,7 @@ namespace BOTS_BL.Repository
                 {
                     var DLCSMSScriptNew = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCMessageType == DLCMessageType).FirstOrDefault();
                     DLCSMSScriptNew.DLCSMSScript = DLCScript;
+                    DLCSMSScriptNew.SMSScriptType = DLCSMSScriptType;
                     context.tblDLCSMSWAScriptMasters.AddOrUpdate(DLCSMSScriptNew);
                     context.SaveChanges();
                 }
@@ -821,6 +1058,51 @@ namespace BOTS_BL.Repository
             catch (Exception ex)
             {
                 newexception.AddException(ex, "SaveSMSDLCScripts");
+            }
+            return result;
+        }
+        public tblDLCSMSWAScriptMaster GetDLCSMSWASendStatus(int GroupId, string DLCMessageType)
+        {
+            tblDLCSMSWAScriptMaster objDLCSMSWAScriptMaster = new tblDLCSMSWAScriptMaster();
+            string Id;
+            string Script;
+            Id = string.Empty;
+            Script = string.Empty;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objDLCSMSWAScriptMaster = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCMessageType == DLCMessageType).FirstOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDLCSMSWASendStatus");
+            }
+            return objDLCSMSWAScriptMaster;
+        }
+        public bool SaveDLCSMSWASendStatus(int GroupId, string DLCMessageType, string SendStatus)
+        {
+            bool result = false;
+            string Id;
+            Id = string.Empty;
+            tblGroupDetail obj = new tblGroupDetail();
+            tblDLCSMSWAScriptMaster objDLCSMSWAScriptMaster = new tblDLCSMSWAScriptMaster();
+            try
+            {
+                var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var DLCSMSScriptNew = context.tblDLCSMSWAScriptMasters.Where(x => x.DLCMessageType == DLCMessageType).FirstOrDefault();
+                    DLCSMSScriptNew.SMSWhatsAppSendStatus = SendStatus;
+                    context.tblDLCSMSWAScriptMasters.AddOrUpdate(DLCSMSScriptNew);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveDLCSMSWASendStatus");
             }
             return result;
         }
@@ -850,14 +1132,15 @@ namespace BOTS_BL.Repository
             }
             return lstOutlet;
         }
-        public SMSCredential GetSMSCredentials(string OutletId)
+        public SMSCredential GetSMSCredentials(string OutletId,string groupid)
         {
             SMSCredential obj = new SMSCredential();
             try
             {
-                using (var contextNew = new BOTSDBContext())
+                var connStr = CR.GetCustomerConnString((groupid));
+                using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    tblSMSWhatsAppCredential objSMSCredential = contextNew.tblSMSWhatsAppCredentials.FirstOrDefault(x => x.OutletId == OutletId);
+                    tblSMSWhatsAppCredential objSMSCredential = contextNew.tblSMSWhatsAppCredentials.Where(x => x.OutletId == OutletId).FirstOrDefault();
 
                     if (objSMSCredential != null)
                     {
@@ -870,17 +1153,17 @@ namespace BOTS_BL.Repository
                         obj.SMSSenderId = objSMSCredential.SMSSenderId;
                         obj.IsActiveSMS = Convert.ToBoolean(objSMSCredential.IsActiveSMS);
                     }
-                    else
-                    {
-                        obj.OutletId = OutletId;
-                        obj.SMSVendor = "";
-                        obj.SMSUrl = "";
-                        obj.SMSLoginId = "";
-                        obj.SMSPassword = "";
-                        obj.SMSAPIKey = "";
-                        obj.SMSSenderId = "";
-                        obj.IsActiveSMS = false;
-                    }
+                    //else
+                    //{
+                    //    obj.OutletId = OutletId;
+                    //    obj.SMSVendor = "";
+                    //    obj.SMSUrl = "";
+                    //    obj.SMSLoginId = "";
+                    //    obj.SMSPassword = "";
+                    //    obj.SMSAPIKey = "";
+                    //    obj.SMSSenderId = "";
+                    //    obj.IsActiveSMS = false;
+                    //}
                 }
             }
             catch (Exception ex)
@@ -889,27 +1172,29 @@ namespace BOTS_BL.Repository
             }
             return obj;
         }
-        public bool SaveSMSCredentials(tblSMSWhatsAppCredential ObjCredential)
+        public bool SaveSMSCredentials(tblSMSWhatsAppCredential ObjCredential,string groupid)
         {
-            int? IntGroupId = Convert.ToInt32(ObjCredential.OutletId);
             bool status = false;
             try
             {
-                tblSMSWhatsAppCredential objtblSMSWhatsAppCredential = new tblSMSWhatsAppCredential();
-                using (var context = new BOTSDBContext())
+                var connStr = CR.GetCustomerConnString((groupid));
+                using (var context = new BOTSDBContext(connStr))
                 {
-                    objtblSMSWhatsAppCredential = context.tblSMSWhatsAppCredentials.Where(x => x.OutletId == ObjCredential.OutletId).FirstOrDefault();
-                    if (objtblSMSWhatsAppCredential != null)
+                    tblSMSWhatsAppCredential objtblSMSWhatsAppCredential = context.tblSMSWhatsAppCredentials.Where(x => x.OutletId == ObjCredential.OutletId).FirstOrDefault();
+
+                    if (objtblSMSWhatsAppCredential == null)
                     {
+                        objtblSMSWhatsAppCredential = new tblSMSWhatsAppCredential();
                         objtblSMSWhatsAppCredential.OutletId = ObjCredential.OutletId;
-                        objtblSMSWhatsAppCredential.SMSVendor = ObjCredential.SMSVendor;
-                        objtblSMSWhatsAppCredential.SMSUrl = ObjCredential.SMSUrl;
-                        objtblSMSWhatsAppCredential.SMSLoginId = ObjCredential.SMSLoginId;
-                        objtblSMSWhatsAppCredential.SMSPassword = ObjCredential.SMSPassword;
-                        objtblSMSWhatsAppCredential.SMSAPIKey = ObjCredential.SMSAPIKey;
-                        objtblSMSWhatsAppCredential.SMSSenderId = ObjCredential.SMSSenderId;
-                        objtblSMSWhatsAppCredential.IsActiveSMS = ObjCredential.IsActiveSMS;
                     }
+                    objtblSMSWhatsAppCredential.SMSVendor = ObjCredential.SMSVendor;
+                    objtblSMSWhatsAppCredential.SMSUrl = ObjCredential.SMSUrl;
+                    objtblSMSWhatsAppCredential.SMSLoginId = ObjCredential.SMSLoginId;
+                    objtblSMSWhatsAppCredential.SMSPassword = ObjCredential.SMSPassword;
+                    objtblSMSWhatsAppCredential.SMSAPIKey = ObjCredential.SMSAPIKey;
+                    objtblSMSWhatsAppCredential.SMSSenderId = ObjCredential.SMSSenderId;
+                    objtblSMSWhatsAppCredential.IsActiveSMS = ObjCredential.IsActiveSMS;
+
                     context.tblSMSWhatsAppCredentials.AddOrUpdate(objtblSMSWhatsAppCredential);
                     context.SaveChanges();
                     status = true;

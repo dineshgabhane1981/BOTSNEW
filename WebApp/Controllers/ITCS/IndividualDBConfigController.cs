@@ -47,13 +47,13 @@ namespace WebApp.Controllers.ITCS
             objData.objSMSWhatsAppScriptMaster = ITCSR.GetTransactionalScripts(Convert.ToInt32(userDetails.GroupId), OutletId, MessageType);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SaveWATransactionalScripts(int OutletId, string Script, string MessageType)
+        public ActionResult SaveWATransactionalScripts(int OutletId, string Script, string MessageType, string ScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveWATransactionalScripts(Convert.ToInt32(userDetails.GroupId), Convert.ToString(OutletId), Script, MessageType);
+                result = ITCSR.SaveWATransactionalScripts(Convert.ToInt32(userDetails.GroupId), Convert.ToString(OutletId), Script, MessageType, ScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change WA Transactional Script";
@@ -67,19 +67,46 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult SaveSMSTransactionalScripts(int OutletId, string Script, string MessageType)
+        public ActionResult SaveSMSTransactionalScripts(int OutletId, string Script, string MessageType,string ScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveSMSTransactionalScripts(Convert.ToInt32(userDetails.GroupId), Convert.ToString(OutletId), Script, MessageType);
+                result = ITCSR.SaveSMSTransactionalScripts(Convert.ToInt32(userDetails.GroupId), Convert.ToString(OutletId), Script, MessageType, ScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change SMS Transactional Script";
                 objData.RequestedBy = userDetails.UserName;
                 objData.RequestedDate = DateTime.Now;
                 ITCSR.AddCSLog(objData);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveScripts");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetTransactionalSMSWASendStatus(string OutletId, string MessageType)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objSMSWhatsAppScriptMaster = ITCSR.GetTransactionalSMSWASendStatus(Convert.ToInt32(userDetails.GroupId), OutletId, MessageType);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveSMSWASendStatus(int OutletId, string MessageType,string SendStatus)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                result = ITCSR.SaveSMSWASendStatus(Convert.ToInt32(userDetails.GroupId), Convert.ToString(OutletId),MessageType, SendStatus);
+                //tblAuditC objData = new tblAuditC();
+                //objData.GroupId = Convert.ToString(userDetails.GroupId);
+                //objData.RequestedFor = "Change SMS Transactional Script";
+                //objData.RequestedBy = userDetails.UserName;
+                //objData.RequestedDate = DateTime.Now;
+                //ITCSR.AddCSLog(objData);
             }
             catch (Exception ex)
             {
@@ -100,13 +127,13 @@ namespace WebApp.Controllers.ITCS
             objData.objBirthdaySMSWAScript = ITCSR.GetBirthdaySMSWAScript(Convert.ToInt32(userDetails.GroupId), Name);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SaveWABirthdayScripts(string Script1, string Name1)
+        public ActionResult SaveWABirthdayScripts(string Script1, string Name1,string BirthdayWAScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveWABirthdayScripts(Convert.ToInt32(userDetails.GroupId), Script1, Name1);
+                result = ITCSR.SaveWABirthdayScripts(Convert.ToInt32(userDetails.GroupId), Script1, Name1, BirthdayWAScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change Birthday WA Script";
@@ -120,16 +147,43 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult SaveSMSBirthdayScripts(string Script1, string Name1)
+        public ActionResult SaveSMSBirthdayScripts(string Script1, string Name1,string BirthdaySMSScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveSMSBirthdayScripts(Convert.ToInt32(userDetails.GroupId), Script1, Name1);
+                result = ITCSR.SaveSMSBirthdayScripts(Convert.ToInt32(userDetails.GroupId), Script1, Name1, BirthdaySMSScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change Birthday SMS Script";
+                objData.RequestedBy = userDetails.UserName;
+                objData.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(objData);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveScripts");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetBirthdaySMSWASendStatus(string Name)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objBirthdaySMSWAScript = ITCSR.GetBirthdaySMSWASendStatus(Convert.ToInt32(userDetails.GroupId), Name);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveBirthdaySMSWASendStatus(string Name1,string SendStatus)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                result = ITCSR.SaveBirthdaySMSWASendStatus(Convert.ToInt32(userDetails.GroupId),Name1,SendStatus);
+                tblAuditC objData = new tblAuditC();
+                objData.GroupId = Convert.ToString(userDetails.GroupId);
+                objData.RequestedFor = "Change SMS Transactional Script";
                 objData.RequestedBy = userDetails.UserName;
                 objData.RequestedDate = DateTime.Now;
                 ITCSR.AddCSLog(objData);
@@ -153,13 +207,13 @@ namespace WebApp.Controllers.ITCS
             objData.objAnniversarySMSWAScript = ITCSR.GetAnniversarySMSWAScript(Convert.ToInt32(userDetails.GroupId), Name);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SaveWAAnniversaryScripts(string Script2, string Name2)
+        public ActionResult SaveWAAnniversaryScripts(string Script2, string Name2,string AnniversaryWAScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveWAAnniversaryScripts(Convert.ToInt32(userDetails.GroupId), Script2, Name2);
+                result = ITCSR.SaveWAAnniversaryScripts(Convert.ToInt32(userDetails.GroupId), Script2, Name2, AnniversaryWAScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change Anniversary WA Script";
@@ -173,16 +227,43 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult SaveSMSAnniversaryScripts(string Script2, string Name2)
+        public ActionResult SaveSMSAnniversaryScripts(string Script2, string Name2,string AnniversarySMSScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveSMSAnniversaryScripts(Convert.ToInt32(userDetails.GroupId), Script2, Name2);
+                result = ITCSR.SaveSMSAnniversaryScripts(Convert.ToInt32(userDetails.GroupId), Script2, Name2, AnniversarySMSScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change Anniversary SMS Script";
+                objData.RequestedBy = userDetails.UserName;
+                objData.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(objData);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveScripts");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetAnniversarySMSWASendStatus(string Name)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objAnniversarySMSWAScript = ITCSR.GetAnniversarySMSWASendStatus(Convert.ToInt32(userDetails.GroupId), Name);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveAnniversarySMSWASendStatus(string Name2, string SendStatus)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                result = ITCSR.SaveAnniversarySMSWASendStatus(Convert.ToInt32(userDetails.GroupId), Name2, SendStatus);
+                tblAuditC objData = new tblAuditC();
+                objData.GroupId = Convert.ToString(userDetails.GroupId);
+                objData.RequestedFor = "Change SMS Transactional Script";
                 objData.RequestedBy = userDetails.UserName;
                 objData.RequestedDate = DateTime.Now;
                 ITCSR.AddCSLog(objData);
@@ -206,13 +287,13 @@ namespace WebApp.Controllers.ITCS
             objData.objInActiveSMSWAScript = ITCSR.GetInactiveSMSWAScript(Convert.ToInt32(userDetails.GroupId), Name);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SaveWAInactiveScripts(string Script3, string Name3)
+        public ActionResult SaveWAInactiveScripts(string Script3, string Name3,string InactiveWAScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveWAInactiveScripts(Convert.ToInt32(userDetails.GroupId), Script3, Name3);
+                result = ITCSR.SaveWAInactiveScripts(Convert.ToInt32(userDetails.GroupId), Script3, Name3, InactiveWAScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change Inactive WA Script";
@@ -226,13 +307,13 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult SaveSMSInactiveScripts(string Script3, string Name3)
+        public ActionResult SaveSMSInactiveScripts(string Script3, string Name3,string InactiveSMSScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveSMSInactiveScripts(Convert.ToInt32(userDetails.GroupId), Script3, Name3);
+                result = ITCSR.SaveSMSInactiveScripts(Convert.ToInt32(userDetails.GroupId), Script3, Name3, InactiveSMSScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Change Inactive SMS Script";
@@ -243,6 +324,33 @@ namespace WebApp.Controllers.ITCS
             catch (Exception ex)
             {
                 newexception.AddException(ex, "SaveSMSInactiveScripts");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetInactiveSMSWASendStatus(string Name)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objInActiveSMSWAScript = ITCSR.GetInactiveSMSWASendStatus(Convert.ToInt32(userDetails.GroupId), Name);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveInactiveSMSWASendStatus(string Name3, string SendStatus)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                result = ITCSR.SaveInactiveSMSWASendStatus(Convert.ToInt32(userDetails.GroupId), Name3, SendStatus);
+                tblAuditC objData = new tblAuditC();
+                objData.GroupId = Convert.ToString(userDetails.GroupId);
+                objData.RequestedFor = "Change SMS Transactional Script";
+                objData.RequestedBy = userDetails.UserName;
+                objData.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(objData);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveScripts");
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -259,13 +367,13 @@ namespace WebApp.Controllers.ITCS
             objData.objPointsExpirySMSWAScript = ITCSR.GetPointsExpirySMSWAScripts(Convert.ToInt32(userDetails.GroupId), Name);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SaveWAPointsExpiryScripts(string Script4, string Name4)
+        public ActionResult SaveWAPointsExpiryScripts(string Script4, string Name4,string PointsExpiryWAScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveWAPointsExpiryScripts(Convert.ToInt32(userDetails.GroupId), Script4, Name4);
+                result = ITCSR.SaveWAPointsExpiryScripts(Convert.ToInt32(userDetails.GroupId), Script4, Name4, PointsExpiryWAScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Save WA Points Expiry Scripts";
@@ -279,16 +387,44 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult SaveSMSPointsExpiryScripts(string Script4, string Name4)
+        public ActionResult SaveSMSPointsExpiryScripts(string Script4, string Name4,string PointsExpirySMSScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveSMSPointsExpiryScripts(Convert.ToInt32(userDetails.GroupId), Script4, Name4);
+                result = ITCSR.SaveSMSPointsExpiryScripts(Convert.ToInt32(userDetails.GroupId), Script4, Name4, PointsExpirySMSScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Save SMS Points Expiry Scripts";
+                objData.RequestedBy = userDetails.UserName;
+                objData.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(objData);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveScripts");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetPointsExpirySMSWASendStatus(string Name)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objPointsExpirySMSWAScript = ITCSR.GetPointsExpirySMSWASendStatus(Convert.ToInt32(userDetails.GroupId), Name);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SavePointsExpirySMSWASendStatus(string Name4, string SendStatus)
+
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                result = ITCSR.SavePointsExpirySMSWASendStatus(Convert.ToInt32(userDetails.GroupId), Name4, SendStatus);
+                tblAuditC objData = new tblAuditC();
+                objData.GroupId = Convert.ToString(userDetails.GroupId);
+                objData.RequestedFor = "Change SMS Transactional Script";
                 objData.RequestedBy = userDetails.UserName;
                 objData.RequestedDate = DateTime.Now;
                 ITCSR.AddCSLog(objData);
@@ -312,13 +448,13 @@ namespace WebApp.Controllers.ITCS
             objData.objDLCSMSWAScriptMaster = ITCSR.GetDLCSMSWAScripts(Convert.ToInt32(userDetails.GroupId), DLCMessageType);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult SaveWADLCScripts(string DLCMessageType, string DLCScript)
+        public ActionResult SaveWADLCScripts(string DLCMessageType, string DLCScript,string DLCWAScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveWADLCScripts(Convert.ToInt32(userDetails.GroupId), DLCMessageType, DLCScript);
+                result = ITCSR.SaveWADLCScripts(Convert.ToInt32(userDetails.GroupId), DLCMessageType, DLCScript, DLCWAScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Save WA DLC Scripts";
@@ -332,13 +468,13 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
-        public ActionResult SaveSMSDLCScripts(string DLCMessageType, string DLCScript)
+        public ActionResult SaveSMSDLCScripts(string DLCMessageType, string DLCScript,string DLCSMSScriptType)
         {
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                result = ITCSR.SaveSMSDLCScripts(Convert.ToInt32(userDetails.GroupId), DLCMessageType, DLCScript);
+                result = ITCSR.SaveSMSDLCScripts(Convert.ToInt32(userDetails.GroupId), DLCMessageType, DLCScript, DLCSMSScriptType);
                 tblAuditC objData = new tblAuditC();
                 objData.GroupId = Convert.ToString(userDetails.GroupId);
                 objData.RequestedFor = "Save SMS DLC Scripts";
@@ -352,6 +488,33 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult GetDLCSMSWASendStatus(string DLCMessageType)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objDLCSMSWAScriptMaster = ITCSR.GetDLCSMSWASendStatus(Convert.ToInt32(userDetails.GroupId), DLCMessageType);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveDLCSMSWASendStatus(string DLCMessageType, string SendStatus)
+        {
+            bool result = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                result = ITCSR.SaveDLCSMSWASendStatus(Convert.ToInt32(userDetails.GroupId), DLCMessageType, SendStatus);
+                tblAuditC objData = new tblAuditC();
+                objData.GroupId = Convert.ToString(userDetails.GroupId);
+                objData.RequestedFor = "Save DLC SMS WA Send Status";
+                objData.RequestedBy = userDetails.UserName;
+                objData.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(objData);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveScripts");
+            }
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
         public JsonResult GetOutletDetails()
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
@@ -362,7 +525,7 @@ namespace WebApp.Controllers.ITCS
         {
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             ProgrammeViewModel objData = new ProgrammeViewModel();
-            objData.objSMSCredential = ITCSR.GetSMSCredentials(OutletId);
+            objData.objSMSCredential = ITCSR.GetSMSCredentials(OutletId,userDetails.GroupId);
             return Json(objData, JsonRequestBehavior.AllowGet);
         }
         public ActionResult SaveSMSCredentials(string jsonData)
@@ -386,7 +549,7 @@ namespace WebApp.Controllers.ITCS
                     objtblSMSWhatsAppCredential.SMSSenderId = Convert.ToString(item["SMSSenderId"]);
                     objtblSMSWhatsAppCredential.IsActiveSMS = Convert.ToBoolean(item["IsActiveSMS"]);
                 }
-                var Response = ITCSR.SaveSMSCredentials(objtblSMSWhatsAppCredential);
+                var Response = ITCSR.SaveSMSCredentials(objtblSMSWhatsAppCredential,userDetails.GroupId);
                 tblAuditC obj = new tblAuditC();
                 obj.GroupId = Convert.ToString(userDetails.GroupId);
                 obj.RequestedFor = "Save SMS Credentials";
