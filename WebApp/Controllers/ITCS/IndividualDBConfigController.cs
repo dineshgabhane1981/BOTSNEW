@@ -1093,6 +1093,162 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult ChangeOutletDetails()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            return View(objData);
+        }
+        public ActionResult SaveOutletDetails(string jsonData)
+        {
+            bool status = false;
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    tblOutletMaster objOutletMaster = new tblOutletMaster();
+                    objOutletMaster.OutletId = Convert.ToString(item["Outlet_ID"]);
+                    objOutletMaster.OutletName = Convert.ToString(item["Outlet_name"]);
+                    objOutletMaster.BrandId = Convert.ToString(item["Brand_ID"]);
+                    objOutletMaster.GroupId = Convert.ToString(item["Group_ID"]);
+                    objOutletMaster.IsActive = true;
+                    objOutletMaster.Address = Convert.ToString(item["_Address"]);
+                    objOutletMaster.City = Convert.ToString(item["_City"]);
+                    objOutletMaster.Area = Convert.ToString(item["_Area"]);
+                    objOutletMaster.Phone = Convert.ToString(item["_Phone"]);
+                    objOutletMaster.Pincode = Convert.ToString(item["_Pincode"]);
+                    objOutletMaster.DefaultOTP = Convert.ToString(item["Default_otp"]);
+                    objOutletMaster.Latitude = Convert.ToString(item["_Latitude"]);
+                    objOutletMaster.Longitude = Convert.ToString(item["_Longitude"]);
+                    objOutletMaster.InvoiceDate = Convert.ToDateTime(item["Invoice_date"]);
+                    objOutletMaster.LiveDate = Convert.ToDateTime(item["Live_date"]);
+                    objOutletMaster.StoreAnniversaryDate = Convert.ToDateTime(item["Store_adate"]);
+
+                    var connectionString = CR.GetCustomerConnString(objOutletMaster.GroupId);
+                    var response = ITCSR.SaveOutletDetails(objOutletMaster, connectionString);
+                    status = response;
+                }
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Change Outlet Details";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveOutletDetails");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult GetOutletDetailsDATA(string OutletId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objOutletData = ITCSR.GetOutletDetails(userDetails.GroupId, OutletId);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetAssignValueForOutlet(string OutletId)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.objOutletData = ITCSR.GetAssignOutletDetails(userDetails.GroupId);
+            return Json(objData, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult SaveOutletCrediantialDetails(string jsonData)
+        {
+            tblGroupOwnerInfo objGroupOwnerInfo = new tblGroupOwnerInfo();
+            bool status = false;
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    tblSMSWhatsAppCredential objCrediantialMaster = new tblSMSWhatsAppCredential();
+                    objGroupOwnerInfo.GroupId = userDetails.GroupId;
+                    objCrediantialMaster.OutletId = item["Outlet_IDCR"]?.ToString();
+                    objCrediantialMaster.SMSVendor = item["Sms_VendorCR"]?.ToString();
+                    objCrediantialMaster.SMSUrl = item["SMSUrlCR"]?.ToString();
+                    objCrediantialMaster.SMSLoginId = item["SMSLoginIdCR"]?.ToString();
+                    objCrediantialMaster.WhatsAppMessageType = "Text";
+                    objCrediantialMaster.SMSPassword = item["SMSPassCR"]?.ToString();
+                    objCrediantialMaster.SMSAPIKey = item["ApiKeyCR"]?.ToString();
+                    objCrediantialMaster.WhatsAppVendor = item["WhatsappVendorCR"]?.ToString();
+                    objCrediantialMaster.WhatsAppUrl = item["WhatsappUrlCR"]?.ToString();
+                    objCrediantialMaster.WhatsAppTokenId = item["WhatsappTIDCR"]?.ToString();
+                    objCrediantialMaster.VerifiedWhatsAppUrl = item["VWAWhatsappUrlCR"]?.ToString();
+                    objCrediantialMaster.VerifiedWhatsAppLoginId = item["VWALoginidDCR"]?.ToString();
+                    objCrediantialMaster.VerifiedWhatsAppPassword = item["VWAPasswordCR"]?.ToString();
+                    objCrediantialMaster.VerifiedWhatsAppAPIKey = item["VWAAPIKeyCR"]?.ToString();
+                    objCrediantialMaster.SMSSenderId = item["VWASenderidCR"]?.ToString();
+                    objCrediantialMaster.VerifiedWhatsAppVendor = item["VWAVendorCR"]?.ToString();
+
+                    var connectionString = CR.GetCustomerConnString(objGroupOwnerInfo.GroupId);
+                    var response = ITCSR.SaveOutletCrediantialDetails(objCrediantialMaster, connectionString);
+                    status = response;
+                }
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Change Outlet Details";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveOutletDetails");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public ActionResult SaveOutletStoreDetails(string jsonData)
+        {
+            tblGroupOwnerInfo objGroupOwnerInfo = new tblGroupOwnerInfo();
+            bool status = false;
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+
+                    tblStoreMaster objCrediantialMaster = new tblStoreMaster();
+                    objGroupOwnerInfo.GroupId = userDetails.GroupId;
+                    objCrediantialMaster.CounterId = Convert.ToString(item["Counter_IDST"]);
+                    objCrediantialMaster.CounterType = Convert.ToString(item["Counter_TypeST"]);
+                    objCrediantialMaster.Securitykey = Convert.ToString(item["Security_KeyST"]);
+                    objCrediantialMaster.OutletId = Convert.ToString(item["Outlet_IDST"]);
+                    objCrediantialMaster.IsActive = true;
+                    objCrediantialMaster.CreatedDate = DateTime.Today;
+
+
+                    var connectionString = CR.GetCustomerConnString(objGroupOwnerInfo.GroupId);
+                    var response = ITCSR.SaveOutletStoreDetails(objCrediantialMaster, connectionString, objGroupOwnerInfo.GroupId);
+                    status = response;
+                }
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Change Outlet Details";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveOutletDetails");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
         public ActionResult UploadCelebrationData()
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();            

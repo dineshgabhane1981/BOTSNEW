@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Security.Cryptography;
 
 namespace BOTS_BL.Repository
 {
@@ -311,6 +312,23 @@ namespace BOTS_BL.Repository
                     var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
                     Script1.WhatsAppScript = Script;
                     Script1.WhatsAppScriptType = ScriptType;
+                    Script1.IsActive = true;
+                    Script1.WhatsAppMessageType = "Text";
+                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
+                    context.SaveChanges();
+
+                    var existingScript = context.tblSMSWhatsAppScriptMasters
+                                                           .Where(x => x.MessageType == MessageType && x.OutletId == OutletId).Select(x => x.SMSScript)
+                                                           .FirstOrDefault();
+                    if (existingScript != null)
+                    {
+                        Script1.SMSWhatsAppSendStatus = "Both";
+
+                    }
+                    else
+                    {
+                        Script1.SMSWhatsAppSendStatus = "WA";
+                    }
                     context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                     context.SaveChanges();
                 }
@@ -321,7 +339,7 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool SaveSMSTransactionalScripts(int GroupId, string OutletId, string Script, string MessageType,string ScriptType)
+        public bool SaveSMSTransactionalScripts(int GroupId, string OutletId, string Script, string MessageType, string ScriptType)
         {
             bool result = false;
             string Id;
@@ -336,9 +354,27 @@ namespace BOTS_BL.Repository
                     var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
                     Script1.SMSScript = Script;
                     Script1.SMSScriptType = ScriptType;
+                    Script1.IsActive = true;
+                    Script1.WhatsAppMessageType = "Text";
+                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
+                    context.SaveChanges();
+
+                    var existingScript = context.tblSMSWhatsAppScriptMasters
+                                                          .Where(x => x.MessageType == MessageType && x.OutletId == OutletId).Select(x => x.WhatsAppScript)
+                                                          .FirstOrDefault();
+                    if (existingScript != null)
+                    {
+                        Script1.SMSWhatsAppSendStatus = "Both";
+
+                    }
+                    else
+                    {
+                        Script1.SMSWhatsAppSendStatus = "SMS";
+                    }
                     context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                     context.SaveChanges();
                 }
+
             }
             catch (Exception ex)
             {
@@ -2094,6 +2130,282 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "SaveDemographicDetails");
 
+            }
+            return status;
+        }
+        public OutletDetail GetOutletDetails(string GroupId, string OutletId)
+        {
+            OutletDetail objDemoData = new OutletDetail();
+            try
+            {
+                tblGroupOwnerInfo objCustomerDetail = new tblGroupOwnerInfo();
+                tblOutletMaster objOutletMaster = new tblOutletMaster();
+                string connStr = CR.GetCustomerConnString(GroupId);
+                using (var contextNew = new BOTSDBContext(connStr))
+                {
+                    objCustomerDetail = contextNew.tblGroupOwnerInfoes.FirstOrDefault(x => x.GroupId == GroupId);
+                    objOutletMaster = contextNew.tblOutletMasters.FirstOrDefault(x => x.OutletId == OutletId);
+                    var maxOutletId = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId).Select(x => x.OutletId).DefaultIfEmpty().Max();
+                    if (maxOutletId != null)
+                    {
+                        maxOutletId = maxOutletId + 1;
+                    }
+                }
+                if (objCustomerDetail != null && objOutletMaster != null)
+                {
+                    objDemoData.GroupId = objCustomerDetail.GroupId;
+                    objDemoData.OutletId = objOutletMaster.OutletId;
+                    objDemoData.OutletName = objOutletMaster.OutletName;
+                    objDemoData.BrandId = objOutletMaster.BrandId;
+                    objDemoData.Address = objOutletMaster.Address;
+                    objDemoData.City = objOutletMaster.City;
+                    objDemoData.Area = objOutletMaster.Area;
+                    objDemoData.Phone = objOutletMaster.Phone;
+                    objDemoData.PinCode = objOutletMaster.Pincode;
+                    objDemoData.DefaultOTP = objOutletMaster.DefaultOTP;
+                    objDemoData.Latitude = objOutletMaster.Latitude;
+                    objDemoData.Longitude = objOutletMaster.Longitude;
+                    if (objOutletMaster.InvoiceDate.HasValue)
+                    {
+                        objDemoData.InvoiceDate = objOutletMaster.InvoiceDate.Value.ToString("yyyy/MM/dd");
+                    }
+                    if (objOutletMaster.LiveDate.HasValue)
+                    {
+                        objDemoData.LiveDate = objOutletMaster.LiveDate.Value.ToString("yyyy/MM/dd");
+                    }
+                    if (objOutletMaster.StoreAnniversaryDate.HasValue)
+                    {
+                        objDemoData.StoreAnniversaryDate = objOutletMaster.StoreAnniversaryDate.Value.ToString("yyyy/MM/dd");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetDemographicDetails");
+            }
+            return objDemoData;
+        }
+        public OutletDetail GetAssignOutletDetails(string GroupId)
+        {
+            OutletDetail objDemoData = new OutletDetail();
+            try
+            {
+                using (var contextNew = new BOTSDBContext(CR.GetCustomerConnString(GroupId)))
+                {
+                    var objCustomerDetail = contextNew.tblGroupOwnerInfoes.FirstOrDefault(x => x.GroupId == GroupId);
+                    var maxOutletId = contextNew.tblOutletMasters.Where(x => x.GroupId == GroupId).Select(x => x.OutletId).DefaultIfEmpty().Max();
+                    if (maxOutletId == null)
+                    {
+                        maxOutletId = objCustomerDetail.GroupId + "1001";
+                    }
+                    else
+                    {
+                        maxOutletId = (Convert.ToInt32(maxOutletId) + 1).ToString();
+                    }
+                    objDemoData.OutletId = maxOutletId;
+                    objDemoData.GroupId = objCustomerDetail.GroupId;
+                    objDemoData.BrandId = GroupId + "1";
+                    objDemoData.CounterId = objDemoData.OutletId + "01";
+                    string securityKey;
+                    do
+                    {
+                        securityKey = GenerateSecurityKey();
+                    }
+                    while (contextNew.tblStoreMasters.Any(x => x.Securitykey == securityKey));
+
+                    objDemoData.Securitykey = securityKey;
+                    objDemoData.CounterType = "Billing";
+                    objDemoData.InvoiceDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
+                    objDemoData.LiveDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
+                    objDemoData.StoreAnniversaryDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetAssignOutletDetails");
+            }
+            return objDemoData;
+        }
+        private string GenerateSecurityKey(int length = 10)
+        {
+            const string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder key = new StringBuilder();
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                byte[] uintBuffer = new byte[sizeof(uint)];
+
+                while (length-- > 0)
+                {
+                    rng.GetBytes(uintBuffer);
+                    uint num = BitConverter.ToUInt32(uintBuffer, 0);
+                    key.Append(validChars[(int)(num % (uint)validChars.Length)]);
+                }
+            }
+            return key.ToString();
+        }
+        public bool SaveOutletDetails(tblOutletMaster objOutletMaster, string connectionString)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new BOTSDBContext(connectionString))
+                {
+                    tblOutletMaster objOutlet = context.tblOutletMasters.FirstOrDefault(x => x.OutletId == objOutletMaster.OutletId);
+                    if (objOutlet != null)
+                    {
+                        objOutlet.OutletName = objOutletMaster.OutletName;
+                        objOutlet.BrandId = objOutletMaster.BrandId;
+                        objOutlet.Address = objOutletMaster.Address;
+                        objOutlet.GroupId = objOutletMaster.GroupId;
+                        objOutlet.IsActive = objOutletMaster.IsActive;
+                        objOutlet.City = objOutletMaster.City;
+                        objOutlet.Area = objOutletMaster.Area;
+                        objOutlet.Phone = objOutletMaster.Phone;
+                        objOutlet.Pincode = objOutletMaster.Pincode;
+                        objOutlet.DefaultOTP = objOutletMaster.DefaultOTP;
+                        objOutlet.Latitude = objOutletMaster.Latitude;
+                        objOutlet.Longitude = objOutletMaster.Longitude;
+                        objOutlet.InvoiceDate = objOutletMaster.InvoiceDate;
+                        objOutlet.LiveDate = objOutletMaster.LiveDate;
+                        objOutlet.StoreAnniversaryDate = objOutletMaster.StoreAnniversaryDate;
+                    }
+                    else
+                    {
+                        context.tblOutletMasters.Add(objOutletMaster);
+                    }
+                    context.SaveChanges();
+                    status = true;
+                    tblSMSWhatsAppScriptMaster objsmsScript = context.tblSMSWhatsAppScriptMasters.FirstOrDefault(x => x.OutletId == objOutletMaster.OutletId);
+                    if (objsmsScript == null)
+                    {
+                        var Data = new List<tblSMSWhatsAppScriptMaster>
+                        {
+                             new tblSMSWhatsAppScriptMaster { Id = "100", MessageType = "Enrollment", OutletId = objOutletMaster.OutletId },
+                             new tblSMSWhatsAppScriptMaster { Id = "101", MessageType = "Earn", OutletId = objOutletMaster.OutletId },
+                             new tblSMSWhatsAppScriptMaster { Id = "102", MessageType = "Burn", OutletId = objOutletMaster.OutletId },
+                             new tblSMSWhatsAppScriptMaster { Id = "103", MessageType = "Cancel Earn", OutletId = objOutletMaster.OutletId },
+                             new tblSMSWhatsAppScriptMaster { Id = "104", MessageType = "Cancel Burn", OutletId = objOutletMaster.OutletId },
+                             new tblSMSWhatsAppScriptMaster { Id = "105", MessageType = "OTP", OutletId = objOutletMaster.OutletId },
+                             new tblSMSWhatsAppScriptMaster { Id = "106", MessageType = "Balance > 0", OutletId = objOutletMaster.OutletId },
+                             new tblSMSWhatsAppScriptMaster { Id = "107", MessageType = "Balance < 0", OutletId = objOutletMaster.OutletId }
+                        };
+                        context.tblSMSWhatsAppScriptMasters.AddRange(Data);
+                        context.SaveChanges();
+                        status = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveOutletDetails");
+            }
+            return status;
+        }
+        public bool SaveOutletCrediantialDetails(tblSMSWhatsAppCredential objCrediantialMaster, string connectionString)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new BOTSDBContext(connectionString))
+                {
+                    tblSMSWhatsAppCredential objcrediantial = context.tblSMSWhatsAppCredentials.FirstOrDefault(x => x.OutletId == objCrediantialMaster.OutletId);
+                    if (objcrediantial != null)
+                    {
+                        objcrediantial.OutletId = objCrediantialMaster.OutletId;
+                        objcrediantial.SMSVendor = objCrediantialMaster.SMSVendor;
+                        objcrediantial.SMSUrl = objCrediantialMaster.SMSUrl;
+                        objcrediantial.SMSLoginId = objCrediantialMaster.SMSLoginId;
+                        objcrediantial.SMSPassword = objCrediantialMaster.SMSPassword;
+                        objcrediantial.WhatsAppMessageType = objCrediantialMaster.WhatsAppMessageType;
+                        objcrediantial.SMSAPIKey = objCrediantialMaster.SMSAPIKey;
+                        objcrediantial.WhatsAppVendor = objCrediantialMaster.WhatsAppVendor;
+                        objcrediantial.WhatsAppUrl = objCrediantialMaster.WhatsAppUrl;
+                        objcrediantial.WhatsAppTokenId = objCrediantialMaster.WhatsAppTokenId;
+                        objcrediantial.VerifiedWhatsAppUrl = objCrediantialMaster.VerifiedWhatsAppUrl;
+                        objcrediantial.VerifiedWhatsAppLoginId = objCrediantialMaster.VerifiedWhatsAppLoginId;
+                        objcrediantial.VerifiedWhatsAppPassword = objCrediantialMaster.VerifiedWhatsAppPassword;
+                        objcrediantial.VerifiedWhatsAppAPIKey = objCrediantialMaster.VerifiedWhatsAppAPIKey;
+                        objcrediantial.SMSSenderId = objCrediantialMaster.SMSSenderId;
+                        objcrediantial.VerifiedWhatsAppVendor = objCrediantialMaster.VerifiedWhatsAppVendor;
+                    }
+                    else
+                    {
+                        context.tblSMSWhatsAppCredentials.Add(objCrediantialMaster);
+                    }
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveOutletCrediantialDetails");
+            }
+            return status;
+        }
+        public bool SaveOutletStoreDetails(tblStoreMaster objStoreMaster, string connectionString, string GroupId)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new BOTSDBContext(connectionString))
+                {
+                    tblStoreMaster existingStore = context.tblStoreMasters.FirstOrDefault(x => x.OutletId == objStoreMaster.OutletId);
+                    if (existingStore != null)
+                    {
+                        existingStore.CounterId = objStoreMaster.CounterId;
+                        existingStore.CounterType = objStoreMaster.CounterType;
+                        existingStore.Securitykey = objStoreMaster.Securitykey;
+                        existingStore.OutletId = objStoreMaster.OutletId;
+                        existingStore.IsActive = true;
+                        existingStore.CreatedDate = DateTime.Today;
+                    }
+                    else
+                    {
+                        context.tblStoreMasters.Add(objStoreMaster);
+                    }
+                    context.SaveChanges();
+                    status = true;
+                }
+
+                using (var context = new CommonDBContext())
+                {
+                    tblDatabaseDetail objtblDatabaseDetail = new tblDatabaseDetail();
+                    var group = context.tblDatabaseDetails.FirstOrDefault(x => x.GroupId == GroupId);
+                    var DBNameNew = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(x => x.DBName).FirstOrDefault();
+                    tblGroupDetail objOutletcount = new tblGroupDetail();
+                    if (objtblDatabaseDetail != null)
+                    {
+                        objtblDatabaseDetail.CounterId = objStoreMaster.CounterId;
+                        objtblDatabaseDetail.SecurityKey = objStoreMaster.Securitykey;
+                        objtblDatabaseDetail.IPAddress = "52.66.245.116";
+                        objtblDatabaseDetail.DBPassword = "F59VM$KDE@KF!AW";
+                        objtblDatabaseDetail.DBId = "Renaldo";
+                        objtblDatabaseDetail.GroupId = group.GroupId;
+                        objtblDatabaseDetail.IsActive = true;
+                        objtblDatabaseDetail.DBName = DBNameNew;
+
+                        context.tblDatabaseDetails.Add(objtblDatabaseDetail);
+                    }
+                    else
+                    {
+                        context.tblDatabaseDetails.Add(objtblDatabaseDetail);
+                    }
+                    context.SaveChanges();
+                    status = true;
+                    objOutletcount = context.tblGroupDetails.Where(x => x.GroupId.ToString() == GroupId).FirstOrDefault();
+                    if (objOutletcount != null)
+                    {
+                        objOutletcount.OutletCount++;
+                        context.tblGroupDetails.AddOrUpdate(objOutletcount);
+                        context.SaveChanges();
+                        status = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveOutletStoreDetails");
             }
             return status;
         }

@@ -703,11 +703,11 @@
                                     </a>
                                 </li>
                                 @*<li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")" href="@Url.Action("ChangeBurnRule", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Burn Rule
-                                    </a>
-                                </li>*@
+            <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")" href="@Url.Action("ChangeBurnRule", "IndividualDBConfig")">
+                <i class="metismenu-icon"></i>
+                Burn Rule
+            </a>
+        </li>*@
                                 <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")">
                                     <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")" href="@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")">
                                         <i class="metismenu-icon"></i>
@@ -735,7 +735,13 @@
                                 <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")">
                                     <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")" href="@Url.Action("ChangeDemographicDetails", "IndividualDBConfig")">
                                         <i class="metismenu-icon"></i>
-                                        Outlet Details
+                                        Outlet Owner Details
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")" href="@Url.Action("ChangeOutletDetails", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Add New Outlet
                                     </a>
                                 </li>
                             </ul>

@@ -68,6 +68,22 @@ namespace BOTS_BL.Models
         public DateTime? ProgramRenewalDate { get; set; }
 
         [NotMapped]
-        public double TransactionPerDay { get; set; }        
+        public double TransactionPerDay { get; set; }
+        public string Phone { get; set; }
+
+        public string Area { get; set; }
+
+        public string DefaultOTP { get; set; }
+
+        public string StoreAnniversaryDate { get; set; }
+        public string LiveDate { get; set; }
+        public string InvoiceDate { get; set; }
+
+        [NotMapped]
+        public string CounterId { get; set; }
+        [NotMapped]
+        public string Securitykey { get; set; }
+        [NotMapped]
+        public string CounterType { get; set; }
     }
 }

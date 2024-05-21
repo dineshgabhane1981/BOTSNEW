@@ -1,0 +1,829 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "ChangeOutletDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 20px;">
+                        <b>Outlet Name</b>
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        @Html.DropDownListFor(model => model.tblOutletMaster.OutletName, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlOutletMaster" })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <button type="button" id="btnGO" style="margin: 5px 40px 10px 5px;" class="btn btn-primary">Show</button>
+                    </div>
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        <button type="button" id="btnAdd" style="margin: 3px 0px 0px -17px; width: 118px; height: 35px; " class="btn btn-primary">Add New Outlet</button>
+                        @*<a href="#" id="btnAdd" class="add_btn" title="Add new Outlet"><i class="fa fa-plus-circle" aria-hidden="true" style="font-size: 35px; color: #3f6ad8; "></i></a>*@
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2 pr-3 pt-3 pl-3" id="divOutlet" style="display: none;">
+             
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Outlet ID
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtOutlet_ID" name="Outlet_ID" tabindex="7" readonly>
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Outlet Name
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtOutlet_name" name="Outlet_name" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Brand Id
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtBrand_ID" name="Brand_ID" tabindex="7" readonly>
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Email, new { @class = "input100", @id = "txtEmail", tabindex = 3 })*@
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Group Id
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtGroup_ID" name="Group_ID" tabindex="7" readonly>
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Address, new { @class = "input100", @id = "txtAddress", tabindex = 4 })*@
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Address
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txt_Address" name="Address" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.DOB, new { @class = "input100", @id = "txtDOB", tabindex = 5 })*@
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        City
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txt_City" name="City" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.DOA, new { @class = "input100", @id = "txtDOA", tabindex = 6 })*@
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Area
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txt_Area" name="Area" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Phone
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txt_Phone" name="Phone" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })*@
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Pincode
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txt_Pincode" name="Pincode" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Default OTP
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtDefault_otp" name="Default_otp" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })*@
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Latitude
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txt_Latitude" name="Latitude" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Longitude
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txt_Longitude" name="Longitude" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })*@
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Invoice Date
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtInvoice_date" name="Invoice_Date" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Live Date
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtLive_date" name="Live_date" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })*@
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Store Anniversary Date
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtStore_adate" name="Store_adate" tabindex="7">
+                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
+                    </div>
+
+                </div>
+                <div class="row mb-2 ml-2">
+                    <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
+                        <button type="button" id="btnOutletSave" style="margin-left: 795px; margin-top: -60px;" class="btn btn-primary" tabindex="15" onclick="SaveOutletDetailsData()"><b>Save</b></button>
+                        <!--<button type="button" id="btnOutletSave" style="margin-left:795px;" class="btn btn-primary" tabindex="15" onclick="validateAndSave()" @*Onclick="SaveDemographicData()*@><b>Save</b></button>-->
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2 pr-3 pt-3 pl-3" id="divOutletCrediantial" style="display: none;">
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Outlet ID
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtOutlet_IDCR" name="Outlet_IDCR" tabindex="7" readonly>
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        SMS Vendor
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtSms_VendorCR" name="Sms_VendorCR" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        SMS Url
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtSMSUrlCR" name="SMSUrlCR" tabindex="7">
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        SMS Login Id
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtSMSLoginIdCR" name="SMSLoginIdCR" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        SMS Password
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtSMSPassCR" name="SMSPassCR" tabindex="7">
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        SMS API Key
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtApiKeyCR" name="ApiKeyCR" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Whatsapp Vendor
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtWhatsappVendorCR" name="WhatsappVendorCR" tabindex="7">
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Whatsapp Url
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtWhatsappUrlCR" name="WhatsappUrlCR" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Whatsapp TokenId
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtWhatsappTIDCR" name="WhatsappTIDCR" tabindex="7">
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Verified WA Url
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtVWAWhatsappUrlCR" name="VWAWhatsappUrlCR" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        VWA LoginID
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtVWALoginidDCR" name="VWALoginidDCR" tabindex="7">
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        VWA Password
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtVWAPasswordCR" name="VWAPasswordCR" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        VWA API Key
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtVWAAPIKeyCR" name="VWAAPIKeyCR" tabindex="7">
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        SMS Sender ID
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtVWASenderidCR" name="VWASenderidCR" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        VWA Vendor
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtVWAVendorCR" name="VWAVendorCR" tabindex="7">
+                    </div>
+                </div>
+                <div class="row mb-2 ml-2">
+                    <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
+                        <button type="button" id="btnCrediantialSave" style="margin-left: 795px; margin-top: -60px;" class="btn btn-primary" tabindex="15"><b>Save</b></button>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2 pr-3 pt-3 pl-3" id="divStoreDetails" style="display: none;">
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        Counter ID
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtCounter_IDST" name="Counter_IDST" tabindex="7" readonly>
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Counter Type
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtCounter_TypeST" name="Counter_TypeST" tabindex="7">
+                    </div>
+                </div>
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;" >
+                        Security Key
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtSecurity_KeyST" name="Security_KeyST" tabindex="7" readonly>
+                    </div>
+                    <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
+                        Outlet ID
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtOutlet_IDST" name="Outlet_IDST" tabindex="7" readonly>
+                    </div>
+                </div>
+                <div class="row mb-2 ml-2">
+                    <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
+                        <button type="button" id="btnStoreDetailsSave" style="margin-left: 795px;" class="btn btn-primary" tabindex="15"><b>Save</b></button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+</div>
+<script>
+    $(document).ready(function () {
+        GetOutlets();
+        $('#btnGO').on("click", function () {
+            GetOutletDetails();
+        });
+        $('#btnCrediantialSave').on("click", function () {
+            debugger;
+            SaveCrediantialData();
+
+        });
+        $('#btnStoreDetailsSave').on("click", function () {
+            debugger;
+            SaveStoreTAbleData();
+        });
+        $('#btnAdd').on("click", function () {
+            $("#txtOutlet_ID").val("");
+            $("#txtOutlet_name").val("");
+            $("#txtBrand_ID").val("");
+            $("#txtGroup_ID").val("");
+            $("#txt_Address").val("");
+            $("#txt_City").val("");
+            $("#txt_Area").val("");
+            $("#txt_Phone").val("");
+            $("#txt_Pincode").val("");
+            $("#txtDefault_otp").val("");
+            $("#txt_Latitude").val("");
+            $("#txt_Longitude").val("");
+            $("#txtInvoice_date").val("");
+            $("#txtLive_date").val("");
+            $("#txtStore_adate").val("");
+            $('#ddlOutletMaster').val('');
+            $('#divOutlet').show();
+            
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetAssignValueForOutlet", "IndividualDBConfig")',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result.objOutletData != null) {
+                        debugger;
+                        $("#txtOutlet_ID").val(result.objOutletData.OutletId);
+                        $("#txtGroup_ID").val(result.objOutletData.GroupId);
+                        $("#txtBrand_ID").val(result.objOutletData.BrandId);
+                        $("#txtSecurity_KeyST").val(result.objOutletData.Securitykey);
+                        $("#txtOutlet_IDST").val(result.objOutletData.OutletId);
+                        $("#txtOutlet_IDCR").val(result.objOutletData.OutletId);
+                        $("#txtCounter_IDST").val(result.objOutletData.CounterId);
+                        $("#txtCounter_TypeST").val(result.objOutletData.CounterType);
+                        $("#txtInvoice_date").val(result.objOutletData.InvoiceDate);
+                        $("#txtLive_date").val(result.objOutletData.LiveDate);
+                        $("#txtStore_adate").val(result.objOutletData.StoreAnniversaryDate);
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                    alert("Failed to fetch outlet details.");
+                }
+            });
+
+        });
+    });
+    function GetOutlets() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOutlet", "IndividualDBConfig")',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $("#ddlOutletMaster").empty();
+                $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+                $.each(result, function () {
+                    $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
+                });
+            },
+            error: function (result) {
+                console.log(result.responseText);
+            }
+        });
+    }
+    function GetOutletDetails() {
+        debugger;
+        if ($('#ddlOutletMaster').val() == "") {
+            toastr.error('Please Select Outlet');
+            return false
+        }
+        $('#divOutlet').show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOutletDetailsDATA", "IndividualDBConfig")',
+            data: '{OutletId: ' + JSON.stringify($('#ddlOutletMaster').val()) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.objOutletData != null) {
+
+                    $("#txtOutlet_ID").val(result.objOutletData.OutletId);
+                    $("#txtOutlet_name").val(result.objOutletData.OutletName);
+                    $("#txtBrand_ID").val(result.objOutletData.BrandId);
+                    $("#txtGroup_ID").val(result.objOutletData.GroupId);
+                    $("#txt_Address").val(result.objOutletData.Address);
+                    $("#txt_City").val(result.objOutletData.City);
+                    $("#txt_Area").val(result.objOutletData.Area);
+                    $("#txt_Phone").val(result.objOutletData.Phone);
+                    $("#txt_Pincode").val(result.objOutletData.PinCode);
+                    $("#txtDefault_otp").val(result.objOutletData.DefaultOTP);
+                    $("#txt_Latitude").val(result.objOutletData.Latitude);
+                    $("#txt_Longitude").val(result.objOutletData.Longitude);
+                    $("#txtInvoice_date").val(result.objOutletData.InvoiceDate);
+                    $("#txtLive_date").val(result.objOutletData.LiveDate);
+                    $("#txtStore_adate").val(result.objOutletData.StoreAnniversaryDate);
+
+                    
+                    $("#btnOutletSave").text('Update');
+                }
+            },
+            error: function (result) {
+                alert("222");
+                console.log(result.responseText)
+            }
+        });
+    }
+    function SaveOutletDetailsData() {
+      
+        var Outlet_ID = $("#txtOutlet_ID").val();
+        var Outlet_name = $("#txtOutlet_name").val();
+        var Brand_ID = $("#txtBrand_ID").val();
+        var Group_ID = $("#txtGroup_ID").val();
+        var _Address = $("#txt_Address").val();
+        var _City = $("#txt_City").val();
+        var _Area = $("#txt_Area").val();
+        var _Phone = $("#txt_Phone").val();
+        var _Pincode = $("#txt_Pincode").val();
+        var Default_otp = $("#txtDefault_otp").val();
+        var _Latitude = $("#txt_Latitude").val();
+        var _Longitude = $("#txt_Longitude").val();
+        var Invoice_date = $("#txtInvoice_date").val();
+        var Live_date = $("#txtLive_date").val();
+        var Store_adate = $("#txtStore_adate").val();
+
+        if (Outlet_ID == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Outlet ID",
+                buttonText: "Okay"
+            })
+        }
+        else if (Outlet_name == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Outlet Name",
+                buttonText: "Okay"
+            })
+        }
+        else if (Brand_ID == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Brand ID ",
+                buttonText: "Okay"
+            })
+        }
+        else if (Group_ID == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Group ID",
+                buttonText: "Okay"
+            })
+        }
+        else if (_Address == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Address ",
+                buttonText: "Okay"
+            })
+        }
+        else if (_City == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the City",
+                buttonText: "Okay"
+            })
+        }
+        else if (_Area == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Area",
+                buttonText: "Okay"
+            })
+        }
+        else if (_Phone == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Phone",
+                buttonText: "Okay"
+            })
+        }
+        else if (_Pincode == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Pincode",
+                buttonText: "Okay"
+            })
+        }
+        else if (Default_otp == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Default OTP",
+                buttonText: "Okay"
+            })
+        }
+        else if (_Latitude == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Latitude",
+                buttonText: "Okay"
+            })
+        }
+        else if (_Longitude == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Longitude",
+                buttonText: "Okay"
+            })
+        }
+        else if (Invoice_date == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Invoice Date",
+                buttonText: "Okay"
+            })
+        }
+        else if (Live_date == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Live Date",
+                buttonText: "Okay"
+            })
+        }
+        else if (Store_adate == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Store Anniversary Date",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            var Filter_Data = [];
+            item = {};
+            item["Outlet_ID"] = Outlet_ID;
+            item["Outlet_name"] = Outlet_name;
+            item["Brand_ID"] = Brand_ID;
+            item["Group_ID"] = Group_ID;
+            item["_Address"] = _Address;
+            item["_City"] = _City;
+            item["_Area"] = _Area;
+            item["_Phone"] = _Phone;
+            item["_Pincode"] = _Pincode;
+            item["Default_otp"] = Default_otp;
+            item["_Latitude"] = _Latitude;
+            item["_Longitude"] = _Longitude;
+            item["Invoice_date"] = Invoice_date;
+            item["Live_date"] = Live_date;
+            item["Store_adate"] = Store_adate;
+
+
+            Filter_Data.push(item);
+            var data = JSON.stringify(Filter_Data);
+
+            $("#divOutlet").show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveOutletDetails", "IndividualDBConfig")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if ($("#btnOutletSave").text() === 'Update') {
+                        if (result === true) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Success Title",
+                                message: "Data Update Successfully",
+                                buttonText: "Okay"
+                            });
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "Couldn't Update Data",
+                                buttonText: "Okay"
+                            });
+                        }
+                        $('#ddlOutletMaster').val('');
+                        ClearallTextBoxValue();
+                        $("#txtOutlet_ID").val('');
+                        $("#txtGroup_ID").val('');
+                        $("#txtBrand_ID").val('');
+                        $("#txtInvoice_date").val('');
+                        $("#txtLive_date").val('');
+                        $("#txtStore_adate").val('');
+                    }
+                    else {
+                        if (result === true) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Success Title",
+                                message: "Data Saved Successfully",
+                                buttonText: "Okay"
+                            });
+                            $("#divOutletCrediantial").show();
+                            console.log("Display style after show:", $("#divOutletCrediantial").css("display"));
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "Couldn't Save Data",
+                                buttonText: "Okay"
+                            });
+                        }
+                        $('#ddlOutletMaster').val('');
+                        $("#txtOutlet_ID").val('');
+                        $("#txtGroup_ID").val('');
+                        $("#txtBrand_ID").val('');
+                        $("#txtInvoice_date").val('');
+                        $("#txtLive_date").val('');
+                        $("#txtStore_adate").val('');
+                       
+                    }
+                    ClearallTextBoxValue();
+                    $("#btnOutletSave").text('Save');
+                    $("#divOutlet").hide();
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                }
+            });
+        }
+    }
+    function SaveCrediantialData() {
+        function getValueOrNull(selector) {
+            var element = document.querySelector(selector);
+            if (element && element.value === "") {
+                return null;
+            }
+            return element ? element.value : null;
+        }
+
+        var Outlet_IDCR = getValueOrNull("#txtOutlet_IDCR");
+        var Sms_VendorCR = getValueOrNull("#txtSms_VendorCR");
+        var SMSUrlCR = getValueOrNull("#txtSMSUrlCR");
+        var SMSLoginIdCR = getValueOrNull("#txtSMSLoginIdCR");
+        var SMSPassCR = getValueOrNull("#txtSMSPassCR");
+        var ApiKeyCR = getValueOrNull("#txtApiKeyCR");
+        var WhatsappVendorCR = getValueOrNull("#txtWhatsappVendorCR");
+        var WhatsappUrlCR = getValueOrNull("#txtWhatsappUrlCR");
+        var WhatsappTIDCR = getValueOrNull("#txtWhatsappTIDCR");
+        var VWAWhatsappUrlCR = getValueOrNull("#txtVWAWhatsappUrlCR");
+        var VWALoginidDCR = getValueOrNull("#txtVWALoginidDCR");
+        var VWAPasswordCR = getValueOrNull("#txtVWAPasswordCR");
+        var VWAAPIKeyCR = getValueOrNull("#txtVWAAPIKeyCR");
+        var VWASenderidCR = getValueOrNull("#txtVWASenderidCR");
+        var VWAVendorCR = getValueOrNull("#txtVWAVendorCR");
+
+        var item = {
+            "Outlet_IDCR": Outlet_IDCR,
+            "Sms_VendorCR": Sms_VendorCR,
+            "SMSUrlCR": SMSUrlCR,
+            "SMSLoginIdCR": SMSLoginIdCR,
+            "SMSPassCR": SMSPassCR,
+            "ApiKeyCR": ApiKeyCR,
+            "WhatsappVendorCR": WhatsappVendorCR,
+            "WhatsappUrlCR": WhatsappUrlCR,
+            "WhatsappTIDCR": WhatsappTIDCR,
+            "VWAWhatsappUrlCR": VWAWhatsappUrlCR,
+            "VWALoginidDCR": VWALoginidDCR,
+            "VWAPasswordCR": VWAPasswordCR,
+            "VWAAPIKeyCR": VWAAPIKeyCR,
+            "VWASenderidCR": VWASenderidCR,
+            "VWAVendorCR": VWAVendorCR
+        };
+
+        var Filter_Data = [item];
+        var data = JSON.stringify(Filter_Data);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveOutletCrediantialDetails", "IndividualDBConfig")',
+            data: JSON.stringify({ jsonData: data }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                if (result === true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success Title",
+                        message: "Data Saved Successfully",
+                        buttonText: "Okay"
+                    });
+                } else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Couldn't Save Data",
+                        buttonText: "Okay"
+                    });
+                }
+                ClearallTextBoxValue();
+                $("#divOutletCrediantial").hide();
+                $("#divStoreDetails").show();
+                $("#txtOutlet_IDCR").val("");
+            },
+            error: function (result) {
+                console.log(result.responseText);
+            }
+        });
+    }
+    function SaveStoreTAbleData() {
+        var Counter_IDST = $("#txtCounter_IDST").val();
+        var Counter_TypeST = $("#txtCounter_TypeST").val();
+        var Security_KeyST = $("#txtSecurity_KeyST").val();
+        var Outlet_IDST = $("#txtOutlet_IDST").val();
+
+
+        var Filter_Data = [];
+        item = {};
+        item["Counter_IDST"] = Counter_IDST;
+        item["Counter_TypeST"] = Counter_TypeST;
+        item["Security_KeyST"] = Security_KeyST;
+        item["Outlet_IDST"] = Outlet_IDST;
+
+        Filter_Data.push(item);
+        var data = JSON.stringify(Filter_Data);
+
+            $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveOutletStoreDetails", "IndividualDBConfig")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result)
+                console.log(result);
+                if (result === true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Success",
+                        message: "Data Saved Successfully",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "Couldn't Save Data",
+                        buttonText: "Okay"
+                    });
+                }
+               
+                $("#divStoreDetails").hide();
+                ClearallTextBoxValue();
+                $("#txtCounter_IDST").val("");
+                $("#txtCounter_TypeST").val("");
+                $("#txtSecurity_KeyST").val("");
+                $("#txtOutlet_IDST").val("");
+            },
+            error: function (result) {
+                console.log(result.responseText)
+            }
+        });
+    }
+    function ClearallTextBoxValue() {
+        $("#txtOutlet_name").val("");
+        $("#txt_Address").val("");
+        $("#txt_City").val("");
+        $("#txt_Area").val("");
+        $("#txt_Phone").val("");
+        $("#txt_Pincode").val("");
+        $("#txtDefault_otp").val("");
+        $("#txt_Latitude").val("");
+        $("#txt_Longitude").val("");
+        $('#ddlOutletMaster').val('');
+        $("#txtSms_VendorCR").val("");
+        $("#txtSMSUrlCR").val("");
+        $("#txtSMSLoginIdCR").val("");
+        $("#txtSMSPassCR").val("");
+        $("#txtApiKeyCR").val("");
+        $("#txtWhatsappVendorCR").val("");
+        $("#txtWhatsappUrlCR").val("");
+        $("#txtWhatsappTIDCR").val("");
+        $("#txtVWAWhatsappUrlCR").val("");
+        $("#txtVWALoginidDCR").val("");
+        $("#txtVWAPasswordCR").val("");
+        $("#txtVWAAPIKeyCR").val("");
+        $("#txtVWASenderidCR").val("");
+        $("#txtVWAVendorCR").val("");
+    }
+</script>

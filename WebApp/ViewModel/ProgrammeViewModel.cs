@@ -43,6 +43,8 @@ namespace WebApp.ViewModel
         public tblGroupOwnerInfo objtblGroupOwnerInfo { get; set; }
         public DemographicData objDemographicData { get; set; }
         public tblRuleMaster objtblRuleMaster { get; set; }
+        public OutletDetail objOutletData { get; set; }
+        public tblStoreMaster objStoreMasterData { get; set; }
         public tblSMSWhatsAppCredential objtblSMSWhatsAppCredential { get; set; }
         public Earndata objEarndata { get; set; }
         public string GroupId { get; set; }
