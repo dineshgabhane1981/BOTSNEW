@@ -772,8 +772,8 @@ namespace WebApp.Controllers.ITCS
         public ActionResult SaveEarnRule(string jsonData)
         {
             tblRuleMaster objtblRuleMaster = new tblRuleMaster();
-            bool status = false;          
-            var userDetails = (CustomerLoginDetail)Session["UserSession"];                        
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
                 JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -782,6 +782,9 @@ namespace WebApp.Controllers.ITCS
                 foreach (Dictionary<string, object> item in objData)
                 {
                     objtblRuleMaster.GroupId = userDetails.GroupId;
+                    objtblRuleMaster.RuleName = Convert.ToString(item["RuleName"]);
+                    objtblRuleMaster.StartDate = Convert.ToDateTime(item["StartDate"]);
+                    objtblRuleMaster.EndDate = Convert.ToDateTime(item["EndDate"]);
                     objtblRuleMaster.EarnMinTxnAmt = Convert.ToDecimal(item["EarnMinTxnAmt"]);
                     objtblRuleMaster.PointsExpiryMonths = Convert.ToInt32(item["PointsExpiryMonths"]);
                     objtblRuleMaster.PointsPercentage = Convert.ToDecimal(item["PointsPercentage"]);
@@ -793,12 +796,26 @@ namespace WebApp.Controllers.ITCS
                     objtblRuleMaster.OldPointsPercentage = Convert.ToDecimal(item["OldPointsPercentage"]);
                     objtblRuleMaster.OldRevolvingStatus = Convert.ToBoolean(item["OldRevolvingStatus"]);
 
+                    //
+                    objtblRuleMaster.BurnMinTxnAmt = Convert.ToDecimal(item["BurnMinTxnAmt"]);
+                    objtblRuleMaster.MinRedemptionPts = Convert.ToDecimal(item["MinRedemptionPts"]);
+                    objtblRuleMaster.MinRedemptionPtsFirstTime = Convert.ToDecimal(item["MinRedemptionPtsFirstTime"]);
+                    objtblRuleMaster.BurnInvoiceAmtPercentage = Convert.ToDecimal(item["BurnInvoiceAmtPercentage"]);
+                    objtblRuleMaster.BurnDBPointsPercentage = Convert.ToDecimal(item["BurnDBPointsPercentage"]);
+                    objtblRuleMaster.OldBurnMinTxnAmt = Convert.ToDecimal(item["OldBurnMinTxnAmt"]);
+                    objtblRuleMaster.OldMinRedemptionPts = Convert.ToDecimal(item["OldMinRedemptionPts"]);
+                    objtblRuleMaster.OldMinRedemptionPtsFirstTime = Convert.ToDecimal(item["OldMinRedemptionPtsFirstTime"]);
+                    objtblRuleMaster.OldBurnInvoiceAmtPercentage = Convert.ToDecimal(item["OldBurnInvoiceAmtPercentage"]);
+                    objtblRuleMaster.OldBurnDBPointsPercentage = Convert.ToDecimal(item["OldBurnDBPointsPercentage"]);
+
                 }
+
+
                 var connectionString = CR.GetCustomerConnString(Convert.ToString(objtblRuleMaster.GroupId));
                 var Response = ITCSR.SaveEarnRule(objtblRuleMaster, connectionString, userDetails.UserName);
                 tblAuditC obj = new tblAuditC();
                 obj.GroupId = Convert.ToString(userDetails.GroupId);
-                obj.RequestedFor = "Change Earn Rule";
+                obj.RequestedFor = "Change Earn Burn Rule";
                 obj.RequestedBy = userDetails.UserName;
                 obj.RequestedDate = DateTime.Now;
                 ITCSR.AddCSLog(obj);

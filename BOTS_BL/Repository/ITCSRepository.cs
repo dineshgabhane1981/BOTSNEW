@@ -1468,15 +1468,25 @@ namespace BOTS_BL.Repository
                 var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));                
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    objtblRuleMaster = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    objtblRuleMaster = contextNew.tblRuleMasters.Where(x => x.GroupId == GroupId && x.IsActive==true).FirstOrDefault();
                 }
                 if (objtblRuleMaster != null)
                 {
+                    obj.RuleName = objtblRuleMaster.RuleName;
+                    obj.StartDate = objtblRuleMaster.StartDate.Value.ToString("yyyy/MM/dd");
+                    obj.EndDate = objtblRuleMaster.EndDate.Value.ToString("yyyy/MM/dd");
                     obj.EarnMinTxnAmt = objtblRuleMaster.EarnMinTxnAmt;
                     obj.PointsExpiryMonths = objtblRuleMaster.PointsExpiryMonths;
                     obj.PointsAllocation = objtblRuleMaster.PointsAllocation;
                     obj.PointsPercentage = objtblRuleMaster.PointsPercentage;
                     obj.Revolving = Convert.ToBoolean(objtblRuleMaster.Revolving);
+                    //Get burn
+                    obj.GroupId = objtblRuleMaster.GroupId;
+                    obj.BurnMinTxnAmt = objtblRuleMaster.BurnMinTxnAmt;
+                    obj.MinRedemptionPts = objtblRuleMaster.MinRedemptionPts;
+                    obj.MinRedemptionPtsFirstTime = objtblRuleMaster.MinRedemptionPtsFirstTime;
+                    obj.BurnInvoiceAmtPercentage = objtblRuleMaster.BurnInvoiceAmtPercentage;
+                    obj.BurnDBPointsPercentage = objtblRuleMaster.BurnDBPointsPercentage;
 
                 }
             }
@@ -1491,7 +1501,7 @@ namespace BOTS_BL.Repository
         {
             string _WAGroupCode = string.Empty;
             string CSName = string.Empty;
-            Int32 RMId;
+            //Int32 RMId;
             int? IntGroupId = Convert.ToInt32(ObjEarn.GroupId);
             bool status = false;
             ITCSMessage ObjCSMessage = new ITCSMessage();
@@ -1499,64 +1509,92 @@ namespace BOTS_BL.Repository
             {
                 tblRuleMaster objCustomerDetail = new tblRuleMaster();
 
-                using (var con = new CommonDBContext())
-                {
-                    
-                    if (ObjEarn.GroupId == "1051" || ObjEarn.GroupId == "1002" )
-                    {
-                        // Takes FineFoods Testing
-                       _WAGroupCode = con.WAReports.Where(x => x.GroupId == "1051" && x.SMSStatus == "5").Select(y=> y.GroupCode).FirstOrDefault();
-                        RMId = (int)con.tblGroupDetails.Where(x => x.GroupId == IntGroupId).Select(y => y.RMAssigned).FirstOrDefault();
-                        CSName = con.tblRMAssigneds.Where(x=>x.RMAssignedId == RMId).Select(y=>y.RMAssignedName).FirstOrDefault();
-                    }
-                    else
-                    {
-                        _WAGroupCode = con.WAReports.Where(x => x.GroupId == ObjEarn.GroupId && x.SMSStatus == "0").Select(y => y.GroupCode).FirstOrDefault();
-                    }
-                    
-                }
+                //using (var con = new CommonDBContext())
+                //{
+
+                //    if (ObjEarn.GroupId == "1051" || ObjEarn.GroupId == "1002")
+                //    {
+                //        // Takes FineFoods Testing
+                //        _WAGroupCode = con.WAReports.Where(x => x.GroupId == "1051" && x.SMSStatus == "5").Select(y => y.GroupCode).FirstOrDefault();
+                //        RMId = (int)con.tblGroupDetails.Where(x => x.GroupId == IntGroupId).Select(y => y.RMAssigned).FirstOrDefault();
+                //        CSName = con.tblRMAssigneds.Where(x => x.RMAssignedId == RMId).Select(y => y.RMAssignedName).FirstOrDefault();
+                //    }
+                //    else
+                //    {
+                //        _WAGroupCode = con.WAReports.Where(x => x.GroupId == ObjEarn.GroupId && x.SMSStatus == "0").Select(y => y.GroupCode).FirstOrDefault();
+                //    }
+
+                //}
+
+
+
+                //Insert New Record
                 using (var context = new BOTSDBContext(connectionstring))
                 {
                     objCustomerDetail = context.tblRuleMasters.Where(x => x.GroupId == ObjEarn.GroupId).FirstOrDefault();
                     if (objCustomerDetail != null)
                     {
                         objCustomerDetail.GroupId = ObjEarn.GroupId;
+                        objCustomerDetail.RuleName = ObjEarn.RuleName;
+                        objCustomerDetail.StartDate = ObjEarn.StartDate;
+                        objCustomerDetail.EndDate = ObjEarn.EndDate;
                         objCustomerDetail.EarnMinTxnAmt = ObjEarn.EarnMinTxnAmt;
                         objCustomerDetail.PointsExpiryMonths = ObjEarn.PointsExpiryMonths;
                         objCustomerDetail.PointsPercentage = ObjEarn.PointsPercentage;
                         objCustomerDetail.PointsAllocation = ObjEarn.PointsAllocation;
                         objCustomerDetail.Revolving = ObjEarn.Revolving;
+                        objCustomerDetail.IsActive = true;
+
+                        //BURN
+                        //obj.GroupId = objCustomerDetail.GroupId;
+                        objCustomerDetail.BurnMinTxnAmt = ObjEarn.BurnMinTxnAmt;
+                        objCustomerDetail.MinRedemptionPts = ObjEarn.MinRedemptionPts;
+                        objCustomerDetail.MinRedemptionPtsFirstTime = ObjEarn.MinRedemptionPtsFirstTime;
+                        objCustomerDetail.BurnInvoiceAmtPercentage = ObjEarn.BurnInvoiceAmtPercentage;
+                        objCustomerDetail.BurnDBPointsPercentage = ObjEarn.BurnDBPointsPercentage;
                     }
 
-                    context.tblRuleMasters.AddOrUpdate(objCustomerDetail);
+                    context.tblRuleMasters.Add(objCustomerDetail);
                     context.SaveChanges();
                     status = true;
 
-                    
-                    ObjCSMessage.GroupCode = _WAGroupCode;
-                    ObjCSMessage.CSName = CSName;
-                    ObjCSMessage.BOTokenid = ConfigurationManager.AppSettings["BOTokenid"].ToString();
-                    ObjCSMessage.WAAPILink = ConfigurationManager.AppSettings["WAAPILink"].ToString();
-                    ObjCSMessage.OldEarnMinTxnAmt = Convert.ToString(ObjEarn.OldEarnMinTxnAmt);
-                    ObjCSMessage.OldPointsAllocation = Convert.ToString(ObjEarn.OldPointsAllocation);
-                    ObjCSMessage.OldPointsExpiryMonths = Convert.ToString(ObjEarn.OldPointsExpiryMonths);
-                    ObjCSMessage.OldPointsPercentage = Convert.ToString(ObjEarn.OldPointsPercentage);
-                    ObjCSMessage.OldRevolvingStatus = Convert.ToString(ObjEarn.OldRevolvingStatus);
-                    ObjCSMessage.EarnMinTxnAmt = Convert.ToString(ObjEarn.EarnMinTxnAmt);
-                    ObjCSMessage.PointsAllocation = Convert.ToString(ObjEarn.PointsAllocation);
-                    ObjCSMessage.PointsExpiryMonths = Convert.ToString(ObjEarn.PointsExpiryMonths);
-                    ObjCSMessage.PointsPercentage = Convert.ToString(ObjEarn.PointsPercentage);
-                    ObjCSMessage.Revolving = Convert.ToString(ObjEarn.Revolving);
-                    //ObjCSMessage.Message = ConfigurationManager.AppSettings["ITCSMessage"].ToString();
-                    ObjCSMessage.FromName = FromName;
 
-                    if (_WAGroupCode != null)
+
+                    objCustomerDetail = context.tblRuleMasters.Where(x => x.IsActive == true).FirstOrDefault();
+                    if (objCustomerDetail != null)
                     {
-                        Thread _job2 = new Thread(() => SendWAMessageEarnRule(ObjCSMessage));
-                        _job2.Start();
+                        objCustomerDetail.IsActive = false;
+                        objCustomerDetail.EndDate = DateTime.Now.Date;
+                        context.tblRuleMasters.AddOrUpdate(objCustomerDetail);
+                        context.SaveChanges();
+                        status = true;
                     }
 
+                    //ObjCSMessage.GroupCode = _WAGroupCode;
+                    //ObjCSMessage.CSName = CSName;
+                    //ObjCSMessage.BOTokenid = ConfigurationManager.AppSettings["BOTokenid"].ToString();
+                    //ObjCSMessage.WAAPILink = ConfigurationManager.AppSettings["WAAPILink"].ToString();
+                    //ObjCSMessage.OldEarnMinTxnAmt = Convert.ToString(ObjEarn.OldEarnMinTxnAmt);
+                    //ObjCSMessage.OldPointsAllocation = Convert.ToString(ObjEarn.OldPointsAllocation);
+                    //ObjCSMessage.OldPointsExpiryMonths = Convert.ToString(ObjEarn.OldPointsExpiryMonths);
+                    //ObjCSMessage.OldPointsPercentage = Convert.ToString(ObjEarn.OldPointsPercentage);
+                    //ObjCSMessage.OldRevolvingStatus = Convert.ToString(ObjEarn.OldRevolvingStatus);
+                    //ObjCSMessage.EarnMinTxnAmt = Convert.ToString(ObjEarn.EarnMinTxnAmt);
+                    //ObjCSMessage.PointsAllocation = Convert.ToString(ObjEarn.PointsAllocation);
+                    //ObjCSMessage.PointsExpiryMonths = Convert.ToString(ObjEarn.PointsExpiryMonths);
+                    //ObjCSMessage.PointsPercentage = Convert.ToString(ObjEarn.PointsPercentage);
+                    //ObjCSMessage.Revolving = Convert.ToString(ObjEarn.Revolving);
+                    //ObjCSMessage.Message = ConfigurationManager.AppSettings["ITCSMessage"].ToString();
+                    //ObjCSMessage.FromName = FromName;
+
+                    //if (_WAGroupCode != null)
+                    //{
+                    //    Thread _job2 = new Thread(() => SendWAMessageEarnRule(ObjCSMessage));
+                    //    _job2.Start();
+                    //}
+
                 }
+
             }
             catch (Exception ex)
             {

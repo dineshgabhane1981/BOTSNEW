@@ -4,18 +4,78 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    #btnUpdate:hover {
+        background-color: green;
+    }
+    </style>
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            
+
             <div id="dvRules">
+                <input type="text" id="idRuleId" hidden />
+                <input type="text" id="idIsActive" hidden />
+                <input type="text" id="idRuleName" hidden />
+                <input type="text" id="idGroupid" hidden />
+                <input type="text" id="idStartDate" hidden />
+                <input type="text" id="idEndDate" hidden />
                 <input type="text" id="idOldEarnMinTxnAmt" hidden />
                 <input type="text" id="idOldPointsExpiryMonths" hidden />
                 <input type="text" id="idOldPointsAllocation" hidden />
                 <input type="text" id="idOldPointsPercentage" hidden />
                 <input type="text" id="idOldRevolvingStatus" hidden />
+                <!--BURN RULE-->
+                <input type="text" id="txtOldBurnMinTxnAmt" hidden />
+                <input type="text" id="txtOldMinRedemptionPts" hidden />
+                <input type="text" id="txtOldMinRedemptionPtsFirstTime" hidden />
+                <input type="text" id="txtOldBurnInvoiceAmtPercentage" hidden />
+                <input type="text" id="txtOldBurnDBPointsPercentage" hidden />
 
-                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:80px;" id="dvTxnAmt">
+
+                <div class="col-md-12 col-lg-12" style="display: flex; margin-left: 80px; margin-top: 10px;" id="dvtxtRuleName">
+
+
+                    <div class="col-lg-3 col-md-3">
+                        @Html.HiddenFor(model => model.objtblRuleMaster.IsActive, new { @readonly = "readonly", @class = "input50", @id = "txtIsActive" })
+                    </div>
+
+                </div>
+
+                <div class="col-md-12 col-lg-12" style="display: flex; margin-left: 80px; margin-top: 10px;" id="dvtxtRuleName">
+
+                    <div class="col-lg-2 col-md-2">
+                        RuleName
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextBoxFor(model => model.objtblRuleMaster.RuleName, new { @readonly = "readonly", @class = "input50", @id = "txtRuleName" })
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        Group Id
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextBoxFor(model => model.objtblRuleMaster.GroupId, new { @readonly = "readonly", @class = "input50", @id = "txtGroupId" })
+                    </div>
+                </div>
+
+
+                <div class="col-md-12 col-lg-12" style="display: flex; margin-left: 80px; margin-top: 10px;" id="dvTxnAmt">
+                    <div class="col-lg-2 col-md-2">
+                        StartDate
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+
+                        @Html.TextBoxFor(model => model.objtblRuleMaster.StartDate, new { @class = "input50", @id = "txtstartdate" })
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        EndDate
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextBoxFor(model => model.objtblRuleMaster.EndDate, new { @class = "input50", @id = "txtensdate" })
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-12" style="display: flex; margin-left: 80px; margin-top: 10px;" id="dvTxnAmt">
                     <div class="col-lg-2 col-md-2">
                         Txn Amt
                     </div>
@@ -29,64 +89,102 @@
                         @Html.TextBoxFor(model => model.objtblRuleMaster.PointsExpiryMonths, new { @class = "input50", @id = "txtRevolvingExpiry" })
                     </div>
                 </div>
+
                 <div class="col-md-12 col-lg-12" style="display: flex;margin-left:80px;margin-top:10px;" id="dvRevolvingExpiry">
                     <div class="col-lg-2 col-md-2">
                         Percentage
-                       
+
                     </div>
                     <div class="col-lg-3 col-md-3">
-                        
+
                         @Html.TextBoxFor(model => model.objtblRuleMaster.PointsPercentage, new { @class = "input50", @id = "txtPercentage" })
                     </div>
                     <div class="col-md-2 col-lg-2">
                         Points In Rs
-                       
+
                     </div>
                     <div class="col-md-3 col-lg-3">
-                       
+
                         @Html.TextBoxFor(model => model.objtblRuleMaster.PointsAllocation, new { @class = "input50", @id = "txtPointsInRs" })
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-12" style="display: flex;margin-left:95px;margin-top:10px;" id="dvRevolving">
-                    <div>
-                        Revolving
+
+                <!----->
+                <div class="col-md-12 col-lg-12" style="display: flex; margin-left: 80px; margin-top: 10px;" id="dvtxtmintxtamt">
+
+                    <div class="col-lg-2 col-md-2">
+                        Min Txn Amount
                     </div>
-                    <div style="margin-left:20px;">
-                        <input type="checkbox" id="chkRevolving" style="cursor: pointer; margin-right: 5px;width:25px;height:25px;margin-top:5px;" />
+
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextBoxFor(model => model.objEarndata.BurnMinTxnAmt, new { @class = "input50", @id = "txtBurnMinTxnAmt", tabindex = 1 })
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3 col-xl-3">
-                        
+                    <div class="col-lg-2 col-md-2">
+                        Min Redemption Points
                     </div>
-                    <div class="col-md-3 col-xl-3">
-                        
-                    </div>
-                    <div class="col-md-3 col-xl-3">
-                        
-                    </div>
-                    <div class="col-md-3 col-xl-3">
-                        <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnUpdate" tabindex="20">Update</button>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextBoxFor(model => model.objEarndata.MinRedemptionPts, new { @class = "input50", @id = "txtMinRedemptionPts", tabindex = 2 })
                     </div>
                 </div>
 
-            </div>           
+                <div class="col-md-12 col-lg-12" style="display: flex; margin-left: 80px; margin-top: 10px;" id="dvtxtred">
+                    <div class="col-lg-2 col-md-2">
+                        Min Points First Time
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextBoxFor(model => model.objEarndata.MinRedemptionPtsFirstTime, new { @class = "input50", @id = "txtMinRedemptionPtsFirstTime", tabindex = 3 })
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        Burn Invoice Amt Percentage
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextBoxFor(model => model.objEarndata.BurnInvoiceAmtPercentage, new { @class = "input50", @id = "txtBurnInvoiceAmtPercentage", tabindex = 4 })
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12" style="display: flex; margin-left: 80px; margin-top: 10px;" id="dvtxtdbpts">
+                    <div class="col-lg-2 col-md-2">
+                        Burn Points Percentage
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextBoxFor(model => model.objEarndata.BurnDBPointsPercentage, new { @class = "input50", @id = "txtBurnDBPointsPercentage", tabindex = 5 })
+                    </div>
+                    <!-------->
+                    <div class="col-md-12 col-lg-12" style="display: flex;margin-left:95px;margin-top:10px;" id="dvRevolving">
+                        <div>
+                            Revolving
+                        </div>
+                        <div style="margin-left:20px;">
+                            <input type="checkbox" id="chkRevolving" style="cursor: pointer; margin-right: 5px;width:25px;height:25px;margin-top:5px;" />
+                        </div>
+                       
+                    </div>
+                </div>
+
+
+                <center>
+                <div class="col-md-3 col-xl-3">
+                    <button class="btn btn-danger ml-auto mt-3" type="button" title="Next" id="btnUpdate" tabindex="20">Update</button>
+                </div>
+                    </center>
+            </div>
         </div>
     </div>
-</div>
-<script>
+    </div>
+
+    <script>
     $(document).ready(function () {
         GetEarnRule();
-        
+
         $('#btnUpdate').on("click", function () {
+
             SaveEarnRule();
-        });        
+        });
     });
-    function GetEarnRule() {        
+    function GetEarnRule() {
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: '@Url.Action("GetEarnRule", "IndividualDBConfig")',           
+            url: '@Url.Action("GetEarnRule", "IndividualDBConfig")',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
@@ -94,16 +192,36 @@
                 console.log(result.objEarndata);
                 if (result.objEarndata != null) {
                     $("#dvRules").show();
-                    
+
+                    $("#txtRuleName").val(result.objEarndata.RuleName);
+                    $("#txtGroupId").val(result.objEarndata.GroupId);
+                    $("#txtstartdate").val(result.objEarndata.StartDate);
+                    $("#txtensdate").val(result.objEarndata.EndDate);
                     $("#txtTxnAmt").val(result.objEarndata.EarnMinTxnAmt);
                     $("#txtRevolvingExpiry").val(result.objEarndata.PointsExpiryMonths);
                     $("#txtPointsInRs").val(result.objEarndata.PointsAllocation);
                     $("#txtPercentage").val(result.objEarndata.PointsPercentage);
 
+                    $("#idRuleName").val(result.objEarndata.RuleName);
+                    $("#idGroupid").val(result.objEarndata.GroupId);
+                    $("#idStartDate").val(result.objEarndata.StartDate);
+                    $("#idEndDate").val(result.objEarndata.EndDate);
                     $("#idOldEarnMinTxnAmt").val(result.objEarndata.EarnMinTxnAmt);
                     $("#idOldPointsExpiryMonths").val(result.objEarndata.PointsExpiryMonths);
                     $("#idOldPointsAllocation").val(result.objEarndata.PointsAllocation);
                     $("#idOldPointsPercentage").val(result.objEarndata.PointsPercentage);
+                    //
+                    $("#txtBurnMinTxnAmt").val(result.objEarndata.BurnMinTxnAmt);
+                    $("#txtMinRedemptionPts").val(result.objEarndata.MinRedemptionPts);
+                    $("#txtMinRedemptionPtsFirstTime").val(result.objEarndata.MinRedemptionPtsFirstTime);
+                    $("#txtBurnInvoiceAmtPercentage").val(result.objEarndata.BurnInvoiceAmtPercentage);
+                    $("#txtBurnDBPointsPercentage").val(result.objEarndata.BurnDBPointsPercentage);
+                    $("#txtOldBurnMinTxnAmt").val(result.objEarndata.BurnMinTxnAmt);
+                    $("#txtOldMinRedemptionPts").val(result.objEarndata.MinRedemptionPts);
+                    $("#txtOldMinRedemptionPtsFirstTime").val(result.objEarndata.MinRedemptionPtsFirstTime);
+                    $("#txtOldBurnInvoiceAmtPercentage").val(result.objEarndata.BurnInvoiceAmtPercentage);
+                    $("#txtOldBurnDBPointsPercentage").val(result.objEarndata.BurnDBPointsPercentage);
+                    //
 
                     if (result.objEarndata.Revolving) {
                         $("#chkRevolving").prop("checked", true)
@@ -123,7 +241,12 @@
             }
         });
     }
-    function SaveEarnRule() {        
+    function SaveEarnRule()
+    {
+        var RuleName = $("#txtRuleName").val();
+        //var IsActive = $("#idRuleName").val();
+        var StartDate = $("#txtstartdate").val();
+        var EndDate = $("#txtensdate").val();
         var EarnMinTxnAmt = $("#txtTxnAmt").val();
         var PointsExpiryMonths = $("#txtRevolvingExpiry").val();
         var PointsPercentage = $("#txtPercentage").val();
@@ -131,6 +254,54 @@
         var Revolving = $("chkRevolving").val();
         var OldRevalving = $("#idOldRevolvingStatus").val();
         var OldRevolvingStatus;
+
+        //
+        var BurnMinTxnAmt = $("#txtBurnMinTxnAmt").val();
+        var MinRedemptionPts = $("#txtMinRedemptionPts").val();
+        var MinRedemptionPtsFirstTime = $("#txtMinRedemptionPtsFirstTime").val();
+        var BurnInvoiceAmtPercentage = $("#txtBurnInvoiceAmtPercentage").val();
+        var BurnDBPointsPercentage = $("#txtBurnDBPointsPercentage").val();
+
+        if (BurnMinTxnAmt == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Min Txn Amt",
+                buttonText: "Okay"
+            })
+        }
+        else if (MinRedemptionPts == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Min Redemption Points",
+                buttonText: "Okay"
+            })
+        }
+        if (MinRedemptionPtsFirstTime == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Min Points First Time",
+                buttonText: "Okay"
+            })
+        }
+        else if (BurnInvoiceAmtPercentage == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Burn Invoice Amt Percentage",
+                buttonText: "Okay"
+            })
+        }
+        if (BurnDBPointsPercentage == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the Burn Points Percentage",
+                buttonText: "Okay"
+            })
+        }
 
         if (OldRevalving == true) {
             OldRevolvingStatus = true;
@@ -140,17 +311,36 @@
         }
 
         var FilterData = [];
-        item = {};        
+        item = {};
+        item["RuleName"] = RuleName;
+        item["StartDate"] = StartDate;
+        item["EndDate"] = EndDate;
         item["EarnMinTxnAmt"] = EarnMinTxnAmt;
         item["PointsExpiryMonths"] = PointsExpiryMonths;
         item["PointsPercentage"] = PointsPercentage;
         item["PointsAllocation"] = PointsAllocation;
 
+        item["OldStartDate"] = $("#idStartDate").val();
+        item["OldEndDate"] = $("#idEndDate").val();
         item["OldEarnMinTxnAmt"] = $("#idOldEarnMinTxnAmt").val();
         item["OldPointsExpiryMonths"] = $("#idOldPointsExpiryMonths").val();
         item["OldPointsAllocation"] = $("#idOldPointsAllocation").val();
         item["OldPointsPercentage"] = $("#idOldPointsPercentage").val();
         item["OldRevolvingStatus"] = OldRevolvingStatus;
+
+
+        item["BurnMinTxnAmt"] = BurnMinTxnAmt;
+        item["MinRedemptionPts"] = MinRedemptionPts;
+        item["MinRedemptionPtsFirstTime"] = MinRedemptionPtsFirstTime;
+        item["BurnInvoiceAmtPercentage"] = BurnInvoiceAmtPercentage;
+        item["BurnDBPointsPercentage"] = BurnDBPointsPercentage;
+
+        item["OldBurnMinTxnAmt"] = $("#txtOldBurnMinTxnAmt").val();
+        item["OldMinRedemptionPts"] = $("#txtOldMinRedemptionPts").val();
+        item["OldMinRedemptionPtsFirstTime"] = $("#txtOldMinRedemptionPtsFirstTime").val();
+        item["OldBurnInvoiceAmtPercentage"] = $("#txtOldBurnInvoiceAmtPercentage").val();
+        item["OldBurnDBPointsPercentage"] = $("#txtOldBurnDBPointsPercentage").val();
+
 
         if ($("#chkRevolving").is(":checked")) {
             Revolving = true;
@@ -197,5 +387,4 @@
             }
         });
     }
-</script>
-
+    </script>

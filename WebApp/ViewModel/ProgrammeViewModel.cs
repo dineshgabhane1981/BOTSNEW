@@ -45,6 +45,11 @@ namespace WebApp.ViewModel
         public tblRuleMaster objtblRuleMaster { get; set; }
         public tblSMSWhatsAppCredential objtblSMSWhatsAppCredential { get; set; }
         public Earndata objEarndata { get; set; }
+        public string GroupId { get; set; }
+        public string RuleName { get; set; }
+
+        //public DateTime? StartDate { get; set; }
+        //public DateTime? EndDate { get; set; }
         public string TxnAmt { get; set; }
         public string RevolvingExpiry { get; set; }
         public string Percentage { get; set; }
