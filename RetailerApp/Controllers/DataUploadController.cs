@@ -213,6 +213,7 @@ namespace RetailerApp.Controllers
                         }
 
                     }
+                    return new JsonResult() { Data = ObjA, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
                 }
                 catch(Exception ex)
                 {
