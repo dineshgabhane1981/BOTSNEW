@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                                 <div class="button-row d-flex mt-4">
-                                    <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" tabindex="20">Next</button>
+                                    <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" tabindex="20" disabled id="btnDataSelect">Next</button>
                                 </div>
                             </div>
 
@@ -335,20 +335,71 @@
         }
     }
 
-    function GetFilterCount() {        
+    function GetFilterCount() {
         if (ValidateDataSelection()) {
 
+            var FilterData = [];
+            item = {};
+            item["BaseType"] = $("#ddlBaseType").val();
+            item["PointsBase"] = $("#ddlAvailablePoints").val();
+            item["Points"] = parseInt($("#txtFromPoints").val()); 
+            item["PointsRange1"] = parseInt($("#txtToPoints").val());
+            item["OutletId"] = $("#ddlOutlet").val();
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetFilteredData", "Campaigns")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        $("#spnTotalBase").text(addComma(response.CustCountALL));
+                        $("#spnFilterBase").text(addComma(response.CustFiltered));
+                        $("#btnDataSelect").prop('disabled', false);
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        $("#divLoader").hide();
+                        cuteAlert({
+                            type: "error",
+                            title: "OOPS...",
+                            message: "Response is NULL",
+                            buttonText: "Okay"
+                        })
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });
         }
+
     }
 
     function ValidateDataSelection() {
         if ($("#ddlBaseType").val() == "4") {
             if ($("#ddlAvailablePoints").val() == "4") {
-                if ($("#txtFromPoints").val() == "" && $("#txtToPoints").val() == "") {
+                if (($("#txtFromPoints").val() == "" && $("#txtToPoints").val() == "") || ($("#txtFromPoints").val() != "" && $("#txtToPoints").val() == "") || ($("#txtFromPoints").val() == "" && $("#txtToPoints").val() != "")) {
                     cuteAlert({
                         type: "error",
                         title: "OOPS...",
-                        message: "Please enter to and from points",
+                        message: "Please enter from and to points",
+                        buttonText: "Okay"
+                    })
+                    return false;
+                }
+                else if (parseInt($("#txtToPoints").val()) < parseInt($("#txtFromPoints").val())) {
+                    cuteAlert({
+                        type: "error",
+                        title: "Data Error",
+                        message: "The Points mentioned in To is less than From. Please correct this and Save",
                         buttonText: "Okay"
                     })
                     return false;
