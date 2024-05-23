@@ -2688,12 +2688,17 @@ namespace BOTS_BL.Repository
 
         public int[] GetSSFilterCount(object[] objData, string loginId, bool IsCount, string connstr, string GroupId)
         {
-            int count = 0;
+            string DBName = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+            }
+                int count = 0;
             int index = 1;
             string Criteria = string.Empty;
-            string slicerQuery = "select count(*) from tblSmartSlicerMaster as a where  ";
-            string productQuery = "select MobileNo from tblTxnProDetailsMaster as b where ";
-            string txnQuery = "select MobileNo from tblTxnDetailsMaster as c where ";
+            string slicerQuery = "select MobileNo from "+ DBName+".dbo.tblSmartSlicerMaster as a where  ";
+            string productQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnProDetailsMasterAndClone as b where ";
+            string txnQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone as c where ";
             string txnQueryWhere = "";
             string productQueryWhere = "";
             string cumQuery = "";
@@ -2785,7 +2790,7 @@ namespace BOTS_BL.Repository
                         }
                         if (SecondChk == "AIsegment")
                         {
-                            //Criteria += "<br/>AIsegment : " + Convert.ToString(item["AIsegment"]);
+                            Criteria += "<br/>AIsegment : " + Convert.ToString(item["AIsegment"]);
                             //WhereClause += " and a.Tier = " + Convert.ToString(item["AIsegment"]);
                         }
                     }
@@ -2795,27 +2800,33 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
                         {
                             Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            WhereClause += " a.TotalTxnCount = 0";
                             if (Convert.ToString(item["SecondChk"]) == "All")
                             {
-                                WhereClause += " a.TotalTxnCount = 0";
+                                
                             }
                             if (Convert.ToString(item["SecondChk"]) == "Enrolled")
                             {
-                                //WhereClause += " a.TotalTxnCount = 0";
+                                WhereClause += " and a.EnrolledBy = 'WalkIn'";
                             }
                             if (Convert.ToString(item["SecondChk"]) == "BulkUpload")
                             {
-                                //WhereClause += " a.TotalTxnCount = 0";
+                                WhereClause += " and a.EnrolledBy = 'BulkUpload'";
                             }
                             if (Convert.ToString(item["SecondChk"]) == "Referal")
                             {
-                                //WhereClause += " a.TotalTxnCount = 0";
+                                WhereClause += " and a.EnrolledBy = 'DLCReferral'";
                             }
                             if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
+                            {                                
                                 if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
                                 {
                                     Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
+                                    WhereClause += " anda.EnrolledBy = " + Convert.ToString(item["QRSource"]);
+                                }
+                                else
+                                {
+                                    WhereClause += " and a.EnrolledBy = 'DLCGifting' and a.EnrolledBy = 'DLCWalkIn'";
                                 }
                             }
                         }
@@ -2853,6 +2864,7 @@ namespace BOTS_BL.Repository
                         Criteria += " : Cumulative";
                         if (Convert.ToString(item["SecondChk"]) != "No")
                         {
+                            WhereClause += " a.TotalTxnCount > 0 ";
                             IsCumulative = true;
                             //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
                             if (Convert.ToString(item["SecondChk"]) == "TxnCount")
@@ -2884,11 +2896,12 @@ namespace BOTS_BL.Repository
                                 }
                                 if (Frequency == "Per Month")
                                 {
-                                    cumQuery = "select T.MobileNo from (select  MobileNo,count(*) as TxnCount,month(TxnDatetime) as Months,year(TxnDatetime) as years from View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by Mobileno,month(TxnDatetime),year(TxnDatetime)) T where T.TxnCount" + LSGTSymbol + " " + TxnCount + " group by T.Mobileno having count(T.MobileNo) " + LSGTSymbol + " " + TxnCount + "";
+                                    cumQuery = "select distinct T.MobileNo from (select  MobileNo,count(*) as TxnCount,month(TxnDatetime) as Months,year(TxnDatetime) as years from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by Mobileno,month(TxnDatetime),year(TxnDatetime)) T where T.TxnCount" + LSGTSymbol + " " + TxnCount + " group by T.Mobileno having count(T.MobileNo) " + LSGTSymbol + " " + TxnCount + "";
                                 }
                                 else
                                 {
-                                    cumQuery = "select sum(T.MobileNo) from (select count(distinct MobileNo) as MobileNo from View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >=dateadd(month,-" + Months + ",getdate()) group by MobileNo having  Count(MobileNo) " + LSGTSymbol + " " + TxnCount + ") T";
+                                    //cumQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >=dateadd(month,-" + Months + ",getdate()) group by MobileNo having  Count(MobileNo) " + LSGTSymbol + " " + TxnCount + ")";
+                                    cumQuery = "select distinct MobileNo from  " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by  MobileNo having  Count(MobileNo) " + LSGTSymbol + " " + TxnCount + "";
                                 }
                             }
                             if (Convert.ToString(item["SecondChk"]) == "CSpend")
@@ -2920,11 +2933,1353 @@ namespace BOTS_BL.Repository
                                 }
                                 if (Frequency == "Per Month")
                                 {
-                                    cumQuery = "select T.MobileNo from (select  MobileNo,sum(InvoiceAmt) as Spends,month(TxnDatetime) as Months,year(TxnDatetime) as years from View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by Mobileno,month(TxnDatetime),year(TxnDatetime)) T where T.Spends " + LSGTSymbol + " " + Amount + " group by T.Mobileno having count(T.MobileNo) " + LSGTSymbol + " " + Amount + "";
+                                    cumQuery = "select distinct T.MobileNo from (select  MobileNo,sum(InvoiceAmt) as Spends,month(TxnDatetime) as Months,year(TxnDatetime) as years from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by Mobileno,month(TxnDatetime),year(TxnDatetime)) T where T.Spends " + LSGTSymbol + " " + Amount + " group by T.Mobileno having count(T.MobileNo) " + LSGTSymbol + " " + Amount + "";
                                 }
                                 else
                                 {
-                                    cumQuery = "select sum(T.MobileNo) from (select count(distinct MobileNo) as MobileNo,sum(InvoiceAmt) as Spend from View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >=dateadd(month,-" + Months + ",getdate()) group by MobileNo having  sum(InvoiceAmt) " + LSGTSymbol + " " + Amount + ") T";
+                                    //cumQuery = "select sum(T.MobileNo) from (select count(distinct MobileNo) as MobileNo,sum(InvoiceAmt) as Spend from View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >=dateadd(month,-" + Months + ",getdate()) group by MobileNo having  sum(InvoiceAmt) " + LSGTSymbol + " " + Amount + ") T";
+                                    cumQuery = "select distinct MobileNo from  " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by  MobileNo having  sum(InvoiceAmt) " + LSGTSymbol + " " + Amount + "";
+                                }
+                            }
+                        }
+                    }
+                }
+                if (index == 2)
+                {
+                    if (Convert.ToString(item["IsAvgTicket"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketFrm"])))
+                        {
+                            Criteria += "<br/>Avgerage ticket size from : " + Convert.ToString(item["AvgTicketFrm"]);
+                            WhereClause += " and a.AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketTo"])))
+                        {
+                            Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
+                            WhereClause += " and a.AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
+                        }
+                    }
+                    if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
+                        {
+                            Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
+                            WhereClause += " and a.EnrolledDate > '" + Convert.ToString(item["Enrollfromdt"] + "'");
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
+                        {
+                            Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
+                            WhereClause += " and a.EnrolledDate < '" + Convert.ToString(item["Enrolltodt"] + "'");
+                        }
+                    }
+                    if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
+                    {
+                        Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
+                    }
+                    
+                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
+                        {
+                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
+                        {
+                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
+                    {
+                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["Redeemed"]);
+                        int isR = 0;
+                        if (Convert.ToString(item["Redeemed"]) == "Multiple")
+                            isR = 2;
+                        if (Convert.ToString(item["Redeemed"]) == "Single")
+                            isR = 1;
+                        WhereClause += " and a.burncount >= " + isR;
+                    }
+                    if (Convert.ToString(item["IsInvoiceValue"]) == "Yes")
+                    {
+                        IsTransaction = true;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["InvoiceValueFrm"])))
+                        {
+                            Criteria += "<br/>Invoice Value from : " + Convert.ToString(item["InvoiceValueFrm"]);
+                            if (!string.IsNullOrEmpty(txnQueryWhere))
+                                txnQueryWhere += " and c.InvoiceAmt >=" + Convert.ToString(item["InvoiceValueFrm"]);
+                            else
+                                txnQueryWhere += " c.InvoiceAmt >=" + Convert.ToString(item["InvoiceValueFrm"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["InvoiceValueTo"])))
+                        {
+                            Criteria += "<br/>Invoice Value to : " + Convert.ToString(item["InvoiceValueTo"]);
+                            if (!string.IsNullOrEmpty(txnQueryWhere))
+                                txnQueryWhere += " and c.InvoiceAmt <=" + Convert.ToString(item["InvoiceValueTo"]);
+                            else
+                                txnQueryWhere += " c.InvoiceAmt <=" + Convert.ToString(item["InvoiceValueTo"]);
+                        }
+                    }
+
+                    if (Convert.ToString(item["IsSpend"]) == "Yes")
+                    {
+                        if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])) && string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                        {
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
+                            {
+                                Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
+                                WhereClause += " and a.Spends > " + Convert.ToString(item["SpendMin"]);
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
+                            {
+                                Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
+                                WhereClause += " and a.Spends < " + Convert.ToString(item["SpendMax"]);
+                            }
+                        }
+                        else
+                        {
+                            IsTransaction = true;
+                            string havngClause = string.Empty;
+                            //Need to create Transaction Table query
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                    txnQueryWhere += " and c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                else
+                                    txnQueryWhere += " c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                            }
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                    txnQueryWhere += " and c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                else
+                                    txnQueryWhere += " c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                            }
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
+                            {
+                                Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMin"]);
+                                else
+                                    havngClause += " sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMin"]);
+
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
+                            {
+                                Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMax"]);
+                                else
+                                    havngClause += " sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMax"]);
+                            }
+                            txnQueryWhere = txnQueryWhere + " group by MobileNo having " + havngClause;
+                        }
+                    }
+                    if (Convert.ToString(item["IsTxnCount"]) == "Yes")
+                    {
+                        if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])) && string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                        {
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
+                            {
+                                Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
+                                WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
+                            {
+                                Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
+                                WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
+                            }
+                        }
+                        else
+                        {
+                            IsTransaction = true;
+                            string havngClause = string.Empty;
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                {
+                                    txnQueryWhere += " and c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                }
+                                else
+                                {
+                                    txnQueryWhere += " c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                {
+                                    txnQueryWhere += " and c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                }
+                                else
+                                {
+                                    txnQueryWhere += " c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
+                            {
+                                Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and count(c.MobileNo) >=" + Convert.ToString(item["CountMin"]);
+                                else
+                                    havngClause += " count(c.MobileNo) >=" + Convert.ToString(item["CountMin"]);
+
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
+                            {
+                                Criteria += "<br/>Spend max : " + Convert.ToString(item["CountMax"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and count(c.MobileNo) >=" + Convert.ToString(item["CountMax"]);
+                                else
+                                    havngClause += " count(c.MobileNo) >=" + Convert.ToString(item["CountMax"]);
+                            }
+                            txnQueryWhere = txnQueryWhere + " group by MobileNo having " + havngClause;
+                        }
+                    }
+
+                }
+                if (index == 3)
+                {
+                    if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
+                    {
+                        IsProduct = true;
+                        //This need to add
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategory"])))
+                        {
+                            Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.CategoryCode!=" + Convert.ToString(item["NPCategory"]);
+                            else
+                                productQueryWhere += " and b.CategoryCode!=" + Convert.ToString(item["NPCategory"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPSubCategory"])))
+                        {
+                            Criteria += "<br/>Never Purchase Sub Category : " + Convert.ToString(item["NPSubCategoryName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.SubCategoryCode!=" + Convert.ToString(item["NPSubCategory"]);
+                            else
+                                productQueryWhere += " and b.SubCategoryCode!=" + Convert.ToString(item["NPSubCategory"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPProduct"])))
+                        {
+                            Criteria += "<br/>Never Purchase Product Name : " + Convert.ToString(item["NPProductName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.ProductCode!=" + Convert.ToString(item["NPProduct"]);
+                            else
+                                productQueryWhere += " and b.ProductCode!=" + Convert.ToString(item["NPProduct"]);
+                        }
+                    }
+
+                    if (Convert.ToString(item["IsPurchased"]) == "Yes")
+                    {
+                        IsProduct = true;
+                        //This need to add
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PCategory"])))
+                        {
+                            Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.CategoryCode=" + Convert.ToString(item["PCategory"]);
+                            else
+                                productQueryWhere += " and b.CategoryCode=" + Convert.ToString(item["PCategory"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PSubCategory"])))
+                        {
+                            Criteria += "<br/>Purchase Sub Category : " + Convert.ToString(item["PSubCategoryName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.SubCategoryCode=" + Convert.ToString(item["PSubCategory"]);
+                            else
+                                productQueryWhere += " and b.SubCategoryCode=" + Convert.ToString(item["PSubCategory"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PProduct"])))
+                        {
+                            Criteria += "<br/>Purchase Product Name : " + Convert.ToString(item["PProductName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.ProductCode=" + Convert.ToString(item["PProduct"]);
+                            else
+                                productQueryWhere += " and b.ProductCode=" + Convert.ToString(item["PProduct"]);
+                        }
+                    }
+                }
+                if (index == 4)
+                {
+                    if (Convert.ToString(item["IsBrands"]) == "Yes")
+                    {
+                        //This need to add
+                        Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
+                    }
+                    if (Convert.ToString(item["IsOutlet"]) == "Yes")
+                    {
+                        var outlets = (object[])item["Outlets"];
+                        
+                        Criteria += "<br/>Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
+                        
+                        foreach (var item1 in outlets)
+                        {
+                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }                        
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (outletAll != "All")
+                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
+                        }
+
+                    }
+                    if (Convert.ToString(item["IsTOutlet"]) == "Yes")
+                    {
+                        var outlets = (object[])item["TransactingOutlets"];
+                        
+                        Criteria += "<br/>Transacting Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
+                        foreach (var item1 in outlets)
+                        {
+                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
+                            {
+                                //This need to add
+                                Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
+                                if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
+                                {
+                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
+                                }
+                                else
+                                {
+                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
+                                }
+                            }
+                            else
+                            {
+                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
+                            }
+                        }
+                    }
+                }
+                if (index == 5)
+                {
+
+                    if (Convert.ToString(item["IsGender"]) == "Yes")
+                    {
+                        Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
+                        if (Convert.ToString(item["Gender"]) == "Male")
+                            WhereClause += " and a.Gender = 'M' ";
+                        if (Convert.ToString(item["Gender"]) == "Female")
+                            WhereClause += " and a.Gender = 'F' ";
+                    }
+                    if (Convert.ToString(item["IsCity"]) == "Yes")
+                    {
+                        Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
+                        WhereClause += " and a.City = " + Convert.ToString(item["IsCity"]);
+                    }
+                    if (Convert.ToString(item["IsAge"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
+                        {
+                            Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
+                            WhereClause += " and a.Age >= " + Convert.ToString(item["AgeFrom"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
+                        {
+                            Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
+                            WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
+                        }
+                    }
+                }
+                index++;
+            }
+
+            txnQuery = txnQuery + " " + txnQueryWhere;
+            productQuery = productQuery + " " + productQueryWhere;
+            slicerQuery = slicerQuery + WhereClause;
+            int totalCount = 0;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    if (!IsCumulative)
+                        cumQuery = "";
+                    if (!IsTransaction)
+                        txnQuery = "";
+                    if (!IsProduct)
+                        productQuery = "";
+
+                    context.Database.CommandTimeout = 300;
+                    var objCustCount = context.Database.SqlQuery<SlicerCount>("sp_SlicerCountNew @pi_GroupId, @pi_Date, @pi_LoginId,@pi_DBName, @pi_IsCumulative, @pi_IsTransaction, @pi_IsProduct,@pi_CumuQuery, @pi_TxnQuery, @pi_ProductQuery,@pi_SlicerQuery",
+                             new SqlParameter("@pi_GroupId", GroupId),
+                             new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                             new SqlParameter("@pi_LoginId", ""),
+                             new SqlParameter("@pi_DBName", DBName),
+                             new SqlParameter("@pi_IsCumulative", IsCumulative),
+                             new SqlParameter("@pi_IsTransaction", IsTransaction),
+                             new SqlParameter("@pi_IsProduct", IsProduct),
+                             new SqlParameter("@pi_CumuQuery", cumQuery),
+                             new SqlParameter("@pi_TxnQuery", txnQuery),
+                             new SqlParameter("@pi_ProductQuery", productQuery),
+                             new SqlParameter("@pi_SlicerQuery", slicerQuery)).FirstOrDefault();
+                    if (objCustCount != null)
+                        count = objCustCount.CustCount;
+
+                }
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    totalCount = context.tblSmartSlicerMasters.Count();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "errorofgetting data");
+            }
+
+            int[] lstCount = new int[2];
+            lstCount[0] = count;
+            lstCount[1] = totalCount;
+            return lstCount;
+        }
+
+        public List<CustomerTypeReport> GetSSFilterReport(object[] objData, string columns, string loginId, string connstr, string GroupId)
+        {
+            string DBName = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+            }            
+            int index = 1;
+            string Criteria = string.Empty;
+            string slicerQuery = "select MobileNo from " + DBName + ".dbo.tblSmartSlicerMaster as a where  ";
+            string productQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnProDetailsMasterAndClone as b where ";
+            string txnQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone as c where ";
+            string txnQueryWhere = "";
+            string productQueryWhere = "";
+            string cumQuery = "";
+            string WhereClause = string.Empty;
+
+            bool IsCumulative = false;
+            bool IsProduct = false;
+            bool IsTransaction = false;
+
+            foreach (Dictionary<string, object> item in objData)
+            {
+                if (index == 1)
+                {
+                    string FirstChk = Convert.ToString(item["FirstChk"]);
+                    string SecondChk = Convert.ToString(item["SecondChk"]);
+                    if (FirstChk == "Transacting")
+                    {
+                        Criteria += "Transacting";
+
+                        if (SecondChk == "All")
+                        {
+                            WhereClause += " a.TotalTxnCount > 0 ";
+                            Criteria += " : All";
+                        }
+                        if (SecondChk == "OnlyOnce")
+                        {
+                            Criteria += " : Only Once";
+                            Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
+                            WhereClause += " a.BackEndCustType = 'OnlyOnce' ";
+                            if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
+                            {
+                                if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
+                                {
+                                    WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'High' ";
+                                }
+                                if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
+                                {
+                                    WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'Low' ";
+                                }
+                                if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
+                                {
+                                    WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'High' ";
+                                }
+                                if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
+                                {
+                                    WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'Low' ";
+                                }
+                            }
+                        }
+                        if (SecondChk == "Inactive")
+                        {
+                            Criteria += " : Inactive";
+                            Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
+                            if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 30 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 120 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
+                            {
+                                WhereClause += " a.LastTxnDate < cast(getdate() - 395 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
+                            {
+                                Criteria += " - Exclude Only Once";
+                                WhereClause += " and a.TotalTxnCount > 1 ";
+                            }
+                        }
+                        if (SecondChk == "Tier")
+                        {
+                            Criteria += "<br/>Tier : " + Convert.ToString(item["Tier"]);
+                            WhereClause += " and a.Tier = " + Convert.ToString(item["Tier"]);
+                        }
+                        if (SecondChk == "AIsegment")
+                        {
+                            Criteria += "<br/>AIsegment : " + Convert.ToString(item["AIsegment"]);
+                            //WhereClause += " and a.Tier = " + Convert.ToString(item["AIsegment"]);
+                        }
+                    }
+                    if (FirstChk == "NonTransacting")
+                    {
+                        Criteria += "Non Transacting";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
+                        {
+                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            WhereClause += " a.TotalTxnCount = 0";
+                            if (Convert.ToString(item["SecondChk"]) == "All")
+                            {
+
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "Enrolled")
+                            {
+                                WhereClause += " and a.EnrolledBy = 'WalkIn'";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "BulkUpload")
+                            {
+                                WhereClause += " and a.EnrolledBy = 'BulkUpload'";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "Referal")
+                            {
+                                WhereClause += " and a.EnrolledBy = 'DLCReferral'";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "DLC")
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
+                                {
+                                    Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
+                                    WhereClause += " anda.EnrolledBy = " + Convert.ToString(item["QRSource"]);
+                                }
+                                else
+                                {
+                                    WhereClause += " and a.EnrolledBy = 'DLCGifting' and a.EnrolledBy = 'DLCWalkIn'";
+                                }
+                            }
+                        }
+                    }
+                    if (FirstChk == "MemberAcquition")
+                    {
+                        //This need to add
+                        Criteria += "Member Acquition";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
+                        {
+                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            Criteria += " - " + Convert.ToString(item["MAFinal"]);
+
+                            if (Convert.ToString(item["SecondChk"]) == "DLC")
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
+                                {
+                                    Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
+                                }
+                            }
+                        }
+                    }
+
+                    if (FirstChk == "Cumulative")
+                    {
+                        string LSGT = string.Empty;
+                        string TxnCount = string.Empty;
+                        string Months = string.Empty;
+                        string Frequency = string.Empty;
+                        string Amount = string.Empty;
+                        string TxnDatetime = DateTime.Now.ToString("yyyy-MM-dd");
+                        string LSGTSymbol = string.Empty;
+
+                        //This need to add
+                        Criteria += " : Cumulative";
+                        if (Convert.ToString(item["SecondChk"]) != "No")
+                        {
+                            WhereClause += " a.TotalTxnCount > 0 ";
+                            IsCumulative = true;
+                            //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
+                            if (Convert.ToString(item["SecondChk"]) == "TxnCount")
+                            {
+                                Criteria += " : Transaction Count";
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["LSGT"]);
+                                    LSGT = Convert.ToString(item["LSGT"]);
+                                    if (LSGT == "Less than")
+                                        LSGTSymbol = "<=";
+                                    if (LSGT == "More than")
+                                        LSGTSymbol = ">=";
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["TxnCount"]);
+                                    TxnCount = Convert.ToString(item["TxnCount"]);
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Months"]);
+                                    Months = Convert.ToString(item["Months"]);
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Frequency"]);
+                                    Frequency = Convert.ToString(item["Frequency"]);
+                                }
+                                if (Frequency == "Per Month")
+                                {
+                                    cumQuery = "select distinct T.MobileNo from (select  MobileNo,count(*) as TxnCount,month(TxnDatetime) as Months,year(TxnDatetime) as years from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by Mobileno,month(TxnDatetime),year(TxnDatetime)) T where T.TxnCount" + LSGTSymbol + " " + TxnCount + " group by T.Mobileno having count(T.MobileNo) " + LSGTSymbol + " " + TxnCount + "";
+                                }
+                                else
+                                {
+                                    //cumQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >=dateadd(month,-" + Months + ",getdate()) group by MobileNo having  Count(MobileNo) " + LSGTSymbol + " " + TxnCount + ")";
+                                    cumQuery = "select distinct MobileNo from  " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by  MobileNo having  Count(MobileNo) " + LSGTSymbol + " " + TxnCount + "";
+                                }
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "CSpend")
+                            {
+                                Criteria += "- Spend";
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["LSGT"]);
+                                    LSGT = Convert.ToString(item["LSGT"]);
+                                    if (LSGT == "Less than")
+                                        LSGTSymbol = "<=";
+                                    if (LSGT == "More than")
+                                        LSGTSymbol = ">=";
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Amount"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Amount"]);
+                                    Amount = Convert.ToString(item["Amount"]);
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Months"]);
+                                    Months = Convert.ToString(item["Months"]);
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Frequency"]);
+                                    Frequency = Convert.ToString(item["Frequency"]);
+                                }
+                                if (Frequency == "Per Month")
+                                {
+                                    cumQuery = "select distinct T.MobileNo from (select  MobileNo,sum(InvoiceAmt) as Spends,month(TxnDatetime) as Months,year(TxnDatetime) as years from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by Mobileno,month(TxnDatetime),year(TxnDatetime)) T where T.Spends " + LSGTSymbol + " " + Amount + " group by T.Mobileno having count(T.MobileNo) " + LSGTSymbol + " " + Amount + "";
+                                }
+                                else
+                                {
+                                    //cumQuery = "select sum(T.MobileNo) from (select count(distinct MobileNo) as MobileNo,sum(InvoiceAmt) as Spend from View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >=dateadd(month,-" + Months + ",getdate()) group by MobileNo having  sum(InvoiceAmt) " + LSGTSymbol + " " + Amount + ") T";
+                                    cumQuery = "select distinct MobileNo from  " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by  MobileNo having  sum(InvoiceAmt) " + LSGTSymbol + " " + Amount + "";
+                                }
+                            }
+                        }
+                    }
+                }
+                if (index == 2)
+                {
+                    if (Convert.ToString(item["IsAvgTicket"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketFrm"])))
+                        {
+                            Criteria += "<br/>Avgerage ticket size from : " + Convert.ToString(item["AvgTicketFrm"]);
+                            WhereClause += " and a.AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketTo"])))
+                        {
+                            Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
+                            WhereClause += " and a.AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
+                        }
+                    }
+                    if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
+                        {
+                            Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
+                            WhereClause += " and a.EnrolledDate > '" + Convert.ToString(item["Enrollfromdt"] + "'");
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
+                        {
+                            Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
+                            WhereClause += " and a.EnrolledDate < '" + Convert.ToString(item["Enrolltodt"] + "'");
+                        }
+                    }
+                    if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
+                    {
+                        Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
+                        WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
+                    }
+
+                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
+                        {
+                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
+                        {
+                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
+                    {
+                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["Redeemed"]);
+                        int isR = 0;
+                        if (Convert.ToString(item["Redeemed"]) == "Multiple")
+                            isR = 2;
+                        if (Convert.ToString(item["Redeemed"]) == "Single")
+                            isR = 1;
+                        WhereClause += " and a.burncount >= " + isR;
+                    }
+                    if (Convert.ToString(item["IsInvoiceValue"]) == "Yes")
+                    {
+                        IsTransaction = true;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["InvoiceValueFrm"])))
+                        {
+                            Criteria += "<br/>Invoice Value from : " + Convert.ToString(item["InvoiceValueFrm"]);
+                            if (!string.IsNullOrEmpty(txnQueryWhere))
+                                txnQueryWhere += " and c.InvoiceAmt >=" + Convert.ToString(item["InvoiceValueFrm"]);
+                            else
+                                txnQueryWhere += " c.InvoiceAmt >=" + Convert.ToString(item["InvoiceValueFrm"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["InvoiceValueTo"])))
+                        {
+                            Criteria += "<br/>Invoice Value to : " + Convert.ToString(item["InvoiceValueTo"]);
+                            if (!string.IsNullOrEmpty(txnQueryWhere))
+                                txnQueryWhere += " and c.InvoiceAmt <=" + Convert.ToString(item["InvoiceValueTo"]);
+                            else
+                                txnQueryWhere += " c.InvoiceAmt <=" + Convert.ToString(item["InvoiceValueTo"]);
+                        }
+                    }
+
+                    if (Convert.ToString(item["IsSpend"]) == "Yes")
+                    {
+                        if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])) && string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                        {
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
+                            {
+                                Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
+                                WhereClause += " and a.Spends > " + Convert.ToString(item["SpendMin"]);
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
+                            {
+                                Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
+                                WhereClause += " and a.Spends < " + Convert.ToString(item["SpendMax"]);
+                            }
+                        }
+                        else
+                        {
+                            IsTransaction = true;
+                            string havngClause = string.Empty;
+                            //Need to create Transaction Table query
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                    txnQueryWhere += " and c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                else
+                                    txnQueryWhere += " c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                            }
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                    txnQueryWhere += " and c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                else
+                                    txnQueryWhere += " c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                            }
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
+                            {
+                                Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMin"]);
+                                else
+                                    havngClause += " sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMin"]);
+
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
+                            {
+                                Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMax"]);
+                                else
+                                    havngClause += " sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMax"]);
+                            }
+                            txnQueryWhere = txnQueryWhere + " group by MobileNo having " + havngClause;
+                        }
+                    }
+                    if (Convert.ToString(item["IsTxnCount"]) == "Yes")
+                    {
+                        if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])) && string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                        {
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
+                            {
+                                Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
+                                WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
+                            {
+                                Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
+                                WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
+                            }
+                        }
+                        else
+                        {
+                            IsTransaction = true;
+                            string havngClause = string.Empty;
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                {
+                                    txnQueryWhere += " and c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                }
+                                else
+                                {
+                                    txnQueryWhere += " c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                {
+                                    txnQueryWhere += " and c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                }
+                                else
+                                {
+                                    txnQueryWhere += " c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
+                            {
+                                Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and count(c.MobileNo) >=" + Convert.ToString(item["CountMin"]);
+                                else
+                                    havngClause += " count(c.MobileNo) >=" + Convert.ToString(item["CountMin"]);
+
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
+                            {
+                                Criteria += "<br/>Spend max : " + Convert.ToString(item["CountMax"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and count(c.MobileNo) >=" + Convert.ToString(item["CountMax"]);
+                                else
+                                    havngClause += " count(c.MobileNo) >=" + Convert.ToString(item["CountMax"]);
+                            }
+                            txnQueryWhere = txnQueryWhere + " group by MobileNo having " + havngClause;
+                        }
+                    }
+
+                }
+                if (index == 3)
+                {
+                    if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
+                    {
+                        IsProduct = true;
+                        //This need to add
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategory"])))
+                        {
+                            Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.CategoryCode!=" + Convert.ToString(item["NPCategory"]);
+                            else
+                                productQueryWhere += " and b.CategoryCode!=" + Convert.ToString(item["NPCategory"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPSubCategory"])))
+                        {
+                            Criteria += "<br/>Never Purchase Sub Category : " + Convert.ToString(item["NPSubCategoryName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.SubCategoryCode!=" + Convert.ToString(item["NPSubCategory"]);
+                            else
+                                productQueryWhere += " and b.SubCategoryCode!=" + Convert.ToString(item["NPSubCategory"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPProduct"])))
+                        {
+                            Criteria += "<br/>Never Purchase Product Name : " + Convert.ToString(item["NPProductName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.ProductCode!=" + Convert.ToString(item["NPProduct"]);
+                            else
+                                productQueryWhere += " and b.ProductCode!=" + Convert.ToString(item["NPProduct"]);
+                        }
+                    }
+
+                    if (Convert.ToString(item["IsPurchased"]) == "Yes")
+                    {
+                        IsProduct = true;
+                        //This need to add
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PCategory"])))
+                        {
+                            Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.CategoryCode=" + Convert.ToString(item["PCategory"]);
+                            else
+                                productQueryWhere += " and b.CategoryCode=" + Convert.ToString(item["PCategory"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PSubCategory"])))
+                        {
+                            Criteria += "<br/>Purchase Sub Category : " + Convert.ToString(item["PSubCategoryName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.SubCategoryCode=" + Convert.ToString(item["PSubCategory"]);
+                            else
+                                productQueryWhere += " and b.SubCategoryCode=" + Convert.ToString(item["PSubCategory"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PProduct"])))
+                        {
+                            Criteria += "<br/>Purchase Product Name : " + Convert.ToString(item["PProductName"]);
+                            if (string.IsNullOrEmpty(productQueryWhere))
+                                productQueryWhere += " b.ProductCode=" + Convert.ToString(item["PProduct"]);
+                            else
+                                productQueryWhere += " and b.ProductCode=" + Convert.ToString(item["PProduct"]);
+                        }
+                    }
+                }
+                if (index == 4)
+                {
+                    if (Convert.ToString(item["IsBrands"]) == "Yes")
+                    {
+                        //This need to add
+                        Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
+                    }
+                    if (Convert.ToString(item["IsOutlet"]) == "Yes")
+                    {
+                        var outlets = (object[])item["Outlets"];
+                       
+                        Criteria += "<br/>Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
+                        
+                        foreach (var item1 in outlets)
+                        {
+                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (outletAll != "All")
+                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
+                        }
+
+                    }
+                    if (Convert.ToString(item["IsTOutlet"]) == "Yes")
+                    {
+                        var outlets = (object[])item["TransactingOutlets"];
+                        Criteria += "<br/>Transacting Outlet : ";
+                        string outletIds = string.Empty;
+                        string outletAll = string.Empty;
+                        foreach (var item1 in outlets)
+                        {
+                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll = "All";
+                            }
+                            else
+                            {
+                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(outletIds))
+                        {
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
+                            {
+                                //This need to add
+                                Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
+                                if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
+                                {
+                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
+                                }
+                                else
+                                {
+                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
+                                }
+                            }
+                            else
+                            {
+                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
+                            }
+                        }
+                    }
+                }
+                if (index == 5)
+                {
+
+                    if (Convert.ToString(item["IsGender"]) == "Yes")
+                    {
+                        Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
+                        if (Convert.ToString(item["Gender"]) == "Male")
+                            WhereClause += " and a.Gender = 'M' ";
+                        if (Convert.ToString(item["Gender"]) == "Female")
+                            WhereClause += " and a.Gender = 'F' ";
+                    }
+                    if (Convert.ToString(item["IsCity"]) == "Yes")
+                    {
+                        Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
+                        WhereClause += " and a.City = " + Convert.ToString(item["IsCity"]);
+                    }
+                    if (Convert.ToString(item["IsAge"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
+                        {
+                            Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
+                            WhereClause += " and a.Age >= " + Convert.ToString(item["AgeFrom"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
+                        {
+                            Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
+                            WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
+                        }
+                    }
+                }
+                index++;
+            }
+
+            txnQuery = txnQuery + " " + txnQueryWhere;
+            productQuery = productQuery + " " + productQueryWhere;
+            slicerQuery = slicerQuery + WhereClause;
+            
+            List<CustomerTypeReport> objcustomertypereport = new List<CustomerTypeReport>();
+            try
+            {
+                if (!IsCumulative)
+                    cumQuery = "";
+                if (!IsTransaction)
+                    txnQuery = "";
+                if (!IsProduct)
+                    productQuery = "";
+                using (var context = new CommonDBContext())
+                {
+                    context.Database.CommandTimeout = 300;
+                    objcustomertypereport = context.Database.SqlQuery<CustomerTypeReport>("sp_SlicerDataNew @pi_GroupId, @pi_Date, @pi_LoginId,@pi_DBName, @pi_IsCumulative, @pi_IsTransaction, @pi_IsProduct,@pi_CumuQuery, @pi_TxnQuery, @pi_ProductQuery,@pi_SlicerQuery,@pi_Parameters",
+                             new SqlParameter("@pi_GroupId", GroupId),
+                             new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                             new SqlParameter("@pi_LoginId", ""),
+                             new SqlParameter("@pi_DBName", DBName),
+                             new SqlParameter("@pi_IsCumulative", IsCumulative),
+                             new SqlParameter("@pi_IsTransaction", IsTransaction),
+                             new SqlParameter("@pi_IsProduct", IsProduct),
+                             new SqlParameter("@pi_CumuQuery", cumQuery),
+                             new SqlParameter("@pi_TxnQuery", txnQuery),
+                             new SqlParameter("@pi_ProductQuery", productQuery),
+                             new SqlParameter("@pi_SlicerQuery", slicerQuery),
+                             new SqlParameter("@pi_Parameters", columns)).ToList<CustomerTypeReport>();
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "errorofgetting data");
+            }
+            return objcustomertypereport;
+        }
+
+        public string SaveDataset(object[] objData, CustomerLoginDetail userDetails, string DSName, string connstr, string GroupId)
+        {
+            string status = "false";
+            string DBName = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+            }
+            
+            int index = 1;
+            string Criteria = string.Empty;
+            string slicerQuery = "select MobileNo from " + DBName + ".dbo.tblSmartSlicerMaster as a where  ";
+            string productQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnProDetailsMasterAndClone as b where ";
+            string txnQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone as c where ";
+            string txnQueryWhere = "";
+            string productQueryWhere = "";
+            string cumQuery = "";
+            string WhereClause = string.Empty;
+
+            bool IsCumulative = false;
+            bool IsProduct = false;
+            bool IsTransaction = false;
+            
+            foreach (Dictionary<string, object> item in objData)
+            {
+                if (index == 1)
+                {
+                    string FirstChk = Convert.ToString(item["FirstChk"]);
+                    string SecondChk = Convert.ToString(item["SecondChk"]);
+                    if (FirstChk == "Transacting")
+                    {
+                        Criteria += "Transacting";
+
+                        if (SecondChk == "All")
+                        {
+                            WhereClause += " a.TotalTxnCount > 0 ";
+                            Criteria += " : All";
+                        }
+                        if (SecondChk == "OnlyOnce")
+                        {
+                            Criteria += " : Only Once";
+                            Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
+                            WhereClause += " a.BackEndCustType = 'OnlyOnce' ";
+                            if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
+                            {
+                                if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
+                                {
+                                    WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'High' ";
+                                }
+                                if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
+                                {
+                                    WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'Low' ";
+                                }
+                                if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
+                                {
+                                    WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'High' ";
+                                }
+                                if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
+                                {
+                                    WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'Low' ";
+                                }
+                            }
+                        }
+                        if (SecondChk == "Inactive")
+                        {
+                            Criteria += " : Inactive";
+                            Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
+                            if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 30 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 120 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
+                            {
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
+                            {
+                                WhereClause += " a.LastTxnDate < cast(getdate() - 395 as nvarchar(20))";
+                            }
+                            if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
+                            {
+                                Criteria += " - Exclude Only Once";
+                                WhereClause += " and a.TotalTxnCount > 1 ";
+                            }
+                        }
+                        if (SecondChk == "Tier")
+                        {
+                            Criteria += "<br/>Tier : " + Convert.ToString(item["Tier"]);
+                            WhereClause += " and a.Tier = " + Convert.ToString(item["Tier"]);
+                        }
+                        if (SecondChk == "AIsegment")
+                        {
+                            Criteria += "<br/>AIsegment : " + Convert.ToString(item["AIsegment"]);
+                            //WhereClause += " and a.Tier = " + Convert.ToString(item["AIsegment"]);
+                        }
+                    }
+                    if (FirstChk == "NonTransacting")
+                    {
+                        Criteria += "Non Transacting";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
+                        {
+                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            WhereClause += " a.TotalTxnCount = 0";
+                            if (Convert.ToString(item["SecondChk"]) == "All")
+                            {
+
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "Enrolled")
+                            {
+                                WhereClause += " and a.EnrolledBy = 'WalkIn'";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "BulkUpload")
+                            {
+                                WhereClause += " and a.EnrolledBy = 'BulkUpload'";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "Referal")
+                            {
+                                WhereClause += " and a.EnrolledBy = 'DLCReferral'";
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "DLC")
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
+                                {
+                                    Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
+                                    WhereClause += " anda.EnrolledBy = " + Convert.ToString(item["QRSource"]);
+                                }
+                                else
+                                {
+                                    WhereClause += " and a.EnrolledBy = 'DLCGifting' and a.EnrolledBy = 'DLCWalkIn'";
+                                }
+                            }
+                        }
+                    }
+                    if (FirstChk == "MemberAcquition")
+                    {
+                        //This need to add
+                        Criteria += "Member Acquition";
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
+                        {
+                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
+                            Criteria += " - " + Convert.ToString(item["MAFinal"]);
+
+                            if (Convert.ToString(item["SecondChk"]) == "DLC")
+                            {
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
+                                {
+                                    Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
+                                }
+                            }
+                        }
+                    }
+
+                    if (FirstChk == "Cumulative")
+                    {
+                        string LSGT = string.Empty;
+                        string TxnCount = string.Empty;
+                        string Months = string.Empty;
+                        string Frequency = string.Empty;
+                        string Amount = string.Empty;
+                        string TxnDatetime = DateTime.Now.ToString("yyyy-MM-dd");
+                        string LSGTSymbol = string.Empty;
+
+                        //This need to add
+                        Criteria += " : Cumulative";
+                        if (Convert.ToString(item["SecondChk"]) != "No")
+                        {
+                            WhereClause += " a.TotalTxnCount > 0 ";
+                            IsCumulative = true;
+                            //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
+                            if (Convert.ToString(item["SecondChk"]) == "TxnCount")
+                            {
+                                Criteria += " : Transaction Count";
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["LSGT"]);
+                                    LSGT = Convert.ToString(item["LSGT"]);
+                                    if (LSGT == "Less than")
+                                        LSGTSymbol = "<=";
+                                    if (LSGT == "More than")
+                                        LSGTSymbol = ">=";
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["TxnCount"]);
+                                    TxnCount = Convert.ToString(item["TxnCount"]);
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Months"]);
+                                    Months = Convert.ToString(item["Months"]);
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Frequency"]);
+                                    Frequency = Convert.ToString(item["Frequency"]);
+                                }
+                                if (Frequency == "Per Month")
+                                {
+                                    cumQuery = "select distinct T.MobileNo from (select  MobileNo,count(*) as TxnCount,month(TxnDatetime) as Months,year(TxnDatetime) as years from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by Mobileno,month(TxnDatetime),year(TxnDatetime)) T where T.TxnCount" + LSGTSymbol + " " + TxnCount + " group by T.Mobileno having count(T.MobileNo) " + LSGTSymbol + " " + TxnCount + "";
+                                }
+                                else
+                                {
+                                    //cumQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >=dateadd(month,-" + Months + ",getdate()) group by MobileNo having  Count(MobileNo) " + LSGTSymbol + " " + TxnCount + ")";
+                                    cumQuery = "select distinct MobileNo from  " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by  MobileNo having  Count(MobileNo) " + LSGTSymbol + " " + TxnCount + "";
+                                }
+                            }
+                            if (Convert.ToString(item["SecondChk"]) == "CSpend")
+                            {
+                                Criteria += "- Spend";
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["LSGT"]);
+                                    LSGT = Convert.ToString(item["LSGT"]);
+                                    if (LSGT == "Less than")
+                                        LSGTSymbol = "<=";
+                                    if (LSGT == "More than")
+                                        LSGTSymbol = ">=";
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Amount"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Amount"]);
+                                    Amount = Convert.ToString(item["Amount"]);
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Months"]);
+                                    Months = Convert.ToString(item["Months"]);
+                                }
+                                if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
+                                {
+                                    Criteria += " - " + Convert.ToString(item["Frequency"]);
+                                    Frequency = Convert.ToString(item["Frequency"]);
+                                }
+                                if (Frequency == "Per Month")
+                                {
+                                    cumQuery = "select distinct T.MobileNo from (select  MobileNo,sum(InvoiceAmt) as Spends,month(TxnDatetime) as Months,year(TxnDatetime) as years from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by Mobileno,month(TxnDatetime),year(TxnDatetime)) T where T.Spends " + LSGTSymbol + " " + Amount + " group by T.Mobileno having count(T.MobileNo) " + LSGTSymbol + " " + Amount + "";
+                                }
+                                else
+                                {
+                                    //cumQuery = "select sum(T.MobileNo) from (select count(distinct MobileNo) as MobileNo,sum(InvoiceAmt) as Spend from View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >=dateadd(month,-" + Months + ",getdate()) group by MobileNo having  sum(InvoiceAmt) " + LSGTSymbol + " " + Amount + ") T";
+                                    cumQuery = "select distinct MobileNo from  " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone where cast(TxnDatetime as date) >= dateadd(month, -" + Months + ", getdate()) group by  MobileNo having  sum(InvoiceAmt) " + LSGTSymbol + " " + Amount + "";
                                 }
                             }
                         }
@@ -2981,29 +4336,43 @@ namespace BOTS_BL.Repository
                         else
                         {
                             IsTransaction = true;
+                            string havngClause = string.Empty;
                             //Need to create Transaction Table query
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                    txnQueryWhere += " and c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                else
+                                    txnQueryWhere += " c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                            }
+
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                    txnQueryWhere += " and c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                else
+                                    txnQueryWhere += " c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                            }
+
                             if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
                             {
                                 Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
-                                if (!string.IsNullOrEmpty(txnQueryWhere))
-                                    txnQueryWhere += " and sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMin"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMin"]);
                                 else
-                                    txnQueryWhere += " sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMin"]);
+                                    havngClause += " sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMin"]);
 
                             }
                             if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
                             {
                                 Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
-                                if (!string.IsNullOrEmpty(txnQueryWhere))
-                                    txnQueryWhere += " and sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMax"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMax"]);
                                 else
-                                    txnQueryWhere += " sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMax"]);
+                                    havngClause += " sum(c.InvoiceAmt) >=" + Convert.ToString(item["SpendMax"]);
                             }
-                            if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])))
-                                txnQueryWhere += " and c.TxnDatetime >= " + Convert.ToString(item["CountSpendDTFrm"]);
-
-                            if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
-                                txnQueryWhere += " and c.TxnDatetime <= " + Convert.ToString(item["CountSpendDTTo"]);
+                            txnQueryWhere = txnQueryWhere + " group by MobileNo having " + havngClause;
                         }
                     }
                     if (Convert.ToString(item["IsTxnCount"]) == "Yes")
@@ -3024,41 +4393,47 @@ namespace BOTS_BL.Repository
                         else
                         {
                             IsTransaction = true;
-                            //Need to create Transaction Table query
+                            string havngClause = string.Empty;
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                {
+                                    txnQueryWhere += " and c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                }
+                                else
+                                {
+                                    txnQueryWhere += " c.TxnDatetime >= '" + Convert.ToString(item["CountSpendDTFrm"]) + "'";
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
+                            {
+                                if (!string.IsNullOrEmpty(txnQueryWhere))
+                                {
+                                    txnQueryWhere += " and c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                }
+                                else
+                                {
+                                    txnQueryWhere += " c.TxnDatetime <= '" + Convert.ToString(item["CountSpendDTTo"]) + "'";
+                                }
+                            }
                             if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
                             {
                                 Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
-                                WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and count(c.MobileNo) >=" + Convert.ToString(item["CountMin"]);
+                                else
+                                    havngClause += " count(c.MobileNo) >=" + Convert.ToString(item["CountMin"]);
+
                             }
                             if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
                             {
-                                Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
-                                WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
-                            }
-
-                            //Need to create Transaction Table query
-                            if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
-                            {
-                                Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
-                                if (!string.IsNullOrEmpty(txnQueryWhere))
-                                    txnQueryWhere += " and count(c.MobileNo) >=" + Convert.ToString(item["CountMin"]);
+                                Criteria += "<br/>Spend max : " + Convert.ToString(item["CountMax"]);
+                                if (!string.IsNullOrEmpty(havngClause))
+                                    havngClause += " and count(c.MobileNo) >=" + Convert.ToString(item["CountMax"]);
                                 else
-                                    txnQueryWhere += " count(c.MobileNo) >=" + Convert.ToString(item["CountMin"]);
-
+                                    havngClause += " count(c.MobileNo) >=" + Convert.ToString(item["CountMax"]);
                             }
-                            if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
-                            {
-                                Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
-                                if (!string.IsNullOrEmpty(txnQueryWhere))
-                                    txnQueryWhere += " and count(c.MobileNo) >=" + Convert.ToString(item["SpendMax"]);
-                                else
-                                    txnQueryWhere += " count(c.MobileNo) >=" + Convert.ToString(item["SpendMax"]);
-                            }
-                            if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])))
-                                txnQueryWhere += " and c.TxnDatetime >= " + Convert.ToString(item["CountSpendDTFrm"]);
-
-                            if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
-                                txnQueryWhere += " and c.TxnDatetime <= " + Convert.ToString(item["CountSpendDTTo"]);
+                            txnQueryWhere = txnQueryWhere + " group by MobileNo having " + havngClause;
                         }
                     }
                     if (Convert.ToString(item["IsPointBalance"]) == "Yes")
@@ -3076,7 +4451,7 @@ namespace BOTS_BL.Repository
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
                     {
-                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["IsRedeemed"]);
+                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["Redeemed"]);
                         int isR = 0;
                         if (Convert.ToString(item["Redeemed"]) == "Multiple")
                             isR = 2;
@@ -3177,9 +4552,12 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["Outlets"];
+                        var outlets1 = (object[])item["OutletIds"];
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
+                        string outletIds1 = string.Empty;
+                        string outletAll1 = string.Empty;
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
@@ -3192,20 +4570,35 @@ namespace BOTS_BL.Repository
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
                         }
-                        if (!string.IsNullOrEmpty(outletIds))
+                        foreach (var item1 in outlets1)
                         {
-                            outletIds = outletIds.Remove(outletIds.Length - 1);
-                            if (outletAll != "All")
-                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
+                           
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll1 = "All";
+                            }
+                            else
+                            {
+                                outletIds1 += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(outletIds1))
+                        {
+                            outletIds1 = outletIds1.Remove(outletIds1.Length - 1);
+                            if (outletAll1 != "All")
+                                WhereClause += " and a.EnrolledOutletId in (" + outletIds1 + ")";
                         }
 
                     }
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["TransactingOutlets"];
+                        var outlets1 = (object[])item["TransactingOutletIds"];
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
+                        string outletIds1 = string.Empty;
+                        string outletAll1 = string.Empty;
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
@@ -3218,25 +4611,38 @@ namespace BOTS_BL.Repository
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
                         }
-                        if (!string.IsNullOrEmpty(outletIds))
+                        Criteria = Criteria.Remove(1);
+                        foreach (var item1 in outlets1)
                         {
-                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            
+                            if (Convert.ToString(item1) == "0")
+                            {
+                                outletAll1 = "All";
+                            }
+                            else
+                            {
+                                outletIds1 += Convert.ToString(Convert.ToString(item1)) + ",";
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(outletIds1))
+                        {
+                            outletIds1 = outletIds1.Remove(outletIds1.Length - 1);
                             if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
                             {
                                 //This need to add
                                 Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
                                 if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
                                 {
-                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
+                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds1 + ")";
                                 }
                                 else
                                 {
-                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
+                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds1 + ") or a.LastTxnOutletId in (" + outletIds1 + "))";
                                 }
                             }
                             else
                             {
-                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
+                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds1 + ")";
                             }
                         }
                     }
@@ -3273,903 +4679,17 @@ namespace BOTS_BL.Repository
                 }
                 index++;
             }
-
             txnQuery = txnQuery + " " + txnQueryWhere;
             productQuery = productQuery + " " + productQueryWhere;
             slicerQuery = slicerQuery + WhereClause;
-            int totalCount = 0;
-            try
-            {
-                using (var context = new BOTSDBContext(connstr))
-                {
-                    count = context.Database.SqlQuery<int>(slicerQuery).FirstOrDefault();
-                    totalCount = context.tblSmartSlicerMasters.Count();
 
-                    count = context.Database.SqlQuery<int>("sp_SlicerCount @pi_GroupId, @pi_Date, @pi_IsCumulative, @pi_IsTransaction, @pi_IsProduct, @pi_TxnQuery, @pi_ProductQuery, @pi_CumuQuery,@pi_SlicerQuery",
-                            new SqlParameter("@pi_GroupId", GroupId),
-                            new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                            new SqlParameter("@pi_IsCumulative", IsCumulative),
-                            new SqlParameter("@pi_IsTransaction", IsTransaction),
-                            new SqlParameter("@pi_IsProduct", IsProduct),
-                            new SqlParameter("@pi_TxnQuery", txnQuery),
-                            new SqlParameter("@pi_ProductQuery", productQuery),
-                            new SqlParameter("@pi_CumuQuery", cumQuery),
-                            new SqlParameter("@pi_SlicerQuery", slicerQuery)).FirstOrDefault();
+            if (!IsCumulative)
+                cumQuery = "";
+            if (!IsTransaction)
+                txnQuery = "";
+            if (!IsProduct)
+                productQuery = "";
 
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "errorofgetting data");
-            }
-
-            int[] lstCount = new int[2];
-            lstCount[0] = count;
-            lstCount[1] = totalCount;
-            return lstCount;
-        }
-
-        public List<CustomerTypeReport> GetSSFilterReport(object[] objData, string columns, string loginId, string connstr)
-        {
-            int index = 1;
-            string Criteria = string.Empty;
-            string query = "select " + columns + " from tblSmartSlicerMaster as a where ";
-            string WhereClause = string.Empty;
-
-            foreach (Dictionary<string, object> item in objData)
-            {
-                if (index == 1)
-                {
-                    string FirstChk = Convert.ToString(item["FirstChk"]);
-                    string SecondChk = Convert.ToString(item["SecondChk"]);
-                    if (FirstChk == "Transacting")
-                    {
-                        Criteria += "Transacting";
-
-                        if (SecondChk == "All")
-                        {
-                            WhereClause += " a.TotalTxnCount > 0 ";
-                            Criteria += " : All";
-                        }
-                        if (SecondChk == "OnlyOnce")
-                        {
-                            Criteria += " : Only Once";
-                            Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
-                            WhereClause += " a.BackEndCustType = 'OnlyOnce' ";
-                            if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
-                            {
-                                try
-                                {
-                                    using (var context = new BOTSDBContext(connstr))
-                                    {
-                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
-                                        {
-                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'High' ";
-                                        }
-                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
-                                        {
-                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'Low' ";
-                                        }
-                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
-                                        {
-                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'High' ";
-                                        }
-                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
-                                        {
-                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'Low' ";
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    newexception.AddException(ex, "errorofgetting data");
-                                }
-                            }
-                        }
-                        if (SecondChk == "Inactive")
-                        {
-                            Criteria += " : Inactive";
-                            Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
-                            if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
-                            {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 30 as nvarchar(20))";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
-                            {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
-                            {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 120 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
-                            {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
-                            {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
-                            {
-                                WhereClause += " a.LastTxnDate < cast(getdate() - 395 as nvarchar(20))";
-                            }
-                            if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
-                            {
-                                Criteria += " - Exclude Only Once";
-                                WhereClause += " and a.TotalTxnCount > 1 ";
-                            }
-                        }
-                        if (SecondChk == "Cumulative")
-                        {
-                            //This need to add
-                            Criteria += " : Cumulative";
-                            if (Convert.ToString(item["SecondChkCumu"]) != "No")
-                            {
-                                //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
-                                if (Convert.ToString(item["SecondChkCumu"]) == "TxnCount")
-                                {
-                                    Criteria += " : Transaction Count";
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Months"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
-                                    }
-                                }
-                                if (Convert.ToString(item["SecondChkCumu"]) == "CSpend")
-                                {
-                                    Criteria += "- Spend";
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Months"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (FirstChk == "NonTransacting")
-                    {
-                        Criteria += "Non Transacting";
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
-                        {
-                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
-                            if (Convert.ToString(item["SecondChk"]) == "All")
-                            {
-                                WhereClause += " a.TotalTxnCount = 0";
-                            }
-                            if (Convert.ToString(item["SecondChk"]) == "Enrolled")
-                            {
-                                WhereClause += " a.TotalTxnCount = 0";
-                            }
-                            if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
-                                {
-                                    Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
-                                }
-                            }
-                        }
-                    }
-                    if (FirstChk == "MemberAcquition")
-                    {
-                        //This need to add
-                        Criteria += "Member Acquition";
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
-                        {
-                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
-                            Criteria += " - " + Convert.ToString(item["MAFinal"]);
-
-                            if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
-                                {
-                                    Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (index == 2)
-                {
-                    if (Convert.ToString(item["IsAvgTicket"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketFrm"])))
-                        {
-                            Criteria += "<br/>Avgerage ticket size from : " + Convert.ToString(item["AvgTicketFrm"]);
-                            WhereClause += " and a.AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketTo"])))
-                        {
-                            Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
-                            WhereClause += " and a.AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
-                        {
-                            Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
-                            WhereClause += " and a.EnrolledDate > '" + Convert.ToString(item["Enrollfromdt"] + "'");
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
-                        {
-                            Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
-                            WhereClause += " and a.EnrolledDate < '" + Convert.ToString(item["Enrolltodt"] + "'");
-                        }
-                    }
-                    if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
-                    {
-                        Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                        WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
-                    }
-                    if (Convert.ToString(item["IsSpend"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
-                        {
-                            Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
-                            WhereClause += " and a.Spends > " + Convert.ToString(item["SpendMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
-                        {
-                            Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
-                            WhereClause += " and a.Spends < " + Convert.ToString(item["SpendMax"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsTxnCount"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
-                        {
-                            Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
-                            WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
-                        {
-                            Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
-                            WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
-                        {
-                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
-                        {
-                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
-                    {
-                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["Redeemed"]);
-
-                        if (Convert.ToString(item["IsRedeemed"]) == "Yes")
-                        {
-                            WhereClause += " and a.BurnCount >= 1 ";
-                        }
-                        if (Convert.ToString(item["IsRedeemed"]) == "Multiple")
-                        {
-                            WhereClause += " and a.BurnCount > 1 ";
-                        }
-                        if (Convert.ToString(item["IsRedeemed"]) == "No")
-                        {
-                            WhereClause += " and a.BurnCount = 0 ";
-                        }
-
-                    }
-                }
-                if (index == 3)
-                {
-                    if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
-                    {
-                        //This need to add
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategoryName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPSubCategoryName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Sub Category : " + Convert.ToString(item["NPSubCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPProductName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Product Name : " + Convert.ToString(item["NPProductName"]);
-                        }
-                    }
-
-                    if (Convert.ToString(item["IsPurchased"]) == "Yes")
-                    {
-                        //This need to add
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PCategoryName"])))
-                        {
-                            Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PSubCategoryName"])))
-                        {
-                            Criteria += "<br/>Purchase Sub Category : " + Convert.ToString(item["PSubCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PProductName"])))
-                        {
-                            Criteria += "<br/>Purchase Product Name : " + Convert.ToString(item["PProductName"]);
-                        }
-                    }
-                }
-                if (index == 4)
-                {
-                    if (Convert.ToString(item["IsBrands"]) == "Yes")
-                    {
-                        //This need to add
-                        Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
-                    }
-                    if (Convert.ToString(item["IsOutlet"]) == "Yes")
-                    {
-                        var outlets = (object[])item["Outlets"];
-                        Criteria += "<br/>Outlet : ";
-                        string outletIds = string.Empty;
-                        string outletAll = string.Empty;
-                        foreach (var item1 in outlets)
-                        {
-                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                            if (Convert.ToString(item1) == "0")
-                            {
-                                outletAll = "All";
-                            }
-                            else
-                            {
-                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(outletIds))
-                        {
-                            outletIds = outletIds.Remove(outletIds.Length - 1);
-                            if (outletAll != "All")
-                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
-                        }
-
-                    }
-                    if (Convert.ToString(item["IsTOutlet"]) == "Yes")
-                    {
-                        var outlets = (object[])item["TransactingOutlets"];
-                        Criteria += "<br/>Transacting Outlet : ";
-                        string outletIds = string.Empty;
-                        string outletAll = string.Empty;
-                        foreach (var item1 in outlets)
-                        {
-                            Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                            if (Convert.ToString(item1) == "0")
-                            {
-                                outletAll = "All";
-                            }
-                            else
-                            {
-                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(outletIds))
-                        {
-                            outletIds = outletIds.Remove(outletIds.Length - 1);
-                            if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
-                            {
-                                //This need to add
-                                Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
-                                if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
-                                {
-                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
-                                }
-                                else
-                                {
-                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
-                                }
-                            }
-                            else
-                            {
-                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
-                            }
-                        }
-                    }
-                }
-                if (index == 5)
-                {
-                    if (Convert.ToString(item["IsTier"]) == "Yes")
-                    {
-                        Criteria += "<br/>Tier : " + Convert.ToString(item["IsTier"]);
-                        WhereClause += " and a.Tier = " + Convert.ToString(item["IsTier"]);
-                    }
-                    if (Convert.ToString(item["IsGender"]) == "Yes")
-                    {
-                        Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
-                        if (Convert.ToString(item["Gender"]) == "Male")
-                            WhereClause += " and a.Gender = 'M' ";
-                        if (Convert.ToString(item["Gender"]) == "Female")
-                            WhereClause += " and a.Gender = 'F' ";
-                    }
-                    if (Convert.ToString(item["IsCity"]) == "Yes")
-                    {
-                        Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
-                        WhereClause += " and a.City = " + Convert.ToString(item["IsCity"]);
-                    }
-                    if (Convert.ToString(item["IsAge"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
-                        {
-                            Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
-                            WhereClause += " and a.Age >= " + Convert.ToString(item["AgeFrom"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
-                        {
-                            Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
-                            WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
-                        }
-                    }
-                }
-                index++;
-            }
-
-            query = query + WhereClause;
-            List<CustomerTypeReport> objcustomertypereport = new List<CustomerTypeReport>();
-            try
-            {
-                using (var context = new BOTSDBContext(connstr))
-                {
-                    objcustomertypereport = context.Database.SqlQuery<CustomerTypeReport>(query).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "errorofgetting data");
-            }
-
-
-            return objcustomertypereport;
-        }
-
-        public string SaveDataset(object[] objData, CustomerLoginDetail userDetails, string DSName, string connstr)
-        {
-            string status = "false";
-            string Criteria = string.Empty;
-            string query = "select count(*) from tblSmartSlicerMaster as a where ";
-            string WhereClause = string.Empty;
-            int index = 1;
-            foreach (Dictionary<string, object> item in objData)
-            {
-                if (index == 1)
-                {
-                    string FirstChk = Convert.ToString(item["FirstChk"]);
-                    string SecondChk = Convert.ToString(item["SecondChk"]);
-                    if (FirstChk == "Transacting")
-                    {
-                        Criteria += "Transacting";
-
-                        if (SecondChk == "All")
-                        {
-                            WhereClause += " a.TotalTxnCount > 0 ";
-                            Criteria += " : All";
-                        }
-                        if (SecondChk == "OnlyOnce")
-                        {
-                            Criteria += " : Only Once";
-                            Criteria += " - " + Convert.ToString(item["OnlyOnceSegment"]);
-                            WhereClause += " a.BackEndCustType = 'OnlyOnce' ";
-                            if (Convert.ToString(item["OnlyOnceSegment"]) != "All")
-                            {
-                                try
-                                {
-                                    using (var context = new BOTSDBContext(connstr))
-                                    {
-                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Long time")
-                                        {
-                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'High' ";
-                                        }
-                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Long time")
-                                        {
-                                            WhereClause += "and a.VisitStatus= 'LongTime' and a.SpendStatusOnlyOnce = 'Low' ";
-                                        }
-                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "High Spend Recent")
-                                        {
-                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'High' ";
-                                        }
-                                        if (Convert.ToString(item["OnlyOnceSegment"]) == "Low Spend Recent")
-                                        {
-                                            WhereClause += "and a.VisitStatus= 'RecentTime' and a.SpendStatusOnlyOnce = 'Low' ";
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    newexception.AddException(ex, "errorofgetting data");
-                                }
-                            }
-                        }
-                        if (SecondChk == "Inactive")
-                        {
-                            Criteria += " : Inactive";
-                            Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
-                            if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
-                            {
-                                WhereClause += " a.InActiveDays <= 30 ";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
-                            {
-                                WhereClause += " a.InActiveDays >= 31 and  a.InActiveDays <= 60";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
-                            {
-                                WhereClause += " a.InActiveDays >= 61 and  a.InActiveDays <= 90";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
-                            {
-                                WhereClause += " a.InActiveDays >= 91 and  a.InActiveDays <= 180";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
-                            {
-                                WhereClause += " a.InActiveDays >= 181 and  a.InActiveDays <= 365";
-                            }
-                            if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
-                            {
-                                WhereClause += " a.InActiveDays > 365";
-                            }
-                            if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
-                            {
-                                Criteria += " - Exclude Only Once";
-                                WhereClause += " and a.TotalTxnCount > 1 ";
-                            }
-                        }
-                        if (SecondChk == "Cumulative")
-                        {
-                            //This need to add
-                            Criteria += " : Cumulative";
-                            if (Convert.ToString(item["SecondChkCumu"]) != "No")
-                            {
-                                //Criteria += "<br/>" + Convert.ToString(item["SecondChkCumu"]);
-                                if (Convert.ToString(item["SecondChkCumu"]) == "TxnCount")
-                                {
-                                    Criteria += " : Transaction Count";
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Months"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
-                                    }
-                                }
-                                if (Convert.ToString(item["SecondChkCumu"]) == "CSpend")
-                                {
-                                    Criteria += "- Spend";
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["LSGT"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["LSGT"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["TxnCount"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["TxnCount"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Months"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Months"]);
-                                    }
-                                    if (!string.IsNullOrEmpty(Convert.ToString(item["Frequency"])))
-                                    {
-                                        Criteria += " - " + Convert.ToString(item["Frequency"]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (FirstChk == "NonTransacting")
-                    {
-                        Criteria += "Non Transacting";
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
-                        {
-                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
-                            if (Convert.ToString(item["SecondChk"]) == "All")
-                            {
-                                WhereClause += " a.TotalTxnCount = 0";
-                            }
-                            if (Convert.ToString(item["SecondChk"]) == "Enrolled")
-                            {
-                                WhereClause += " a.TotalTxnCount = 0";
-                            }
-                            if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
-                                {
-                                    Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
-                                }
-                            }
-                        }
-                    }
-                    if (FirstChk == "MemberAcquition")
-                    {
-                        //This need to add
-                        Criteria += "Member Acquition";
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
-                        {
-                            Criteria += " - " + Convert.ToString(item["SecondChk"]);
-                            Criteria += " - " + Convert.ToString(item["MAFinal"]);
-
-                            if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {
-                                if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
-                                {
-                                    Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (index == 2)
-                {
-                    if (Convert.ToString(item["IsAvgTicket"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketFrm"])))
-                        {
-                            Criteria += "<br/>Avgerage ticket size from : " + Convert.ToString(item["AvgTicketFrm"]);
-                            WhereClause += " and a.AvgTicketSize > " + Convert.ToString(item["AvgTicketFrm"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AvgTicketTo"])))
-                        {
-                            Criteria += "<br/>Avgerage ticket size to : " + Convert.ToString(item["AvgTicketTo"]);
-                            WhereClause += " and a.AvgTicketSize < " + Convert.ToString(item["AvgTicketTo"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsEnrolledRange"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrollfromdt"])))
-                        {
-                            Criteria += "<br/>Enrolled date from : " + Convert.ToString(item["Enrollfromdt"]);
-                            WhereClause += " and a.EnrolledDate > " + Convert.ToString(item["Enrollfromdt"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["Enrolltodt"])))
-                        {
-                            Criteria += "<br/>Enrolled date to : " + Convert.ToString(item["Enrolltodt"]);
-                            WhereClause += " and a.EnrolledDate < " + Convert.ToString(item["Enrolltodt"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsInactiveSince"]) == "Yes")
-                    {
-                        Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
-                        WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
-                    }
-                    if (Convert.ToString(item["IsSpend"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMin"])))
-                        {
-                            Criteria += "<br/>Spend min : " + Convert.ToString(item["SpendMin"]);
-                            WhereClause += " and a.Spends > " + Convert.ToString(item["SpendMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["SpendMax"])))
-                        {
-                            Criteria += "<br/>Spend max : " + Convert.ToString(item["SpendMax"]);
-                            WhereClause += " and a.Spends < " + Convert.ToString(item["SpendMax"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsTxnCount"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
-                        {
-                            Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
-                            WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
-                        {
-                            Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
-                            WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
-                        }
-                    }
-                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
-                        {
-                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
-                        {
-                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["IsRedeemed"])))
-                    {
-                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["IsRedeemed"]);
-                        int isR = 0;
-                        if (Convert.ToString(item["IsRedeemed"]) == "Yes")
-                            isR = 1;
-                        WhereClause += " and a.RedeemStatus < " + isR;
-                    }
-                }
-                if (index == 3)
-                {
-                    if (Convert.ToString(item["IsNeverPurchased"]) == "Yes")
-                    {
-                        //This need to add
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPCategoryName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Category : " + Convert.ToString(item["NPCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPSubCategoryName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Sub Category : " + Convert.ToString(item["NPSubCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["NPProductName"])))
-                        {
-                            Criteria += "<br/>Never Purchase Product Name : " + Convert.ToString(item["NPProductName"]);
-                        }
-                    }
-
-                    if (Convert.ToString(item["IsPurchased"]) == "Yes")
-                    {
-                        //This need to add
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PCategoryName"])))
-                        {
-                            Criteria += "<br/>Purchase Category : " + Convert.ToString(item["PCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PSubCategoryName"])))
-                        {
-                            Criteria += "<br/>Purchase Sub Category : " + Convert.ToString(item["PSubCategoryName"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PProductName"])))
-                        {
-                            Criteria += "<br/>Purchase Product Name : " + Convert.ToString(item["PProductName"]);
-                        }
-                    }
-                }
-                if (index == 4)
-                {
-                    if (Convert.ToString(item["IsBrands"]) == "Yes")
-                    {
-                        //This need to add
-                        Criteria += "<br/>Zone : " + Convert.ToString(item["Zone"]);
-                    }
-                    if (Convert.ToString(item["IsOutlet"]) == "Yes")
-                    {
-                        var outlets = (object[])item["Outlets"];
-                        var outletsIds = (object[])item["OutletIds"];
-                        Criteria += "<br/>Outlet : ";
-                        string outletIds = string.Empty;
-                        string outletAll = string.Empty;
-                        foreach (var item1 in outlets)
-                        {
-                            Criteria += Convert.ToString(Convert.ToString(item1)) + ",";
-                        }
-                        Criteria = Criteria.Remove(Criteria.Length - 1);
-                        foreach (var item1 in outletsIds)
-                        {
-                            ////Criteria += ", " + Convert.ToString(Convert.ToString(item1));
-                            if (Convert.ToString(item1) == "0")
-                            {
-                                outletAll = "All";
-                            }
-                            else
-                            {
-                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(outletIds))
-                        {
-                            outletIds = outletIds.Remove(outletIds.Length - 1);
-                            if (outletAll != "All")
-                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
-                        }
-
-                    }
-                    if (Convert.ToString(item["IsTOutlet"]) == "Yes")
-                    {
-                        var outlets = (object[])item["TransactingOutlets"];
-                        var outletsIds = (object[])item["TransactingOutletIds"];
-                        Criteria += "<br/>Transacting Outlet : ";
-                        string outletIds = string.Empty;
-                        string outletAll = string.Empty;
-                        foreach (var item1 in outlets)
-                        {
-                            Criteria += Convert.ToString(Convert.ToString(item1)) + ",";
-                        }
-                        Criteria = Criteria.Remove(Criteria.Length - 1);
-                        foreach (var item1 in outletsIds)
-                        {
-                            if (Convert.ToString(item1) == "0")
-                            {
-                                outletAll = "All";
-                            }
-                            else
-                            {
-                                outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(outletIds))
-                        {
-                            outletIds = outletIds.Remove(outletIds.Length - 1);
-                            if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
-                            {
-                                //This need to add
-                                Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
-                                if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
-                                {
-                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
-                                }
-                                else
-                                {
-                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
-                                }
-                            }
-                            else
-                            {
-                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
-                            }
-                        }
-                    }
-                }
-                if (index == 5)
-                {
-                    if (Convert.ToString(item["IsTier"]) == "Yes")
-                    {
-                        Criteria += "<br/>Tier : " + Convert.ToString(item["IsTier"]);
-                        WhereClause += " and a.Tier = " + Convert.ToString(item["IsTier"]);
-                    }
-                    if (Convert.ToString(item["IsGender"]) == "Yes")
-                    {
-                        Criteria += "<br/>Gender : " + Convert.ToString(item["IsGender"]);
-                        if (Convert.ToString(item["Gender"]) == "Male")
-                            WhereClause += " and a.Gender = 'M' ";
-                        if (Convert.ToString(item["Gender"]) == "Female")
-                            WhereClause += " and a.Gender = 'F' ";
-                    }
-                    if (Convert.ToString(item["IsCity"]) == "Yes")
-                    {
-                        Criteria += "<br/>City : " + Convert.ToString(item["IsCity"]);
-                        WhereClause += " and a.City = " + Convert.ToString(item["IsCity"]);
-                    }
-                    if (Convert.ToString(item["IsAge"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeFrom"])))
-                        {
-                            Criteria += "<br/>Age Min : " + Convert.ToString(item["AgeFrom"]);
-                            WhereClause += " and a.Age >= " + Convert.ToString(item["AgeFrom"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["AgeTo"])))
-                        {
-                            Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
-                            WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
-                        }
-                    }
-                }
-                index++;
-            }
-            query = query + WhereClause;
             try
             {
                 using (var context = new BOTSDBContext(userDetails.connectionString))
@@ -4177,7 +4697,10 @@ namespace BOTS_BL.Repository
                     tblCRDataset objDataset = new tblCRDataset();
                     objDataset.DSName = DSName;
                     objDataset.DSCriteria = Criteria;
-                    objDataset.DSCriteriaForQuery = query;
+                    objDataset.DSCriteriaForQuery = slicerQuery;
+                    objDataset.DSTxnQuery = txnQuery;
+                    objDataset.DSProdQuery = productQuery;
+                    objDataset.DSCumuQuery = cumQuery;
                     objDataset.AddedBy = userDetails.LoginId;
                     objDataset.AddedDate = DateTime.Now;
                     context.tblCRDatasets.Add(objDataset);
@@ -4191,25 +4714,115 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-        public int[] GetSavedDSCount(string DSId, string connstr)
+        public int[] GetSavedDSCount(string DSId, string connstr, string GroupId)
         {
+            string DBName = string.Empty;
+            bool IsCumulative = false;
+            bool IsProduct = false;
+            bool IsTransaction = false;
+            
+            using (var context = new CommonDBContext())
+            {
+                DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+            }
             int[] lstCount = new int[2];
+            tblCRDataset DSDetails = new tblCRDataset();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
                 {
                     var id = Convert.ToInt32(DSId);
-                    var query = context.tblCRDatasets.Where(x => x.DSId == id).Select(y => y.DSCriteriaForQuery).FirstOrDefault();
+                    DSDetails = context.tblCRDatasets.Where(x => x.DSId == id).FirstOrDefault();
+                }
+                using (var context = new CommonDBContext())
+                {
+                    if (!string.IsNullOrEmpty(DSDetails.DSCumuQuery))
+                        IsCumulative = true;
+                    if (!string.IsNullOrEmpty(DSDetails.DSTxnQuery))
+                        IsTransaction = true;
+                    if (!string.IsNullOrEmpty(DSDetails.DSProdQuery))
+                        IsProduct = true;
 
-                    lstCount[0] = context.Database.SqlQuery<int>(query).FirstOrDefault();
+                    context.Database.CommandTimeout = 300;
+                    var objCustCount = context.Database.SqlQuery<SlicerCount>("sp_SlicerCountNew @pi_GroupId, @pi_Date, @pi_LoginId,@pi_DBName, @pi_IsCumulative, @pi_IsTransaction, @pi_IsProduct,@pi_CumuQuery, @pi_TxnQuery, @pi_ProductQuery,@pi_SlicerQuery",
+                             new SqlParameter("@pi_GroupId", GroupId),
+                             new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                             new SqlParameter("@pi_LoginId", ""),
+                             new SqlParameter("@pi_DBName", DBName),
+                             new SqlParameter("@pi_IsCumulative", IsCumulative),
+                             new SqlParameter("@pi_IsTransaction", IsTransaction),
+                             new SqlParameter("@pi_IsProduct", IsProduct),
+                             new SqlParameter("@pi_CumuQuery", DSDetails.DSCumuQuery),
+                             new SqlParameter("@pi_TxnQuery", DSDetails.DSTxnQuery),
+                             new SqlParameter("@pi_ProductQuery", DSDetails.DSProdQuery),
+                             new SqlParameter("@pi_SlicerQuery", DSDetails.DSCriteriaForQuery)).FirstOrDefault();
+                    if (objCustCount != null)
+                        lstCount[0] = objCustCount.CustCount;
+
+                }
+                using (var context = new BOTSDBContext(connstr))
+                {
                     lstCount[1] = context.tblSmartSlicerMasters.Count();
                 }
+                
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "errorofgetting data");
             }
             return lstCount;
+        }
+        public List<CustomerTypeReport> GetSSFilterReportFromDS(string DSId, string columns, string loginId, string connstr, string GroupId)
+        {
+            string DBName = string.Empty;
+            bool IsCumulative = false;
+            bool IsProduct = false;
+            bool IsTransaction = false;
+            List<CustomerTypeReport> objcustomertypereport = new List<CustomerTypeReport>();
+            using (var context = new CommonDBContext())
+            {
+                DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+            }
+            
+            tblCRDataset DSDetails = new tblCRDataset();
+            try
+            {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    var id = Convert.ToInt32(DSId);
+                    DSDetails = context.tblCRDatasets.Where(x => x.DSId == id).FirstOrDefault();
+                }
+                using (var context = new CommonDBContext())
+                {
+                    if (!string.IsNullOrEmpty(DSDetails.DSCumuQuery))
+                        IsCumulative = true;
+                    if (!string.IsNullOrEmpty(DSDetails.DSTxnQuery))
+                        IsTransaction = true;
+                    if (!string.IsNullOrEmpty(DSDetails.DSProdQuery))
+                        IsProduct = true;
+
+                    context.Database.CommandTimeout = 300;
+                    objcustomertypereport = context.Database.SqlQuery<CustomerTypeReport>("sp_SlicerDataNew @pi_GroupId, @pi_Date, @pi_LoginId,@pi_DBName, @pi_IsCumulative, @pi_IsTransaction, @pi_IsProduct,@pi_CumuQuery, @pi_TxnQuery, @pi_ProductQuery,@pi_SlicerQuery,@pi_Parameters",
+                             new SqlParameter("@pi_GroupId", GroupId),
+                             new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                             new SqlParameter("@pi_LoginId", ""),
+                             new SqlParameter("@pi_DBName", DBName),
+                             new SqlParameter("@pi_IsCumulative", IsCumulative),
+                             new SqlParameter("@pi_IsTransaction", IsTransaction),
+                             new SqlParameter("@pi_IsProduct", IsProduct),
+                             new SqlParameter("@pi_CumuQuery", DSDetails.DSCumuQuery),
+                             new SqlParameter("@pi_TxnQuery", DSDetails.DSTxnQuery),
+                             new SqlParameter("@pi_ProductQuery", DSDetails.DSProdQuery),
+                             new SqlParameter("@pi_SlicerQuery", DSDetails.DSCriteriaForQuery),
+                             new SqlParameter("@pi_Parameters", columns)).ToList<CustomerTypeReport>();                   
+
+                }                
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "errorofgetting data");
+            }
+            return objcustomertypereport;
         }
 
         public List<tblCRDataset> GetCRDataset(string connectionString)
@@ -4290,32 +4903,13 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        public List<CustomerTypeReport> GetSSFilterReportFromDS(string DSId, string columns, string loginId, string connstr)
-        {
-            string query = "";
-            using (var context = new BOTSDBContext(connstr))
-            {
-                var id = Convert.ToInt32(DSId);
-                query = context.tblCRDatasets.Where(x => x.DSId == id).Select(y => y.DSCriteriaForQuery).FirstOrDefault();
-
-                query = query.Replace("count(*)", columns);
-            }
-
-            List<CustomerTypeReport> objcustomertypereport = new List<CustomerTypeReport>();
-            try
-            {
-                using (var context = new BOTSDBContext(connstr))
-                {
-                    objcustomertypereport = context.Database.SqlQuery<CustomerTypeReport>(query).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "errorofgetting data");
-            }
-            return objcustomertypereport;
-        }
+        
 
     }
+}
+
+public class SlicerCount
+{
+    public int  CustCount {get;set;}
 }
 

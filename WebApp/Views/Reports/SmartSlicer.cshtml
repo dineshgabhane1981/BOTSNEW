@@ -825,6 +825,7 @@
             $("#dvTxnTier").hide();
             $("#dvTxnAIsegment").hide();
             $("#dvCountSpendDt").show();
+            $("#dvInvoiceValue").show();            
             ResetTransactionFilters();
         });
         $("#chkTxnAIsegment").on('change', function () {
@@ -905,6 +906,7 @@
             $("#dvTxnAIsegment").hide();
             $("#dvCountSpendDt").show();
             $("#dvTxnAIsegment").hide();
+            $("#dvInvoiceValue").show();
             ResetTransactionFilters();
         });
         $("#chkTxnAIsegment").on('change', function () {
@@ -968,12 +970,20 @@
             $("#hrTxnFilter").show();
             $("#TxnFilterText").show();
             $("#dvSpend").show();
+            $("#ddlTxnCumulative").val($("#ddlTxnCumulative option:first").val());            
+            $("#txtCTxnCount").val("");
+            $("#txtCTxnMonths").val("");
+            $("#ddlTxnCumulativeFrequency").val($("#ddlTxnCumulativeFrequency option:first").val());
             ResetTransactionFilters();
         });
         $("#rbtnCTxnCount").on('change', function () {
             $("#hrTxnFilter").hide();
             $("#TxnFilterText").hide();
             $("#dvSpend").hide();
+            $("#ddlSpendCumulative").val($("#ddlSpendCumulative option:first").val());            
+            $("#txtCSpendCount").val("");
+            $("#txtCSpendMonths").val("");
+            $("#ddlSpendCumulativeFrequency").val($("#ddlSpendCumulativeFrequency option:first").val());            
             ResetTransactionFilters();
         });
     }
@@ -1311,7 +1321,7 @@
                 $("#dvSpend").hide();
                 $("#hrProduct").hide();
                 $("#dvAvgTicket").hide();
-                $("#dvInvoiceValue").hide();
+                 
 
                 $("#hrTxnFilter").show();
                 $("#TxnFilterText").show();
@@ -2694,7 +2704,7 @@
             var selectedVal = [];
             var selectedIds = [];
             $('#lstBoxOutlet :selected').each(function (i, selected) {
-                selectedVal[i] = $(selected).text();
+                selectedVal[i] = $(selected).val();
                 selectedIds[i] = $(selected).val();
             });
             item3["Outlets"] = selectedVal;
@@ -2706,7 +2716,7 @@
             var selectedVal = [];
             var selectedIds = [];
             $('#lstBoxTOutlet :selected').each(function (i, selected) {
-                selectedVal[i] = $(selected).text();
+                selectedVal[i] = $(selected).val();
                 selectedIds[i] = $(selected).val();
             });
             item3["TransactingOutlets"] = selectedVal;

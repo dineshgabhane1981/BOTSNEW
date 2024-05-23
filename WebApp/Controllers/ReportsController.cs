@@ -1691,7 +1691,7 @@ namespace WebApp.Controllers
             object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
             status = RR.CheckCRDatasetExist(DSName, userDetails.connectionString);
             if (status != "Exist")
-                status = RR.SaveDataset(objData, userDetails, DSName, userDetails.connectionString);
+                status = RR.SaveDataset(objData, userDetails, DSName, userDetails.connectionString, userDetails.GroupId);
 
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
@@ -1733,7 +1733,7 @@ namespace WebApp.Controllers
             }
 
             columns = columns.Remove(columns.Length - 1);
-            createownviewmodel.listCustR = RR.GetSSFilterReport(objData, columns, userDetails.GroupId, userDetails.connectionString);
+            createownviewmodel.listCustR = RR.GetSSFilterReport(objData, columns, userDetails.GroupId, userDetails.connectionString, userDetails.GroupId);
             createownviewmodel.lstcolumnlist = lstcolumnlist;
             createownviewmodel.lstcolumnIdlist = lstcolumnIdlist;
             Session["ExportColumnList"] = createownviewmodel.lstcolumnlist;
@@ -1869,19 +1869,19 @@ namespace WebApp.Controllers
             }
 
             columns = columns.Remove(columns.Length - 1);
-            createownviewmodel.listCustR = RR.GetSSFilterReportFromDS(DSId, columns, userDetails.GroupId, userDetails.connectionString);
+            createownviewmodel.listCustR = RR.GetSSFilterReportFromDS(DSId, columns, userDetails.GroupId, userDetails.connectionString, userDetails.GroupId);
             createownviewmodel.lstcolumnlist = lstcolumnlist;
             createownviewmodel.lstcolumnIdlist = lstcolumnIdlist;
             Session["ExportColumnList"] = createownviewmodel.lstcolumnlist;
 
-            return PartialView("_CreateOwnReportCustomerWise", createownviewmodel);
+            return PartialView("_CreateOwnReportCustomerWiseForSaved", createownviewmodel);
         }
 
         [HttpPost]
         public JsonResult GetDSQueryCount(string DSId)
         {           
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var count = RR.GetSavedDSCount(DSId, userDetails.connectionString);
+            var count = RR.GetSavedDSCount(DSId, userDetails.connectionString, userDetails.GroupId);
             return new JsonResult() { Data = count, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 

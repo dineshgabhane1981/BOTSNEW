@@ -12,14 +12,14 @@
             <div class="row">
                 <div class="col search-container">
                     <i class="fas fa-search"></i>
-                    <input class="input100" type="text" id="txtSearch" placeholder="Search Member..." />
+                    <input class="input100" type="text" id="txtSearchDS" placeholder="Search Member..." />
                 </div>
             </div>
             @if (Model.lstcolumnlist != null)
             {
                 <div class="row mt-3" id="dvActivityData">
                     <div class="table-responsive">
-                        <table class="table" id="reportTable">
+                        <table class="table" id="DSReportTable">
                             <thead>
                                 <tr>
                                     @foreach (var item in Model.lstcolumnlist)
@@ -141,7 +141,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#reportTable').DataTable({
+        $('#DSReportTable').DataTable({
             "aaSorting": [],
             "paging": true,
             "ordering": true,
@@ -158,12 +158,12 @@
             //]
         });
 
-        $('#reportTable_filter').hide();
+        $('#DSReportTable_filter').hide();
 
-        $('#txtSearch').on('keyup', function () {
+        $('#txtSearchDS').on('keyup', function () {
 
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
-                var term = $('#txtSearch').val().toLowerCase()
+                var term = $('#txtSearchDS').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
                     if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
@@ -171,7 +171,7 @@
                 }
                 return false;
             });
-            var table = $('#reportTable').DataTable();
+            var table = $('#DSReportTable').DataTable();
             table.draw();
         });
 
