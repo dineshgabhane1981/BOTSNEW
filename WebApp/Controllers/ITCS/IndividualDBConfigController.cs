@@ -1233,7 +1233,7 @@ namespace WebApp.Controllers.ITCS
 
 
                     var connectionString = CR.GetCustomerConnString(objGroupOwnerInfo.GroupId);
-                    var response = ITCSR.SaveOutletStoreDetails(objCrediantialMaster, connectionString, objGroupOwnerInfo.GroupId);
+                    var response = ITCSR.SaveOutletStoreDetails(objCrediantialMaster, connectionString, objGroupOwnerInfo.GroupId,userDetails.UserName,userDetails.EmailId);
                     status = response;
                 }
                 tblAuditC obj = new tblAuditC();

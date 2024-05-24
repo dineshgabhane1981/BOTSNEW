@@ -15,6 +15,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Security.Cryptography;
+using System.Net.Mail;
+using System.Net.Mime;
 
 namespace BOTS_BL.Repository
 {
@@ -2343,14 +2345,19 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-        public bool SaveOutletStoreDetails(tblStoreMaster objStoreMaster, string connectionString, string GroupId)
+        public bool SaveOutletStoreDetails(tblStoreMaster objStoreMaster, string connectionString, string GroupId,string LoginCS,string EmailId)
         {
             bool status = false;
+            tblOutletMaster objOutlet = new tblOutletMaster();
+            tblGroupMaster objGroup = new tblGroupMaster();
             try
             {
+              
                 using (var context = new BOTSDBContext(connectionString))
                 {
                     tblStoreMaster existingStore = context.tblStoreMasters.FirstOrDefault(x => x.OutletId == objStoreMaster.OutletId);
+                    objGroup.GroupName = context.tblGroupMasters.Where(x => x.GroupId == GroupId).Select(x => x.GroupName).FirstOrDefault();
+                    objOutlet.OutletName = context.tblOutletMasters.Where(x => x.GroupId == GroupId).OrderByDescending(x => x.OutletId).Select(x => x.OutletName).FirstOrDefault();
                     if (existingStore != null)
                     {
                         existingStore.CounterId = objStoreMaster.CounterId;
@@ -2366,6 +2373,7 @@ namespace BOTS_BL.Repository
                     }
                     context.SaveChanges();
                     status = true;
+                    SendEmailComplete(objGroup.GroupName, objOutlet.OutletName, objStoreMaster.CounterId, objStoreMaster.Securitykey, LoginCS, EmailId);
                 }
 
                 using (var context = new CommonDBContext())
@@ -2408,6 +2416,70 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "SaveOutletStoreDetails");
             }
             return status;
+        }
+        public void SendEmailComplete(string DBName,string outletName, string CounterId, string Securitykey,string LoginCS,string EmailId)
+        {
+            string responseString;
+            var from = ConfigurationManager.AppSettings["Email"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailPassword"].ToString();
+           // var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            //var from = EmailId;
+            //var PWD = "JedheKiran@123@";
+             var smtpAddress = "smtp.zoho.com";
+            var PortNo = 587;
+            try
+            {
+                using (MailMessage mail = new MailMessage())
+                {
+                    StringBuilder str = new StringBuilder();
+                    str.Append("<table>");
+                    str.AppendLine("<td>Dear Vikas,");
+                    str.AppendLine("</tr>");
+                    str.Append("<tr><td>&nbsp;</td></tr>");
+                    str.AppendLine("<td><b>Description:"+"&nbsp;"+"</b>New Outlet Added. Please do some testing.</td>");
+                    //str.AppendLine("<td><b>Description: </b>New Outlet Added in"+ DBName + "Please do some testing.</td>");
+                    str.Append("<tr><td>Customer Name: " + DBName + "</td></tr>");
+                    str.Append("<tr><td>Outlet Name: " + outletName + "</td></tr>");
+                    str.Append("<tr><td>Counter ID: " + CounterId + "</td></tr>");
+                    str.Append("<tr><td>Security Key: " + Securitykey + "</td></tr>");
+                    str.AppendLine("</tr>");
+                    str.Append("<tr><td>&nbsp;</td></tr>");
+                    str.Append("<tr><td>Regards,");
+                    str.Append("<tr><td>-" + LoginCS + "</td></tr>");
+                    str.Append("</table>");
+
+                    mail.From = new MailAddress(from);
+                    //mail.To.Add("kiran@blueocktopus.in");
+                    mail.To.Add("vikas@blueocktopus.in");
+                    mail.CC.Add("jacqueline@blueocktopus.in");
+                    mail.CC.Add(EmailId);
+                    mail.Subject = DBName+":"+"&nbsp;"+ "New Outlet Added";
+                    mail.SubjectEncoding = System.Text.Encoding.Default;
+                    mail.Body = str.ToString();
+                    mail.IsBodyHtml = true;
+                    mail.BodyEncoding = System.Text.Encoding.UTF8;
+
+                    using (SmtpClient smtp = new SmtpClient(smtpAddress, PortNo))
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential(from, PWD);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                responseString = $"HTTP_ERROR :: Argument Exception :: {ex.Message}";
+            }
+            catch (WebException ex)
+            {
+                responseString = $"HTTP_ERROR :: WebException :: {ex.Message}";
+            }
+            catch (Exception ex)
+            {
+                responseString = $"HTTP_ERROR :: Exception :: {ex.Message}";
+            }
         }
         public void AddCSLog(tblAuditC objData)
         {

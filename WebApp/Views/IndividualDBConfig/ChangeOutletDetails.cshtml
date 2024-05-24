@@ -33,7 +33,7 @@
                         Outlet ID
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txtOutlet_ID" name="Outlet_ID" tabindex="7" readonly>
+                        <input type="text" class="input100" id="txtOutlet_ID" name="Outlet_ID" tabindex="7" disabled>
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Outlet Name
@@ -47,14 +47,14 @@
                         Brand Id
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txtBrand_ID" name="Brand_ID" tabindex="7" readonly>
+                        <input type="text" class="input100" id="txtBrand_ID" name="Brand_ID" tabindex="7" disabled>
                         @*@Html.TextBoxFor(model => model.objDemographicData.Email, new { @class = "input100", @id = "txtEmail", tabindex = 3 })*@
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Group Id
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txtGroup_ID" name="Group_ID" tabindex="7" readonly>
+                        <input type="text" class="input100" id="txtGroup_ID" name="Group_ID" tabindex="7" disabled>
                         @*@Html.TextBoxFor(model => model.objDemographicData.Address, new { @class = "input100", @id = "txtAddress", tabindex = 4 })*@
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                         Outlet ID
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txtOutlet_IDCR" name="Outlet_IDCR" tabindex="7" readonly>
+                        <input type="text" class="input100" id="txtOutlet_IDCR" name="Outlet_IDCR" tabindex="7" disabled>
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         SMS Vendor
@@ -268,13 +268,14 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-2 pr-3 pt-3 pl-3" id="divStoreDetails" style="display: none;">
+            <div class="mb-2 pr-3 pt-3 pl-3" id="divStoreDetails">
+                @*style="display: none;"*@
                 <div class="row" style="margin: 0;">
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         Counter ID
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txtCounter_IDST" name="Counter_IDST" tabindex="7" readonly>
+                        <input type="text" class="input100" id="txtCounter_IDST" name="Counter_IDST" tabindex="7" disabled>
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Counter Type
@@ -284,17 +285,17 @@
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
-                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;" >
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         Security Key
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txtSecurity_KeyST" name="Security_KeyST" tabindex="7" readonly>
+                        <input type="text" class="input100" id="txtSecurity_KeyST" name="Security_KeyST" tabindex="7" disabled>
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Outlet ID
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txtOutlet_IDST" name="Outlet_IDST" tabindex="7" readonly>
+                        <input type="text" class="input100" id="txtOutlet_IDST" name="Outlet_IDST" tabindex="7" disabled>
                     </div>
                 </div>
                 <div class="row mb-2 ml-2">
