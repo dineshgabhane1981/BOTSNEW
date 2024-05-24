@@ -541,15 +541,15 @@ namespace WebApp.Controllers.ITCS
                 foreach (Dictionary<string, object> item in objData)
                 {
                     objtblSMSWhatsAppCredential.OutletId = Convert.ToString(item["OutletId"]);
-                    objtblSMSWhatsAppCredential.SMSVendor = Convert.ToString(item["SMSVendor"]);
-                    objtblSMSWhatsAppCredential.SMSUrl = Convert.ToString(item["SMSUrl"]);
-                    objtblSMSWhatsAppCredential.SMSLoginId = Convert.ToString(item["SMSLoginId"]);
-                    objtblSMSWhatsAppCredential.SMSPassword = Convert.ToString(item["SMSPassword"]);
-                    objtblSMSWhatsAppCredential.SMSAPIKey = Convert.ToString(item["SMSAPIKey"]);
-                    objtblSMSWhatsAppCredential.SMSSenderId = Convert.ToString(item["SMSSenderId"]);
+                    objtblSMSWhatsAppCredential.SMSVendor = item["SMSVendor"]?.ToString();
+                    objtblSMSWhatsAppCredential.SMSUrl = item["SMSUrl"]?.ToString(); ;
+                    objtblSMSWhatsAppCredential.SMSLoginId = item["SMSLoginId"]?.ToString();
+                    objtblSMSWhatsAppCredential.SMSPassword = item["SMSPassword"]?.ToString();
+                    objtblSMSWhatsAppCredential.SMSAPIKey = item["SMSAPIKey"]?.ToString();
+                    objtblSMSWhatsAppCredential.SMSSenderId = item["SMSSenderId"]?.ToString();
                     objtblSMSWhatsAppCredential.IsActiveSMS = Convert.ToBoolean(item["IsActiveSMS"]);
                 }
-                var Response = ITCSR.SaveSMSCredentials(objtblSMSWhatsAppCredential,userDetails.GroupId);
+                var Response = ITCSR.SaveSMSCredentials(objtblSMSWhatsAppCredential, userDetails.GroupId);
                 tblAuditC obj = new tblAuditC();
                 obj.GroupId = Convert.ToString(userDetails.GroupId);
                 obj.RequestedFor = "Save SMS Credentials";
@@ -559,7 +559,7 @@ namespace WebApp.Controllers.ITCS
             }
             catch (Exception ex)
             {
-                newexception.AddException(ex, "SaveEarnRule");
+                newexception.AddException(ex, "SaveSMSCredentials");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
