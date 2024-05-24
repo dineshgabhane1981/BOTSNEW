@@ -2126,11 +2126,13 @@
             if ($("#chkBirthday").is(":checked")) {
                 item4["IsBirthday"] = "Yes";
                 item4["BirthdayMonth"] = $("#ddlBirthday").val();
+                item4["BirthdayMonthName"] = $("#ddlBirthday option:selected").text();
             }
 
             if ($("#chkAnniversary").is(":checked")) {
                 item4["IsAnniversary"] = "Yes";
                 item4["AnniversaryMonth"] = $("#ddlAnniversary").val();
+                item4["AnniversaryMonthName"] = $("#ddlAnniversary option:selected").text();
             }
 
             AllData.push(item4);
@@ -2438,6 +2440,17 @@
                 item4["AgeFrom"] = $("#txtAgefrom").val();
                 item4["AgeTo"] = $("#txtAgeTo").val();
             }
+            if ($("#chkBirthday").is(":checked")) {
+                item4["IsBirthday"] = "Yes";
+                item4["BirthdayMonth"] = $("#ddlBirthday").val();
+                item4["BirthdayMonthName"] = $("#ddlBirthday option:selected").text();
+            }
+
+            if ($("#chkAnniversary").is(":checked")) {
+                item4["IsAnniversary"] = "Yes";
+                item4["AnniversaryMonth"] = $("#ddlAnniversary").val();
+                item4["AnniversaryMonthName"] = $("#ddlAnniversary option:selected").text();
+            }
 
             AllData.push(item4);
 
@@ -2734,16 +2747,11 @@
         AllData.push(item3);
 
         //Demographic Filter
-        item4 = {}
-        item4["IsTier"] = "No";
+        item4 = {}        
         item4["IsGender"] = "No";
         item4["IsCity"] = "No";
         item4["IsAge"] = "No";
-
-        if ($("#chkTier").is(":checked")) {
-            item4["IsTier"] = "Yes";
-            item4["Tier"] = $("#ddlTier").val();
-        }
+               
 
         if ($("#chkGender").is(":checked")) {
             item4["IsGender"] = "Yes";
@@ -2759,6 +2767,18 @@
             item4["IsAge"] = "Yes";
             item4["AgeFrom"] = $("#txtAgefrom").val();
             item4["AgeTo"] = $("#txtAgeTo").val();
+        }
+
+        if ($("#chkBirthday").is(":checked")) {
+            item4["IsBirthday"] = "Yes";
+            item4["BirthdayMonth"] = $("#ddlBirthday").val();
+            item4["BirthdayMonthName"] = $("#ddlBirthday option:selected").text();
+        }
+
+        if ($("#chkAnniversary").is(":checked")) {
+            item4["IsAnniversary"] = "Yes";
+            item4["AnniversaryMonth"] = $("#ddlAnniversary").val();
+            item4["AnniversaryMonthName"] = $("#ddlAnniversary option:selected").text();
         }
 
         AllData.push(item4);
@@ -2795,11 +2815,7 @@
                         $("#dvListing").show();
                         $("#btnExport").show();
                         $("#divLoader").hide();
-
-                    }
-                    else {
-
-                    }
+                    }                    
                 },
                 error: function (response) {
                     console.log(response.responseText);

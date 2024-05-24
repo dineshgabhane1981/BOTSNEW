@@ -3311,6 +3311,16 @@ namespace BOTS_BL.Repository
                             WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
                         }
                     }
+                    if (Convert.ToString(item["IsBirthday"]) == "Yes")
+                    {
+                        Criteria += "<br/>Birthday : " + Convert.ToString(item["BirthdayMonthName"]);
+                        WhereClause += " and Month(a.DOB) = " + Convert.ToString(item["BirthdayMonth"])+ " and a.DOB !='1900-01-01'";
+                    }
+                    if (Convert.ToString(item["IsAnniversary"]) == "Yes")
+                    {
+                        Criteria += "<br/>Anniversary : " + Convert.ToString(item["AnniversaryMonthName"]);
+                        WhereClause += " and Month(a.DOA) = " + Convert.ToString(item["AnniversaryMonth"]) + " and a.DOB !='1900-01-01'";
+                    }
                 }
                 index++;
             }
@@ -3984,6 +3994,16 @@ namespace BOTS_BL.Repository
                             Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
                             WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
                         }
+                    }
+                    if (Convert.ToString(item["IsBirthday"]) == "Yes")
+                    {
+                        Criteria += "<br/>Birthday : " + Convert.ToString(item["BirthdayMonthName"]);
+                        WhereClause += " and Month(a.DOB) = " + Convert.ToString(item["BirthdayMonth"]) + " and a.DOB !='1900-01-01'";
+                    }
+                    if (Convert.ToString(item["IsAnniversary"]) == "Yes")
+                    {
+                        Criteria += "<br/>Anniversary : " + Convert.ToString(item["AnniversaryMonthName"]);
+                        WhereClause += " and Month(a.DOA) = " + Convert.ToString(item["AnniversaryMonth"]) + " and a.DOB !='1900-01-01'";
                     }
                 }
                 index++;
@@ -4675,6 +4695,16 @@ namespace BOTS_BL.Repository
                             Criteria += "<br/>Age Max : " + Convert.ToString(item["AgeTo"]);
                             WhereClause += " and a.Age <= " + Convert.ToString(item["AgeTo"]);
                         }
+                    }
+                    if (Convert.ToString(item["IsBirthday"]) == "Yes")
+                    {
+                        Criteria += "<br/>Birthday : " + Convert.ToString(item["BirthdayMonthName"]);
+                        WhereClause += " and Month(a.DOB) = " + Convert.ToString(item["BirthdayMonth"]) + " and a.DOB !='1900-01-01'";
+                    }
+                    if (Convert.ToString(item["IsAnniversary"]) == "Yes")
+                    {
+                        Criteria += "<br/>Anniversary : " + Convert.ToString(item["AnniversaryMonthName"]);
+                        WhereClause += " and Month(a.DOA) = " + Convert.ToString(item["AnniversaryMonth"]) + " and a.DOB !='1900-01-01'";
                     }
                 }
                 index++;
