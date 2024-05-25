@@ -1,5 +1,6 @@
 ﻿using BOTS_BL.Models;
 using BOTS_BL.Repository;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -125,69 +126,78 @@ namespace BOTS_BL.Repository
                                 obj.IsZwing = "True";
                             else
                                 obj.IsZwing = "False";
-                            if (dt2.Rows.Count > 0)
+                            string _VWAUrl, _VWAAppId, _VWATemplateId, _VWAScript, _VWABasicAuthUserName, _VWABasicAuthPassword, _VWAVendor;
+                            for (int i = 0; i < dt2.Rows.Count; i++)
                             {
-                                string SMSStatus = Convert.ToString(dt2.Rows[0]["SMSWASendStatus"]);
+                                
+                                string WhatsAppVendor = Convert.ToString(dt2.Rows[0]["WhatsAppVendor"]);
+                                       MobileNo = Convert.ToString(dt2.Rows[0]["MobileNo"]);
+                                string SMSScript = Convert.ToString(dt2.Rows[0]["SMSScript"]);
+                                string SMSSenderId = Convert.ToString(dt2.Rows[0]["SMSSenderId"]);
+                                string WhatsAppScript = Convert.ToString(dt2.Rows[0]["WhatsAppScript"]);
+                                string OutletId = Convert.ToString(dt2.Rows[0]["OutletId"]);
+                                string SMSTemplateId = Convert.ToString(dt2.Rows[0]["SMSTemplateId"]);
+                                string SMSScriptType = Convert.ToString(dt2.Rows[0]["SMSScriptType"]);
+                                string WhatsAppScriptType = Convert.ToString(dt2.Rows[0]["WhatsAppScriptType"]);
+                                string SMSVendor = Convert.ToString(dt2.Rows[0]["SMSVendor"]);
+                                string SMSUrl = Convert.ToString(dt2.Rows[0]["SMSUrl"]);
+                                string SMSLoginId = Convert.ToString(dt2.Rows[0]["SMSLoginId"]);
+                                string SMSPassword = Convert.ToString(dt2.Rows[0]["SMSPassword"]);
+                                string SMSAPIKey = Convert.ToString(dt2.Rows[0]["SMSAPIKey"]);
+                                string WhatsAppUrl = Convert.ToString(dt2.Rows[0]["WhatsAppUrl"]);
+                                string WhatsAppTokenId = Convert.ToString(dt2.Rows[0]["WhatsAppTokenId"]);
+                                string IsActiveWhatsApp = Convert.ToString(dt2.Rows[0]["IsActiveWhatsApp"]);
+                                string IsActiveSMS = Convert.ToString(dt2.Rows[0]["IsActiveSMS"]);
+                                string VerifiedWhatsAppUrl = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppUrl"]);
+                                string VerifiedWhatsAppLoginId = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppLoginId"]);
+                                string VerifiedWhatsAppPassword = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppPassword"]);
+                                string VerifiedWhatsAppAPIKey = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppAPIKey"]);
+                                string WhatsAppMessageType = Convert.ToString(dt2.Rows[0]["WhatsAppMessageType"]);
+                                string SMSWASendStatus = Convert.ToString(dt2.Rows[0]["SMSWASendStatus"]);
 
-                                //if (SMSStatus == "SMS")
-                                //{
-                                //    string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
-                                //    string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
-                                //    string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
-                                //    string _Password = dt2.Rows[0]["SMSPassword"].ToString();
-                                //    string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
-                                //    string _Url = dt2.Rows[0]["SMSUrl"].ToString();
-                                //    //string _SMSBrandId = dt2.Rows[0]["SMSBrandId"].ToString();
-                                //    Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url));
-                                //    _job.Start();
-                                //}
-
-                                switch (SMSStatus)
+                                if (IsActiveWhatsApp == "1")
                                 {
-                                    case "SMS":
-                                           string _MobileNo = dt2.Rows[0]["MobileNo"].ToString();
-                                           string _MobileMessage = dt2.Rows[0]["SMSScript"].ToString();
-                                           string _UserName = dt2.Rows[0]["SMSLoginId"].ToString();
-                                           string _Password = dt2.Rows[0]["SMSPassword"].ToString();
-                                           string _Sender = dt2.Rows[0]["SMSSenderId"].ToString();
-                                           string _Url = dt2.Rows[0]["SMSUrl"].ToString();
-                                           string _SMSVendor = dt2.Rows[0]["SMSVendor"].ToString();
-                                           string _SMSScriptType = dt2.Rows[0]["SMSScriptType"].ToString();
+                                    if (SMSWASendStatus == "Both" || SMSWASendStatus == "WA")
+                                    {
+                                        switch (WhatsAppVendor)
+                                        {
+                                            case "TechnoCore":
+                                                if (WhatsAppMessageType == "Text")
+                                                {
+                                                    SendWAText_TechnoCore(MobileNo, WhatsAppScript, WhatsAppTokenId, WhatsAppUrl, SMSScript, SMSTemplateId, SMSScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, IsActiveSMS, SMSSenderId, SMSWASendStatus);
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    else if (SMSWASendStatus == "VWA")
+                                    {
+                                        _VWAVendor = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppVendor"]);
+                                        switch (_VWAVendor)
+                                        {
+                                            case "Bik":
+                                                if (WhatsAppMessageType == "Text")
+                                                {
+                                                    _VWAUrl = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppUrl"]);
+                                                    _VWAAppId = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppAppId"]);
+                                                    _VWATemplateId = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppTemplateId"]);
+                                                    _VWAScript = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppScript"]);
+                                                    _VWABasicAuthUserName = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppBasicAuthUserName"]);
+                                                    _VWABasicAuthPassword = Convert.ToString(dt2.Rows[0]["VerifiedWhatsAppBasicAuthPassword"]);
 
-                                             Thread _job = new Thread(() => SendSMS(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _SMSVendor, _SMSScriptType));
-                                            _job.Start();
-                                        break;
-                                    case "WA":
-                                           string _MobileNoWA = dt2.Rows[0]["MobileNo"].ToString();
-                                           string _MobileMessageWA = dt2.Rows[0]["SMSScript"].ToString();
-                                           string _WATokenId = dt2.Rows[0]["WhatsAppTokenId"].ToString();
-                                           string _WAUrl = dt2.Rows[0]["WhatsAppUrl"].ToString();
-
-                                             Thread _jobWA = new Thread(() => SendWA(_MobileNoWA, _MobileMessageWA, _WATokenId, _WAUrl));
-                                            _jobWA.Start();
-                                        break;
-                                    default:
-
-                                          string _MobileNoSMSWA = dt2.Rows[0]["MobileNo"].ToString();
-                                          string _MobileMessageSMS = dt2.Rows[0]["SMSScript"].ToString();
-                                          string _UserNameSMSWA = dt2.Rows[0]["SMSLoginId"].ToString();
-                                          string _PasswordSMSWA = dt2.Rows[0]["SMSPassword"].ToString();
-                                          string _SenderSMSWA = dt2.Rows[0]["SMSSenderId"].ToString();
-                                          string _UrlSMSWA = dt2.Rows[0]["SMSUrl"].ToString();
-                                          string _SMSAPIKey = dt2.Rows[0]["SMSAPIKey"].ToString();
-                                          string _SMSVendorSMSWA = dt2.Rows[0]["SMSVendor"].ToString();
-                                          string _SMSScriptTypeSMSWA = dt2.Rows[0]["SMSScriptType"].ToString();
-                                          string _MobileMessageWASMSWA = dt2.Rows[0]["WhatsAppScript"].ToString();
-                                          string _WATokenIdSMSWA = dt2.Rows[0]["WhatsAppTokenId"].ToString();
-                                          string _WAUrlSMSWA = dt2.Rows[0]["WhatsAppUrl"].ToString();
-                                          string _SMSTemplateId = string.Empty;
-                                          string _DisableSMS = string.Empty;
-
-
-                                        Thread _jobSMSWA = new Thread(() => SendSMSWA(_MobileNoSMSWA, _MobileMessageWASMSWA, _WATokenIdSMSWA, _WAUrlSMSWA, _MobileMessageSMS, _SMSTemplateId, _SMSScriptTypeSMSWA, _SMSVendorSMSWA, _UrlSMSWA, _UserNameSMSWA, _PasswordSMSWA,  _SMSAPIKey, _DisableSMS , _SenderSMSWA, SMSStatus));
-                                        _jobSMSWA.Start();
-                                        break;
+                                                    SendWAText_Bik(MobileNo, WhatsAppScript, WhatsAppTokenId, WhatsAppUrl, SMSScript, SMSTemplateId, SMSScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, IsActiveSMS, SMSSenderId, SMSWASendStatus, _VWAUrl, _VWAAppId, _VWATemplateId, _VWAScript, _VWABasicAuthUserName, _VWABasicAuthPassword);
+                                                }
+                                                break;
+                                        }                                       
+                                    }
+                                    else
+                                    {
+                                        SendSMSMessage(MobileNo, SMSScript, SMSTemplateId, SMSScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, IsActiveSMS, SMSSenderId);
+                                    }
                                 }
+                                else if (IsActiveSMS == "1")
+                                {
+                                    SendSMSMessage(MobileNo, SMSScript, SMSTemplateId, SMSScriptType, SMSVendor, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, IsActiveSMS, SMSSenderId);
+                                }                                    
                             }
                         }
                         else
@@ -352,7 +362,105 @@ namespace BOTS_BL.Repository
             return obj;
         }
 
-        public void SendSMS(string _MobileNo, string _SMSScript, string _SMSLoginId, string _SMSPassword, string _SMSSenderId, string _SMSUrl, string _SMSVendor, string _SMSScriptType)
+        public void SendTxnSMS(string _MobileNo, string _MobileMessage, string _SMSAPIKey, string _Password, string _Sender, string _Url)
+        {
+            var httpWebRequest_00003 = (HttpWebRequest)WebRequest.Create(_Url);
+            httpWebRequest_00003.ContentType = "application/json";
+            httpWebRequest_00003.Method = "POST";
+
+            using (var streamWriter_00003 = new StreamWriter(httpWebRequest_00003.GetRequestStream()))
+            {
+
+                string json_00003 = "{\"Account\":" +
+                                "{\"APIKey\":\"" + _SMSAPIKey + "\"," +
+                                "\"SenderId\":\"" + _Sender + "\"," +
+                                "\"Channel\":\"Trans\"," +
+                                "\"DCS\":\"0\"," +
+                                "\"SchedTime\":null," +
+                                "\"GroupId\":null}," +
+                                "\"Messages\":[{\"Number\":\"" + _MobileNo + "\"," +
+                                "\"Text\":\"" + _MobileMessage + "\"}]" +
+                                "}";
+                streamWriter_00003.Write(json_00003);
+            }
+
+            var httpResponse_00003 = (HttpWebResponse)httpWebRequest_00003.GetResponse();
+            using (var streamReader_00003 = new StreamReader(httpResponse_00003.GetResponseStream()))
+            {
+                var result_00003 = streamReader_00003.ReadToEnd();
+            }
+        }
+
+        public void SendWAText_TechnoCore(string _MobileNo, string _WAMessage, string _WATokenId, string _WAUrl, string _SMSScript, string _SMSTemplateId, string _SMSScriptType, string _SMSVendor, string _SMSUrl, string _SMSLoginId, string _SMSPassword, string _SMSAPIKey, string _DisableSMS, string _SMSSenderId, string _SMSWASendStatus)
+        {
+            string responseString;
+            try
+            {
+                _WAMessage = _WAMessage.Replace("#99", "&");
+                _WAMessage = HttpUtility.UrlEncode(_WAMessage);
+                //string type = "TEXT";
+                StringBuilder sbposdata = new StringBuilder();
+                sbposdata.AppendFormat(_WAUrl);
+                sbposdata.AppendFormat("token={0}", _WATokenId);
+                sbposdata.AppendFormat("&phone={0}", _MobileNo);
+                sbposdata.AppendFormat("&message={0}", _WAMessage);
+                sbposdata.AppendFormat("&wacheck={0}", "true");
+                string Url = sbposdata.ToString();
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
+                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] data = encoding.GetBytes(sbposdata.ToString());
+                httpWReq.Method = "POST";
+                httpWReq.ContentType = "application/x-www-form-urlencoded";
+                httpWReq.ContentLength = data.Length;
+                using (Stream stream = httpWReq.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
+                StreamReader reader = new StreamReader(response.GetResponseStream());
+                responseString = reader.ReadToEnd();
+                //var J = JObject.Parse(responseString);
+                //string J1 = J["status"].ToString();
+                //if (J1 == "error")
+                //{
+                //    Thread _job = new Thread(() => SendSMSMessageTxn(_MobileNo, _MobileMessage, _UserName, _Password, _Sender, _Url, _CounterId));
+                //    _job.Start();
+                //}
+                reader.Close();
+                response.Close();
+            }
+            catch (ArgumentException ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+                }
+            }
+            catch (WebException ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (_SMSWASendStatus == "Both")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+                }
+            }
+        }
+
+        public void SendSMSMessage(string _MobileNo, string _SMSScript, string _SMSTemplateId, string _SMSScriptType, string _SMSVendor, string _SMSUrl, string _SMSLoginId, string _SMSPassword, string _SMSAPIKey, string _DisableSMS, string _SMSSenderId)
         {
             string responseString;
             try
@@ -437,11 +545,10 @@ namespace BOTS_BL.Repository
                             using (var streamWriter_VisionText = new StreamWriter(httpWebRequest_VisionText.GetRequestStream()))
                             {
                                 string json_VisionText = "{\"Account\":" +
-                                                "{\"APIKey\":\"" + _SMSPassword + "\"," +
+                                                "{\"APIKey\":\"" + _SMSAPIKey + "\"," +
                                                 "\"SenderId\":\"" + _SMSSenderId + "\"," +
                                                 "\"Channel\":\"Trans\"," +
                                                 "\"DCS\":\"0\"," +
-                                                "\"Route\":\"13\"," +
                                                 "\"SchedTime\":null," +
                                                 "\"GroupId\":null}," +
                                                 "\"Messages\":[{\"Number\":\"" + _MobileNo + "\"," +
@@ -464,11 +571,10 @@ namespace BOTS_BL.Repository
                             using (var streamWriter_VisionUniCode = new StreamWriter(httpWebRequest_VisionUniCode.GetRequestStream()))
                             {
                                 string json_VisionUniCode = "{\"Account\":" +
-                                                "{\"APIKey\":\"" + _SMSPassword + "\"," +
+                                                "{\"APIKey\":\"" + _SMSAPIKey + "\"," +
                                                 "\"SenderId\":\"" + _SMSSenderId + "\"," +
                                                 "\"Channel\":\"Trans\"," +
                                                 "\"DCS\":\"8\"," +
-                                                "\"Route\":\"13\"," +
                                                 "\"SchedTime\":null," +
                                                 "\"GroupId\":null}," +
                                                 "\"Messages\":[{\"Number\":\"" + _MobileNo + "\"," +
@@ -590,6 +696,37 @@ namespace BOTS_BL.Repository
                             response_ValueFirstUnicode.Close();
                         }
                         break;
+                    case "ThirdParty":
+                        if (_SMSScriptType == "Text")
+                        {
+                            _SMSScript = _SMSScript.Replace("#99", "&");
+                            _SMSScript = HttpUtility.UrlEncode(_SMSScript);
+                            string type3 = "TEXT";
+                            StringBuilder sbposdata3 = new StringBuilder();
+                            sbposdata3.AppendFormat("username={0}", _SMSLoginId);
+                            sbposdata3.AppendFormat("&pass={0}", _SMSPassword);
+                            sbposdata3.AppendFormat("&route={0}", "trans1");
+                            sbposdata3.AppendFormat("&senderid={0}", _SMSSenderId);
+                            sbposdata3.AppendFormat("&numbers={0}", _MobileNo);
+                            sbposdata3.AppendFormat("&message={0}", _SMSScript);
+                            HttpWebRequest httpWReq3 = (HttpWebRequest)WebRequest.Create(_SMSUrl);
+                            UTF8Encoding encoding3 = new UTF8Encoding();
+                            byte[] data3 = encoding3.GetBytes(sbposdata3.ToString());
+                            httpWReq3.Method = "POST";
+                            httpWReq3.ContentType = "application/x-www-form-urlencoded";
+                            httpWReq3.ContentLength = data3.Length;
+                            using (Stream stream = httpWReq3.GetRequestStream())
+                            {
+                                stream.Write(data3, 0, data3.Length);
+                            }
+                            HttpWebResponse response3 = (HttpWebResponse)httpWReq3.GetResponse();
+                            StreamReader reader3 = new StreamReader(response3.GetResponseStream());
+                            string responseString3 = reader3.ReadToEnd();
+                            reader3.Close();
+                            response3.Close();
+                            break;
+                        }
+                        break;
                 }
 
             }
@@ -607,94 +744,50 @@ namespace BOTS_BL.Repository
             }
         }
 
-        public void SendWA(string _MobileNoWA, string _MobileMessageWA, string _WATokenId, string _WAUrl)
+        public void SendWAText_Bik(string _MobileNo, string _WAMessage, string _WATokenId, string _WAUrl, string _SMSScript, string _SMSTemplateId, string _SMSScriptType, string _SMSVendor, string _SMSUrl, string _SMSLoginId, string _SMSPassword, string _SMSAPIKey, string _DisableSMS, string _SMSSenderId, string _SMSWASendStatus, string _VWAUrl, string _VWAAppId, string _VWATemplateId, string _VWAParameters, string _VWABasicAuthUserName, string _VWABasicAuthPassword)
         {
             string responseString;
             try
             {
-                _MobileMessageWA = _MobileMessageWA.Replace("#99", "&");
-                _MobileMessageWA = HttpUtility.UrlEncode(_MobileMessageWA);
-                //string type = "TEXT";
-                StringBuilder sbposdata = new StringBuilder();
-                sbposdata.AppendFormat(_WAUrl);
-                sbposdata.AppendFormat("token={0}", _WATokenId);
-                sbposdata.AppendFormat("&phone={0}", _MobileNoWA);
-                sbposdata.AppendFormat("&message={0}", _MobileMessageWA);
-                sbposdata.AppendFormat("&wacheck={0}", "true");
-                string Url = sbposdata.ToString();
+                string _Medium = "whatsapp";
+                string encoded = System.Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1")
+                                               .GetBytes(_VWABasicAuthUserName + ":" + _VWABasicAuthPassword));
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
                 ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
-                UTF8Encoding encoding = new UTF8Encoding();
-                byte[] data = encoding.GetBytes(sbposdata.ToString());
-                httpWReq.Method = "POST";
-                httpWReq.ContentType = "application/x-www-form-urlencoded";
-                httpWReq.ContentLength = data.Length;
-                using (Stream stream = httpWReq.GetRequestStream())
+                var httpWebRequest_Bik = (HttpWebRequest)WebRequest.Create(_VWAUrl);
+                httpWebRequest_Bik.ContentType = "application/json";
+                httpWebRequest_Bik.Headers.Add("Authorization", "Basic " + encoded);
+                httpWebRequest_Bik.Method = "POST";
+                using (var streamWriter_Bik = new StreamWriter(httpWebRequest_Bik.GetRequestStream()))
                 {
-                    stream.Write(data, 0, data.Length);
+                    string json_Bik = "{\"medium\":\"" + _Medium + "\"," +
+                                    "\"appId\":\"" + _VWAAppId + "\"," +
+                                    "\"contactIdentifier\":\"+" + _MobileNo + "\"," +
+                                    "\"payload\":" +
+                                    "{\"templateId\":\"" + _VWATemplateId + "\"," +
+                                    "\"components\":" +
+                                    "{\"body\":[\"" + _VWAParameters + "\"]}}}";
+
+                    streamWriter_Bik.Write(json_Bik);
                 }
-                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                responseString = reader.ReadToEnd();
-                reader.Close();
-                response.Close();
-
-            }
-            catch (ArgumentException ex)
-            {
-                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
-            }
-            catch (WebException ex)
-            {
-                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
-            }
-            catch (Exception ex)
-            {
-                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
-            }
-
-        }
-
-        public void SendSMSWA(string _MobileNo, string _WAMessage, string _WATokenId, string _WAUrl, string _SMSScript, string _SMSTemplateId, string _SMSScriptType, string _SMSVendor, string _SMSUrl, string _SMSLoginId, string _SMSPassword, string _SMSAPIKey, string _DisableSMS, string _SMSSenderId, string _SMSWASendStatus)
-        {
-            string responseString;
-            try
-            {
-                _WAMessage = _WAMessage.Replace("#99", "&");
-                _WAMessage = HttpUtility.UrlEncode(_WAMessage);
-                //string type = "TEXT";
-                StringBuilder sbposdata = new StringBuilder();
-                sbposdata.AppendFormat(_WAUrl);
-                sbposdata.AppendFormat("token={0}", _WATokenId);
-                sbposdata.AppendFormat("&phone={0}", _MobileNo);
-                sbposdata.AppendFormat("&message={0}", _WAMessage);
-                sbposdata.AppendFormat("&wacheck={0}", "true");
-                string Url = sbposdata.ToString();
-                ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | (SecurityProtocolType)3072;
-                ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
-                HttpWebRequest httpWReq = (HttpWebRequest)WebRequest.Create(Url);
-                UTF8Encoding encoding = new UTF8Encoding();
-                byte[] data = encoding.GetBytes(sbposdata.ToString());
-                httpWReq.Method = "POST";
-                httpWReq.ContentType = "application/x-www-form-urlencoded";
-                httpWReq.ContentLength = data.Length;
-                using (Stream stream = httpWReq.GetRequestStream())
+                var httpResponse_Bik = (HttpWebResponse)httpWebRequest_Bik.GetResponse();
+                using (var streamReader_Bik = new StreamReader(httpResponse_Bik.GetResponseStream()))
                 {
-                    stream.Write(data, 0, data.Length);
+                    var result_Bik = streamReader_Bik.ReadToEnd();
+                    var J = JObject.Parse(result_Bik);
+                    string J1 = J["status"].ToString();
+                    if (J1 != "200")
+                    {
+                        Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
+                        _job.Start();
+                    }
                 }
-                HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
-                StreamReader reader = new StreamReader(response.GetResponseStream());
-                responseString = reader.ReadToEnd();
-                
-                reader.Close();
-                response.Close();
             }
             catch (ArgumentException ex)
             {
                 if (_SMSWASendStatus == "Both")
                 {
-                    Thread _job = new Thread(() => SendSMS(_MobileNo, _SMSScript, _SMSLoginId, _SMSPassword, _SMSSenderId, _SMSUrl, _SMSVendor, _SMSScriptType));
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
                     _job.Start();
                     responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
                 }
@@ -703,7 +796,7 @@ namespace BOTS_BL.Repository
             {
                 if (_SMSWASendStatus == "Both")
                 {
-                    Thread _job = new Thread(() => SendSMS(_MobileNo, _SMSScript, _SMSLoginId, _SMSPassword, _SMSSenderId, _SMSUrl, _SMSVendor, _SMSScriptType));
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
                     _job.Start();
                     responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
                 }
@@ -712,40 +805,12 @@ namespace BOTS_BL.Repository
             {
                 if (_SMSWASendStatus == "Both")
                 {
-                    Thread _job = new Thread(() => SendSMS(_MobileNo, _SMSScript, _SMSLoginId, _SMSPassword, _SMSSenderId,_SMSUrl, _SMSVendor, _SMSScriptType));
+                    Thread _job = new Thread(() => SendSMSMessage(_MobileNo, _SMSScript, _SMSTemplateId, _SMSScriptType, _SMSVendor, _SMSUrl, _SMSLoginId, _SMSPassword, _SMSAPIKey, _DisableSMS, _SMSSenderId));
                     _job.Start();
                     responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
                 }
             }
         }
-
-        public void SendTxnSMS(string _MobileNo, string _MobileMessage, string _SMSAPIKey, string _Password, string _Sender, string _Url)
-        {
-            var httpWebRequest_00003 = (HttpWebRequest)WebRequest.Create(_Url);
-            httpWebRequest_00003.ContentType = "application/json";
-            httpWebRequest_00003.Method = "POST";
-
-            using (var streamWriter_00003 = new StreamWriter(httpWebRequest_00003.GetRequestStream()))
-            {
-
-                string json_00003 = "{\"Account\":" +
-                                "{\"APIKey\":\"" + _SMSAPIKey + "\"," +
-                                "\"SenderId\":\"" + _Sender + "\"," +
-                                "\"Channel\":\"Trans\"," +
-                                "\"DCS\":\"0\"," +
-                                "\"SchedTime\":null," +
-                                "\"GroupId\":null}," +
-                                "\"Messages\":[{\"Number\":\"" + _MobileNo + "\"," +
-                                "\"Text\":\"" + _MobileMessage + "\"}]" +
-                                "}";
-                streamWriter_00003.Write(json_00003);
-            }
-
-            var httpResponse_00003 = (HttpWebResponse)httpWebRequest_00003.GetResponse();
-            using (var streamReader_00003 = new StreamReader(httpResponse_00003.GetResponseStream()))
-            {
-                var result_00003 = streamReader_00003.ReadToEnd();
-            }
-        }
+        
     }
 }

@@ -16,7 +16,8 @@ namespace GinesysRedeemption
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "CouponRedeem", action = "GetURL", id = UrlParameter.Optional }
+                //defaults: new { controller = "CouponRedeem", action = "GetURL", id = UrlParameter.Optional }
+                defaults: new { controller = "Redeem", action = "GetURL", id = UrlParameter.Optional }
             );
         }
     }
