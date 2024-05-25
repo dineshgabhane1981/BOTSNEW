@@ -28,6 +28,54 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
         EventsRepository ER = new EventsRepository();
+
+        public List<SelectListItem> GetOutletList(string GroupId, string connstr)
+        {
+            string DBStatus = string.Empty;
+            List<SelectListItem> countriesItem = new List<SelectListItem>();
+            try
+            {
+                using (var contextnew = new CommonDBContext())
+                {
+                    DBStatus = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupId).FirstOrDefault();
+                }
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    if (!string.IsNullOrEmpty(DBStatus))
+                    {
+                        var lstOutlet = context.tblOutletMasters.ToList();
+
+                        foreach (var item in lstOutlet)
+                        {
+                            countriesItem.Add(new SelectListItem
+                            {
+                                Text = item.OutletName,
+                                Value = Convert.ToString(item.OutletId)
+                            });
+                        }
+                    }
+                    else
+                    {
+                        var lstOutlet = context.OutletDetails.ToList();
+
+                        foreach (var item in lstOutlet)
+                        {
+                            countriesItem.Add(new SelectListItem
+                            {
+                                Text = item.OutletName,
+                                Value = Convert.ToString(item.OutletId)
+                            });
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetOutletList");
+            }
+            return countriesItem;
+        }
         public CampaignTiles GetCampaignTilesData(string GroupId, string connstr)
         {
             CampaignTiles objCampaignTiles = new CampaignTiles();
@@ -517,7 +565,8 @@ namespace BOTS_BL.Repository
                     {
                         var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
                         objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletIdAdmin).Count();
+                        //objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletIdAdmin).Count();
+                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Count();
                     }
                     else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId == "")
                     {

@@ -1205,7 +1205,7 @@ namespace WebApp.Controllers
             NewCampaignViewModel objData = new NewCampaignViewModel();
             SMSDetailsTemp SDT = new SMSDetailsTemp();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objData.lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
+            objData.lstOutlet = CMPR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             var SMSGatewayDetails = CMPR.GatewayDetails(userDetails.GroupId, userDetails.connectionString);
             objData.lstDataset = CMPR.GetCRDatasetList(userDetails.connectionString);
             //var DataTemp = CMPR.GetWAInsData(userDetails.GroupId, userDetails.connectionString);
