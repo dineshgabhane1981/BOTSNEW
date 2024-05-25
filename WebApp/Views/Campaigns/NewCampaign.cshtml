@@ -341,7 +341,13 @@
             var FilterData = [];
             item = {};
             item["BaseType"] = $("#ddlBaseType").val();
-            item["PointsBase"] = $("#ddlAvailablePoints").val();
+            if ($("#ddlBaseType").val() == "4") {
+                item["PointsBase"] = $("#ddlAvailablePoints").val();
+            }
+            else {
+                item["PointsBase"] = "";
+            }
+            
             item["Points"] = parseInt($("#txtFromPoints").val()); 
             item["PointsRange1"] = parseInt($("#txtToPoints").val());
             item["OutletId"] = $("#ddlOutlet").val();
