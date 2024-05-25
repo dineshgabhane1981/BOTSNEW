@@ -191,9 +191,12 @@ namespace WebApp.Controllers
             try
             {
                 objOnlyOnceTxn = KR.GetOnlyOnceTxnData(userDetails.GroupId, outletId, type, userDetails.connectionString, userDetails.LoginId);
-                decimal? totalspent = 0;
-                long? totalvisit = 0;
-                long? availbal = 0;
+                //decimal? totalspent = 0;
+                //long? totalvisit = 0;
+                //long? availbal = 0;
+                long totalspent = 0;
+                long totalvisit = 0;
+                long availbal = 0;
                 foreach (var item in objOnlyOnceTxn)
                 {
                     totalspent += item.TotalSpend;
