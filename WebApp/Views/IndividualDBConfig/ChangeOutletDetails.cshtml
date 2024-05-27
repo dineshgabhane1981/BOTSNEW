@@ -22,7 +22,6 @@
                     </div>
                     <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
                         <button type="button" id="btnAdd" style="margin: 3px 0px 0px -17px; width: 118px; height: 35px; " class="btn btn-primary">Add New Outlet</button>
-                        @*<a href="#" id="btnAdd" class="add_btn" title="Add new Outlet"><i class="fa fa-plus-circle" aria-hidden="true" style="font-size: 35px; color: #3f6ad8; "></i></a>*@
                     </div>
                 </div>
             </div>
@@ -48,14 +47,12 @@
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txtBrand_ID" name="Brand_ID" tabindex="7" disabled>
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Email, new { @class = "input100", @id = "txtEmail", tabindex = 3 })*@
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Group Id
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txtGroup_ID" name="Group_ID" tabindex="7" disabled>
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Address, new { @class = "input100", @id = "txtAddress", tabindex = 4 })*@
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -64,14 +61,12 @@
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txt_Address" name="Address" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.DOB, new { @class = "input100", @id = "txtDOB", tabindex = 5 })*@
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         City
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txt_City" name="City" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.DOA, new { @class = "input100", @id = "txtDOA", tabindex = 6 })*@
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -80,14 +75,12 @@
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txt_Area" name="Area" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Phone
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txt_Phone" name="Phone" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })*@
+                        <input type="tel" class="input100" id="txt_Phone" name="Phone" pattern="\d*" maxlength="10" tabindex="7">
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -95,15 +88,13 @@
                         Pincode
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
-                        <input type="text" class="input100" id="txt_Pincode" name="Pincode" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
+                        <input type="tel" class="input100" id="txt_Pincode" name="Pincode" pattern="\d*" maxlength="6"  tabindex="7">
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Default OTP
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txtDefault_otp" name="Default_otp" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })*@
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -112,14 +103,12 @@
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txt_Latitude" name="Latitude" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Longitude
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txt_Longitude" name="Longitude" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })*@
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -128,14 +117,12 @@
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txtInvoice_date" name="Invoice_Date" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
                     </div>
                     <div style="float: left; text-align: right; width: 115px; margin-top: 10px;">
                         Live Date
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txtLive_date" name="Live_date" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Name, new { @class = "input100", @id = "txtName", tabindex = 8 })*@
                     </div>
                 </div>
                 <div class="row" style="margin: 0;">
@@ -144,14 +131,12 @@
                     </div>
                     <div class="col-sm-4" style="float:left;margin-top:10px;">
                         <input type="text" class="input100" id="txtStore_adate" name="Store_adate" tabindex="7">
-                        @*@Html.TextBoxFor(model => model.objDemographicData.Gender, new { @class = "input100", @id = "txtGender", tabindex = 7 })*@
                     </div>
 
                 </div>
                 <div class="row mb-2 ml-2">
                     <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
-                        <button type="button" id="btnOutletSave" style="margin-left: 795px; margin-top: -60px;" class="btn btn-primary" tabindex="15" onclick="SaveOutletDetailsData()"><b>Save</b></button>
-                        <!--<button type="button" id="btnOutletSave" style="margin-left:795px;" class="btn btn-primary" tabindex="15" onclick="validateAndSave()" @*Onclick="SaveDemographicData()*@><b>Save</b></button>-->
+                        <button type="button" id="btnOutletSave" style="margin-left: 795px; margin-top: -60px;" class="btn btn-primary" tabindex="15" onclick="SaveOutletDetailsData()"><b>Next</b></button>
                     </div>
                 </div>
             </div>
@@ -264,7 +249,7 @@
                 </div>
                 <div class="row mb-2 ml-2">
                     <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
-                        <button type="button" id="btnCrediantialSave" style="margin-left: 795px; margin-top: -60px;" class="btn btn-primary" tabindex="15"><b>Save</b></button>
+                        <button type="button" id="btnCrediantialSave" style="margin-left: 795px; margin-top: -60px;" class="btn btn-primary" tabindex="15"><b>Next</b></button>
                     </div>
                 </div>
             </div>
@@ -313,12 +298,9 @@
             GetOutletDetails();
         });
         $('#btnCrediantialSave').on("click", function () {
-            debugger;
             SaveCrediantialData();
-
         });
         $('#btnStoreDetailsSave').on("click", function () {
-            debugger;
             SaveStoreTAbleData();
         });
         $('#btnAdd').on("click", function () {
@@ -338,7 +320,7 @@
             $("#txtLive_date").val("");
             $("#txtStore_adate").val("");
             $('#ddlOutletMaster').val('');
-            $('#divOutlet').show();
+          
             
             $.ajax({
                 type: "POST",
@@ -347,7 +329,6 @@
                 dataType: "json",
                 success: function (result) {
                     if (result.objOutletData != null) {
-                        debugger;
                         $("#txtOutlet_ID").val(result.objOutletData.OutletId);
                         $("#txtGroup_ID").val(result.objOutletData.GroupId);
                         $("#txtBrand_ID").val(result.objOutletData.BrandId);
@@ -360,13 +341,19 @@
                         $("#txtLive_date").val(result.objOutletData.LiveDate);
                         $("#txtStore_adate").val(result.objOutletData.StoreAnniversaryDate);
                     }
+                    document.getElementById("txt_Phone").addEventListener("input", function (e) {
+                        this.value = this.value.replace(/\D/g, '');
+                    });
+                    document.getElementById("txt_Pincode").addEventListener("input", function (e) {
+                        this.value = this.value.replace(/\D/g, '');
+                    });
+                    $('#divOutlet').show();
                 },
                 error: function (result) {
                     console.log(result.responseText);
                     alert("Failed to fetch outlet details.");
                 }
             });
-
         });
     });
     function GetOutlets() {
@@ -388,12 +375,10 @@
         });
     }
     function GetOutletDetails() {
-        debugger;
         if ($('#ddlOutletMaster').val() == "") {
             toastr.error('Please Select Outlet');
             return false
         }
-        $('#divOutlet').show();
         $.ajax({
             type: "POST",
             url: '@Url.Action("GetOutletDetailsDATA", "IndividualDBConfig")',
@@ -418,10 +403,9 @@
                     $("#txtInvoice_date").val(result.objOutletData.InvoiceDate);
                     $("#txtLive_date").val(result.objOutletData.LiveDate);
                     $("#txtStore_adate").val(result.objOutletData.StoreAnniversaryDate);
-
-                    
                     $("#btnOutletSave").text('Update');
                 }
+                $('#divOutlet').show();
             },
             error: function (result) {
                 alert("222");
@@ -430,7 +414,6 @@
         });
     }
     function SaveOutletDetailsData() {
-      
         var Outlet_ID = $("#txtOutlet_ID").val();
         var Outlet_name = $("#txtOutlet_name").val();
         var Brand_ID = $("#txtBrand_ID").val();
@@ -446,36 +429,12 @@
         var Invoice_date = $("#txtInvoice_date").val();
         var Live_date = $("#txtLive_date").val();
         var Store_adate = $("#txtStore_adate").val();
-
-        if (Outlet_ID == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter the Outlet ID",
-                buttonText: "Okay"
-            })
-        }
-        else if (Outlet_name == "") {
+      
+        if (Outlet_name == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
                 message: "Please enter the Outlet Name",
-                buttonText: "Okay"
-            })
-        }
-        else if (Brand_ID == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter the Brand ID ",
-                buttonText: "Okay"
-            })
-        }
-        else if (Group_ID == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter the Group ID",
                 buttonText: "Okay"
             })
         }
@@ -511,6 +470,14 @@
                 buttonText: "Okay"
             })
         }
+        else if ((/^[6789]\d{9,9}$/.test($("#txt_Phone").val()) == false)) {
+            cuteAlert({
+                type: "error",
+                title: "Invalid MobileNo",
+                message: "Please check MobileNo",
+                buttonText: "Okay"
+            });
+        }
         else if (_Pincode == "") {
             cuteAlert({
                 type: "error",
@@ -519,27 +486,19 @@
                 buttonText: "Okay"
             })
         }
+        else if (_Pincode.length != 6 || isNaN(_Pincode)) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter a valid 6-digit pincode",
+                buttonText: "Okay"
+            });
+        }
         else if (Default_otp == "") {
             cuteAlert({
                 type: "error",
                 title: "Oops..",
                 message: "Please enter the Default OTP",
-                buttonText: "Okay"
-            })
-        }
-        else if (_Latitude == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter the Latitude",
-                buttonText: "Okay"
-            })
-        }
-        else if (_Longitude == "") {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please enter the Longitude",
                 buttonText: "Okay"
             })
         }
@@ -586,12 +545,8 @@
             item["Live_date"] = Live_date;
             item["Store_adate"] = Store_adate;
 
-
             Filter_Data.push(item);
             var data = JSON.stringify(Filter_Data);
-
-            $("#divOutlet").show();
-
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveOutletDetails", "IndividualDBConfig")',
@@ -652,10 +607,9 @@
                         $("#txtInvoice_date").val('');
                         $("#txtLive_date").val('');
                         $("#txtStore_adate").val('');
-                       
                     }
                     ClearallTextBoxValue();
-                    $("#btnOutletSave").text('Save');
+                    $("#btnOutletSave").text('Next');
                     $("#divOutlet").hide();
                 },
                 error: function (result) {
@@ -672,7 +626,6 @@
             }
             return element ? element.value : null;
         }
-
         var Outlet_IDCR = getValueOrNull("#txtOutlet_IDCR");
         var Sms_VendorCR = getValueOrNull("#txtSms_VendorCR");
         var SMSUrlCR = getValueOrNull("#txtSMSUrlCR");
@@ -709,7 +662,6 @@
 
         var Filter_Data = [item];
         var data = JSON.stringify(Filter_Data);
-
         $.ajax({
             type: "POST",
             url: '@Url.Action("SaveOutletCrediantialDetails", "IndividualDBConfig")',
@@ -749,7 +701,6 @@
         var Security_KeyST = $("#txtSecurity_KeyST").val();
         var Outlet_IDST = $("#txtOutlet_IDST").val();
 
-
         var Filter_Data = [];
         item = {};
         item["Counter_IDST"] = Counter_IDST;
@@ -759,7 +710,6 @@
 
         Filter_Data.push(item);
         var data = JSON.stringify(Filter_Data);
-
             $.ajax({
             type: "POST",
             url: '@Url.Action("SaveOutletStoreDetails", "IndividualDBConfig")',
@@ -787,7 +737,6 @@
                         buttonText: "Okay"
                     });
                 }
-               
                 $("#divStoreDetails").hide();
                 ClearallTextBoxValue();
                 $("#txtCounter_IDST").val("");

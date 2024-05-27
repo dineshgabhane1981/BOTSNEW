@@ -1074,7 +1074,9 @@
                 success: function (result) {
                     $("#ddlOutletMaster").empty();
                     $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
+                    $("#ddlOutletMaster").append($("<option />").val("1").text("All Outlet"));
                     $.each(result, function () {
+                        
                         $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
                     });
                     $("#divLoader").hide();
@@ -1167,6 +1169,12 @@
                         message: "Script Saved Successfully",
                         buttonText: "Okay"
                     })
+                    if (OutletId === "1") { 
+                        $("#txtScript").val('');
+                        $("#ddlOutletMaster").val('');
+                        $("#ddlWAScriptType").val('');
+                        $("#ddltblSMSWhatsAppScriptMaster").val('');
+                    }
                     $("#divLoader").hide();
                 }
                 else {
@@ -1192,6 +1200,7 @@
             success: function (result) {
                 $("#ddlOutletMasterNew").empty();
                 $("#ddlOutletMasterNew").append($("<option />").val("").text("Please Select"));
+                $("#ddlOutletMasterNew").append($("<option />").val("1").text("All Outlet"));
                 $.each(result, function () {
                     $("#ddlOutletMasterNew").append($("<option />").val(this.Value).text(this.Text));
                 });
@@ -1284,6 +1293,12 @@
                         message: "Script Saved Successfully",
                         buttonText: "Okay"
                     })
+                    if (OutletId === "1") {
+                        $("#txtScriptNew").val('');
+                        $("#ddlOutletMasterNew").val('');
+                        $("#ddlSMSScriptType").val('');
+                        $("#ddltblSMSWhatsAppScriptMasterNew").val('');
+                    }
                     $("#divLoader").hide();
                 }
                 else {

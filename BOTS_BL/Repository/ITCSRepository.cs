@@ -261,15 +261,30 @@ namespace BOTS_BL.Repository
                 var connStr = CR.GetCustomerConnString((GroupId));
                 using (var contextNew = new BOTSDBContext(connStr))
                 {
-                    var MessageType = contextNew.tblSMSWhatsAppScriptMasters.Where(x => x.OutletId == OutletId).ToList();
-                    foreach (var item in MessageType)
+                    if (OutletId == "1")
                     {
-                        lstScript.Add(new SelectListItem
+                        var MessageType = contextNew.tblSMSWhatsAppScriptMasters.Take(8).ToList();
+                        foreach (var item in MessageType)
                         {
-                            Text = item.MessageType,
-                            Value = Convert.ToString(item.Id)
-                        });
+                            lstScript.Add(new SelectListItem
+                            {
+                                Text = item.MessageType,
+                                Value = Convert.ToString(item.Id)
+                            });
+                        }
                     }
+                    else
+                        {
+                            var MessageType = contextNew.tblSMSWhatsAppScriptMasters.Where(x => x.OutletId == OutletId).ToList();
+                            foreach (var item in MessageType)
+                            {
+                                lstScript.Add(new SelectListItem
+                                {
+                                    Text = item.MessageType,
+                                    Value = Convert.ToString(item.Id)
+                                });
+                            }
+                        }
                 }
             }
             catch (Exception ex)
@@ -311,28 +326,50 @@ namespace BOTS_BL.Repository
                 var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
-                    Script1.WhatsAppScript = Script;
-                    Script1.WhatsAppScriptType = ScriptType;
-                    Script1.IsActive = true;
-                    Script1.WhatsAppMessageType = "Text";
-                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
-                    context.SaveChanges();
-
-                    var existingScript = context.tblSMSWhatsAppScriptMasters
-                                                           .Where(x => x.MessageType == MessageType && x.OutletId == OutletId).Select(x => x.SMSScript)
-                                                           .FirstOrDefault();
-                    if (existingScript != null)
+                    if (OutletId == "1") 
                     {
-                        Script1.SMSWhatsAppSendStatus = "Both";
+                        var scripts = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType).ToList();
+                        foreach (var script in scripts)
+                        {
+                            script.WhatsAppScript = Script;
+                            script.WhatsAppScriptType = ScriptType;
+                            script.IsActive = true;
+                            script.WhatsAppMessageType = "Text";
 
+                            var existingScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == script.OutletId).Select(x => x.SMSScript).FirstOrDefault();
+                            if (existingScript != null)
+                            {
+                                script.SMSWhatsAppSendStatus = "Both";
+                            }
+                            else
+                            {
+                                script.SMSWhatsAppSendStatus = "WA";
+                            }
+                            
+                            context.tblSMSWhatsAppScriptMasters.AddOrUpdate(script);
+                            context.SaveChanges();
+                        }
                     }
                     else
-                    {
-                        Script1.SMSWhatsAppSendStatus = "WA";
+                    { 
+                        var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
+                        Script1.WhatsAppScript = Script;
+                        Script1.WhatsAppScriptType = ScriptType;
+                        Script1.IsActive = true;
+                        Script1.WhatsAppMessageType = "Text";
+                     
+                        var existingScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).Select(x => x.SMSScript).FirstOrDefault();
+                        if (existingScript != null)
+                        {
+                            Script1.SMSWhatsAppSendStatus = "Both";
+                        }
+                        else
+                        {
+                            Script1.SMSWhatsAppSendStatus = "WA";
+                        }
+                        context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
+                        context.SaveChanges();
                     }
-                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
-                    context.SaveChanges();
                 }
             }
             catch (Exception ex)
@@ -353,30 +390,53 @@ namespace BOTS_BL.Repository
                 var connStr = CR.GetCustomerConnString(Convert.ToString(GroupId));
                 using (var context = new BOTSDBContext(connStr))
                 {
-                    var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
-                    Script1.SMSScript = Script;
-                    Script1.SMSScriptType = ScriptType;
-                    Script1.IsActive = true;
-                    Script1.WhatsAppMessageType = "Text";
-                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
-                    context.SaveChanges();
-
-                    var existingScript = context.tblSMSWhatsAppScriptMasters
-                                                          .Where(x => x.MessageType == MessageType && x.OutletId == OutletId).Select(x => x.WhatsAppScript)
-                                                          .FirstOrDefault();
-                    if (existingScript != null)
+                    if (OutletId == "1")
                     {
-                        Script1.SMSWhatsAppSendStatus = "Both";
+                        var scripts = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType).ToList();
+                        foreach (var script in scripts)
+                        {
+                            script.SMSScript = Script;
+                            script.SMSScriptType = ScriptType;
+                            script.IsActive = true;
+                            script.WhatsAppMessageType = "Text";
 
+                            var existingScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == script.OutletId).Select(x => x.WhatsAppScript).FirstOrDefault();
+                            if (existingScript != null)
+                            {
+                                script.SMSWhatsAppSendStatus = "Both";
+                            }
+                            else
+                            {
+                                script.SMSWhatsAppSendStatus = "WA";
+                            }
+
+                            context.tblSMSWhatsAppScriptMasters.AddOrUpdate(script);
+                            context.SaveChanges();
+                        }
                     }
                     else
                     {
-                        Script1.SMSWhatsAppSendStatus = "SMS";
-                    }
-                    context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
-                    context.SaveChanges();
-                }
+                        var Script1 = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).FirstOrDefault();
+                        Script1.SMSScript = Script;
+                        Script1.SMSScriptType = ScriptType;
+                        Script1.IsActive = true;
+                        Script1.WhatsAppMessageType = "Text";
+                        context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
+                        context.SaveChanges();
 
+                        var existingScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).Select(x => x.WhatsAppScript).FirstOrDefault();
+                        if (existingScript != null)
+                        {
+                            Script1.SMSWhatsAppSendStatus = "Both";
+                        }
+                        else
+                        {
+                            Script1.SMSWhatsAppSendStatus = "SMS";
+                        }
+                        context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
+                        context.SaveChanges();
+                    }
+                }
             }
             catch (Exception ex)
             {
