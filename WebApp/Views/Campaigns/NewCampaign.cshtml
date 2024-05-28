@@ -427,7 +427,41 @@
     }
 
     function ValidateCampaignDetails() {
+        
         var CampStatus = true;
+        var d = new Date();
+        month = ("0" + (d.getMonth() + 1)).slice(-2);
+        day = ("0" + d.getDate()).slice(-2);
+        year = d.getFullYear();
+        var Date1 = year + '-' + month + '-' + day;
+
+        if ($("#txtCampaignName").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Campaign Name",
+                buttonText: "Okay"
+            })
+            CampStatus = false;
+        }
+        else if (($("#txtCampaignfromdt").val() == "" && $("#txtCampaigntodt").val() == "") || ($("#txtCampaignfromdt").val() == "" || $("#txtCampaigntodt").val() == "")) {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter From date and To date",
+                buttonText: "Okay"
+            })
+            CampStatus = false;
+        }
+        else if (($("#txtCampaignfromdt").val() < Date1 || $("#txtCampaigntodt").val() < Date1) || ($("#txtCampaignfromdt").val() < Date1 && $("#txtCampaigntodt").val() < Date1)) {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter From date, To date greater than Today",
+                buttonText: "Okay"
+            })
+            CampStatus = false;
+        }
 
 
         if (CampStatus) {
