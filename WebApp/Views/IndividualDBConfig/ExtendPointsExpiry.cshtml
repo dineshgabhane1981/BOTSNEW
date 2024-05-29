@@ -159,6 +159,11 @@
         });
         $("#txtExpiryDate").datepicker({
             dateFormat: "yy-mm-dd",
+            minDate: 0, 
+            changeMonth: true, 
+            changeYear: true,
+            showOtherMonths: true, 
+            selectOtherMonths: true 
         });
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $("#dtFrom").datepicker({
