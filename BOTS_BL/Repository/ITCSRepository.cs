@@ -2723,28 +2723,28 @@ namespace BOTS_BL.Repository
 
             return result;
         }
-        public bool UpdateDisableTxnData(string groupId, string mobileNo)
-        {
-            bool result = false;
-            try
-            {
-                var connStr = CR.GetCustomerConnString(groupId);
-                using (var context = new BOTSDBContext(connStr))
-                {
-                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
-                    custDetails.DisableSMSWATxn = true;
-                    context.tblCustDetailsMasters.AddOrUpdate(custDetails);
-                    context.SaveChanges();
-                    result = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                newexception.AddException(ex, "UpdateDisableTxnData");
-            }
+        //public bool UpdateDisableTxnData(string groupId, string mobileNo)
+        //{
+        //    bool result = false;
+        //    try
+        //    {
+        //        var connStr = CR.GetCustomerConnString(groupId);
+        //        using (var context = new BOTSDBContext(connStr))
+        //        {
+        //            var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+        //            custDetails.DisableSMSWATxn = true;
+        //            context.tblCustDetailsMasters.AddOrUpdate(custDetails);
+        //            context.SaveChanges();
+        //            result = true;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        newexception.AddException(ex, "UpdateDisableTxnData");
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
         public bool UpdateDisableLoyaltyData(string groupId, string mobileNo)
         {
             bool result = false;
