@@ -2697,5 +2697,72 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
+        public bool UpdateDisablePromoData(string groupId, string mobileNo)
+        {
+            bool result = false;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(groupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                    custDetails.DisableSMSWAPromo = true;
+                    context.tblCustDetailsMasters.AddOrUpdate(custDetails);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateDisablePromoData");
+            }
+
+            return result;
+        }
+        public bool UpdateDisableTxnData(string groupId, string mobileNo)
+        {
+            bool result = false;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(groupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                    custDetails.DisableSMSWATxn = true;
+                    context.tblCustDetailsMasters.AddOrUpdate(custDetails);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateDisableTxnData");
+            }
+
+            return result;
+        }
+        public bool UpdateDisableLoyaltyData(string groupId, string mobileNo)
+        {
+            bool result = false;
+            try
+            {
+                var connStr = CR.GetCustomerConnString(groupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+                    custDetails.DisableTxn = true;
+                    context.tblCustDetailsMasters.AddOrUpdate(custDetails);
+                    context.SaveChanges();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateDisableLoyaltyData");
+            }
+
+            return result;
+        }
+
     }
 }
