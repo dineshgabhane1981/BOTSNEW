@@ -2697,7 +2697,7 @@ namespace BOTS_BL.Repository
                 responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
             }
         }
-        public bool UpdateDisablePromoData(string groupId, string mobileNo)
+        public bool UpdateDisablePromoData(string groupId, string mobileNo, bool IsPromo, bool IsTxn, bool IsStatus)
         {
             bool result = false;
             try
@@ -2706,7 +2706,11 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connStr))
                 {
                     var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
-                    custDetails.DisableSMSWAPromo = true;
+                    if(IsPromo)
+                        custDetails.DisableSMSWAPromo = IsStatus;
+                    if (IsTxn)
+                        custDetails.DisableSMSWATxn = IsStatus;
+
                     context.tblCustDetailsMasters.AddOrUpdate(custDetails);
                     context.SaveChanges();
                     result = true;

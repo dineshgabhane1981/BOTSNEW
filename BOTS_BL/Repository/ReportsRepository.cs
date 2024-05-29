@@ -44,7 +44,7 @@ namespace BOTS_BL.Repository
                     new SqlParameter("@pi_INDDatetime", DateTime.Now.ToShortDateString()),
                     new SqlParameter("@pi_LoginId", loginId),
                     new SqlParameter("@pi_OutletId", OutletId),
-                    new SqlParameter("@pi_DBName", DBName)).Take(50).ToList<MemberList>();
+                    new SqlParameter("@pi_DBName", DBName)).ToList<MemberList>();
                 }
 
                 //if (!string.IsNullOrEmpty(FromDate) && !string.IsNullOrEmpty(ToDate))
@@ -380,18 +380,18 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connstr))
                 {
                     context.Database.CommandTimeout = 300;
-                    if (GroupId == "1086")
-                    {
-                        lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
-                        new SqlParameter("@pi_GroupId", GroupId),
-                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
-                        new SqlParameter("@pi_LoginId", loginId),
-                        new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
-                        new SqlParameter("@pi_FromDate", FromDate),
-                        new SqlParameter("@pi_ToDate", ToDate),
-                        new SqlParameter("@pi_OutletId", OutletId),
-                        new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
-                    }
+                    //if (GroupId == "1086")
+                    //{
+                    //    lstOutletWiseTransaction = context.Database.SqlQuery<OutletwiseTransaction>("sp_BOTS_DetailedTransaction @pi_GroupId, @pi_Date, @pi_LoginId, @pi_DateRangeFlag, @pi_FromDate, @pi_ToDate, @pi_OutletId, @pi_EnrolmentDataFlag",
+                    //    new SqlParameter("@pi_GroupId", GroupId),
+                    //    new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                    //    new SqlParameter("@pi_LoginId", loginId),
+                    //    new SqlParameter("@pi_DateRangeFlag", DateRangeFlag),
+                    //    new SqlParameter("@pi_FromDate", FromDate),
+                    //    new SqlParameter("@pi_ToDate", ToDate),
+                    //    new SqlParameter("@pi_OutletId", OutletId),
+                    //    new SqlParameter("@pi_EnrolmentDataFlag", EnrolmentDataFlag)).ToList<OutletwiseTransaction>();
+                    //}
                     //else if (GroupId == "1087")
                     //{
                     if (DateRangeFlag == "0")
@@ -2755,27 +2755,27 @@ namespace BOTS_BL.Repository
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
                             if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 30 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 30 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 0 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 31 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 120 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 180 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 365 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 181 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
                             {
-                                WhereClause += " a.LastTxnDate < cast(getdate() - 395 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate < cast(getdate() - 365 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
                             {
@@ -3324,10 +3324,21 @@ namespace BOTS_BL.Repository
                 }
                 index++;
             }
-
+           
             txnQuery = txnQuery + " " + txnQueryWhere;
+            txnQuery = txnQuery.Replace("where and", "where");
+            txnQuery = txnQuery.Replace("where  and", "where");
+            txnQuery = txnQuery.Replace("where   and", "where");
+
             productQuery = productQuery + " " + productQueryWhere;
+            productQuery = productQuery.Replace("where and", "where");
+            productQuery = productQuery.Replace("where  and", "where");
+            productQuery = productQuery.Replace("where   and", "where");
+
             slicerQuery = slicerQuery + WhereClause;
+            slicerQuery = slicerQuery.Replace("where and", "where");
+            slicerQuery = slicerQuery.Replace("where  and", "where");
+            slicerQuery = slicerQuery.Replace("where   and", "where");
             int totalCount = 0;
             try
             {
@@ -3396,6 +3407,7 @@ namespace BOTS_BL.Repository
 
             foreach (Dictionary<string, object> item in objData)
             {
+
                 if (index == 1)
                 {
                     string FirstChk = Convert.ToString(item["FirstChk"]);
@@ -3440,27 +3452,27 @@ namespace BOTS_BL.Repository
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
                             if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 30 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 30 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 0 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 31 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 120 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 180 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 365 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 181 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
                             {
-                                WhereClause += " a.LastTxnDate < cast(getdate() - 395 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate < cast(getdate() - 365 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
                             {
@@ -3899,11 +3911,11 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["Outlets"];
-                       
+
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
-                        
+
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
@@ -3916,7 +3928,6 @@ namespace BOTS_BL.Repository
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
                         }
-                        
                         if (!string.IsNullOrEmpty(outletIds))
                         {
                             outletIds = outletIds.Remove(outletIds.Length - 1);
@@ -3928,6 +3939,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["TransactingOutlets"];
+
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
@@ -3943,6 +3955,7 @@ namespace BOTS_BL.Repository
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
                         }
+
                         if (!string.IsNullOrEmpty(outletIds))
                         {
                             outletIds = outletIds.Remove(outletIds.Length - 1);
@@ -4010,9 +4023,20 @@ namespace BOTS_BL.Repository
             }
 
             txnQuery = txnQuery + " " + txnQueryWhere;
+            txnQuery = txnQuery.Replace("where and", "where");
+            txnQuery = txnQuery.Replace("where  and", "where");
+            txnQuery = txnQuery.Replace("where   and", "where");
+
             productQuery = productQuery + " " + productQueryWhere;
+            productQuery = productQuery.Replace("where and", "where");
+            productQuery = productQuery.Replace("where  and", "where");
+            productQuery = productQuery.Replace("where   and", "where");
+
             slicerQuery = slicerQuery + WhereClause;
-            
+            slicerQuery = slicerQuery.Replace("where and", "where");
+            slicerQuery = slicerQuery.Replace("where  and", "where");
+            slicerQuery = slicerQuery.Replace("where   and", "where");
+
             List<CustomerTypeReport> objcustomertypereport = new List<CustomerTypeReport>();
             try
             {
@@ -4069,9 +4093,10 @@ namespace BOTS_BL.Repository
             bool IsCumulative = false;
             bool IsProduct = false;
             bool IsTransaction = false;
-            
+
             foreach (Dictionary<string, object> item in objData)
             {
+
                 if (index == 1)
                 {
                     string FirstChk = Convert.ToString(item["FirstChk"]);
@@ -4116,27 +4141,27 @@ namespace BOTS_BL.Repository
                             Criteria += " - " + Convert.ToString(item["InactiveSegment"]);
                             if (Convert.ToString(item["InactiveSegment"]) == "Within 30 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 30 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 30 as nvarchar(20)) and a.LastTxnDate < cast(getdate() - 0 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "31 to 60 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 60 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 31 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "61 to 90 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 120 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 90 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 61 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "91 to 180 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 210 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 121 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 180 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 91 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "181 to 365 days")
                             {
-                                WhereClause += " a.LastTxnDate >= cast(getdate() - 395 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 211 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate >= cast(getdate() - 365 as nvarchar(20)) and a.LastTxnDate <= cast(getdate() - 181 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["InactiveSegment"]) == "More than a year")
                             {
-                                WhereClause += " a.LastTxnDate < cast(getdate() - 395 as nvarchar(20))";
+                                WhereClause += " a.LastTxnDate < cast(getdate() - 365 as nvarchar(20))";
                             }
                             if (Convert.ToString(item["ExcludeOnlyOnce"]) == "True")
                             {
@@ -4338,6 +4363,51 @@ namespace BOTS_BL.Repository
                         Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
                         WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
                     }
+
+                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
+                    {
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
+                        {
+                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
+                        {
+                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
+                    {
+                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["Redeemed"]);
+                        int isR = 0;
+                        if (Convert.ToString(item["Redeemed"]) == "Multiple")
+                            isR = 2;
+                        if (Convert.ToString(item["Redeemed"]) == "Single")
+                            isR = 1;
+                        WhereClause += " and a.burncount >= " + isR;
+                    }
+                    if (Convert.ToString(item["IsInvoiceValue"]) == "Yes")
+                    {
+                        IsTransaction = true;
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["InvoiceValueFrm"])))
+                        {
+                            Criteria += "<br/>Invoice Value from : " + Convert.ToString(item["InvoiceValueFrm"]);
+                            if (!string.IsNullOrEmpty(txnQueryWhere))
+                                txnQueryWhere += " and c.InvoiceAmt >=" + Convert.ToString(item["InvoiceValueFrm"]);
+                            else
+                                txnQueryWhere += " c.InvoiceAmt >=" + Convert.ToString(item["InvoiceValueFrm"]);
+                        }
+                        if (!string.IsNullOrEmpty(Convert.ToString(item["InvoiceValueTo"])))
+                        {
+                            Criteria += "<br/>Invoice Value to : " + Convert.ToString(item["InvoiceValueTo"]);
+                            if (!string.IsNullOrEmpty(txnQueryWhere))
+                                txnQueryWhere += " and c.InvoiceAmt <=" + Convert.ToString(item["InvoiceValueTo"]);
+                            else
+                                txnQueryWhere += " c.InvoiceAmt <=" + Convert.ToString(item["InvoiceValueTo"]);
+                        }
+                    }
+
                     if (Convert.ToString(item["IsSpend"]) == "Yes")
                     {
                         if (string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTFrm"])) && string.IsNullOrEmpty(Convert.ToString(item["CountSpendDTTo"])))
@@ -4456,49 +4526,7 @@ namespace BOTS_BL.Repository
                             txnQueryWhere = txnQueryWhere + " group by MobileNo having " + havngClause;
                         }
                     }
-                    if (Convert.ToString(item["IsPointBalance"]) == "Yes")
-                    {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
-                        {
-                            Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
-                        {
-                            Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
-                        }
-                    }
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
-                    {
-                        Criteria += "<br/>Redeemed : " + Convert.ToString(item["Redeemed"]);
-                        int isR = 0;
-                        if (Convert.ToString(item["Redeemed"]) == "Multiple")
-                            isR = 2;
-                        if (Convert.ToString(item["Redeemed"]) == "Single")
-                            isR = 1;
-                        WhereClause += " and a.burncount >= " + isR;
-                    }
-                    if (Convert.ToString(item["IsInvoiceValue"]) == "Yes")
-                    {
-                        IsTransaction = true;
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["InvoiceValueFrm"])))
-                        {
-                            Criteria += "<br/>Invoice Value from : " + Convert.ToString(item["InvoiceValueFrm"]);
-                            if (!string.IsNullOrEmpty(txnQueryWhere))
-                                txnQueryWhere += " and c.InvoiceAmt >=" + Convert.ToString(item["InvoiceValueFrm"]);
-                            else
-                                txnQueryWhere += " c.InvoiceAmt >=" + Convert.ToString(item["InvoiceValueFrm"]);
-                        }
-                        if (!string.IsNullOrEmpty(Convert.ToString(item["InvoiceValueTo"])))
-                        {
-                            Criteria += "<br/>Invoice Value to : " + Convert.ToString(item["InvoiceValueTo"]);
-                            if (!string.IsNullOrEmpty(txnQueryWhere))
-                                txnQueryWhere += " and c.InvoiceAmt <=" + Convert.ToString(item["InvoiceValueTo"]);
-                            else
-                                txnQueryWhere += " c.InvoiceAmt <=" + Convert.ToString(item["InvoiceValueTo"]);
-                        }
-                    }
+
                 }
                 if (index == 3)
                 {
@@ -4572,12 +4600,11 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["Outlets"];
-                        var outlets1 = (object[])item["OutletIds"];
+
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
-                        string outletIds1 = string.Empty;
-                        string outletAll1 = string.Empty;
+
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
@@ -4590,35 +4617,21 @@ namespace BOTS_BL.Repository
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
                         }
-                        foreach (var item1 in outlets1)
+                        if (!string.IsNullOrEmpty(outletIds))
                         {
-                           
-                            if (Convert.ToString(item1) == "0")
-                            {
-                                outletAll1 = "All";
-                            }
-                            else
-                            {
-                                outletIds1 += Convert.ToString(Convert.ToString(item1)) + ",";
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(outletIds1))
-                        {
-                            outletIds1 = outletIds1.Remove(outletIds1.Length - 1);
-                            if (outletAll1 != "All")
-                                WhereClause += " and a.EnrolledOutletId in (" + outletIds1 + ")";
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
+                            if (outletAll != "All")
+                                WhereClause += " and a.EnrolledOutletId in (" + outletIds + ")";
                         }
 
                     }
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["TransactingOutlets"];
-                        var outlets1 = (object[])item["TransactingOutletIds"];
+
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
-                        string outletIds1 = string.Empty;
-                        string outletAll1 = string.Empty;
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
@@ -4631,38 +4644,26 @@ namespace BOTS_BL.Repository
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
                         }
-                        Criteria = Criteria.Remove(1);
-                        foreach (var item1 in outlets1)
+
+                        if (!string.IsNullOrEmpty(outletIds))
                         {
-                            
-                            if (Convert.ToString(item1) == "0")
-                            {
-                                outletAll1 = "All";
-                            }
-                            else
-                            {
-                                outletIds1 += Convert.ToString(Convert.ToString(item1)) + ",";
-                            }
-                        }
-                        if (!string.IsNullOrEmpty(outletIds1))
-                        {
-                            outletIds1 = outletIds1.Remove(outletIds1.Length - 1);
+                            outletIds = outletIds.Remove(outletIds.Length - 1);
                             if (Convert.ToString(item["TOutletsAnyLast"]) != "No")
                             {
                                 //This need to add
                                 Criteria += "<br/>Last or Anyone : " + Convert.ToString(item["TOutletsAnyLast"]);
                                 if (Convert.ToString(item["TOutletsAnyLast"]) == "Last")
                                 {
-                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds1 + ")";
+                                    WhereClause += " and a.LastTxnOutletId in (" + outletIds + ")";
                                 }
                                 else
                                 {
-                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds1 + ") or a.LastTxnOutletId in (" + outletIds1 + "))";
+                                    WhereClause += " and (a.FirstTxnOutletId in (" + outletIds + ") or a.LastTxnOutletId in (" + outletIds + "))";
                                 }
                             }
                             else
                             {
-                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds1 + ")";
+                                WhereClause += " and a.FirstTxnOutletId in (" + outletIds + ")";
                             }
                         }
                     }
@@ -4709,9 +4710,21 @@ namespace BOTS_BL.Repository
                 }
                 index++;
             }
+
             txnQuery = txnQuery + " " + txnQueryWhere;
+            txnQuery = txnQuery.Replace("where and", "where");
+            txnQuery = txnQuery.Replace("where  and", "where");
+            txnQuery = txnQuery.Replace("where   and", "where");
+
             productQuery = productQuery + " " + productQueryWhere;
+            productQuery = productQuery.Replace("where and", "where");
+            productQuery = productQuery.Replace("where  and", "where");
+            productQuery = productQuery.Replace("where   and", "where");
+
             slicerQuery = slicerQuery + WhereClause;
+            slicerQuery = slicerQuery.Replace("where and", "where");
+            slicerQuery = slicerQuery.Replace("where  and", "where");
+            slicerQuery = slicerQuery.Replace("where   and", "where");
 
             if (!IsCumulative)
                 cumQuery = "";

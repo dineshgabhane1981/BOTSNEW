@@ -1305,14 +1305,15 @@ namespace WebApp.Controllers.ITCS
             }
             return status;
         }        
-        public bool UploadDisablePromoDocument()
+        public bool UploadEnableDisableSMSFile(HttpPostedFileBase file, string Promo, string Txn, string Enable, string Disable)
         {
             bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
             DataSet ds = new DataSet();
             HttpPostedFileBase files = Request.Files[0];
             string fileName = Request.Files[0].FileName;
             var path = ConfigurationManager.AppSettings["CampaignFileUpload"].ToString();
-            System.IO.FileInfo file = new System.IO.FileInfo(path);
+            
             var fullFilePath = path + "/" + "_" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + fileName;
             files.SaveAs(fullFilePath);
             var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
@@ -1341,19 +1342,21 @@ namespace WebApp.Controllers.ITCS
                 }
             }
             foreach (DataRow dr in ds.Tables[0].Rows)
-            {
-                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            {               
                 if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
                 {
-                    status = ITCSR.UpdateDisablePromoData(userDetails.GroupId, Convert.ToString(dr["MobileNo"]));
-                    tblAuditC obj = new tblAuditC();
-                    obj.GroupId = Convert.ToString(userDetails.GroupId);
-                    obj.RequestedFor = "Upload Disable Promo Data";
-                    obj.RequestedBy = userDetails.UserName;
-                    obj.RequestedDate = DateTime.Now;
-                    ITCSR.AddCSLog(obj);
+                    var Flag = false;
+                    if (Convert.ToBoolean(Enable))
+                        Flag = true;
+                    status = ITCSR.UpdateDisablePromoData(userDetails.GroupId, Convert.ToString(dr["MobileNo"]),Convert.ToBoolean(Promo),Convert.ToBoolean(Txn), Flag);                   
                 }
             }
+            tblAuditC obj = new tblAuditC();
+            obj.GroupId = Convert.ToString(userDetails.GroupId);
+            obj.RequestedFor = "Upload Disable Promo Data";
+            obj.RequestedBy = userDetails.UserName;
+            obj.RequestedDate = DateTime.Now;
+            ITCSR.AddCSLog(obj);
             return status;
         }
         public bool UploadDisableTxnDocument()

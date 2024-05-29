@@ -208,6 +208,8 @@ namespace WebApp.Controllers
                     objRule.AddedDate = DateTime.Now;
                     objRule.AddedBy = userDetails.LoginId;
                     objRule.IsOnlyCoupon = Convert.ToBoolean(item["IsOnlyCoupon"]);
+                    objRule.UsageTime = Convert.ToString(item["MultipleUse"]);
+
                     objRule.CouponValue = Convert.ToInt32(item["CouponValue"]);
                     objRule.ValueType = Convert.ToString(item["ValueType"]);
                     objRule.ExpiryDays = Convert.ToInt32(item["ExpiryDays"]);

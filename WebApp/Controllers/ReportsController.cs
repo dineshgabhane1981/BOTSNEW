@@ -1885,5 +1885,102 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = count, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
+        public JsonResult GetSubCategoryByCategoryCode(string CategoryCode)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstData = ORR.GetSubCategoryCode(userDetails.connectionString, CategoryCode);
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult GetProductByCategoryCode(string CategoryCode)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstData = ORR.GetProductCodeByCategory(userDetails.connectionString, CategoryCode);
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult GetProductBySubCategoryCode(string SubCategoryCode)
+        {
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var lstData = ORR.GetProductCode(userDetails.connectionString, SubCategoryCode);
+            return new JsonResult() { Data = lstData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult ExportSlicerReport(string jsonData, string columnslist,string type,string DSId)
+        {
+            CreateOwnReportViewModel createownviewmodel = new CreateOwnReportViewModel();
+            List<CustomerDetail> lstcustomerdetails = (List<CustomerDetail>)Session["customerId"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;           
+
+            object[] columnData = (object[])json_serializer.DeserializeObject(columnslist);
+            List<string> lstcolumnlist = new List<string>();
+            List<string> lstcolumnIdlist = new List<string>();
+            string columns = string.Empty;
+            foreach (Dictionary<string, object> item in columnData)
+            {
+                object[] ColumnId = (object[])item["ColumnId"];
+                object[] columnname = (object[])item["columnnm"];
+
+                foreach (var itemNew1 in (columnname))
+                {
+                    string name = Convert.ToString(itemNew1);
+                    lstcolumnlist.Add(name);
+                }
+                foreach (var itemNew1 in (ColumnId))
+                {                   
+                    string name = Convert.ToString(itemNew1);
+                    lstcolumnIdlist.Add(name);
+                    columns += itemNew1 + ",";                   
+                }
+            }
+            if (type == "0")
+            {
+                object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+                columns = columns.Remove(columns.Length - 1);
+                createownviewmodel.listCustR = RR.GetSSFilterReport(objData, columns, userDetails.GroupId, userDetails.connectionString, userDetails.GroupId);
+                createownviewmodel.lstcolumnlist = lstcolumnlist;
+                createownviewmodel.lstcolumnIdlist = lstcolumnIdlist;
+                Session["ExportColumnList"] = createownviewmodel.lstcolumnlist;
+            }
+            if(type == "1")
+            {
+                createownviewmodel.listCustR = RR.GetSSFilterReportFromDS(DSId, columns, userDetails.GroupId, userDetails.connectionString, userDetails.GroupId);
+            }
+
+            DataTable table = new DataTable();
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(CustomerTypeReport));
+            
+            var tblColumns = columns.Split(',');
+            foreach(var newItem in tblColumns)
+            {
+                table.Columns.Add(newItem);
+            }
+            foreach (CustomerTypeReport item in createownviewmodel.listCustR)
+            {
+                DataRow row = table.NewRow();
+                foreach (PropertyDescriptor prop in properties)
+                {
+                    if (tblColumns.Contains(prop.Name))
+                    {
+                        row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                    }
+                }
+                table.Rows.Add(row);
+            }
+            string fileName = "SlicerReport_" + DateTime.Now.ToString("dd-MMM-yyyy") + ".xlsx";
+            string filePath = @"F:\BOTS_Code\BOTSA\WebApp\SlicerReports\" + fileName;
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                table.TableName = fileName;
+                IXLWorksheet worksheet = wb.AddWorksheet(sheetName: fileName);
+                worksheet.Cell(1, 1).InsertTable(table);                
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(filePath);
+                }
+            }
+            return new JsonResult() { Data = fileName, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 }

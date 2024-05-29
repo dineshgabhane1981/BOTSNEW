@@ -6,22 +6,21 @@
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-6 col-xl-6 row">
-                <input type="radio" id="rbtnPromotional" checked name="SMS" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:100px;"> Disable Promotional SMS </div> &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="radio" id="rbtnTxn" name="SMS" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div> Disable Txn SMS </div>
-            </div>
-            @*<div id="dvPromo" class="col-md-6 col-xl-6 row mt-5">
+            <div id="dvPromo" class="col-md-6 col-xl-6 row mt-5 ml-5">
                 <input type="radio" id="rbtnPromoCust" checked name="Promo" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:150px;">Search Customer</div> &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" id="rbtnPromoFileUpload" name="Promo" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Upload File</div>
             </div>
+
+
             <div id="dvTxn" class="col-md-6 col-xl-6 row mt-5" style="display:none">
                 <input type="radio" id="rbtnTxnCust" checked name="Txn" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; <div style="margin-right:150px;">Search Customer</div> &nbsp;&nbsp;&nbsp;&nbsp;
                 <input type="radio" id="rbtnTxnFileUpload" name="Txn" style="width:20px;height:20px;cursor:pointer;" />&nbsp; <div>Upload File</div>
-            </div>*@
-            <div id="dvPromotionalSMS" class="col-md-6 col-xl-6 row mt-5">
+            </div>
+
+            <div id="dvPromotionalSMS" class="col-md-6 col-xl-6 row mt-5 ml-5">
                 <input type="number" id="txtMobileNo" class="input100" placeholder="Please enter mobile Number" /> <button id="btnSearchMemberPromoSMS" class="btn btn-primary login-btn" style="margin-left:30px;">Show</button>
                 <div class="col-md-12 col-lg-12" style="padding-left: 0px !important;margin-top:30px;margin-left:80px;display:none;" id="dvMemberDetails">
-                    <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
+                    <div class="col-md-4 col-lg-8" style="padding-left: 0px !important; margin-bottom: 10px; ">
                         <table border="1" cellpadding="5" cellspacing="5">
                             <tr>
                                 <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
@@ -36,37 +35,8 @@
                                     <button id="btnEnableDisablePromoSMS" class="btn btn-primary ml-auto mt-3" value=""></button>
                                 </td>
                             </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div id="dvUploadPromoMemberList" style="display:none;">
-                <div class="app-main__inner">
-                    <input type="hidden" id="hdnuploadDocBase64" />
-                    <input type="hidden" id="hdnFileName" />
-                    <div class="container-fluid pt-3 pr-3 pb-3 ml-5">
-                        <div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvMainSection">
-                            <input type="file" id="fileUpload1" />
-                            <button type="button" id="btnPromoUpload" class="btn btn-primary">Upload</button>
-                            <div class="ml-5"> <a href="~/Downloads/DisableDataFile.xlsx" target="_blank">Download Sample File</a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-6 row mt-5" id="dvTransactionalSMS" style="display:none">
-                <input type="number" id="txtMobileNo2" class="input100" placeholder="Please enter mobile Number" /> <button id="btnSearchMemberTxnSMS" class="btn btn-primary login-btn" style="margin-left:30px;">Show</button>
-                <div class="col-md-12 col-lg-12" style="padding-left: 0px !important;margin-top:30px;margin-left:80px;display:none;" id="dvMemberDetails2">
-                    <div class="col-md-4 col-lg-4" style="padding-left: 0px !important; margin-bottom: 10px; ">
-                        <table border="1" cellpadding="5" cellspacing="5">
                             <tr>
-                                <th colspan="2" style="padding:10px;text-align:center;">Existing Member Details</th>
-                            </tr>
-                            <tr>
-                                <td style="padding:10px;">Member Name</td>
-                                <td style="padding:10px;width:150px;"><span style="color:red;" id="spnMemberName2"></span></td>
-                            </tr>
-                            <tr>
-                                <td style="padding:10px;">Enable/Disable Txn SMS</td>
+                                <td style="padding:10px;">Enable/Disable Transactional SMS</td>
                                 <td>
                                     <button id="btnEnableDisableTxnSMS" class="btn btn-primary ml-auto mt-3" value=""></button>
                                 </td>
@@ -75,6 +45,29 @@
                     </div>
                 </div>
             </div>
+
+            <div id="dvUploadPromoMemberList" style="display:none;">
+
+                <input type="hidden" id="hdnuploadDocBase64" />
+                <input type="hidden" id="hdnFileName" />
+                <div class="container-fluid pt-3 pr-3 pb-3 ml-5">
+                    <div class="col-md-8 col-xl-8 row mt-3 mb-4">
+                        <input type="checkbox" id="chkPromo" style="width:20px; height:20px; cursor:pointer;" /> &nbsp; Promotional SMS
+                        <input type="checkbox" id="chkTxn" style="width:20px; height:20px; cursor:pointer; margin-left:50px;" /> &nbsp; Transactional SMS
+                    </div>
+                    <div class="col-md-8 col-xl-8 row mt-3 mb-4">
+                        <input type="radio" id="rbtnUploadEnable" checked name="uploadSMS" style="width:20px;height:20px;cursor:pointer;" /> &nbsp; Enable
+                        <input type="radio" id="rbtnUploadDisable" name="uploadSMS" style="width: 20px; height: 20px; cursor: pointer; margin-left: 117px;" />&nbsp; Disable
+                    </div>
+                    <div class="col-md-8 col-xl-8 row mt-3 mb-4" id="dvMainSection">
+                        <input type="file" id="fileUpload1" />
+                        <button type="button" id="btnPromoUpload" class="btn btn-primary">Upload</button>
+                        <div> <a href="~/Downloads/DisableDataFile.xlsx" target="_blank">Download Sample File</a></div>
+                    </div>
+                </div>
+
+            </div>
+
             <div id="dvUploadTxnMemberList" style="display:none;">
                 <div class="app-main__inner">
                     <input type="hidden" id="hdnuploadDocBase64" />
@@ -105,20 +98,20 @@
         $('#btnEnableDisableTxnSMS').on("click", function () {
             DisableTransactionalSMS();
         });
-        $("#rbtnPromotional").change(function () {
-            $("#dvPromo").show();
-            $("#dvTxn").hide();
-            $("#dvPromotionalSMS").show();
-            $("#dvTransactionalSMS").hide();
-            $("#dvUploadPromoMemberList").hide();
-        });
-        $("#rbtnTxn").change(function () {
-            $("#dvTxn").show();
-            $("#dvPromo").hide();
-            $("#dvPromotionalSMS").hide();
-            $("#dvTransactionalSMS").show();
-            $("#dvUploadPromoMemberList").hide();
-        });
+        //$("#rbtnPromotional").change(function () {
+        //    $("#dvPromo").show();
+        //    $("#dvTxn").hide();
+        //    $("#dvPromotionalSMS").show();
+        //    $("#dvTransactionalSMS").hide();
+        //    $("#dvUploadPromoMemberList").hide();
+        //});
+        //$("#rbtnTxn").change(function () {
+        //    $("#dvTxn").show();
+        //    $("#dvPromo").hide();
+        //    $("#dvPromotionalSMS").hide();
+        //    $("#dvTransactionalSMS").show();
+        //    $("#dvUploadPromoMemberList").hide();
+        //});
         $("#rbtnPromoCust").change(function () {
             $("#dvPromotionalSMS").show();
             $("#dvUploadPromoMemberList").hide();
@@ -127,20 +120,23 @@
             $("#dvPromotionalSMS").hide();
             $("#dvUploadPromoMemberList").show();
         });
-        $("#rbtnTxnCust").change(function () {
-            $("#dvTransactionalSMS").show();
-            $("#dvUploadTxnMemberList").hide();
-        });
-        $("#rbtnTxnFileUpload").change(function () {
-            $("#dvTransactionalSMS").hide();
-            $("#dvUploadTxnMemberList").show();
-        });
-        $("#btnPromoUpload").click(function (){
+
+
+        //$("#rbtnTxnCust").change(function () {
+        //    $("#dvTransactionalSMS").show();
+        //    $("#dvUploadTxnMemberList").hide();
+        //});
+        //$("#rbtnTxnFileUpload").change(function () {
+        //    $("#dvTransactionalSMS").hide();
+        //    $("#dvUploadTxnMemberList").show();
+        //});
+
+        $("#btnPromoUpload").click(function () {
             UploadDisablePromoDocuments();
         });
-        $("#btnTxnUpload").click(function (){
-            UploadDisableTxnDocuments();
-        });
+        //$("#btnTxnUpload").click(function (){
+        //    UploadDisableTxnDocuments();
+        //});
     });
     function GetChangeNameDataForPromoSMS() {
         if ($('#txtMobileNo').val() == "") {
@@ -165,6 +161,12 @@
                     else {
                         $("#btnEnableDisablePromoSMS").text("Disable");
                     }
+                    if (result.DisableSMSWATxn) {
+                        $("#btnEnableDisableTxnSMS").text("Enable");
+                    }
+                    else {
+                        $("#btnEnableDisableTxnSMS").text("Disable");
+                    }
                 }
                 else {
                     cuteAlert({
@@ -187,7 +189,7 @@
             }
         });
     }
-    function GetChangeNameDataForTxnSMS() {
+    @*function GetChangeNameDataForTxnSMS() {
         if ($('#txtMobileNo2').val() == "") {
             toastr.error('Please Enter Mobile No');
             return false
@@ -231,7 +233,7 @@
                 $("#divLoader").hide();
             }
         });
-    }
+    }*@
     function DisablePromotionalSMS() {
         var DisableSMSWAPromo = true;
         if ($("#btnEnableDisablePromoSMS").text() == "Enable") {
@@ -353,22 +355,31 @@
         })
     }
     function UploadDisablePromoDocuments() {
-        if (window.FormData !== undefined) {
-            var fileUpload = $("#fileUpload1").get(0);
+        if (!$("#chkPromo").is(":checked") && !$("#chkTxn").is(":checked"))
+        {
 
-            var files = fileUpload.files;
-            if (files.length > 0) {
-                var fileData = new FormData();
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-        $("#divLoader").show();
+        }
+        else if ($("#fileUpload1").val() == "")
+        {
+
+        }
+        else {
+
+            $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("UploadDisablePromoDocument", "IndividualDBConfig")',
+                url: '@Url.Action("UploadEnableDisableSMSFile", "IndividualDBConfig")',
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data
-                data: fileData,
+                data: function () {
+                    var data = new FormData();
+                    data.append("file", $("#file").get(0).files[0]);
+                    data.append("Promo", $("#chkPromo").is(":checked"));
+                    data.append("Txn", $("#chkTxn").is(":checked"));
+                    data.append("Enable", $("#rbtnUploadEnable").is(":checked"));
+                    data.append("Disable", $("#rbtnUploadDisable").is(":checked"));
+                    return data;
+                }(),
                 success: function (result) {
                     if (result) {
                         cuteAlert({
@@ -398,10 +409,11 @@
                 }
             });
 
-            }
         }
     }
-    function UploadDisableTxnDocuments() {
+
+
+    @*function UploadDisableTxnDocuments() {
         if (window.FormData !== undefined) {
             var fileUpload = $("#fileUpload2").get(0);
 
@@ -449,7 +461,7 @@
 
             }
         }
-    }
-    </script>
+    }*@
+</script>
 
 

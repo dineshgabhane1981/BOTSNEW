@@ -69,6 +69,7 @@ namespace BOTS_BL.Models
         public string ValueType { get; set; }
         [StringLength(50)]
         public string CouponCode { get; set; }
+        public string UsageTime { get; set; }
 
     }
 }
