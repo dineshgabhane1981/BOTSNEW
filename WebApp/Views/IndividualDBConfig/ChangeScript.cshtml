@@ -4,23 +4,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
+    .top-right {
+        position: absolute;
+        top: 140px;
+        right: 0;
+        margin: 30px;
+    }
     .rbtnClass {
         height: 20px;
         width: 20px;
-        vertical-align: middle;   
+        vertical-align: middle;
         cursor: pointer;
         margin-left: 10px;
     }
+
     h2 {
         color: #000;
         text-align: center;
         font-size: 2em;
     }
+
     .warpper {
         display: grid;
         flex-direction: column;
         align-items: center;
     }
+
     .tab {
         cursor: pointer;
         padding: 10px 20px;
@@ -31,9 +40,11 @@
         border-radius: 3px 3px 0px 0px;
         box-shadow: 0 0.5rem 0.8rem #00000080;
     }
+
     .tabs {
         padding-left: 25px;
     }
+
     .panels {
         background: #ffffff;
         box-shadow: 0 2rem 2rem #00000080;
@@ -41,22 +52,27 @@
         border-radius: 3px;
         overflow: hidden;
     }
+
     .panel {
         display: none;
         animation: fadein .8s;
     }
+
     .panel-title {
         font-size: 1.5em;
         font-weight: bold
     }
+
     .radio {
         display: none;
     }
+
     #one:checked ~ .panels #one-panel,
     #two:checked ~ .panels #two-panel,
     #three:checked ~ .panels #three-panel {
         display: block
     }
+
     #one:checked ~ .tabs #one-tab,
     #two:checked ~ .tabs #two-tab,
     #three:checked ~ .tabs #three-tab {
@@ -120,7 +136,7 @@
                         WA Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
-                        @Html.DropDownListFor(model => model.objSMSWhatsAppScriptMaster.WhatsAppScriptType, new SelectList(Model.WhatsAppScriptType(), "Value", "Text"),"Please Select", htmlAttributes: new { @class = "input50", @id = "ddlWAScriptType" })
+                        @Html.DropDownListFor(model => model.objSMSWhatsAppScriptMaster.WhatsAppScriptType, new SelectList(Model.WhatsAppScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlWAScriptType" })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
@@ -272,6 +288,25 @@
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnDLCWAUpdate">Update</button>
                 </div>
             </div>
+
+            <div class="top-right" style="height:500px;overflow-y:scroll;">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th>Legend Code</th>
+                        <th>Legend Name</th>
+                    </tr>
+
+                    @foreach (var item in Model.lstLegend)
+                    {
+                        <tr>
+                            <td>@item.LegendCode</td>
+                            <td>@item.LegendName</td>
+                        </tr>
+
+                    }
+                </table>
+            </div>
+
         </div>
         <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="two-panel">
             <div style="margin-bottom:15px;margin-top:15px;">
@@ -534,6 +569,9 @@
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnCredential">Save</button>
                 </div>
             </div>
+
+
+
         </div>
         <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="three-panel">
             <div style="margin-bottom:15px;margin-top:15px;">
@@ -658,26 +696,26 @@
                 </div>
             </div>
             @*<div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvDLCNew1" style="display:none;">
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
-                    <div class="col-lg-3 col-md-3">
-                        Message Type
+                    <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                        <div class="col-lg-3 col-md-3">
+                            Message Type
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            @Html.DropDownListFor(model => model.tblDLCSMSWAScriptMaster.DLCMessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblDLCSMSWAScriptNew1" })
+                        </div>
                     </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.DropDownListFor(model => model.tblDLCSMSWAScriptMaster.DLCMessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblDLCSMSWAScriptNew1" })
+                    <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                        <div class="col-lg-3 col-md-3">
+                            Send Via
+                        </div>
+                        <div class="col-lg-3 col-md-3">
+                            @Html.DropDownListFor(model => model.objDLCSMSWAScriptMaster.SMSWhatsAppSendStatus, new SelectList(Model.SendStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDLCSendStatus" })
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
-                    <div class="col-lg-3 col-md-3">
-                        Send Via
+                    <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
+                        <button class="btn btn-primary pull-right" type="button" title="Next" id="btnDLCStatusUpdate">Update</button>
                     </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.DropDownListFor(model => model.objDLCSMSWAScriptMaster.SMSWhatsAppSendStatus, new SelectList(Model.SendStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDLCSendStatus" })
-                    </div>
-                </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
-                    <button class="btn btn-primary pull-right" type="button" title="Next" id="btnDLCStatusUpdate">Update</button>
-                </div>
-            </div>*@
+                </div>*@
         </div>
     </div>
 </div>
@@ -1076,7 +1114,7 @@
                     $("#ddlOutletMaster").append($("<option />").val("").text("Please Select"));
                     $("#ddlOutletMaster").append($("<option />").val("1").text("All Outlet"));
                     $.each(result, function () {
-                        
+
                         $("#ddlOutletMaster").append($("<option />").val(this.Value).text(this.Text));
                     });
                     $("#divLoader").hide();
@@ -1169,7 +1207,7 @@
                         message: "Script Saved Successfully",
                         buttonText: "Okay"
                     })
-                    if (OutletId === "1") { 
+                    if (OutletId === "1") {
                         $("#txtScript").val('');
                         $("#ddlOutletMaster").val('');
                         $("#ddlWAScriptType").val('');
@@ -1699,7 +1737,7 @@
             data: '{Name: ' + JSON.stringify($('#ddltblInActiveSMSWAScript option:selected').text()) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (result) {                
+            success: function (result) {
                 console.log(result.objInActiveSMSWAScript.WAScript)
                 if (result.objInActiveSMSWAScript != null) {
                     if (result.objInActiveSMSWAScript.Name != null) {
@@ -1745,7 +1783,7 @@
                         message: "Script Saved Successfully",
                         buttonText: "Okay"
                     })
-                    
+
                     $("#divLoader").hide();
                 }
                 else {

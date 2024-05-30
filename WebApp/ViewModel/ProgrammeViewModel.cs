@@ -66,6 +66,9 @@ namespace WebApp.ViewModel
         public tblCustDetailsMaster tblCustDetailsMaster { get; set; }
         public MemberData objMemberData { get; set; }
         public List<MemberData> lstMemberData { get; set; }
+
+        public List<BOTS_TblVariableWords> lstLegend { get; set; }
+        
         public SelectListItem[] WhatsAppScriptType()
         {
             return new SelectListItem[2] { new SelectListItem() { Text = "Text", Value = "Text" }, new SelectListItem() { Text = "Unicode", Value = "Unicode" } };

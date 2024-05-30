@@ -13,5 +13,9 @@ namespace BOTS_BL.Models
         [Required]
         [StringLength(100)]
         public string VariableWords { get; set; }
+        [StringLength(200)]
+        public string LegendCode { get; set; }
+        [StringLength(200)]
+        public string LegendName { get; set; }
     }
 }

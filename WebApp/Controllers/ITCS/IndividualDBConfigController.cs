@@ -24,6 +24,7 @@ namespace WebApp.Controllers.ITCS
     {
         ITCSRepository ITCSR = new ITCSRepository();
         CustomerRepository CR = new CustomerRepository();
+        OnBoardingRepository OBR = new OnBoardingRepository();
         Exceptions newexception = new Exceptions();
         // GET: IndividualDBConfig
         public ActionResult Index()
@@ -35,6 +36,7 @@ namespace WebApp.Controllers.ITCS
         public ActionResult ChangeScript()
         {
             ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstLegend = OBR.GetVariableWordsList();
             return View(objData);
         }
         public JsonResult GetScript(string OutletId)
