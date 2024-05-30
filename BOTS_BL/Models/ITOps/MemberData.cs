@@ -112,4 +112,26 @@ namespace BOTS_BL.Models
         public string StoreAnniversary { get; set; }        
     }
 
+
+
+    public class LisRules
+    {
+        public string StartDate { get; set; }
+
+        public bool IsActive { get; set; }
+        public string EndDate { get; set; }
+
+        public string RuleName { get; set; }
+        public string GroupId { get; set; }
+        public decimal? EarnMinTxnAmt { get; set; }
+        public int? PointsExpiryMonths { get; set; }
+        public decimal? PointsAllocation { get; set; }
+        public decimal? PointsPercentage { get; set; }
+        public bool Revolving { get; set; }
+        public decimal? BurnMinTxnAmt { get; set; }
+        public decimal? MinRedemptionPts { get; set; }
+        public decimal? MinRedemptionPtsFirstTime { get; set; }
+        public decimal? BurnInvoiceAmtPercentage { get; set; }
+        public decimal? BurnDBPointsPercentage { get; set; }
+    }
 }

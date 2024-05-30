@@ -4,13 +4,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    #btnUpdate:hover {
-        background-color: green;
-    }
-    </style>
 <div class="app-main__inner">
     <div class="row mb-3 card">
+        <div class="col-md-12 col-xl-12" style="text-align: right;">
+            @*<div class="button">
+                <button type="button" id="btnLinkCampaign" style="margin-left:15px;" class="btn btn-primary" onclick="LinkCreateCamp();"><b>CreateCampaign</b></button>
+            </div>*@
+            <a href="@Url.Action("GetRuleList", "IndividualDBConfig")" class="btn btn-primary" role="button" data-bs-toggle="button">All Rules</a>
+        </div>
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
 
             <div id="dvRules">
@@ -83,7 +84,7 @@
                         @Html.TextBoxFor(model => model.objtblRuleMaster.EarnMinTxnAmt, new { @class = "input50", @id = "txtTxnAmt" })
                     </div>
                     <div class="col-lg-2 col-md-2">
-                        Revolving Expiry Months
+                         Expiry Months
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.TextBoxFor(model => model.objtblRuleMaster.PointsExpiryMonths, new { @class = "input50", @id = "txtRevolvingExpiry" })
@@ -156,16 +157,16 @@
                         <div style="margin-left:20px;">
                             <input type="checkbox" id="chkRevolving" style="cursor: pointer; margin-right: 5px;width:25px;height:25px;margin-top:5px;" />
                         </div>
-                       
+
                     </div>
                 </div>
 
 
                 <center>
-                <div class="col-md-3 col-xl-3">
-                    <button class="btn btn-danger ml-auto mt-3" type="button" title="Next" id="btnUpdate" tabindex="20">Update</button>
-                </div>
-                    </center>
+                    <div class="col-md-3 col-xl-3">
+                        <button class="btn btn-primary ml-auto mt-3" type="button" title="Next" id="btnUpdate" tabindex="20">Update</button>
+                    </div>
+                </center>
             </div>
         </div>
     </div>

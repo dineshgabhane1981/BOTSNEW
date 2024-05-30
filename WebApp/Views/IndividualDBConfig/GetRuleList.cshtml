@@ -1,0 +1,83 @@
+﻿@*@model WebApp.ViewModel.RuleViewModel*@
+@*@model WebApp.ViewModel.ProgrammeViewModel*@
+
+
+@{
+    ViewBag.Title = "GetRuleList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+<div class="container" id="dvall">
+    <div class="container pt-3 pl-3 pr-3 pb-3">
+        <div class="card" style="padding-bottom:20px;">
+            <div>
+                
+                @if (Model.lstRules.Count > 0)
+                {
+
+                    <div class="row" style="overflow-x:auto;padding-right:20px;margin-top:20px;margin-left:10px;">
+
+                        <table class="table table-bordered">
+                            <tr>
+
+                                <th>PointsAllocation</th>
+                                <th>&nbsp;&nbsp;&nbsp;StartDate&nbsp;</th>
+                                <th>&nbsp;&nbsp;&nbsp;&nbsp;EndDate&nbsp;</th>
+                                <th>EarnMinTxnAmt</th>
+                                <th>BurnMinTxnAmt</th>
+                                <th>MinRedemptionPts</th>
+                                <th>MinRedemptionPtsFirstTime</th>
+                                <th>IsActive</th>
+                                <th>PointsPercentage</th>
+                                <th>PointsExpiryMonths</th>
+                                <th>BurnInvoiceAmtPercentage</th>
+                                <th>BurnDBPointsPercentage</th>
+
+                            </tr>
+                            @foreach (var item in Model.lstRules)
+                            {
+                                var rowClass = item.IsActive ? "table-success" : "table";
+
+                                  <tr class="@rowClass">
+
+                                    <td>@item.PointsAllocation</td>
+                                    <td>@item.StartDate</td>
+                                    <td>@item.EndDate</td>
+                                    <td>@item.EarnMinTxnAmt</td>
+                                    <td>@item.BurnMinTxnAmt</td>
+                                    <td>@item.MinRedemptionPts</td>
+                                    <td>@item.MinRedemptionPtsFirstTime</td>
+                                    <td>@item.IsActive</td>
+                                    <td>@item.PointsPercentage</td>
+                                    <td>@item.PointsExpiryMonths</td>
+                                    <td>@item.BurnInvoiceAmtPercentage</td>
+                                    <td>@item.BurnDBPointsPercentage</td>
+                                  </tr>
+                             }
+                        </table>
+
+                    </div>
+
+                }
+                
+                else
+                     {
+                        <div class="col-md-12 col-xl-12" style="text-align:center;">
+                        <h6>No Rules Found</h6>
+                        </div>
+                     }
+                <br>
+                <div class="col-md-12 col-xl-12" style="text-align: center;">
+                  
+                    <a href="@Url.Action("ChangeEarnRule", "IndividualDBConfig")" class="btn btn-primary" role="button" data-bs-toggle="button">Add Rule</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

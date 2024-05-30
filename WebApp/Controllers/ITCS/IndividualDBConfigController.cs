@@ -1529,6 +1529,25 @@ namespace WebApp.Controllers.ITCS
                 return null;
             }
         }
+
+        public ActionResult GetRuleList()
+        {
+            LisRules obj = new LisRules();
+            RuleViewModel objData = new RuleViewModel();
+            // ProgrammeViewModel o = new ProgrammeViewModel();
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            try
+            {
+                objData.lstRules = ITCSR.GetRuleList(userDetails.GroupId, userDetails.connectionString);
+
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRuleList");
+            }
+            return View("GetRuleList", objData);
+        }
     }
 
 }

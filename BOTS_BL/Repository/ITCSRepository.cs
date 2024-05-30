@@ -1700,6 +1700,52 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
+
+        public List<LisRules> GetRuleList(string groupId, string connectionString)
+        {
+            List<LisRules> CM = new List<LisRules>();
+
+            using (var context = new BOTSDBContext(connectionString))
+            {
+                try
+                {
+                    using (var newcontext = new CommonDBContext())
+                    {
+                        var CM2 = context.tblRuleMasters.ToList();
+
+                        foreach (var item in CM2)
+                        {
+                            LisRules itemData = new LisRules();
+                            itemData.RuleName = Convert.ToString(item.RuleName);
+                            itemData.MinRedemptionPts = item.MinRedemptionPts;
+                            itemData.EarnMinTxnAmt = item.EarnMinTxnAmt;
+                            itemData.BurnMinTxnAmt = item.BurnMinTxnAmt;
+                            itemData.StartDate = item.StartDate.Value.ToString("yyyy-MM-dd");
+                            itemData.MinRedemptionPts = item.MinRedemptionPts;
+                            itemData.MinRedemptionPtsFirstTime = item.MinRedemptionPtsFirstTime;
+                            itemData.IsActive = Convert.ToBoolean(item.IsActive);
+                            itemData.EndDate = item.EndDate.Value.ToString("yyyy-MM-dd");
+                            itemData.PointsAllocation = item.PointsAllocation;
+                            itemData.PointsPercentage = item.PointsPercentage;
+                            itemData.PointsExpiryMonths = item.PointsExpiryMonths;
+                            itemData.BurnInvoiceAmtPercentage = item.BurnInvoiceAmtPercentage;
+                            itemData.BurnDBPointsPercentage = item.BurnDBPointsPercentage;
+                            CM.Add(itemData);
+                        }
+
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    newexception.AddException(ex, "GetRuleList");
+                }
+            }
+            return CM;
+        }
+
         public PointExpiryDummyModel GetPointExpiryDetails(string groupid, string mobileNo)
         {
             PointExpiryDummyModel objData = new PointExpiryDummyModel();

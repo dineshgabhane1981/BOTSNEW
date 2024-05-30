@@ -19,6 +19,7 @@ namespace WebApp.ViewModel
         public List<SelectListItem> lstInactive { get; set; }
         public List<SelectListItem> lstSMSWhatsAppScriptMaster { get; set; }
         public List<tblCampaignMaster> lstCampaigns { get; set; }
+        public List<LisRules> lstRules { get; set; }
         public tblInActiveSMSWAScript tblInActiveSMSWAScript {get;set;}
         public tblInActiveSMSWAScript objInActiveSMSWAScript { get; set; }
         public tblBirthdaySMSWAScript tblBirthdaySMSWAScript { get; set; }
