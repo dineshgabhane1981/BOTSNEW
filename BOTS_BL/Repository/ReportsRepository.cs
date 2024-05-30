@@ -3086,12 +3086,12 @@ namespace BOTS_BL.Repository
                             if (!string.IsNullOrEmpty(Convert.ToString(item["CountMin"])))
                             {
                                 Criteria += "<br/>Txn Count min : " + Convert.ToString(item["CountMin"]);
-                                WhereClause += " and a.TotalTxnCount > " + Convert.ToString(item["CountMin"]);
+                                WhereClause += " and a.TotalTxnCount >= " + Convert.ToString(item["CountMin"]);
                             }
                             if (!string.IsNullOrEmpty(Convert.ToString(item["CountMax"])))
                             {
                                 Criteria += "<br/>Txn Count max : " + Convert.ToString(item["CountMax"]);
-                                WhereClause += " and a.TotalTxnCount < " + Convert.ToString(item["CountMax"]);
+                                WhereClause += " and a.TotalTxnCount <= " + Convert.ToString(item["CountMax"]);
                             }
                         }
                         else

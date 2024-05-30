@@ -630,7 +630,8 @@
     });
 
     $(document).ready(function () {
-
+        DisableAllCheckboxes();
+        
         FillColumns();
         FillColumns1();
 
@@ -697,6 +698,7 @@
 
     function OnchangeMethods() {
         $("#chkTransacting").on('change', function () {
+            EnableAllCheckboxes();
             if ($("#chkTxnOnlyOnce").is(":checked")) {
             }
             else
@@ -725,7 +727,7 @@
             ResetTransactionFilters();
         });
         $("#chkNonTransacting").on('change', function () {
-            //ShowAll();
+            EnableAllCheckboxes();
             HideAll();
             $("#dvBaseFilters").show();
             $("#dvTransactingOutlet").hide();
@@ -761,6 +763,7 @@
             ResetTransactionFilters();
         });
         $("#chkMemberAcquition").on('change', function () {
+            EnableAllCheckboxes();
             ShowAll();
             $("#dvBaseFilters").show();
             $("#dvTxnFilters").hide();
@@ -785,6 +788,7 @@
             ResetTransactionFilters();
         });
         $("#chkPastTransTrendAnalysis").on('change', function () {
+            EnableAllCheckboxes();
             HideAll();
             $("#dvBaseFilters").show();
             $("#dvCumulative").show();
@@ -888,30 +892,26 @@
             ResetTransactionFilters();
         });
         $("#chkTxnInactive").on('change', function () {
-            $("#hrTxnFilter").show();
-            $("#TxnFilterText").show();
+            $("#hrTxnFilter").hide();
+            $("#TxnFilterText").hide();
             if ($("#chkTxnInactive").is(":checked")) {
                 $("#dvTxnInactive").show();
+                $("#dvTxnOnlyOnce").hide();
                 $("#ddlInactive").val($("#ddlInactive option:first").val());
             }
             else {
                 $("#dvTxnInactive").hide();
             }
-            $("#dvEnrolledRange").show();
-            $("#dvTxnCount").show();
-            $("#dvPointBalance").show();
-            $("#dvRedeemed").show();
-            $("#dvNeverPurchased").show();
+
+            HideAll();
             $("#headingProduct").show();
             $("#dvPurchased").show();
-            $("#dvInactive").show();
-            $("#dvSpend").show();
-            $("#dvTxnOnlyOnce").hide();
+            $("#dvNeverPurchased").show();
+            $("#hrProduct").show();
             $("#dvTxnTier").hide();
             $("#dvTxnAIsegment").hide();
-            $("#dvCountSpendDt").show();
+            $("#dvCountSpendDt").hide();
             $("#dvTxnAIsegment").hide();
-            $("#dvInvoiceValue").show();
             ResetTransactionFilters();
         });
         $("#chkTxnAIsegment").on('change', function () {
@@ -1211,8 +1211,7 @@
                 $("#chkTOutletAnyOne").prop("disabled", true);
                 $("#chkTOutletLast").prop("disabled", true);
                 $("#lstBoxTOutlet").prop("disabled", true);
-                $("#chkTOutletAnyOne").prop('checked', false);
-                $("#chkTOutletLast").prop('checked', false);
+                
                 $("#lstBoxTOutlet")[0].selectedIndex = -1;
             }
         });
@@ -1276,75 +1275,136 @@
         $('#chkEnrolledRange').prop('checked', false);
         $('#txtEnrollfromdt').val("");
         $('#txtEnrolltodt').val("");
+        $("#txtEnrollfromdt").prop('disabled', true);
+        $("#txtEnrolltodt").prop('disabled', true);
 
         $('#chkInactiveSince').prop('checked', false);
         $('#txtNonTransactedMax').val("");
+        $("#txtNonTransactedMax").prop('disabled', true);
 
         $('#chkPointBalance').prop('checked', false);
         $('#txtPointsBalMin').val("");
         $('#txtPointsBalMax').val("");
+        $("#txtPointsBalMin").prop('disabled', true);
+        $("#txtPointsBalMax").prop('disabled', true);
 
         $('#chkTxnCount').prop('checked', false);
         $('#txtTxnCountMin').val("");
         $('#txtTxnCountMax').val("");
+        $("#txtTxnCountMin").prop('disabled', true);
+        $("#txtTxnCountMax").prop('disabled', true);
 
         $('#chkSpend').prop('checked', false);
         $('#txtSpendMin').val("");
         $('#txtSpendMax').val("");
+        $("#txtSpendMin").prop('disabled', true);
+        $("#txtSpendMax").prop('disabled', true);
 
         $('#chkInvoiceValue').prop('checked', false);
         $('#txtInvoiceValueMin').val("");
         $('#txtInvoiceValueMax').val("");
         $('#txtInvoiceValuefromdt').val("");
         $('#txtInvoiceValuetodt').val("");
+        $("#txtInvoiceValueMin").prop('disabled', true);
+        $("#txtInvoiceValueMax").prop('disabled', true);
+        $("#txtInvoiceValuefromdt").prop('disabled', true);
+        $("#txtInvoiceValuetodt").prop('disabled', true);
 
         $('#chkAvgTicket').prop('checked', false);
         $('#txtAvgTicketFrm').val("");
         $('#txtAvgTicketTo').val("");
+        $("#txtAvgTicketFrm").prop('disabled', true);
+        $("#txtAvgTicketTo").prop('disabled', true);
 
         $('#chkRedeemed').prop('checked', false);
         $('#rbtnRedeemedMultiple').prop('checked', false);
         $('#rbtnRedeemedSingle').prop('checked', false);
         $('#rbtnNonRedeemed').prop('checked', false);
+
+        $('#chkNeverPurchased').prop('checked', false);
+        $("#ddlNPCategory").val($("#ddlNPCategory option:first").val());
+        $("#ddlNPSubCategory").val($("#ddlNPSubCategory option:first").val());
+        $("#ddlNPProduct").val($("#ddlNPProduct option:first").val());
+        $("#ddlNPCategory").prop('disabled', true);
+        $("#ddlNPSubCategory").prop('disabled', true);
+        $("#ddlNPProduct").prop('disabled', true);
+
+        $('#chkPurchased').prop('checked', false);
+        $("#ddlPCategory").val($("#ddlPCategory option:first").val());
+        $("#ddlPSubCategory").val($("#ddlPSubCategory option:first").val());
+        $("#ddlPProduct").val($("#ddlPProduct option:first").val());
+        $("#ddlPCategory").prop('disabled', true);
+        $("#ddlPSubCategory").prop('disabled', true);
+        $("#ddlPProduct").prop('disabled', true);
+
+        $('#chkBrands').prop('checked', false);
+        $("#ddlBrands").prop('disabled', true);
+        $("#ddlBrands").val($("#ddlBrands option:first").val());
+
+        $('#chkOutlet').prop('checked', false);
+        $("#lstBoxOutlet").prop("disabled", true);
+        $("#lstBoxOutlet")[0].selectedIndex = -1;
+
+        $('#chkTOutlet').prop('checked', false);
+        $("#chkTOutletAnyOne").prop("disabled", true);
+        $("#chkTOutletLast").prop("disabled", true);
+        $("#lstBoxTOutlet").prop("disabled", true);
+        $("#lstBoxTOutlet")[0].selectedIndex = -1;
+
+        $("#chkGender").prop('checked', false);
+        $("#ddlGender").prop('disabled', true);
+        $("#ddlGender").val($("#ddlGender option:first").val());
+
+        $("#chkCity").prop('checked', false);
+        $('#txtCity').val("");
+        $("#txtCity").prop('disabled', true);
+
+        $("#chkAge").prop('checked', false);
+        $('#txtAgefrom').val("");
+        $('#txtAgeTo').val("");
+        $("#txtAgefrom").prop('disabled', true);
+        $("#txtAgeTo").prop('disabled', true);
+
+        $("#chkBirthday").prop('checked', false);
+        $("#ddlBirthday").prop('disabled', true);
+        $("#ddlBirthday").val($("#ddlBirthday option:first").val());
+
+        $("#chkAnniversary").prop('checked', false);
+        $("#ddlAnniversary").prop('disabled', true);
+        $("#ddlAnniversary").val($("#ddlAnniversary option:first").val());
     }
 
     $("#ddlOnlyOnce").change(function () {
         if ($("#ddlOnlyOnce").val() != "") {
             if ($("#ddlOnlyOnce").val() != "Custom") {
                 $("#dvEnrolledRange").hide();
-                $("#dvTxnCount").hide();
+                $("#dvInactive").hide();
+                $("#dvSpend").hide();
                 $("#dvPointBalance").hide();
+                $("#dvTxnCount").hide();                
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
                 $("#dvPurchased").hide();
-                $("#dvInactive").hide();
-                $("#dvSpend").hide();
-
                 $("#dvAvgTicket").hide();
                 $("#dvInvoiceValue").hide();
                 $("#hrProduct").hide();
                 $("#hrTxnFilter").hide();
                 $("#TxnFilterText").hide();
-
             }
-            else {
-                $("#dvEnrolledRange").hide();
-                $("#dvTxnCount").hide();
-                $("#dvPointBalance").hide();
+            else {              
+                $("#dvEnrolledRange").show();
+                $("#dvInactive").show();
+                $("#dvSpend").show();
+                $("#dvPointBalance").show();
+                
+                $("#dvTxnCount").hide();                
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
-                $("#dvPurchased").hide();
-                $("#dvSpend").hide();
+                $("#dvPurchased").hide();                
                 $("#hrProduct").hide();
-                $("#dvAvgTicket").hide();
-
-
-                $("#hrTxnFilter").show();
-                $("#TxnFilterText").show();
-                $("#dvInactive").show();
-                $("#dvInvoiceValue").show();
+                $("#dvAvgTicket").hide();               
             }
         }
         else {
@@ -1355,32 +1415,45 @@
     $("#ddlInactive").change(function () {
         if ($("#ddlInactive").val() != "") {
             if ($("#ddlInactive").val() == "Custom") {
-                $("#dvEnrolledRange").hide();
+              
+                $("#dvEnrolledRange").show();
+                $("#dvInactive").show();
+                $("#dvSpend").show();
+                $("#dvPointBalance").show();
+                
                 $("#dvTxnCount").hide();
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
                 $("#dvPurchased").hide();
-                $("#hrProduct").hide();
-                $("#dvPointBalance").hide();
+                $("#hrProduct").hide();                
                 $("#dvInvoiceValue").hide();
                 $("#dvAvgTicket").hide();
                 $("#txtTxnCountSpendfromdt").hide();
-                $("#txtTxnCountSpendtodt").hide();
-
-                $("#dvSpend").show();
-                $("#dvInactive").show();
+                $("#txtTxnCountSpendtodt").hide();               
 
             }
             else {
-                ShowAll();
+                $("#dvEnrolledRange").hide();
+                $("#dvInactive").hide();
+                $("#dvSpend").hide();
+                $("#dvPointBalance").hide();
+                $("#dvTxnCount").hide();
+                $("#dvRedeemed").hide();
+                $("#dvNeverPurchased").hide();
+                $("#headingProduct").hide();
+                $("#dvPurchased").hide();
+                $("#dvAvgTicket").hide();
+                $("#dvInvoiceValue").hide();
+                $("#hrProduct").hide();
+                $("#hrTxnFilter").hide();
+                $("#TxnFilterText").hide();
 
                 $("#dvAvgTicket").hide();
             }
         }
         else {
             ShowAll();
-
             $("#dvAvgTicket").hide();
         }
     });
@@ -2601,4 +2674,47 @@
             }
         }
     }
+
+    function DisableAllCheckboxes() {
+        $("#chkEnrolledRange").prop('disabled', true);
+        $("#chkInactiveSince").prop('disabled', true);
+        $("#chkPointBalance").prop('disabled', true);
+        $("#chkTxnCount").prop('disabled', true);
+        $("#chkSpend").prop('disabled', true);
+        $("#chkInvoiceValue").prop('disabled', true);
+        $("#chkAvgTicket").prop('disabled', true);
+        $("#chkRedeemed").prop('disabled', true);
+        $("#chkNeverPurchased").prop('disabled', true);
+        $("#chkPurchased").prop('disabled', true);
+        $("#chkBrands").prop('disabled', true);
+        $("#chkOutlet").prop('disabled', true);
+        $("#chkTOutlet").prop('disabled', true);
+        $("#chkGender").prop('disabled', true);
+        $("#chkCity").prop('disabled', true);
+        $("#chkAge").prop('disabled', true);
+        $("#chkBirthday").prop('disabled', true);
+        $("#chkAnniversary").prop('disabled', true);
+    }
+
+    function EnableAllCheckboxes() {
+        $("#chkEnrolledRange").prop('disabled', false);
+        $("#chkInactiveSince").prop('disabled', false);
+        $("#chkPointBalance").prop('disabled', false);
+        $("#chkTxnCount").prop('disabled', false);
+        $("#chkSpend").prop('disabled', false);
+        $("#chkInvoiceValue").prop('disabled', false);
+        $("#chkAvgTicket").prop('disabled', false);
+        $("#chkRedeemed").prop('disabled', false);
+        $("#chkNeverPurchased").prop('disabled', false);
+        $("#chkPurchased").prop('disabled', false);
+        $("#chkBrands").prop('disabled', false);
+        $("#chkOutlet").prop('disabled', false);
+        $("#chkTOutlet").prop('disabled', false);
+        $("#chkGender").prop('disabled', false);
+        $("#chkCity").prop('disabled', false);
+        $("#chkAge").prop('disabled', false);
+        $("#chkBirthday").prop('disabled', false);
+        $("#chkAnniversary").prop('disabled', false);
+    }
+
 </script>
