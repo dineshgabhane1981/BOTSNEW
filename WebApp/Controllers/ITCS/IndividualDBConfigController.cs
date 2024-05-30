@@ -1307,116 +1307,68 @@ namespace WebApp.Controllers.ITCS
                 }
             }
             return status;
+        }
+        public bool UploadEnableDisableSMSFile(HttpPostedFileBase file, string Promo, string Txn, string Enable, string Disable)
+        {
+            bool status = false;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            DataSet ds = new DataSet();
+            HttpPostedFileBase files = Request.Files[0];
+            string fileName = Request.Files[0].FileName;
+            var path = ConfigurationManager.AppSettings["DisableMsgFileUpload"].ToString();
+
+            var fullFilePath = path + "/" + "_" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + fileName;
+            files.SaveAs(fullFilePath);
+            var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+            using (OleDbConnection connExcel = new OleDbConnection(conString))
+            {
+                using (OleDbCommand cmdExcel = new OleDbCommand())
+                {
+                    using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                    {
+                        cmdExcel.Connection = connExcel;
+                        //Get the name of First Sheet.
+                        connExcel.Open();
+                        DataTable dtExcelSchema;
+                        dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                        string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                        connExcel.Close();
+
+                        //Read Data from First Sheet.
+                        connExcel.Open();
+                        cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                        odaExcel.SelectCommand = cmdExcel;
+                        odaExcel.Fill(ds);
+                        connExcel.Close();
+                    }
+                }
+            }
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
+                {
+                    var Flag = false;
+                    if (Convert.ToBoolean(Enable))
+                        Flag = true;
+                    status = ITCSR.UpdateDisablePromoData(userDetails.GroupId, Convert.ToString(dr["MobileNo"]), Convert.ToBoolean(Promo), Convert.ToBoolean(Txn), Flag);
+                }
+            }
+            tblAuditC obj = new tblAuditC();
+            obj.GroupId = Convert.ToString(userDetails.GroupId);
+            obj.RequestedFor = "Upload Disable Promo Data";
+            obj.RequestedBy = userDetails.UserName;
+            obj.RequestedDate = DateTime.Now;
+            ITCSR.AddCSLog(obj);
+            return status;
         }        
-        //public bool UploadDisablePromoDocument()
-        //{
-        //    bool status = false;
-        //    DataSet ds = new DataSet();
-        //    HttpPostedFileBase files = Request.Files[0];
-        //    string fileName = Request.Files[0].FileName;
-        //    var path = ConfigurationManager.AppSettings["CampaignFileUpload"].ToString();
-        //    System.IO.FileInfo file = new System.IO.FileInfo(path);
-        //    var fullFilePath = path + "/" + "_" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + fileName;
-        //    files.SaveAs(fullFilePath);
-        //    var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
-
-        //    using (OleDbConnection connExcel = new OleDbConnection(conString))
-        //    {
-        //        using (OleDbCommand cmdExcel = new OleDbCommand())
-        //        {
-        //            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-        //            {
-        //                cmdExcel.Connection = connExcel;
-        //                //Get the name of First Sheet.
-        //                connExcel.Open();
-        //                DataTable dtExcelSchema;
-        //                dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-        //                string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-        //                connExcel.Close();
-
-        //                //Read Data from First Sheet.
-        //                connExcel.Open();
-        //                cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-        //                odaExcel.SelectCommand = cmdExcel;
-        //                odaExcel.Fill(ds);
-        //                connExcel.Close();
-        //            }
-        //        }
-        //    }
-        //    foreach (DataRow dr in ds.Tables[0].Rows)
-        //    {
-        //        var userDetails = (CustomerLoginDetail)Session["UserSession"];
-        //        if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
-        //        {
-        //            status = ITCSR.UpdateDisablePromoData(userDetails.GroupId, Convert.ToString(dr["MobileNo"]));
-        //            tblAuditC obj = new tblAuditC();
-        //            obj.GroupId = Convert.ToString(userDetails.GroupId);
-        //            obj.RequestedFor = "Upload Disable Promo Data";
-        //            obj.RequestedBy = userDetails.UserName;
-        //            obj.RequestedDate = DateTime.Now;
-        //            ITCSR.AddCSLog(obj);
-        //        }
-        //    }
-        //    return status;
-        //}
-        //public bool UploadDisableTxnDocument()
-        //{
-        //    bool status = false;
-        //    DataSet ds = new DataSet();
-        //    HttpPostedFileBase files = Request.Files[0];
-        //    string fileName = Request.Files[0].FileName;
-        //    var path = ConfigurationManager.AppSettings["CampaignFileUpload"].ToString();
-        //    System.IO.FileInfo file = new System.IO.FileInfo(path);
-        //    var fullFilePath = path + "/" + "_" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + fileName;
-        //    files.SaveAs(fullFilePath);
-        //    var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
-
-        //    using (OleDbConnection connExcel = new OleDbConnection(conString))
-        //    {
-        //        using (OleDbCommand cmdExcel = new OleDbCommand())
-        //        {
-        //            using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-        //            {
-        //                cmdExcel.Connection = connExcel;
-        //                //Get the name of First Sheet.
-        //                connExcel.Open();
-        //                DataTable dtExcelSchema;
-        //                dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-        //                string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-        //                connExcel.Close();
-
-        //                //Read Data from First Sheet.
-        //                connExcel.Open();
-        //                cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-        //                odaExcel.SelectCommand = cmdExcel;
-        //                odaExcel.Fill(ds);
-        //                connExcel.Close();
-        //            }
-        //        }
-        //    }
-        //    foreach (DataRow dr in ds.Tables[0].Rows)
-        //    {
-        //        var userDetails = (CustomerLoginDetail)Session["UserSession"];
-        //        if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
-        //        {
-        //            status = ITCSR.UpdateDisableTxnData(userDetails.GroupId, Convert.ToString(dr["MobileNo"]));
-        //            tblAuditC obj = new tblAuditC();
-        //            obj.GroupId = Convert.ToString(userDetails.GroupId);
-        //            obj.RequestedFor = "Upload Disable Txn Data";
-        //            obj.RequestedBy = userDetails.UserName;
-        //            obj.RequestedDate = DateTime.Now;
-        //            ITCSR.AddCSLog(obj);
-        //        }
-        //    }
-        //    return status;
-        //}
         public bool UploadDisableLoyaltyDocument()
         {
             bool status = false;
             DataSet ds = new DataSet();
             HttpPostedFileBase files = Request.Files[0];
             string fileName = Request.Files[0].FileName;
-            var path = ConfigurationManager.AppSettings["CampaignFileUpload"].ToString();
+            var path = ConfigurationManager.AppSettings["DisableMsgFileUpload"].ToString();
             System.IO.FileInfo file = new System.IO.FileInfo(path);
             var fullFilePath = path + "/" + "_" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + fileName;
             files.SaveAs(fullFilePath);
