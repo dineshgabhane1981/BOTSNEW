@@ -1,0 +1,88 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+
+@{
+    ViewBag.Title = "Genarate QrCode";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="app-main__inner">
+                <div class="row mb-3 card">
+                    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+                        <div class="col-md-8 col-xl-8 row mt-3 pl-5 mb-4" id="dvGroup">
+                            <div class="row" style="margin: 0;">
+                                <div style="float: left; text-align: right; width: 100px; margin-top: 20px;">
+                                    <b>Enter URL:</b>
+                                </div>
+                                <div class="col-sm-4" style="float:left;margin-top:10px;">
+                                    <input type="text" class="input100" id="urlInput" name="URL" tabindex="7">
+                                </div>
+                            </div>
+                            <div class="row" style="margin: 0;">
+                                <div style="float: left; text-align: right; width: 110px; margin-top: 11px;">
+                                    <button type="button" id="generateButton" style="margin: 5px 40px 10px 5px;" class="btn btn-primary">Create</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="qrCodeImageContainer" style="display: none;">
+                    <img id="qrCodeImage" src="" style=" height: 200px;" alt="QR Code Image" />
+                    <div>
+                        <button type="button" id="downloadButton" style="margin: 5px 0px 20px 870px; display: none;" class="btn btn-primary">Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#generateButton').click(function () {
+            var url = $('#urlInput').val();
+
+            if (url === "") {
+                toastr.error('Please Enter Url');
+                return false;
+            }
+            $.ajax({
+                url: '@Url.Action("GenerateQRCode", "IndividualDBConfig")',
+                type: 'GET',
+                data: { url: url },
+                success: function (response) {
+                    if (response.success) {
+                        $('#qrCodeImage').attr('src', response.imageUrl);
+                        $('#qrCodeImageContainer').show();
+                        $('#downloadButton').show();
+                        $('#downloadButton').attr('href', response.imageUrl);
+                        $('#downloadButton').attr('download', 'QRCode.png');
+                        toastr.success('QR Code generated successfully.');
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    toastr.error('Something Went Wrong while generating the QR code.');
+                }
+            });
+        });
+
+        $('#downloadButton').click(function () {
+            var qrCodeUrl = $('#qrCodeImage').attr('src');
+            var a = document.createElement('a');
+            a.href = qrCodeUrl;
+            a.download = 'QRCode.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            $('#qrCodeImageContainer').hide();
+            $('#downloadButton').hide();
+            $('#urlInput').val("");
+        });
+    });
+</script>
+
+

@@ -687,13 +687,13 @@
                                 <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableSMS")">
                                     <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableSMS")" href="@Url.Action("DisableSMS", "IndividualDBConfig")">
                                         <i class="metismenu-icon"></i>
-                                        Block Promo/Txn Messages
+                                        Block Promo/Txn SMS
                                     </a>
                                 </li>
                                 <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")">
                                     <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")" href="@Url.Action("DisableTransactions", "IndividualDBConfig")">
                                         <i class="metismenu-icon"></i>
-                                        Block Loyalty 
+                                        Block Transactions
                                     </a>
                                 </li>
                                 <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")">
@@ -711,7 +711,7 @@
                                 <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")">
                                     <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")" href="@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")">
                                         <i class="metismenu-icon"></i>
-                                        Extend Point Expiry
+                                        Point Expiry
                                     </a>
                                 </li>
                                 <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "UploadCelebrationData")">
@@ -742,6 +742,12 @@
                                     <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")" href="@Url.Action("ChangeOutletDetails", "IndividualDBConfig")">
                                         <i class="metismenu-icon"></i>
                                         Add New Outlet
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "GenarateQrCode")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "GenarateQrCode")" href="@Url.Action("GenarateQrCode", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Generate QRCode
                                     </a>
                                 </li>
                             </ul>
