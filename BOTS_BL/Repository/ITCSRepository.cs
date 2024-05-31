@@ -2617,7 +2617,7 @@ namespace BOTS_BL.Repository
                 StringBuilder stb = new StringBuilder();
                 stb.AppendLine("Dear Customer,");
                 stb.AppendLine();
-                stb.AppendLine("As discussed the Loyalty Earn Rule have been changed :");
+                stb.AppendLine("As discussed the Loyalty Points Rule have been changed :");
                 stb.AppendLine();
                 stb.AppendLine("*Old Rule*");
                 stb.AppendLine("--------------");
