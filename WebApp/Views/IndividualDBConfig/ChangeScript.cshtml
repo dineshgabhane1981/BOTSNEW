@@ -818,6 +818,11 @@
 </div>
 <script>
     $(document).ready(function () {
+        $("#txtScriptNew").keyup(function () {
+            GetCounts($("#ddlSMSScriptType"), $("#txtScriptNew"), $("#charCount"), $("#SMSCount"));
+        });
+
+
         $('#btnUpdate').on("click", function () {
             SaveWATransactionalScripts();
         });
@@ -3018,6 +3023,28 @@
             }
         });
     }
+
+    //$("#SMSScript").keyup(function () {
+    function GetCounts(SType,Script,CharCount,SMSCount) {       
+       
+        var TempCalc = 0;
+        var a = 0;
+        var characterCount = $(Script).val().length;
+           
+        $(CharCount).text(characterCount);        
+        if ($(SType).val() == "Text") {
+            TempCalc = 159;
+        }
+        if ($(SType).val() == "Unicode") {
+            TempCalc = 69;
+        }
+        a = Math.ceil(characterCount / TempCalc);
+        $(SMSCount).text(a);
+    }
+
+
+
+
     @*GetDLCScriptsNew();
     function GetDLCScriptsNew() {
         $("#divLoader").show();
