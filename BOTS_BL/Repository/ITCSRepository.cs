@@ -1599,7 +1599,7 @@ namespace BOTS_BL.Repository
         {
             string _WAGroupCode = string.Empty;
             string CSName = string.Empty;
-            //Int32 RMId;
+            Int32 RMId;
             int? IntGroupId = Convert.ToInt32(ObjEarn.GroupId);
             bool status = false;
             ITCSMessage ObjCSMessage = new ITCSMessage();
@@ -1607,22 +1607,22 @@ namespace BOTS_BL.Repository
             {
                 tblRuleMaster objCustomerDetail = new tblRuleMaster();
 
-                //using (var con = new CommonDBContext())
-                //{
+                using (var con = new CommonDBContext())
+                {
 
-                //    if (ObjEarn.GroupId == "1051" || ObjEarn.GroupId == "1002")
-                //    {
-                //        // Takes FineFoods Testing
-                //        _WAGroupCode = con.WAReports.Where(x => x.GroupId == "1051" && x.SMSStatus == "5").Select(y => y.GroupCode).FirstOrDefault();
-                //        RMId = (int)con.tblGroupDetails.Where(x => x.GroupId == IntGroupId).Select(y => y.RMAssigned).FirstOrDefault();
-                //        CSName = con.tblRMAssigneds.Where(x => x.RMAssignedId == RMId).Select(y => y.RMAssignedName).FirstOrDefault();
-                //    }
-                //    else
-                //    {
-                //        _WAGroupCode = con.WAReports.Where(x => x.GroupId == ObjEarn.GroupId && x.SMSStatus == "0").Select(y => y.GroupCode).FirstOrDefault();
-                //    }
+                    if (ObjEarn.GroupId == "1051" || ObjEarn.GroupId == "1002")
+                    {
+                        // Takes FineFoods Testing
+                        _WAGroupCode = con.WAReports.Where(x => x.GroupId == "1051" && x.SMSStatus == "5").Select(y => y.GroupCode).FirstOrDefault();
+                        RMId = (int)con.tblGroupDetails.Where(x => x.GroupId == IntGroupId).Select(y => y.RMAssigned).FirstOrDefault();
+                        CSName = con.tblRMAssigneds.Where(x => x.RMAssignedId == RMId).Select(y => y.RMAssignedName).FirstOrDefault();
+                    }
+                    else
+                    {
+                        _WAGroupCode = con.WAReports.Where(x => x.GroupId == ObjEarn.GroupId && x.SMSStatus == "0").Select(y => y.GroupCode).FirstOrDefault();
+                    }
 
-                //}
+                }
 
 
 
@@ -1668,28 +1668,38 @@ namespace BOTS_BL.Repository
                         status = true;
                     }
 
-                    //ObjCSMessage.GroupCode = _WAGroupCode;
-                    //ObjCSMessage.CSName = CSName;
-                    //ObjCSMessage.BOTokenid = ConfigurationManager.AppSettings["BOTokenid"].ToString();
-                    //ObjCSMessage.WAAPILink = ConfigurationManager.AppSettings["WAAPILink"].ToString();
-                    //ObjCSMessage.OldEarnMinTxnAmt = Convert.ToString(ObjEarn.OldEarnMinTxnAmt);
-                    //ObjCSMessage.OldPointsAllocation = Convert.ToString(ObjEarn.OldPointsAllocation);
-                    //ObjCSMessage.OldPointsExpiryMonths = Convert.ToString(ObjEarn.OldPointsExpiryMonths);
-                    //ObjCSMessage.OldPointsPercentage = Convert.ToString(ObjEarn.OldPointsPercentage);
-                    //ObjCSMessage.OldRevolvingStatus = Convert.ToString(ObjEarn.OldRevolvingStatus);
-                    //ObjCSMessage.EarnMinTxnAmt = Convert.ToString(ObjEarn.EarnMinTxnAmt);
-                    //ObjCSMessage.PointsAllocation = Convert.ToString(ObjEarn.PointsAllocation);
-                    //ObjCSMessage.PointsExpiryMonths = Convert.ToString(ObjEarn.PointsExpiryMonths);
-                    //ObjCSMessage.PointsPercentage = Convert.ToString(ObjEarn.PointsPercentage);
-                    //ObjCSMessage.Revolving = Convert.ToString(ObjEarn.Revolving);
-                    //ObjCSMessage.Message = ConfigurationManager.AppSettings["ITCSMessage"].ToString();
-                    //ObjCSMessage.FromName = FromName;
+                    ObjCSMessage.GroupCode = _WAGroupCode;
+                    ObjCSMessage.CSName = CSName;
+                    ObjCSMessage.BOTokenid = ConfigurationManager.AppSettings["BOTokenid"].ToString();
+                    ObjCSMessage.WAAPILink = ConfigurationManager.AppSettings["WAAPILink"].ToString();
+                    ObjCSMessage.OldEarnMinTxnAmt = Convert.ToString(ObjEarn.OldEarnMinTxnAmt);
+                    ObjCSMessage.OldPointsAllocation = Convert.ToString(ObjEarn.OldPointsAllocation);
+                    ObjCSMessage.OldPointsExpiryMonths = Convert.ToString(ObjEarn.OldPointsExpiryMonths);
+                    ObjCSMessage.OldPointsPercentage = Convert.ToString(ObjEarn.OldPointsPercentage);
+                    ObjCSMessage.OldRevolvingStatus = Convert.ToString(ObjEarn.OldRevolvingStatus);
+                    ObjCSMessage.EarnMinTxnAmt = Convert.ToString(ObjEarn.EarnMinTxnAmt);
+                    ObjCSMessage.PointsAllocation = Convert.ToString(ObjEarn.PointsAllocation);
+                    ObjCSMessage.PointsExpiryMonths = Convert.ToString(ObjEarn.PointsExpiryMonths);
+                    ObjCSMessage.PointsPercentage = Convert.ToString(ObjEarn.PointsPercentage);
+                    ObjCSMessage.Revolving = Convert.ToString(ObjEarn.Revolving);
+                    ObjCSMessage.OldBurnMinTxnAmt = Convert.ToString(ObjEarn.OldBurnMinTxnAmt);
+                    ObjCSMessage.OldMinRedemptionPts = Convert.ToString(ObjEarn.OldMinRedemptionPts);
+                    ObjCSMessage.OldMinRedemptionPtsFirstTime = Convert.ToString(ObjEarn.OldMinRedemptionPtsFirstTime);
+                    ObjCSMessage.OldBurnInvoiceAmtPercentage = Convert.ToString(ObjEarn.OldBurnInvoiceAmtPercentage);
+                    ObjCSMessage.OldBurnDBPointsPercentage = Convert.ToString(ObjEarn.OldBurnDBPointsPercentage);
+                    ObjCSMessage.BurnMinTxnAmt = Convert.ToString(ObjEarn.BurnMinTxnAmt);
+                    ObjCSMessage.MinRedemptionPts = Convert.ToString(ObjEarn.MinRedemptionPts);
+                    ObjCSMessage.MinRedemptionPtsFirstTime = Convert.ToString(ObjEarn.MinRedemptionPtsFirstTime);
+                    ObjCSMessage.BurnInvoiceAmtPercentage = Convert.ToString(ObjEarn.BurnInvoiceAmtPercentage);
+                    ObjCSMessage.BurnDBPointsPercentage = Convert.ToString(ObjEarn.BurnDBPointsPercentage);
+                    ObjCSMessage.Message = ConfigurationManager.AppSettings["ITCSMessage"].ToString();
+                    ObjCSMessage.FromName = FromName;
 
-                    //if (_WAGroupCode != null)
-                    //{
-                    //    Thread _job2 = new Thread(() => SendWAMessageEarnRule(ObjCSMessage));
-                    //    _job2.Start();
-                    //}
+                    if (_WAGroupCode != null)
+                    {
+                        Thread _job2 = new Thread(() => SendWAMessageEarnRule(ObjCSMessage));
+                        _job2.Start();
+                    }
 
                 }
 
@@ -2616,6 +2626,11 @@ namespace BOTS_BL.Repository
                 stb.AppendLine("PointsExpiryMonths : " + ObjCSMessage.OldPointsExpiryMonths);
                 stb.AppendLine("PointsPercentage : " + ObjCSMessage.OldPointsPercentage);
                 stb.AppendLine("PointsRevolving : " + ObjCSMessage.OldRevolvingStatus);
+                stb.AppendLine("BurnMinTxnAmt : " + ObjCSMessage.OldBurnMinTxnAmt);
+                stb.AppendLine("MinRedemptionPts : " + ObjCSMessage.OldMinRedemptionPts);
+                stb.AppendLine("MinRedemptionPtsFirstTime : " + ObjCSMessage.OldMinRedemptionPtsFirstTime);
+                stb.AppendLine("BurnInvoiceAmtPercentage : " + ObjCSMessage.OldBurnInvoiceAmtPercentage);
+                stb.AppendLine("BurnDBPointsPercentage : " + ObjCSMessage.OldBurnDBPointsPercentage);
                 stb.AppendLine();
                 stb.AppendLine("*New Rule*");
                 stb.AppendLine("--------------");
@@ -2624,6 +2639,11 @@ namespace BOTS_BL.Repository
                 stb.AppendLine("PointsExpiryMonths : " + ObjCSMessage.PointsExpiryMonths);
                 stb.AppendLine("PointsPercentage : " + ObjCSMessage.PointsPercentage);
                 stb.AppendLine("PointsRevolving : " + ObjCSMessage.Revolving);
+                stb.AppendLine("BurnMinTxnAmt : " + ObjCSMessage.BurnMinTxnAmt);
+                stb.AppendLine("MinRedemptionPts : " + ObjCSMessage.MinRedemptionPts);
+                stb.AppendLine("MinRedemptionPtsFirstTime : " + ObjCSMessage.MinRedemptionPtsFirstTime);
+                stb.AppendLine("BurnInvoiceAmtPercentage : " + ObjCSMessage.BurnInvoiceAmtPercentage);
+                stb.AppendLine("BurnDBPointsPercentage : " + ObjCSMessage.BurnDBPointsPercentage);
                 stb.AppendLine();
                 stb.AppendLine("Regards,");
                 stb.AppendLine(" - " + ObjCSMessage.FromName);
