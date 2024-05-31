@@ -2538,10 +2538,11 @@ namespace BOTS_BL.Repository
             string responseString;
             var from = ConfigurationManager.AppSettings["Email"].ToString();
             var PWD = ConfigurationManager.AppSettings["EmailPassword"].ToString();
-           // var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
+            //EmailId = "dinesh@blueocktopus.in";
             //var from = EmailId;
             //var PWD = "JedheKiran@123@";
-             var smtpAddress = "smtp.zoho.com";
+            //  var smtpAddress = "smtp.zoho.com";
             var PortNo = 587;
             try
             {
@@ -2565,10 +2566,12 @@ namespace BOTS_BL.Repository
                     str.Append("</table>");
 
                     mail.From = new MailAddress(from);
-                    //mail.To.Add("kiran@blueocktopus.in");
+                    mail.To.Add("kiran@blueocktopus.in");
                     mail.To.Add("vikas@blueocktopus.in");
                     mail.CC.Add("jacqueline@blueocktopus.in");
-                    mail.CC.Add(EmailId);
+                    mail.CC.Add("dinesh @blueocktopus.in");
+                    if (!string.IsNullOrEmpty(EmailId))
+                        mail.CC.Add(EmailId);
                     mail.Subject = DBName+":"+"&nbsp;"+ "New Outlet Added";
                     mail.SubjectEncoding = System.Text.Encoding.Default;
                     mail.Body = str.ToString();
@@ -2583,18 +2586,10 @@ namespace BOTS_BL.Repository
                         smtp.Send(mail);
                     }
                 }
-            }
-            catch (ArgumentException ex)
-            {
-                responseString = $"HTTP_ERROR :: Argument Exception :: {ex.Message}";
-            }
-            catch (WebException ex)
-            {
-                responseString = $"HTTP_ERROR :: WebException :: {ex.Message}";
-            }
+            }            
             catch (Exception ex)
             {
-                responseString = $"HTTP_ERROR :: Exception :: {ex.Message}";
+                newexception.AddException(ex, "SendEmailComplete");
             }
         }
         public void AddCSLog(tblAuditC objData)
