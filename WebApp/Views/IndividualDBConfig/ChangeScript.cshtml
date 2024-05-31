@@ -323,20 +323,20 @@
                         @Html.DropDownListFor(model => model.tblSMSWhatsAppScriptMaster.MessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblSMSWhatsAppScriptMasterNew" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvScript">
-                    <div class="col-lg-3 col-md-3">
-                        SMS Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objSMSWhatsAppScriptMaster.SMSScript, new { @id = "txtScriptNew", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3 ">
                         SMS Script Type
                     </div>
                     <div class="col-lg-3 col-md-3 ">
                         @Html.DropDownListFor(model => model.objSMSWhatsAppScriptMaster.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlSMSScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvScript">
+                    <div class="col-lg-3 col-md-3">
+                        SMS Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objSMSWhatsAppScriptMaster.SMSScript, new { @id = "txtScriptNew", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
@@ -368,20 +368,20 @@
                         @Html.DropDownListFor(model => model.tblBirthdaySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblBirthdaySMSWAScriptNew" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvBirthdaySMSScript">
-                    <div class="col-lg-3 col-md-3">
-                        SMS Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objBirthdaySMSWAScript.SMSScript, new { @id = "txtBirthdaySMSScript", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         SMS Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objBirthdaySMSWAScript.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlBirthdaySMSScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvBirthdaySMSScript">
+                    <div class="col-lg-3 col-md-3">
+                        SMS Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objBirthdaySMSWAScript.SMSScript, new { @id = "txtBirthdaySMSScript", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
@@ -413,20 +413,20 @@
                         @Html.DropDownListFor(model => model.tblAnniversarySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblAnniversarySMSWAScriptNew" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvAnniversaryScript">
-                    <div class="col-lg-3 col-md-3">
-                        SMS Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objAnniversarySMSWAScript.SMSScript, new { @id = "txtScriptNew2", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         SMS Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objAnniversarySMSWAScript.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlAnniversarySMSScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvAnniversaryScript">
+                    <div class="col-lg-3 col-md-3">
+                        SMS Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objAnniversarySMSWAScript.SMSScript, new { @id = "txtScriptNew2", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
@@ -458,20 +458,20 @@
                         @Html.DropDownListFor(model => model.tblInActiveSMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblInActiveSMSWAScriptNew" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvInactiveScript">
-                    <div class="col-lg-3 col-md-3">
-                        SMS Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objInActiveSMSWAScript.SMSScript, new { @id = "txtScriptNew3", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         SMS Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objInActiveSMSWAScript.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlInactiveSMSScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvInactiveScript">
+                    <div class="col-lg-3 col-md-3">
+                        SMS Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objInActiveSMSWAScript.SMSScript, new { @id = "txtScriptNew3", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
@@ -548,20 +548,20 @@
                         @Html.DropDownListFor(model => model.tblDLCSMSWAScriptMaster.DLCMessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblDLCSMSWAScriptMasterNew" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvDLCScript">
-                    <div class="col-lg-3 col-md-3">
-                        SMS Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objDLCSMSWAScriptMaster.DLCSMSScript, new { @id = "txtDLCScriptNew", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         SMS Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objDLCSMSWAScriptMaster.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDLCSMSScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvDLCScript">
+                    <div class="col-lg-3 col-md-3">
+                        SMS Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objDLCSMSWAScriptMaster.DLCSMSScript, new { @id = "txtDLCScriptNew", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
@@ -821,8 +821,21 @@
         $("#txtScriptNew").keyup(function () {
             GetCounts($("#ddlSMSScriptType"), $("#txtScriptNew"), $("#charCount"), $("#SMSCount"));
         });
-
-
+        $("#txtBirthdaySMSScript").keyup(function () {
+            GetCounts($("#ddlBirthdaySMSScriptType"), $("#txtBirthdaySMSScript"), $("#birthdaycharCount"), $("#birthdaySMSCount"));
+        });
+        $("#txtScriptNew2").keyup(function () {
+            GetCounts($("#ddlAnniversarySMSScriptType"), $("#txtScriptNew2"), $("#AnniversarycharCount"), $("#AnniversarySMSCount"));
+        });
+        $("#txtScriptNew3").keyup(function () {
+            GetCounts($("#ddlInactiveSMSScriptType"), $("#txtScriptNew3"), $("#InactivecharCount"), $("#InactiveSMSCount"));
+        });
+        $("#txtScriptNew4").keyup(function () {
+            GetCounts($("#ddlPointsExpirySMSScriptType"), $("#txtScriptNew4"), $("#PointsExpirycharCount"), $("#PointsExpirySMSCount"));
+        });
+        $("#txtDLCScriptNew").keyup(function () {
+            GetCounts($("#ddlDLCSMSScriptType"), $("#txtDLCScriptNew"), $("#DLCcharCount"), $("#DLCSMSCount"));
+        });
         $('#btnUpdate').on("click", function () {
             SaveWATransactionalScripts();
         });
@@ -3023,10 +3036,7 @@
             }
         });
     }
-
-    //$("#SMSScript").keyup(function () {
-    function GetCounts(SType,Script,CharCount,SMSCount) {       
-       
+    function GetCounts(SType, Script, CharCount, SMSCount) {
         var TempCalc = 0;
         var a = 0;
         var characterCount = $(Script).val().length;
@@ -3041,10 +3051,6 @@
         a = Math.ceil(characterCount / TempCalc);
         $(SMSCount).text(a);
     }
-
-
-
-
     @*GetDLCScriptsNew();
     function GetDLCScriptsNew() {
         $("#divLoader").show();
