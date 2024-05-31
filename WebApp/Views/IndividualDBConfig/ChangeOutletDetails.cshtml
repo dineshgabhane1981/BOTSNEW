@@ -340,6 +340,7 @@
                         $("#txtInvoice_date").val(result.objOutletData.InvoiceDate);
                         $("#txtLive_date").val(result.objOutletData.LiveDate);
                         $("#txtStore_adate").val(result.objOutletData.StoreAnniversaryDate);
+                        $("#txtDefault_otp").val("0");
                     }
                     document.getElementById("txt_Phone").addEventListener("input", function (e) {
                         this.value = this.value.replace(/\D/g, '');
