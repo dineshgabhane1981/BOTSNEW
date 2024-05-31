@@ -113,20 +113,20 @@
                         @Html.DropDownListFor(model => model.tblSMSWhatsAppScriptMaster.MessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblSMSWhatsAppScriptMaster" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvScript">
-                    <div class="col-lg-3 col-md-3">
-                        WA Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objSMSWhatsAppScriptMaster.WhatsAppScript, new { @id = "txtScript", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         WA Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objSMSWhatsAppScriptMaster.WhatsAppScriptType, new SelectList(Model.WhatsAppScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlWAScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvScript">
+                    <div class="col-lg-3 col-md-3">
+                        WA Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objSMSWhatsAppScriptMaster.WhatsAppScript, new { @id = "txtScript", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
@@ -142,20 +142,20 @@
                         @Html.DropDownListFor(model => model.tblBirthdaySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblBirthdaySMSWAScript" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvBirthdayScript">
-                    <div class="col-lg-3 col-md-3">
-                        WA Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objBirthdaySMSWAScript.WAScript, new { @id = "txtScript1", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         WA Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objBirthdaySMSWAScript.WhatsAppScriptType, new SelectList(Model.WhatsAppScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlBirthdayWAScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvBirthdayScript">
+                    <div class="col-lg-3 col-md-3">
+                        WA Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objBirthdaySMSWAScript.WAScript, new { @id = "txtScript1", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
@@ -171,20 +171,20 @@
                         @Html.DropDownListFor(model => model.tblAnniversarySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblAnniversarySMSWAScript" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvAnniversaryScript">
-                    <div class="col-lg-3 col-md-3">
-                        WA Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objAnniversarySMSWAScript.WAScript, new { @id = "txtScript2", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         WA Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objAnniversarySMSWAScript.WhatsAppScriptType, new SelectList(Model.WhatsAppScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlAnniversaryWAScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvAnniversaryScript">
+                    <div class="col-lg-3 col-md-3">
+                        WA Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objAnniversarySMSWAScript.WAScript, new { @id = "txtScript2", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
@@ -200,20 +200,20 @@
                         @Html.DropDownListFor(model => model.tblInActiveSMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblInActiveSMSWAScript" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvInactiveScript">
-                    <div class="col-lg-3 col-md-3">
-                        WA Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objInActiveSMSWAScript.WAScript, new { @id = "txtScript3", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         WA Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objInActiveSMSWAScript.WhatsAppScriptType, new SelectList(Model.WhatsAppScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlInactiveWAScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvInactiveScript">
+                    <div class="col-lg-3 col-md-3">
+                        WA Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objInActiveSMSWAScript.WAScript, new { @id = "txtScript3", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
@@ -229,20 +229,20 @@
                         @Html.DropDownListFor(model => model.tblPointsExpirySMSWAScript.Name, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblPointsExpirySMSWAScript" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvPointsExpiryScript">
-                    <div class="col-lg-3 col-md-3">
-                        WA Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objPointsExpirySMSWAScript.WAScript, new { @id = "txtScript4", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         WA Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objPointsExpirySMSWAScript.WhatsAppScriptType, new SelectList(Model.WhatsAppScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlPointsExpiryWAScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvPointsExpiryScript">
+                    <div class="col-lg-3 col-md-3">
+                        WA Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objPointsExpirySMSWAScript.WAScript, new { @id = "txtScript4", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
@@ -258,20 +258,20 @@
                         @Html.DropDownListFor(model => model.tblDLCSMSWAScriptMaster.DLCMessageType, new SelectList(Enumerable.Empty<SelectListItem>(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddltblDLCSMSWAScriptMaster" })
                     </div>
                 </div>
-                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvDLCScript">
-                    <div class="col-lg-3 col-md-3">
-                        WA Script
-                    </div>
-                    <div class="col-lg-3 col-md-3">
-                        @Html.TextAreaFor(model => model.objDLCSMSWAScriptMaster.DLCWAScript, new { @id = "txtDLCScript", @class = "input150", @rows = 10 })
-                    </div>
-                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <div class="col-lg-3 col-md-3">
                         WA Script Type
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objDLCSMSWAScriptMaster.WhatsAppScriptType, new SelectList(Model.WhatsAppScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDLCWAScriptType" })
+                    </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" id="dvDLCScript">
+                    <div class="col-lg-3 col-md-3">
+                        WA Script
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        @Html.TextAreaFor(model => model.objDLCSMSWAScriptMaster.DLCWAScript, new { @id = "txtDLCScript", @class = "input150", @rows = 10 })
                     </div>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
