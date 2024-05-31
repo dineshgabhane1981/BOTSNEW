@@ -1312,6 +1312,7 @@ namespace WebApp.Controllers.ITCS
         }
         public bool UploadEnableDisableSMSFile(HttpPostedFileBase file, string Promo, string Txn, string Enable, string Disable)
         {
+            DataTable dt = new DataTable();
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             DataSet ds = new DataSet();
@@ -1321,32 +1322,60 @@ namespace WebApp.Controllers.ITCS
 
             var fullFilePath = path + "/" + "_" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + fileName;
             files.SaveAs(fullFilePath);
-            var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
 
-            using (OleDbConnection connExcel = new OleDbConnection(conString))
+            using (XLWorkbook workBook = new XLWorkbook(file.InputStream))
             {
-                using (OleDbCommand cmdExcel = new OleDbCommand())
-                {
-                    using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-                    {
-                        cmdExcel.Connection = connExcel;
-                        //Get the name of First Sheet.
-                        connExcel.Open();
-                        DataTable dtExcelSchema;
-                        dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                        string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                        connExcel.Close();
+                IXLWorksheet workSheet = workBook.Worksheet(1);
+                            
+                dt.Columns.Add("MobileNo", typeof(string));
 
-                        //Read Data from First Sheet.
-                        connExcel.Open();
-                        cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                        odaExcel.SelectCommand = cmdExcel;
-                        odaExcel.Fill(ds);
-                        connExcel.Close();
+                foreach (IXLRow row in workSheet.Rows())
+                {
+                    int i = 0;
+                    DataRow toInsert = dt.NewRow();
+                    foreach (IXLCell cell in row.Cells(1, dt.Columns.Count))
+                    {
+                        try
+                        {
+                            toInsert[i] = cell.Value.ToString();
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        i++;
                     }
+                    dt.Rows.Add(toInsert);
                 }
             }
-            foreach (DataRow dr in ds.Tables[0].Rows)
+
+
+            //var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+            //using (OleDbConnection connExcel = new OleDbConnection(conString))
+            //{
+            //    using (OleDbCommand cmdExcel = new OleDbCommand())
+            //    {
+            //        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+            //        {
+            //            cmdExcel.Connection = connExcel;
+            //            //Get the name of First Sheet.
+            //            connExcel.Open();
+            //            DataTable dtExcelSchema;
+            //            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            //            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+            //            connExcel.Close();
+
+            //            //Read Data from First Sheet.
+            //            connExcel.Open();
+            //            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+            //            odaExcel.SelectCommand = cmdExcel;
+            //            odaExcel.Fill(ds);
+            //            connExcel.Close();
+            //        }
+            //    }
+            //}
+            foreach (DataRow dr in dt.Rows)
             {
                 if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))
                 {
@@ -1421,29 +1450,41 @@ namespace WebApp.Controllers.ITCS
         }
         public ActionResult GenerateQrCode(string url)
         {
-            if (string.IsNullOrEmpty(url))
+            string failedMessage = string.Empty;
+            string imageUrl = string.Empty;
+            try
             {
-                return Json(new { success = false, message = "URL cannot be empty." }, JsonRequestBehavior.AllowGet);
-            }
-            if (!Uri.TryCreate(url, UriKind.Absolute, out _))
-            {
-                return Json(new { success = false, message = "Invalid URL format." }, JsonRequestBehavior.AllowGet);
-            }
+                if (string.IsNullOrEmpty(url))
+                {
+                    failedMessage = "URL cannot be empty.";
+                }
+                if (!Uri.TryCreate(url, UriKind.Absolute, out _))
+                {
+                    failedMessage = "Invalid URL format.";
+                }
 
-            var qrCodeImage = GenerateQrCodeImage(url);
-            if (qrCodeImage == null)
-            {
-                return Json(new { success = false, message = "Failed to generate QR code image." }, JsonRequestBehavior.AllowGet);
-            }
+                var qrCodeImage = GenerateQrCodeImage(url);
+                if (qrCodeImage == null)
+                {
+                    failedMessage = "Failed to generate QR code image.";
+                }
 
-            var filePath = SaveQrCodeImage(qrCodeImage);
-            if (string.IsNullOrEmpty(filePath))
-            {
-                return Json(new { success = false, message = "Failed to save QR code image." }, JsonRequestBehavior.AllowGet);
-            }
+                var filePath = SaveQrCodeImage(qrCodeImage);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    failedMessage = "Failed to save QR code image.";
+                }
 
-            var imageUrl = Url.Content("~/Downloads/GeneratedQRcodeImage/" + Path.GetFileName(filePath));
-            return Json(new { success = true, imageUrl }, JsonRequestBehavior.AllowGet);
+                imageUrl = Url.Content("~/Downloads/GeneratedQRcodeImage/" + Path.GetFileName(filePath));
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "GenerateQrCode");
+            }
+            if (!string.IsNullOrEmpty(failedMessage))
+                return Json(new { success = false, message = failedMessage }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { success = true, imageUrl }, JsonRequestBehavior.AllowGet);
         }
         private Bitmap GenerateQrCodeImage(string url)
         {
