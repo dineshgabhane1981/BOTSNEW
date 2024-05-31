@@ -6,7 +6,7 @@
 <style>
     .top-right {
         position: absolute;
-        top: 140px;
+        top: 180px;
         right: 0;
         margin: 30px;
     }
@@ -17,19 +17,16 @@
         cursor: pointer;
         margin-left: 10px;
     }
-
     h2 {
         color: #000;
         text-align: center;
         font-size: 2em;
     }
-
     .warpper {
         display: grid;
         flex-direction: column;
         align-items: center;
     }
-
     .tab {
         cursor: pointer;
         padding: 10px 20px;
@@ -40,11 +37,9 @@
         border-radius: 3px 3px 0px 0px;
         box-shadow: 0 0.5rem 0.8rem #00000080;
     }
-
     .tabs {
         padding-left: 25px;
     }
-
     .panels {
         background: #ffffff;
         box-shadow: 0 2rem 2rem #00000080;
@@ -52,27 +47,22 @@
         border-radius: 3px;
         overflow: hidden;
     }
-
     .panel {
         display: none;
         animation: fadein .8s;
     }
-
     .panel-title {
         font-size: 1.5em;
         font-weight: bold
     }
-
     .radio {
         display: none;
     }
-
     #one:checked ~ .panels #one-panel,
     #two:checked ~ .panels #two-panel,
     #three:checked ~ .panels #three-panel {
         display: block
     }
-
     #one:checked ~ .tabs #one-tab,
     #two:checked ~ .tabs #two-tab,
     #three:checked ~ .tabs #three-tab {
@@ -288,7 +278,6 @@
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnDLCWAUpdate">Update</button>
                 </div>
             </div>
-
             <div class="top-right" style="height:500px;overflow-y:scroll;">
                 <table border="1" cellpadding="5" cellspacing="5">
                     <tr>
@@ -306,7 +295,6 @@
                     }
                 </table>
             </div>
-
         </div>
         <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="two-panel">
             <div style="margin-bottom:15px;margin-top:15px;">
@@ -351,6 +339,22 @@
                         @Html.DropDownListFor(model => model.objSMSWhatsAppScriptMaster.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlSMSScriptType" })
                     </div>
                 </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">Character Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="charCount">0</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">SMS Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="SMSCount">0</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnUpdateNew">Update</button>
                 </div>
@@ -379,6 +383,22 @@
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objBirthdaySMSWAScript.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlBirthdaySMSScriptType" })
                     </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">Character Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="birthdaycharCount">0</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">SMS Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="birthdaySMSCount">0</span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnBirthdaySMSUpdate">Update</button>
@@ -409,6 +429,22 @@
                         @Html.DropDownListFor(model => model.objAnniversarySMSWAScript.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlAnniversarySMSScriptType" })
                     </div>
                 </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">Character Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="AnniversarycharCount">0</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">SMS Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="AnniversarySMSCount">0</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnAnniversarySMSUpdate">Update</button>
                 </div>
@@ -437,6 +473,22 @@
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objInActiveSMSWAScript.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlInactiveSMSScriptType" })
                     </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">Character Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="InactivecharCount">0</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">SMS Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="InactiveSMSCount">0</span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnInactiveSMSUpdate">Update</button>
@@ -467,6 +519,22 @@
                         @Html.DropDownListFor(model => model.objPointsExpirySMSWAScript.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlPointsExpirySMSScriptType" })
                     </div>
                 </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">Character Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="PointsExpirycharCount">0</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">SMS Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="PointsExpirySMSCount">0</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnPointsExpirySMSUpdate">Update</button>
                 </div>
@@ -495,6 +563,22 @@
                     <div class="col-lg-3 col-md-3">
                         @Html.DropDownListFor(model => model.objDLCSMSWAScriptMaster.SMSScriptType, new SelectList(Model.SMSScriptType(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlDLCSMSScriptType" })
                     </div>
+                </div>
+                <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6" style="margin-top:20px;margin-left:3px;">
+                    <table border="1" cellpadding="5" cellspacing="5">
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">Character Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="DLCcharCount">0</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; width: 150px;">SMS Count</td>
+                            <td style="padding: 10px; width: 150px;">
+                                <span id="DLCSMSCount">0</span>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <div class="col-md-8 col-xl-8 row mt-4 pl-6 mb-6">
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnDLCSMSUpdate">Update</button>
@@ -569,9 +653,23 @@
                     <button class="btn btn-primary pull-right" type="button" title="Next" id="btnCredential">Save</button>
                 </div>
             </div>
+            <div class="top-right" style="height:500px;overflow-y:scroll;" id="LegendTable">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th>Legend Code</th>
+                        <th>Legend Name</th>
+                    </tr>
 
+                    @foreach (var item in Model.lstLegend)
+                    {
+                        <tr>
+                            <td>@item.LegendCode</td>
+                            <td>@item.LegendName</td>
+                        </tr>
 
-
+                    }
+                </table>
+            </div>
         </div>
         <div class="multisteps-form__panel p-3 m-3  list-box bg-white panel" id="three-panel">
             <div style="margin-bottom:15px;margin-top:15px;">
@@ -883,6 +981,7 @@
                 $("#ddlDLCWAScriptType").val("");
         });
         $("#rbtnTransactionalNew").on("click", function () {
+            $("#LegendTable").show();
             $("#dvTransactionalNew").show();
             if ($("#dvTransactionalNew").is(":checked")) {
                 $("#ddlOutletMasterNew").val($("#ddlOutletMasterNew option:first").val());
@@ -895,6 +994,8 @@
                 $("#ddltblSMSWhatsAppScriptMasterNew").val("");
                 $("#txtScriptNew").val("");
                 $("#ddlSMSScriptType").val("");
+                $("#charCount").text("");
+                $("#SMSCount").text("");
             $("#dvBirthdayNew").hide();
             $("#dvAnniversaryNew").hide();
             $("#dvInactiveNew").hide();
@@ -904,6 +1005,7 @@
         });
         $("#rbtnBirthdayNew").on("click", function () {
             $("#dvTransactionalNew").hide();
+            $("#LegendTable").show();
             $("#dvBirthdayNew").show();
             if ($("#dvBirthdayNew").is(":checked")) {
                 $("#ddltblBirthdaySMSWAScriptNew").val($("#ddltblBirthdaySMSWAScriptNew option:first").val());
@@ -914,6 +1016,8 @@
                 $("#ddltblBirthdaySMSWAScriptNew").val("");
                 $("#txtBirthdaySMSScript").val("");
                 $("#ddlBirthdaySMSScriptType").val("");
+                $("#birthdaycharCount").text("");
+                $("#birthdaySMSCount").text("");
             $("#dvAnniversaryNew").hide();
             $("#dvInactiveNew").hide();
             $("#dvPointExpiryNew").hide();
@@ -923,6 +1027,7 @@
         $("#rbtnAnniversaryNew").on("click", function () {
             $("#dvTransactionalNew").hide();
             $("#dvBirthdayNew").hide();
+            $("#LegendTable").show();
             $("#dvAnniversaryNew").show();
             if ($("#dvAnniversaryNew").is(":checked")) {
                 $("#ddltblAnniversarySMSWAScriptNew").val($("#ddltblAnniversarySMSWAScriptNew option:first").val());
@@ -933,6 +1038,8 @@
                 $("#ddltblAnniversarySMSWAScriptNew").val("");
                 $("#txtScriptNew2").val("");
                 $("#ddlAnniversarySMSScriptType").val("");
+                $("#AnniversarycharCount").text("");
+                $("#AnniversarySMSCount").text("");
             $("#dvInactiveNew").hide();
             $("#dvPointExpiryNew").hide();
             $("#dvDLCNew").hide();
@@ -942,6 +1049,7 @@
             $("#dvTransactionalNew").hide();
             $("#dvBirthdayNew").hide();
             $("#dvAnniversaryNew").hide();
+            $("#LegendTable").show();
             $("#dvInactiveNew").show();
             if ($("#dvInactiveNew").is(":checked")) {
                 $("#ddltblInActiveSMSWAScriptNew").val($("#ddltblInActiveSMSWAScriptNew option:first").val());
@@ -952,6 +1060,8 @@
                 $("#ddltblInActiveSMSWAScriptNew").val("");
                 $("#txtScriptNew3").val("");
                 $("#ddlInactiveSMSScriptType").val("");
+                $("#InactivecharCount").text("");
+                $("#InactiveSMSCount").text("");
             $("#dvPointExpiryNew").hide();
             $("#dvDLCNew").hide();
             $("#dvSMSCredentialNew").hide();
@@ -961,6 +1071,7 @@
             $("#dvBirthdayNew").hide();
             $("#dvAnniversaryNew").hide();
             $("#dvInactiveNew").hide();
+            $("#LegendTable").show();
             $("#dvPointExpiryNew").show();
             if ($("#dvPointExpiryNew").is(":checked")) {
                 $("#ddltblPointsExpirySMSWAScriptNew").val($("#ddltblPointsExpirySMSWAScriptNew option:first").val());
@@ -971,6 +1082,8 @@
                 $("#ddltblPointsExpirySMSWAScriptNew").val("");
                 $("#txtScriptNew4").val("");
                 $("#ddlPointsExpirySMSScriptType").val("");
+                $("#PointsExpirycharCount").text("");
+                $("#PointsExpirySMSCount").text("");
             $("#dvDLCNew").hide();
             $("#dvSMSCredentialNew").hide();
         });
@@ -980,6 +1093,7 @@
             $("#dvAnniversaryNew").hide();
             $("#dvInactiveNew").hide();
             $("#dvPointExpiryNew").hide();
+            $("#LegendTable").show();
             $("#dvDLCNew").show();
             if ($("#dvDLCNew").is(":checked")) {
                 $("#ddltblDLCSMSWAScriptMasterNew").val($("#ddltblDLCSMSWAScriptMasterNew option:first").val());
@@ -990,6 +1104,8 @@
                 $("#ddltblDLCSMSWAScriptMasterNew").val("");
                 $("#txtDLCScriptNew").val("");
                 $("#ddlDLCSMSScriptType").val("");
+                $("#DLCcharCount").text("");
+                $("#DLCSMSCount").text("");
             $("#dvSMSCredentialNew").hide();
         });
         $("#rbtnSMSCredentialNew").on("click", function () {
@@ -999,6 +1115,7 @@
             $("#dvInactiveNew").hide();
             $("#dvPointExpiryNew").hide();
             $("#dvDLCNew").hide();
+            $("#LegendTable").hide();
             $("#dvSMSCredentialNew").show();
             if ($("#dvSMSCredentialNew").is(":checked")) {
                 $("#ddlOutletMasterNew1").val($("#ddlOutletMasterNew1 option:first").val());
@@ -1288,11 +1405,22 @@
                     if (result.objSMSWhatsAppScriptMaster.SMSScript != null && result.objSMSWhatsAppScriptMaster.OutletId != null) {
                         $("#txtScriptNew").val(result.objSMSWhatsAppScriptMaster.SMSScript);
                         $("#ddlSMSScriptType").val(result.objSMSWhatsAppScriptMaster.SMSScriptType);
+                        var charCount = $("#txtScriptNew").val().length;
+                        $("#charCount").text(charCount);
+                        if (result.objSMSWhatsAppScriptMaster.SMSScriptType == "Text") {
+                            TempCalc = 159;
+                        } else {
+                            TempCalc = 69;
+                        }
+                        var SMSCount = Math.ceil(charCount / TempCalc);
+                        $("#SMSCount").text(SMSCount);
                     }
                     else {
                         toastr.error('SMS Script for this Outlet is not present');
                         $("#txtScriptNew").val("");
                         $("#ddlSMSScriptType").val("");
+                        $("#charCount").text("");
+                        $("#SMSCount").text("");
                     }
                 }
                 else {
@@ -1475,6 +1603,16 @@
                     if (result.objBirthdaySMSWAScript.Name != null) {
                         $("#txtBirthdaySMSScript").val(result.objBirthdaySMSWAScript.SMSScript);
                         $("#ddlBirthdaySMSScriptType").val(result.objBirthdaySMSWAScript.SMSScriptType);
+                        var BirthdaycharCount = $("#txtBirthdaySMSScript").val().length;
+                        $("#birthdaycharCount").text(BirthdaycharCount);
+                        if (result.objBirthdaySMSWAScript.SMSScriptType == "Text") {
+                            TempCalc = 159;
+                        }
+                        else {
+                            TempCalc = 69;
+                        }
+                        var BirthdaySMSCount = Math.ceil(BirthdaycharCount / TempCalc);
+                        $("#birthdaySMSCount").text(BirthdaySMSCount);
                     }
                     else {
                         toastr.error('SMS Script for this Outlet is not present');
@@ -1653,6 +1791,16 @@
                     if (result.objAnniversarySMSWAScript.Name != null) {
                         $("#txtScriptNew2").val(result.objAnniversarySMSWAScript.SMSScript);
                         $("#ddlAnniversarySMSScriptType").val(result.objAnniversarySMSWAScript.SMSScriptType);
+                        var AnniversarycharCount = $("#txtScriptNew2").val().length;
+                        $("#AnniversarycharCount").text(AnniversarycharCount);
+                        if (result.objAnniversarySMSWAScript.SMSScriptType == "Text") {
+                            TempCalc = 159;
+                        }
+                        else {
+                            TempCalc = 69;
+                        }
+                        var AnniversarySMSCount = Math.ceil(AnniversarycharCount / TempCalc);
+                        $("#AnniversarySMSCount").text(AnniversarySMSCount);
                     }
                     else {
                         toastr.error('SMS Script for this Outlet is not present');
@@ -1833,6 +1981,16 @@
                     if (result.objInActiveSMSWAScript.Name != null) {
                         $("#txtScriptNew3").val(result.objInActiveSMSWAScript.SMSScript);
                         $("#ddlInactiveSMSScriptType").val(result.objInActiveSMSWAScript.SMSScriptType);
+                        var InactivecharCount = $("#txtScriptNew3").val().length;
+                        $("#InactivecharCount").text(InactivecharCount);
+                        if (result.objInActiveSMSWAScript.SMSScriptType == "Text") {
+                            TempCalc = 159;
+                        }
+                        else {
+                            TempCalc = 69;
+                        }
+                        var InactiveSMSCount = Math.ceil(InactivecharCount / TempCalc);
+                        $("#InactiveSMSCount").text(InactiveSMSCount);
                     }
                     else {
                         toastr.error('SMS Script for this Outlet is not present');
@@ -2011,6 +2169,16 @@
                     if (result.objPointsExpirySMSWAScript.Name != null) {
                         $("#txtScriptNew4").val(result.objPointsExpirySMSWAScript.SMSScript);
                         $("#ddlPointsExpirySMSScriptType").val(result.objPointsExpirySMSWAScript.SMSScriptType);
+                        var PointsExpirycharCount = $("#txtScriptNew4").val().length;
+                        $("#PointsExpirycharCount").text(PointsExpirycharCount);
+                        if (result.objPointsExpirySMSWAScript.SMSScriptType == "Text") {
+                            TempCalc = 159;
+                        }
+                        else {
+                            TempCalc = 69;
+                        }
+                        var PointsExpirySMSCount = Math.ceil(PointsExpirycharCount / TempCalc);
+                        $("#PointsExpirySMSCount").text(PointsExpirySMSCount);
                     }
                     else {
                         toastr.error('SMS Script for this Outlet is not present');
@@ -2191,11 +2359,23 @@
                     if (result.objDLCSMSWAScriptMaster.DLCSMSScript != null) {
                         $("#txtDLCScriptNew").val(result.objDLCSMSWAScriptMaster.DLCSMSScript);
                         $("#ddlDLCSMSScriptType").val(result.objDLCSMSWAScriptMaster.SMSScriptType);
+                        var DLCcharCount = $("#txtDLCScriptNew").val().length;
+                        $("#DLCcharCount").text(DLCcharCount);
+                        if (result.objDLCSMSWAScriptMaster.SMSScriptType == "Text") {
+                            TempCalc = 159;
+                        }
+                        else {
+                            TempCalc = 69;
+                        }
+                        var DLCSMSCount = Math.ceil(DLCcharCount / TempCalc);
+                        $("#DLCSMSCount").text(DLCSMSCount);
                     }
                     else {
                         toastr.error('SMS Script for this Outlet is not present');
                         $("#txtDLCScriptNew").val("");
                         $("#ddlDLCSMSScriptType").val("");
+                        $("#DLCcharCount").text("");
+                        $("#DLCSMSCount").text("");
                     }
                 }
                 else {
@@ -2422,8 +2602,6 @@
             }
         });
     });
-
-
     $("#ddltblSMSWhatsAppScriptMasterNew1").change(function () {
         var OutletId = $("#ddlOutletMasterNew2").val();
         var MessageType = ($("#ddltblSMSWhatsAppScriptMasterNew1 option:selected").text());
