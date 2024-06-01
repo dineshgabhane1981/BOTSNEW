@@ -778,6 +778,7 @@
     <Content Include="Views\Campaigns\NewCampaign.cshtml" />
     <Content Include="Views\Reports\_CreateOwnReportCustomerWiseForSaved.cshtml" />
     <Content Include="Views\IndividualDBConfig\ChangeOutletDetails.cshtml" />
+    <Content Include="Views\IndividualDBConfig\GenarateQrCode.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />
@@ -934,6 +935,7 @@
     <Folder Include="CouponFiles\" />
     <Folder Include="CustomerDocuments\" />
     <Folder Include="DashboardReports\" />
+    <Folder Include="DisableMsgFileUpload\" />
     <Folder Include="DLCImages\" />
     <Folder Include="DocLibDownload\" />
     <Folder Include="ReportFiles\" />
