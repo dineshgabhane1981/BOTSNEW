@@ -1571,7 +1571,8 @@ namespace BOTS_BL.Repository
                 if (objtblRuleMaster != null)
                 {
                     obj.RuleName = objtblRuleMaster.RuleName;
-                    obj.StartDate = objtblRuleMaster.StartDate.Value.ToString("yyyy/MM/dd");
+                    //obj.StartDate = objtblRuleMaster.StartDate.Value.ToString("yyyy/MM/dd");
+                    obj.StartDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
                     obj.EndDate = objtblRuleMaster.EndDate.Value.ToString("yyyy/MM/dd");
                     obj.EarnMinTxnAmt = objtblRuleMaster.EarnMinTxnAmt;
                     obj.PointsExpiryMonths = objtblRuleMaster.PointsExpiryMonths;

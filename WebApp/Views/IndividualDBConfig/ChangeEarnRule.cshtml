@@ -8,8 +8,8 @@
     <div class="row mb-3 card">
         <div class="col-md-12 col-xl-12" style="text-align: right;">
             @*<div class="button">
-                <button type="button" id="btnLinkCampaign" style="margin-left:15px;" class="btn btn-primary" onclick="LinkCreateCamp();"><b>CreateCampaign</b></button>
-            </div>*@
+                    <button type="button" id="btnLinkCampaign" style="margin-left:15px;" class="btn btn-primary" onclick="LinkCreateCamp();"><b>CreateCampaign</b></button>
+                </div>*@
             <a href="@Url.Action("GetRuleList", "IndividualDBConfig")" class="btn btn-primary" role="button" data-bs-toggle="button">All Rules</a>
         </div>
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
@@ -84,7 +84,7 @@
                         @Html.TextBoxFor(model => model.objtblRuleMaster.EarnMinTxnAmt, new { @class = "input50", @id = "txtTxnAmt" })
                     </div>
                     <div class="col-lg-2 col-md-2">
-                         Expiry Months
+                        Expiry Months
                     </div>
                     <div class="col-lg-3 col-md-3">
                         @Html.TextBoxFor(model => model.objtblRuleMaster.PointsExpiryMonths, new { @class = "input50", @id = "txtRevolvingExpiry" })
@@ -170,10 +170,21 @@
             </div>
         </div>
     </div>
-    </div>
-
-    <script>
-    $(document).ready(function () {
+</div>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script>
+        $(document).ready(function () {
+            $("#txtstartdate").datepicker({
+                dateFormat: "yy-mm-dd",
+                minDate: 0,
+                changeMonth: true,
+                changeYear: true,
+                showOtherMonths: true,
+                selectOtherMonths: true
+            });
         GetEarnRule();
 
         $('#btnUpdate').on("click", function () {
@@ -388,4 +399,4 @@
             }
         });
     }
-    </script>
+</script>

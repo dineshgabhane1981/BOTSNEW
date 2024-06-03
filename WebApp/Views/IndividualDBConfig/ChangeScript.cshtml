@@ -904,7 +904,7 @@
             else
                 $("#ddlOutletMaster").val("");
                 $("#ddltblSMSWhatsAppScriptMaster").val("");
-                $("#txtScript").val("");
+                $("#txtScript").text("");
                 $("#ddlWAScriptType").val("");
             $("#dvBirthday").hide();
             $("#dvAnniversary").hide();
@@ -1272,8 +1272,12 @@
             success: function (result) {
                 $("#ddltblSMSWhatsAppScriptMaster").empty();
                 $("#ddltblSMSWhatsAppScriptMaster").append($("<option />").val("").text("Please Select"));
+                $("#txtScript").val("");
+                $("#ddlWAScriptType").val("");
                 $.each(result, function () {
                     $("#ddltblSMSWhatsAppScriptMaster").append($("<option />").val(this.Value).text(this.Text));
+                    $("#txtScript").val("");
+                    $("#ddlWAScriptType").val("");
                 });
                 $("#divLoader").hide();
             },
@@ -1396,8 +1400,16 @@
             success: function (result) {
                 $("#ddltblSMSWhatsAppScriptMasterNew").empty();
                 $("#ddltblSMSWhatsAppScriptMasterNew").append($("<option />").val("").text("Please Select"));
+                        $("#txtScriptNew").val("");
+                        $("#ddlSMSScriptType").val("");
+                        $("#charCount").text("");
+                        $("#SMSCount").text("");
                 $.each(result, function () {
                     $("#ddltblSMSWhatsAppScriptMasterNew").append($("<option />").val(this.Value).text(this.Text));
+                    $("#txtScriptNew").val("");
+                        $("#ddlSMSScriptType").val("");
+                        $("#charCount").text("");
+                        $("#SMSCount").text("");
                 });
                 $("#divLoader").hide();
             },
