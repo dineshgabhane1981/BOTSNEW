@@ -2770,14 +2770,17 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connStr))
                 {
                     var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
-                    if(IsPromo)
-                        custDetails.DisableSMSWAPromo = IsStatus;
-                    if (IsTxn)
-                        custDetails.DisableSMSWATxn = IsStatus;
+                    if (custDetails != null)
+                    {
+                        if (IsPromo)
+                            custDetails.DisableSMSWAPromo = IsStatus;
+                        if (IsTxn)
+                            custDetails.DisableSMSWATxn = IsStatus;
 
-                    context.tblCustDetailsMasters.AddOrUpdate(custDetails);
-                    context.SaveChanges();
-                    result = true;
+                        context.tblCustDetailsMasters.AddOrUpdate(custDetails);
+                        context.SaveChanges();
+                        result = true;
+                    }
                 }
             }
             catch (Exception ex)
@@ -2818,10 +2821,13 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connStr))
                 {
                     var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
-                    custDetails.DisableTxn = true;
-                    context.tblCustDetailsMasters.AddOrUpdate(custDetails);
-                    context.SaveChanges();
-                    result = true;
+                    if (custDetails != null)
+                    {
+                        custDetails.DisableTxn = true;
+                        context.tblCustDetailsMasters.AddOrUpdate(custDetails);
+                        context.SaveChanges();
+                        result = true;
+                    }
                 }
             }
             catch (Exception ex)
