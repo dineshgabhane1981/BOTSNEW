@@ -1376,6 +1376,7 @@ namespace WebApp.Controllers.ITCS
         public bool UploadDisableLoyaltyDocument()
         {
             bool status = false;
+            DataTable dt = new DataTable();
             DataSet ds = new DataSet();
             HttpPostedFileBase files = Request.Files[0];
             string fileName = Request.Files[0].FileName;
@@ -1383,31 +1384,57 @@ namespace WebApp.Controllers.ITCS
             System.IO.FileInfo file = new System.IO.FileInfo(path);
             var fullFilePath = path + "/" + "_" + DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + fileName;
             files.SaveAs(fullFilePath);
-            var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
 
-            using (OleDbConnection connExcel = new OleDbConnection(conString))
+            using (XLWorkbook workBook = new XLWorkbook(files.InputStream))
             {
-                using (OleDbCommand cmdExcel = new OleDbCommand())
-                {
-                    using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-                    {
-                        cmdExcel.Connection = connExcel;
-                        //Get the name of First Sheet.
-                        connExcel.Open();
-                        DataTable dtExcelSchema;
-                        dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                        string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                        connExcel.Close();
+                IXLWorksheet workSheet = workBook.Worksheet(1);
 
-                        //Read Data from First Sheet.
-                        connExcel.Open();
-                        cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                        odaExcel.SelectCommand = cmdExcel;
-                        odaExcel.Fill(ds);
-                        connExcel.Close();
+                dt.Columns.Add("MobileNo", typeof(string));
+
+                foreach (IXLRow row in workSheet.Rows())
+                {
+                    int i = 0;
+                    DataRow toInsert = dt.NewRow();
+                    foreach (IXLCell cell in row.Cells(1, dt.Columns.Count))
+                    {
+                        try
+                        {
+                            toInsert[i] = cell.Value.ToString();
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                        i++;
                     }
+                    dt.Rows.Add(toInsert);
                 }
             }
+           // var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
+
+            //using (OleDbConnection connExcel = new OleDbConnection(conString))
+            //{
+            //    using (OleDbCommand cmdExcel = new OleDbCommand())
+            //    {
+            //        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+            //        {
+            //            cmdExcel.Connection = connExcel;
+            //            //Get the name of First Sheet.
+            //            connExcel.Open();
+            //            DataTable dtExcelSchema;
+            //            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            //            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+            //            connExcel.Close();
+
+            //            //Read Data from First Sheet.
+            //            connExcel.Open();
+            //            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+            //            odaExcel.SelectCommand = cmdExcel;
+            //            odaExcel.Fill(ds);
+            //            connExcel.Close();
+            //        }
+            //    }
+            //}
             foreach (DataRow dr in ds.Tables[0].Rows)
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
