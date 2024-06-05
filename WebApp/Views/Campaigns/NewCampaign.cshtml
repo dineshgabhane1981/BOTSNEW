@@ -152,16 +152,33 @@
                                         </div>
                                     </div>
                                     <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns" style="display:none;">
-                                        <div class="col-xl-2">
+                                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostBonusPoint">
+                                            <div class="col-xl-3">
+                                                Load Bonus Points:
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <input type="number" id="txtPostBonusPoint" class="input50" placeholder="Bonus Points" />
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostBonusValidity">
+                                            <div class="col-xl-3">
+                                                Validity of Bonus Points:
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <input type="date" id="txtPostBonusValidity" class="input50" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-2 mt-4">
 
                                         </div>
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-6 mt-4">
                                             <input type="radio" id="chkTxnCount" name="PostPoints" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Txn Count
                                             <input type="radio" id="chkSpend" name="PostPoints" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Spend
                                             <input type="radio" id="chkRedeemTxn" name="PostPoints" style="width: 20px; height: 20px; cursor: pointer; margin-left: 20px;" /> &nbsp;Redemption txn
                                         </div>
                                     </div>
 
+                                    
                                     <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns1" style="display:none;">
                                         <div class="col-xl-3">
                                             Qualifiying Txn counts:
@@ -463,6 +480,66 @@
             CampStatus = false;
         }
 
+        if ($("#chkPreIssue").prop('checked') == true) {
+            if (($("#txtLoadBonus").val() == "" || $("#txtValidityBonus").val() == "") || ($("#txtLoadBonus").val() == "" && $("#txtValidityBonus").val() == "")) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Load Bonus points.. and Bonus validity entered",
+                    buttonText: "Okay"
+                })
+            }
+            CampStatus = false;
+        }
+
+        if ($("#chkPostIssue").prop('checked') == true) {
+            alert("111");
+            if (($("#txtPostBonusPoint").val() == "" || $("#txtPostBonusValidity").val() == "") || ($("#txtPostBonusPoint").val() == "" && $("#txtPostBonusValidity").val() == "")) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Load Bonus points.. and Bonus validity entered",
+                    buttonText: "Okay"
+                })
+                CampStatus = false;
+            }
+            
+        }
+        if ($("#chkTxnCount").prop('checked') == true) {
+            if (($("#txtQTxnCount").val() == "" || $("#txtQInvoiceValue").val() == "") || ($("#txtQTxnCount").val() == "" && $("#txtQInvoiceValue").val() == "")) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Qualifying Txn Count and Min Invoice Val..",
+                    buttonText: "Okay"
+                })
+                CampStatus = false;
+            }
+            
+        }
+        if (($("#chkSpend").prop('checked') == true) && $("#txtQSpends").val() == "") {
+            
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Qualifying Spend for Campaign..",
+                    buttonText: "Okay"
+                })
+                CampStatus = false;
+        }
+        if ($("#chkRedeemTxn").prop('checked') == true) {
+            if ((($("#txtQRedeemPoints").val() == "" || $("#txtQInvoiceValueForRedeem").val() == "")) || (($("#txtQRedeemPoints").val() == "" && $("#txtQInvoiceValueForRedeem").val() == ""))) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Qualifying Spend for Campaign..",
+                    buttonText: "Okay"
+                })
+                CampStatus = false;
+            }
+            
+        }
+
 
         if (CampStatus) {
             $("#btnCampaignNext").prop('disabled', false);
@@ -499,6 +576,8 @@
             $("#dvPreIssue1").hide();
             $("#dvPreIssue2").hide();
             $("#dvPostRbtns").show();
+            
+
         }
     }
 
