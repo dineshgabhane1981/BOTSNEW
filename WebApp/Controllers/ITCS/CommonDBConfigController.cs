@@ -119,6 +119,42 @@ namespace WebApp.Controllers.ITCS
             }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+        public ActionResult UpdateRenewal()
+        {
+            ProgrammeViewModel objData = new ProgrammeViewModel();
+            objData.lstGroupDetails = ITCSR.GetGroupDetails();
+            objData.lstRMAssigned = ITCSR.GetRMAssignedList();
+            return View(objData);
+        }
 
+        public ActionResult GetRenewalData(string GroupId)
+        {
+            string objGroupDate = string.Empty;
+            try
+            {
+                objGroupDate = ITCSR.GetGroupRenewalDate(Convert.ToInt32(GroupId));
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetRenewalData");
+            }
+            return Json(objGroupDate, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult UpdateRenewalDate(string GroupId, string RenewalDate)
+        {
+            bool result = false;
+            try
+            {
+                if (!string.IsNullOrEmpty(GroupId))
+                {
+                    result = ITCSR.UpdateRenewalDate(Convert.ToInt32(GroupId), Convert.ToDateTime(RenewalDate));
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "UpdateRenewalDate");
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

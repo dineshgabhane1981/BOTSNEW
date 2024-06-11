@@ -246,6 +246,12 @@
                                                 Program Status
                                             </a>
                                         </li>
+                                        <li class="@Html.IsSelected(controller: "CommonDBConfig", action: "UpdateRenewal")">
+                                            <a class="@Html.IsSelected(controller: "CommonDBConfig", action: "UpdateRenewal")" href="@Url.Action("UpdateRenewal", "CommonDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Update Renewal
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             }

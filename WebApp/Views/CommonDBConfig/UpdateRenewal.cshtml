@@ -1,0 +1,152 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "Update Renewal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvGroup">
+                <div class="col-lg-3 col-md-3">
+                    <b>Group Name</b>
+                </div>
+                <div class="col-md-3 col-xl-3" style="padding-left:9px;">
+                    @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
+                </div>
+                 
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvRenewalDate" style="display: none;">
+                <div class="col-md-12 col-xl-12 row">
+                    <div class="col-md-3 col-xl-3" style="margin-bottom: 30px;">
+                        <b>Existing Renewal Date</b>
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        <span id="spnExistingRenewalDate"></span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row">
+                    <div class="col-md-3 col-xl-3">
+                        <b>Update Renewal Date</b>
+                    </div>
+                    <div class="col-md-3 col-xl-3">
+                        <input id="txtNewRewalDate" class="input50" />
+                    </div>
+                </div>
+                <div class="row mb-2 ml-2">
+                    <div class="col-md-3 col-xl-6" style="margin-left: 270px; margin-top: 20px; ">
+                        <button type="button" id="btnUpdate" class="btn btn-primary" Onclick="UpdateRenewalDate()"><b>Update</b></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script>
+    $(document).ready(function () {
+        $('#ddlGroupDetails').on("change", function () {
+            GetRenewalDetails();
+        });
+        $("#txtNewRewalDate").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            selectOtherMonths: true
+        });
+    });
+    function GetRenewalDetails() {
+        if ($('#ddlGroupDetails').val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Group",
+                buttonText: "Okay"
+            })
+            return false
+        }
+        else {
+
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetRenewalData", "CommonDBConfig")',
+                data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result != null) {
+                        $("#spnExistingRenewalDate").text(result);
+                        $("#dvRenewalDate").show();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "No Renewal Date found",
+                            buttonText: "Okay"
+                        })
+                        $("#dvRenewalDate").show();
+                    }
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(111)
+                    console.log(result.responseText)
+                }
+            });
+        }
+    }
+    function UpdateRenewalDate() {
+        if ($('#txtNewRewalDate').val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Date",
+                buttonText: "Okay"
+            })
+            return false
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("UpdateRenewalDate", "CommonDBConfig")',
+                data: '{GroupId: ' + JSON.stringify($('#ddlGroupDetails').val()) + ',RenewalDate: ' + JSON.stringify($('#txtNewRewalDate').val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                    if (result = true) {
+                        cuteAlert({
+                            type: "success",
+                            title: "Success Title",
+                            message: "Renewal Date updated Successfully",
+                            buttonText: "Okay"
+                        }).then(() => {
+                            window.location.reload();
+                        })
+                        $("#divLoader").hide();
+                    }
+                    else {
+                        cuteAlert({
+                            type: "error",
+                            title: "Oops..",
+                            message: "couldn't Save Data",
+                            buttonText: "Okay"
+                        })
+                    }
+
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                }
+            });
+        }
+    }
+</script>

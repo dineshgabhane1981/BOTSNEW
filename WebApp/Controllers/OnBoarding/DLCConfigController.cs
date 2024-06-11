@@ -13,6 +13,10 @@ using System.Data;
 using Newtonsoft.Json;
 using BOTS_BL.Repository;
 using WebApp.App_Start;
+using System.Net;
+using Newtonsoft.Json.Linq;
+using QRCoder;
+using System.Drawing;
 
 namespace WebApp.Controllers.OnBoarding
 {
@@ -121,6 +125,16 @@ namespace WebApp.Controllers.OnBoarding
                         objDashboard.UseLogoURL = baseLogoPath + Convert.ToString(userDetails.GroupId + "Medium.jpg");
                     if (objDashboard.UseLogo == "Big")
                         objDashboard.UseLogoURL = baseLogoPath + Convert.ToString(userDetails.GroupId + "Big.jpg");
+
+                    objDashboard.UseCard = Convert.ToString(item["UseCard"]);
+                    var BaseUrl = ConfigurationManager.AppSettings["BaseUrl"].ToString();
+
+                    if (objDashboard.UseCard == "One")
+                        objDashboard.UseCardURL = BaseUrl + "/Content/assets/Card1.jpg";
+                    if (objDashboard.UseCard == "Two")
+                        objDashboard.UseCardURL = BaseUrl + "/Content/assets/Card2.jpg";
+                    if (objDashboard.UseCard == "Three")
+                        objDashboard.UseCardURL = BaseUrl + "/Content/assets/Card3.png";
 
                     objDashboard.LoginWithOTP = Convert.ToString(item["LoginWithOTP"]);
                     objDashboard.RedirectToPage = Convert.ToString(item["RedirectToPage"]);
@@ -252,28 +266,128 @@ namespace WebApp.Controllers.OnBoarding
         }
         public ActionResult GenerateDLCLink()
         {
-            var BaseUrl= ConfigurationManager.AppSettings["baseDLCUrl"];
-            List<DLCLinksViewModel> objData = new List<DLCLinksViewModel>();
-            List<string> Urls = new List<string>(); ;
+            DLCLinksViewModel objData = new DLCLinksViewModel();
+            List<tblDLCCampaignMaster> lstLinks = new List<tblDLCCampaignMaster>();
+            var BaseUrl= ConfigurationManager.AppSettings["baseDLCUrl"];            
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            var BrandDetails = DCR.GetBrandsByGroupId(userDetails.GroupId);
-            //ViewBag.URLs = BrandDetails;
+           
             try
             {
-                foreach (var item in BrandDetails)
-                {
-                    DLCLinksViewModel objLink = new DLCLinksViewModel();
-                    objLink.BrandName = item.BrandName;
-                    objLink.Url = BaseUrl + "?data=" + common.EncryptString("BrandId=" + item.BrandId);
-                    objData.Add(objLink);
-                }
-                ViewBag.URLs = Urls;
+                objData.lstLinks = DCR.GetDlcLinks(userDetails.connectionString);
+                objData.lstBrands = DCR.GetBrandsByGroupId(userDetails.GroupId);
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "GenerateDLCLink");
             }
             return View(objData);
+        }
+
+        public ActionResult CreateDLCLink(string SourceName, string StartDate,string EndDate,string BrandId)
+        {
+            bool status = false;
+            string result_00003;
+            var BaseUrl = ConfigurationManager.AppSettings["baseDLCUrl"];
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+
+            string encryptStr = "BrandId=" + BrandId;
+            encryptStr += "&Source=" + SourceName;
+            string entoken = common.EncryptString(encryptStr);
+            var DLCLink = BaseUrl + "?data=" + entoken;            
+
+            string _Url = "https://api-ssl.bitly.com/v4/shorten";
+            var httpWebRequest_00003 = (HttpWebRequest)WebRequest.Create(_Url);
+            httpWebRequest_00003.ContentType = "application/json";
+            httpWebRequest_00003.Headers.Add("Authorization", "f22c9274b5565860b85d1e4af701d4d6a4c795fa");
+
+            httpWebRequest_00003.Method = "POST";
+
+            using (var streamWriter_00003 = new StreamWriter(httpWebRequest_00003.GetRequestStream()))
+            {
+
+                string json_00003 =
+                                "{\"long_url\":\"" + DLCLink + "\"," +
+                                "\"domain\":\"bit.ly\"," +
+                                "\"group_guid\":\"\"}";
+                streamWriter_00003.Write(json_00003);
+            }
+
+            var httpResponse_00003 = (HttpWebResponse)httpWebRequest_00003.GetResponse();
+            using (var streamReader_00003 = new StreamReader(httpResponse_00003.GetResponseStream()))
+            {
+                result_00003 = streamReader_00003.ReadToEnd();
+            }
+
+            JObject jsonObj = JObject.Parse(result_00003);
+            var Balance = JObject.Parse(result_00003)["id"];
+            string itemshortUrl = (string)Balance;
+
+            status = DCR.SaveDLCLink(userDetails.connectionString, SourceName, itemshortUrl, StartDate, EndDate);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult DownloadDLCQRCode(string DLCName)
+        {
+            string imageUrl = string.Empty;
+            string failedMessage = string.Empty;
+            var qrCodeImage = GenerateAndDownloadQR(DLCName);
+            if (qrCodeImage == null)
+            {
+                failedMessage = "Failed to generate QR code image.";
+            }
+            if (qrCodeImage != null)
+            {
+                var filePath = SaveQrCodeImage(qrCodeImage, DLCName);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    failedMessage = "Failed to save QR code image.";
+                }
+                imageUrl = Url.Content("~/Downloads/GeneratedQRcodeImage/" + Path.GetFileName(filePath));
+            }
+            if (!string.IsNullOrEmpty(failedMessage))
+                return Json(new { success = false, message = failedMessage }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { success = true, imageUrl }, JsonRequestBehavior.AllowGet);
+        }
+        public Bitmap GenerateAndDownloadQR(string DLCName)
+        {
+            try
+            {
+                var userDetails = (CustomerLoginDetail)Session["UserSession"];
+                var DlcDetails= DCR.GetDlcLinkByName(userDetails.connectionString, DLCName);
+                using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+                {
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(DlcDetails.DLCLink, QRCodeGenerator.ECCLevel.Q);
+                    QRCode qrCode = new QRCode(qrCodeData);
+                    Bitmap qrCodeImage = qrCode.GetGraphic(20);
+                    return qrCodeImage;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GenerateQrCodeImage");
+                return null;
+            }
+        }
+        private string SaveQrCodeImage(Bitmap qrCodeImage, string DLCName)
+        {
+            try
+            {
+                var folder = Server.MapPath("~/Downloads/GeneratedQRcodeImage");
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                string filePath = Path.Combine(folder, $"QRCode_{DLCName}.png");
+                qrCodeImage.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveQrCodeImage");
+                return null;
+            }
         }
 
     }

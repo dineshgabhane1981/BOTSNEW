@@ -1410,32 +1410,8 @@ namespace WebApp.Controllers.ITCS
                     dt.Rows.Add(toInsert);
                 }
             }
-           // var conString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fullFilePath + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=1\"";
-
-            //using (OleDbConnection connExcel = new OleDbConnection(conString))
-            //{
-            //    using (OleDbCommand cmdExcel = new OleDbCommand())
-            //    {
-            //        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-            //        {
-            //            cmdExcel.Connection = connExcel;
-            //            //Get the name of First Sheet.
-            //            connExcel.Open();
-            //            DataTable dtExcelSchema;
-            //            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-            //            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-            //            connExcel.Close();
-
-            //            //Read Data from First Sheet.
-            //            connExcel.Open();
-            //            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-            //            odaExcel.SelectCommand = cmdExcel;
-            //            odaExcel.Fill(ds);
-            //            connExcel.Close();
-            //        }
-            //    }
-            //}
-            foreach (DataRow dr in ds.Tables[0].Rows)
+          
+            foreach (DataRow dr in dt.Rows)
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 if (!string.IsNullOrEmpty(Convert.ToString(dr["MobileNo"])))

@@ -1,11 +1,10 @@
-namespace BOTS_BL.Models
+namespace BOTS_BL.Models.DLCConfig
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
-    using System.Web;
 
     [Table("tblDLCDashboardConfig")]
     public partial class tblDLCDashboardConfig
@@ -30,17 +29,23 @@ namespace BOTS_BL.Models
         public int? ReferPoints { get; set; }
 
         public int? GiftPoints { get; set; }
+
         public bool IsExtraWidgetText1 { get; set; }
+
         [StringLength(250)]
         public string ExtraWidgetText1 { get; set; }
 
         public int? ExtraWidgetPoints1 { get; set; }
+
         public bool IsExtraWidgetText2 { get; set; }
+
         [StringLength(250)]
         public string ExtraWidgetText2 { get; set; }
 
         public int? ExtraWidgetPoints2 { get; set; }
+
         public bool IsExtraWidgetText3 { get; set; }
+
         [StringLength(250)]
         public string ExtraWidgetText3 { get; set; }
 
@@ -55,14 +60,17 @@ namespace BOTS_BL.Models
 
         [StringLength(250)]
         public string UseLogoURL { get; set; }
-        [StringLength(50)]
-        public string UseCard { get; set; }
 
-        [StringLength(250)]
-        public string UseCardURL { get; set; }
+        [StringLength(50)]
         public string PrefferedLanguage { get; set; }
+
+        [StringLength(50)]
         public string CountryCode { get; set; }
-        public string HeaderColor { get; set; }        
+
+        [StringLength(50)]
+        public string HeaderColor { get; set; }
+
+        [StringLength(50)]
         public string FontColor { get; set; }
 
         [Required]
@@ -71,18 +79,10 @@ namespace BOTS_BL.Models
 
         public DateTime AddedDate { get; set; }
 
-        [NotMapped]
-        public string LogoFile1 { get; set; }
-        [NotMapped]
-        public string LogoFile2 { get; set; }
-        [NotMapped]
-        public string LogoFile3 { get; set; }
+        [StringLength(50)]
+        public string UseCard { get; set; }
 
-        [NotMapped]
-        public string CardFile1 { get; set; }
-        [NotMapped]
-        public string CardFile2 { get; set; }
-        [NotMapped]
-        public string CardFile3 { get; set; }
+        [StringLength(250)]
+        public string UseCardURL { get; set; }
     }
 }

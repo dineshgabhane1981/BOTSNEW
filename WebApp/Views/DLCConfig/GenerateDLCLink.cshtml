@@ -1,32 +1,264 @@
-﻿@model List<WebApp.ViewModel.DLCLinksViewModel>
+﻿@model WebApp.ViewModel.DLCLinksViewModel
 @{
     ViewBag.Title = "GenerateDLCLink";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner">
-    <div class="row mb-3 pt-3 pl-3 pr-3 card">
-        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
-            <table border="1" cellpadding="10" cellspacing="10">
-                <thead>
-                    <tr>
-                        <th>Brand Name</th>
-                        <th>DLC URL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.BrandName</td>
-                            <td><a href="@item.Url" target="_blank">@item.Url</a></td>
-                        </tr>
-                    }
-
-                </tbody>
-            </table>
-            
+    <div id="dvAddDLCLink" class="row mb-2 pt-3 pl-3 pr-3 col-md-12 col-xl-12 container-fluid card" style="display:none;padding:20px;">
+        <h5>Create DLC Link</h5>
+        <div class="col-md-12 col-xl-12 mt-4 row">
+            <div class="col-md-4 col-xl-2">
+                Brand
+            </div>
+            <div class="col-md-4 col-xl-4">
+                @Html.DropDownListFor(model => model.dummyValue, new SelectList(Model.lstBrands, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlBrands" })
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-12 mt-4 row">
+            <div class="col-md-4 col-xl-2">
+                Source Name
+            </div>
+            <div class="col-md-4 col-xl-4">
+                <input type="text" class="input100" id="txtSourceName" />
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-12 mt-4 row">
+            <div class="col-md-4 col-xl-2">
+                Start Date
+            </div>
+            <div class="col-md-4 col-xl-4">
+                <input type="text" class="input50" id="txtStartDate" />
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-12 mt-4 row">
+            <div class="col-md-4 col-xl-2">
+                End Date
+            </div>
+            <div class="col-md-4 col-xl-4">
+                <input type="text" class="input50" id="txtEndDate" />
+            </div>
+        </div>
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <button id="btnGenerateLink" class="btn btn-primary pull-right" style="margin-left:10px;" type="button"><b>Generate</b></button>
+            <button id="btnCancel" class="btn btn-primary pull-right" style="margin-left:10px;" type="button"><b>Cancel</b></button>
         </div>
     </div>
-</div>
+    <div class="row mb-3 pt-3 pl-3 pr-3 container-fluid card">
 
+        <div style="text-align:right;">
+            <a href="#" onclick="ShowCreateDLCLink();" title="Create New Dlc Link">  <img src="~/Content/assets/images/AddCustomer.png" /></a>
+        </div>
+        <div class="pl-3 pr-3 col-md-12 col-lg-12">
+            <div class="row">
+                <div class="col search-container">
+                    <i class="fas fa-search"></i>
+                    <input class="input100" type="text" id="txtSearch" placeholder="Search activity..." />
+                </div>
+            </div>
+            <div class="row mt-3" id="dvActivityData">
+
+                <div class="table-responsive">
+                    <table class="table" id="tblDlcDetails">
+                        <thead>
+                            <tr>
+                                <th>Brand Name</th>
+                                <th>DLC URL</th>
+                                <th style="text-align:center;">Start Date</th>
+                                <th style="text-align:center;">End Date</th>
+                                <th style="text-align:center;">Created Date</th>
+                                <th>QR Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                if (Model.lstLinks.Count > 0)
+                                {
+
+                                    foreach (var item in Model.lstLinks)
+                                    {
+                                        var url = "https://" + item.DLCLink;
+                                        <tr>
+                                            <td>@item.DLCName</td>
+                                            <td><a href="@url" target="_blank">@item.DLCLink</a></td>
+                                            @if (item.StartDate.HasValue)
+                                            {
+                                                <td style="text-align:center;">@item.StartDate.Value.ToString("dd-MM-yyyy")</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;">--</td>
+                                            }
+                                            @if (item.EndDate.HasValue)
+                                            {
+                                                <td style="text-align:center;">@item.EndDate.Value.ToString("dd-MM-yyyy")</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;">--</td>
+                                            }
+                                            @if (item.CreatedDate.HasValue)
+                                            {
+                                                <td style="text-align:center;">@item.CreatedDate.Value.ToString("dd-MM-yyyy")</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;">--</td>
+                                            }
+                                            @if (!string.IsNullOrEmpty(item.DLCLink))
+                                            {
+                                                <td><button id="btnDownloadQR" class="btn btn-primary" onclick="DownloadQRCode('@item.DLCName')" style="margin-left:10px;" type="button"><b>Download</b></button></td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;">--</td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" align="center">No Links Available</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5">No Links Available</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script>
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $("#txtStartDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: today,
+    });
+    $("#txtEndDate").datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: today,
+    });
+    $(document).ready(function () {
+        $('#tblDlcDetails').DataTable({
+            "aaSorting": [],
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "bFilter": true,
+            "pageLength": 10,
+            "pagingType": "simple_numbers"
+        });
+
+        $('#tblDlcDetails_filter').hide();
+
+        $('#txtSearch').on('keyup', function () {
+            $.fn.dataTable.ext.search.push(function (settings, searchData) {
+                var term = $('#txtSearch').val().toLowerCase()
+                for (var i = 0; i < searchData.length; i++) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            var table = $('#activityTable').DataTable();
+            table.draw();
+        });
+
+        $("#btnGenerateLink").on("click", function () {
+            CreateDLCLink();
+        });
+        $("#btnCancel").on("click", function () {
+            $('#dvAddDLCLink').hide(1000);
+        });
+    });
+    function ShowCreateDLCLink() {
+        $('#dvAddDLCLink').show(1000);
+    }
+    function CreateDLCLink() {
+        if ($("#txtSourceName").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS..",
+                message: "Please enter Source Name",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateDLCLink", "DLCConfig")',
+                data: '{SourceName: ' + JSON.stringify($("#txtSourceName").val()) + ',StartDate: ' + JSON.stringify($("#txtStartDate").val()) + ',EndDate: ' + JSON.stringify($("#txtEndDate").val()) + ',BrandId: ' + JSON.stringify($("#ddlBrands").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "DLC Link created Successfully !!!",
+                        buttonText: "Okay"
+                    }).then(() => {
+                        window.location.reload();
+                    })
+                    $("#divLoader").hide();
+                },
+                error: function (result) {
+                    alert(222)
+                    console.log(result.responseText)
+                }
+            });
+        }
+    }
+    function DownloadQRCode(DlcName) {        
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DownloadDLCQRCode", "DLCConfig")',
+            data: '{DLCName: ' + JSON.stringify(DlcName) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                //var qrCodeUrl = result;
+                var a = document.createElement('a');
+                a.href = result.imageUrl;
+                a.download = 'DlcName.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText)
+            }
+        });
+    }
+</script>
+
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
+
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>

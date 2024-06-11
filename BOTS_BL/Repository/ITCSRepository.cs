@@ -2839,5 +2839,36 @@ namespace BOTS_BL.Repository
             return result;
         }
 
+        public string GetGroupRenewalDate(int GroupId)
+        {
+            string renewalDate = string.Empty;
+            using (var context = new CommonDBContext())
+            {
+                var RDate = context.tblGroupDetails.Where(x => x.GroupId == GroupId).Select(y => y.RenewalDate).FirstOrDefault();
+                if (RDate.HasValue)
+                    renewalDate = RDate.Value.ToString("dd-MMM-yyyy");
+            }
+            return renewalDate;
+        }
+        public bool UpdateRenewalDate(int GroupId,DateTime RenewalDate)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var GroupDetails = context.tblGroupDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    GroupDetails.RenewalDate = RenewalDate;
+                    context.tblGroupDetails.AddOrUpdate(GroupDetails);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "UpdateRenewalDateRepo");
+            }
+            return status;
+        }
     }
 }

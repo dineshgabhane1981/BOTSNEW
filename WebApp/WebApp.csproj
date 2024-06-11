@@ -319,6 +319,9 @@
     <Content Include="Content\assets\BlueocktopusLoadingGIF.mp4" />
     <Content Include="Content\assets\Blue_Ocktopus-TLC_blue.png" />
     <Content Include="Content\assets\BotsLoginBackground.jpeg" />
+    <Content Include="Content\assets\Card1.jpg" />
+    <Content Include="Content\assets\Card2.jpg" />
+    <Content Include="Content\assets\Card3.png" />
     <Content Include="Content\assets\fonts\fa-solid-900.svg" />
     <Content Include="Content\assets\fonts\Pe-icon-7-stroke.svg" />
     <Content Include="Content\assets\images\14.png" />
@@ -779,6 +782,7 @@
     <Content Include="Views\Reports\_CreateOwnReportCustomerWiseForSaved.cshtml" />
     <Content Include="Views\IndividualDBConfig\ChangeOutletDetails.cshtml" />
     <Content Include="Views\IndividualDBConfig\GenarateQrCode.cshtml" />
+    <Content Include="Views\CommonDBConfig\UpdateRenewal.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

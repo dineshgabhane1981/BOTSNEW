@@ -12,6 +12,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 
 namespace BOTS_BL.Repository
 {
@@ -214,6 +215,8 @@ namespace BOTS_BL.Repository
                     objData.FontColor = configData.FontColor;
                     objData.AddedBy = userDetails.UserId;
                     objData.AddedDate = DateTime.Now;
+                    objData.UseCard = configData.UseCard;
+                    objData.UseCardURL = configData.UseCardURL;
                     context.tblDLCDashboardConfig_Publish.AddOrUpdate(objData);
                     context.SaveChanges();
 
@@ -1033,18 +1036,64 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-        public List<tblBrandMaster> GetBrandsByGroupId(string groupId)
+        public List<SelectListItem> GetBrandsByGroupId(string groupId)
         {
-            List<tblBrandMaster> lstBrands = new List<tblBrandMaster>();
+            List<SelectListItem> lstBrands = new List<SelectListItem>();
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             using (var context = new BOTSDBContext(connStr))
             {
-                lstBrands = context.tblBrandMasters.Where(x => x.GroupId == groupId).ToList();
+               var Brands = context.tblBrandMasters.Where(x => x.GroupId == groupId).ToList();
+                foreach (var item in Brands)
+                {
+                    lstBrands.Add(new SelectListItem
+                    {
+                        Text = item.BrandName,
+                        Value = Convert.ToString(item.BrandId)
+                    });
+                }
             }
             return lstBrands;
         }
 
+        public List<tblDLCCampaignMaster> GetDlcLinks(string connStr)
+        {
+            List<tblDLCCampaignMaster> lstDlcLinks = new List<tblDLCCampaignMaster>();
+            using (var context = new BOTSDBContext(connStr))
+            {
+                lstDlcLinks = context.tblDLCCampaignMasters.ToList();
+            }
+            return lstDlcLinks;
+        }
+        public tblDLCCampaignMaster GetDlcLinkByName(string connStr, string DlcName)
+        {
+            tblDLCCampaignMaster objDlcLink = new tblDLCCampaignMaster();
+            using (var context = new BOTSDBContext(connStr))
+            {
+                objDlcLink = context.tblDLCCampaignMasters.Where(x => x.DLCName == DlcName).FirstOrDefault();
+            }
+            return objDlcLink;
+        }
+        public bool SaveDLCLink(string connStr, string DLcName, string DlcLink, string StartDate, string EndDate)
+        {
+            bool result = false;
+            using (var context = new BOTSDBContext(connStr))
+            {
+                tblDLCCampaignMaster objData = new tblDLCCampaignMaster();
+                objData.DLCName = DLcName;
+                objData.DLCLink = DlcLink;
 
+                if (!string.IsNullOrEmpty(StartDate))
+                    objData.StartDate = Convert.ToDateTime(StartDate);
+                if (!string.IsNullOrEmpty(EndDate))
+                    objData.EndDate = Convert.ToDateTime(EndDate);
+                objData.CreatedDate = DateTime.Now;
+                context.tblDLCCampaignMasters.Add(objData);
+                context.SaveChanges();
+
+                result = true;
+            }
+            return result;
+        }
 
     }
 }

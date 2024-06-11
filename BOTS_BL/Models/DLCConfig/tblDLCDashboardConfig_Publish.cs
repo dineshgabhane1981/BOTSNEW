@@ -22,23 +22,29 @@ namespace BOTS_BL.Models
         public bool AddGiftPoints { get; set; }
 
         public bool AddReferFriend { get; set; }
+
         public int? PersonalDetailsPoints { get; set; }
 
         public int? ReferPoints { get; set; }
 
         public int? GiftPoints { get; set; }
 
-        public bool IsExtraWidgetText1 { get; set; }
+        public bool? IsExtraWidgetText1 { get; set; }
+
         [StringLength(250)]
         public string ExtraWidgetText1 { get; set; }
 
         public int? ExtraWidgetPoints1 { get; set; }
-        public bool IsExtraWidgetText2 { get; set; }
+
         [StringLength(250)]
         public string ExtraWidgetText2 { get; set; }
 
+        public bool? IsExtraWidgetText2 { get; set; }
+
         public int? ExtraWidgetPoints2 { get; set; }
-        public bool IsExtraWidgetText3 { get; set; }
+
+        public bool? IsExtraWidgetText3 { get; set; }
+
         [StringLength(250)]
         public string ExtraWidgetText3 { get; set; }
 
@@ -62,6 +68,7 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string HeaderColor { get; set; }
+
         [StringLength(50)]
         public string FontColor { get; set; }
 
@@ -70,5 +77,11 @@ namespace BOTS_BL.Models
         public string AddedBy { get; set; }
 
         public DateTime AddedDate { get; set; }
+
+        [StringLength(250)]
+        public string UseCardURL { get; set; }
+
+        [StringLength(50)]
+        public string UseCard { get; set; }
     }
 }
