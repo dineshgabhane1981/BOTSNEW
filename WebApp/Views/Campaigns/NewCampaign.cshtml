@@ -24,7 +24,7 @@
                     <div class="col-12 col-lg-12 ml-auto mr-auto mb-4">
                         <div class="multisteps-form__progress">
                             <button class="multisteps-form__progress-btn js-active" type="button" title="Data Selection">Data Selection</button>
-                            <button class="multisteps-form__progress-btn" type="button" title="Campaign Details">Campaign Configuration</button>                            
+                            <button class="multisteps-form__progress-btn" type="button" title="Campaign Details">Campaign Configuration</button>
                             <button class="multisteps-form__progress-btn" type="button" title="Communication Details">Communication</button>
                             <button class="multisteps-form__progress-btn" type="button" title="Preview">Preview</button>
                         </div>
@@ -87,6 +87,22 @@
                                             <button class="btn btn-primary ml-auto pull-right" type="button" id="btnGetCount" title="Get Count" tabindex="20">Get Count</button>
                                         </div>
                                     </div>
+                                    <div class="row col-md-12 col-xl-12 ml-0 mt-2">
+                                        <div class="col-xl-2">
+                                            Target Base Description
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <textarea id="txtTBD" rows="5" class="input150"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row col-md-12 col-xl-12 ml-0 mt-2">
+                                        <div class="col-xl-2">
+                                            Any Other Information
+                                        </div>
+                                        <div class="col-xl-6">
+                                            <textarea id="txtAOI" rows="5" class="input150"></textarea>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="button-row d-flex mt-4">
                                     <button class="btn btn-primary ml-auto js-btn-next" type="button" title="Next" tabindex="20" disabled id="btnDataSelect">Next</button>
@@ -110,7 +126,7 @@
                                             Campaign Name:
                                         </div>
                                         <div class="col-xl-6">
-                                            <input type="text" id="txtCampaignName" class="input50" placeholder="Enter Campaign Name" />
+                                            <input type="text" id="txtCampaignName" class="input100" placeholder="Enter Campaign Name" />
                                         </div>
                                     </div>
                                     <div class="row mt-4 col-md-12 col-xl-12 ml-0">
@@ -118,8 +134,17 @@
                                             Campaign Period:
                                         </div>
                                         <div class="col-xl-6">
-                                            <input type="date" id="txtCampaignfromdt" class="input50" placeholder="Start" />
-                                            <input type="date" id="txtCampaigntodt" class="input50" placeholder="End" />
+                                            <input type="text" id="txtCampaignfromdt" class="input50" placeholder="Start" />
+                                            <input type="text" id="txtCampaigntodt" class="input50" placeholder="End" />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="CampaignSubType">
+                                        <div class="col-xl-2">
+                                            Campaign Sub-type:
+                                        </div>
+                                        <div class="col-xl-10">
+                                            @Html.DropDownListFor(x => Model.dummyValue, new SelectList(Model.CampaignSubtype(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = "ddlCampSubType" })
+                                            <input type="text" id="txtOtherSubType" class="input100" style="display:none;" />
                                         </div>
                                     </div>
                                 </div>
@@ -178,7 +203,7 @@
                                         </div>
                                     </div>
 
-                                    
+
                                     <div class="row mt-4 col-md-12 col-xl-12 ml-0" id="dvPostRbtns1" style="display:none;">
                                         <div class="col-xl-3">
                                             Qualifiying Txn counts:
@@ -220,6 +245,24 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="row col-md-12 col-xl-12 ml-0 mt-2">
+                                    <div class="col-xl-2">
+                                        Campaign Objective
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <textarea id="txtCampaignObjective" rows="5" class="input150"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row col-md-12 col-xl-12 ml-0 mt-2">
+                                    <div class="col-xl-2">
+                                        Campaign Description
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <textarea id="txtCampaignDescription" rows="5" class="input150"></textarea>
+                                    </div>
+                                </div>
+
                                 <div class="row col-md-12 col-xl-12 ml-0 mt-5">
                                     <div class="col-xl-12">
                                         <button class="btn btn-primary ml-auto pull-right" type="button" style="margin-right:-30px;" id="btnValidateCampaignDetails" title="Check" tabindex="20">Check</button>
@@ -250,7 +293,39 @@
                                         </div>
                                         <div class="col-xl-6">
                                             <input type="radio" id="chkSMSEnglish" checked name="SMSChannel" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;English
-                                            <input type="radio" id="chkSMSNonEnglish" name="SMSChannel" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Non-English 
+                                            <input type="radio" id="chkSMSNonEnglish" name="SMSChannel" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Non-English
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-3">
+                                            Introduction Message:
+                                        </div>
+                                        <div class="col-xl-8">
+                                            <textarea id="txtIntroMessage" rows="5" class="input150"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-3">
+                                            Reminder Message 1:
+                                        </div>
+                                        <div class="col-xl-8">
+                                            <textarea id="txtRemMessage1" rows="5" class="input150"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-3">
+                                            Reminder Message 2:
+                                        </div>
+                                        <div class="col-xl-8">
+                                            <textarea id="txtRemMessage2" rows="5" class="input150"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4 col-md-12 col-xl-12 ml-0">
+                                        <div class="col-xl-3">
+                                            Successful Message:
+                                        </div>
+                                        <div class="col-xl-8">
+                                            <textarea id="txtSuccessMessage" rows="5" class="input150"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -280,8 +355,28 @@
 </div>
 
 <script src="~/Content/scriptSteps.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
 <script>
     $(document).ready(function () {
+        $("#txtCampaignfromdt").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            selectOtherMonths: true
+        });
+        $("#txtCampaigntodt").datepicker({
+            dateFormat: "yy-mm-dd",
+            minDate: 0,
+            changeMonth: true,
+            changeYear: true,
+            showOtherMonths: true,
+            selectOtherMonths: true
+        });
         $("#ddlBaseType").change(function () {
             ShowBaseType();
         });
@@ -316,6 +411,9 @@
         });
         $("#chkRedeemTxn").click(function () {
             ShowPostRewardPoints(2);
+        });
+        $("#ddlCampSubType").change(function () {
+            ShowSubTypeType();
         });
     });
 
@@ -352,6 +450,15 @@
         }
     }
 
+    function ShowSubTypeType() {
+        if ($("#ddlCampSubType").val() == "Reminder about something") {
+            $("#txtOtherSubType").show();
+        }
+        else {
+            $("#txtOtherSubType").hide();
+        }
+    }
+
     function GetFilterCount() {
         if (ValidateDataSelection()) {
 
@@ -364,13 +471,13 @@
             else {
                 item["PointsBase"] = "";
             }
-            
-            item["Points"] = parseInt($("#txtFromPoints").val()); 
+
+            item["Points"] = parseInt($("#txtFromPoints").val());
             item["PointsRange1"] = parseInt($("#txtToPoints").val());
             item["OutletId"] = $("#ddlOutlet").val();
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
-            
+
 
             $("#divLoader").show();
             $.ajax({
@@ -444,7 +551,7 @@
     }
 
     function ValidateCampaignDetails() {
-        
+
         var CampStatus = true;
         var d = new Date();
         month = ("0" + (d.getMonth() + 1)).slice(-2);
@@ -503,7 +610,7 @@
                 })
                 CampStatus = false;
             }
-            
+
         }
         if ($("#chkTxnCount").prop('checked') == true) {
             if (($("#txtQTxnCount").val() == "" || $("#txtQInvoiceValue").val() == "") || ($("#txtQTxnCount").val() == "" && $("#txtQInvoiceValue").val() == "")) {
@@ -515,10 +622,10 @@
                 })
                 CampStatus = false;
             }
-            
+
         }
         if (($("#chkSpend").prop('checked') == true) && $("#txtQSpends").val() == "") {
-            
+
                 cuteAlert({
                     type: "error",
                     title: "OOPS...",
@@ -537,7 +644,7 @@
                 })
                 CampStatus = false;
             }
-            
+
         }
 
 
@@ -550,10 +657,12 @@
         if (type == 0) {
             $("#headingRewardPoints").hide();
             $("#dvRewardPoints").hide();
+            $("#CampaignSubType").show();
         }
         if (type == 1) {
             $("#headingRewardPoints").show();
             $("#dvRewardPoints").show();
+            $("#CampaignSubType").hide();
         }
     }
 
@@ -576,7 +685,7 @@
             $("#dvPreIssue1").hide();
             $("#dvPreIssue2").hide();
             $("#dvPostRbtns").show();
-            
+
 
         }
     }
