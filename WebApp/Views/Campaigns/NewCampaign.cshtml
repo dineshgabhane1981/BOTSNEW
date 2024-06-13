@@ -16,7 +16,7 @@
 </style>
 
 <div class="app-main__inner" id="dvall">
-    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+     
 
         <div class="mb-2 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
             <div class="multisteps-form">
@@ -291,41 +291,108 @@
                                         <div class="col-xl-3">
                                             Choose Language:
                                         </div>
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-4">
                                             <input type="radio" id="chkSMSEnglish" checked name="SMSChannel" style="width: 20px; height: 20px; cursor: pointer;" /> &nbsp;English
                                             <input type="radio" id="chkSMSNonEnglish" name="SMSChannel" style="width:20px;height:20px; cursor:pointer;" /> &nbsp; Non-English
+                                        </div>
+                                        <div class="col-xl-3" id="dvLanguage" style="display:none;margin-left:-60px;">
+                                            @Html.DropDownListFor(x => Model.dummyValue, new SelectList(Model.Language(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlLanguage" })
                                         </div>
                                     </div>
                                     <div class="row mt-4 col-md-12 col-xl-12 ml-0">
                                         <div class="col-xl-3">
                                             Introduction Message:
                                         </div>
-                                        <div class="col-xl-8">
+                                        <div class="col-xl-7">
                                             <textarea id="txtIntroMessage" rows="5" class="input150"></textarea>
+                                        </div>
+                                        <div class="col-xl-2" style="margin-left:-30px;">
+                                            <table border="1" cellpadding="5" cellspacing="5" width="150px">
+                                                <tr>
+                                                    <td style="padding: 10px; width: 150px;">Character Count</td>
+                                                    <td style="padding: 10px; width: 150px;">
+                                                        <span id="spnIntroCharCount">0</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 10px; width: 150px;">SMS Count</td>
+                                                    <td style="padding: 10px; width: 150px;">
+                                                        <span id="spnIntroSMSCount">0</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="row mt-4 col-md-12 col-xl-12 ml-0">
                                         <div class="col-xl-3">
                                             Reminder Message 1:
                                         </div>
-                                        <div class="col-xl-8">
+                                        <div class="col-xl-7">
                                             <textarea id="txtRemMessage1" rows="5" class="input150"></textarea>
+                                        </div>
+                                        <div class="col-xl-2" style="margin-left:-30px;">
+                                            <table border="1" cellpadding="5" cellspacing="5" width="150px">
+                                                <tr>
+                                                    <td style="padding: 10px; width: 150px;">Character Count</td>
+                                                    <td style="padding: 10px; width: 150px;">
+                                                        <span id="spnRem1CharCount">0</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 10px; width: 150px;">SMS Count</td>
+                                                    <td style="padding: 10px; width: 150px;">
+                                                        <span id="spnRem1SMSCount">0</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="row mt-4 col-md-12 col-xl-12 ml-0">
                                         <div class="col-xl-3">
                                             Reminder Message 2:
                                         </div>
-                                        <div class="col-xl-8">
+                                        <div class="col-xl-7">
                                             <textarea id="txtRemMessage2" rows="5" class="input150"></textarea>
+                                        </div>
+                                        <div class="col-xl-2" style="margin-left:-30px;">
+                                            <table border="1" cellpadding="5" cellspacing="5" width="150px">
+                                                <tr>
+                                                    <td style="padding: 10px; width: 150px;">Character Count</td>
+                                                    <td style="padding: 10px; width: 150px;">
+                                                        <span id="spnRem2CharCount">0</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 10px; width: 150px;">SMS Count</td>
+                                                    <td style="padding: 10px; width: 150px;">
+                                                        <span id="spnRem2SMSCount">0</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="row mt-4 col-md-12 col-xl-12 ml-0">
                                         <div class="col-xl-3">
                                             Successful Message:
                                         </div>
-                                        <div class="col-xl-8">
+                                        <div class="col-xl-7">
                                             <textarea id="txtSuccessMessage" rows="5" class="input150"></textarea>
+                                        </div>
+                                        <div class="col-xl-2" style="margin-left:-30px;">
+                                            <table border="1" cellpadding="5" cellspacing="5" width="150px">
+                                                <tr>
+                                                    <td style="padding: 10px; width: 150px;">Character Count</td>
+                                                    <td style="padding: 10px; width: 150px;">
+                                                        <span id="spnSuccessCharCount">0</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 10px; width: 150px;">SMS Count</td>
+                                                    <td style="padding: 10px; width: 150px;">
+                                                        <span id="spnSuccessSMSCount">0</span>
+                                                    </td>
+                                                </tr>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -351,7 +418,7 @@
                 </div>
             </div>
         </div>
-    </div>
+     
 </div>
 
 <script src="~/Content/scriptSteps.js"></script>
@@ -415,7 +482,37 @@
         $("#ddlCampSubType").change(function () {
             ShowSubTypeType();
         });
+        $("#chkSMSEnglish").click(function () {
+            ShowLanguageDDL(0);
+        });
+        $("#chkSMSNonEnglish").click(function () {
+            ShowLanguageDDL(1);
+        });
+        $("#txtIntroMessage").keyup(function () {
+            GetCounts($("#chkSMSEnglish"), $("#chkSMSNonEnglish"), $("#txtIntroMessage"), $("#spnIntroCharCount"), $("#spnIntroSMSCount"));
+        });
+        $("#txtRemMessage1").keyup(function () {
+            GetCounts($("#chkSMSEnglish"), $("#chkSMSNonEnglish"), $("#txtRemMessage1"), $("#spnRem1CharCount"), $("#spnRem1SMSCount"));
+        });
+        $("#txtRemMessage2").keyup(function () {
+            GetCounts($("#chkSMSEnglish"), $("#chkSMSNonEnglish"), $("#txtRemMessage2"), $("#spnRem2CharCount"), $("#spnRem2SMSCount"));
+        });
+        $("#txtSuccessMessage").keyup(function () {
+            GetCounts($("#chkSMSEnglish"), $("#chkSMSNonEnglish"), $("#txtSuccessMessage"), $("#spnSuccessCharCount"), $("#spnSuccessSMSCount"));
+        });
     });
+
+    function ShowLanguageDDL(type) {
+        if (type == 0) 
+            $("#dvLanguage").hide();        
+        else 
+            $("#dvLanguage").show();
+        
+        $("#txtIntroMessage").text($(this).text()).trigger('keyup');
+        $("#txtRemMessage1").text($(this).text()).trigger('keyup');
+        $("#txtRemMessage2").text($(this).text()).trigger('keyup');
+        $("#txtSuccessMessage").text($(this).text()).trigger('keyup');
+    }
 
     function ShowBaseType() {
         if ($("#ddlBaseType").val() == "4") {
@@ -479,10 +576,9 @@
                 item["OutletId"] = $("#ddlOutlet").val();
                 item["Dataset"] = "";
             }
-
             item["Points"] = parseInt($("#txtFromPoints").val());
             item["PointsRange1"] = parseInt($("#txtToPoints").val());
-            
+            //item["OutletId"] = $("#ddlOutlet").val();
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
 
@@ -722,4 +818,19 @@
         }
     }
 
+    function GetCounts(IsEnglish, IsNonEnglish, Script, CharCount, SMSCount) {
+        var TempCalc = 0;
+        var a = 0;
+        var characterCount = $(Script).val().length;
+
+        $(CharCount).text(characterCount);
+        if ($(IsEnglish).is(':checked')) {
+            TempCalc = 159;
+        }
+        if ($(IsNonEnglish).is(':checked')) {
+            TempCalc = 69;
+        }
+        a = Math.ceil(characterCount / TempCalc);
+        $(SMSCount).text(a);
+    }
 </script>

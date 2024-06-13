@@ -1202,8 +1202,7 @@ namespace WebApp.Controllers
 
         public ActionResult NewCampaign()
         {
-            NewCampaignViewModel objData = new NewCampaignViewModel();
-            SMSDetailsTemp SDT = new SMSDetailsTemp();
+            NewCampaignViewModel objData = new NewCampaignViewModel();            
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             objData.lstOutlet = CMPR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
             var SMSGatewayDetails = CMPR.GatewayDetails(userDetails.GroupId, userDetails.connectionString);
@@ -1211,7 +1210,6 @@ namespace WebApp.Controllers
             //var DataTemp = CMPR.GetWAInsData(userDetails.GroupId, userDetails.connectionString);
             try
             {
-
                 if (SMSGatewayDetails.Count() > 0)
                 {
                     for (int i = 0; i <= SMSGatewayDetails.Count(); i++)
@@ -1236,7 +1234,6 @@ namespace WebApp.Controllers
             {
                 newexception.AddException(ex, "NewCampaign");
             }
-
             return View(objData);
         }
     }

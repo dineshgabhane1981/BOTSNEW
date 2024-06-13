@@ -24,6 +24,10 @@ namespace WebApp.ViewModel
         {
             return new SelectListItem[4] { new SelectListItem() { Text = "Less Than", Value = "1" }, new SelectListItem() { Text = "Greater Than", Value = "2" }, new SelectListItem() { Text = "Equal To", Value = "3" }, new SelectListItem() { Text = "Points Range", Value = "4" } };
         }
+        public SelectListItem[] Language()
+        {
+            return new SelectListItem[4] { new SelectListItem() { Text = "Hindi", Value = "Hindi" }, new SelectListItem() { Text = "Marathi", Value = "Marathi" }, new SelectListItem() { Text = "Kannada", Value = "Kannada" }, new SelectListItem() { Text = "Telugu", Value = "Telugu" } };
+        }
         public SelectListItem[] CampaignSubtype()
         {
             return new SelectListItem[8] { new SelectListItem() { Text = "Only Festival Wish", Value = "Only Festival Wish" },
