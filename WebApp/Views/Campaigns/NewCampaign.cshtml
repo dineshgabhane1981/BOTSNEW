@@ -471,10 +471,18 @@
             else {
                 item["PointsBase"] = "";
             }
+            if ($("#ddlBaseType").val() == "5") {
+                item["Dataset"] = $("#ddlDataset").val()
+                item["OutletId"] = "";
+            }
+            else {
+                item["OutletId"] = $("#ddlOutlet").val();
+                item["Dataset"] = "";
+            }
 
             item["Points"] = parseInt($("#txtFromPoints").val());
             item["PointsRange1"] = parseInt($("#txtToPoints").val());
-            item["OutletId"] = $("#ddlOutlet").val();
+            
             FilterData.push(item);
             var data = JSON.stringify(FilterData);
 
