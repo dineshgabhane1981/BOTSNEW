@@ -60,5 +60,6 @@ namespace BOTS_BL.Models
         public string City { get; set; }
 
         public long? Age { get; set; }
+        public string EnrolledBy { get; set; }
     }
 }

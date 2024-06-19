@@ -41,4 +41,10 @@ namespace BOTS_BL.Models.IndividualDBModels
         public DateTime? AnniversaryDate { get; set; }
         public DateTime? DOJ { get; set; }
     }
+
+    public class NonRedeemtionDataModel
+    {
+         
+    }
+   
 }

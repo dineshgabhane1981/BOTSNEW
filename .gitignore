@@ -3,3 +3,22 @@
 ################################################################################
 
 /WebApp/CustomerDocuments
+*/bin/Debug
+*/bin/Release
+*/obj/Debug
+*/obj/Release
+*.suo
+*.config
+*/AudioPalace/obj/Debug/
+*/BOTSNEW/v17
+*/BOTS/FileContentIndex
+*/BOTS/v17
+*.json
+*/bin
+*/obj/Debug
+*.cache
+*.csproj
+*/BotsMobileAPI/obj/Debug
+*/Web.config
+*/WebApp/bin
+*/.vs

@@ -477,9 +477,14 @@
                                 <td><span id="spnTotalCount"></span></td>
                             </tr>
                             <tr>
+                                <td><span id="spnTransactingCountText"></span></td>
+                                <td><span id="spnTransactingCount"></span></td>
+                            </tr>
+                            <tr>
                                 <td>Filter Count</td>
                                 <td><span id="spnFilterCount"></span></td>
                             </tr>
+
                         </table>
                     </div>
 
@@ -2021,6 +2026,15 @@
                 success: function (response) {
                     $("#spnFilterCount").text(addComma(response[0]));
                     $("#spnTotalCount").text(addComma(response[1]));
+                    $("#spnTransactingCount").text(addComma(response[2]))
+                    if ($("#chkTransacting").is(":checked")) {
+                        $("#spnTransactingCountText").html("Transacting Count")
+                    } else if ($("#chkNonTransacting").is(":checked")) {
+                        $("#spnTransactingCountText").html("Non Transacting Count")
+                    } else if ($("#chkMemberAcquition").is(":checked")) {
+                        $("#spnTransactingCountText").html("Total Member Acquition Count")
+                    }
+                    
                     $("#tblFilterDetails").show();
                     $("#divLoader").hide();
                 },

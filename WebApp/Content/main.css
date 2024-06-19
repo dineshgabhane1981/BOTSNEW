@@ -10190,7 +10190,7 @@ a, button, .btn {
         z-index: 15;
         width: 100%;
         overflow-y:scroll;
-        
+        /*scrollbar-width:thin;*/
     }
 
     .app-sidebar .app-sidebar-bg {

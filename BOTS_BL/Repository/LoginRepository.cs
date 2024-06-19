@@ -10,6 +10,7 @@ using System.Data.Entity.Migrations;
 using System.Data.SqlClient;
 using System.Data.Entity.Core.EntityClient;
 using System.Configuration;
+using BOTS_BL.Common;
 
 namespace BOTS_BL.Repository
 {
@@ -17,6 +18,7 @@ namespace BOTS_BL.Repository
     {
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
+        EncryptionDecryption encryptionDecryption = new EncryptionDecryption();
         public CustomerLoginDetail AuthenticateUser(LoginModel objLoginModel)
         {
             DatabaseDetail DBDetails = new DatabaseDetail();
@@ -26,7 +28,9 @@ namespace BOTS_BL.Repository
             {
                 using (var context = new CommonDBContext())
                 {
-                    userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == objLoginModel.LoginId && a.Password == objLoginModel.Password && a.UserStatus.Value == true).FirstOrDefault();
+                    var ss = EncryptionDecryption.EncryptString(objLoginModel.Password);
+                    //userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == objLoginModel.LoginId && a.Password == objLoginModel.Password && a.UserStatus.Value == true).FirstOrDefault();
+                    userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == objLoginModel.LoginId && a.EncryptedPassword == ss && a.UserStatus.Value == true).FirstOrDefault();
 
                     if (userDetail != null)
                     {

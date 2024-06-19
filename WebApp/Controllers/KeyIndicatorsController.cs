@@ -61,6 +61,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             NonRedemptionCls objNonRedemptionCls = new NonRedemptionCls();
             objNonRedemptionCls = KR.GetNonRedemptionData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
+            //objNonRedemptionCls = KR.GetNonRedemptionDataBySP(userDetails.GroupId, userDetails.LoginId);
             return View(objNonRedemptionCls);
         }
 
