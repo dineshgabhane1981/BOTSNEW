@@ -1663,7 +1663,8 @@ namespace BOTS_BL.Repository
                     if (objCustomerDetail != null)
                     {
                         objCustomerDetail.IsActive = false;
-                        objCustomerDetail.EndDate = DateTime.Now.Date;
+                        //objCustomerDetail.EndDate = DateTime.Now.Date;
+                        objCustomerDetail.EndDate = DateTime.Now.AddDays(-1).Date;
                         context.tblRuleMasters.AddOrUpdate(objCustomerDetail);
                         context.SaveChanges();
                         status = true;
