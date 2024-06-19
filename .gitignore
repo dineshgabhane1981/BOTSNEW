@@ -22,3 +22,10 @@
 */Web.config
 */WebApp/bin
 */.vs
+*.dll
+/BOTS_BL/bin/Debug/BOTS_BL.dll
+/BOTS_BL/bin/Debug/BOTS_BL.pdb
+/BOTS_BL/obj/Debug/BOTS_BL.dll
+/BOTS_BL/obj/Debug/BOTS_BL.pdb
+/BOTS_BL/bin/Debug/BOTS_BL.dll
+/.vs/ProjectEvaluation
