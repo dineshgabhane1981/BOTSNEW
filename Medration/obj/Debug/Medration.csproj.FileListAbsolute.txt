@@ -93,3 +93,5 @@ E:\BOTS_Code\BOTS\Medration\bin\JavaScriptEngineSwitcher.Core.xml
 E:\BOTS_Code\BOTS\Medration\bin\ru-ru\BundleTransformer.Core.resources.dll
 E:\BOTS_Code\BOTS\Medration\bin\ru-ru\BundleTransformer.SassAndScss.resources.dll
 E:\BOTS_Code\BOTS\Medration\bin\ru-ru\JavaScriptEngineSwitcher.Core.resources.dll
+C:\BO-Project\BOTSNEW\Medration\obj\Debug\Medration.csproj.AssemblyReference.cache
+C:\BO-Project\BOTSNEW\Medration\obj\Debug\Medration.csproj.CoreCompileInputs.cache
