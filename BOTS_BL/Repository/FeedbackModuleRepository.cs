@@ -867,7 +867,7 @@ namespace BOTS_BL.Repository
                             }
 
                             message = message.Replace("#30", mobileNo);
-                            message = message.Replace("#08", Convert.ToString(date));                          
+                            message = message.Replace("#08", Convert.ToString(date));
 
                         }
                         if (feedbackpointsmsg.IsFeedbackPoints)
@@ -895,6 +895,7 @@ namespace BOTS_BL.Repository
                                     objnewcust.IsActive = true;
                                     objnewcust.DOJ = date;
                                     objnewcust.Email = "";
+                                    objnewcust.EnrolledOutlet = outletId;
                                     objnewcust.CurrentEnrolledOutlet = outletId;
                                     objnewcust.DisableSMSWATxn = false;
                                     objnewcust.DisableSMSWAPromo = false;
@@ -942,55 +943,86 @@ namespace BOTS_BL.Repository
                                 pointMaster.MobileNoPtsId = mobileNo + "Feedback" + DateTime.Now;
                                 context.tblCustPointsMasters.Add(pointMaster);
                                 context.SaveChanges();
-                                //var custpoint = objcustdetails.Points;
-                                //if (custpoint == null)
-                                //    objcustdetails.Points = feedbackpointsmsg.AwardFeedbackPoints;
-                                //else
-                                //    objcustdetails.Points = custpoint + feedbackpointsmsg.AwardFeedbackPoints;
-                                //context.CustomerDetails.AddOrUpdate(objcustdetails);
-                                //context.SaveChanges();
-                                //objtransactionMaster.CustomerId = objcustdetails.CustomerId;
-                                //objtransactionMaster.CustomerPoints = objcustdetails.Points;
-                                //objtransactionMaster.CounterId = outletId + "01";
-                                //objtransactionMaster.MobileNo = mobileNo;
-                                //objtransactionMaster.Datetime = date;
-                                //objtransactionMaster.TransType = "1";
-                                //objtransactionMaster.TransSource = "1";
-                                //objtransactionMaster.InvoiceNo = "B_Feedbackpoints";
-                                //objtransactionMaster.InvoiceAmt = 0;
-                                //objtransactionMaster.Status = "06";
-                                //objtransactionMaster.PointsEarned = feedbackpointsmsg.AwardFeedbackPoints;
-                                //objtransactionMaster.PointsBurned = 0;
-                                //objtransactionMaster.CampaignPoints = 0;
-                                //objtransactionMaster.TxnAmt = 0;
-                                //objtransactionMaster.Synchronization = "";
-                                //objtransactionMaster.SyncDatetime = null;
-                                //context.TransactionMasters.Add(objtransactionMaster);
-                                //context.SaveChanges();
-                                //objpointsExpiry.MobileNo = mobileNo;
-                                //objpointsExpiry.CounterId = outletId + "01";
-                                //objpointsExpiry.CustomerId = objcustdetails.CustomerId;
-                                //objpointsExpiry.BurnDate = null;
-                                //objpointsExpiry.Datetime = date;
-                                //objpointsExpiry.EarnDate = date;
-                                //// DateTime today = date;
-                                //DateTime next = date.AddYears(1);
-                                //var currentmonth = DateTime.DaysInMonth(next.Year, next.Month);
 
-                                //if (next.Day < currentmonth)
-                                //{
-                                //    var days = (currentmonth - next.Day);
-                                //    next = date.AddDays(days).AddYears(1);
-                                //}
-                                //objpointsExpiry.ExpiryDate = next;
-                                //objpointsExpiry.Points = feedbackpointsmsg.AwardFeedbackPoints;
-                                //objpointsExpiry.Status = "00";
-                                //objpointsExpiry.InvoiceNo = "B_Feedbackpoints";
-                                //objpointsExpiry.GroupId = GroupId;
-                                //objpointsExpiry.OriginalInvoiceNo = "";
-                                //objpointsExpiry.TransRefNo = null;
-                                //context.PointsExpiries.Add(objpointsExpiry);
-                                //context.SaveChanges();
+
+                                Feedback_SMSNumbers objsmsnumber1 = new Feedback_SMSNumbers();
+                                string mobileNos = "";
+                                string WATokenId = "";
+                                using (var contextNew = new CommonDBContext())
+                                {
+                                    objsmsnumber1 = contextNew.Feedback_SMSNumbers.Where(x => x.GroupId == GroupId && x.OutletId == outletId).FirstOrDefault();
+                                    mobileNos = objsmsnumber1.MobileNos;
+                                }
+                                string WAMsg = feedbackpointsmsg.MsgToCustomer;
+                                var objsmsdetails = context.tblSMSWhatsAppCredentials.Where(x => x.OutletId == outletId).FirstOrDefault();
+                                if (objsmsdetails != null)
+                                {
+                                    WATokenId = objsmsdetails.WhatsAppTokenId;
+                                }
+                                if (GroupId == "1225")
+                                {
+                                    var SMSDetailsMapping = context.SMSOutletMappings.Where(x => x.OutletId == outletId).FirstOrDefault();
+                                    if (SMSDetailsMapping != null)
+                                    {
+                                        WATokenId = SMSDetailsMapping.WATokenId;
+                                    }
+                                }
+                                if (objcustdetails != null)
+                                {
+                                    WAMsg = WAMsg.Replace("#01", objcustdetails.Name);
+                                }
+                                else
+                                {
+                                    WAMsg = WAMsg.Replace("#01", "Member");
+                                }
+                                WAMsg = WAMsg.Replace("#02", Convert.ToString(feedbackpointsmsg.AwardFeedbackPoints));
+
+                                var bitly = context.tblDLCRuleMasters.Where(x => x.DLCId == 4).Select(y => y.DLCValue).FirstOrDefault();
+                                WAMsg = WAMsg.Replace("#03", bitly);
+                                var customerName = context.tblGroupMasters.Where(x => x.GroupId == GroupId).Select(y => y.GroupName).FirstOrDefault();
+                                WAMsg = WAMsg.Replace("#04", customerName);
+
+                                SendMessage(mobileNo, WAMsg, WATokenId);
+                                if (feedbackpointsmsg.IsPositiveMessage)
+                                {
+                                    var SuccessMSG = "Successful Feedback registered by : #01";
+                                    SuccessMSG = SuccessMSG.Replace("#01", mobileNo);
+                                    SendMessage(mobileNos, SuccessMSG, WATokenId);
+                                }
+
+                                if (!string.IsNullOrEmpty(feedbackpointsmsg.MsgNegativeFeedback))
+                                {
+                                    if (GroupId == "1225")
+                                    {
+                                        if (Combinedpoint <= 9)
+                                        {
+                                            var negativeMSG = "Negative Feedback by : #01 | On date time #08 | Negative Score: #31 | Outlet Name : #09";
+                                            negativeMSG = negativeMSG.Replace("#01", mobileNo);
+                                            negativeMSG = negativeMSG.Replace("#08", Convert.ToString(date));
+                                            negativeMSG = negativeMSG.Replace("#31", Convert.ToString(Combinedpoint));
+                                            negativeMSG = negativeMSG.Replace("#09", objoutlet.OutletName);
+                                            //message = message.Replace("#09", objoutlet.OutletName);
+
+                                            SendMessage(feedbackpointsmsg.MsgNegativeFeedback, negativeMSG, WATokenId);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (Combinedpoint <= 6)
+                                        {
+                                            var negativeMSG = "Negative Feedback by : #01 | On date time #08 | Negative Score: #31 | Outlet Name : #09";
+                                            negativeMSG = negativeMSG.Replace("#01", mobileNo);
+                                            negativeMSG = negativeMSG.Replace("#08", Convert.ToString(date));
+                                            negativeMSG = negativeMSG.Replace("#31", Convert.ToString(Combinedpoint));
+                                            negativeMSG = negativeMSG.Replace("#09", objoutlet.OutletName);
+                                            //message = message.Replace("#09", objoutlet.OutletName);
+
+                                            SendMessage(feedbackpointsmsg.MsgNegativeFeedback, negativeMSG, WATokenId);
+                                        }
+                                    }
+                                }
+
+
                                 if (feedbackpointsmsg.IsOtherInfoShow)
                                 {
                                     status = "true";
@@ -1174,7 +1206,7 @@ namespace BOTS_BL.Repository
                     if (feedbackpointsmsg.PointsConfig == "OnOtherInfo")
                     {
                         if (objcustdetails != null)
-                        {                            
+                        {
                             if (AnniversaryDt != null)
                             {
                                 objcustdetails.AnniversaryDate = Convert.ToDateTime(AnniversaryDt);
@@ -1182,7 +1214,7 @@ namespace BOTS_BL.Repository
                             if (BirthDt != null)
                             {
                                 objcustdetails.DOB = Convert.ToDateTime(BirthDt);
-                            }                            
+                            }
                             context.tblCustDetailsMasters.Add(objcustdetails);
                             context.SaveChanges();
                         }
@@ -2019,20 +2051,20 @@ namespace BOTS_BL.Repository
 
                         if (feedback != null)
                         {
-                            var invoiceamt = context.TransactionMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.Datetime == today).GroupBy(x => x.MobileNo)
+                            var invoiceamt = context.tblTxnBonusMasters.Where(x => x.MobileNo == feedback.Mobilenumber && x.TxnDatetime == today).GroupBy(x => x.MobileNo)
                                 .Select(g => new
                                 {
                                     g.Key,
                                     totalamt = g.Sum(s => s.InvoiceAmt > 0 ? s.InvoiceAmt : 0),
                                     txnstatus = g.Sum(s => s.InvoiceAmt).ToString()
                                 }).ToList();
-                            var custinfo = context.CustomerDetails.Where(x => x.MobileNo == feedback.Mobilenumber).Select(g => new
+                            var custinfo = context.tblCustDetailsMasters.Where(x => x.MobileNo == feedback.Mobilenumber).Select(g => new
                             {
                                 cust = g.DOJ == today ? "1st time" : "Existing",
-                                custname = g.CustomerName
+                                custname = g.Name
                             }).ToList();
 
-                            var outlet = context.OutletDetails.Where(x => x.OutletId == feedback.outletid).FirstOrDefault();
+                            var outlet = context.tblOutletMasters.Where(x => x.OutletId == feedback.outletid).FirstOrDefault();
                             objreport.GroupId = groupId;
                             objreport.MemberName = custinfo.Select(x => x.custname).FirstOrDefault();
                             objreport.MobileNo = feedback.Mobilenumber;

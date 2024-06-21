@@ -6,41 +6,99 @@
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvGroup">
-                <div class="col-lg-3 col-md-3">
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4">
+                <div class="col-lg-2 col-md-3">
                     <b>Group Name</b>
                 </div>
                 <div class="col-md-3 col-xl-3" style="padding-left:9px;">
                     @Html.DropDownListFor(model => model.tblGroupDetails.GroupName, new SelectList(Model.lstGroupDetails, "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input50", @id = "ddlGroupDetails" })
                 </div>
-                 
+
+                <div class="col-md-3 col-xl-2" style="margin-bottom: 30px;">
+                    <b>Renewal Date</b>
+                </div>
+                <div class="col-md-3 col-xl-2">
+                    <span id="spnExistingRenewalDate"></span>
+                </div>
+                <div class="col-md-3 col-xl-2" style="margin-bottom: 30px;">
+                    <b>CS Name</b>
+                </div>
+                <div class="col-md-3 col-xl-2">
+                    <span id="spnCSName"></span>
+                </div>
             </div>
-            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4" id="dvRenewalDate" style="display: none;">
-                <div class="col-md-12 col-xl-12 row">
-                    <div class="col-md-3 col-xl-3" style="margin-bottom: 30px;">
-                        <b>Existing Renewal Date</b>
-                    </div>
-                    <div class="col-md-3 col-xl-3">
-                        <span id="spnExistingRenewalDate"></span>
-                    </div>
+
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4">
+                <div class="col-lg-2 col-md-3">
+                    <b>Group Type</b>
                 </div>
-                <div class="col-md-12 col-xl-12 row">
-                    <div class="col-md-3 col-xl-3">
-                        <b>Update Renewal Date</b>
-                    </div>
-                    <div class="col-md-3 col-xl-3">
-                        <input id="txtNewRewalDate" class="input50" />
-                    </div>
+                <div class="col-lg-3 col-md-3">
+                    <input type="radio" id="rbtnLoyalty" name="GroupType" style="width:20px; cursor:pointer;" /> &nbsp;Loyalty
+                    <input type="radio" id="rbtnNonLoyalty" name="GroupType" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Non Loyalty
                 </div>
-                <div class="row mb-2 ml-2">
-                    <div class="col-md-3 col-xl-6" style="margin-left: 270px; margin-top: 20px; ">
-                        <button type="button" id="btnUpdate" class="btn btn-primary" Onclick="UpdateRenewalDate()"><b>Update</b></button>
-                    </div>
+                <div class="col-lg-2 col-md-3">
+                    <b>Frequency</b>
+                </div>
+                <div class="col-lg-5 col-md-3">
+                    <input type="radio" id="rbtnQuarterly" name="Frequency" style="width:20px; cursor:pointer;" /> &nbsp;Quarterly
+                    <input type="radio" id="rbtnHalfYearly" name="Frequency" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Half Yearly
+                    <input type="radio" id="rbtnAnnually" name="Frequency" style="width:20px; cursor:pointer;margin-left:20px;" /> &nbsp;Annual
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4">
+                <div class="col-lg-2 col-md-3">
+                    <input type="checkbox" id="chkIsPartial" style="width:20px;height:20px;cursor:pointer;" /> Is Partial
+                </div>
+                <div class="col-lg-3 col-md-3" id="dvPartialAmtLbl" style="display:none;">
+                    Partial Amount                     
+                </div>
+                <div class="col-lg-3 col-md-3" id="dvPartialAmt" style="display:none;">
+                    <input type="number" id="txtPartialAmount" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4">
+                <div class="col-lg-2 col-md-3">
+
+                </div>
+                <div class="col-lg-3 col-md-3" id="dvRemAmtLbl" style="display:none;">                    
+                    Remaining Amount
+                </div>
+                <div class="col-lg-3 col-md-3" id="dvRemAmt" style="display:none;">
+                    <input type="number" id="txtRemainingAmount" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-12 row mt-3 pl-5 mb-4">
+                <div class="col-lg-2 col-md-3">
+
+                </div>
+                <div class="col-lg-3 col-md-3" id="dvRemDateLbl" style="display:none;">
+                    Remaining Payment Date
+                </div>
+                <div class="col-lg-3 col-md-3" id="dvRemAmtDate" style="display:none;">
+                    <input type="number" id="txtRemainingAmountDate" class="input50" />
+                </div>
+            </div>
+
+
+
+
+            <div class="col-md-12 col-xl-12 row">
+                <div class="col-md-3 col-xl-3">
+                    <b>Update Renewal Date</b>
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <input id="txtNewRewalDate" class="input50" />
+                </div>
+            </div>
+            <div class="row mb-2 ml-2">
+                <div class="col-md-3 col-xl-6" style="margin-left: 270px; margin-top: 20px; ">
+                    <button type="button" id="btnUpdate" class="btn btn-primary" Onclick="UpdateRenewalDate()"><b>Update</b></button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
 <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
 <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
@@ -49,6 +107,28 @@
     $(document).ready(function () {
         $('#ddlGroupDetails').on("change", function () {
             GetRenewalDetails();
+        });
+        $("#chkIsPartial").change(function () {
+            if (this.checked) {
+                $('#dvPartialAmtLbl').show();
+                $('#dvPartialAmt').show();
+                $('#dvRemAmtLbl').show();
+                $('#dvRemAmt').show();
+                $('#dvRemDateLbl').show();
+                $('#dvRemAmtDate').show();
+            }
+            else {
+                $('#dvPartialAmtLbl').hide();
+                $('#dvPartialAmt').hide();
+                $('#dvRemAmtLbl').hide();
+                $('#dvRemAmt').hide();
+                $('#dvRemDateLbl').hide();
+                $('#dvRemAmtDate').hide();
+                $("#txtPartialAmount").val("");
+                $("#txtRemainingAmount").val("");
+                $("#txtRemainingAmountDate").val("");
+            }
+            
         });
         $("#txtNewRewalDate").datepicker({
             dateFormat: "yy-mm-dd",
