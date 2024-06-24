@@ -2693,10 +2693,10 @@ namespace BOTS_BL.Repository
             {
                 DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
             }
-                int count = 0;
+            int count = 0;
             int index = 1;
             string Criteria = string.Empty;
-            string slicerQuery = "select MobileNo from "+ DBName+".dbo.tblSmartSlicerMaster as a where  ";
+            string slicerQuery = "select MobileNo from " + DBName + ".dbo.tblSmartSlicerMaster as a where  ";
             string productQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnProDetailsMasterAndClone as b where ";
             string txnQuery = "select distinct MobileNo from " + DBName + ".dbo.View_tblTxnDetailsMasterAndClone as c where ";
             string txnQueryWhere = "";
@@ -2707,7 +2707,7 @@ namespace BOTS_BL.Repository
             bool IsCumulative = false;
             bool IsProduct = false;
             bool IsTransaction = false;
-
+            bool IsTransacting = false;
             foreach (Dictionary<string, object> item in objData)
             {
 
@@ -2717,6 +2717,7 @@ namespace BOTS_BL.Repository
                     string SecondChk = Convert.ToString(item["SecondChk"]);
                     if (FirstChk == "Transacting")
                     {
+                        IsTransacting = true;
                         Criteria += "Transacting";
 
                         if (SecondChk == "All")
@@ -2796,6 +2797,7 @@ namespace BOTS_BL.Repository
                     }
                     if (FirstChk == "NonTransacting")
                     {
+                        IsTransacting = false;
                         Criteria += "Non Transacting";
                         if (!string.IsNullOrEmpty(Convert.ToString(item["SecondChk"])))
                         {
@@ -2803,7 +2805,7 @@ namespace BOTS_BL.Repository
                             WhereClause += " a.TotalTxnCount = 0";
                             if (Convert.ToString(item["SecondChk"]) == "All")
                             {
-                                
+
                             }
                             if (Convert.ToString(item["SecondChk"]) == "Enrolled")
                             {
@@ -2818,7 +2820,7 @@ namespace BOTS_BL.Repository
                                 WhereClause += " and a.EnrolledBy = 'DLCReferral'";
                             }
                             if (Convert.ToString(item["SecondChk"]) == "DLC")
-                            {                                
+                            {
                                 if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
                                 {
                                     Criteria += " - Source : " + Convert.ToString(item["QRSource"]);
@@ -2839,12 +2841,45 @@ namespace BOTS_BL.Repository
                         {
                             Criteria += " - " + Convert.ToString(item["SecondChk"]);
                             Criteria += " - " + Convert.ToString(item["MAFinal"]);
-
+                            string MAFinal = Convert.ToString(item["MAFinal"]);
+                            if (SecondChk == "Referal")
+                            {
+                                if (MAFinal == "All")
+                                {
+                                    //Add where clause for Member Acquition - Referal - All
+                                    WhereClause += "EnrolledBy ='DLCReferral'";
+                                } 
+                                else if(MAFinal == "Transacting")
+                                {
+                                    //Add Where clause for Member Acquition - Referal - Transacting
+                                    WhereClause += "EnrolledBy ='DLCReferral' and TotalTxnCount > 0";
+                                }
+                                else
+                                {
+                                    //Add Where clause for Member Acquition - Referal - Only Registered
+                                    WhereClause += "EnrolledBy ='DLCReferral' and TotalTxnCount = 0";
+                                }
+                            }
                             if (Convert.ToString(item["SecondChk"]) == "DLC")
                             {
                                 if (!string.IsNullOrEmpty(Convert.ToString(item["QRSource"])))
                                 {
                                     Criteria += "<br/>Source QR : " + Convert.ToString(item["QRSource"]);
+                                }
+                                if (MAFinal == "All")
+                                {
+                                    //Add where clause for Member Acquition - Referal - All
+                                    WhereClause += "EnrolledBy like 'Social%'";
+                                }
+                                else if (MAFinal == "Transacting")
+                                {
+                                    //Add Where clause for Member Acquition - Referal - Transacting
+                                    WhereClause += "EnrolledBy like 'Social%' and TotalTxnCount > 0";
+                                }
+                                else
+                                {
+                                    //Add Where clause for Member Acquition - Referal - Only Registered
+                                    WhereClause += "EnrolledBy like 'Social%' and TotalTxnCount = 0";
                                 }
                             }
                         }
@@ -2977,7 +3012,7 @@ namespace BOTS_BL.Repository
                         Criteria += "<br/>Inactive since(days) : " + Convert.ToString(item["NonTransactedSince"]);
                         WhereClause += " and a.InActiveDays <= " + Convert.ToString(item["NonTransactedSince"]);
                     }
-                    
+
                     if (Convert.ToString(item["IsPointBalance"]) == "Yes")
                     {
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
@@ -3214,11 +3249,11 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["Outlets"];
-                        
+
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
-                        
+
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
@@ -3230,7 +3265,7 @@ namespace BOTS_BL.Repository
                             {
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
-                        }                        
+                        }
                         if (!string.IsNullOrEmpty(outletIds))
                         {
                             outletIds = outletIds.Remove(outletIds.Length - 1);
@@ -3242,7 +3277,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["TransactingOutlets"];
-                        
+
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
                         string outletAll = string.Empty;
@@ -3258,7 +3293,7 @@ namespace BOTS_BL.Repository
                                 outletIds += Convert.ToString(Convert.ToString(item1)) + ",";
                             }
                         }
-                        
+
                         if (!string.IsNullOrEmpty(outletIds))
                         {
                             outletIds = outletIds.Remove(outletIds.Length - 1);
@@ -3314,7 +3349,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsBirthday"]) == "Yes")
                     {
                         Criteria += "<br/>Birthday : " + Convert.ToString(item["BirthdayMonthName"]);
-                        WhereClause += " and Month(a.DOB) = " + Convert.ToString(item["BirthdayMonth"])+ " and a.DOB !='1900-01-01'";
+                        WhereClause += " and Month(a.DOB) = " + Convert.ToString(item["BirthdayMonth"]) + " and a.DOB !='1900-01-01'";
                     }
                     if (Convert.ToString(item["IsAnniversary"]) == "Yes")
                     {
@@ -3324,7 +3359,7 @@ namespace BOTS_BL.Repository
                 }
                 index++;
             }
-           
+
             txnQuery = txnQuery + " " + txnQueryWhere;
             txnQuery = txnQuery.Replace("where and", "where");
             txnQuery = txnQuery.Replace("where  and", "where");
@@ -3340,6 +3375,7 @@ namespace BOTS_BL.Repository
             slicerQuery = slicerQuery.Replace("where  and", "where");
             slicerQuery = slicerQuery.Replace("where   and", "where");
             int totalCount = 0;
+            int transactingCount = 0;
             try
             {
                 using (var context = new CommonDBContext())
@@ -3370,6 +3406,21 @@ namespace BOTS_BL.Repository
                 }
                 using (var context = new BOTSDBContext(connstr))
                 {
+                    if (IsTransacting)
+                    {
+                        //get transacting records
+                        transactingCount = context.tblSmartSlicerMasters.Where(x => x.TotalTxnCount > 0).Count();
+                    }
+                    else
+                    {
+                        //get non transacting records
+                        transactingCount = context.tblSmartSlicerMasters.Where(x => x.TotalTxnCount == 0).Count();
+                    }
+                    if(Criteria.Contains("Member Acquition"))
+                    {
+                        //Get All count for Member Acquition
+                        transactingCount = context.tblSmartSlicerMasters.Where(x => x.EnrolledBy == "DLCReferral" || x.EnrolledBy.Contains("Social")).Count();
+                    }
                     totalCount = context.tblSmartSlicerMasters.Count();
                 }
             }
@@ -3378,9 +3429,10 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "errorofgetting data");
             }
 
-            int[] lstCount = new int[2];
+            int[] lstCount = new int[3];
             lstCount[0] = count;
             lstCount[1] = totalCount;
+            lstCount[2] = transactingCount;
             return lstCount;
         }
 
@@ -3390,7 +3442,7 @@ namespace BOTS_BL.Repository
             using (var context = new CommonDBContext())
             {
                 DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-            }            
+            }
             int index = 1;
             string Criteria = string.Empty;
             string slicerQuery = "select MobileNo from " + DBName + ".dbo.tblSmartSlicerMaster as a where  ";
@@ -4079,7 +4131,7 @@ namespace BOTS_BL.Repository
             {
                 DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
             }
-            
+
             int index = 1;
             string Criteria = string.Empty;
             string slicerQuery = "select MobileNo from " + DBName + ".dbo.tblSmartSlicerMaster as a where  ";
@@ -4763,7 +4815,7 @@ namespace BOTS_BL.Repository
             bool IsCumulative = false;
             bool IsProduct = false;
             bool IsTransaction = false;
-            
+
             using (var context = new CommonDBContext())
             {
                 DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
@@ -4807,7 +4859,7 @@ namespace BOTS_BL.Repository
                 {
                     lstCount[1] = context.tblSmartSlicerMasters.Count();
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -4826,7 +4878,7 @@ namespace BOTS_BL.Repository
             {
                 DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
             }
-            
+
             tblCRDataset DSDetails = new tblCRDataset();
             try
             {
@@ -4857,9 +4909,9 @@ namespace BOTS_BL.Repository
                              new SqlParameter("@pi_TxnQuery", DSDetails.DSTxnQuery),
                              new SqlParameter("@pi_ProductQuery", DSDetails.DSProdQuery),
                              new SqlParameter("@pi_SlicerQuery", DSDetails.DSCriteriaForQuery),
-                             new SqlParameter("@pi_Parameters", columns)).ToList<CustomerTypeReport>();                   
+                             new SqlParameter("@pi_Parameters", columns)).ToList<CustomerTypeReport>();
 
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -4946,13 +4998,13 @@ namespace BOTS_BL.Repository
             return objData;
         }
 
-        
+
 
     }
 }
 
 public class SlicerCount
 {
-    public int  CustCount {get;set;}
+    public int CustCount { get; set; }
 }
 

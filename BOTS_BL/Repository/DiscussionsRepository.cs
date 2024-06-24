@@ -2939,7 +2939,7 @@ namespace BOTS_BL.Repository
             var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
             var PortNo = 587;
             var OpsTeam = "operations@blueocktopus.in";
-
+            var CSSupport = "cssupport@blueocktopus.in";
             try
             {
                 using (MailMessage mail = new MailMessage())//tech@blueocktopus.in operations@blueocktopus.in
@@ -2995,6 +2995,7 @@ namespace BOTS_BL.Repository
                     }
                     mail.CC.Add(OpsTeam);
                     mail.CC.Add(Emaildata.AddbyEmail);
+                    mail.CC.Add(CSSupport);
                     mail.Body = str.ToString();
                     mail.IsBodyHtml = true;
                     mail.BodyEncoding = System.Text.Encoding.GetEncoding("utf-8");

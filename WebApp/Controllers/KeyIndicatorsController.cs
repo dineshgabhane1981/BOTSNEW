@@ -61,6 +61,7 @@ namespace WebApp.Controllers
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             NonRedemptionCls objNonRedemptionCls = new NonRedemptionCls();
             objNonRedemptionCls = KR.GetNonRedemptionData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId);
+            //objNonRedemptionCls = KR.GetNonRedemptionDataBySP(userDetails.GroupId, userDetails.LoginId);
             return View(objNonRedemptionCls);
         }
 
@@ -194,7 +195,7 @@ namespace WebApp.Controllers
                 //decimal? totalspent = 0;
                 //long? totalvisit = 0;
                 //long? availbal = 0;
-                decimal? totalspent = 0;
+                long totalspent = 0;
                 long totalvisit = 0;
                 long availbal = 0;
                 foreach (var item in objOnlyOnceTxn)
@@ -375,7 +376,7 @@ namespace WebApp.Controllers
             try
             {
                 objNonTransactingTxn = KR.GetNonTransactingTxnData(userDetails.GroupId, outletId, barType, userDetails.connectionString, userDetails.LoginId);
-                decimal? totalspent = 0;
+                long totalspent = 0;
                 long? totalvisit = 0;
                 long? availbal = 0;
                 foreach (var item in objNonTransactingTxn)

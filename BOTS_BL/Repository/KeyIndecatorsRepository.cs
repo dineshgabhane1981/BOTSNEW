@@ -58,7 +58,7 @@ namespace BOTS_BL.Repository
                   new SqlParameter("@pi_OutletId", outletId),
                   new SqlParameter("@pi_Type", type),
                   new SqlParameter("@pi_DBName", DBName)).ToList<OnlyOnceTxn>();
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -76,13 +76,13 @@ namespace BOTS_BL.Repository
                 using (var contextnew = new CommonDBContext())
                 {
                     var DBName = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
-                    objNonTransacting = contextnew.Database.SqlQuery<NonTransactingCls>("sp_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_DBName", 
-                        new SqlParameter("@pi_GroupId", GroupId), 
-                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")), 
-                        new SqlParameter("@pi_LoginId", loginId), 
-                        new SqlParameter("@pi_OutletId", outletId), 
+                    objNonTransacting = contextnew.Database.SqlQuery<NonTransactingCls>("sp_NonTransacting @pi_GroupId, @pi_Date, @pi_LoginId, @pi_OutletId,@pi_DBName",
+                        new SqlParameter("@pi_GroupId", GroupId),
+                        new SqlParameter("@pi_Date", DateTime.Now.ToString("yyyy-MM-dd")),
+                        new SqlParameter("@pi_LoginId", loginId),
+                        new SqlParameter("@pi_OutletId", outletId),
                         new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<NonTransactingCls>();
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace BOTS_BL.Repository
                         new SqlParameter("@pi_DBName", DBName),
                         new SqlParameter("@pi_Type", type)).ToList<NonTransactingTxn>();
                     objNonTransactingTxn = objNonTransactingTxn.OrderBy(x => x.LastTxnDate).ToList();
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -124,7 +124,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {                   
+                {
                     List<MemberListAllData> AllData = new List<MemberListAllData>();
 
                     AllData = context.Database.SqlQuery<MemberListAllData>("select * from View_CustTxnSummaryWithPts").ToList();
@@ -152,7 +152,7 @@ namespace BOTS_BL.Repository
                     objNonRedemption.MoreThan180DaysLow = AllData.Where(x => x.AvlPts < Low && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
                     objNonRedemption.MoreThan180DaysMedium = AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
                     objNonRedemption.MoreThan180DaysHigh = AllData.Where(x => x.AvlPts >= Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
-                    
+
                 }
             }
             catch (Exception ex)
@@ -162,14 +162,67 @@ namespace BOTS_BL.Repository
 
             return objNonRedemption;
         }
+        /// <summary>
+        /// Added by Omkar on 13th June 2024
+        /// </summary>
+        /// <param name="GroupId"></param>
+        /// <param name="loginId"></param>
+        /// <returns></returns>
+        public NonRedemptionCls GetNonRedemptionDataBySP(string GroupId, string loginId)
+        {
+            NonRedemptionCls objNonRedemption = new NonRedemptionCls();
+            try
+            {
+                using (var contextnew = new CommonDBContext())
+                {
+                    List<MemberListAllData> AllData = new List<MemberListAllData>();
+                    var DBName = contextnew.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(y => y.DBName).FirstOrDefault();
+                    
+                    var SPData = contextnew.Database.SqlQuery<object>("sp_NonRedeemtion @pi_GroupId,  @pi_LoginId, @pi_DBName",
+                            new SqlParameter("@pi_GroupId", GroupId),
+                            new SqlParameter("@pi_LoginId", loginId),                          
+                            new SqlParameter("@pi_DBName", DBName)).ToList();
 
+                    objNonRedemption.TotalMember = AllData.Where(x => x.EarnCount > 0).Count();
+                    objNonRedemption.UniqueRedeemedMember = AllData.Where(x => x.BurnCount > 0).Count();
+                    objNonRedemption.NeverRedeemed = AllData.Where(x => x.BurnCount == 0 && x.EarnCount > 0).Count();
+                    objNonRedemption.NeverRedeemedPercentage = (objNonRedemption.NeverRedeemed * 100) / objNonRedemption.TotalMember;
+
+                    var TotalPoints = AllData.Where(x => x.BurnCount > 0).Sum(y => y.AvlPts);
+                    var avg = TotalPoints / objNonRedemption.NeverRedeemed;
+                    var Low = avg / 3;
+                    var Medium = Low + Low;
+                    var High = avg;
+                    var last90 = DateTime.Today.AddDays(-90);
+                    var last180 = DateTime.Today.AddDays(-180);
+
+                    objNonRedemption.LessThan90DaysLow = AllData.Where(x => x.AvlPts < Low && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                    objNonRedemption.LessThan90DaysMedium = AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                    objNonRedemption.LessThan90DaysHigh = AllData.Where(x => x.AvlPts >= Medium && x.DOJ >= last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+
+                    objNonRedemption.Bt90to180Low = AllData.Where(x => x.AvlPts < Low && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                    objNonRedemption.Bt90to180Medium = AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                    objNonRedemption.Bt90to180High = AllData.Where(x => x.AvlPts >= Medium && x.DOJ >= last180 && x.DOJ < last90 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+
+                    objNonRedemption.MoreThan180DaysLow = AllData.Where(x => x.AvlPts < Low && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                    objNonRedemption.MoreThan180DaysMedium = AllData.Where(x => x.AvlPts >= Low && x.AvlPts < Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+                    objNonRedemption.MoreThan180DaysHigh = AllData.Where(x => x.AvlPts >= Medium && x.DOJ < last180 && x.BurnCount == 0 && x.EarnCount > 0).Count();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetNonRedemptionDataBySP");
+            }
+            return objNonRedemption;
+        }
         public List<NonRedemptionTxn> GetNonRedemptionTxnData(string GroupId, int type, int daysType, string connstr, string loginId)
         {
             List<NonRedemptionTxn> objNonRedemptionTxn = new List<NonRedemptionTxn>();
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {                    
+                {
                     List<MemberListAllData> AllData = new List<MemberListAllData>();
                     List<MemberListAllData> FilteredData = new List<MemberListAllData>();
 
@@ -314,7 +367,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {                    
+                {
                     var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
                     var ReferralBase = context.Database.SqlQuery<tblDLCReportingData>("select ReferredByMobileNo,ReferredByName,ReferredDate,ReferralMobileNo,ReferralName,ConvertedStatus,ReferralTotalTxnCount,ReferralTotalSpend from tblDLCReporting").ToList();
 
@@ -341,7 +394,7 @@ namespace BOTS_BL.Repository
                     if (objMemberPage.ProfileUpdateCount > 0)
                     {
                         objMemberPage.ProfileUpdatePercentage = ((objMemberPage.ProfileUpdateCount / TotalBase) * 100);
-                    }                  
+                    }
                 }
             }
             catch (Exception ex)
@@ -414,7 +467,7 @@ namespace BOTS_BL.Repository
             try
             {
                 using (var context = new BOTSDBContext(connstr))
-                {                    
+                {
                     DateTime DummyDate = new DateTime(1900, 1, 1);
                     DateTime Today = DateTime.Now;
                     var AllData = DR.GetExecutiveSummaryAllData(GroupId, connstr);
