@@ -43,3 +43,5 @@
 /WebApp/bin/WebApp.pdb
 /WebApp/obj/Debug/WebApp.dll
 /WebApp/obj/Debug/WebApp.pdb
+*/.vs
+.wsuo
