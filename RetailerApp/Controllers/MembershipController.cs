@@ -67,13 +67,15 @@ namespace RetailerApp.Controllers
                     objDetails.CreatedDate = DateTime.Now;
                     objDetails.CreatedBy = userDetails.LoginId;
 
+
                     objCustDetails.MobileNo = Convert.ToString(item["MobileNo"]);
+                    objCustDetails.CountryCode = "91";
                     objCustDetails.Name = Convert.ToString(item["CustomerName"]);
                     objCustDetails.Id = Convert.ToString(userDetails.GroupId) + Convert.ToString(item["MobileNo"]);
-                    objCustDetails.EnrolledOutlet = Convert.ToString(userDetails.OutletOrBrandId).Substring(0,7);
+                    objCustDetails.EnrolledOutlet = Convert.ToString(userDetails.OutletOrBrandId).Substring(0,8);
                     objCustDetails.DOJ = ER.IndianDatetime();
                     objCustDetails.EnrolledBy = "WalkIn";
-                    objCustDetails.CurrentEnrolledOutlet = Convert.ToString(userDetails.OutletOrBrandId).Substring(0, 7);
+                    objCustDetails.CurrentEnrolledOutlet = Convert.ToString(userDetails.OutletOrBrandId).Substring(0, 8);
                     objCustDetails.IsActive = true;
                     objCustDetails.DisableTxn = false;
                     objCustDetails.DisableSMSWAPromo = false;
