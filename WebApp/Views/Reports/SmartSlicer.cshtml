@@ -275,10 +275,10 @@
                             </div>
                         </div>
                         <div class="col-xl-4" style="margin-left:-200px;" id="dvCountSpendDt">
-                             
+
                             <input type="date" id="txtTxnCountSpendfromdt" class="input40" placeholder="From" disabled />
-                             
-                            <input type="date" id="txtTxnCountSpendtodt" class="input40" placeholder="To" disabled  />
+
+                            <input type="date" id="txtTxnCountSpendtodt" class="input40" placeholder="To" disabled />
                         </div>
                     </div>
 
@@ -639,7 +639,7 @@
 
     $(document).ready(function () {
         DisableAllCheckboxes();
-        
+
         FillColumns();
         FillColumns1();
 
@@ -1219,7 +1219,7 @@
                 $("#chkTOutletAnyOne").prop("disabled", true);
                 $("#chkTOutletLast").prop("disabled", true);
                 $("#lstBoxTOutlet").prop("disabled", true);
-                
+
                 $("#lstBoxTOutlet")[0].selectedIndex = -1;
             }
         });
@@ -1389,7 +1389,7 @@
                 $("#dvInactive").hide();
                 $("#dvSpend").hide();
                 $("#dvPointBalance").hide();
-                $("#dvTxnCount").hide();                
+                $("#dvTxnCount").hide();
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
@@ -1400,19 +1400,19 @@
                 $("#hrTxnFilter").hide();
                 $("#TxnFilterText").hide();
             }
-            else {              
+            else {
                 $("#dvEnrolledRange").show();
                 $("#dvInactive").show();
                 $("#dvSpend").show();
                 $("#dvPointBalance").show();
-                
-                $("#dvTxnCount").hide();                
+
+                $("#dvTxnCount").hide();
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
-                $("#dvPurchased").hide();                
+                $("#dvPurchased").hide();
                 $("#hrProduct").hide();
-                $("#dvAvgTicket").hide();               
+                $("#dvAvgTicket").hide();
             }
         }
         else {
@@ -1423,22 +1423,22 @@
     $("#ddlInactive").change(function () {
         if ($("#ddlInactive").val() != "") {
             if ($("#ddlInactive").val() == "Custom") {
-              
+
                 $("#dvEnrolledRange").show();
                 $("#dvInactive").show();
                 $("#dvSpend").show();
                 $("#dvPointBalance").show();
-                
+
                 $("#dvTxnCount").hide();
                 $("#dvRedeemed").hide();
                 $("#dvNeverPurchased").hide();
                 $("#headingProduct").hide();
                 $("#dvPurchased").hide();
-                $("#hrProduct").hide();                
+                $("#hrProduct").hide();
                 $("#dvInvoiceValue").hide();
                 $("#dvAvgTicket").hide();
                 $("#txtTxnCountSpendfromdt").hide();
-                $("#txtTxnCountSpendtodt").hide();               
+                $("#txtTxnCountSpendtodt").hide();
 
             }
             else {
@@ -2034,7 +2034,7 @@
                     } else if ($("#chkMemberAcquition").is(":checked")) {
                         $("#spnTransactingCountText").html("Total Member Acquition Count")
                     }
-                    
+
                     $("#tblFilterDetails").show();
                     $("#divLoader").hide();
                 },
@@ -2403,63 +2403,6 @@
         return AllData;
     }
 
-    function GetReport() {
-        var returnStatus = true;
-        var objData = GetObject();
-
-        var selecteddata = JSON.stringify(objData);
-            var Array = [];
-            var ArrayColumnName = [];
-        $('#ChooseRight > option').each(function (i, selected) {
-                Array.push($(selected).val());
-                ArrayColumnName.push($(selected).text());
-            });
-        if (ArrayColumnName.length >0) {
-
-            if (returnStatus) {
-                $("#divLoader").show();
-                var FilterData = [];
-                item = {};
-                item["ColumnId"] = Array;
-                item["columnnm"] = ArrayColumnName;
-                FilterData.push(item);
-                var data = JSON.stringify(FilterData);
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetSlicerReport", "Reports")',
-                data: '{jsonData: ' + JSON.stringify(selecteddata) + ',columnslist: ' + JSON.stringify(data) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    console.log(response);
-                    if (response != null) {
-                        $("#dvListing").html(response);
-                        $("#dvListing").show();
-                        $("#btnExport").show();
-                        $("#divLoader").hide();
-                    }
-                },
-                error: function (response) {
-                    console.log(response.responseText);
-                    $("#dvListing").html(response.responseText);
-                    $("#dvListing").show();
-                    $("#btnExport").show();
-                    $("#divLoader").hide();
-                }
-            });
-            }
-        }
-        else {
-            cuteAlert({
-                type: "error",
-                title: "Oops..",
-                message: "Please Select Column from List",
-                buttonText: "Okay"
-            })
-            returnStatus = false;
-        }
-    }
-
     function GetReportDSCount(id) {
         $("#hdnDSID").val(id);
         FillColumns1();
@@ -2636,25 +2579,84 @@
             });
     }
 
+    function GetReport() {
+        var returnStatus = true;
+        var objData = GetObject();
+        var selecteddata = JSON.stringify(objData);
+        var Array = [];
+        var ArrayColumnName = [];
+        $('#ChooseRight > option').each(function (i, selected) {
+            Array.push($(selected).val());
+            ArrayColumnName.push($(selected).text());
+        });
+        if (ArrayColumnName.length >0) {
+            if (returnStatus) {
+                $("#divLoader").show();
+                var FilterData = [];
+                item = {};
+                item["ColumnId"] = Array;
+                item["columnnm"] = ArrayColumnName;
+                FilterData.push(item);
+                var data = JSON.stringify(FilterData);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetSlicerReport", "Reports")',
+                data: '{jsonData: ' + JSON.stringify(selecteddata) + ',columnslist: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    
+                    if (response != null) {
+                        $("#dvListing").html(response);
+                        $("#dvListing").show();
+                        $("#btnExport").show();
+                        $("#divLoader").hide();
+                    }
+                },
+                error: function (response) {
+                    
+                    $("#dvListing").html(response.responseText);
+                    $("#dvListing").show();
+                    $("#btnExport").show();
+                    $("#divLoader").hide();
+                }
+            });
+            }
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Column from List",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+        }
+    }
+
     function ExportDataExcel(type) {
         var returnStatus = true;
-        var objData = [];
-        var selecteddata = "";
-        var DSId = "";
-        if (type == 0) {
-            objData = GetObject();
-            selecteddata = JSON.stringify(objData);
-        }
+        var DSId = 0;
+        var objData = GetObject();
+        var selecteddata = JSON.stringify(objData);
+        var Array = [];
+        var ArrayColumnName = [];
+        $('#ChooseRight > option').each(function (i, selected) {
+            Array.push($(selected).val());
+            ArrayColumnName.push($(selected).text());
+        }); 
+       
         if (type == 1) {
             DSId = $("#hdnDSID").val();
         }
+        var Array = [];
+        var ArrayColumnName = [];
+        $('#ChooseRight > option').each(function (i, selected) {
+            Array.push($(selected).val());
+            ArrayColumnName.push($(selected).text());
+        });
+        console.log(selecteddata)
 
-            var Array = [];
-            var ArrayColumnName = [];
-            $('#ChooseRight > option').each(function (i, selected) {
-                Array.push($(selected).val());
-                ArrayColumnName.push($(selected).text());
-            });
         if (ArrayColumnName.length > 0) {
 
             if (returnStatus) {
@@ -2665,21 +2667,17 @@
                 item["columnnm"] = ArrayColumnName;
                 FilterData.push(item);
                 var data = JSON.stringify(FilterData);
-
+                
                 $("#divLoader").show();
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("ExportSlicerReport", "Reports")',
-                    data: '{jsonData: ' + JSON.stringify(selecteddata) + ',columnslist: ' + JSON.stringify(data) + ',type:' + type + ',DSId:' + DSId + '}',
+                    data: '{"jsonData": ' + JSON.stringify(selecteddata) + ',"columnslist": ' + JSON.stringify(data) + ',"type": ' + type + ',"DSId": ' + DSId + '}',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                        var BaseUrl = $("#baseURL").val();
                         console.log(result)
-                    @*var docurl = "@baseURL/Temp/" + filename;*@
                         var docurl = '@baseURL' + result;
-                        //alert(docurl)
-                        //window.location.href =docurl;
                         window.open(docurl);
                         $("#divLoader").hide();
                     },

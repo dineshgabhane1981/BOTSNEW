@@ -125,7 +125,7 @@ namespace BOTS_BL.Models
         public long TotalTxnCount { get; set; }
         public DateTime? EnrolledDate { get; set; }
         public long PointsBalance { get; set; }
-        public decimal? Spends { get; set; }
+        public long Spends { get; set; }
         //public decimal? TotalEarn { get; set; }
         //public decimal? TotalBurn { get; set; }
         //public decimal? TotalSpend { get; set; }        
