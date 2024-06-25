@@ -1,13 +1,17 @@
 ﻿@model BOTS_BL.Models.OnlyOnce
+@using BOTS_BL.Models;
 @{
-    ViewBag.Title = "OnlyOnce";
+    ViewBag.Title = "Only Once";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
 
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
-        <div class="col-sm-12">
+        <div class="col-sm-12" style="margin-bottom:20px;">
             Select Outlet  @Html.DropDownListFor(x => Model.TotalMember, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
 
         </div>
@@ -60,17 +64,19 @@
             </div>
         </div>
         <div class="col-sm-10" id="dvRecency" style="display:none;margin-bottom:20px;">
-           
 
-            <table class="col-sm-12"  cellpadding="10" cellspacing="10">
+
+            <table class="col-sm-12" cellpadding="10" cellspacing="10">
                 <tr style="text-align:center;">
                     <td style="border-bottom:1px solid black;background-color:#DCE6F0;">High Spend, Long time no see member <br /><u><b><span id="spnNotSeenHigh" style="cursor:pointer;" onclick="GetTxnData('3')"></span></b></u> </td>
                     <td style="border-bottom:1px solid black; border-left:1px solid black;background-color:#DBEDF7;">High Spend, Recent Member <br /><u><b><span id="spnRecentVisitHigh" style="cursor:pointer;" onclick="GetTxnData('1')"></span></b></u></td>
+                    <td rowspan="2" width="100px" class="bg-arielle-smile"> <u><b><span id="spnAll" style="cursor:pointer;" onclick="GetTxnData('5')"> All </span></b></u> </td>
                 </tr>
                 <tr style="text-align:center;">
                     <td style="background-color: #F1DDDC;">Low Spend, Long time no see member <br /><u><b><span id="spnNotSeenLow" style="cursor:pointer;" onclick="GetTxnData('4')"></span></b></u></td>
                     <td style="border-left:1px solid black;background-color:#E6E0EA;">Low Spend, Recent Member <br /><u><b><span id="spnRecentVisitLow" style="cursor:pointer;" onclick="GetTxnData('2')"></span></b></u></td>
                 </tr>
+                <tr></tr>
             </table>
 
         </div>
@@ -90,10 +96,23 @@
                                 <ul class="list-inline progress-list mt-2">
                                     <li class="list-inline-item">
                                         <div class="dropdown">
-                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                                 <i class="fas fa-file-export"></i> Export
                                             </button>
                                         </div>
+                                        @if (logintype == "1" || logintype == "7" || logintype == "6")
+                                        {
+                                            <div>
+                                                <a href="#" onclick="showReport();">Send Report</a>
+                                            </div>
+                                            <div class="dropdown" id="divsendemail" style="display:none">
+                                                <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                                    <i class="fas fa-file-export"></i> Send
+                                                </button>
+
+                                            </div>
+                                        }
                                     </li>
                                 </ul>
                             </div>
@@ -109,8 +128,9 @@
                                             <th scope="col">Member Name</th>
                                             <th scope="col">Type</th>
                                             <th scope="col">Total Spend</th>
+                                            <th scope="col">Total Visits</th>
                                             <th scope="col">Avl Bal Points</th>
-                                            <th scope="col">Txn Update Date</th>
+                                            <th scope="col">Last Txn Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -145,7 +165,8 @@
         var outletId = $("#OutletList").val();
         $.ajax({
             type: "POST",
-            url: "../KeyIndicators/GetOnlyOnceResult",
+            url: '@Url.Action("GetOnlyOnceResult", "KeyIndicators")',
+            //url: "../KeyIndicators/GetOnlyOnceResult",
             data: "{'outletId': '" + outletId + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -174,32 +195,38 @@
             }
         });
     }
-
+    function showReport() {
+        $("#divsendemail").show();
+    }
     function GetTxnData(mtype) {
         clickedType = mtype;
         $("#divLoader").show();
         var outletId = $("#OutletList").val();
         $.ajax({
             type: "POST",
-            url: "../KeyIndicators/GetOnlyOnceTxnResult",
+            url: '@Url.Action("GetOnlyOnceTxnResult", "KeyIndicators")',
+            //url: "../KeyIndicators/GetOnlyOnceTxnResult",
             data: "{'outletId': '" + outletId + "','type': '" + mtype + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 if (response != null) {
-                    tableData.length = 0;                   
+                    tableData.length = 0;
                     $.map(response, function (item) {
                         optionItem = {}
                         optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
                         optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                        optionItem["MobileNo"] = item.MobileNo;
+                        optionItem["MobileNo"] = item.MobileNo;
                         optionItem["MemberName"] = item.MemberName;
                         optionItem["Type"] = item.Type;
                         optionItem["TotalSpend"] = item.TotalSpend;
+                        optionItem["TotalVisit"] = item.TotalVisit;
                         optionItem["AvlBalPoints"] = item.AvlBalPoints;
                         optionItem["LastTxnDate"] = item.LastTxnDate;
                         tableData.push(optionItem);
                     });
-                    
+
                     DrawTable();
                     $("#dvOutletWiseData").show();
                 }
@@ -226,17 +253,85 @@
             "ordering": true,
             "info": true,
             "bFilter": true,
+            "bAutoWidth": false,
             "pageLength": 25,
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "EnrolledOutlet" },
-                { data: "MaskedMobileNo" },
+                {
+                    "mData": "MaskedMobileNo",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                    }
+                },
                 { data: "MemberName" },
                 { data: "Type" },
-                { data: "TotalSpend" },
-                { data: "AvlBalPoints" },
-                { data: "LastTxnDate" }
+                {
+                    "mData": "TotalSpend",
+                    "mRender": function (data, type, row) {
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
+                {
+                    "mData": "TotalVisit",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
+                 
+                {
+                    "mData": "AvlBalPoints",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
+                //{ data: "LastTxnDate" }
+                {
+                    "data": "LastTxnDate", "title": "Last Txn Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                }
             ],
+            "columnDefs": [
+                {
+                    "targets": 4,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 5,
+                    "className": "text-right",
+                },
+                {
+                    "targets": 6,
+                    "className": "text-right"
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,
@@ -251,7 +346,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }
@@ -262,13 +357,18 @@
         });
     }
 
-    function ExportDataExcel() {
-
+    function ExportDataExcel(Id) {
+        var emailid = '';
+        console.log(Id);       
+        if (Id == "1") {
+            emailid = $("#txtemailsend").val();
+        }
         var urlLink = "@Url.Action("ExportToExcelOnlyOnce", "KeyIndicators")";
-        urlLink = urlLink + "?outletId=" + $("#OutletList").val() + "&type=" + clickedType + "&ReportName=OnlyOnce";
+        urlLink = urlLink + "?outletId=" + $("#OutletList").val() + "&type=" + clickedType + "&ReportName=OnlyOnce" + "&EmailId=" + emailid + "";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();
+        $("#txtemailsend").val('');
 
     }
 

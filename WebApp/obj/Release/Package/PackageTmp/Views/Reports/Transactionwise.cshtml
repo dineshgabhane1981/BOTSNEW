@@ -1,28 +1,44 @@
 ﻿@model List<BOTS_BL.Models.OutletwiseTransaction>
+@using BOTS_BL.Models;
+
 @{
     ViewBag.Title = "Transactionwise";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
     <div class="row mb-3 pt-3 pl-3 pr-3 card">
 
-        <div class="col-sm-12" style="display:flex;">
-            <label style="margin-right:20px;"> Txn Date Range</label>
-            <input type="radio" id="rdnBTD" checked name="first_item" value="1" style="margin-right:5px;margin-top:5px;" />  <label for="rdnBTD" style="margin-right:20px;">  BTD</label>
-            <input type="radio" id="rdnRange" name="first_item" value="2" style="margin-right:5px;margin-top:5px;" />  <label for="rdnRange" style="margin-right:20px;">  Range</label>
-
-            <label style="margin-right:10px;"> From :</label> <input type="date" id="dtFrom" style="margin-right:20px;" />
-            <label style="margin-right:10px;"> To :</label><input type="date" id="dtTo" style="margin-right:20px;" />
-
+        <div class="col-sm-10" style="display:flex;padding-bottom: 10px;margin-top:5px;">
+            <div class="col-md-6 col-xl-6">
+                <b>Txn Date Range</b><br /><br />&nbsp;&nbsp; <input type="radio" checked id="rdnMiniStatement" name="btdornot" /> Mini Statement &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdn30Days" name="btdornot" /> Last 30 days &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="rdnRange" name="btdornot" /> Range
+            </div>
+            <div class="col-md-3 col-xl-3">
+                From Date <br /><input type="text" class="input50" placeholder="From Date" readonly id="dtFrom" />&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="col-md-3 col-xl-3">
+                To Date <br /><input type="text" class="input50" placeholder="To Date" readonly id="dtTo" />
+            </div>
         </div>
-        <div class="col-sm-12" style="margin-top:20px;">
-            Select Outlet :  @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
-            
+        <div class="col-sm-10" style="margin-left:15px;">
+            <div class="col-md-10 col-xl-10">
+                Select Outlet :  @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+
+            </div>
         </div>
-        <div class="col-sm-12" style="margin-bottom:20px;">
-            <input type="checkbox" id="chkEnrollmentData" name="chkEnrollmentData" style="margin-right:5px;height:15px;width:15px;" />  <label for="rdnBTD" style="margin-right:20px;">Only Enrollment data</label>
-            <button id="btnFilter" class="btn btn-primary login-btn" style="margin-left:20px;">Filter</button>
+        <div class="col-sm-10" style="margin-bottom:20px;margin-top:20px;margin-left:15px;">
+            <div class="col-md-10 col-xl-10">
+                <input type="radio" id="chkAll" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> All &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkEnrollmentData" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Only Enrollment data &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkEarn" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Earn &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkRedeem" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Redeem &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="radio" id="chkCancel" name="EnrollmentParam" style="margin-right:5px;height:15px;width:15px;" /> Cancel &nbsp;&nbsp;&nbsp;&nbsp;
+                <button id="btnFilter" class="btn btn-primary login-btn" style="margin-left:40px;">Filter</button>
+            </div>
         </div>
     </div>
 
@@ -40,10 +56,23 @@
                             <ul class="list-inline progress-list mt-2">
                                 <li class="list-inline-item">
                                     <div class="dropdown">
-                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                             <i class="fas fa-file-export"></i> Export
                                         </button>
                                     </div>
+                                    @if (logintype == "1" || logintype == "7" || logintype == "6")
+                                    {
+                                        <div>
+                                            <a href="#" onclick="showReport();">Send Report</a>
+                                        </div>
+                                        <div class="dropdown" id="divsendemail" style="display:none">
+                                            <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                            <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                                <i class="fas fa-file-export"></i> Send
+                                            </button>
+
+                                        </div>
+                                    }
                                 </li>
                             </ul>
                         </div>
@@ -79,13 +108,33 @@
     </div>
 
 </div>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<!-- Data table Scripts-->
+
 <script>
     var tableData = [];
     $("#OutletList").val('@ViewBag.OutletId');
+
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    $("#dtFrom").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
+    $("#dtTo").datepicker({
+        dateFormat: "yy-mm-dd",
+        maxDate: today,
+    });
     $(document).ready(function () {
+
         SetFilter();
         GetData();
-        $("#rdnBTD").change(function () {
+        $("#rdnMiniStatement").change(function () {
+            SetFilter();
+        });
+        $("#rdn30Days").change(function () {
             SetFilter();
         });
         $("#rdnRange").change(function () {
@@ -95,16 +144,30 @@
             GetData();
         });
     });
+    function showReport() {
+        $("#divsendemail").show();
+    }
     function SetFilter() {
-        if ($("#rdnBTD").is(":checked")) {
-            $('#dtFrom').prop('readonly', true);
-            $('#dtTo').prop('readonly', true);
+        if ($("#rdnMiniStatement").is(":checked")) {
+            $("#dtFrom").attr("disabled", "disabled");
+            $("#dtTo").attr("disabled", "disabled");
+            //$('#dtFrom').prop('readonly', true);
+            //$('#dtTo').prop('readonly', true);
             $('#dtFrom').val('');
             $('#dtTo').val('');
         }
+        if ($("#rdn30Days").is(":checked")) {
+            $("#dtFrom").attr("disabled", "disabled");
+            $("#dtTo").attr("disabled", "disabled");
+            $('#dtFrom').val('');
+            $('#dtTo').val('');
+        }
+
         if ($("#rdnRange").is(":checked")) {
-            $('#dtFrom').prop('readonly', false);
-            $('#dtTo').prop('readonly', false);
+            //$('#dtFrom').prop('readonly', false);
+            //$('#dtTo').prop('readonly', false);
+            $("#dtFrom").removeAttr("disabled");
+            $("#dtTo").removeAttr("disabled");
         }
     }
     function GetData() {
@@ -112,8 +175,13 @@
         var fromDate = '';
         var toDate = '';
         $("#divLoader").show();
-        if ($("#rdnRange").is(":checked")) {
+        if ($("#rdn30Days").is(":checked")) {
             DateRangeFlag = "1";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        if ($("#rdnRange").is(":checked")) {
+            DateRangeFlag = "2";
             fromDate = $('#dtFrom').val();
             toDate = $('#dtTo').val();
         }
@@ -121,10 +189,26 @@
         if ($("#OutletList").val() != "") {
             outletId = $("#OutletList").val();
         }
-        var EnrolmentDataFlag = $("#chkEnrollmentData").is(":checked");
+        var EnrolmentDataFlag = 4;
+        if ($("#chkEnrollmentData").is(":checked")) {
+            EnrolmentDataFlag = 1;
+        }
+        if ($("#chkEarn").is(":checked")) {
+            EnrolmentDataFlag = 2;
+        }
+        if ($("#chkRedeem").is(":checked")) {
+            EnrolmentDataFlag = 3;
+        }
+        if ($("#chkAll").is(":checked")) {
+            EnrolmentDataFlag = 4;
+        }
+        if ($("#chkCancel").is(":checked")) {
+            EnrolmentDataFlag = 5;
+        }
         $.ajax({
             type: "POST",
-            url: "../Reports/GetOutletWiseTransactionResult",
+            url: '@Url.Action("GetOutletWiseTransactionResult", "Reports")',
+            //url: "../Reports/GetOutletWiseTransactionResult",
             data: "{'DateRangeFlag': " + DateRangeFlag + ", 'fromDate': '" + fromDate + "','toDate': '" + toDate + "','outletId': '" + outletId + "','EnrolmentDataFlag': " + EnrolmentDataFlag + "}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -135,6 +219,7 @@
                     optionItem = {}
                     optionItem["OutletName"] = item.OutletName;
                     optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                    optionItem["MobileNo"] = item.MobileNo;
                     optionItem["MemberName"] = item.MemberName;
                     optionItem["Type"] = item.Type;
                     optionItem["InvoiceNo"] = item.InvoiceNo;
@@ -160,6 +245,7 @@
     }
 
     function DrawTable() {
+
         var table1 = $('#activityTable').DataTable();
         table1.destroy();
 
@@ -169,31 +255,112 @@
             "ordering": true,
             "info": true,
             "bFilter": true,
-            "pageLength": 25,
+            "pageLength": 50,
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "OutletName" },
-                { data: "MaskedMobileNo" },
+                {
+                    "mData": "MaskedMobileNo",
+                    "mRender": function (data, type, row) {
+                        if (data != "" && data != null) {
+                            var MobileNo = row.MobileNo;
+                            return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                        }                        
+                    }
+                },
                 { data: "MemberName" },
                 { data: "Type" },
                 { data: "InvoiceNo" },
-                { data: "InvoiceAmt" },
+                {
+                    "mData": "InvoiceAmt",
+                    "mRender": function (data, type, row) {
+                        if (row.OutletName != "<b>Total</b>") {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span><b>' + addComma(data) + '</b></span>';
+                        }
+                    }
+                },
                 { data: "TxnType" },
-                { data: "PointsEarned" },
-                { data: "PointsBurned" },
-                { data: "TxnDatetime" },
-                { data: "TxnUpdateDate" }
+                {
+                    "mData": "PointsEarned",
+                    "mRender": function (data, type, row) {
+                        if (row.OutletName != "<b>Total</b>") {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span><b>' + addComma(data) + '</b></span>';
+                        }
+                    }
+                },
+                
+                {
+                    "mData": "PointsBurned",
+                    "mRender": function (data, type, row) {
+                        if (row.OutletName != "<b>Total</b>") {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span><b>' + addComma(data) + '</b></span>';
+                        }
+                    }
+                },
+                /*{ data: "TxnDatetime" },*/
+                {
+                    "data": "TxnDatetime", "title": "Txn Datetime", "render": function (data, type) {
+                        if (data != "" && data != null && data != "-" && data != undefined) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "data": "TxnUpdateDate", "title": "Txn UpdateDate", "render": function (data, type) {
+                        if (data != "" && data != null && data != "-" && data != undefined) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                }
+
             ],
-            aoColumnDefs: [
+            "columnDefs": [
+                {
+                    "targets": 5,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 7,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 8,
+                    "className": "text-right",
+                },
+                {
+                    "targets": 9,
+                    type: 'datetime-moment',
+                }
+                ],
+                aoColumnDefs: [
                 {
                     bSortable: false,
                     aTargets: [-9, -10, -11]
                 }
             ]
-            //"aoColumnDefs": [{ "sClass": "hide_me", "aTargets": [1] }]
-            //"rowReorder": {
-            //    dataSrc: "index"
-            //}
         });
         $('#activityTable_filter').hide();
 
@@ -202,7 +369,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }
@@ -213,13 +380,19 @@
         });
     }
 
-    function ExportDataExcel() {
+    function ExportDataExcel(Id) {
         var DateRangeFlag = "0";
         var fromDate = '';
         var toDate = '';
+        var emailid = '';
         $("#divLoader").show();
-        if ($("#rdnRange").is(":checked")) {
+        if ($("#rdn30Days").is(":checked")) {
             DateRangeFlag = "1";
+            fromDate = $('#dtFrom').val();
+            toDate = $('#dtTo').val();
+        }
+        if ($("#rdnRange").is(":checked")) {
+            DateRangeFlag = "2";
             fromDate = $('#dtFrom').val();
             toDate = $('#dtTo').val();
         }
@@ -227,13 +400,25 @@
         if ($("#OutletList").val() != "") {
             outletId = $("#OutletList").val();
         }
-        var EnrolmentDataFlag = $("#chkEnrollmentData").is(":checked");       
-
+        var EnrolmentDataFlag = 4;
+        if ($("#chkEnrollmentData").is(":checked")) {
+            EnrolmentDataFlag = 1;
+        }
+        if ($("#chkEarn").is(":checked")) {
+            EnrolmentDataFlag = 2;
+        }
+        if ($("#chkRedeem").is(":checked")) {
+            EnrolmentDataFlag = 3;
+        }
+        if (Id == "1") {
+            emailid = $("#txtemailsend").val();
+        }
         var urlLink = "@Url.Action("ExportToExcelTransactionwise", "Reports")";
-        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&outletId=" + outletId + "&EnrolmentDataFlag=" + EnrolmentDataFlag + "&ReportName=Transactionwise";
+        urlLink = urlLink + "?DateRangeFlag=" + DateRangeFlag + "&fromDate=" + fromDate + "&toDate=" + toDate + "&outletId=" + outletId + "&EnrolmentDataFlag=" + EnrolmentDataFlag + "&ReportName=Transactionwise" + "&EmailId=" + emailid + "";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();
+        $("#txtemailsend").val('');
 
     }
 
