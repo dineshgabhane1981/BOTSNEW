@@ -11,6 +11,7 @@ using System.Net;
 using System.Web;
 using System.IO;
 using BOTS_BL.Models.IndividualDBModels;
+using BOTS_BL.Common;
 
 namespace BOTS_BL.Repository
 {
@@ -598,6 +599,7 @@ namespace BOTS_BL.Repository
                     CustomerLoginDetail userDetail = new CustomerLoginDetail();
                     userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == LoginId).FirstOrDefault();
                     userDetail.Password = password;
+                    userDetail.EncryptedPassword = EncryptionDecryption.EncryptString(password);                    
                     context.CustomerLoginDetails.AddOrUpdate(userDetail);
                     context.SaveChanges();
 
@@ -677,6 +679,8 @@ namespace BOTS_BL.Repository
                     CustomerLoginDetail userDetail = new CustomerLoginDetail();
                     userDetail = context.CustomerLoginDetails.Where(a => a.LoginId == emailId).FirstOrDefault();
                     userDetail.Password = password;
+                    userDetail.EncryptedPassword = EncryptionDecryption.EncryptString(password);
+
                     context.CustomerLoginDetails.AddOrUpdate(userDetail);
                     context.SaveChanges();
 
