@@ -368,8 +368,9 @@ namespace WebApp.Controllers
                     string Points = Convert.ToString(item["Points"]);
                     string PointsRange1 = Convert.ToString(item["PointsRange1"]);
                     string OutletId = Convert.ToString(item["OutletId"]);
+                    string Dataset = Convert.ToString(item["Dataset"]);
 
-                    objcustAll = CR.GetFiltData(BaseType, PointsBase, Points, PointsRange1, OutletId, userDetails.GroupId, userDetails.connectionString);
+                    objcustAll = CR.GetFiltData(BaseType, PointsBase, Points, PointsRange1, OutletId, Dataset, userDetails.GroupId, userDetails.connectionString);
 
                     // Session["customerId"] = objcounts.lstcustomerDetails;
                 }

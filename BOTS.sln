@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.10.34928.147
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{6421303F-1189-4AE1-B05C-EA512C62B5FE}"
 EndProject
@@ -39,7 +39,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GinesysRedeemption", "Gines
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EReceipt", "EReceipt\EReceipt.csproj", "{9637B6FA-381B-4F7C-B169-41ACC581AF07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinEncrypDecryp", "WinEncrypDecryp\WinEncrypDecryp.csproj", "{9D9142C2-0442-4545-9D4A-8A8551BE55E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelcomDataUpload", "MelcomDataUpload\MelcomDataUpload.csproj", "{5632DFA7-62DD-4684-A242-63666CFF2CA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataUpload", "DataUpload\DataUpload.csproj", "{1F156BA1-7DC5-4189-8E17-9DB381D7CB5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatnaEnterprisesDataUpload", "RatnaEnterprisesDataUpload\RatnaEnterprisesDataUpload.csproj", "{CDA4C187-C75F-4299-91FE-24923A34ECE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,10 +119,18 @@ Global
 		{9637B6FA-381B-4F7C-B169-41ACC581AF07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9637B6FA-381B-4F7C-B169-41ACC581AF07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9637B6FA-381B-4F7C-B169-41ACC581AF07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D9142C2-0442-4545-9D4A-8A8551BE55E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D9142C2-0442-4545-9D4A-8A8551BE55E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D9142C2-0442-4545-9D4A-8A8551BE55E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D9142C2-0442-4545-9D4A-8A8551BE55E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5632DFA7-62DD-4684-A242-63666CFF2CA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5632DFA7-62DD-4684-A242-63666CFF2CA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5632DFA7-62DD-4684-A242-63666CFF2CA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5632DFA7-62DD-4684-A242-63666CFF2CA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F156BA1-7DC5-4189-8E17-9DB381D7CB5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F156BA1-7DC5-4189-8E17-9DB381D7CB5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F156BA1-7DC5-4189-8E17-9DB381D7CB5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F156BA1-7DC5-4189-8E17-9DB381D7CB5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDA4C187-C75F-4299-91FE-24923A34ECE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDA4C187-C75F-4299-91FE-24923A34ECE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDA4C187-C75F-4299-91FE-24923A34ECE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDA4C187-C75F-4299-91FE-24923A34ECE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

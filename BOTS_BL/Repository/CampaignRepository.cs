@@ -28,6 +28,7 @@ namespace BOTS_BL.Repository
         Exceptions newexception = new Exceptions();
         CustomerRepository CR = new CustomerRepository();
         EventsRepository ER = new EventsRepository();
+        ReportsRepository RR = new ReportsRepository();
 
         public List<SelectListItem> GetOutletList(string GroupId, string connstr)
         {
@@ -540,7 +541,7 @@ namespace BOTS_BL.Repository
             return SMSGatewayDetails;
         }
 
-        public CustCount GetFiltData(string BaseType, string PointsBase, string Points, string PointsRange1, string OutletId, string GroupId, string connstr)
+        public CustCount GetFiltData(string BaseType, string PointsBase, string Points, string PointsRange1, string OutletId,string DSId, string GroupId, string connstr)
         {
             CustomerIdListAndCount objcount = new CustomerIdListAndCount();
             List<CustomerDetail> objcust = new List<CustomerDetail>();
@@ -552,139 +553,147 @@ namespace BOTS_BL.Repository
 
                 try
                 {
-                    if (Points != "")
+                    if(BaseType == "5")
                     {
-                        int DummyPoints = Convert.ToInt32(Points);
+                        var DataSetResult = RR.GetSavedDSCount(DSId,connstr,GroupId);
+                        objcustAll.CustFiltered = DataSetResult[0];
+                        objcustAll.CustCountALL = DataSetResult[1];
                     }
-                    if (BaseType == "1" && PointsBase == "" && Points == "" && OutletId == "")
+                    else
                     {
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        if (Points != "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+                        }
+                        if (BaseType == "1" && PointsBase == "" && Points == "" && OutletId == "")
+                        {
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                            objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                        }
+                        else if (BaseType == "1" && PointsBase == "" && Points == "" && OutletId != "")
+                        {
+                            var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                            //objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletIdAdmin).Count();
+                            objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Count();
+                        }
+                        else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId == "")
+                        {
+                            var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && !x.CurrentEnrolledOutlet.Contains(OutletIdAdmin)).Count();
+                        }
+                        else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId != "")
+                        {
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                            objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && !x.CurrentEnrolledOutlet.Contains(OutletId)).Count();
+                        }
+                        else if (BaseType == "3" && PointsBase == "" && Points == "" && OutletId == "")
+                        {
+                            var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                            objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletIdAdmin).Count();
+                        }
+                        else if (BaseType == "3" && PointsBase == "" && Points == "" && OutletId != "")
+                        {
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+                            objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Count();
+                        }
+                        else if (BaseType == "4" && PointsBase == "1" && Points != "" && OutletId == "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
+                            LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                            var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                            objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints < DummyPoints).Count();
+                        }
+                        else if (BaseType == "4" && PointsBase == "1" && Points != "" && OutletId != "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
+                            LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                            var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                            objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints < DummyPoints).Count();
+                        }
+                        else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId == "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
+                            LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                            var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                            objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints > DummyPoints).Count();
+                        }
+                        else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId != "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
+                            LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                            var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                            objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints > DummyPoints).Count();
+                        }
+                        else if (BaseType == "4" && PointsBase == "3" && Points != "" && OutletId == "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
+                            LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                            var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                            objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints == DummyPoints).Count();
+                        }
+                        else if (BaseType == "4" && PointsBase == "3" && Points != "" && OutletId != "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
+                            LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                            var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                            objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints == DummyPoints).Count();
+                        }
+
+                        else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1 != "" && OutletId == "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+                            int DummyPoints2 = Convert.ToInt32(PointsRange1);
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
+                            LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                            var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                            objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints >= DummyPoints && x.TotalPoints <= DummyPoints).Count();
+                        }
+                        else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1 != "" && OutletId != "")
+                        {
+                            int DummyPoints = Convert.ToInt32(Points);
+                            int DummyPoints2 = Convert.ToInt32(PointsRange1);
+
+                            objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
+
+                            var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
+                            LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
+                            var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
+                            objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints >= DummyPoints && x.TotalPoints <= DummyPoints).Count();
+                        }
                     }
-                    else if (BaseType == "1" && PointsBase == "" && Points == "" && OutletId != "")
-                    {
-                        var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-                        //objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletIdAdmin).Count();
-                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Count();
-                    }
-                    else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId == "")
-                    {
-                        var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && !x.CurrentEnrolledOutlet.Contains(OutletIdAdmin)).Count();
-                    }
-                    else if (BaseType == "2" && PointsBase == "" && Points == "" && OutletId != "")
-                    {
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && !x.CurrentEnrolledOutlet.Contains(OutletId)).Count();
-                    }
-                    else if (BaseType == "3" && PointsBase == "" && Points == "" && OutletId == "")
-                    {
-                        var OutletIdAdmin = context.tblOutletMasters.Where(x => x.OutletName.Contains("admin")).Select(y => y.OutletId).FirstOrDefault();
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletIdAdmin).Count();
-                    }
-                    else if (BaseType == "3" && PointsBase == "" && Points == "" && OutletId != "")
-                    {
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-                        objcustAll.CustFiltered = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Count();
-                    }
-                    else if (BaseType == "4" && PointsBase == "1" && Points != "" && OutletId == "")
-                    {
-                        int DummyPoints = Convert.ToInt32(Points);
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
-                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
-                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
-                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints < DummyPoints).Count();
-                    }
-                    else if (BaseType == "4" && PointsBase == "1" && Points != "" && OutletId != "")
-                    {
-                        int DummyPoints = Convert.ToInt32(Points);
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
-                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
-                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
-                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints < DummyPoints).Count();
-                    }
-                    else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId == "")
-                    {
-                        int DummyPoints = Convert.ToInt32(Points);
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
-                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
-                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
-                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints > DummyPoints).Count();
-                    }
-                    else if (BaseType == "4" && PointsBase == "2" && Points != "" && OutletId != "")
-                    {
-                        int DummyPoints = Convert.ToInt32(Points);
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
-                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
-                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
-                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints > DummyPoints).Count();
-                    }
-                    else if (BaseType == "4" && PointsBase == "3" && Points != "" && OutletId == "")
-                    {
-                        int DummyPoints = Convert.ToInt32(Points);
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
-                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
-                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
-                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints == DummyPoints).Count();
-                    }
-                    else if (BaseType == "4" && PointsBase == "3" && Points != "" && OutletId != "")
-                    {
-                        int DummyPoints = Convert.ToInt32(Points);
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
-                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
-                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
-                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints == DummyPoints).Count();
-                    }
-
-                    else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1 != "" && OutletId == "")
-                    {
-                        int DummyPoints = Convert.ToInt32(Points);
-                        int DummyPoints2 = Convert.ToInt32(PointsRange1);
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Select(y => y.MobileNo).ToList();
-                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
-                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
-                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints >= DummyPoints && x.TotalPoints <= DummyPoints).Count();
-                    }
-                    else if (BaseType == "4" && PointsBase == "4" && Points != "" && PointsRange1 != "" && OutletId != "")
-                    {
-                        int DummyPoints = Convert.ToInt32(Points);
-                        int DummyPoints2 = Convert.ToInt32(PointsRange1);
-
-                        objcustAll.CustCountALL = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false).Count();
-
-                        var MemberLst = context.tblCustDetailsMasters.Where(x => x.IsActive == true && x.DisableSMSWAPromo == false && x.CurrentEnrolledOutlet == OutletId).Select(y => y.MobileNo).ToList();
-                        LstPoints = (from y in context.tblCustPointsMasters where (MemberLst.Contains(y.MobileNo) && y.PointsType == "Base") select y).ToList();
-                        var Lst = from tblCustPointsMasters in LstPoints group tblCustPointsMasters by tblCustPointsMasters.MobileNo into LstGroup select new { MobileNo = LstGroup.Key, TotalPoints = LstGroup.Sum(x => decimal.Truncate(x.Points.Value)) };
-                        objcustAll.CustFiltered = Lst.Where(x => x.TotalPoints >= DummyPoints && x.TotalPoints <= DummyPoints).Count();
-                    }
-
                 }
                 catch (Exception ex)
                 {

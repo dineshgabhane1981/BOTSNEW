@@ -1244,9 +1244,18 @@
     }
 
     $("#btnPaybyPoints").click(function () {
-        var ResltInvoiceSelect = ValidateMandatorySelect();
-        var ResltInvoiceText = ValidateMandatoryText();
-        var ResltInvoiceDate = ValidateMandatoryDate();
+        
+
+        console.log(object);
+
+        var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
+
+        if (c != 1000) {
+            var ResltInvoiceSelect = ValidateMandatorySelect();
+            var ResltInvoiceText = ValidateMandatoryText();
+            var ResltInvoiceDate = ValidateMandatoryDate();
+        }
+
 
         if ($('#BurnPoints').is(":visible")) {
             //if ($("#txtInvoiceNoOld").val() == "") {
@@ -1274,7 +1283,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true)) {
+            else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true) && (c != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -1283,7 +1292,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true)) {
+            else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true) && (c != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -1292,7 +1301,7 @@
                     buttonText: "Okay"
                 })
             }
-            else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true)) {
+            else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true) && (c != 1000)) {
 
                 cuteAlert({
                     type: "error",
@@ -1318,7 +1327,7 @@
         var FilterData = [];
         var Dynamicname = [];
         var DynamicResult = [];
-        var DynamicData = [];
+        var DynamicData = [], Result =[];
             item = {};
             item["MobileNo"] = $("#txtMobileNo").val();
             item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
@@ -1330,8 +1339,11 @@
 
         var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
 
-        DynamicData = InvoiceDynData();
-        var Result = ConcatData(DynamicData);
+        if (c != 1000) {
+            DynamicData = InvoiceDynData();
+            var Result = ConcatData(DynamicData);
+        }
+        
         //alert(Result);
         item["DynamicData"] = Result;
         //alert(DynamicData);
@@ -1390,7 +1402,7 @@
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
         var FilterData = [];
-        var DynamicData = [];
+        var DynamicData = [],Result=[];
         item = {};
         item["MobileNo"] = $("#txtMobileNo").val();
         item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
@@ -1399,8 +1411,11 @@
 
         var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
 
-        DynamicData = InvoiceDynData();
-        var Result = ConcatData(DynamicData);
+        if (c != 1000) {
+            DynamicData = InvoiceDynData();
+            var Result = ConcatData(DynamicData);
+        }
+        
         //alert(Result);
         item["DynamicData"] = Result;
 
