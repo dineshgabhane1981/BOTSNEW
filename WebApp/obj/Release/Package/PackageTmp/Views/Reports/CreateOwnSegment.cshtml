@@ -1,14 +1,1183 @@
-﻿
+﻿@model WebApp.ViewModel.CreateOwnReportViewModel
+
 @{
     ViewBag.Title = "CreateOwnSegment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner">
-
-    <div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">
-        <h3><b>Coming Soon in March 2021</b> </h3>
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="row">
+            <div class="col-md-6 col-xl-12" style="text-align:center;">
+                <h3>This Functionality is under Development.... </h3>
+            </div>
+        </div>
     </div>
 </div>
+<!--<div class="app-main__inner" id="dvall">
+    <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">-->
+            @*<div class="col-sm-8" style="display:flex;padding-bottom: 10px;margin-top:5px;">*@
+            <!--<div class="row mt-4">
+                <div class="col-md-8 col-xl-8">
+                    <input type="radio" checked id="rdnSliceandDice" name="btdornot" /><b> Slice And Dice </b> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="rdnTxncnt" name="btdornot" /><b> Txn Count and Spend DrillDown</b> &nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>-->
+
+            @*</div>*@
+        <!--</div>
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;" id="divSliceDice">
+            <div class="row mt-4">
+                <div class="col-md-8 col-xl-8">
+                    <span id="spnFilter" style="font-size:17px;font-weight:bold;"></span>
+                </div>
+            </div>           
+            <h6><b>Select Transactional Variables</b></h6>
+
+            <div class="row mt-4" id="secTransaction">
+                <div class="col-md-3 col-xl-3">
+                    Enrolled Since (days)
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <input type="radio" id="rdndaterange" name="btdornot" /> Date Range &nbsp;&nbsp;
+                    <input type="radio" id="rdnenrolled" name="btdornot" /> Enrolled Since
+                </div>
+               
+                <div id="divdaterange" class="col-md-6 col-xl-4" style="display:none">
+                    <input type="date" id="txtEnrollfromdt" class="input50" placeholder="From Enrolled" />
+                    <input type="date" id="txtEnrolltodt" class="input50" placeholder="To Enrolled" />
+
+                </div>
+                <div id="divdays" class="col-md-6 col-xl-4" style="display:none">
+                    <input type="text" id="txtEnrolldays" class="input50" placeholder="Enter no of days" />
+
+
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Not transacted since (days)
+                </div>              
+                <div class="col-md-6 col-xl-4">                    
+                    <input type="text" id="txtnontransactedmax" class="input50" placeholder="Enter no of days" />
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Spends(Rs.)
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    @Html.DropDownList("Spends", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpend" })
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <input type="number" id="txtspendmin" class="input50" placeholder="From Spend" style="display:none" />
+                    <input type="number" id="txtspendmax" class="input50" placeholder="To Spend" style="display:none" />
+
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Txn Count
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    @Html.DropDownList("TxnCount", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddltxncount" })
+                </div>
+                <div class="col-md-3 col-xl-4">
+                    <input type="number" id="txttxncountmin" class="input50" placeholder="From Txn Count" style="display:none" />
+                    <input type="number" id="txttxncountmax" class="input50" placeholder="To Txn Count" style="display:none" />
+
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Redeemed
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    @Html.DropDownList("Redeemed", new SelectList(Model.LstRedeemedList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlRedeemed" })
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Points Balance
+                </div>
+                <div class="col-md-2 col-xl-2">
+                    @Html.DropDownList("PointsBalance", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlPointsBalance" })
+                </div>
+                <div class="col-md-6 col-xl-4">
+                    <input type="number" id="txtPointsBalnmin" class="input50" placeholder="From PointBalance" style="display:none" />
+                    <input type="number" id="txtPointsBalnmax" class="input50" placeholder="To PointBalance" style="display:none" />
+
+                </div>
+            </div>           
+
+            <h6><b>Brand And Outlet Selection</b></h6>
+            <div class="row mt-4" id="secbrandOutlet">
+                <div class="col-md-3 col-xl-3">
+                    Select Brand
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.DropDownList("SelectBrand", new SelectList(Model.LstBrandList, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddlBrand" })
+                </div>
+
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Select Outlet
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    @Html.ListBox("SelectOutlet", new MultiSelectList(Model.LstOutlet, "Value", "Text"), new { @class = "input50", @style = "width:80%", Multiple = "multiple", @id = "ddlOutlet" })
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-3 col-xl-3">
+                    Report Date Range
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <hidden id="spnStartDate" style="display:none">@Model.StartDt</hidden>
+                    <input type="radio" checked id="rdnBTD" name="btdaterange" /> BTD &nbsp;&nbsp;
+                    <input type="radio" id="rdnalldaterange" name="btdaterange" /> Date Range
+                </div>
+                <div id="divalldaterange" class="col-md-6 col-xl-4" style="display:none">
+                    <input type="date" id="txtallfmdt" class="input50" placeholder="From Date" />
+                    <input type="date" id="txtalltodt" class="input50" placeholder="To Date" />
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-3 col-xl-3">
+                    <button class="btn btn-primary login-btn" type="button" id="btnFilter">
+                        Filter
+                    </button>
+                    <button class="btn btn-primary login-btn" type="button" id="btnReset" onclick="ResetAll();">
+                        Reset
+                    </button>
+                </div>
+                <div class="col-md-4 col-xl-4">
+                    <table style="border:2px solid black;width:80%">
+                        <tr style="border:2px solid black;">
+                            <td style="border:2px solid black;">
+                                Total Member Count
+                            </td>
+                            <td style="border:2px solid black;">
+                                <span id="spnMemberCount">@Model.TotalCount</span>
+                            </td>
+                        </tr>
+                        <tr style="border:2px solid black; ">
+                            <td style="border:2px solid black;text-align:left;">
+                                <span id="spnfilteredCount"></span>Filtered Count
+                            </td>
+                            <td style="border:2px solid black;">
+                                <span id="spnfilteredCountnum"></span>
+                            </td>
+                        </tr>
+                        <tr style="border:2px solid black; ">
+                            <td style="border:2px solid black;text-align:left;">
+                                <span id="spntxnCount"></span>Total No Of Transaction
+                            </td>
+                            <td style="border:2px solid black;">
+                                <span id="spnnooftxnCountnum"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-3 col-xl-3">
+                    <input type="radio" id="rdncustwise" name="btreportwise" /> CustomerWise &nbsp;&nbsp;
+                    <input type="radio" id="rdntransactionwise" name="btreportwise" /> TransactionWise
+                </div>
+                <div class="col-md-3 col-xl-3">
+                    <button class="btn btn-primary login-btn" type="button" id="btnshow" onclick="showbutton();" style="display:none;">
+                        Show
+                    </button>
+                </div>
+
+
+            </div>
+            <div class="row mt-5">
+                <div id="divcolumnlist" class="row mt-3 ml-3 col-md-10 col-xl-10 " style="display:none;">
+                    <div>
+                        <select id="ChooseLeft" multiple="multiple" style="height: 300px; width: 200px;">
+                        </select>
+                    </div>
+                    <div style="margin-top:140px;margin-left:30px;margin-right:30px;">
+                        <input id="ShiftRight" type="button" value=" ShiftRight (>>) " style="margin-right:10px;" />
+                        <input id="ShiftLeft" type="button" value="ShiftLeft(<<) " />
+                    </div>
+                    <div>                        
+                        <select id="ChooseRight" multiple="multiple" style="height:300px;width:200px;">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5" >
+                <button class=" ml-3 btn btn-primary login-btn" type="button" id="btngenerate" onclick="GenerateReport();" style="display:none; text-align:right;">
+                    Generate Report
+                </button>
+                <button class="ml-3 btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport" style="display:none;">
+                    <i class="fas fa-file-export"></i> Export
+                </button>
+            </div>
+                <div id="dvListing" style="display:none;">-->
+                    @*@Html.Partial("~/Views/Reports/_CreateOwnReportCustomerWise.cshtml", Model)*@
+                <!--</div>
+                <div class="mb-3 pr-3 pt-3 pl-3 card" id="divTxncount" style="padding-bottom:20px;display:none; text-align:center;">
+                    <div class="row mt-4">
+                        <div class="col-md-8 col-xl-8">
+                            <span id="spnFilterDrillDown" style="font-size:17px;font-weight:bold;"></span>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-6 col-xl-4 ">
+                            <b>Select Outlet</b>-->
+                            @*</div>
+                        <div class="col-md-2 col-xl-2">*@
+                            <!--@Html.DropDownList("Outlet", new SelectList(Model.LstOutlet, "Value", "Text"), "--Select--", htmlAttributes: new { @class = "input50", @id = "ddloutletId" })
+                        </div>
+                    </div>
+                    <div class="row mt-8 ">
+                        <div class="col-md-4 col-xl-4 border" style="margin-left:20px; margin-top:20px; text-align:center;">
+                            <b> Elements </b>
+                            <hr />
+                            <div class="row mb-3">
+                                <div class="col text-center ">
+                                    <input type="radio" id="rdnNooftxn" name="bt2" /> No Of Txn  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" id="rdnSpend" name="bt2" /> Spend &nbsp;&nbsp;&nbsp;&nbsp;<br />
+                                </div>
+                            </div>
+                            <div class="row mb-3 text-center">
+                                <div class="col text-center">
+                                    @Html.DropDownList("Spends", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlSpendTxn" })
+                                </div>
+                            </div>
+                            <div class="row mb-3 ">
+                                <div class="col text-center">
+                                    <input type="text" id="txtEnterminval" class="input50" placeholder="From Spend" style="display:none" />
+                                    <input type="text" id="txtEntermaxval" class="input50" placeholder="To Spend" style="display:none" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xl-4 border" style="margin-left:20px; margin-top:20px; text-align:center;">
+                            <b> Avg Bill Size</b>
+                            <hr />
+                            <div class="row mb-3 text-center">
+                                <div class="col text-center">
+                                    @Html.DropDownList("Spends", new SelectList(Model.LstSpendList, "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlAvgBill" })
+                                </div>
+                            </div>
+                            <div class="row mb-3 text-center">
+                                <div class="col text-center">
+                                    <input type="text" id="txtBillSizemin" class="input50" placeholder="From Bill" style="display:none" />
+                                    <input type="text" id="txtBillSizemax" class="input50" placeholder="To Bill" style="display:none" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-xl-3 border" style="margin-left:20px; margin-top:20px;text-align:center;">
+                            <b>  Period </b>
+                            <hr />
+                            <div class="row mb-3">
+                            </div>
+                            <div class="row mb-3  text-center">
+                                <div class="col text-center">
+                                    <input type="radio" checked id="rdnevryMonth" name="bt3" /> Every Month  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <input type="radio" id="rdnDuration" name="bt3" /> Duration &nbsp;&nbsp;&nbsp;&nbsp;<br />
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col text-center">
+                                    <input type="text" id="txtperiodFrom" class="date-picker" placeholder="Select Period From" />
+                                    <input type="text" id="txtperiodTo" class="date-picker" placeholder="Select Period To" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row mt-4 ">
+                        <div class="col-md-6 col-xl-2 ">
+                            <button class="btn btn-primary login-btn" type="button" id="btnFilterdrilldown">
+                                Filter
+                            </button>
+                            <button class="btn btn-primary login-btn" type="button" id="btnResetForDrillDown" onclick="ResetAllForDrillDown();">
+                                Reset
+                            </button>
+                        </div>
+                        <div class="col-md-6 col-xl-4 ">
+                            <table style="border:2px solid black;width:80%">
+                                <tr style="border:2px solid black;">
+                                    <td style="border:2px solid black;text-align:left;">
+                                        Total Member Count
+                                    </td>
+                                    <td style="border:2px solid black;">
+                                        <span id="spnMemberCount">@Model.TotalCount</span>
+                                    </td>
+                                </tr>
+                                <tr style="border:2px solid black; ">
+                                    <td style="border:2px solid black;text-align:left;">
+                                        <span id="spnfilteredCount"></span>Filtered Count
+                                    </td>
+                                    <td style="border:2px solid black;">
+                                        <span id="spnfilteredCountDrillDown"></span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>-->
+
+    @*<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />*@
+
+    @*<script>
+
+    $(function () {
+        $('.date-picker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'MM yy',
+            onClose: function (dateText, inst) {
+                var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                $(this).datepicker('setDate', new Date(year, month, 1));
+            },
+            beforeShow: function (input, inst) {
+                var datestr;
+                if ((datestr = $(this).val()).length > 0) {
+                    year = datestr.substring(datestr.length - 4, datestr.length);
+                    month = jQuery.inArray(datestr.substring(0, datestr.length - 5), $(this).datepicker('option', 'monthNamesShort'));
+                    $(this).datepicker('option', 'defaultDate', new Date(year, month, 1));
+                    $(this).datepicker('setDate', new Date(year, month, 1));
+                }
+            }
+        });
+    });
+    $(function () {
+        $("#ShiftRight,#ShiftLeft").click(function (event) {
+            var ID = $(event.target).attr("ID");
+            var ChooseFrom = ID == "ShiftRight" ? "#ChooseLeft" : "#ChooseRight";
+            var moveTo = ID == "ShiftRight" ? "#ChooseRight" : "#ChooseLeft";
+            var SelectData = $(ChooseFrom + " :selected").toArray();
+            $(moveTo).append(SelectData);
+            SelectData.remove;
+        });
+    });
+    $(document).ready(function () {
+        //GetOutletList();
+        $('#rdnSliceandDice').change(function () {
+            $('#divTxncount').hide();
+            $('#divSliceDice').show();
+        });
+        $('#rdnTxncnt').change(function () {
+            $('#divTxncount').show();
+            $('#divSliceDice').hide();
+        });
+        $('#rdndaterange').change(function () {
+            $('#divdays').hide();
+            $('#divdaterange').show();
+        });
+        $('#rdnenrolled').change(function () {
+            $('#divdays').show();
+            $('#divdaterange').hide();
+        });
+        $('#rdnalldaterange').change(function () {
+            $('#divalldaterange').show();
+        });
+        $('#rdnBTD').change(function () {
+            $('#divalldaterange').hide();
+        });
+        $('#rdncustwise').change(function () {
+            $("#ChooseLeft").empty();
+            $("#ChooseRight").empty();
+            let myOptions = [
+
+                { "ColumnId": 1, "ColumnName": "Outlet Name" },
+                { "ColumnId": 2, "ColumnName": "Mobile No" },
+                { "ColumnId": 3, "ColumnName": "Customer Name" },
+                { "ColumnId": 4, "ColumnName": "First Txn Date" },
+                { "ColumnId": 5, "ColumnName": "Last Txn Date" },
+                { "ColumnId": 6, "ColumnName": "No Of Txn" },
+                { "ColumnId": 7, "ColumnName": "Enrolled Date" },
+                { "ColumnId": 8, "ColumnName": "Total Available Points" },
+                { "ColumnId": 9, "ColumnName": "Total Earn" },
+                { "ColumnId": 10, "ColumnName": "Total Burn" },
+                { "ColumnId": 11, "ColumnName": "Total Spend" },
+                { "ColumnId": 12, "ColumnName": "Bonus Points" }
+            ];
+
+            myOptions.forEach(function (e, i) {
+                $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
+            });
+            $('#divcolumnlist').show();
+            $('#btngenerate').show();
+        });
+        $('#rdntransactionwise').change(function () {
+            $("#ChooseLeft").empty();
+            $("#ChooseRight").empty();
+            let myOptions = [
+
+                { "ColumnId": 1, "ColumnName": "Outlet Name" },
+                { "ColumnId": 2, "ColumnName": "Mobile No" },
+                { "ColumnId": 3, "ColumnName": "Customer Name" },
+                { "ColumnId": 4, "ColumnName": "First Txn Date" },
+                { "ColumnId": 5, "ColumnName": "Last Txn Date" },
+                { "ColumnId": 9, "ColumnName": "Enrolled Date" },
+                { "ColumnId": 12, "ColumnName": "Bonus Points" },
+                { "ColumnId": 13, "ColumnName": "Points Earn" },
+                { "ColumnId": 14, "ColumnName": "Points Burn" },
+                { "ColumnId": 15, "ColumnName": "Type" },
+                { "ColumnId": 16, "ColumnName": "Invoice No" },
+                { "ColumnId": 17, "ColumnName": "Invoice Amt" },
+                { "ColumnId": 18, "ColumnName": "Txn Date" }
+            ];
+
+            myOptions.forEach(function (e, i) {
+                $('#ChooseLeft').append($('<option></option>').val(e.ColumnId).text(e.ColumnName));
+            });
+            $('#divcolumnlist').show();
+            $('#btngenerate').show();
+
+        });
+        $("#spnFilter").text('');
+    });
+    $('#btnFilter').on("click", function () {
+        GetFilteredDataforSliceAndDice();
+    });
+    $('#btnFilterdrilldown').on("click", function () {
+        GetFilteredDataForDrillDown();
+    });
+    function GetOutletList() {
+      //  $("#divLoader").show();
+        $.ajax({
+            url: '@Url.Action("GetOutletlist", "Reports")',
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            datatype: JSON,
+            success: function (lstOutlet) {
+                console.log(lstOutlet);
+                $.each(lstOutlet, function () {
+                    $('#ddlOutlet').append($("<option />").val(this.Value).text(this.Text));
+                });
+                //$('#ddlOutlet').multiselect({
+                //includeSelectAllOption: true,
+
+                //});
+            },
+            error: function (data) { }
+            });
+
+            }
+    $("#ddlPointsBalance").change(function () {
+        var selected = $("#ddlPointsBalance option:selected").text();
+        if (selected == 'Between') {
+            $("#txtPointsBalnmin").show();
+            $("#txtPointsBalnmax").show();
+            $('#txtPointsBalnmin').attr('placeholder', 'From Point Balance');
+            $('#txtPointsBalnmax').attr('placeholder', 'To Point Balance');
+        }
+        else if (selected == 'Less than') {
+            $("#txtPointsBalnmin").show();
+            $("#txtPointsBalnmax").hide();
+            $('#txtPointsBalnmin').attr('placeholder', 'Less Than Point Baln');
+        }
+        else if (selected == 'More than') {
+            $("#txtPointsBalnmax").show();
+            $("#txtPointsBalnmin").hide();
+            $('#txtPointsBalnmax').attr('placeholder', 'More Than Point Baln');
+        }
+        else if (selected == '---Select---') {
+            $("#txtPointsBalnmin").hide();
+            $("#txtPointsBalnmax").hide();
+        }
+    });
+    $("#ddltxncount").change(function () {
+        var selected = $("#ddltxncount option:selected").text();
+        if (selected == 'Between') {
+            $("#txttxncountmin").show();
+            $("#txttxncountmax").show();
+            $('#txttxncountmin').attr('placeholder', 'From Txn Count');
+            $('#txttxncountmax').attr('placeholder', 'To Txn Count');
+        }
+        else if (selected == 'Less than') {
+            $("#txttxncountmin").show();
+            $("#txttxncountmax").hide();
+            $('#txttxncountmin').attr('placeholder', 'Less Than Txn Count');
+        }
+        else if (selected == 'More than') {
+            $("#txttxncountmax").show();
+            $("#txttxncountmin").hide();
+            $('#txttxncountmax').attr('placeholder', 'More Than Txn Count');
+        }
+        else if (selected == '---Select---') {
+            $("#txttxncountmin").hide();
+            $("#txttxncountmax").hide();
+        }
+    });
+    $("#ddlSpend").change(function () {
+        var selected = $("#ddlSpend option:selected").text();
+        if (selected == 'Between') {
+            $("#txtspendmin").show();
+            $("#txtspendmax").show();
+            $('#txtspendmin').attr('placeholder', 'From Spend Amount');
+            $('#txtspendmax').attr('placeholder', 'To Spend Amount');
+        }
+        else if (selected == 'Less than') {
+            $("#txtspendmin").show();
+            $("#txtspendmax").hide();
+            $('#txtspendmin').attr('placeholder', 'Less Than Spend Amt');
+        }
+        else if (selected == 'More than') {
+            $("#txtspendmin").hide();
+            $("#txtspendmax").show();
+            $('#txtspendmax').attr('placeholder', 'More Than Spend Amt');
+        }
+        else if (selected == '---Select---') {
+            $("#txtspendmin").hide();
+            $("#txtspendmax").hide();
+        }
+    });
+    $("#ddlSpendTxn").change(function () {
+     var selected = $("#ddlSpendTxn option:selected").text();
+        if (selected == 'Between') {
+            $("#txtEnterminval").show();
+            $("#txtEntermaxval").show();
+            $('#txtEnterminval').attr('placeholder', 'From Value');
+            $('#txtEntermaxval').attr('placeholder', 'To Value');
+        }
+        else if (selected == 'Less than') {
+            $("#txtEnterminval").show();
+            $("#txtEntermaxval").hide();
+            $('#txtEnterminval').attr('placeholder', 'Less Than Value');
+        }
+     else if(selected == 'More than') {
+            $("#txtEntermaxval").show();
+            $("#txtEnterminval").hide();
+            $('#txtEntermaxval').attr('placeholder', 'More Than Value');
+        }
+        else if (selected == '---Select---') {
+            $("#txtEnterminval").hide();
+            $("#txtEntermaxval").hide();
+        }
+ });
+    $("#ddlAvgBill").change(function () {
+       var selected = $("#ddlAvgBill option:selected").text();
+       if (selected == 'Between') {
+           $("#txtBillSizemin").show();
+           $("#txtBillSizemax").show();
+           $('#txtBillSizemin').attr('placeholder', 'From Bill');
+           $('#txtBillSizemax').attr('placeholder', 'To Bill');
+        }
+       else if (selected == 'Less than') {
+           $("#txtBillSizemin").show();
+           $("#txtBillSizemax").hide();
+           $('#txtBillSizemin').attr('placeholder', 'Less Than Bill');
+       }
+       else if (selected == 'More than') {
+           $("#txtBillSizemax").show();
+           $("#txtBillSizemin").hide();
+           $('#txtBillSizemax').attr('placeholder', 'More Than Bill');
+        }
+       else if (selected == '---Select---') {
+           $("#txtBillSizemin").hide();
+           $("#txtBillSizemax").hide();
+        }
+    });
+    $('#rdnNooftxn').change(function () {
+        $('#txtEnterminval').hide();
+        $('#txtEntermaxval').hide();
+        $('#ddlSpendTxn').prop('selectedIndex', 0);
+    });
+    $('#rdnSpend').change(function () {
+        $('#txtEnterminval').hide();
+        $('#txtEntermaxval').hide();
+        $('#ddlSpendTxn').prop('selectedIndex', 0);
+    });
+
+    function showbutton() {
+        var returnStatus = true;
+        var custreport = $("#rdncustwise").val();
+        var txnreport = $("#rdntransactionwise").val();
+        console.log(custreport);
+        console.log(txnreport);
+        if ((custreport.checked == false) || (txnreport.checked == false)) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Report Type",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+        }
+        else {
+            $('#divcolumnlist').show();
+            $('#btngenerate').show();
+        }
+
+    }
+    function ResetAll() {
+
+        $('#dvall').find(':input').val('');
+        $('#divdays').find(':input').val('');
+        $('#divdaterange').find(':input').val('');
+        $('#divalldaterange').find(':input').val('');
+        $('#txtAgemin').hide();
+        $('#txtAgemax').hide();
+        //$("#txtEnrollmin").hide();
+        //$('#txtEnrollmax').hide();
+        $("#txtnontransactedmin").hide();
+        $("#txtnontransactedmax").hide();
+        $('#txtspendmin').hide();
+        $('#txtspendmax').hide();
+        $('#txttxncountmin').hide();
+        $('#txttxncountmax').hide();
+        $('#txtPointsBalnmin').hide();
+        $('#txtPointsBalnmax').hide();
+        $('#txtTicketmin').hide();
+        $('#txtTicketmax').hide();
+        $('#ddlPointsBalance').prop('selectedIndex', 0);
+        $('#ddltxncount').prop('selectedIndex', 0);
+        $('#ddlSpend').prop('selectedIndex', 0);
+        //$('#ddlNontrasacted').prop('selectedIndex', 0);
+        //$('#ddlEnrolled').prop('selectedIndex', 0);
+        //$('#ddlAge').prop('selectedIndex', 0);
+        //$('#ddlGender').prop('selectedIndex', 0);
+        $('#ddlBrand').prop('selectedIndex', 0);
+        $('#ddlRedeemed').prop('selectedIndex', 0);
+        $('#ddlOutlet').prop('selectedIndex', 0);
+        //$('#ddlTicketsize').prop('selectedIndex', 0);
+        //$('#ddlSource').prop('selectedIndex', 0);
+        $('#spnfilteredCountnum').text('');
+        $("#spnFilter").text('');
+
+    }
+    function ResetAllForDrillDown()
+    {
+        $('#ddlSpendTxn').prop('selectedIndex', 0);
+        $('#ddlAvgBill').prop('selectedIndex', 0);
+        $('#txtEnterminval').hide();
+        $('#txtEntermaxval').hide();
+        $("#txtperiod").val('');
+        $('#txtBillSizemin').hide();
+        $("#txtBillSizemax").hide();
+        $('#spnfilteredCountDrillDown').text('');
+        $("#ddlOutlet").prop('selectedIndex', 0);
+        $('#txtperiodFrom').val('');
+        $('#txtperiodTo').val('');
+        $('#txtEnterminval').val('');
+        $('#txtEntermaxval').val('');
+    }
+    function GenerateReport() {
+        var returnStatus = true;
+
+            var Array = [];
+            var ArrayColumnName = [];
+            $('#ChooseRight :selected').each(function (i, selected) {
+                Array.push($(selected).val());
+                ArrayColumnName.push($(selected).text());
+            });
+        if (Array.length >0) {
+            console.log(Array);
+            if (returnStatus) {
+                $("#divLoader").show();
+                var custreport = $("#rdncustwise").val();
+                var txnreport = $("#rdntransactionwise").val();
+                var type;
+                if ($("#rdncustwise").is(":checked")) {
+                    type = "customer";
+                }
+                else if ($("#rdntransactionwise").is(":checked")) {
+                    type = "transaction";
+                }
+                console.log(custreport);
+                console.log(txnreport);
+                var FilterData = [];
+                item = {};
+                item["ColumnId"] = Array;
+                item["columnnm"] = ArrayColumnName;
+                item["reporttype"] = type;
+                FilterData.push(item);
+                var data = JSON.stringify(FilterData);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GenerateReport", "Reports")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        $("#dvListing").html(response);
+                        $("#dvListing").show();
+                        $("#btnExport").show();
+                        $("#divLoader").hide();
+
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                    $("#dvListing").html(response.responseText);
+                    $("#dvListing").show();
+                    $("#btnExport").show();
+                    $("#divLoader").hide();
+                }
+            });
+            }
+        }
+        else {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Column from List",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+        }
+    }
+    function GetFilteredDataforSliceAndDice() {
+        var returnStatus = true;
+        var startdate = new Date($("#spnStartDate").text())
+        var btdradio = $("#rdnBTD").val();
+        var Alldaterangeradio = $("#rdndaterange").val();
+        console.log(btdradio);
+        if (btdradio.checked || Alldaterangeradio.checked) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please Select Report Date Range",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+        }
+        if ($("#rdnalldaterange").is(":checked")) {
+            console.log($('#txtallfmdt').val());
+            console.log($('#txtalltodt').val());
+            if ($('#txtallfmdt').val() == "" && $('#txtalltodt').val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Please Select Date",
+                    buttonText: "Okay"
+                })
+                returnStatus = false;
+            }
+        }
+        if ($("#rdndaterange").is(":checked")) {            
+            var dtToday = new Date();
+            console.log(startdate);
+            console.log(dtToday);
+            console.log($('#txtEnrollfromdt').val());
+            console.log($('#txtallfmdt').val());
+            console.log($('#txtEnrolltodt').val());
+            console.log($('#txtalltodt').val());
+            var date1 = $('#txtallfmdt').val();
+            if ($('#txtallfmdt').val() == "" || $('#txtallfmdt').val() == null) {
+                date1 = startdate;                
+            }
+            else {
+
+            }
+            console.log(date1);
+            if (($('#txtEnrollfromdt').val() > startdate && $('#txtEnrolltodt').val() >= dtToday) || (date1 < $('#txtEnrollfromdt').val() && $('#txtalltodt').val() < $('#txtEnrolltodt').val())) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Enrollment Date should be less than Report Date Range",
+                    buttonText: "Okay"
+                })
+                returnStatus = false;
+            }
+        }
+        else if ($("#rdnenrolled").is(":checked")) {
+            var d = new Date();
+            var dtToday = new Date();
+            var startdate = new Date($("#spnStartDate").text())
+            d.setDate(d.getDate() - $('#txtEnrolldays').val());
+            if ((d > startdate && dtToday > dtToday) || (d > $('#txtallfmdt').val() && $('#txtalltodt').val() > dtToday))
+            {
+                console.log(d);
+                console.log(dtToday);
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Enrollment Date should be less than Report Date Range!",
+                    buttonText: "Okay"
+                })
+                returnStatus = false;
+            }
+        }
+        if ($('#txtnontransactedmax').val() != 0 || $('#txtnontransactedmax').val() == '') {
+            var d = new Date();
+            var dtToday = new Date();
+            var startdate = new Date($("#spnStartDate").text())
+            d.setDate(d.getDate() - $('#txtnontransactedmax').val());
+            if ((d > startdate && dtToday > dtToday) || (d > $('#txtallfmdt').val() && $('#txtalltodt').val() > dtToday)) {
+                console.log(d);
+                console.log(dtToday);
+                cuteAlert({
+                    type: "error",
+                    title: "Oops..",
+                    message: "Non Transacting Date should be less than Report Date Range",
+                    buttonText: "Okay"
+                })
+                returnStatus = false;
+            }
+        }
+        if (returnStatus) {
+            $("#divLoader").show();
+            var FilterData = [];
+            item = {};
+            //item["Gender"] = ($("#ddlGender").prop('selectedIndex') !== 0) ? $('#ddlGender :selected').val() : 0;
+
+            //item["Age-min"] = ($("#ddlAge").prop('selectedIndex') == 1) ? $('#txtAgemin').val() : 0;
+            //item["Age-max"] = ($("#ddlAge").prop('selectedIndex') == 2) ? $('#txtAgemax').val() : 0;
+            // if ($("#ddlAge").prop('selectedIndex') == 3) {
+            //     item["Age-max"] = $('#txtAgemax').val();
+            //     item["Age-min"] = $('#txtAgemin').val();
+            //}
+            //item["Source"] = ($("#ddlSource").prop('selectedIndex') !== 0) ? $('#ddlSource :selected').val() : 0;
+            if ($("#rdnalldaterange").is(":checked")) {
+
+                item["fromdtall"] = $('#txtallfmdt').val();
+                item["todtall"] = $('#txtalltodt').val();
+            }
+            else if ($("#rdnBTD").is(":checked")) {
+                console.log("Hi");
+                item["fromdtall"] = $("#spnStartDate").text();
+                item["todtall"] = new Date();
+            }
+            if ($("#rdndaterange").is(":checked")) {
+
+                item["Enroll-min"] = $('#txtEnrollfromdt').val();
+                item["Enroll-max"] = $('#txtEnrolltodt').val();
+            }
+            else if ($("#rdnenrolled").is(":checked")) {
+
+                item["Enroll-min"] = $('#txtEnrolldays').val();
+                item["Enroll-max"] = 0;
+            }
+            else {
+                item["Enroll-min"] = 0;
+                item["Enroll-max"] = 0;
+            }
+            //if ($("#ddlEnrolled").prop('selectedIndex') !== 0) {
+            //    item["Enroll-min"] = ($("#ddlEnrolled").prop('selectedIndex') == 8) ? $("#txtEnrollmin").val() : $('#ddlEnrolled :selected').text();
+            //    item["Enroll-max"] = ($("#ddlEnrolled").prop('selectedIndex') == 8) ? $('#txtEnrollmax').val() : 0;
+            //}
+            //else {
+            //    item["Enroll-min"] = 0;
+            //    item["Enroll-max"] = 0;
+            //}
+            if ($('#txtnontransactedmax').val() != 0 || $('#txtnontransactedmax').val() == '') {
+
+                item["Nontransacted-min"] = $('#txtnontransactedmax').val();
+
+            }
+            else {
+                item["Nontransacted-min"] = 0;
+
+            }
+
+            //item["Spend-min"] = ($("#ddlSpend").prop('selectedIndex') !== 0) ? $('#txtspendmin').val() : 0;
+            //item["Spend-max"] = ($("#ddlSpend").prop('selectedIndex') == 3) ? $('#txtspendmax').val() : 0;
+            item["Spend-min"] = ($("#ddlSpend").prop('selectedIndex') == 1) ? $('#txtspendmin').val() : 0;
+            item["Spend-max"] = ($("#ddlSpend").prop('selectedIndex') == 2) ? $('#txtspendmax').val() : 0;
+            if ($("#ddlSpend").prop('selectedIndex') == 3) {
+                item["Spend-max"] = $('#txtspendmax').val();
+                item["Spend-min"] = $('#txtspendmin').val();
+            }
+
+            item["txncount-min"] = ($("#ddltxncount").prop('selectedIndex') == 1) ? $('#txttxncountmin').val() : 0;
+            item["txncount-max"] = ($("#ddltxncount").prop('selectedIndex') == 2) ? $('#txttxncountmax').val() : 0;
+            if ($("#ddltxncount").prop('selectedIndex') == 3) {
+                item["txncount-max"] = $('#txttxncountmax').val();
+                item["txncount-min"] = $('#txttxncountmin').val();
+            }
+
+            item["pointBaln-min"] = ($("#ddlPointsBalance").prop('selectedIndex') == 1) ? $('#txtPointsBalnmin').val() : 0;
+            item["pointBaln-max"] = ($("#ddlPointsBalance").prop('selectedIndex') == 2) ? $('#txtPointsBalnmax').val() : 0;
+            if ($("#ddlPointsBalance").prop('selectedIndex') == 3) {
+                item["pointBaln-max"] = $('#txtPointsBalnmax').val();
+                item["pointBaln-min"] = $('#txtPointsBalnmin').val();
+            }
+            item["Redeem"] = ($("#ddlRedeemed").prop('selectedIndex') !== 0) ? $('#ddlRedeemed :selected').val() : 0;
+
+            //item["TicketSize-min"] = ($("#ddlTicketsize").prop('selectedIndex') !== 0) ? $('#txtTicketmin').val() :0;
+            //    item["TicketSize-max"] = ($("#ddlTicketsize").prop('selectedIndex') == 3) ? $('#txtTicketmax').val() : 0;
+
+            item["Brand"] = ($("#ddlBrand").prop('selectedIndex') !== 0) ? $('#ddlBrand :selected').val() : 0;
+            if ($("#ddlOutlet").prop('selected') !== 0) {
+
+                var Array = [];
+                $('#ddlOutlet :selected').each(function (i, selected) {
+                    Array.push($(selected).val());
+                });
+                item["Outlet"] = Array;
+
+            }
+
+            FilterData.push(item);
+
+            var text = "";
+            //if ($("#ddlGender").prop('selectedIndex') !== 0 ) {
+            //    text = "Filter : " + $("#ddlGender :selected").text();
+            //}
+            //if ($("#ddlAge").prop('selectedIndex') !== 0 ) {
+            //    text = text + " | " + $("#ddlAge :selected").text();
+            //}
+            //if ($("#ddlSource").prop('selectedIndex') != 0 ) {
+            //    text = text + " | " + $("#ddlSource :selected").text();
+            //}
+            if ($("#ddlEnrolled").prop('selectedIndex') != 0) {
+                text = text + " | " + $("#ddlEnrolled :selected").text();
+            }
+            //if ($("#ddlNontrasacted").prop('selectedIndex') != 0 ) {
+            //    text = text + " | " + $("#ddlNontrasacted :selected").text();
+            //}
+            if ($("#ddlSpend").prop('selectedIndex') != 0) {
+                text = text + " | " + $("#ddlSpend :selected").text();
+            }
+            if ($("#ddltxncount").prop('selectedIndex') != 0) {
+                text = text + " | " + $("#ddltxncount :selected").text();
+            }
+            if ($("#ddlPointsBalance").prop('selectedIndex') != 0) {
+                text = text + " | " + $("#ddlPointsBalance :selected").text();
+            }
+            if ($("#ddlRedeemed").prop('selectedIndex') != 0) {
+                text = text + " | " + $("#ddlRedeemed :selected").text();
+            }
+            //if ($("#ddlTicketsize").prop('selectedIndex') != 0 ) {
+            //    text = text + " | " + $("#ddlTicketsize :selected").text();
+            //}
+            if ($("#ddlBrand").prop('selectedIndex') != 0) {
+                text = text + " | " + $("#ddlBrand :selected").text();
+            }
+            if ($("#ddlOutlet").prop('selected') != 0) {
+                text = text + " | " + $("#ddlOutlet :selected").text();
+            }
+            if (text != "") {
+
+                $("#spnFilter").text(text);
+                $("#spnFilter").show();
+            }
+            console.log(text);
+            var data = JSON.stringify(FilterData);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetFilteredData", "Reports")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (response) {
+                    console.log(response);
+                    if (response != null) {
+                        $("#spnfilteredCountnum").text(response.Filteredcount);
+                        $("#spnnooftxnCountnum").text(response.txncount);
+                        $("#divLoader").hide();
+                    }
+                    else {
+
+                    }
+                },
+                error: function (response) {
+                    console.log(response.responseText);
+                }
+            });
+        }
+        else {
+            return false;
+        }
+    }
+    function GetFilteredDataForDrillDown()
+    {
+        $("#divLoader").show();
+        var FilterData = [];
+        item = {};
+        if ($("#rdnNooftxn").is(":checked")) {
+            item["Element_Type"] = 1;
+            if ($("#ddlSpendTxn").prop('selectedIndex') == 1) {
+                item["Element_Filter"] = 1;
+                item["element1"] = $('#txtEnterminval').val();
+                item["element2"] = 0;
+            }
+            else if ($("#ddlSpendTxn").prop('selectedIndex') == 2) {
+                item["Element_Filter"] = 2;
+                item["element2"] = $('#txtEntermaxval').val();
+                item["element1"] = 0;
+            }
+            else if ($("#ddlSpendTxn").prop('selectedIndex') == 3) {
+                item["element1"] = $('#txtEnterminval').val();
+                item["element2"] = $('#txtEntermaxval').val();
+                item["Element_Filter"] = 3;
+            }
+            else {
+                item["element2"] = 0;
+                item["element1"] = 0;
+            }
+
+        }
+         if ($("#rdnSpend").is(":checked")) {
+            item["Element_Type"] = 2;
+            if ($("#ddlSpendTxn").prop('selectedIndex') == 1) {
+                item["Element_Filter"] = 1;
+                item["element1"] = $('#txtEnterminval').val();
+                item["element2"] = 0;
+            }
+            else if ($("#ddlSpendTxn").prop('selectedIndex') == 2) {
+                item["Element_Filter"] = 2;
+                item["element2"] = $('#txtEntermaxval').val();
+                item["element1"] = 0;
+            }
+            else if ($("#ddlSpendTxn").prop('selectedIndex') == 3) {
+                item["element1"] = $('#txtEnterminval').val();
+                item["element2"] = $('#txtEntermaxval').val();
+                item["Element_Filter"] = 3;
+            }
+        }
+        if ($("#ddlAvgBill").prop('selectedIndex') == 1) {
+            item["AvgBillFilter"] = 1;
+            item["AvgBill-min"] = $('#txtBillSizemin').val();
+            item["AvgBill-max"] = 0;
+        }
+        else if ($("#ddlAvgBill").prop('selectedIndex') == 2) {
+            item["AvgBillFilter"] = 2;
+            item["AvgBill-max"] = $('#txtBillSizemax').val();
+            item["AvgBill-min"] = 0;
+        }
+        else if ($("#ddlAvgBill").prop('selectedIndex') == 3) {
+            item["AvgBillFilter"] = 3;
+            item["AvgBill-max"] = $('#txtBillSizemax').val();
+            item["AvgBill-min"] = $('#txtBillSizemin').val();
+        }
+        else {
+            item["AvgBillFilter"] = '';
+            item["AvgBill-max"] = 0;
+            item["AvgBill-min"] = 0;
+        }
+        if ($("#rdnevryMonth").is(":checked")) {
+
+            item["period_filter"] = 2;
+            item["period_From"] = $('#txtperiodFrom').val();
+            item["period_To"] = $('#txtperiodTo').val();
+        }
+        else if ($("#rdnDuration").is(":checked")) {
+            item["period_filter"] = 1;
+            item["period_From"] = $('#txtperiodFrom').val();
+            item["period_To"] = $('#txtperiodTo').val();
+
+        }
+        if ($("#ddloutletId").prop('selected') !== 0) {
+            var selectval = $("#ddloutletId option:selected").text();
+            if (selectval == "All") {
+                item["OutletIds"] = '';
+            }
+            else {
+                item["OutletIds"] = $("#ddloutletId option:selected").val();
+            }
+
+        }
+        FilterData.push(item);
+        //var text = "";
+        //if ($("#ddloutletId").prop('selectedIndex') !== 0) {
+        //    text = "Filter : " + $("#ddloutletId :selected").text();
+        //}
+        ////if ($("#rdnNooftxn").is(":checked")) {
+        ////    text = text + " | " + $("#rdnNooftxn").parent().text();
+        ////}
+        ////if ($("#rdnSpend").is(":checked")) {
+        ////    text = text + " | " + $("#rdnSpend").parent().text();
+        ////}
+        //if ($("#ddlSpendTxn").prop('selectedIndex') != 0) {
+        //    text = text + " | " + $("#ddlSpendTxn :selected").text();
+        //}
+        //if ($("#ddlAvgBill").prop('selectedIndex') != 0) {
+        //    text = text + " | " + $("#ddlAvgBill :selected").text();
+        //}
+        ////if ($("#rdnevryMonth").is(":checked")) {
+        ////    text = text + " | " + $("#rdnevryMonth").parent().text();
+        ////}
+        ////if ($("#rdnDuration").is(":checked")) {
+        ////    text = text + " | " + $("#rdnDuration").parent().text();
+        ////}
+        ////if ($("#txtperiodFrom").text != "") {
+        ////    text = text + " | " + $("#txtperiodFrom").text();
+        ////}
+        ////if ($("#txtperiodTo").text != "") {
+        ////    text = text + " | " + $("#txtperiodTo").text();
+        ////}
+
+        //if (text != "") {
+
+        //    $("#spnFilterDrillDown").text(text);
+        //    $("#spnFilterDrillDown").show();
+        //}
+        var data = JSON.stringify(FilterData);
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetFilteredCountforDrillDown", "Reports")',
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response[0] != null) {
+                    $("#spnfilteredCountDrillDown").text(response[0].FilterCount);
+                    $("#divLoader").hide();
+                }
+                else {
+                    alert("error");
+                    $("#divLoader").hide();
+
+                }
+            },
+            error: function (response) {
+                console.log(response.responseText);
+            }
+        });
+
+    }
+    function ExportDataExcel(Id)
+    {
+        var type;
+        if ($("#rdncustwise").is(":checked")) {
+            type = "CustomerWiseReport";
+        }
+        else if ($("#rdntransactionwise").is(":checked")) {
+            type = "TransactionWiseReport";
+        }
+         var urlLink = "@Url.Action("ExportToExcelCreateOwnReport", "Reports")";
+        urlLink = urlLink + "?ReportName=" + type+"";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
+
+    </script>*@
+    @*<style>
+        .ui-datepicker-calendar {
+            display: none;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>*@
+
+
 
 

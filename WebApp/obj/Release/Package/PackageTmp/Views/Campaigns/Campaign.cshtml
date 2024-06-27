@@ -1,12 +1,1441 @@
-﻿
+﻿@model BOTS_BL.Models.CampaignTiles
 @{
     ViewBag.Title = "Campaign";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="row">
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="background-color:#00B0F0;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading" style="font-size:16px !important;">
+                                Celebrations
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetCelebrationData();">@Model.Celebration%</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="row mb-3 pt-3 pl-3 pr-3 card" style="text-align:center;padding-bottom:20px;">
-        <h3><b>Coming Soon in March 2021</b> </h3>
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="background-color:#E46C00;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading" style="font-size:16px !important;">
+                                Points Expiry
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetPointsExpiryData();">@Model.PointsExpiry%</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="background-color:red;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading" style="font-size:16px !important;">
+                                Inactive
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetInactiveData();">@Model.Inactive%</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="background-color:#00B050;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading" style="font-size:16px !important;">
+                                Campaigns
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetCampaignsData();">@Model.Campaigns%</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-2">
+                <div class="card mb-3 widget-content" style="background-color:#E1E100;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading" style="font-size:16px !important;">
+                                SMS Blasts
+                                <hr style="border-top: 2px solid white;margin:0px;" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetSMSBlastsData();">@Model.SMSBlasts%</a></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div class="row mb-3 pt-3 pl-3 pr-3 card" id="dvDetailData" style="display: none;">
+        <div class="row" id="dvCelebrationsFirst" style="display: none;">
+            <div class="mb-3 pt-3 pl-3 pr-3">
+                <span><u>CELEBRATIONS</u></span> <br /><br />
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearList" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthList" })
+                <button id="btnGo" class="btn btn-primary" onclick="GetCelebrationData()">GO</button>
+            </div>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvCelebrationData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityCelebration">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Celebration</th>
+                                    <th scope="col">Count </th>
+                                    <th scope="col">Unique Members Qualified</th>
+                                    <th scope="col">Bonus Points Issued</th>
+                                    <th scope="col">Bonus Points Redeemed</th>
+                                    <th scope="col">Redemption Rate</th>
+                                    <th scope="col">Business Generated</th>
+                                    <th scope="col">Conv %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvCelebrationsSecond" style="display:none;">
+            <span>CELEBRATIONS : </span><u><span id="spnType"></span></u><span style="margin-left:50px;" id="spnCelebrationsDateLabel"></span>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvCelebrationSecondData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityCelebrationSecond">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mobile No</th>
+                                    <th scope="col">Member Name</th>
+                                    <th scope="col">Celebration Date</th>
+                                    <th scope="col">Txn Date</th>
+                                    <th scope="col">No of Txns</th>
+                                    <th scope="col">Total Spends (Rs.)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="dvPointsExpiryFirst" style="display:none;">
+            <div class="mb-3 pt-3 pl-3 pr-3">
+                <span><u>POINTS EXPIRY</u></span> <br /><br />
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearListExpiry" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthListExpiry" })
+                <button id="btnGo" class="btn btn-primary" onclick="GetPointsExpiryData()">GO</button>
+            </div>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvPointsExpiryData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityPointsExpiry">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Element</th>
+                                    <th scope="col">Count </th>
+                                    <th scope="col">Points to Be Expired</th>
+                                    <th scope="col">Unique Members Qualified</th>
+                                    <th scope="col">Points Redeemed</th>
+                                    <th scope="col">Redemption %</th>
+                                    <th scope="col">Business Generated</th>
+                                    <th scope="col">Conv %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvPointsExpirySecond" style="display:none;">
+            <span style="margin-left:20px;">POINTS EXPIRY</span><span style="margin-left:50px;" id="spnPointsExpiryDateLabel"></span>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvPointsExpirySecondData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityPointsExpirySecond">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mobile No</th>
+                                    <th scope="col">Member Name</th>
+                                    <th scope="col">Expiry Date</th>
+                                    <th scope="col">Txn Date</th>
+                                    <th scope="col">No of Txns</th>
+                                    <th scope="col">Points Redeemed</th>
+                                    <th scope="col">Total Spends (Rs.)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="dvInactiveFirst" style="display:none;">
+            <div class="mb-3 pt-3 pl-3 pr-3">
+                <span><u>INACTIVE TO ACTIVE</u></span> <br /><br />
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearListInactive" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthListInactive" })
+                <button id="btnGo" class="btn btn-primary" onclick="GetInactiveData()">GO</button>
+            </div>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvInactiveData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityInactive">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Inactive</th>
+                                    <th scope="col">Count </th>
+                                    <th scope="col">Unique Members Qualified</th>
+                                    <th scope="col">Business Generated</th>
+                                    <th scope="col">Conv %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row" id="dvInactiveSecond" style="display:none;">
+            <span style="margin-left:20px;">INACTIVE</span><span style="margin-left:50px;" id="spnInactiveDateLabel"></span>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvInactiveSecondData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityInactiveSecond">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mobile No</th>
+                                    <th scope="col">Member Name</th>
+                                    <th scope="col">Inactive Date</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Txn Date</th>
+                                    <th scope="col">Total Spends (Rs.)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="dvCampaignsFirst" style="display:none;">
+            <div class="mb-3 pt-3 pl-3 pr-3">
+                <span><u>CAMPAIGNS</u></span> <br /><br />
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearListCampaigns" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthListCampaigns" })
+                <button id="btnGo" class="btn btn-primary" onclick="GetCampaignsData()">GO</button>
+            </div>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvCampaignData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityCampaign">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Cpg Type</th>
+                                    <th scope="col">Cpg Name </th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Start Date</th>
+                                    <th scope="col">End Date</th>
+                                    <th scope="col">Cpg Member Count</th>
+                                    <th scope="col">Unique Members Qualified </th>
+                                    <th scope="col">Transactions</th>
+                                    <th scope="col">Biz Gen</th>
+                                    <th scope="col">Conv %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvCampaignsSecond" style="display:none;">
+            <span style="margin-left:20px;">CAMPAIGN Name : </span><span id="spnCampaignsName" style="margin-left:20px;">
+
+            </span>
+            <a style="cursor:pointer;color:blue;margin-left:50px;" onclick="GetCampaignsThirdData();"><u>Click to see detailed campaign list</u></a>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvCampaignsSecondData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityCampaignsSecond">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Campaign Base</th>
+                                    <th scope="col">Control Base</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvCampaignsThird" style="display:none;">
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvCampaignsThirdData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activityCampaignsThird">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Mem Name</th>
+                                    <th scope="col">Mob No</th>
+                                    <th scope="col">Txn Count</th>
+                                    <th scope="col">Total Biz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" id="dvSMSBlastsFirst" style="display:none;">
+            <div class="mb-3 pt-3 pl-3 pr-3">
+                <span><u>SMS BLASTS</u></span> <br /><br />
+                @Html.DropDownListFor(x => Model.year, new SelectList(Model.lstYear, "Value", "Text", Model.year), htmlAttributes: new { @class = "smallDDL", @id = "YearListSMSBlasts" })
+                @Html.DropDownListFor(x => Model.month, new SelectList(Model.lstMonth, "Value", "Text", Model.month), htmlAttributes: new { @class = "smallDDL", @id = "MonthListSMSBlasts" })
+                <button id="btnGo" class="btn btn-primary" onclick="GetSMSBlastsData()">GO</button>
+            </div>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvSMSBlastsFirstData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activitySMSBlastsFirst">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Cpg Type</th>
+                                    <th scope="col">Cpg Name </th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Sent Date</th>
+                                    <th scope="col">Cpg Member Count</th>
+                                    <th scope="col">Unique Members Qualified </th>
+                                    <th scope="col">Transactions</th>
+                                    <th scope="col">Biz Gen</th>
+                                    <th scope="col">Conv %</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvSMSBlastsSecond" style="display:none;">
+            <span style="margin-left:20px;">SMS Blast Name : </span><span id="spnSMSBlastName" style="margin-left:20px;">
+            </span>
+            <a style="cursor:pointer;color:blue;margin-left:50px;" onclick="GetSMSBlastThirdData();"><u>Click to see detailed campaign list</u></a>
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvSMSBlastSecondData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activitySMSBlastSecond">
+                            <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">Campaign Base</th>
+                                    <th scope="col">Control Base</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="dvSMSBlastsThird" style="display:none;">
+            <div class="pt-3 pl-3 pr-3 col-md-12 col-lg-12">
+                <div class="row mt-3" id="dvSMSBlastThirdData" style="padding-bottom:20px;">
+                    <div class="table-responsive">
+                        <table class="table" id="activitySMSBlastThird">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Mem Name</th>
+                                    <th scope="col">Mob No</th>
+                                    <th scope="col">Txn Count</th>
+                                    <th scope="col">Total Biz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
+
+
+<script>
+    var tblCelebrationFirst = [];
+    var tblCelebrationSecond = [];
+    var tblPointsExpiryFirst = [];
+    var tblPointsExpirySecond = [];
+    var tblInactiveFirst = [];
+    var tblInactiveSecond = [];
+    var tblCampaignFirst = [];
+    var tblCampaignSecond = [];
+    var tblCampaignThird = [];
+    var tblSMSBlastsFirst = [];
+    var tblSMSBlastsSecond = [];
+    var tblSMSBlastsThird = [];
+    var CampaignIDClicked = 0;
+    var SMSBlastIDClicked = 0;
+
+    function showhideDiv(id) {
+        $("#dvCelebrationsFirst").hide();
+        $("#dvCelebrationsSecond").hide();
+        $("#dvPointsExpiryFirst").hide();
+        $("#dvPointsExpirySecond").hide();
+        $("#dvInactiveFirst").hide();
+        $("#dvInactiveSecond").hide();
+        $("#dvCampaignsFirst").hide();
+        $("#dvCampaignsSecond").hide();
+        $("#dvCampaignsThird").hide();
+        $("#dvSMSBlastsFirst").hide();
+        $("#dvSMSBlastsSecond").hide();
+        $("#dvSMSBlastsThird").hide();
+
+        if (id == 1) {
+            $("#dvCelebrationsFirst").show();
+        }
+        if (id == 2) {
+            $("#dvCelebrationsFirst").show();
+            $("#dvCelebrationsSecond").show();
+        }
+        if (id == 3) {
+            $("#dvPointsExpiryFirst").show();
+        }
+        if (id == 4) {
+            $("#dvPointsExpiryFirst").show();
+            $("#dvPointsExpirySecond").show();
+        }
+        if (id == 5) {
+            $("#dvInactiveFirst").show();
+        }
+        if (id == 6) {
+            $("#dvInactiveFirst").show();
+            $("#dvInactiveSecond").show();
+        }
+        if (id == 7) {
+            $("#dvCampaignsFirst").show();
+        }
+        if (id == 8) {
+            $("#dvCampaignsFirst").show();
+            $("#dvCampaignsSecond").show();
+        }
+        if (id == 9) {
+            $("#dvCampaignsFirst").show();
+            $("#dvCampaignsSecond").show();
+            $("#dvCampaignsThird").show();
+        }
+        if (id == 10) {
+            $("#dvSMSBlastsFirst").show();
+        }
+        if (id == 11) {
+            $("#dvSMSBlastsFirst").show();
+            $("#dvSMSBlastsSecond").show();
+        }
+        if (id == 12) {
+            $("#dvSMSBlastsFirst").show();
+            $("#dvSMSBlastsSecond").show();
+            $("#dvSMSBlastsThird").show();
+        }
+
+    }
+    function GetCelebrationData() {
+        var year = $("#YearList").val();
+        var month = $("#MonthList").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignCelebrationsData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblCelebrationFirst.length = 0;
+                console.log(response)
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["Celebration"] = item.Celebration;
+                    optionItem["Counts"] = item.Counts;
+                    optionItem["UniqueMemberTransacted"] = item.UniqueMemberTransacted;
+                    optionItem["BonusPointsIssued"] = item.BonusPointsIssued;
+                    optionItem["BonusPointsRedeemed"] = item.BonusPointsRedeemed;
+                    optionItem["RedemptionRate"] = item.RedemptionRate;
+                    optionItem["BusinessGenerated"] = item.BusinessGenerated;
+                    optionItem["Conversion"] = item.Conversion;
+                    tblCelebrationFirst.push(optionItem);
+                });
+                DrawCelebrationFirstTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(1);
+    }
+    function DrawCelebrationFirstTable() {
+        var table1 = $('#activityCelebration').DataTable();
+        table1.destroy();
+
+        var table = $('#activityCelebration').DataTable({
+            "data": tblCelebrationFirst,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                {
+
+                    "mData": "Celebration",
+                    "mRender": function (data, type, row) {
+                        var id = 0;
+                        if (data == "Birthday")
+                            id = 1;
+                        if (data == "Anniversary")
+                            id = 2;
+                        return '<a href="#" onclick="GetCelebrationSecondList(\'' + id + '\'\)" class="login" >' + data + '</a>';
+                    }
+                },
+                { data: "Counts" },
+                { data: "UniqueMemberTransacted" },
+                { data: "BonusPointsIssued" },
+                { data: "BonusPointsRedeemed" },
+                { data: "RedemptionRate" },
+                { data: "BusinessGenerated" },
+                { data: "Conversion" }
+            ]
+        });
+        $('#activityCelebration_filter').hide();
+    }
+
+    function GetCelebrationSecondList(id) {
+        var year = $("#YearList").val();
+        var month = $("#MonthList").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignCelebrationsSecondData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'type': " + id + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblCelebrationSecond.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["CelebrationDate"] = item.CelebrationDate;
+                    optionItem["TxnDate"] = item.TxnDate;
+                    optionItem["NoOfTxn"] = item.NoOfTxn;
+                    optionItem["TotalSpend"] = item.TotalSpend;
+                    optionItem["PointsRedeemed"] = item.PointsRedeemed;
+                    tblCelebrationSecond.push(optionItem);
+                });
+                DrawCelebrationSecondTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+        $("#dvDetailData").show();
+        if (id==1)
+            $("#spnType").text("BIRTHDAY");
+        if (id == 2)
+            $("#spnType").text("ANNIVERSARY");
+
+        $("#spnCelebrationsDateLabel").text($("#MonthList option:selected").text() + " - " + $("#YearList option:selected").text());
+
+        showhideDiv(2);
+    }
+    function DrawCelebrationSecondTable() {
+        var table1 = $('#activityCelebrationSecond').DataTable();
+        table1.destroy();
+
+        var table = $('#activityCelebrationSecond').DataTable({
+            "data": tblCelebrationSecond,
+            "paging": true,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "MemberName" },
+                /*{ data: "CelebrationDate" },*/
+                {
+                    "data": "CelebrationDate", "title": "Celebration Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                /*{ data: "TxnDate" },*/
+                {
+                    "data": "TxnDate", "title": "Txn Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                { data: "NoOfTxn" },
+                /*{ data: "TotalSpend" },*/
+                {
+                    "mData": "TotalSpend",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
+            ]
+        });
+        $('#activityCelebrationSecond_filter').hide();
+    }
+
+    function GetPointsExpiryData() {
+        var year = $("#YearListExpiry").val();
+        var month = $("#MonthListExpiry").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignPointsExpiryData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblPointsExpiryFirst.length = 0;
+                console.log(response)
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["Element"] = item.Element;
+                    optionItem["Counts"] = item.Counts;
+                    optionItem["PointsToBeExpired"] = item.PointsToBeExpired;
+                    optionItem["UniqueMemberTransacted"] = item.UniqueMemberTransacted;
+                    optionItem["PointsRedeemed"] = item.PointsRedeemed;
+                    optionItem["RedemptionRate"] = item.RedemptionRate;
+                    optionItem["BusinessGenerated"] = item.BusinessGenerated;
+                    optionItem["Conversion"] = item.Conversion;
+                    tblPointsExpiryFirst.push(optionItem);
+                });
+                DrawPointsExpiryFirstTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(3);
+    }
+    function DrawPointsExpiryFirstTable() {
+        var table1 = $('#activityPointsExpiry').DataTable();
+        table1.destroy();
+
+        var table = $('#activityPointsExpiry').DataTable({
+            "data": tblPointsExpiryFirst,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                {
+                    "mData": "Element",
+                    "mRender": function (data, type, row) {
+                        return '<a href="#" onclick="GetPointsExpirySecondList()" class="login" >' + data + '</a>';
+                    }
+                },
+                { data: "Counts" },
+                { data: "PointsToBeExpired" },
+                { data: "UniqueMemberTransacted" },
+                { data: "PointsRedeemed" },
+                { data: "RedemptionRate" },
+                { data: "BusinessGenerated" },
+                { data: "Conversion" }
+            ]
+        });
+        $('#activityPointsExpiry_filter').hide();
+    }
+
+    function GetPointsExpirySecondList(id) {
+        var year = $("#YearListExpiry").val();
+        var month = $("#MonthListExpiry").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignPointsExpirySecondData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblPointsExpirySecond.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["ExpiryDate"] = item.ExpiryDate;
+                    optionItem["TxnDate"] = item.TxnDate;
+                    optionItem["NoOfTxn"] = item.NoOfTxn;                   
+                    optionItem["PointsRedeemed"] = item.PointsRedeemed;
+                    optionItem["TotalSpend"] = item.TotalSpend;
+                    tblPointsExpirySecond.push(optionItem);
+                });
+                DrawPointsExpirySecondTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+        $("#dvDetailData").show();
+        $("#spnPointsExpiryDateLabel").text($("#MonthListInactive option:selected").text() + " - " + $("#YearListInactive option:selected").text());
+        showhideDiv(4);
+    }
+    function DrawPointsExpirySecondTable() {
+        var table1 = $('#activityPointsExpirySecond').DataTable();
+        table1.destroy();
+
+        var table = $('#activityPointsExpirySecond').DataTable({
+            "data": tblPointsExpirySecond,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "MemberName" },
+                /*{ data: "ExpiryDate" },*/
+                {
+                    "data": "ExpiryDate", "title": "Expiry Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                /*{ data: "TxnDate" },*/
+                {
+                    "data": "TxnDate", "title": "Txn Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                { data: "NoOfTxn" },
+                { data: "PointsRedeemed" },
+                { data: "TotalSpend"}
+            ]
+        });
+        $('#activityPointsExpirySecond_filter').hide();
+    }
+
+    function GetInactiveData() {
+        var year = $("#YearListInactive").val();
+        var month = $("#MonthListInactive").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignInactiveData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblInactiveFirst.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["Element"] = item.Element;
+                    optionItem["Counts"] = item.Counts;
+                    optionItem["UniqueMemberTransacted"] = item.UniqueMemberTransacted;
+                    optionItem["BusinessGenerated"] = item.BusinessGenerated;
+                    optionItem["Conversion"] = item.Conversion;
+                    tblInactiveFirst.push(optionItem);
+                });
+                DrawInactiveFirstTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(5);
+    }
+    function DrawInactiveFirstTable() {
+        var table1 = $('#activityInactive').DataTable();
+        table1.destroy();
+
+        var table = $('#activityInactive').DataTable({
+            "data": tblInactiveFirst,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                {
+                    "mData": "Element",
+                    "mRender": function (data, type, row) {
+                        return '<a href="#" onclick="GetInactiveSecondList()" class="login" >' + data + '</a>';
+                    }
+                },
+                { data: "Counts" },
+                { data: "UniqueMemberTransacted" },
+                { data: "BusinessGenerated" },
+                { data: "Conversion" }
+            ]
+        });
+        $('#activityInactive_filter').hide();
+    }
+
+    function GetInactiveSecondList(id) {
+        var year = $("#YearList").val();
+        var month = $("#MonthList").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignInactiveSecondData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblInactiveSecond.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["InActiveDate"] = item.InActiveDateStr;
+                    optionItem["Status"] = item.Status;
+                    optionItem["TxnDate"] = item.TxnDateStr;
+                    optionItem["TotalSpend"] = item.TotalSpend;
+                    tblInactiveSecond.push(optionItem);
+                });
+                DrawInactiveSecondTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+        $("#dvDetailData").show();
+        $("#spnInactiveDateLabel").text($("#MonthListExpiry option:selected").text() + " - " + $("#YearListExpiry option:selected").text());
+
+        showhideDiv(6);
+    }
+    function DrawInactiveSecondTable() {
+        var table1 = $('#activityInactiveSecond').DataTable();
+        table1.destroy();
+
+        var table = $('#activityInactiveSecond').DataTable({
+            "data": tblInactiveSecond,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "MobileNo" },
+                { data: "MemberName" },
+                /*{ data: "InActiveDate" },*/
+                {
+                    "data": "InActiveDate", "title": "Inactive Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var year = data.split('-')[0]
+                            var month = data.split('-')[1]
+                            var day = data.split('-')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                { data: "Status" },
+               /* { data: "TxnDate" },*/
+                {
+                    "data": "TxnDate", "title": "Txn Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var year = data.split('-')[0]
+                            var month = data.split('-')[1]
+                            var day = data.split('-')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                { data: "TotalSpend" }
+            ]
+        });
+        $('#activityInactiveSecond_filter').hide();
+    }
+
+    function GetCampaignsData() {
+        var year = $("#YearListCampaigns").val();
+        var month = $("#MonthListCampaigns").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignFirstData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblCampaignFirst.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["CampaignType"] = item.CampaignType;
+                    optionItem["CampaignName"] = item.CampaignName;
+                    optionItem["StartDate"] = item.StartDate;
+                    optionItem["EndDate"] = item.EndDate;
+                    optionItem["CampaignMemberCount"] = item.CampaignMemberCount;
+                    optionItem["Status"] = item.Status;
+                    optionItem["CampaignId"] = item.CampaignId;
+                    optionItem["UniqueMemberTransacted"] = item.UniqueMemberTransacted;
+                    optionItem["Transactions"] = item.Transactions;
+                    optionItem["BizGenerated"] = item.BizGenerated;
+                    optionItem["Conversion"] = item.Conversion;
+                    tblCampaignFirst.push(optionItem);
+                });
+                DrawCampaignFirstTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(7);
+    }
+    function DrawCampaignFirstTable() {
+        var table1 = $('#activityCampaign').DataTable();
+        table1.destroy();
+
+        var table = $('#activityCampaign').DataTable({
+            "data": tblCampaignFirst,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "CampaignType" },
+                {
+                    "mData": "CampaignName",
+                    "mRender": function (data, type, row) {
+                        var id = row.CampaignId;
+                        return '<a href="#" onclick="GetCampaignSecondList(\'' + id + '\'\,\'' + data +'\'\)" class="login" >' + data + '</a>';
+                    }
+                },
+                { data: "Status" },
+                /*{ data: "StartDate" },*/
+                {
+                    "data": "StartDate", "title": "Start Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                /*{ data: "EndDate" },*/
+                {
+                    "data": "EndDate", "title": "End Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                /*{ data: "CampaignMemberCount" },*/
+                {
+                    "mData": "CampaignMemberCount",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
+                { data: "UniqueMemberTransacted" },
+                { data: "Transactions" },
+                {
+                    "mData": "BizGenerated",
+                    "mRender": function (data, type, row) {
+
+                        if (data != null) {
+                            return '<span>' + addComma(data) + '</span>';
+                        }
+                        else {
+                            return '<span></span>';
+                        }
+                    }
+                },
+               /* { data: "BizGenerated" },*/
+                { data: "Conversion" }
+            ]
+        });
+        $('#activityCampaign_filter').hide();
+    }
+
+    function GetCampaignSecondList(id, name) {
+        CampaignIDClicked = id;
+        var year = $("#YearListCampaigns").val();
+        var month = $("#MonthListCampaigns").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignSecondData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'CampaignId': " + id + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblCampaignSecond.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["CampaignId"] = item.CampaignId;
+                    optionItem["Element"] = item.Element;
+                    optionItem["CampaignBase"] = item.CampaignBase;
+                    optionItem["ControlBase"] = item.ControlBase;
+                    tblCampaignSecond.push(optionItem);
+                });
+                DrawCampaignSecondTable();
+                $("#spnCampaignsName").text(name);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(8);
+    }
+    function DrawCampaignSecondTable() {
+        var table1 = $('#activityCampaignsSecond').DataTable();
+        table1.destroy();
+
+        var table = $('#activityCampaignsSecond').DataTable({
+            "data": tblCampaignSecond,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Element" },
+                { data: "CampaignBase" },
+                { data: "ControlBase" }
+            ]
+        });
+        $('#activityCampaignsSecond_filter').hide();
+    }
+
+    function GetCampaignsThirdData() {
+        var year = $("#YearListCampaigns").val();
+        var month = $("#MonthListCampaigns").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignThirdData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'CampaignId': " + CampaignIDClicked + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblCampaignThird.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["TxnCount"] = item.TxnCount;
+                    optionItem["TotalBiz"] = item.TotalBiz;
+                    optionItem["Status"] = item.Status;
+                    tblCampaignThird.push(optionItem);
+                });
+                DrawCampaignThirdTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(9);
+    }
+    function DrawCampaignThirdTable() {
+        var table1 = $('#activityCampaignsThird').DataTable();
+        table1.destroy();
+
+        var table = $('#activityCampaignsThird').DataTable({
+            "data": tblCampaignThird,
+            "paging": true,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 200,
+            "lengthChange": false,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Status" },
+                { data: "MemberName" },
+                { data: "MobileNo" },
+                { data: "TxnCount" },
+                { data: "TotalBiz" }
+            ]
+        });
+        $('#activityCampaignsThird_filter').hide();
+    }
+
+    function GetSMSBlastsData() {
+        var year = $("#YearListSMSBlasts").val();
+        var month = $("#MonthListSMSBlasts").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetCampaignSMSBlastFirstData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblSMSBlastsFirst.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["CampaignType"] = item.CampaignType;
+                    optionItem["CampaignName"] = item.CampaignName;
+                    optionItem["SendDate"] = item.SendDate;
+                    optionItem["CampaignMemberCount"] = item.CampaignMemberCount;
+                    optionItem["Status"] = item.Status;
+                    optionItem["CampaignId"] = item.CampaignId;
+                    optionItem["UniqueMemberTransacted"] = item.UniqueMemberTransacted;
+                    optionItem["Transactions"] = item.Transactions;
+                    optionItem["BizGenerated"] = item.BizGenerated;
+                    optionItem["Conversion"] = item.Conversion;
+                    tblSMSBlastsFirst.push(optionItem);
+                });
+                DrawSMSBlastsFirstTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(10);
+    }
+    function DrawSMSBlastsFirstTable() {
+        var table1 = $('#activitySMSBlastsFirst').DataTable();
+        table1.destroy();
+
+        var table = $('#activitySMSBlastsFirst').DataTable({
+            "data": tblSMSBlastsFirst,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "CampaignType" },
+                {
+                    "mData": "CampaignName",
+                    "mRender": function (data, type, row) {
+                        var id = row.CampaignId;
+                        return '<a href="#" onclick="GetSMSBlastsSecondList(\'' + id + '\'\,\'' + data +'\'\)" class="login" >' + data + '</a>';
+                    }
+                },
+                { data: "Status" },
+                /*{ data: "SendDate" },*/
+                {
+                    "data": "SendDate", "title": "Send Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                { data: "CampaignMemberCount" },
+                { data: "UniqueMemberTransacted" },
+                { data: "Transactions" },
+                { data: "BizGenerated" },
+                { data: "Conversion" }
+            ]
+        });
+        $('#activitySMSBlastsFirst_filter').hide();
+    }
+
+    function GetSMSBlastsSecondList(id, name) {
+        SMSBlastIDClicked = id;
+        var year = $("#YearListSMSBlasts").val();
+        var month = $("#MonthListSMSBlasts").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSMSBlastsSecondData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'CampaignId': " + id + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblSMSBlastsSecond.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["CampaignId"] = item.CampaignId;
+                    optionItem["Element"] = item.Element;
+                    optionItem["CampaignBase"] = item.CampaignBase;
+                    optionItem["ControlBase"] = item.ControlBase;
+                    tblSMSBlastsSecond.push(optionItem);
+                });
+                DrawSMSBlastsSecondTable();
+                $("#spnSMSBlastName").text(name);
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+
+        $("#dvDetailData").show();
+        showhideDiv(11);
+    }
+    function DrawSMSBlastsSecondTable() {
+        var table1 = $('#activitySMSBlastSecond').DataTable();
+        table1.destroy();
+
+        var table = $('#activitySMSBlastSecond').DataTable({
+            "data": tblSMSBlastsSecond,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Element" },
+                { data: "CampaignBase" },
+                { data: "ControlBase" }
+            ]
+        });
+        $('#activitySMSBlastSecond_filter').hide();
+    }
+
+    function GetSMSBlastThirdData() {
+        var year = $("#YearListSMSBlasts").val();
+        var month = $("#MonthListSMSBlasts").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetSMSBlastsThirdData", "Campaigns")',
+            data: "{'month': " + month + ",'year': " + year + ",'CampaignId': " + SMSBlastIDClicked + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                tblSMSBlastsThird.length = 0;
+                $.map(response, function (item) {
+                    optionItem = {}
+                    optionItem["MobileNo"] = item.MobileNo;
+                    optionItem["MemberName"] = item.MemberName;
+                    optionItem["TxnCount"] = item.TxnCount;
+                    optionItem["TotalBiz"] = item.TotalBiz;
+                    optionItem["Status"] = item.Status;
+                    tblSMSBlastsThird.push(optionItem);
+                });
+                DrawSMSBlastThirdTable();
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+        $("#dvDetailData").show();
+        showhideDiv(12);
+    }
+    function DrawSMSBlastThirdTable() {
+        var table1 = $('#activitySMSBlastThird').DataTable();
+        table1.destroy();
+
+        var table = $('#activitySMSBlastThird').DataTable({
+            "data": tblSMSBlastsThird,
+            "paging": false,
+            "ordering": false,
+            "info": false,
+            "bFilter": false,
+            "pageLength": 25,
+            "pagingType": "simple_numbers",
+            "columns": [
+                { data: "Status" },
+                { data: "MemberName" },
+                { data: "MobileNo" },
+                { data: "TxnCount" },
+                { data: "TotalBiz" }
+            ]
+        });
+        $('#activitySMSBlastThird_filter').hide();
+    }
+
+
+
+</script>

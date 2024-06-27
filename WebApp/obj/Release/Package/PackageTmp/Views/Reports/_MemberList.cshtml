@@ -45,7 +45,7 @@
                                             <td>@member.TotalSpend</td>
                                             <td>@member.TotalBurnTxn</td>
                                             <td>@member.TotalBurnPoints</td>
-                                            <td>@member.AvBalPoints</td>
+                                            <td>@member.AvlBalPoints</td>
                                             <td>@member.LastTxnDate</td>
                                         </tr>
                                     }
@@ -53,14 +53,14 @@
                                 else
                                 {
                                     <tr>
-                                        <td colspan="10" align="center">No Learning Available</td>
+                                        <td colspan="10" align="center">No Member Available</td>
                                     </tr>
                                 }
                             }
                             else
                             {
                                 <tr>
-                                    <td colspan="10">No Learning Available</td>
+                                    <td colspan="10">No Member Available</td>
                                 </tr>
                             }
                         </tbody>
@@ -107,7 +107,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }

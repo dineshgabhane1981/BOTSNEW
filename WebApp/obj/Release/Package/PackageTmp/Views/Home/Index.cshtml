@@ -1,121 +1,397 @@
 ﻿@model BOTS_BL.Models.ExecutiveSummary
 @using System.Globalization
+@using BOTS_BL.Models;
 @{
     ViewBag.Title = "Executive Summary";
-    var labelValues = "";
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var level = userDetails.LevelIndicator;
 }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.4.0/dist/chartjs-plugin-datalabels.min.js"></script>
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.bundle.min.js"></script>*@
 
 <div class="app-main__inner">
     <input type="hidden" id="hdnNames" />
-    <div class="row" style="display:none;">
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-midnight-bloom">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">
-                            Total Biz (Rs.)
-                        </div>
+    @*@if (!string.IsNullOrEmpty(Model.RenewalDate))
+        {
+            if (Model.RemainingDaysForRenewal < 45)
+            {
+                <div class="col-md-12 col-xl-12" style="background-color:white;font-size:18px;font-weight:bold;margin-bottom:10px;">
+                    <marquee direction="left"> Renewal Date - <b style="color:red;"> @Model.RenewalDate </b> & Days remaining for renewal - <b style="color:red;"> @Model.RemainingDaysForRenewal </b></marquee>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-12 col-xl-12" style="background-color:white;font-size:18px;font-weight:bold;margin-bottom:10px;">
+                    <marquee direction="left"> Renewal Date - <b style="color:green;"> @Model.RenewalDate </b> & Days remaining for renewal - <b style="color: green;"> @Model.RemainingDaysForRenewal </b></marquee>
+                </div>
+            }
+        }*@
+    @if (level == "02")
+    {
+        @*string VWADate = ""; string RenewDate = "";
+             if (Model.VerifiedWARenewalDate != "")
+             {
+                 var Date = DateTime.Parse(Model.VerifiedWARenewalDate);
+                 VWADate = Date.ToString("yyyy-MM-dd");
+             }
+             else
+             {
+                 VWADate = (Model.VerifiedWARenewalDate).ToString();
+             }
 
-                    </div>
-                    <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</span></div>
+             if (Model.RenewDate != "")
+             {
+                 var RDate = DateTime.Parse(Model.RenewDate);
+                 RenewDate = RDate.ToString("yyyy-MM-dd");
+             }
+             else
+             {
+                 RenewDate = (Model.RenewDate).ToString();
+             }
+            <div class="row">
+                 @if (!string.IsNullOrEmpty(VWADate))
+                 {
+
+
+                     <div class="col-md-6 col-xl-4">
+                         <div class="card mb-3 widget-content bg-love-kiss">
+                             <div class="widget-content-wrapper text-white">
+                                 <div class="widget-content-left">
+                                     <div class="widget-heading">
+                                         Renewal Date:
+                                     </div>
+
+                                 </div>
+                                 <div class="widget-content-right">
+                                     <div class="widget-numbers text-white"><span id="spnRenewalDate">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", RenewDate)</span></div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 }
+                 @if (!string.IsNullOrEmpty(RenewDate))
+                 {
+                     <div class="col-md-6 col-xl-4">
+                         <div class="card mb-3 widget-content bg-midnight-bloom">
+                             <div class="widget-content-wrapper text-white">
+                                 <div class="widget-content-left">
+                                     <div class="widget-heading">
+                                         Verified WA <br /> Renewal Date:
+                                     </div>
+
+                                 </div>
+                                 <div class="widget-content-right">
+                                     <div class="widget-numbers text-white"><span id="spnVWARenewalDate">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", VWADate)</span></div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 }
+             </div>*@
+        <div class="row" style="display:none;">
+            <div class="col-md-12 col-lg-12">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title" style="cursor:pointer;">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            From Date &nbsp; &nbsp; <input type="date" id="FromDate" class="input50" />&nbsp; &nbsp;  To Date &nbsp; &nbsp; <input type="date" id="ToDate" class="input50" />&nbsp; &nbsp; <button type="button" id="btnFilter" class="btn btn-primary" style="margin-top:10px;">Filter</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-arielle-smile">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">
-                            Loyalty Biz (Rs.)
-                        </div>
 
-                    </div>
-                    <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@Model.LoyaltyBiz</span></div>
+        @*<div class="col-md-12 col-lg-12 mb-3" style="text-align:end;">
+                <div> <b>Period :</b> @Model.StartDate To @Model.ToDate</div>
+            </div>*@
+
+        <div class="row">
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-midnight-bloom">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Total Biz
+                            </div>
+
+                        </div>
+                        <div class="widget-content-right">
+                            @if (userDetails.GroupId == "1341")
+                            {
+                                <div class="widget-numbers text-white"><span id="spnTotalBiz">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</span></div>
+                            }
+                            else
+                            {
+                                <div class="widget-numbers text-white"><span id="spnTotalBiz">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.TotalBiz))</span></div>
+                            }
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6 col-xl-4">
-            <div class="card mb-3 widget-content bg-grow-early">
-                <div class="widget-content-wrapper text-white">
-                    <div class="widget-content-left">
-                        <div class="widget-heading">
-                            Loyalty % to Biz
-                        </div>
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-arielle-smile">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Loyalty Biz
+                            </div>
 
-                    </div>
-                    <div class="widget-content-right">
-                        <div class="widget-numbers text-white"><span>@Model.LoyaltyPercentageBiz%</span></div>
+                        </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-white"><span id="spnLoyaltyBiz">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.LoyaltyBiz))</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 col-xl-4">
+                <div class="card mb-3 widget-content bg-grow-early">
+                    <div class="widget-content-wrapper text-white">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Loyalty % to Biz
+                            </div>
+
+                        </div>
+                        <div class="widget-content-right">
+                            <div class="widget-numbers text-white">
+
+                                @if (Convert.ToDouble(Model.TotalBiz) > 0)
+                                {
+                                    var num = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.LoyaltyBiz * 100) / Convert.ToDouble(Model.TotalBiz)));
+                                    <span id="spnLoyaltyPercentage">
+                                        @num%
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span>
+                                        0
+                                    </span>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-    </div>
+        @*<div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header-tab-animation card-header">
+                            <div class="card-header-title" style="cursor:pointer;" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                                Share of Business(Rs.) <span style="margin-left:100px;">PERIOD : Last 12 Months</span>
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAllSharedBiz();" class="active nav-link">All</a></li>
+                                <li class="nav-item" style="padding-bottom:15px;">
+                                    @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "sharedBizOutletList", style = "margin-top:20px;" })
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body collapse" id="collapseExample">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tabs-eg-77">
+                                    <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                        <div class="widget-chat-wrapper-outer">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasSharedBizContainer">
+                                                <canvas id="sharedBizcanvas"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
 
+        <div class="row">
+            <div class="col-md-12 col-lg-12">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            MEMBER SEGMENT <span id="spnPeriod" style="margin-left:100px;"></span>
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAll();" class="active nav-link">All</a></li>
+                            <li class="nav-item">
+                                @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "memberSegmentOutletList", style = "margin-top:20px;" })
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
+                                            <canvas id="barcanvas"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h6 class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal" style="color:blue !important; cursor:pointer;" id="btnExpand" onclick="ToggleKeyPointers();"><b>Expand to see key pointers</b></h6>
+                                <div id="dvKeyPointers" style="display:none;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
     <div class="row">
-        <div class="col-md-12 col-lg-12">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        MEMBER SEGMENT
+        @if (level == "02")
+        {
+            var cssClass = "col-md-12 col-lg-6";
+            if (ViewBag.OutletCount > 8)
+            {
+                cssClass = "col-md-12 col-lg-12";
+            }
+
+            <div class="@cssClass">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            OUTLET ENROLMENTS
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('')" id="outletTillDate" class="active nav-link">Till Date</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="outletCurrentDate" class="nav-link second-tab-toggle">Current Month</a></li>
+                        </ul>
                     </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="ShowAll();" class="active nav-link">All</a></li>
-                        <li class="nav-item">
-                            @Html.DropDownListFor(x => Model.ActiveBase_Total, new SelectList(ViewBag.OutletList, "Value", "Text"), "Select Outlet", htmlAttributes: new { @class = "input50", @id = "memberSegmentOutletList", style = "margin-top:20px;" })
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="canvasContainer">
-                                        <canvas id="barcanvas"></canvas>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div id="containerOutlet">
+                                            <canvas id="cvOutlet" style=" width:100%; height:100%" !important></canvas>
+                                            @*// widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0*@
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <h6 class="text-muted text-uppercase font-size-md opacity-5 font-weight-normal" style="color:blue !important; cursor:pointer;" id="btnExpand" onclick="ToggleKeyPointers();"><b>Expand to see key pointers</b></h6>
-                            <div class="scroll-area-sm" id="dvKeyPointers" style="display:none;">
-                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
+        @if (level == "02" || level == "04")
+        {
+            var cssClass = "col-md-12 col-lg-6";
+            if (ViewBag.OutletCount > 8)
+            {
+                cssClass = "col-md-12 col-lg-12";
+            }
 
+            <div class="@cssClass">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            TRANSACTION POINTS SUMMARY
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('')" id="pointsTillDate" class="active nav-link">Till Date</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('1')" id="pointsCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerPointSummery">
+                                            <canvas id="cvPointSummery"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 
-
-    <div class="row">
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        OUTLET ENROLMENTS
+    @if (level == "02")
+    {
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            REDEMPTION
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('1');" id="pointsBase" class="active nav-link">Base</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showRedemptionChart('2');" id="pointsBonus" class="nav-link second-tab-toggle">Bonus</a></li>
+                        </ul>
                     </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('')" id="outletTillDate" class="active nav-link">Till Date</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showOutletEnrolmentChart('1')" id="outletCurrentDate" class="nav-link second-tab-toggle">Current Month</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerOutlet">
-                                        <canvas id="cvOutlet"></canvas>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div style="display:flex;margin-top:30px;">
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemption" style="width:250px;border-right:1px solid black;text-align:center;">
+                                                <span style="font-weight:bold;">Redemption<br /> Rate</span>
+                                                <canvas id="cvRedemption"></canvas>
+                                            </div>
+                                            <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerRedemptionMember" style="width:250px;text-align:center;">
+                                                <span style="font-weight:bold;">Unique Redeeming <br /> Members</span>
+                                                <canvas id="cvRedemptionMember"></canvas>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <table border="1" width="100%" id="tblReferrals" style="margin-top:30px;">
+                                                <tr>
+                                                    <th style="text-align:center;">
+                                                        Redeemed Members
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Redemption Txn Count
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Redeemed Points
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Points Value (Rs.)
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;"><span id="spnRedeemedMembers"></span></td>
+                                                    <td style="text-align:center;"><span id="spnRedemptionTxnCount"></span></td>
+                                                    <td style="text-align:center;"><span id="spnRedeemedPoints"></span></td>
+                                                    <td style="text-align:center;"><span id="spnPointsValue"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4" style="height:20px;"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;font-weight:bold;">
+                                                        Business Generated
+                                                    </td>
+                                                    <td style="text-align:center;"><span id="spnRedemBusinessGenerated"></span></td>
+                                                    <td style="text-align:center;font-weight:bold;">
+                                                        Redeem to Invoice
+                                                    </td>
+                                                    <td style="text-align:center;"><span id="spnRedeemToInvoice"></span></td>
+                                                </tr>
+
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -123,118 +399,46 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        POINTS SUMMARY
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('')" id="pointsTillDate" class="active nav-link">Till Date</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showPointSummeryChart('1')" id="pointsCurrentMonth" class="nav-link second-tab-toggle">Current Month</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerPointSummery">
-                                        <canvas id="cvPointSummery"></canvas>
-                                    </div>
-                                </div>
-                            </div>
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            BULK UPLOAD
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        CAMPAIGN REPORT
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" class="active nav-link">Till Date</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" class="nav-link second-tab-toggle">Current Month</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0">
-                                        @*<canvas id="cvOutlet"></canvas>*@
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-6">
-            <div class="mb-3 card">
-                <div class="card-header-tab card-header-tab-animation card-header">
-                    <div class="card-header-title">
-                        <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
-                        MEMBER WEBPAGE
-                    </div>
-                    <ul class="nav">
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showMemberWebpageChart('1');" id="memberWebpageReferrals" class="active nav-link">Referrals</a></li>
-                        <li class="nav-item"><a href="javascript:void(0);" onclick="showMemberWebpageChart('0');" id="memberWebpageProfile" class="nav-link second-tab-toggle">Profile</a></li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tabs-eg-77">
-                            <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
-                                <div class="widget-chat-wrapper-outer">
-                                    <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMemberWebpage">
-                                        <canvas id="cvMemberWebpage"></canvas>
-
-                                    </div>
-                                    <div>
-                                        <table border="1" width="100%" id="tblReferrals">
-                                            <tr>
-                                                <th style="text-align:center;">
-                                                    Member Base
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Referring Base
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Referrals Generated
-                                                </th>
-                                                <th style="text-align:center;">
-                                                    Referrals Transacted
-                                                </th>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center;"><span id="spnMemberBase">@Model.NoofMember_Total</span></td>
-                                                <td style="text-align:center;"><span id="spnNoofReferee">@Model.NoofReferee</span></td>
-                                                <td style="text-align:center;"><span id="spnNoofReferral">@Model.NoofReferral</span></td>
-                                                <td style="text-align:center;"><span id="spnUniqueReferralTxn">@Model.UniqueReferralTxn</span></td>
-                                            </tr>
-                                            <tr>
-
-                                                <td style="text-align:center;" colspan="2">
-                                                    Referrals Txn Count: <span id="spnTotalReferralTxn">@Model.TotalReferralTxn</span>
-                                                </td>
-                                                <td style="text-align:center;" colspan="2">
-                                                    Business Generated:<span id="spnTotalReferralBusniess"> @Model.TotalReferralBusniess</span>
-                                                </td>
-                                            </tr>
-                                        </table>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerBulkUpload">
+                                            <canvas id="cvBulkUpload"></canvas>
+                                        </div>
+                                        <div>
+                                            <table border="1" width="100%">
+                                                <tr>
+                                                    <th style="text-align:center;">
+                                                        Total Upload
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Unique Transacted
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Transaction Count
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Business Generated
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;"><span id="spnTotalUpload"></span></td>
+                                                    <td style="text-align:center;"><span id="spnUniqueTransacted"></span></td>
+                                                    <td style="text-align:center;"><span id="spnTransactionCount"></span></td>
+                                                    <td style="text-align:center;"><span id="spnBusinessGenerated"></span></td>
+                                                </tr>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -244,19 +448,109 @@
             </div>
         </div>
 
-    </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-6">
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header-tab-animation card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
+                            Digital Loyalty Card
+                        </div>
+                        <ul class="nav">
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showMemberWebpageChart('1');" id="memberWebpageReferrals" class="active nav-link">Referrals</a></li>
+                            <li class="nav-item"><a href="javascript:void(0);" onclick="showMemberWebpageChart('0');" id="memberWebpageProfile" class="nav-link second-tab-toggle">Profile</a></li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tabs-eg-77">
+                                <div class="card mb-3 widget-chart widget-chart2 text-left w-100">
+                                    <div class="widget-chat-wrapper-outer">
+                                        <div class="widget-chart-wrapper widget-chart-wrapper-lg opacity-10 m-0" id="containerMemberWebpage">
+                                            <div id="dvMWPMsessage" style="display:none;margin:20px;padding:20px;font-weight:bold;">Member WebPage - Not Opted. Please connect with the team to start your Profile Update & Referral journey</div>
+                                            <canvas id="cvMemberWebpage"></canvas>
+                                        </div>
+                                        <div id="dvWebpageData">
+                                            <table border="1" width="100%" id="tblReferrals">
+                                                <tr>
+                                                    <th style="text-align:center;">
+                                                        Member Base
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Referring Base
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Referrals Generated
+                                                    </th>
+                                                    <th style="text-align:center;">
+                                                        Referrals Transacted
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align:center;"><span id="spnMemberBase"></span></td>
+                                                    <td style="text-align:center;"><span id="spnNoofReferee"></span></td>
+                                                    <td style="text-align:center;"><span id="spnNoofReferral"></span></td>
+                                                    <td style="text-align:center;"><span id="spnUniqueReferralTxn"></span></td>
+                                                </tr>
+                                                <tr>
+
+                                                    <td style="text-align:center;" colspan="2">
+                                                        Referrals Txn Count: <span id="spnTotalReferralTxn"></span>
+                                                    </td>
+                                                    <td style="text-align:center;" colspan="2">
+                                                        Business Generated:<span id="spnTotalReferralBusniess"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr id="trNoOfProfileUpdate">
+                                                    <td style="text-align:center;" colspan="4">
+                                                        No of Profile Update: <span id="spnNoOfProfileUpdate"></span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+
+
+
+
 </div>
 
 <script>
-
     $(document).ready(function () {
+
         ShowMemberSegmentChart();
         showOutletEnrolmentChart('');
+        showBulkUploadChart();
         showPointSummeryChart('');
         showMemberWebpageChart('1');
+        showRedemptionChart('1');
+        //ShowAllSharedBiz();
         $("#memberSegmentOutletList").on("change", function () {
             ShowMemberSegmentChart();
         });
+        $("#sharedBizOutletList").on("change", function () {
+            ShowAllSharedBiz();
+        });
+        $("#btnFilter").on("click", function () {
+            ShowLoyaltyBizData();
+            ShowMemberSegmentChart();
+            ShowAllSharedBiz();
+            showOutletEnrolmentChart('');
+            showPointSummeryChart('');
+            showMemberWebpageChart('1');
+            showBulkUploadChart();
+            showRedemptionChart('1');
+        });
+
 
     });
     function ToggleKeyPointers() {
@@ -266,38 +560,81 @@
         $("#memberSegmentOutletList").prop('selectedIndex', 0);
         ShowMemberSegmentChart();
     }
+    function addCommaUS(data) {
+        return data.toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        })
+    }
+    function ShowLoyaltyBizData() {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
+        $("#divLoader").show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDashboardDataFiltered", "Home")',
+            data: "{'frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log("IN");
+                console.log(response);
+                console.log(response.TotalBiz);
+
+                $("#spnTotalBiz").text(addComma(response.TotalBiz));
+                $("#spnLoyaltyBiz").text(addComma(response.LoyaltyBiz));
+                if (response.LoyaltyBiz > 0)
+                {
+                    var num = parseFloat(response.LoyaltyBiz) * 100 / parseFloat(response.TotalBiz);
+                    $("#spnLoyaltyPercentage").text(parseFloat(num.toFixed(2))+'%');
+
+                }
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
 
     function ShowMemberSegmentChart() {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         var selectedOutlet = $("#memberSegmentOutletList").val();
         var outletData = [];
         $.ajax({
             type: "POST",
-            url: "Home/GetMemberSegmentResult",
-            data: "{'OutletId': '" + selectedOutlet + "'}",
+            url: '@Url.Action("GetMemberSegmentResult", "Home")',
+            data: "{'OutletId': '" + selectedOutlet + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                //console.log(response);
 
-                if (response != null) {
+                var resp = response[0];
+                if (resp != null) {
+
                     $('#barcanvas').remove(); // this is my <canvas> element
                     $('#canvasContainer').append('<canvas id="barcanvas"><canvas>');
 
                     var barChartData =
                     {
-                        labels: ["Total Base", "Repeat Members", "Never Redeemed", "Recently Enrolled", "Only Once"],
+                        labels: ["Active Base", "Repeat Redeemed", "Repeat Non-Redeemed", "Recently Enrolled", "Only Once","Not Transacted"],
                         datasets: [{
                             label: '',
                             backgroundColor: [
-                                "#f990a7",
-                                "#aad2ed",
-                                "#9966FF",
-                                "#99e5e5",
-                                "#f7bd83",
+                                "#fd7f6f",
+                                "#7eb0d5",
+                                "#b2e061",
+                                "#bd7ebe",
+                                "#ffb55a",
+                                "#ffee65",
                             ],
                             borderWidth: 2,
-                            data: [response[0], response[1], response[2], response[3], response[4]]
+                            data: [resp[0], resp[1], resp[2], resp[3], resp[4], resp[5]]
                         }]
                     };
 
@@ -309,6 +646,11 @@
                             data: barChartData,
                             options:
                             {
+                                plugins: {
+                                    datalabels: {
+                                        display: false
+                                    }
+                                },
                                 scales: {
                                     xAxes: [{
                                         ticks: {
@@ -316,6 +658,7 @@
                                         }
                                     }]
                                 },
+
                                 title:
                                 {
                                     display: true,
@@ -348,7 +691,9 @@
                                             meta.data.forEach(function (bar, index) {
                                                 var data = dataset.data[index];
                                                 ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+
+                                                var res = addComma(data);
+                                                ctx.fillText(res, bar._model.x, bar._model.y - 5);
                                             });
                                         });
                                     }
@@ -356,35 +701,64 @@
                             }
                         });
 
+
+
+                    var resp1 = response[1];
+                    //console.log("aaa - "+resp1);
+                    if (resp1[0] != null && resp1[1] != null) {
+                        $("#spnPeriod").text("PERIOD : " + resp1[0] + " TO " + resp1[1]);
+                    }
+                    else {
+                        $("#spnPeriod").text("");
+                    }
+
                     //--------------------------Member segment Transaction-----------------------------------------
 
                     $.ajax({
                         type: "POST",
                         url: "Home/GetMemberSegmentTxnResult",
-                        data: "{'OutletId': '" + selectedOutlet + "'}",
+                        data: "{'OutletId': '" + selectedOutlet + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         success: function (response) {
                             if (response != null) {
                                 var tableHTML = "<table border=\"1\" cellpadding=\"10\" cellspacing=\"10\" style=\"width:100%;\">";
-                                tableHTML += "<tr style=\"text-align:center; background-color:lightgrey;font-weight: bold;\">";
+                                tableHTML += "<tr style=\"text-align:right; background-color:lightgrey;font-weight: bold;\">";
                                 tableHTML += "<td>Title</td>";
-                                tableHTML += "<td>Unit</td>";
                                 tableHTML += "<td>Total Base</td>";
-                                tableHTML += "<td>Repeat Base</td>";
-                                tableHTML += "<td>Only Once</td>";
-                                tableHTML += "<td>Never Redeem</td>";
+                                tableHTML += "<td>Repeat Redeemed</td>";
+                                tableHTML += "<td>Repeat Non-Redeemed</td>";
                                 tableHTML += "<td>Recently Enrolled</td>";
+                                tableHTML += "<td>Only Once</td>";
                                 tableHTML += "</tr>";
+
+                                //tableHTML += "<tr style=\"text-align:center;\">";
+                                //tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">No of Unique Members</td>";
+                                //tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">Nos</td>";
+                                //tableHTML += "<td>" + addComma(resp[0]) + "</td>";
+                                //tableHTML += "<td>" + addComma(resp[1]) + "</td>";
+                                //tableHTML += "<td>" + addComma(resp[2]) + "</td>";
+                                //tableHTML += "<td>" + addComma(resp[3]) + "</td>";
+                                //tableHTML += "<td>" + addComma(resp[4]) + "</td>";
+                                //tableHTML += "</tr>";
+
+
+
                                 $.map(response, function (item) {
-                                    tableHTML += "<tr style=\"text-align:center;\">";
-                                    tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Title + "</td>";
-                                    tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;\">" + item.Unit + "</td>";
-                                    tableHTML += "<td>" + item.TotalBase + "</td>";
-                                    tableHTML += "<td>" + item.RepeatBase + "</td>";
-                                    tableHTML += "<td>" + item.OnlyOnce + "</td>";
-                                    tableHTML += "<td>" + item.NeverRedeem + "</td>";
-                                    tableHTML += "<td>" + item.RecentlyEnrolled + "</td>";
+                                    tableHTML += "<tr style=\"text-align:right;\">";
+                                    tableHTML += "<td style=\"background-color:lightgrey;font-weight: bold;text-align:left;\">" + item.Title + "</td>";
+                                    if (item.Unit == "Times") {
+                                        tableHTML += "<td>" + item.TotalBase + "</td>";
+                                        tableHTML += "<td>" + item.RepeatBase + "</td>";
+                                    }
+                                    else {
+                                        tableHTML += "<td>" + addComma(item.TotalBase) + "</td>";
+                                        tableHTML += "<td>" + addComma(item.RepeatBase) + "</td>";
+                                    }
+
+                                    tableHTML += "<td>" + addComma(item.NeverRedeem) + "</td>";
+                                    tableHTML += "<td>" + addComma(item.RecentlyEnrolled) + "</td>";
+                                    tableHTML += "<td>" + addComma(item.OnlyOnce) + "</td>";
                                     tableHTML += "</tr>";
                                 });
                                 tableHTML += "</table>";
@@ -393,10 +767,10 @@
                             }
                         },
                         failure: function (response) {
-                            $("#divLoader").hide();
+                            //$("#divLoader").hide();
                         },
                         error: function (response) {
-                            $("#divLoader").hide();
+                            //$("#divLoader").hide();
                         }
 
                     });
@@ -414,18 +788,93 @@
         });
     }
 
-    function showOutletEnrolmentChart(flag) {
+    function ShowAllSharedBiz() {
         $("#divLoader").show();
+        var selectedOutlet = $("#sharedBizOutletList").val();
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
+        var outletData = [];
         $.ajax({
             type: "POST",
-            url: "Home/GetOutletEnrolmentResult",
-            data: "{'monthFlag': '" + flag + "'}",
+            url: '@Url.Action("GetSharedBizResult", "Home")',
+            data: "{'OutletId': '" + selectedOutlet + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                
+                //console.log(response);
+                $('#sharedBizcanvas').remove(); // this is my <canvas> element
+                $('#canvasSharedBizContainer').append('<canvas id="sharedBizcanvas"><canvas>');
                 var names = response[0];
-                var count = names.length;               
+                var first = response[1];
+                var repeat = response[2];
+                var redeem = response[3];
+
+                var ctx = document.getElementById("sharedBizcanvas").getContext("2d");
+                var bizChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        datasets: [
+                            {
+                            label: 'Redeem Txn',
+                            data: [...redeem],
+                            type: 'line',
+                            borderColor: '#F37A43',
+                            //backgroundColor: "#F37A43",
+                            fill: false,
+                            order: 3,
+                            tension: 0.1
+                        },
+
+                        {
+                            label: 'First Time Txn',
+                            data: [...first],
+                            type: 'line',
+                            borderColor: '#FFBD42',
+                            //backgroundColor: "#FFBD42",
+                            fill: false,
+                            order: 1,
+                            tension: 0.1
+                            },
+                            {
+                                label: 'Repeat Txn',
+                                data: [...repeat],
+                                type: 'line',
+                                borderColor: '#3F74C0',
+                                fill: false,
+                                //backgroundColor: "#3F74C0",
+                                order: 2,
+                                tension: 0.1
+                            }],
+                        labels: [...names]
+                    }//,
+                    //options: options
+                });
+
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function showOutletEnrolmentChart(flag) {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetOutletEnrolmentResult", "Home")',
+            data: "{'monthFlag': '" + flag + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                var names = response[0];
+
 
                 var dataList = response[1];
                 if (response != null) {
@@ -433,11 +882,18 @@
                     $('#containerOutlet').append('<canvas id="cvOutlet"><canvas>');
                     var barChartData =
                     {
-                        
+
                         labels: [...names],
                         datasets: [{
+
                             label: '',
                             backgroundColor: [
+                                "#fd7f6f",
+                                "#7eb0d5",
+                                "#b2e061",
+                                "#bd7ebe",
+                                "#ffb55a",
+                                "#ffee65",
                                 "#f990a7",
                                 "#aad2ed",
                                 "#9966FF",
@@ -460,13 +916,29 @@
                             data: barChartData,
                             options:
                             {
+                                plugins: {
+                                    datalabels: {
+                                        display: false
+                                    }
+                                },
                                 scales: {
                                     xAxes: [{
+
                                         ticks: {
                                             beginAtZero: true
                                         }
-                                    }]
+                                    }],
+                                    //yAxes: [{
+                                    //    categoryPercentage: 0.9,
+                                    //   // barThickness: 10,
+                                    //    stacked: true,
+                                    //    ticks: {
+                                    //        beginAtZero: true
+                                    //    },
+                                    //}]
+
                                 },
+
                                 title:
                                 {
                                     display: true,
@@ -495,12 +967,13 @@
                                         ctx.textAlign = 'center';
                                         ctx.textBaseline = 'bottom';
 
+
                                         this.data.datasets.forEach(function (dataset, i) {
                                             var meta = chartInstance.controller.getDatasetMeta(i);
                                             meta.data.forEach(function (bar, index) {
                                                 var data = dataset.data[index];
                                                 ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                                ctx.fillText(addComma(data), bar._model.x, bar._model.y);
                                             });
                                         });
                                     }
@@ -529,11 +1002,13 @@
     }
 
     function showPointSummeryChart(flag) {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: "Home/GetPointsSummaryResult",
-            data: "{'monthFlag': '" + flag + "'}",
+            url: '@Url.Action("GetPointsSummaryResult", "Home")',
+            data: "{'monthFlag': '" + flag + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -546,11 +1021,12 @@
                         datasets: [{
                             label: '',
                             backgroundColor: [
-                                "#f990a7",
-                                "#aad2ed",
-                                "#9966FF",
-                                "#99e5e5",
-                                "#f7bd83",
+                                "#fd7f6f",
+                                "#7eb0d5",
+                                "#b2e061",
+                                "#bd7ebe",
+                                "#ffb55a",
+                                "#ffee65",
                             ],
                             borderWidth: 2,
                             data: [response[0], response[1], response[2], response[3], response[4]]
@@ -564,6 +1040,11 @@
                             data: barChartData,
                             options:
                             {
+                                plugins: {
+                                    datalabels: {
+                                        display: false
+                                    }
+                                },
                                 scales: {
                                     xAxes: [{
                                         ticks: {
@@ -603,7 +1084,7 @@
                                             meta.data.forEach(function (bar, index) {
                                                 var data = dataset.data[index];
                                                 ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-                                                ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                                ctx.fillText(addComma(data), bar._model.x, bar._model.y - 5);
                                             });
                                         });
                                     }
@@ -617,7 +1098,7 @@
                 $("#divLoader").hide();
             },
             error: function (response) {
-                $("#divLoader").hide();
+               $("#divLoader").hide();
             }
         });
 
@@ -631,71 +1112,90 @@
         }
     }
 
-
     function showMemberWebpageChart(flag) {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: "Home/GetMemberWebPageResult",
-            data: "{'profileFlag': '" + flag + "'}",
+             url: '@Url.Action("GetMemberWebPageResult", "Home")',
+            data: "{'profileFlag': '" + flag + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);
+                //console.log(response)
                 if (response != null) {
-                    $('#cvMemberWebpage').remove(); // this is my <canvas> element
-                    $('#containerMemberWebpage').append('<canvas id="cvMemberWebpage"><canvas>');
-                    var options = {
-                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
-                        legend: {
-                            display: true,
-                            position: 'bottom'
+                    if (response[7] == "1") {
+                        $("#dvMWPMsessage").show();
+                        $("#dvWebpageData").hide();
+                        $("#cvMemberWebpage").hide();
+                    }
+                    else {
+                        $("#dvMWPMsessage").hide();
+                        $("#dvWebpageData").show();
+                        $("#cvMemberWebpage").show();
+                        $('#cvMemberWebpage').remove(); // this is my <canvas> element
+                        $('#containerMemberWebpage').append('<canvas id="cvMemberWebpage"><canvas>');
+                        var options = {
+                            plugins: {
+                                datalabels: {
+                                    display: false
+                                }
+                            },
+                            rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                            legend: {
+                                display: true,
+                                position: 'bottom'
+                            }
+                        }
+                        var label1 = 'Total Member Base';
+                        var label2 = 'No of Profile Update';
+                        if (flag == 1) {
+                            label2 = 'Referring Base';
+                        }
+                        var data1 = response[0];
+                        var data2 = response[6];
+                        if (flag == 1) {
+                            //console.log("Profile");
+                            data2 = response[1];
+                        }
+                        var data = {
+                            datasets: [{
+                                data: [data1, data2],
+                                backgroundColor: ["#fd7f6f", "#b2e061"]
+                            }],
+
+                            // These labels appear in the legend and in the tooltips when hovering different arcs
+                            labels: [
+                                label1,
+                                label2
+                            ],
+
+                        };
+
+                        var ctx4 = document.getElementById("cvMemberWebpage").getContext("2d");
+                        window.myBar = new Chart(ctx4, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+
+                        });
+                        if (flag == 1) {
+                            $("#spnMemberBase").text(addComma(response[0]));
+                            $("#spnNoofReferee").text(addComma(response[1]));
+                            $("#spnNoofReferral").text(addComma(response[2]));
+                            $("#spnUniqueReferralTxn").text(addComma(response[3]));
+                            $("#spnTotalReferralTxn").text(addComma(response[4]));
+                            $("#spnTotalReferralBusniess").text(addComma(response[5]));
+                            $("#trNoOfProfileUpdate").hide()
+                        }
+                        else {
+                            $("#trNoOfProfileUpdate").show();
+                            $("#spnNoOfProfileUpdate").text(addComma(response[6]));
                         }
                     }
-                    var label1 = 'Total Member Base';
-                    var label2 = 'Referring Base';
-                    if (flag == 1) {
-                        label2 = 'No of Profile Update';
-                    }
-                    var data1 = response[0];
-                    var data2 = response[6];
-                    if (flag == 1) {
-					console.log("Profile");
-                        data2 = response[1];
-                    }
-                    var data = {
-                        datasets: [{
-                            data: [data1, data2],
-                            backgroundColor: ["#f990a7", "#aad2ed"]
-                        }],
-
-                        // These labels appear in the legend and in the tooltips when hovering different arcs
-                        labels: [
-                            label1,
-                            label2
-                        ],
-
-                    };
-
-                    var ctx4 = document.getElementById("cvMemberWebpage").getContext("2d");
-                    window.myBar = new Chart(ctx4, {
-                        type: 'pie',
-                        data: data,
-                        options: options
-
-                    });
-                    if (flag == 1) {
-                        $("#spnMemberBase").text(response[0]);
-                        $("#spnNoofReferee").text(response[1]);
-                        $("#spnNoofReferral").text(response[2]);
-                        $("#spnUniqueReferralTxn").text(response[3]);
-                        $("#spnTotalReferralTxn").text(response[4]);
-                        $("#spnTotalReferralBusniess").text(response[5]);
-                    }
-
-
-                    $("#divLoader").hide();
                 }
+                $("#divLoader").hide();
             },
             failure: function (response) {
                 $("#divLoader").hide();
@@ -717,4 +1217,286 @@
         }
     }
 
+    function showBulkUploadChart() {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetBulkUploadResult", "Home")',
+            data: "{'frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var count = 0;
+                if (response != null) {
+                    $('#cvBulkUpload').remove(); // this is my <canvas> element
+                    $('#containerBulkUpload').append('<canvas id="cvBulkUpload"><canvas>');
+
+                    var options = {
+                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                        legend: {
+                            display: false,
+                            position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        hover: { mode: null },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    if (value != null) {
+                                        let sum = 0;
+                                        let dataArr = ctx.chart.data.datasets[0].data;
+                                        dataArr.map(data => {
+                                            sum += data;
+                                        });
+                                        count++;
+                                        let percentage = value.toFixed(2) + "%";
+                                        if (count == 1) {
+                                            return "";
+                                        }
+                                        if (count == 2) {
+                                            count = 0;
+                                            return percentage;
+                                        }
+                                    }
+                                },
+                                color: '#000',
+                            }
+                        }
+                    }
+                    var label1 = '';
+                    var label2 = '';
+                    var data1 = 100 - parseFloat(response[6]);
+                    var data2 = response[6];
+                    var data = {
+                        datasets: [{
+                            data: [data1, data2],
+                            backgroundColor: ["#fd7f6f", "#b2e061"]
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            label1,
+                            label2
+                        ],
+                    };
+
+                    var ctx4 = document.getElementById("cvBulkUpload").getContext("2d");
+                        window.myBar = new Chart(ctx4, {
+                            type: 'pie',
+                            data: data,
+                            options: options
+                        });
+                        if (@userDetails.GroupId== "1341") {
+                            $("#spnTotalUpload").text(addCommaUS(response[0]));
+                            $("#spnUniqueTransacted").text(addCommaUS(response[1]));
+                            $("#spnTransactionCount").text(addCommaUS(response[2]));
+                            $("#spnBusinessGenerated").text(addCommaUS(response[3]));
+                        }
+                        else {
+                            $("#spnTotalUpload").text(addComma(response[0]));
+                            $("#spnUniqueTransacted").text(addComma(response[1]));
+                            $("#spnTransactionCount").text(addComma(response[2]));
+                            $("#spnBusinessGenerated").text(addComma(response[3]));
+                        }
+
+                    }
+
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function showRedemptionChart(type) {
+        var frmDate = $("#FromDate").val();
+        var toDate = $("#ToDate").val();
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetRedemptionResult", "Home")',
+            data: "{'type': '" + type + "','frmDate': '" + frmDate + "','toDate': '" + toDate + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    //console.log(response[0]);
+                    $('#cvRedemption').remove(); // this is my <canvas> element
+                    $('#containerRedemption').append('<canvas id="cvRedemption"><canvas>');
+
+                    $('#cvRedemptionMember').remove(); // this is my <canvas> element
+                    $('#containerRedemptionMember').append('<canvas id="cvRedemptionMember"><canvas>');
+
+                    var count = 0;
+                    var options = {
+                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                        legend: {
+                            display: false,
+                            position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        hover: { mode: null },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    if (value != null) {
+                                        count++;
+                                        let percentage = value.toFixed(2) + "%";
+                                        if (count == 1) {
+                                            return "";
+                                        }
+                                        if (count == 2) {
+                                            count = 0;
+                                            return percentage;
+                                        }
+                                    }
+                                },
+                                color: '#000',
+                            }
+                        }
+                    }
+                    var label1 = '';
+                    var label2 = '';
+                    var data1 = response[6];
+                    var data2 = response[7];
+
+                    var data = {
+                        datasets: [{
+                            data: [data1, data2],
+                            backgroundColor: ["#fd7f6f", "#b2e061"]
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            label1,
+                            label2
+                        ],
+                    };
+                    var ctx4 = document.getElementById("cvRedemption").getContext("2d");
+                    window.myBar = new Chart(ctx4, {
+                        type: 'pie',
+                        data: data,
+                        options: options
+                    });
+
+                    var count1 = 0;
+                    var options1 = {
+                        rotation: (-0.5 * Math.PI) - (-90 / 180 * Math.PI),
+                        legend: {
+                            display: false,
+                            position: 'bottom'
+                        },
+                        tooltips: {
+                            enabled: false
+                        },
+                        hover: { mode: null },
+                        plugins: {
+                            datalabels: {
+                                formatter: (value, ctx) => {
+                                    if (value != null) {
+                                        count1++;
+                                        let percentage = value.toFixed(2) + "%";
+                                        if (count1 == 1) {
+                                            return "";
+                                        }
+                                        if (count1 == 2) {
+                                            count1 = 0;
+                                            return percentage;
+                                        }
+                                    }
+                                },
+                                color: '#000',
+                            }
+                        }
+                    }
+                    var label3 = '';
+                    var label4 = '';
+                    var data3 = response[8];
+                    var data4 = response[9];
+
+                    var data1 = {
+                        datasets: [{
+                            data: [data3, data4],
+                            backgroundColor: ["#fd7f6f", "#b2e061"]
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            label3,
+                            label4
+                        ],
+                    };
+
+                    var ctx5 = document.getElementById("cvRedemptionMember").getContext("2d");
+                    window.myBar = new Chart(ctx5, {
+                        type: 'pie',
+                        data: data1,
+                        options: options1
+                    });
+                    if (response[0] != null) {
+                        $("#spnRedeemedMembers").text(addComma(response[0]));
+                    }
+                    else {
+                        $("#spnRedeemedMembers").text("-");
+                    }
+                    if (response[1] != null) {
+                        $("#spnRedemptionTxnCount").text(addComma(response[1]));
+                    }
+                    else {
+                        $("#spnRedemptionTxnCount").text("-");
+                    }
+                    if (response[2] != null) {
+                        $("#spnRedeemedPoints").text(addComma(response[2]));
+                    }
+                    else {
+                        $("#spnRedeemedPoints").text("-");
+                    }
+                    if (response[3] != null) {
+                        $("#spnPointsValue").text(addComma(response[3]));
+                    }
+                    else {
+                        $("#spnPointsValue").text("-");
+                    }
+                    if (response[4] != null) {
+                        $("#spnRedemBusinessGenerated").text(addComma(response[4]));
+                    }
+                    else {
+                        $("#spnRedemBusinessGenerated").text("-");
+                    }
+                    if (response[5] != null) {
+                        $("#spnRedeemToInvoice").text(addComma(response[5]));
+                    }
+                    else {
+                        $("#spnRedeemToInvoice").text("-");
+                    }
+                }
+                if (type == 1) {
+                    $("#pointsBase").addClass("active");
+                    $("#pointsBonus").removeClass("active");
+                }
+                else {
+                    $("#pointsBase").removeClass("active");
+                    $("#pointsBonus").addClass("active");
+                }
+
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                $("#divLoader").hide();
+            }
+        });
+    }
 </script>

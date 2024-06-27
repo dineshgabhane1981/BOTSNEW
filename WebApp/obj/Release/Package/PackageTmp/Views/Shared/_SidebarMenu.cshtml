@@ -1,8 +1,17 @@
 ﻿@using BOTS_BL.Models;
+@using WebApp.App_Start;
 @{
+    CommonFunctions common = new CommonFunctions();
+
     var userDetails = (CustomerLoginDetail)Session["UserSession"];
-    var GroupId = userDetails.GroupId;
+    string GroupId = string.Empty;
+    if (userDetails.GroupId != null)
+    {
+        GroupId = common.EncryptString(userDetails.GroupId);
+    }
     var roleId = userDetails.LoginType;
+    var level = userDetails.LevelIndicator;
+    var gId = userDetails.GroupId;
 }
 <div class="app-sidebar sidebar-shadow">
     <div class="app-header__logo">
@@ -38,16 +47,250 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                @if (GroupId == null || roleId=="1")
+                @if ((string.IsNullOrEmpty(GroupId) && (roleId != null || roleId == "1")) && gId != "1051" && gId != "1000" && gId != "1001")
                 {
                     <li>
-                        <a href="@Url.Action("Index", "CustomerManagement")" class="@Html.IsSelected(controller: "CustomerManagement", action: "Index,SelectProduct,AddNewCustomer")">
-                            <i class="metismenu-icon pe-7s-rocket"></i>
+                        <a href="#">
+                            <i class="metismenu-icon pe-7s-car"></i>
                             Customer Management
+                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
+                        <ul>
+                            <li class="@Html.IsSelected(controller: "CustomerManagement", action: "Index")">
+                                <a href="@Url.Action("Index", "CustomerManagement")" class="@Html.IsSelected(controller: "CustomerManagement", action: "Index,SelectProduct,AddNewCustomer")">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>
+                                    Customers
+                                </a>
+                            </li>
+                            @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
+                            {
+                                <li>
+                                    <a href="#">
+                                        <i class="metismenu-icon pe-7s-car"></i>
+                                        Customer Masters
+                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                    </a>
+                                    <ul>
+                                        <li class="@Html.IsSelected(controller: "CustomerMaster", action: "CategoryMaster")">
+                                            <a class="@Html.IsSelected(controller: "CustomerMaster", action: "CategoryMaster")" href="@Url.Action("CategoryMaster", "CustomerMaster")">
+                                                <i class="metismenu-icon"></i>
+                                                Category
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CustomerMaster", action: "SourceMaster")">
+                                            <a class="@Html.IsSelected(controller: "CustomerMaster", action: "SourceMaster")" href="@Url.Action("SourceMaster", "CustomerMaster")">
+                                                <i class="metismenu-icon"></i>
+                                                Source
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CustomerMaster", action: "CsMaster")">
+                                            <a class="@Html.IsSelected(controller: "CustomerMaster", action: "CsMaster")" href="@Url.Action("CsMaster", "CustomerMaster")">
+                                                <i class="metismenu-icon"></i>
+                                                Customer Success
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CustomerMaster", action: "CityMaster")">
+                                            <a class="@Html.IsSelected(controller: "CustomerMaster", action: "CityMaster")" href="@Url.Action("CityMaster", "CustomerMaster")">
+                                                <i class="metismenu-icon"></i>
+                                                City
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CustomerMaster", action: "BillingPartnerMaster")">
+                                            <a class="@Html.IsSelected(controller: "CustomerMaster", action: "BillingPartnerMaster")" href="@Url.Action("BillingPartnerMaster", "CustomerMaster")">
+                                                <i class="metismenu-icon"></i>
+                                                Billing Partner
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CustomerMaster", action: "BillingPartnerProductMaster")">
+                                            <a class="@Html.IsSelected(controller: "CustomerMaster", action: "BillingPartnerProductMaster")" href="@Url.Action("BillingPartnerProductMaster", "CustomerMaster")">
+                                                <i class="metismenu-icon"></i>
+                                                Billing Partner Product
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CustomerMaster", action: "SourceType")">
+                                            <a class="@Html.IsSelected(controller: "CustomerMaster", action: "SourceType")" href="@Url.Action("SourceType", "CustomerMaster")">
+                                                <i class="metismenu-icon"></i>
+                                                Source Type
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CustomerMaster", action: "ChannelPartnerMaster")">
+                                            <a class="@Html.IsSelected(controller: "CustomerMaster", action: "ChannelPartnerMaster")" href="@Url.Action("ChannelPartnerMaster", "CustomerMaster")">
+                                                <i class="metismenu-icon"></i>
+                                                Channel Partner
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </li>
+                            }
+
+                            <li class="@Html.IsSelected(controller: "Discussion", action: "CommonDiscussion")">
+                                <a href="@Url.Action("CommonDiscussion", "Discussion")" class="@Html.IsSelected(controller: "Discussion", action: "CommonDiscussion")">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>
+                                    Common Discussion
+                                </a>
+                            </li>
+
+
+                            <li>
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-car"></i>
+                                    Single Page
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
+                                    {
+                                        @*<li class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")">
+                                    <a class="@Html.IsSelected(controller: "SinglePage", action: "NonTransacting")" href="@Url.Action("NonTransacting", "SinglePage")">
+                                        <i class="metismenu-icon"></i>
+                                        Non Transacting
+                                    </a>
+                                </li>*@
+                                    }
+                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "Communication")">
+                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "Communication")" href="@Url.Action("Communication", "SinglePage")">
+                                            <i class="metismenu-icon"></i>
+                                            Communication
+                                        </a>
+                                    </li>
+                                    @if (roleId == "1" || roleId == "5" || roleId == "6" || roleId == "9")
+                                    {
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "KeyIndicator")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "KeyIndicator")" href="@Url.Action("KeyIndicator", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Key Indicator
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "CityWise")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "CityWise")" href="@Url.Action("CityWise", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                City Wise
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "Discussion")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "Discussion")" href="@Url.Action("Discussion", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Discussion Report
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "GroupWise")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "GroupWise")" href="@Url.Action("GroupWise", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Group Wise
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "GetAllNonTransactingData")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "GetAllNonTransactingData")" href="@Url.Action("GetAllNonTransactingData", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Non Transacted
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "SinglePage", action: "GetAllNonRedeemedData")">
+                                            <a class="@Html.IsSelected(controller: "SinglePage", action: "GetAllNonRedeemedData")" href="@Url.Action("GetAllNonRedeemedData", "SinglePage")">
+                                                <i class="metismenu-icon"></i>
+                                                Non Redeemed
+                                            </a>
+                                        </li>
+                                        if (roleId == "1" || roleId == "6")
+                                        {
+                                            <li class="@Html.IsSelected(controller: "SinglePage", action: "DiscussionCountReport")">
+                                                <a class="@Html.IsSelected(controller: "SinglePage", action: "DiscussionCountReport")" href="@Url.Action("DiscussionCountReport", "SinglePage")">
+                                                    <i class="metismenu-icon"></i>
+                                                    Discussion Count
+                                                </a>
+                                            </li>
+                                        }
+
+                                    }
+                                    <li class="@Html.IsSelected(controller: "SinglePage", action: "RenewalData")">
+                                        <a class="@Html.IsSelected(controller: "SinglePage", action: "RenewalData")" href="@Url.Action("RenewalData", "SinglePage")">
+                                            <i class="metismenu-icon"></i>
+                                            Customer Payments
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            @if (roleId == "1" || roleId == "6")
+                            {
+                                <li class="@Html.IsSelected(controller: "Feedback", action: "Index")">
+                                    <a href="@Url.Action("Index", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Index")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Feedback Configuration
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Events", action: "EventCustomers")">
+                                    <a href="@Url.Action("EventCustomers", "Events")" class="@Html.IsSelected(controller: "Events", action: "EventCustomers")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Event Configuration
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="#">
+                                        <i class="metismenu-icon pe-7s-car"></i>
+                                        IT CS
+                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                    </a>
+                                    <ul>
+                                        <li class="@Html.IsSelected(controller: "CommonDBConfig", action: "ChangeCSName")">
+                                            <a class="@Html.IsSelected(controller: "CommonDBConfig", action: "ChangeCSName")" href="@Url.Action("ChangeCSName", "CommonDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                CS Name
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CommonDBConfig", action: "EnableProgramme")">
+                                            <a class="@Html.IsSelected(controller: "CommonDBConfig", action: "EnableProgramme")" href="@Url.Action("EnableProgramme", "CommonDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Program Status
+                                            </a>
+                                        </li>
+                                        <li class="@Html.IsSelected(controller: "CommonDBConfig", action: "UpdateRenewal")">
+                                            <a class="@Html.IsSelected(controller: "CommonDBConfig", action: "UpdateRenewal")" href="@Url.Action("UpdateRenewal", "CommonDBConfig")">
+                                                <i class="metismenu-icon"></i>
+                                                Update Renewal
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (roleId == "1" || roleId == "6" || roleId == "7")
+                            {
+                                <li class="@Html.IsSelected(controller: "BOPromoCampaign", action: "Index")">
+                                    <a href="@Url.Action("Index", "BOPromoCampaign")" class="@Html.IsSelected(controller: "BOPromoCampaign", action: "Index")">
+                                        <i class="metismenu-icon pe-7s-car"></i>
+                                        Knowledge Series
+
+                                    </a>
+                                </li>
+                            }
+                            @if (roleId == "1" || roleId == "6" || roleId == "7" || roleId == "9")
+                            {
+                                <li class="@Html.IsSelected(controller: "Bitly", action: "Index,UploadData")">
+                                    <a href="@Url.Action("Index", "Bitly")" class="@Html.IsSelected(controller: "Bitly", action: "Index,UploadData")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Bitly Link
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="@Html.IsSelected(controller: "DocumentLibrary", action: "Index")">
+                                <a href="@Url.Action("Index", "DocumentLibrary")" class="@Html.IsSelected(controller: "DocumentLibrary", action: "Index")">
+                                    <i class="metismenu-icon pe-7s-rocket"></i>
+                                    Document Library
+                                </a>
+                            </li>
+
+                        </ul>
                     </li>
+
+
+
+
                 }
-                @if (GroupId != null)
+
+                @if (!string.IsNullOrEmpty(GroupId) && level == "02")
                 {
                     <li>
                         <a href="@Url.Action("Index", "Home")" class="@Html.IsSelected(controller: "Home", action: "Index")">
@@ -55,7 +298,6 @@
                             Executive Summary
                         </a>
                     </li>
-
                     <li>
                         <a href="#">
                             <i class="metismenu-icon pe-7s-diamond"></i>
@@ -63,39 +305,21 @@
                             <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
                         <ul>
-                            <li class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "BizObj")">
-                                <a class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "BizObj")" href="@Url.Action("BizObj", "LoyaltyKPIs")">
-                                    <i class="metismenu-icon"></i>
-                                    Biz Obj
-                                </a>
-                            </li>
                             <li class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "LoyaltyPerformance")">
                                 <a class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "LoyaltyPerformance")" href="@Url.Action("LoyaltyPerformance", "LoyaltyKPIs")">
                                     <i class="metismenu-icon">
                                     </i>Loyalty Performance
                                 </a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "LoyaltySegments")">
-                                <a class="@Html.IsSelected(controller: "LoyaltyKPIs", action: "LoyaltySegments")" href="@Url.Action("LoyaltySegments", "LoyaltyKPIs")">
-                                    <i class="metismenu-icon">
-                                    </i>Loyalty Segments
-                                </a>
-                            </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#">
-                            <i class="metismenu-icon pe-7s-car"></i>
+                            <i class="metismenu-icon pe-7s-graph2"></i>
                             Reports
                             <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
                         <ul>
-                            @*<li class="@Html.IsSelected(controller: "Reports", action: "MemberSearch")">
-                        <a class="@Html.IsSelected(controller: "Reports", action: "MemberSearch")" href="@Url.Action("MemberSearch", "Reports")">
-                            <i class="metismenu-icon"></i>
-                            Member Search
-                        </a>
-                    </li>*@
                             <li class="@Html.IsSelected(controller: "Reports", action: "MemberList")">
                                 <a class="@Html.IsSelected(controller: "Reports", action: "MemberList")" href="@Url.Action("MemberList", "Reports")">
                                     <i class="metismenu-icon"></i>
@@ -132,13 +356,50 @@
                                     Create Own Segment
                                 </a>
                             </li>
-
-
+                            <li class="@Html.IsSelected(controller: "Reports", action: "SmartSlicer")">
+                                <a class="@Html.IsSelected(controller: "Reports", action: "SmartSlicer")" href="@Url.Action("SmartSlicer", "Reports")">
+                                    <i class="metismenu-icon"></i>
+                                    Smart Slicer
+                                </a>
+                            </li>
+                            @*<li class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")">
+                        <a class="@Html.IsSelected(controller: "Reports", action: "ProfitableCustomer")" href="@Url.Action("ProfitableCustomer", "Reports")">
+                            <i class="metismenu-icon"></i>
+                            Profitable Customer
+                        </a>
+                    </li>*@
+                            <li class="@Html.IsSelected(controller: "DLCReporting", action: "Index")">
+                                <a class="@Html.IsSelected(controller: "DLCReporting", action: "Index")" href="@Url.Action("Index", "DLCReporting")">
+                                    <i class="metismenu-icon"></i>
+                                    DLC Reporting
+                                </a>
+                            </li>
+                            <li class="@Html.IsSelected(controller: "DLCReporting", action: "DLCNewReg")">
+                                <a class="@Html.IsSelected(controller: "DLCReporting", action: "DLCNewReg")" href="@Url.Action("DLCNewReg", "DLCReporting")">
+                                    <i class="metismenu-icon"></i>
+                                    DLC New Registration
+                                </a>
+                            </li>
+                            @if (gId == "1341")
+                            {
+                                <li class="@Html.IsSelected(controller: "Reports", action: "SuperSaverReport")">
+                                    <a class="@Html.IsSelected(controller: "Reports", action: "SuperSaverReport")" href="@Url.Action("SuperSaverReport", "Reports")">
+                                        <i class="metismenu-icon"></i>
+                                        SS Vs Non-SS
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Reports", action: "VelocityReport")">
+                                    <a class="@Html.IsSelected(controller: "Reports", action: "VelocityReport")" href="@Url.Action("VelocityReport", "Reports")">
+                                        <i class="metismenu-icon"></i>
+                                        Velocity Report
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </li>
                     <li>
                         <a href="#">
-                            <i class="metismenu-icon pe-7s-display2"></i>
+                            <i class="metismenu-icon pe-7s-graph1"></i>
                             Key Indicators
                             <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
@@ -161,18 +422,27 @@
                                     Non-Redeeming
                                 </a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberWebPage")">
-                                <a class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberWebPage")" href="@Url.Action("MemberWebPage", "KeyIndicators")">
+                            <li class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberPage")">
+                                <a class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberPage")" href="@Url.Action("MemberPage", "KeyIndicators")">
                                     <i class="metismenu-icon"></i>
-                                    Member WebPage
+                                    Digital Loyalty Card
                                 </a>
                             </li>
+                            @* @if (roleId != null)
+                    {
+                        <li class="@Html.IsSelected(controller: "KeyIndicators", action: "DLCCreation")">
+                            <a class="@Html.IsSelected(controller: "KeyIndicators", action: "DLCCreation")" href="@Url.Action("DLCCreation", "KeyIndicators")">
+                                <i class="metismenu-icon"></i>
+                                DLC Creation
+                            </a>
+                        </li>
+                    }*@
                         </ul>
                     </li>
 
                     <li>
                         <a href="#">
-                            <i class="metismenu-icon pe-7s-display2"></i>
+                            <i class="metismenu-icon pe-7s-map-2"></i>
                             Heat Maps
                             <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
@@ -183,80 +453,358 @@
                                     Daywise/Hourwise
                                 </a>
                             </li>
-                            <li class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")">
-                                <a class="@Html.IsSelected(controller: "HeatMaps", action: "SMSConversion")" href="@Url.Action("SMSConversion", "HeatMaps")">
-                                    <i class="metismenu-icon"></i>
-                                    SMS Conversion
-                                </a>
-                            </li>
                         </ul>
                     </li>
+
                     <li>
                         <a href="#">
-                            <i class="metismenu-icon pe-7s-display2"></i>
+                            <i class="metismenu-icon pe-7s-speaker"></i>
                             Campaigns
                             <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                         </a>
                         <ul>
-                            <li class="@Html.IsSelected(controller: "Campaigns", action: "Campaign")">
-                                <a class="@Html.IsSelected(controller: "Campaigns", action: "Campaign")" href="@Url.Action("Campaign", "Campaigns")">
+                            <li class="@Html.IsSelected(controller: "Campaigns", action: "CampMgmtNew,NewCampaign")">
+                                <a class="@Html.IsSelected(controller: "Campaigns", action: "CampMgmtNew,NewCampaign")" href="@Url.Action("CampMgmtNew", "Campaigns")">
                                     <i class="metismenu-icon"></i>
-                                    Campaign
+                                    Campaign Management
                                 </a>
                             </li>
-
+                            <li class="@Html.IsSelected(controller: "Campaigns", action: "CampDLTList")">
+                                <a class="@Html.IsSelected(controller: "Campaigns", action: "CampDLTList")" href="@Url.Action("CampDLTList", "Campaigns")">
+                                    <i class="metismenu-icon"></i>
+                                    Campaign DLT Management
+                                </a>
+                            </li>
+                            @*<li class="@Html.IsSelected(controller: "Campaigns", action: "Campaign")">
+                        <a class="@Html.IsSelected(controller: "Campaigns", action: "Campaign")" href="@Url.Action("Campaign", "Campaigns")">
+                            <i class="metismenu-icon"></i>
+                            Campaign Reporting
+                        </a>
+                    </li>*@
+                            <li class="@Html.IsSelected(controller: "Campaigns", action: "CampaignReport")">
+                                <a class="@Html.IsSelected(controller: "Campaigns", action: "CampaignReport")" href="@Url.Action("CampaignReport", "Campaigns")">
+                                    <i class="metismenu-icon"></i>
+                                    Campaign Reporting New
+                                </a>
+                            </li>
                         </ul>
                     </li>
+                    if (gId != "1341")
+                    {
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-graph3"></i>
+                                Other Reports
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+                            <ul>
+                                <li class="@Html.IsSelected(controller: "OtherReports", action: "Productwise")">
+                                    <a class="@Html.IsSelected(controller: "OtherReports", action: "Productwise")" href="@Url.Action("Productwise", "OtherReports")">
+                                        <i class="metismenu-icon"></i>
+                                        Product-wise
+                                    </a>
+                                </li>
+                                @*<li class="@Html.IsSelected(controller: "OtherReports", action: "Manufacturer")">
+                            <a class="@Html.IsSelected(controller: "OtherReports", action: "Manufacturer")" href="@Url.Action("Manufacturer", "OtherReports")">
+                                <i class="metismenu-icon"></i>
+                                Manufacturer
+                            </a>
+                        </li>*@
+                                <li class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Index")">
+                                    <a href="@Url.Action("Index", "DashBoardCustomerLogin")" class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Index")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Dashboard Login
+                                    </a>
+                                </li>
+                                @if (gId != "1051" && gId != "1007")
+                                {
+                                    <li class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Security")">
+                                        <a href="@Url.Action("Security", "DashBoardCustomerLogin")" class="@Html.IsSelected(controller: "DashBoardCustomerLogin", action: "Security")">
+                                            <i class="metismenu-icon pe-7s-rocket"></i>
+                                            Security
+                                        </a>
+                                    </li>
+                                }
+                                <li class="@Html.IsSelected(controller: "Telecaller", action: "Telecaller")">
+                                    <a href="@Url.Action("Telecaller", "Telecaller")" class="@Html.IsSelected(controller: "Telecaller", action: "Telecaller")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Telecaller Report
+                                    </a>
+                                </li>
+                                @*<li class="@Html.IsSelected(controller: "OtherReports", action: "ReportsDownload")">
+                            <a class="@Html.IsSelected(controller: "OtherReports", action: "ReportsDownload")" href="@Url.Action("ReportsDownload", "OtherReports")">
+                                <i class="metismenu-icon"></i>
+                                Reports Download
+                            </a>
+                        </li>*@
+                                @if (gId == "1172")
+                                {
+                                    <li class="@Html.IsSelected(controller: "OtherReports", action: "FranchiseeEnquiryReport")">
+                                        <a class="@Html.IsSelected(controller: "OtherReports", action: "FranchiseeEnquiryReport")" href="@Url.Action("FranchiseeEnquiryReport", "OtherReports")">
+                                            <i class="metismenu-icon"></i>
+                                            Franchisee Enquiry
+                                        </a>
+                                    </li>
+                                }
+
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-settings"></i>
+                                DLC Configuration
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+                            <ul>
+                                <li class="@Html.IsSelected(controller: "DLCConfig", action: "DashboardConfig")">
+                                    <a class="@Html.IsSelected(controller: "DLCConfig", action: "DashboardConfig")" href="@Url.Action("DashboardConfig", "DLCConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Dashboard
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "DLCConfig", action: "ProfileConfig")">
+                                    <a class="@Html.IsSelected(controller: "DLCConfig", action: "ProfileConfig")" href="@Url.Action("ProfileConfig", "DLCConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Profile
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "DLCConfig", action: "GenerateDLCLink")">
+                                    <a class="@Html.IsSelected(controller: "DLCConfig", action: "GenerateDLCLink")" href="@Url.Action("GenerateDLCLink", "DLCConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        DLC Links
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    }
+                    if (userDetails.IsFeedback)
+                    {
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-car"></i>
+                                Feedback Module
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+
+                            <ul>
+                                @if (userDetails.GroupId != "1013")
+                                {
+                                    <li class="@Html.IsSelected(controller: "Feedback", action: "Dashboard,CreateFeedback")">
+                                        <a href="@Url.Action("Dashboard", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Dashboard,CreateFeedback")">
+                                            <i class="metismenu-icon pe-7s-rocket"></i>
+                                            Dashboard
+                                        </a>
+                                    </li>
+                                }
+                                <li class="@Html.IsSelected(controller: "Feedback", action: "Report")">
+                                    <a href="@Url.Action("Report", "Feedback")" class="@Html.IsSelected(controller: "Feedback", action: "Report")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Report
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    }
+                    if (userDetails.IsEvent)
+                    {
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-date"></i>
+                                Event Module
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+
+                            <ul>
+
+                                <li class="@Html.IsSelected(controller: "Events", action: "Index,CreateEvent")">
+                                    <a href="@Url.Action("Index", "Events")" class="@Html.IsSelected(controller: "Events", action: "Index,CreateEvent")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Events
+                                    </a>
+                                </li>
+
+                                <li class="@Html.IsSelected(controller: "Events", action: "EventReport")">
+                                    <a href="@Url.Action("EventReport", "Events")" class="@Html.IsSelected(controller: "Events", action: "EventReport")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Report
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    }
+                    if (userDetails.IsCoupon)
+                    {
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-date"></i>
+                                Coupon Module
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+                            <ul>
+                                <li class="@Html.IsSelected(controller: "Coupon", action: "Index")">
+                                    <a href="@Url.Action("Index", "Coupon")" class="@Html.IsSelected(controller: "Coupon", action: "Index")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Bulk Upload
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Coupon", action: "Configure")">
+                                    <a href="@Url.Action("Configure", "Coupon")" class="@Html.IsSelected(controller: "Coupon", action: "Configure")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Configure Coupon
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Coupon", action: "GenericCoupon")">
+                                    <a href="@Url.Action("GenericCoupon", "Coupon")" class="@Html.IsSelected(controller: "Coupon", action: "GenericCoupon")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Generic Coupon
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "Coupon", action: "CouponReport")">
+                                    <a href="@Url.Action("CouponReport", "Coupon")" class="@Html.IsSelected(controller: "Coupon", action: "CouponReport")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        Report
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                    }
+                    if (gId != "1341")
+                    {
+                        if (roleId != "2" && roleId != "3" && roleId != "4" && gId != "1051" && gId != "1000" && gId != "1001")
+                        {
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-car"></i>
+                                IT CS
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+                            <ul>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeScript")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeScript")" href="@Url.Action("ChangeScript", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Change Script
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableSMS")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableSMS")" href="@Url.Action("DisableSMS", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Block Promo/Txn Messages
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")" href="@Url.Action("DisableTransactions", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Block Loyalty
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")" href="@Url.Action("ChangeEarnRule", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Points Rule
+                                    </a>
+                                </li>
+                                @*<li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")">
+            <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")" href="@Url.Action("ChangeBurnRule", "IndividualDBConfig")">
+                <i class="metismenu-icon"></i>
+                Burn Rule
+            </a>
+        </li>*@
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")" href="@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Extend Point Expiry
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "UploadCelebrationData")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "UploadCelebrationData")" href="@Url.Action("UploadCelebrationData", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Celebration Data
+                                    </a>
+                                </li>
+                                @*<li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeRedeemptionOTP")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeRedeemptionOTP")" href="@Url.Action("ChangeRedeemptionOTP", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Redeemption OTP
+                                    </a>
+                                </li>*@
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "SlabWiseReport")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "SlabWiseReport")" href="@Url.Action("SlabWiseReport", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Slab Wise
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")" href="@Url.Action("ChangeDemographicDetails", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Outlet Owner Details
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")" href="@Url.Action("ChangeOutletDetails", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Add New Outlet
+                                    </a>
+                                </li>
+                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "GenarateQrCode")">
+                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "GenarateQrCode")" href="@Url.Action("GenarateQrCode", "IndividualDBConfig")">
+                                        <i class="metismenu-icon"></i>
+                                        Generate QRCode
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </li>
+
+                        }
+                    }
+                }
+
+                @if (!string.IsNullOrEmpty(GroupId) && level == "04")
+                {
                     <li>
-                        <a href="#">
-                            <i class="metismenu-icon pe-7s-display2"></i>
-                            Other Reports
-                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        <a href="@Url.Action("Index", "Home")" class="@Html.IsSelected(controller: "Home", action: "Index")">
+                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            Executive Summary
                         </a>
-                        <ul>
-                            <li class="@Html.IsSelected(controller: "OtherReports", action: "Productwise")">
-                                <a class="@Html.IsSelected(controller: "OtherReports", action: "Productwise")" href="@Url.Action("Productwise", "OtherReports")">
-                                    <i class="metismenu-icon"></i>
-                                    Product-wise
-                                </a>
-                            </li>
-                            <li class="@Html.IsSelected(controller: "OtherReports", action: "Manufacturer")">
-                                <a class="@Html.IsSelected(controller: "OtherReports", action: "Manufacturer")" href="@Url.Action("Manufacturer", "OtherReports")">
-                                    <i class="metismenu-icon"></i>
-                                    Manufacturer
-                                </a>
-                            </li>
-                        </ul>
+                    </li>
+                    @*<li>
+                <a href="#">
+                    <i class="metismenu-icon pe-7s-car"></i>
+                    Reports
+                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                </a>
+                <ul>
+                    <li class="@Html.IsSelected(controller: "Reports", action: "Outletwise")">
+                        <a class="@Html.IsSelected(controller: "Reports", action: "Outletwise")" href="@Url.Action("Outletwise", "Reports")">
+                            <i class="metismenu-icon"></i>
+                            Outlet-wise
+                        </a>
+                    </li>
+                </ul>
+            </li>*@
+                    <li>
+                        <a href="@Url.Action("Index", "Telecaller")" class="@Html.IsSelected(controller: "Telecaller", action: "Index")">
+                            <i class="metismenu-icon pe-7s-rocket"></i>
+                            Telecaller
+                        </a>
                     </li>
                 }
-                @*<li>
-            <a href="forms-layouts.html">
-                <i class="metismenu-icon pe-7s-eyedropper">
-                </i>Forms Layouts
-            </a>
-        </li>*@
-                @*<li>
-            <a href="forms-validation.html">
-                <i class="metismenu-icon pe-7s-pendrive">
-                </i>Forms Validation
-            </a>
-        </li>*@
-                @*<li class="app-sidebar__heading">Charts</li>
-        <li>
-            <a href="charts-chartjs.html">
-                <i class="metismenu-icon pe-7s-graph2">
-                </i>ChartJS
-            </a>
-        </li>*@
-                @*<li class="app-sidebar__heading">PRO Version</li>
-        <li>
-            <a href="https://dashboardpack.com/theme-details/architectui-dashboard-html-pro/" target="_blank">
-                <i class="metismenu-icon pe-7s-graph2">
-                </i>
-                Upgrade to PRO
-            </a>
-        </li>*@
+                @if (!string.IsNullOrEmpty(GroupId) && level == "09")
+                {
+                    <li class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberPage")">
+                        <a class="@Html.IsSelected(controller: "KeyIndicators", action: "MemberPage")" href="@Url.Action("MemberPage", "KeyIndicators")">
+                            <i class="metismenu-icon"></i>
+                            Digital Loyalty Card
+                        </a>
+                    </li>
+                }
             </ul>
+
         </div>
     </div>
 </div>

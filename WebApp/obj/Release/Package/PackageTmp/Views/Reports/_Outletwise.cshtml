@@ -1,5 +1,12 @@
 ﻿@model List<BOTS_BL.Models.OutletWise>
 @using System.Globalization
+@using BOTS_BL.Models;
+@{
+
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
+}
+
 
 <div class="row mb-3 card">
     <div class="container-fluid pt-3 pl-3 pr-3">
@@ -13,10 +20,24 @@
                     <ul class="list-inline progress-list mt-2">
                         <li class="list-inline-item">
                             <div class="dropdown">
-                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                     <i class="fas fa-file-export"></i> Export
                                 </button>
+
                             </div>
+                            @if (logintype == "1" || logintype == "7" || logintype == "6")
+                            {
+                                <div>
+                                    <a href="#" onclick="showReport();">Send Report</a>
+                                </div>
+                                <div class="dropdown" id="divsendemail" style="display:none">
+                                    <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                        <i class="fas fa-file-export"></i> Send
+                                    </button>
+
+                                </div>
+                            }
                         </li>
                     </ul>
                 </div>
@@ -27,23 +48,24 @@
                     <table class="table" id="activityTable">
                         <thead>
                             <tr style="text-align:center;">
-                                <th scope="col" style="border-top:1px solid black !important;"></th>
-                                <th scope="col" style="border:1px solid black !important;" colspan="7">Keys Indicators</th>
-                                <th scope="col" style="border-right:0px solid black !important;border-top:1px solid black !important;" colspan="4">Points Summary</th>
+                                <th scope="col" style="border-top:1px solid black !important;" colspan="4"></th>
+                                <th scope="col" style="border:1px solid black !important; background-color: #FFF3CB;" colspan="5">Keys Indicators</th>
+                                <th scope="col" style="border-right:0px solid black !important;background-color: #DEEBF6;border-top:1px solid black !important;" colspan="4">Points Summary</th>
                             </tr>
-                            <tr>
-                                <th scope="col">Outlet Name</th>
+                            <tr style="text-align:end;">
+                                <th scope="col" style="text-align:left;">Outlet Name</th>
                                 <th scope="col">Total Members</th>
                                 <th scope="col">Total Txns</th>
-                                <th scope="col">Total Spends</th>
-                                <th scope="col">ATS</th>
-                                <th scope="col">Non Active</th>
-                                <th scope="col">Only Once</th>
-                                <th scope="col">Red'n Rate</th>
-                                <th scope="col">Points Earn</th>
-                                <th scope="col">Points Burn</th>
-                                <th scope="col">Points Cancelled</th>
-                                <th scope="col">Points Expired</th>
+                                <th scope="col">Total Business</th>
+                                <th scope="col" style="background-color: #FFF3CB;">Biz Share</th>
+                                <th scope="col" style="background-color: #FFF3CB;">ATS</th>
+                                <th scope="col" style="background-color: #FFF3CB;">Non Active</th>
+                                <th scope="col" style="background-color: #FFF3CB;">Only Once</th>
+                                <th scope="col" style="background-color: #FFF3CB;">Red'n Rate</th>
+                                <th scope="col" style="background-color: #DEEBF6;">Points Earn</th>
+                                <th scope="col" style="background-color: #DEEBF6;">Points Burn</th>
+                                <th scope="col" style="background-color: #DEEBF6;">Points Cancelled</th>
+                                <th scope="col" style="background-color: #DEEBF6;">Points Expired</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,48 +73,234 @@
                             {
                                 if (Model.Count > 0)
                                 {
-
+                                    BOTS_BL.Models.OutletWise outletWiseLast = new BOTS_BL.Models.OutletWise();
+                                    var count = 0;
                                     foreach (var outlet in Model)
                                     {
-                                        <tr>
-                                            <td><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
-                                            <td>@outlet.TotalMember</td>
-                                            <td>@outlet.TotalTxn</td>
-                                            <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
-                                            <td>@outlet.ATS</td>
-                                            <td>@outlet.NonActive</td>
-                                            <td>@outlet.OnlyOnce</td>
-                                            <td>@outlet.RedemptionRate</td>
-                                            <td>@outlet.PointsEarned</td>
-                                            <td>@outlet.PointsBurned</td>
-                                            <td>@outlet.PointsCancelled</td>
-                                            <td>@outlet.PointsExpired</td>
-                                        </tr>
+                                        count++;
+                                        if (Model.Count == count)
+                                        {
+                                            outletWiseLast.TotalSpend = outlet.TotalSpend;
+                                        }
+                                    }
+                                    var index = 0;
+                                    foreach (var outlet in Model)
+                                    {
+                                        index++;
+                                        if (Model.Count == index)
+                                        {
+                                            <tr style="text-align:end;font-weight:bold;">
+                                                <td style="border-top:1px solid black;text-align:left;">@outlet.OutletName</td>
+                                                @if (userDetails.GroupId == "1341")
+                                                {
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                }
+
+                                                <td style="border-top:1px solid black;">-</td>
+                                                <td style="border-top:1px solid black;">-</td>
+                                                <td style="border-top:1px solid black;">-</td>
+                                                <td style="border-top:1px solid black;">-</td>
+                                                <td style="border-top:1px solid black;">-</td>
+                                                @if (userDetails.GroupId == "1341")
+                                                {
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                    <td style="border-top:1px solid black;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                }
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            if (outlet.TotalSpend > 0)
+                                            {
+                                                outlet.BizShare = (Convert.ToDecimal(outlet.TotalSpend) * 100) / Convert.ToDecimal(outletWiseLast.TotalSpend);
+                                            }
+                                            else
+                                            {
+                                                outlet.BizShare = 0;
+                                            }
+                                            <tr style="text-align:end;">
+                                                <td style="text-align:left;"><a href="@Url.Action("Transactionwise", "Reports", new { OutletId = outlet.OutletId })" class="login" title="Launch Course">@outlet.OutletName</a></td>
+                                                @if (userDetails.GroupId == "1341")
+                                                {
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.BizShare))%</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalMember))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalTxn))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.TotalSpend))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.BizShare))%</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.ATS))</td>
+                                                }
+
+
+                                                @if (outlet.NonActiveColor == "Red")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+                                                }
+                                                @if (outlet.NonActiveColor == "Orange")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+
+                                                }
+                                                @if (outlet.NonActiveColor == "Green")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.NonActivePer))%</td>
+                                                    }
+
+                                                }
+
+                                                @if (outlet.OnlyOnceColor == "Red")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+
+                                                }
+                                                @if (outlet.OnlyOnceColor == "Orange")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+
+                                                }
+                                                @if (outlet.OnlyOnceColor == "Green")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.OnlyOncePer))%</td>
+                                                    }
+
+                                                }
+
+                                                @if (outlet.RedemptionRateColor == "Red")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:red;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+
+                                                }
+                                                @if (outlet.RedemptionRateColor == "Orange")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:darkorange;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+
+                                                }
+                                                @if (outlet.RedemptionRateColor == "Green")
+                                                {
+                                                    if (userDetails.GroupId == "1341")
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-US", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="background-color:limegreen;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDecimal(outlet.RedemptionRate))%</td>
+                                                    }
+
+                                                }
+                                                @if (userDetails.GroupId == "1341")
+                                                {
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                    <td>@String.Format(new CultureInfo("en-US", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsEarned))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsBurned))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsCancelled))</td>
+                                                    <td>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(outlet.PointsExpired))</td>
+                                                }
+
+                                            </tr>
+                                        }
                                     }
                                 }
                                 else
                                 {
                                     <tr>
-                                        <td colspan="12" align="center">No Learning Available</td>
+                                        <td colspan="13" align="center">No Data Available</td>
                                     </tr>
                                 }
                             }
                             else
                             {
                                 <tr>
-                                    <td colspan="12">No Learning Available</td>
+                                    <td colspan="13">No Data Available</td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
             </div>
-
-
-
-
         </div>
-
     </div>
 </div>
 
@@ -106,16 +314,10 @@
             "bFilter": true,
             "pageLength": 25,
             "pagingType": "simple_numbers",
-            //language: {
-            //    paginate: {
-            //        next: '&#8594;', // or '→'
-            //        previous: '&#8592;' // or '←'
-            //    }
-            //}
             aoColumnDefs: [
                 {
                     bSortable: false,
-                    aTargets: [-10, -11, -12]
+                    aTargets: [-10, -11, -12, -13]
                 }
             ]
         });
@@ -127,7 +329,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }
