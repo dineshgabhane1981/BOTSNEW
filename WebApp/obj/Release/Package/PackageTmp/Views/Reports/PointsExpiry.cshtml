@@ -1,55 +1,116 @@
-﻿@model BOTS_BL.Models.PointExpiry
+﻿@model BOTS_BL.Models.PointExpiryTmp
+@using System.Globalization
+@using BOTS_BL.Models;
 @{
-    ViewBag.Title = "PointsExpiry";
+    ViewBag.Title = "Points Expiry";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var currentMonth = DateTime.Now.ToString("MMMM");
+    var nextMonth = DateTime.Now.AddMonths(1).ToString("MMMM");
+    var next2Month = DateTime.Now.AddMonths(2).ToString("MMMM");
+
+    var currentMonthNum = DateTime.Now.Month;
+    var nextMonthNum = DateTime.Now.AddMonths(1).Month;
+    var next2MonthNum = DateTime.Now.AddMonths(2).Month;
+
+    var currentYear = DateTime.Now.Year.ToString();
+    var nextYear = DateTime.Now.AddMonths(1).Year.ToString();
+    var next2Year = DateTime.Now.AddMonths(2).Year.ToString();
+
+    var userDetails = (CustomerLoginDetail)Session["UserSession"];
+    var logintype = userDetails.LoginType;
 }
 
 <div class="app-main__inner">
-    <div class="row mb-3 card">
-        <div class="container-fluid pt-3 pl-3 pr-3" style="display:flex;">
-            <div class="row col-5">
-                <table class="table" style="border:1px solid gray;">
-                    <tr>
-                        <th scope="col" colspan="3" style="text-align:center;">Points Expiring in</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">Period</th>
-                        <th scope="col" style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(0);"><u>Current Month</u></a></th>
-                        <th scope="col" style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetData(1);"><u>Next Month</u></a></th>
-                    </tr>
-                    <tr>
-                        <td>Member Count</td>
-                        <td style="text-align:center;">@Model.MemberCountThisMonth</td>
-                        <td style="text-align:center;">@Model.MemberCountNextMonth</td>
-                    </tr>
-                    <tr>
-                        <td>Points Expiring</td>
-                        <td style="text-align:center;">@Model.MemberPointsThisMonth</td>
-                        <td style="text-align:center;">@Model.MemberPointsNextMonth</td>
-                    </tr>
-                </table>
+    <div class="row mb-3 pt-3 pl-3 pr-3 card">
+        <div class="row">
+            <div class="col-xl-3">
+            </div>
+            <div class="col-xl-3">
+            </div>
+            <div class="col-xl-3">
+            </div>
+            <div class="col-xl-3" style="height:50px !important;">
+                @Html.DropDownListFor(x => Model.SelectedCount, new SelectList(ViewBag.MonthList, "Value", "Text"), "Month", htmlAttributes: new { @class = "smallDDL", @id = "MonthList" })
+                @Html.DropDownListFor(x => Model.SelectedPoints, new SelectList(ViewBag.YearList, "Value", "Text"), htmlAttributes: new { @class = "smallDDL", @id = "YearList" })
+                <button id="btnGo" class="btn btn-primary">GO</button>
             </div>
 
-            <div class="row col-5" style="margin-left:120px;">
-                <div>
-                    @Html.DropDownListFor(x => Model.SelectedCount, new SelectList(ViewBag.MonthList, "Value", "Text"), "Select Month", htmlAttributes: new { @class = "input50", @id = "MonthList" })
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xl-3">
+                <div class="card mb-3 widget-content" style="background-color:#D99694;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Expiring in (@currentMonth - @currentYear)
+                                <hr />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-white" style="font-weight:bold;">
+                                Members | <span style="cursor:pointer; font-size:22px !important;"><a onclick="GetData(@currentMonthNum,@currentYear);"> <u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountThisMonth))</u></a></span>
+                                <br />Expiring Points | <span style="font-size:20px !important;"> @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsThisMonth))</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                    <table class="table" id="selectedMonth" style="border:1px solid gray; display:none;">                    
-                    <tr>
-                        <th scope="col">Period</th>
-                        <th scope="col" style="text-align:center; color:blue;cursor:pointer;"><a onclick="GetFutureData();"><u>Selected Month</u></a></th>
-                    </tr>
-                    <tr>
-                        <td>Member Count</td>
-                        <td style="text-align:center;"><span id="spnSelectedCount"></span></td>
-                       
-                    </tr>
-                    <tr>
-                        <td>Points Expiring</td>
-                        <td style="text-align:center;"><span id="spnSelectedPoints"></span></td>
-                       
-                    </tr>
-                </table>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card mb-3 widget-content" style="background-color: #E46C0A;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Expiring in (@nextMonth - @nextYear)
+                                <hr />
+                            </div>
+
+                        </div>
+                        <div>
+                            <div class="text-white" style="font-weight:bold;">
+                                Members | <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetData(@nextMonthNum,@nextYear);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCountNextMonth))</u></a></span>
+                                <br />Expiring Points | <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPointsNextMonth))</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card mb-3 widget-content" style="background-color:#558ED5;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Expiring in (@next2Month - @next2Year)
+                                <hr />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="text-white" style="font-weight:bold;">
+                                Members | <span style="cursor:pointer;font-size:22px !important;"><a onclick="GetData(@next2MonthNum, @next2Year);"><u>@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberCount3rdMonth))</u></a></span>
+                                <br />Expiring Points | <span style="font-size:20px !important;">@String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(Model.MemberPoints3rdMonth))</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3" id="dvSelectedMonth" style="display:none;">
+                <div class="card mb-3 widget-content" style="background-color: #E1E100;">
+                    <div class="widget-content-wrapper text-white" style="display:block !important;">
+                        <div class="widget-content-left">
+                            <div class="widget-heading">
+                                Expiring in (<span id="spnFutureMonth"></span> - <span id="spnFutureYear"></span>)
+                                <hr />
+                            </div>
+
+                        </div>
+                        <div>
+                            <div class="widget-numbers text-white">
+                                <a onclick="GetFutureData();"><u><span style="cursor:pointer;" id="spnSelectedMemberCount"></span></u></a>
+                                <br /><span id="spnSelectedMemberPoints" style="font-size:20px !important;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -66,10 +127,23 @@
                         <ul class="list-inline progress-list mt-2">
                             <li class="list-inline-item">
                                 <div class="dropdown">
-                                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel();' type="button" id="btnExport">
+                                    <button class="btn btn-primary login-btn" onclick='ExportDataExcel("0");' type="button" id="btnExport">
                                         <i class="fas fa-file-export"></i> Export
                                     </button>
                                 </div>
+                                @if (logintype == "1" || logintype == "7" || logintype == "6")
+                                {
+                                    <div>
+                                        <a href="#" onclick="showReport();">Send Report</a>
+                                    </div>
+                                    <div class="dropdown" id="divsendemail" style="display:none">
+                                        <input type="text" id="txtemailsend" class="input50" placeholder="Enter Email Ids" />
+                                        <button class="btn btn-primary login-btn" onclick='ExportDataExcel("1");' type="button" id="btnExport">
+                                            <i class="fas fa-file-export"></i> Send
+                                        </button>
+
+                                    </div>
+                                }
                             </li>
                         </ul>
                     </div>
@@ -90,7 +164,7 @@
                                     <th scope="col">Expiry Date</th>
                                 </tr>
                             </thead>
-                            <tbody>                                
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
@@ -104,35 +178,34 @@
     var clickedMonth = 0;
     var clickedYear = 0;
     $(document).ready(function () {
-        $("#MonthList").on("change", function () {
+        $("#btnGo").click(function () {
             GetPointExpiryData();
         });
     });
     function GetPointExpiryData() {
         var month = $("#MonthList").val();
-        var year = new Date().getFullYear();
-
+        var year = $("#YearList").val();
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: "../Reports/GetPointsExpiryDataResult",
+            url: '@Url.Action("GetPointsExpiryDataResult", "Reports")',
             data: "{'month': " + month + ",'year': " + year + "}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {                
-                console.log(response)
-                $("#spnSelectedCount").text(response.SelectedCount);
-                $("#spnSelectedPoints").text(response.SelectedPoints);
-                $("#selectedMonth").show();
-             
+            success: function (response) {
+                $("#spnFutureMonth").text($("#MonthList option:selected").text());
+                $("#spnFutureYear").text($("#YearList option:selected").text());
 
+                $("#spnSelectedMemberCount").text(addComma(response.SelectedCount));
+                $("#spnSelectedMemberPoints").text(addComma(response.SelectedPoints));
+
+                $("#dvSelectedMonth").show();
                 $("#divLoader").hide();
             },
             failure: function (response) {
                 $("#divLoader").hide();
             },
             error: function (response) {
-                //$('#dvOutletWiseData').html(response.responseText);
                 $("#divLoader").hide();
             }
         });
@@ -140,26 +213,21 @@
 
     function GetFutureData() {
         var month = $("#MonthList").val();
-        GetData(month);
+        var year = $("#YearList").val();
+        GetData(month, year);
     }
-
-    function GetData(currentMonth, type) {
-        var month = new Date().getMonth()+1;
-        var year = new Date().getFullYear();
-
-        if (currentMonth == 1) {
-            month = month + 1;
-        }
-        if (currentMonth > 1) {
-            month = currentMonth;
-        }
+    function showReport() {
+        $("#divsendemail").show();
+    }
+    function GetData(month, year) {
         clickedMonth = month;
         clickedYear = year;
 
         $("#divLoader").show();
         $.ajax({
             type: "POST",
-            url: "../Reports/GetPointsExpiryTxnResult",
+            url: '@Url.Action("GetPointsExpiryTxnResult", "Reports")',
+            //url: "../Reports/GetPointsExpiryTxnResult",
             data: "{'month': " + month + ",'year': " + year + "}",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -170,6 +238,7 @@
                     optionItem = {}
                     optionItem["EnrolledOutlet"] = item.EnrolledOutlet;
                     optionItem["MaskedMobileNo"] = item.MaskedMobileNo;
+                    optionItem["MobileNo"] = item.MobileNo;
                     optionItem["MemberName"] = item.MemberName;
                     optionItem["TxnCount"] = item.TxnCount;
                     optionItem["TotalSpend"] = item.TotalSpend;
@@ -204,19 +273,94 @@
             "info": true,
             "bFilter": true,
             "pageLength": 25,
+            "bAutoWidth": false,
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "EnrolledOutlet" },
-                { data: "MaskedMobileNo" },
+                {
+                    "mData": "MaskedMobileNo",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        if (data !=null)
+                            return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                        else
+                            return '<span></span>';
+                    }
+                },
                 { data: "MemberName" },
-                { data: "TxnCount" },
-                { data: "TotalSpend" },
-                { data: "AvlPoints" },
-                { data: "LastTxnDate" },
-                { data: "PointsExpiry" },
-                { data: "ExpiryDate" }
+                {
+                    "mData": "TxnCount",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "TotalSpend",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "AvlPoints",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                /*{ data: "LastTxnDate" },*/
+                {
+                    "data": "LastTxnDate", "title": "Last Txn Datetime", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "mData": "PointsExpiry",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                /*{ data: "ExpiryDate" }*/
+                {
+                    "data": "ExpiryDate", "title": "Expiry Date", "render": function (data, type) {
+                        if (data != "" && data != null) {
+                            var day = data.split('/')[0]
+                            var month = data.split('/')[1]
+                            var year = data.split('/')[2]
+                            var date = month + "/" + day + "/" + year;
+                            return date;
+                        }
+                        else {
+                            return data;
+                        }
+                    }
+                }
 
             ],
+            "columnDefs": [
+                {
+                    "targets": 3,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 4,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 5,
+                    "className": "text-right",
+                },
+                {
+                    "targets": 7,
+                    "className": "text-right",
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,
@@ -231,7 +375,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }
@@ -242,13 +386,20 @@
         });
     }
 
-    function ExportDataExcel() {        
+    function ExportDataExcel(Id) {
+        var emailid = '';
+        console.log(Id);
+        
+        if (Id == "1") {
+            emailid = $("#txtemailsend").val();
+        }
 
         var urlLink = "@Url.Action("ExportToExcelPointExpiry", "Reports")";
-        urlLink = urlLink + "?month=" + clickedMonth + "&year=" + clickedYear + "&ReportName=PointExpiry";
+        urlLink = urlLink + "?month=" + clickedMonth + "&year=" + clickedYear + "&ReportName=PointExpiry" + "&EmailId=" + emailid + "";
         console.log(urlLink);
         window.location.href = urlLink;
         $("#divLoader").hide();
+        $("#txtemailsend").val('');
 
     }
 

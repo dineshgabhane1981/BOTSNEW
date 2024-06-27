@@ -1,6 +1,6 @@
 ﻿@model List<BOTS_BL.Models.MemberList>
 @{
-    ViewBag.Title = "MemberList";
+    ViewBag.Title = "Member List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,9 +9,10 @@
 
         <div class="col-sm-6">
             Select Outlet :
-            @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id= "OutletList" })
-           
+            @Html.DropDownListFor(x => Model.Count, new SelectList(ViewBag.OutletList, "Value", "Text"), "All", htmlAttributes: new { @class = "input100", @id = "OutletList" })
+
         </div>
+        <br />
     </div>
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3">
@@ -28,6 +29,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Enrolled Outlet</th>
+                                    <th scope="col">Enrolled Date</th>
                                     <th scope="col">Mobile Number</th>
                                     <th scope="col">Member Name</th>
                                     <th scope="col">Type</th>
@@ -37,9 +39,10 @@
                                     <th scope="col">Total Burn Points</th>
                                     <th scope="col">Avl Bal Points</th>
                                     <th scope="col">Last Txn Date</th>
+
                                 </tr>
                             </thead>
-                            <tbody>                               
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
@@ -48,12 +51,29 @@
         </div>
     </div>
 </div>
-
+<script type="text/JavaScript" src=" https://MomentJS.com/downloads/moment.js"></script>
 <script>
     var tableData = [];
-    $(document).ready(function () {        
+    $(document).ready(function () {
+        $.fn.dataTable.moment = function (format, locale) {
+            var types = $.fn.dataTable.ext.type;
+
+            // Add type detection
+            types.detect.unshift(function (d) {
+                return moment(d, format, locale, true).isValid() ?
+                    'moment-' + format :
+                    null;
+            });
+
+            // Add sorting method - use an integer for the sorting
+            types.order['moment-' + format + '-pre'] = function (d) {
+                return moment(d, format, locale, true).unix();
+            };
+        };
+
+        $.fn.dataTable.moment('DD/MM/YYYY');
         LoadMemberData();
-        $("#OutletList").on("change", function () {            
+        $("#OutletList").on("change", function () {
             LoadMemberData();
 
         });
@@ -61,28 +81,39 @@
 
     function LoadMemberData() {
         $("#divLoader").show();
+        var searchData = [];
+        var item = {}
+        item["OutletId"] = $("#OutletList").val();
+        searchData.push(item);
+
+        var data = JSON.stringify(searchData);
         var SearchText = JSON.stringify($("#OutletList").val());
         $.ajax({
             type: "POST",
-            url: "../Reports/GetMemberDataResult",
-            data: '{SearchText: ' + SearchText + '}',
+            url: '@Url.Action("GetMemberDataResult", "Reports")',
+            //url: "../Reports/GetMemberDataResult",
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) { 
+            success: function (response) {
                 tableData = [];
                 //$('#dvMemberData').html(response);
                 $.map(response, function (item) {
                     optionItem = {}
                     optionItem["EnrolledOutlet"] = item.EnrooledOutlet;
                     optionItem["MobileNumber"] = item.MaskedMobileNo;
+                    optionItem["MobileNo"] = item.MobileNo;
                     optionItem["MemberName"] = item.MemberName;
                     optionItem["Type"] = item.Type;
                     optionItem["TxnCount"] = item.TxnCount;
                     optionItem["TotalSpends"] = item.TotalSpend;
                     optionItem["TotalBurnTxn"] = item.TotalBurnTxn;
                     optionItem["TotalBurnPoints"] = item.TotalBurnPoints;
-                    optionItem["AvlBalPoints"] = item.AvBalPoints;
+                    optionItem["AvlBalPoints"] = item.AvlBalPoints;
                     optionItem["LastTxnDate"] = item.LastTxnDate;
+                    optionItem["EnrolledDate"] = item.EnrolledDate;
+
+
                     tableData.push(optionItem);
                 });
                 DrawTable();
@@ -108,20 +139,108 @@
             "ordering": true,
             "info": true,
             "bFilter": true,
-            "pageLength": 25,
+            "pageLength": 25    ,
             "pagingType": "simple_numbers",
             "columns": [
                 { data: "EnrolledOutlet" },
-                { data: "MobileNumber" },
+                { data: "EnrolledDate" },
+                //{
+                //    "data": "EnrolledDate", "title": "Enrolled Date", "render": function (data, type) {
+                //        if (data != "" && data != null) {
+                //            var day = data.split('/')[0]
+                //            var month = data.split('/')[1]
+                //            var year = data.split('/')[2]
+                //            var date = month + "/" + day + "/" + year;
+                //            return date;
+                //        }
+                //        else {
+                //            return data;
+                //        }
+                //    }
+                //},
+
+                {
+                    "mData": "MobileNumber",
+                    "mRender": function (data, type, row) {
+                        var MobileNo = row.MobileNo;
+                        return '<span class="login" title=' + MobileNo + '>' + data + '</span>';
+                    }
+                },
                 { data: "MemberName" },
                 { data: "Type" },
-                { data: "TxnCount" },
-                { data: "TotalSpends" },
-                { data: "TotalBurnTxn" },
-                { data: "TotalBurnPoints" },
-                { data: "AvlBalPoints" },
+                {
+                    "mData": "TxnCount",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "TotalSpends",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "TotalBurnTxn",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "TotalBurnPoints",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
+                {
+                    "mData": "AvlBalPoints",
+                    "mRender": function (data, type, row) {
+                        return '<span>' + addComma(data) + '</span>';
+                    }
+                },
                 { data: "LastTxnDate" }
+                //{
+                //    "data": "LastTxnDate", "title": "Last Txn Date", "render": function (data, type) {
+                //        if (data != "" && data != null) {
+                //            var day = data.split('/')[0]
+                //            var month = data.split('/')[1]
+                //            var year = data.split('/')[2]
+                //            var date = month + "/" + day + "/" + year;
+                //            return date;
+                //        }
+                //        else {
+                //            return data;
+                //        }
+                //    }
+                //}
+                /*{ data: "LastTxnDate" }*/
+
             ],
+            "columnDefs": [
+                {
+                    "targets": 4,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 5,
+                    "className": "text-right",
+                },
+                {
+                    "targets": 6,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 7,
+                    "className": "text-right",
+                },
+                {
+                    "targets": 8,
+                    "className": "text-right"
+                },
+                {
+                    "targets": 9,
+                    "className": "text-right"
+                }],
             aoColumnDefs: [
                 {
                     bSortable: false,
@@ -140,7 +259,7 @@
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
-                    if (searchData[i].toLowerCase().indexOf(term) == 0) {
+                    if (searchData[i].toLowerCase().indexOf(term) >= 0) {
                         return true;
                     }
                 }
@@ -150,6 +269,7 @@
             table.draw();
         });
     }
+
 </script>
 
 

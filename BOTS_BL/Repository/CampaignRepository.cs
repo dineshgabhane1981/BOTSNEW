@@ -556,6 +556,8 @@ namespace BOTS_BL.Repository
                     if(BaseType == "5")
                     {
                         var DataSetResult = RR.GetSavedDSCount(DSId,connstr,GroupId);
+                        objcustAll.CustFiltered = DataSetResult[0];
+                        objcustAll.CustCountALL = DataSetResult[1];
                     }
                     else
                     {

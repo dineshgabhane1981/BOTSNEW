@@ -17,6 +17,7 @@ using System.Net.Mail;
 using System.Text;
 using WebApp.ViewModel;
 using System.Reflection;
+using System.Configuration;
 
 namespace WebApp.Controllers
 {
@@ -1969,7 +1970,8 @@ namespace WebApp.Controllers
                 table.Rows.Add(row);
             }
             string fileName = "SlicerReport_" + DateTime.Now.ToString("dd-MMM-yyyy") + ".xlsx";
-            string filePath = @"F:\BOTS_Code\BOTSA\WebApp\SlicerReports\" + fileName;
+            //string filePath = @"F:\BOTS_Code\BOTSA\WebApp\SlicerReports\" + fileName;
+            string filePath = ConfigurationManager.AppSettings["SlicerReportLocation"] + "\\" + fileName;
             using (XLWorkbook wb = new XLWorkbook())
             {
                 table.TableName = fileName;

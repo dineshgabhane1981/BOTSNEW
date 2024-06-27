@@ -679,7 +679,7 @@
 
         $("#ddReassignMember").empty()
         $("#ddReassignMember").append("<option>Please Select</option>");
-         
+
 
         var FilterData = [];
         item = {};
@@ -740,7 +740,7 @@
         $("#hdnIdNew").val(id);
     }
 
-    function UpdateStatusNew() {       
+    function UpdateStatusNew() {
         var result = true;
         var id = $("#hdnIdNew").val();
         var Desc = $("#txtDesc").val();
@@ -750,7 +750,7 @@
         var DoneFileName = $("#DoneFileName").val();
         var FollowupDate = $("#txtFollowupDateNew").val();
         var SubDiscussionCallType = $("#hdnSubDiscussionId").val();
-        var DoneNotDone = $("#ddlDoneNotDoneSub option:selected").text();       
+        var DoneNotDone = $("#ddlDoneNotDoneSub option:selected").text();
         if (Status == "Completed") {
             if (SubDiscussionCallType != "") {
                 if ($("#ddlDoneNotDoneSub option:selected").text() == "Select") {
@@ -764,9 +764,9 @@
                 }
             }
         }
-        if (result) {            
+        if (result) {
             if (Desc != "") {
-                alert(Desc)
+                
                 $.ajax({
                     type: "POST",
                     url: '@Url.Action("UpdateStatusAndDiscussion", "Discussion")',
@@ -802,10 +802,10 @@
                                 message: "Status updated Successfully !!!",
                                 buttonText: "Okay"
                             })
-                            BindListing();
+                            GetData();
                             $("#myModal").hide(1000);
                         }
-                        else {                            
+                        else {
                             cuteAlert({
                                 type: "error",
                                 title: "OOPS...",
@@ -827,7 +827,5 @@
             }
         }
     }
-
-
 </script>
 

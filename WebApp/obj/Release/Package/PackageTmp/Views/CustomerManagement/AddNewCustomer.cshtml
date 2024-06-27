@@ -127,7 +127,7 @@
                                                         <label style="padding-left:15px;"> Annual Fees (Rs.)</label>
                                                         @Html.TextBoxFor(model => model.objModulesPayment.AnnualFees, new { @class = "input50", @id = "txtAnnualFees", @readonly = "readonly" })
                                                         <label style="padding-left:180px;"> Payment Terms</label>
-                                                        @Html.DropDownListFor(model => model.objModulesPayment.AnnualFees, Model.PaymentTerms(), "Select", htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlAnnualFees" })
+                                                        @Html.DropDownListFor(model => model.objModulesPayment.PaymentTerms, Model.PaymentTerms(), "Select", htmlAttributes: new { @class = "input50", @disabled = "disabled", @id = "ddlAnnualFees" })
                                                     </div>
                                                     <hr />
                                                     <div>
@@ -209,14 +209,56 @@
                                     </div>
                                     <!--Brand / Outlet-->
                                     <div class="multisteps-form__panel shadow p-4 list-box bg-white" id="sec3" data-animation="scaleIn">
-                                        <h5 class="multisteps-form__title">Brand / Outlet</h5>
+                                        <h5 class="multisteps-form__title"></h5>
                                         <div class="multisteps-form__content" style="display:flex;">
+                                            <div class="col-sm-12" style="float:left;overflow:hidden;">
+                                                <label>Group Retail Name - <b> @Model.objGroupData.RetailName </b></label>
+                                                <div>
+                                                    <input type="hidden" id="hdnBrand1" />
+                                                    Brand Name <input type="text" id="txtBrandName1" class="input100" />
+                                                    Brand Category <input type="text" id="txtBrandCategory1" class="input100" />
 
-
+                                                </div>
+                                                <div>
+                                                    <input type="hidden" id="hdnBrand2" />
+                                                    Brand Name <input type="text" id="txtBrandName2" class="input100" />
+                                                    Brand Category <input type="text" id="txtBrandCategory2" class="input100" />
+                                                </div>
+                                                <hr />
+                                                <div>
+                                                    <b>Outlet Details [Brand1]</b><br /><br />
+                                                    <div id="dvBrand1">
+                                                        <div id="dvB11">
+                                                            <input type="hidden" id="hdnBrand1OutletId1"/>
+                                                            Outlet Name <input type="text" id="txtOutletBrand1Name1" class="input50" />
+                                                            City <input type="text" id="txtOutletBrand1City1" class="input50" />
+                                                            Area <input type="text" id="txtOutletBrand1Area1" class="input50" />
+                                                            Pincode <input type="text" id="txtOutletBrand1Pincode1" class="input50" />
+                                                            Geotags <input type="text" id="txtOutletBrand1Geotags1" class="input50" />
+                                                            Cashier Count <input type="text" id="txtOutletBrand1CCount1" class="input50" />
+                                                            <button class="btn btn-primary" id="btnBrand1">+</button>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <b>Outlet Details [Brand2]</b><br /><br />
+                                                    <div id="dvBrand2">
+                                                        <div id="dvB21">
+                                                            <input type="hidden" id="hdnBrand2OutletId1" />
+                                                            Outlet Name <input type="text" id="txtOutletBrand2Name1" class="input50" />
+                                                            City <input type="text" id="txtOutletBrand2City1" class="input50" />
+                                                            Area <input type="text" id="txtOutletBrand2Area1" class="input50" />
+                                                            Pincode <input type="text" id="txtOutletBrand2Pincode1" class="input50" />
+                                                            Geotags <input type="text" id="txtOutletBrand2Geotags1" class="input50" />
+                                                            Cashier Count <input type="text" id="txtOutletBrand2CCount1" class="input50" />
+                                                            <button class="btn btn-primary" id="btnBrand2">+</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="button-row d-flex mt-4">
                                             <button class="btn btn-primary js-btn-prev" type="button" title="Prev" tabindex="36">Prev</button>
-                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="next3" tabindex="37">Next</button>
+                                            <button class="btn btn-primary ml-auto" type="button" title="Next" id="next3" tabindex="37">Save & Next</button>
                                         </div>
                                     </div>
                                     <!--Points Config-->
@@ -306,7 +348,10 @@
 <script src="~/Content/scriptSteps.js"></script>
 
 <script>
+    var brand1count = 1;
+    var brand2count = 1;
     $(document).ready(function () {
+
         document.getElementById("FileUploadLogo").addEventListener('change', handleFileSelectInvoice, false);
         $('#ddlRetailCategory').change(function () {
             if ($('#ddlRetailCategory').val() == "14") {
@@ -408,7 +453,7 @@
 
             $("#divLoader").show();
             var data = $('#frmaddgroupdetails').serialize();
-            
+
             $.ajax({
                 url: $('#frmaddgroupdetails').attr('action'),
                 type: 'post',
@@ -590,7 +635,7 @@
 
             $("#divLoader").show();
             var data = $('#frmaddmoduleandpayment').serialize();
-            
+
             $.ajax({
                 url: $('#frmaddmoduleandpayment').attr('action'),
                 type: 'post',
@@ -599,7 +644,7 @@
                 success: function (response) {
                     console.log(response)
                     if (response == "true") {
-                        toastr.success("Group Detail Saved");
+                        toastr.success("Modules and Payments Detail Saved");
                         $("#divLoader").hide();
                         $('#btn3').addClass("js-active");
                         $('#sec3').addClass("js-active");
@@ -613,5 +658,356 @@
             });
 
         });
+
+        
+        if ($("#hdnGroupDetailGroupID").val() != 0) {
+            LoadModuleAndPaymentData();
+            GetBrandAndOutletData();
+        }
+        $('#next3').on("click", function () {
+            SaveBrandAndOutlet();
+        })
+        $('#btnBrand1').on("click", function () {            
+            brand1count++;
+            AddBrand1Outlet();
+        });
+        $('#btnBrand2').on("click", function () {            
+            brand2count++;
+            AddBrand2Outlet();
+            
+        });
     });
+    
+    function remove1Item(count) {
+        $("#dvB1" + count).remove();
+        //brand1count--;
+    }
+    function remove2Item(count) {
+        $("#dvB2" + count).remove();
+        //brand2count--;
+    }
+    function AddBrand1Outlet() {
+        brand1count++;
+        console.log(brand1count)
+        itemHTML = "<div id=dvB1" + brand1count + ">";
+        itemHTML += "<input type=\"hidden\" id=\"hdnBrand1OutletId" + brand1count + "\" />";
+        itemHTML += "Outlet Name <input type=\"text\" id=\"txtOutletBrand1Name" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "City <input type=\"text\" id=\"txtOutletBrand1City" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "Area <input type=\"text\" id=\"txtOutletBrand1Area" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "Pincode <input type=\"text\" id=\"txtOutletBrand1Pincode" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "Geotags <input type=\"text\" id=\"txtOutletBrand1Geotags" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "Cashier Count <input type=\"text\" id=\"txtOutletBrand1CCount" + brand1count + "\" class=\"input50\" />";
+        itemHTML += "<button onclick=\"remove1Item(" + brand1count + ")\" id=btnBrand1" + brand1count + " type=\"button\" class=\"btn btn-primary\" style=\"margin-left: 5px;\"> - </button>";
+        itemHTML += "</div>";
+        $("#dvBrand1").append(itemHTML);
+    }
+
+    function AddBrand2Outlet() {
+        itemHTML = "<div id=dvB2" + brand2count + ">";
+        itemHTML += "<input type=\"hidden\" id=\"hdnBrand2OutletId" + brand2count + "\" />";
+        itemHTML += "Outlet Name <input type=\"text\" id=\"txtOutletBrand2Name" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "City <input type=\"text\" id=\"txtOutletBrand2City" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "Area <input type=\"text\" id=\"txtOutletBrand2Area" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "Pincode <input type=\"text\" id=\"txtOutletBrand2Pincode" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "Geotags <input type=\"text\" id=\"txtOutletBrand2Geotags" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "Cashier Count <input type=\"text\" id=\"txtOutletBrand2CCount" + brand2count + "\" class=\"input50\" />";
+        itemHTML += "<button onclick=\"remove2Item(" + brand2count + ")\" id=btnBrand2" + brand2count + " type=\"button\" class=\"btn btn-primary\" style=\"margin-left: 5px;\"> - </button>";
+        itemHTML += "</div>";
+        $("#dvBrand2").append(itemHTML);
+    }
+    function LoadModuleAndPaymentData() {
+        if ($("#chkIsProgramManagement").is(':checked')) {
+            $("#txtNoOfOutlets").attr("readonly", false);
+            $("#txtAnnualFees").attr("readonly", false);
+            $("#ddlAnnualFees").prop("disabled", false);
+        }
+        else {
+            $("#txtNoOfOutlets").val("");
+            $("#txtNoOfOutlets").attr("readonly", true);
+            $("#txtAnnualFees").val("");
+            $("#txtAnnualFees").attr("readonly", true);
+            $('#ddlAnnualFees').prop('selectedIndex', 0);
+            $("#ddlAnnualFees").prop("disabled", true);
+        }
+
+        if ($("#chkIsSMSPack").is(':checked')) {
+            $("#txtFreeSMS").attr("readonly", false);
+            $("#txtPrepaidSMSCount").attr("readonly", false);
+            $("#txtPrepaidSMSAmount").attr("readonly", false);
+            $("#ddlGateway").prop("disabled", false);
+        }
+        else {
+            $("#txtFreeSMS").val("");
+            $("#txtFreeSMS").attr("readonly", true);
+            $("#txtPrepaidSMSCount").val("");
+            $("#txtPrepaidSMSCount").attr("readonly", true);
+            $("#txtPrepaidSMSAmount").val("");
+            $("#txtPrepaidSMSAmount").attr("readonly", true);
+            $('#ddlGateway').prop('selectedIndex', 0);
+            $("#ddlGateway").prop("disabled", true);
+        }
+
+        if ($("#chkIsWhatsApp").is(':checked')) {
+            $("#txtIntegrationAmount").attr("readonly", false);
+            $("#txtWAPrepaidPackCount").attr("readonly", false);
+            $("#txtWAPrepaidPackAmount").attr("readonly", false);
+        }
+        else {
+            $("#txtIntegrationAmount").val("");
+            $("#txtIntegrationAmount").attr("readonly", true);
+            $("#txtWAPrepaidPackCount").val("");
+            $("#txtWAPrepaidPackCount").attr("readonly", true);
+            $("#txtWAPrepaidPackAmount").val("");
+            $("#txtWAPrepaidPackAmount").attr("readonly", true);
+        }
+
+        if ($("#chkIsMemberWebpage").is(':checked')) {
+            $("#ddlMemberWebpageCharge").prop("disabled", false);
+            $("#txtMemberWebpageAnnualFee").attr("readonly", false);
+        }
+        else {
+            $("#txtMemberWebpageAnnualFee").val("");
+            $("#txtMemberWebpageAnnualFee").attr("readonly", true);
+            $('#ddlMemberWebpageCharge').prop('selectedIndex', 0);
+            $("#ddlMemberWebpageCharge").prop("disabled", true);
+        }
+
+        if ($("#chkIsNPC").is(':checked')) {
+            $("#ddlNPCCharge").prop("disabled", false);
+            $("#txtNPCAnnualCharge").attr("readonly", false);
+        }
+        else {
+            $("#txtNPCAnnualCharge").val("");
+            $("#txtNPCAnnualCharge").attr("readonly", true);
+            $('#ddlNPCCharge').prop('selectedIndex', 0);
+            $("#ddlNPCCharge").prop("disabled", true);
+        }
+
+        if ($("#chkIsMobileApp").is(':checked')) {
+            $("#ddlMobileAppCharge").prop("disabled", false);
+            $("#txtMobileAppAnnualCharge").attr("readonly", false);
+        }
+        else {
+            $("#txtMobileAppAnnualCharge").val("");
+            $("#txtMobileAppAnnualCharge").attr("readonly", true);
+            $('#ddlMobileAppCharge').prop('selectedIndex', 0);
+            $("#ddlMobileAppCharge").prop("disabled", true);
+        }
+
+        if ($("#chkIsSProfileUpdate").is(':checked')) {
+            $("#ddlSProfileUpdateCharge").prop("disabled", false);
+            $("#txtSProfileUpdateAnnualCharge").attr("readonly", false);
+        }
+        else {
+            $("#txtSProfileUpdateAnnualCharge").val("");
+            $("#txtSProfileUpdateAnnualCharge").attr("readonly", true);
+            $('#ddlSProfileUpdateCharge').prop('selectedIndex', 0);
+            $("#ddlSProfileUpdateCharge").prop("disabled", true);
+        }
+
+        if ($("#chkIsOtherOne").is(':checked')) {
+            $("#txtOtherOneDesc").attr("readonly", false);
+            $("#txtOtherOneFees").attr("readonly", false);
+        }
+        else {
+            $("#txtOtherOneDesc").val("");
+            $("#txtOtherOneDesc").attr("readonly", true);
+            $("#txtOtherOneFees").val("");
+            $("#txtOtherOneFees").attr("readonly", true);
+        }
+
+        if ($("#chkIsOtherTwo").is(':checked')) {
+            $("#txtOtherTwoDesc").attr("readonly", false);
+            $("#txtOtherTwoFees").attr("readonly", false);
+        }
+        else {
+            $("#txtOtherTwoDesc").val("");
+            $("#txtOtherTwoDesc").attr("readonly", true);
+            $("#txtOtherTwoFees").val("");
+            $("#txtOtherTwoFees").attr("readonly", true);
+        }
+
+
+    }
+
+    function SaveBrandAndOutlet() {
+        var BrandData = [];
+        item = {}
+        item["GroupId"] = $("#hdnGroupDetailGroupID").val();
+        item["BrandId1"] = $("#hdnBrand1").val();
+        item["Brand1Name"] = $("#txtBrandName1").val();
+        item["Brand1Category"] = $("#txtBrandCategory1").val();
+        item["BrandId2"] = $("#hdnBrand2").val();
+        item["Brand2Name"] = $("#txtBrandName2").val();
+        item["Brand2Category"] = $("#txtBrandCategory2").val();
+        var ItemObject = [];
+        var IDs = $("#dvBrand1 div[id^='dvB1']");
+        $.each(IDs, function (index, value) {
+            var id = value.id.substring(4, value.id.length);
+            brandItem = {}
+            if ($("#hdnBrand1").val() == "") {
+                brandItem["BrandId"] = 1;
+            }
+            else {
+                brandItem["BrandId"] = $("#hdnBrand1").val();
+            }
+            brandItem["OutletId"] = $("#hdnBrand1OutletId" + id).val();
+            brandItem["OutletName"] = $("#txtOutletBrand1Name" + id).val();
+            brandItem["City"] = $("#txtOutletBrand1City" + id).val();
+            brandItem["Area"] = $("#txtOutletBrand1Area" + id).val();
+            brandItem["Pincode"] = $("#txtOutletBrand1Pincode" + id).val();
+            brandItem["Geotags"] = $("#txtOutletBrand1Geotags" + id).val();
+            brandItem["CashierCount"] = $("#txtOutletBrand1CCount" + id).val();
+            ItemObject.push(brandItem);
+        });
+        var ID2s = $("#dvBrand2 div[id^='dvB2']");
+        $.each(ID2s, function (index, value) {
+            var id = value.id.substring(4, value.id.length);
+            brandItem = {}
+            if ($("#hdnBrand2").val() == "") {
+                brandItem["BrandId"] = 2;
+            }
+            else {
+                brandItem["BrandId"] = $("#hdnBrand2").val();
+            }
+            brandItem["OutletId"] = $("#hdnBrand2OutletId" + id).val();
+            brandItem["OutletName"] = $("#txtOutletBrand2Name" + id).val();
+            brandItem["City"] = $("#txtOutletBrand2City" + id).val();
+            brandItem["Area"] = $("#txtOutletBrand2Area" + id).val();
+            brandItem["Pincode"] = $("#txtOutletBrand2Pincode" + id).val();
+            brandItem["Geotags"] = $("#txtOutletBrand2Geotags" + id).val();
+            brandItem["CashierCount"] = $("#txtOutletBrand2CCount" + id).val();
+            ItemObject.push(brandItem);
+        });
+        item["OutletJson"] = ItemObject;
+        BrandData.push(item);
+        var data = JSON.stringify(BrandData);        
+
+        $.ajax({
+            type: "POST",
+            url: "/CustomerManagement/AddBrandAndOutlet",
+            data: '{jsonData: ' + JSON.stringify(data) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(111)
+            },
+            error: function (result) {
+                console.log(result.responseText)
+                if (result.responseText == "True") {
+                    toastr.success("Brand and Outlets Added");
+                    $('#btn4').addClass("js-active");
+                    $('#sec4').addClass("js-active");
+                    $('#sec3').removeClass("js-active");
+                    $("#divLoader").hide();
+                }
+                else {
+                    toastr.error('error occured while saving data');
+                    $("#divLoader").hide();
+                }
+
+            }
+        });
+    }
+
+    function GetBrandAndOutletData() {
+        var GroupId = $("#hdnGroupDetailGroupID").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/CustomerManagement/GetBrandAndOutletData",
+            data: '{groupId: ' + JSON.stringify(GroupId) + '}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {                
+                LoadBrandAndOutlet(result)
+                $("#divLoader").hide();
+            },
+            error: function (result) {                
+                console.log(result.responseText)
+                $("#divLoader").hide();
+            }
+        });
+    }
+    function LoadBrandAndOutlet(data)
+    {        
+        var brands = data.lstBrands;        
+        $("#hdnBrand1").val(brands[0].BrandId);
+        $("#txtBrandName1").val(brands[0].BrandName);
+        $("#txtBrandCategory1").val(brands[0].Category);
+
+        if (data.lstBrands.length > 1) {
+            $("#hdnBrand2").val(brands[1].BrandId);
+            $("#txtBrandName2").val(brands[1].BrandName);
+            $("#txtBrandCategory2").val(brands[1].Category);
+            $("#dvBrand2").html("");
+        }
+
+        var outlets = data.lstOutlets;        
+        var outlet1count = 1;
+        var outlet2count = 1;
+        $("#dvBrand1").html("");
+
+        $.each(outlets, function (index, value) {            
+            if (value.BrandId == $("#hdnBrand1").val()) {
+                itemHTML = "<div id=dvB1" + outlet1count + ">";
+                itemHTML += "<input type=\"hidden\" id=\"hdnBrand1OutletId" + outlet1count + "\" />";
+                itemHTML += "Outlet Name <input type=\"text\" id=\"txtOutletBrand1Name" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "City <input type=\"text\" id=\"txtOutletBrand1City" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "Area <input type=\"text\" id=\"txtOutletBrand1Area" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "Pincode <input type=\"text\" id=\"txtOutletBrand1Pincode" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "Geotags <input type=\"text\" id=\"txtOutletBrand1Geotags" + outlet1count + "\" class=\"input50\" />";
+                itemHTML += "Cashier Count <input type=\"text\" id=\"txtOutletBrand1CCount" + outlet1count + "\" class=\"input50\" />";
+                if (outlet1count==1) {
+                    itemHTML += "<button class=\"btn btn-primary\" onclick=\"AddBrand1Outlet()\" id=\"btnBrand1\">+</button>";
+                }
+                else {
+                    itemHTML += "<button onclick=\"remove1Item(" + outlet1count + ")\" id=btnBrand1" + outlet1count + " type=\"button\" class=\"btn btn-primary\" style=\"margin-left: 5px;\"> - </button>";
+                }
+                itemHTML += "</div>";
+                $("#dvBrand1").append(itemHTML);
+
+                $("#hdnBrand1OutletId" + outlet1count).val(value.OutletId);
+                $("#txtOutletBrand1Name" + outlet1count).val(value.OutletName);
+                $("#txtOutletBrand1City" + outlet1count).val(value.City);
+                $("#txtOutletBrand1Area" + outlet1count).val(value.Address);
+                $("#txtOutletBrand1Pincode" + outlet1count).val(value.PinCode);
+                $("#txtOutletBrand1Geotags" + outlet1count).val(value.Latitude);
+                //$("#txtOutletBrand1CCount" + outlet1count).val(value.ItemQty);
+                brand1count = outlet1count;
+                outlet1count++;                
+               
+            }
+            if (value.BrandId == $("#hdnBrand2").val()) {
+                
+                itemHTML = "<div id=dvB2" + outlet2count + ">";
+                itemHTML += "<input type=\"hidden\" id=\"hdnBrand2OutletId" + outlet2count + "\" />";
+                itemHTML += "Outlet Name <input type=\"text\" id=\"txtOutletBrand2Name" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "City <input type=\"text\" id=\"txtOutletBrand2City" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "Area <input type=\"text\" id=\"txtOutletBrand2Area" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "Pincode <input type=\"text\" id=\"txtOutletBrand2Pincode" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "Geotags <input type=\"text\" id=\"txtOutletBrand2Geotags" + outlet2count + "\" class=\"input50\" />";
+                itemHTML += "Cashier Count <input type=\"text\" id=\"txtOutletBrand2CCount" + outlet2count + "\" class=\"input50\" />";
+                if (outlet2count == 1) {
+                    itemHTML += "<button class=\"btn btn-primary\" onclick=\"AddBrand2Outlet()\" id=\"btnBrand2\">+</button>";
+                }
+                else {
+                    itemHTML += "<button onclick=\"remove2Item(" + outlet2count + ")\" id=btnBrand2" + outlet2count + " type=\"button\" class=\"btn btn-primary\" style=\"margin-left: 5px;\"> - </button>";
+                }
+                    itemHTML += "</div>";
+                $("#dvBrand2").append(itemHTML);
+
+                $("#hdnBrand2OutletId" + outlet2count).val(value.OutletId);
+                $("#txtOutletBrand2Name" + outlet2count).val(value.OutletName);
+                $("#txtOutletBrand2City" + outlet2count).val(value.City);
+                $("#txtOutletBrand2Area" + outlet2count).val(value.Address);
+                $("#txtOutletBrand2Pincode" + outlet2count).val(value.PinCode);
+                $("#txtOutletBrand2Geotags" + outlet2count).val(value.Latitude);
+                //$("#txtOutletBrand1CCount" + outlet1count).val(value.ItemQty);
+                
+                outlet2count++;
+                brand2count = outlet2count;
+            }
+        });
+    }
 </script>

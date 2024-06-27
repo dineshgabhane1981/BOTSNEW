@@ -35,7 +35,7 @@
                             </tr>
                             <tr>
                                 <td>Card No</td>
-                                <td></td>
+                                <td>@Model.CardNo</td>
                             </tr>
                             <tr>
                                 <td>Type</td>
@@ -46,8 +46,35 @@
                                 <td>@Model.Birthdate</td>
                             </tr>
                             <tr>
+                                <td>Anniversary</td>
+                                <td>@Model.AnniversaryDate</td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                @if (string.IsNullOrEmpty(Model.Gender))
+                                {
+                                    <td></td>
+                                }
+                                @if (Model.Gender == "M")
+                                {
+                                    <td>Male</td>
+                                }
+                                @if (Model.Gender == "F")
+                                {
+                                    <td>Female</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Area</td>
+                                <td>@Model.Area</td>
+                            </tr>
+                            <tr>
                                 <td>Source</td>
                                 <td>@Model.Source</td>
+                            </tr>
+                            <tr>
+                                <td>Old Mobile No</td>
+                                <td>@Model.OldMobileNo</td>
                             </tr>
 
                         </table>
@@ -61,15 +88,33 @@
                                 <th colspan="2" style="text-align:center;color:darkcyan;font-size:20px;"><b>@Model.AvlPtsBal</b></th>
                             </tr>
                             <tr>
-                                <th colspan="2" style="text-align:center;">Points Balance</th>
+                                <th colspan="2" style="text-align:center;">Total Points balance</th>
                             </tr>
                             <tr style="text-align:center;">
-                                <td>Expired Points</td>
+                                <td>Points Expiry</td>
                                 <td style="text-align:center;">On</td>
                             </tr>
                             <tr style="text-align:center;">
                                 <td>@Model.PointstobeExpired</td>
                                 <td>@Model.PointsExpiryDate</td>
+                            </tr>
+
+                        </table>
+
+                        <table border="1" cellpadding="5" cellspacing="5" style="margin-top:25px;">
+                            <tr>
+                                <th colspan="2" style="text-align:center;color:darkcyan;font-size:20px;height:30px;"><b>@Model.BonusPoints</b></th>
+                            </tr>
+                            <tr>
+                                <th colspan="2" style="text-align:center;">Bonus Points balance</th>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td>Points Expiry</td>
+                                <td style="text-align:center;">On</td>
+                            </tr>
+                            <tr style="text-align:center;">
+                                <td style="height:30px;">@Model.BonusPointsExpiry</td>
+                                <td>@Model.BonusPointsExpiryDate</td>
                             </tr>
 
                         </table>
@@ -98,6 +143,26 @@
                                 <td>Total Burn</td>
                                 <td>@Model.TotalBurn</td>
                             </tr>
+                            <tr>
+                                <td>Last Txn Date</td>
+                                <td>@Model.LastTxnDate</td>
+                            </tr>
+                            <tr>
+                                <td>Profile Updated</td>
+                                <td>@Model.ProfileUpdateStatus</td>
+                            </tr>
+                            <tr>
+                                <td>Referrals Given</td>
+                                <td>@Model.ReferralGiven</td>
+                            </tr>
+                            <tr>
+                                <td>Referral Biz</td>
+                                <td>@Model.ReferralBiz</td>
+                            </tr>
+                            <tr>
+                                <td>If Referred, by</td>
+                                <td>@Model.ReferredBy</td>
+                            </tr>
 
                         </table>
 
@@ -106,8 +171,17 @@
                 </div>
             </div>
 
-            <div class="row" style="margin-left:0px !important;margin-right:0px !important; background-color:white;" id="dvActivityData">
-                <h5>Transaction Details</h5>
+            <div class="row" style="margin-left: 0px !important; margin-right: 0px !important; background-color: white; padding: 15px;" id="dvActivityData">                
+                <div class="col search-container">
+                    <h5>Transaction Details</h5>
+                </div>
+                <div class="col text-right">
+                    <div class="dropdown">
+                        <button class="btn btn-primary login-btn" onclick='SearchExportDataExcel(@Model.MobileNo);' type="button" id="btnExport">
+                            <i class="fas fa-file-export"></i> Export
+                        </button>
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table" id="memberSearchTable">
                         <thead>
@@ -134,11 +208,40 @@
                                         <tr>
                                             <td>@item.TxnOutlet</td>
                                             <td>@item.InvoiceNo</td>
-                                            <td>@item.InvoiceAmt</td>
+                                            @if (item.InvoiceAmt.HasValue)
+                                            {
+                                                <td>@item.InvoiceAmt</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+
                                             <td>@item.TxnType</td>
-                                            <td>@item.PointsEarned</td>
-                                            <td>@item.PointsBurned</td>
-                                            <td>@item.PointsBalance</td>
+                                            @if (item.PointsEarned.HasValue)
+                                            {
+                                                <td>@item.PointsEarned</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+                                            @if (item.PointsBurned.HasValue)
+                                            {
+                                                <td>@item.PointsBurned</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
+                                            @if (item.PointsBalance.HasValue)
+                                            {
+                                                <td>@item.PointsBalance</td>
+                                            }
+                                            else
+                                            {
+                                                <td>0.00</td>
+                                            }
                                             <td>@item.TxnDatetime</td>
                                             <td>@item.TxnUpdateDate</td>
                                         </tr>
@@ -161,40 +264,77 @@
                     </table>
                 </div>
             </div>
-        }
-        else
-        {
-            <div class="row" style="margin-left:0px !important;margin-right:0px !important;">
-                <div class="row col-md-12 mt-3" style="color:red;">
-                    This Mobile Number is not part of the Member Database. Please check the number & try again
+                }
+                else
+                {
+                <div class="row" style="margin-left:0px !important;margin-right:0px !important;">
+                    <div class="row col-md-12 mt-3" style="color:red;">
+                        This Mobile Number is not part of the Member Database. Please check the number & try again
 
+                    </div>
                 </div>
+                }
             </div>
-        }
-    </div>
 </div>
 <script>
+    (function () {
+
+        var customDateDDMMMYYYYToOrd = function (date) {
+            var dateTime = date.split(' '),
+                dateObj = new Date(dateTime[0].replace(/-/g, ' ')),
+                time = "00:00",
+                type = "AM";
+            if (dateTime.length > 1) { // if time part and am/pm part is available
+                time = dateTime[1],
+                    type = dateTime[2];
+            }
+
+            var splitTime = time.split(":"),
+                hours = type == "PM" ? Number(splitTime[0]) + 12 : Number(splitTime[0]),
+                minutes = Number(splitTime[1]),
+                seconds = 0,
+                milliseconds = 0;
+            return new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), hours, minutes, seconds, milliseconds);
+        };
+
+        // This will help DataTables magic detect the "dd-MMM-yyyy" format; Unshift
+        // so that it's the first data type (so it takes priority over existing)
+        jQuery.fn.dataTableExt.aTypes.unshift(
+            function (sData) {
+                "use strict"; //let's avoid tom-foolery in this function
+                if (/^([0-2]?\d|3[0-1])-(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)-\d{4}/i.test(sData)) {
+                    return 'date-dd-mmm-yyyy';
+                }
+                return null;
+            }
+        );
+
+        // define the sorts
+        jQuery.fn.dataTableExt.oSort['date-dd-mmm-yyyy-asc'] = function (a, b) {
+            "use strict"; //let's avoid tom-foolery in this function
+            var ordA = customDateDDMMMYYYYToOrd(a),
+                ordB = customDateDDMMMYYYYToOrd(b);
+            return (ordA < ordB) ? -1 : ((ordA > ordB) ? 1 : 0);
+        };
+
+        jQuery.fn.dataTableExt.oSort['date-dd-mmm-yyyy-desc'] = function (a, b) {
+            "use strict"; //let's avoid tom-foolery in this function
+            var ordA = customDateDDMMMYYYYToOrd(a),
+                ordB = customDateDDMMMYYYYToOrd(b);
+            return (ordA < ordB) ? 1 : ((ordA > ordB) ? -1 : 0);
+        };
+
+    })();
+
     $(document).ready(function () {
         $('#memberSearchTable').DataTable({
-            "aaSorting": [],
+            "aaSorting": [[7, "desc"]],
             "paging": true,
-            "ordering": true,
+            "ordering": false,
             "info": true,
             "bFilter": true,
             "pageLength": 10,
-            "pagingType": "simple_numbers",
-            //language: {
-            //    paginate: {
-            //        next: '&#8594;', // or '→'
-            //        previous: '&#8592;' // or '←'
-            //    }
-            //}
-            aoColumnDefs: [
-                {
-                    bSortable: false,
-                    aTargets: [-9, -8, -7]
-                }
-            ]
+            "pagingType": "simple_numbers"            
         });
 
         $('#memberSearchTable_filter').hide();
@@ -213,9 +353,17 @@
             var table = $('#memberSearchTable').DataTable();
             table.draw();
         });
-
-        //$(".first.paginate_button, .last.paginate_button").hide();
     });
+
+    function SearchExportDataExcel(mobileNo) {
+        
+        var GroupId = $('#hdnGroupId').val();
+         var urlLink = "@Url.Action("MemberSearchExportToExcel", "Reports")";
+        urlLink = urlLink + "?mobileNo=" + mobileNo + "&groupId=" + GroupId + "";
+        console.log(urlLink);
+        window.location.href = urlLink;
+        $("#divLoader").hide();
+    }
 </script>
 
 <style>
