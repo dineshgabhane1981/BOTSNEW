@@ -1092,19 +1092,19 @@ namespace BOTS_BL.Repository
                                     mobileNos = objsmsnumber1.MobileNos;
                                 }
                                 string WAMsg = feedbackpointsmsg.MsgToCustomer;
-                                var objsmsdetails = context.SMSDetails.Where(x => x.OutletId == outletId).FirstOrDefault();
+                                var objsmsdetails = context.tblSMSWhatsAppCredentials.Where(x => x.OutletId == outletId).FirstOrDefault();
                                 if (objsmsdetails != null)
                                 {
                                     WATokenId = objsmsdetails.WhatsAppTokenId;
                                 }
-                                if (GroupId == "1225")
-                                {
-                                    var SMSDetailsMapping = context.SMSOutletMappings.Where(x => x.OutletId == outletId).FirstOrDefault();
-                                    if (SMSDetailsMapping != null)
-                                    {
-                                        WATokenId = SMSDetailsMapping.WATokenId;
-                                    }
-                                }
+                                //if (GroupId == "1225")
+                                //{
+                                //    var SMSDetailsMapping = context.SMSOutletMappings.Where(x => x.OutletId == outletId).FirstOrDefault();
+                                //    if (SMSDetailsMapping != null)
+                                //    {
+                                //        WATokenId = SMSDetailsMapping.WATokenId;
+                                //    }
+                                //}
                                 if (objcustdetails != null)
                                 {
                                     WAMsg = WAMsg.Replace("#01", objcustdetails.Name);
@@ -1115,9 +1115,9 @@ namespace BOTS_BL.Repository
                                 }
                                 WAMsg = WAMsg.Replace("#02", Convert.ToString(feedbackpointsmsg.AwardFeedbackPoints));
 
-                                var bitly = context.MWP_Details.Where(x => x.MWP_Id == "08").Select(y => y.MWP_Name).FirstOrDefault();
+                                var bitly = context.tblDLCRuleMasters.Where(x => x.DLCName == "DLCLink").Select(y => y.DLCValue).FirstOrDefault();
                                 WAMsg = WAMsg.Replace("#03", bitly);
-                                var customerName = context.GroupDetails.Where(x => x.GroupId == GroupId).Select(y => y.GroupName).FirstOrDefault();
+                                var customerName = context.tblGroupMasters.Where(x => x.GroupId == GroupId).Select(y => y.GroupName).FirstOrDefault();
                                 WAMsg = WAMsg.Replace("#04", customerName);
 
                                 SendMessage(mobileNo, WAMsg, WATokenId);
