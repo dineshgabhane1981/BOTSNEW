@@ -20,6 +20,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<tblEReceiptConfig> tblEReceiptConfigs { get; set; }
         public virtual DbSet<tblMembershipDetail> tblMembershipDetails { get; set; }
         public virtual DbSet<tblTempTxnJSON> tblTempTxnJSONs { get; set; }
         public virtual DbSet<tblCouponRule> tblCouponRules { get; set; }

@@ -673,92 +673,111 @@
                         </li>
 
                     }
+                    if (userDetails.IsEReceipt)
+                    {
+                        <li>
+                            <a href="#">
+                                <i class="metismenu-icon pe-7s-date"></i>
+                                EReceipt Module
+                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                            </a>
+                            <ul>
+                                <li class="@Html.IsSelected(controller: "EReceipt", action: "ConfigureEReceipt")">
+                                    <a href="@Url.Action("ConfigureEReceipt", "EReceipt")" class="@Html.IsSelected(controller: "EReceipt", action: "ConfigureEReceipt")">
+                                        <i class="metismenu-icon pe-7s-rocket"></i>
+                                        EReceipt Config
+                                    </a>
+                                </li>                                
+                            </ul>
+                        </li>
+                    }
+
                     if (gId != "1341")
                     {
                         if (roleId != "2" && roleId != "3" && roleId != "4" && gId != "1051" && gId != "1000" && gId != "1001")
                         {
-                        <li>
-                            <a href="#">
-                                <i class="metismenu-icon pe-7s-car"></i>
-                                IT CS
-                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                            </a>
-                            <ul>
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeScript")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeScript")" href="@Url.Action("ChangeScript", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Change Script
-                                    </a>
-                                </li>
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableSMS")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableSMS")" href="@Url.Action("DisableSMS", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Block Promo/Txn Messages
-                                    </a>
-                                </li>
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")" href="@Url.Action("DisableTransactions", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Block Loyalty
-                                    </a>
-                                </li>
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")" href="@Url.Action("ChangeEarnRule", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Points Rule
-                                    </a>
-                                </li>
-                                @*<li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")">
-            <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")" href="@Url.Action("ChangeBurnRule", "IndividualDBConfig")">
-                <i class="metismenu-icon"></i>
-                Burn Rule
-            </a>
-        </li>*@
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")" href="@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Extend Point Expiry
-                                    </a>
-                                </li>
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "UploadCelebrationData")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "UploadCelebrationData")" href="@Url.Action("UploadCelebrationData", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Celebration Data
-                                    </a>
-                                </li>
-                                @*<li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeRedeemptionOTP")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeRedeemptionOTP")" href="@Url.Action("ChangeRedeemptionOTP", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Redeemption OTP
-                                    </a>
-                                </li>*@
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "SlabWiseReport")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "SlabWiseReport")" href="@Url.Action("SlabWiseReport", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Slab Wise
-                                    </a>
-                                </li>
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")" href="@Url.Action("ChangeDemographicDetails", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Outlet Owner Details
-                                    </a>
-                                </li>
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")" href="@Url.Action("ChangeOutletDetails", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Add New Outlet
-                                    </a>
-                                </li>
-                                <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "GenarateQrCode")">
-                                    <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "GenarateQrCode")" href="@Url.Action("GenarateQrCode", "IndividualDBConfig")">
-                                        <i class="metismenu-icon"></i>
-                                        Generate QRCode
-                                    </a>
-                                </li>
-                            </ul>
+                            <li>
+                                <a href="#">
+                                    <i class="metismenu-icon pe-7s-car"></i>
+                                    IT CS
+                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                </a>
+                                <ul>
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeScript")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeScript")" href="@Url.Action("ChangeScript", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Change Script
+                                        </a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableSMS")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableSMS")" href="@Url.Action("DisableSMS", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Block Promo/Txn Messages
+                                        </a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "DisableTransactions")" href="@Url.Action("DisableTransactions", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Block Loyalty
+                                        </a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeEarnRule")" href="@Url.Action("ChangeEarnRule", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Points Rule
+                                        </a>
+                                    </li>
+                                    @*<li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")">
+                                <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeBurnRule")" href="@Url.Action("ChangeBurnRule", "IndividualDBConfig")">
+                                    <i class="metismenu-icon"></i>
+                                    Burn Rule
+                                </a>
+                            </li>*@
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ExtendPointsExpiry")" href="@Url.Action("ExtendPointsExpiry", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Extend Point Expiry
+                                        </a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "UploadCelebrationData")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "UploadCelebrationData")" href="@Url.Action("UploadCelebrationData", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Celebration Data
+                                        </a>
+                                    </li>
+                                    @*<li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeRedeemptionOTP")">
+                                <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeRedeemptionOTP")" href="@Url.Action("ChangeRedeemptionOTP", "IndividualDBConfig")">
+                                    <i class="metismenu-icon"></i>
+                                    Redeemption OTP
+                                </a>
+                            </li>*@
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "SlabWiseReport")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "SlabWiseReport")" href="@Url.Action("SlabWiseReport", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Slab Wise
+                                        </a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeDemographicDetails")" href="@Url.Action("ChangeDemographicDetails", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Outlet Owner Details
+                                        </a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "ChangeOutletDetails")" href="@Url.Action("ChangeOutletDetails", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Add New Outlet
+                                        </a>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "IndividualDBConfig", action: "GenarateQrCode")">
+                                        <a class="@Html.IsSelected(controller: "IndividualDBConfig", action: "GenarateQrCode")" href="@Url.Action("GenarateQrCode", "IndividualDBConfig")">
+                                            <i class="metismenu-icon"></i>
+                                            Generate QRCode
+                                        </a>
+                                    </li>
+                                </ul>
 
-                        </li>
+                            </li>
 
                         }
                     }

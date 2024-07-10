@@ -106,7 +106,7 @@ namespace WebApp.Controllers
                 {
                     if (string.IsNullOrEmpty(Convert.ToString(TempData["InvalidUserMessage"])))
                     {
-                        TempData["InvalidUserMessage"] = "Please check OTP again";
+                        TempData["InvalidUserMessage"] = "Please check User details again";
                     }
                 }
             }

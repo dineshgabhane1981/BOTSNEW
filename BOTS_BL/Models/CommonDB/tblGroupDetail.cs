@@ -76,6 +76,7 @@ namespace BOTS_BL.Models
         public bool? IsLive { get; set; }
         public bool? IsEvent { get; set; }
         public bool? IsCoupon { get; set; }
+        public bool? IsEReceipt { get; set; }
 
         public DateTime? RenewalDate { get; set; }
 

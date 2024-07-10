@@ -18,5 +18,6 @@ namespace BOTS_BL.Models
 
         [Required]
         public string JSON { get; set; }
+        public string MobileNo { get; set; }        
     }
 }

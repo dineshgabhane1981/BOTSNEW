@@ -294,6 +294,7 @@
     <Compile Include="ViewModel\DLCLinksViewModel.cs" />
     <Compile Include="ViewModel\DLCProfileUpdateViewModel.cs" />
     <Compile Include="ViewModel\DocumentLibraryViewModel.cs" />
+    <Compile Include="ViewModel\EReceiptViewModel.cs" />
     <Compile Include="ViewModel\EventViewModel.cs" />
     <Compile Include="ViewModel\FeedbackAuthorViewModel.cs" />
     <Compile Include="ViewModel\FeedbackConfigViewModel.cs" />
@@ -404,13 +405,17 @@
     <Content Include="Content\EReceipt\Images\Calender.png" />
     <Content Include="Content\EReceipt\Images\EA5FA8E6-667B-43FB-A0A0-B9E8ABE339AA.png" />
     <Content Include="Content\EReceipt\Images\edit.png" />
+    <Content Include="Content\EReceipt\Images\facebook.svg" />
     <Content Include="Content\EReceipt\Images\HP-NeoCasualsForNeoLeaders_WebsiteBanner-Desktop.jpg" />
+    <Content Include="Content\EReceipt\Images\instagram.svg" />
     <Content Include="Content\EReceipt\Images\logo23.png" />
     <Content Include="Content\EReceipt\Images\mail-outline.png" />
     <Content Include="Content\EReceipt\Images\phone-portrait-outline.png" />
     <Content Include="Content\EReceipt\Images\round-corner.png" />
     <Content Include="Content\EReceipt\Images\tier-bg.png" />
+    <Content Include="Content\EReceipt\Images\twitter.svg" />
     <Content Include="Content\EReceipt\Images\UnlimitedSneakers_WebsiteBanner-Desktop.jpg" />
+    <Content Include="Content\EReceipt\Images\whatsapp.svg" />
     <Content Include="Content\EReceipt\SVG\alert.svg" />
     <Content Include="Content\EReceipt\SVG\apple-store.svg" />
     <Content Include="Content\EReceipt\SVG\chat.svg" />
@@ -784,6 +789,8 @@
     <Content Include="Views\IndividualDBConfig\ChangeOutletDetails.cshtml" />
     <Content Include="Views\IndividualDBConfig\GenarateQrCode.cshtml" />
     <Content Include="Views\CommonDBConfig\UpdateRenewal.cshtml" />
+    <Content Include="Views\EReceipt\ConfigureEReceipt.cshtml" />
+    <Content Include="Views\EReceipt\GetReceiptLink.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

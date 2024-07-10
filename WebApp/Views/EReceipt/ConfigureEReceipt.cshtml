@@ -1,0 +1,276 @@
+﻿@model WebApp.ViewModel.EReceiptViewModel
+@{
+    ViewBag.Title = "Configure EReceipt";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 pt-3 pl-3 pr-3 pb-3 card">
+        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
+            @Html.HiddenFor(model => model.objEReceiptConfig.SlNo, new { @id = "hdnSlNo" })
+
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div class="col-md-3 col-lg-3">
+                    Brand Name
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    @Html.TextBoxFor(model => model.objEReceiptConfig.BrandName, new { @class = "input100", @id = "txtBrandName", tabindex = 1 })
+                </div>
+            </div>
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div class="col-md-3 col-lg-3">
+                    Website URL
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    @Html.TextBoxFor(model => model.objEReceiptConfig.WebsiteURL, new { @class = "input100", @id = "txtWebsiteURL", tabindex = 2 })
+                </div>
+            </div>
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div class="col-md-3 col-lg-3">
+                    Thank You Message
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    @Html.TextAreaFor(model => model.objEReceiptConfig.ThankyouMessage, new { @class = "input100", @id = "txtThankyouMessage", tabindex = 3 })
+                </div>
+            </div>
+            @*<div class="row" style="margin: 0; padding-top:10px;">
+                    <div class="col-md-3 col-lg-3">
+                        Show Feedback
+                    </div>
+                    <div class="col-md-6 col-lg-6" style="text-align:left;">
+                        @Html.CheckBoxFor(model => model.objEReceiptConfig.IsFeedback, new { @id = "chkIsFeedback", @style = "width:20px;height:20px;cursor:pointer;", tabindex = 4 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px;">
+                    <div class="col-md-3 col-lg-3">
+                        Show Update Profile & Earn
+                    </div>
+                    <div class="col-md-6 col-lg-6" style="text-align:left;">
+                        @Html.CheckBoxFor(model => model.objEReceiptConfig.IsUpdateProfileAndEarn, new { @id = "chkIsUpdateProfileAndEarn", @style = "width:20px;height:20px;cursor:pointer;", tabindex = 5 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top:10px; display:none;" id="dvUpdateProfileText">
+                    <div class="col-md-3 col-lg-3">
+                        Update Profile Text
+                    </div>
+                    <div class="col-md-6 col-lg-6" style="text-align:left;">
+                        @Html.TextBoxFor(model => model.objEReceiptConfig.UpdateProfileText, new { @class = "input100", @id = "txtUpdateProfileText", tabindex = 6 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top: 10px; display: none;" id="dvUpdateProfileBanner">
+                    <div class="col-md-3 col-lg-3">
+                        Update Profile Banner
+                    </div>
+                    <div class="col-md-6 col-lg-6" style="text-align:left;">
+                        @Html.TextBoxFor(model => model.objEReceiptConfig.UpdateProfileBanner, new { type = "file", @id = "fileUpdateProfileBanner", tabindex = 7 })
+                    </div>
+                </div>*@
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div class="col-md-3 col-lg-3">
+                    Show Social Media
+                </div>
+                <div class="col-md-6 col-lg-6" style="text-align:left;">
+                    @Html.CheckBoxFor(model => model.objEReceiptConfig.IsSocialMedia, new { @id = "chkIsSocialMedia", @style = "width:20px;height:20px;cursor:pointer;", tabindex = 4 })
+                </div>
+            </div>
+            <div class="row" style="margin: 0; padding-top:10px; display:none;" id="dvFacebookUrl">
+                <div class="col-md-3 col-lg-3">
+                    Facebook Url
+                </div>
+                <div class="col-md-6 col-lg-6" style="text-align:left;">
+                    @Html.TextBoxFor(model => model.objEReceiptConfig.FacebookUrl, new { @class = "input100", @id = "txtFacebookUrl", tabindex = 6 })
+                </div>
+            </div>
+            <div class="row" style="margin: 0; padding-top:10px; display:none;" id="dvTwitterUrl">
+                <div class="col-md-3 col-lg-3">
+                    Twitter Url
+                </div>
+                <div class="col-md-6 col-lg-6" style="text-align:left;">
+                    @Html.TextBoxFor(model => model.objEReceiptConfig.TwitterUrl, new { @class = "input100", @id = "txtTwitterUrl", tabindex = 6 })
+                </div>
+            </div>
+            <div class="row" style="margin: 0; padding-top:10px; display:none;" id="dvInstagramUrl">
+                <div class="col-md-3 col-lg-3">
+                    Instagram Url
+                </div>
+                <div class="col-md-6 col-lg-6" style="text-align:left;">
+                    @Html.TextBoxFor(model => model.objEReceiptConfig.InstagramUrl, new { @class = "input100", @id = "txtInstagramUrl", tabindex = 6 })
+                </div>
+            </div>
+            <div class="row" style="margin: 0; padding-top:10px; display:none;" id="dvWhatsappUrl">
+                <div class="col-md-3 col-lg-3">
+                    Whatsapp Number
+                </div>
+                <div class="col-md-6 col-lg-6" style="text-align:left;">
+                    @Html.TextBoxFor(model => model.objEReceiptConfig.WhatsappUrl, new { @class = "input100", @id = "txtWhatsappUrl", tabindex = 6 })
+                </div>
+            </div>
+            @*<div class="row" style="margin: 0; padding-top:10px;">
+                    <div class="col-md-3 col-lg-3">
+                        Show Advertising Banners
+                    </div>
+                    <div class="col-md-6 col-lg-6" style="text-align:left;">
+                        @Html.CheckBoxFor(model => model.objEReceiptConfig.IsAdvertisingBanner, new { @id = "chkIsAdvertisingBanner", @style = "width:20px;height:20px;cursor:pointer;", tabindex = 4 })
+                    </div>
+                </div>
+                <div class="row" style="margin: 0; padding-top: 10px; display: none;" id="dvAddBanner">
+                    <div class="col-md-3 col-lg-3">
+                        Upload Banner
+                    </div>
+                    <div class="col-md-6 col-lg-6" style="text-align:left;">
+                        @Html.TextBoxFor(model => model.objEReceiptConfig.CustomerServiceContact, new { type = "file", @id = "txtCustomerServiceContact", tabindex = 7 })
+                    </div>
+                </div>*@
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div class="col-md-3 col-lg-3">
+                    Customer Service Email
+                </div>
+                <div class="col-md-6 col-lg-6" style="text-align:left;">
+                    @Html.TextBoxFor(model => model.objEReceiptConfig.CustomerServiceEmail, new { @class = "input100", @id = "txtCustomerServiceEmail", tabindex = 6 })
+                </div>
+            </div>
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div class="col-md-3 col-lg-3">
+                    Customer Service Contact
+                </div>
+                <div class="col-md-6 col-lg-6" style="text-align:left;">
+                    @Html.TextBoxFor(model => model.objEReceiptConfig.CustomerServiceContact, new { @class = "input100", @id = "txtCustomerServiceContact", tabindex = 6 })
+                </div>
+            </div>
+            <div class="row" style="margin: 0; padding-top:10px;">
+                <div class="col-md-3 col-lg-3">
+                    Terms And Conditions
+                </div>
+                <div class="col-md-6 col-lg-6" style="text-align:left;">
+                    @Html.TextAreaFor(model => model.objEReceiptConfig.TermsAndConditions, new { @class = "input200", rows = "5", @id = "txtTermsAndConditions", tabindex = 6 })
+                </div>
+            </div>
+            <div class="mt-4 col-md-8 col-xl-8" style="text-align:end;">
+                <button id="btnSave" class="btn btn-primary login-btn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+<script>
+    var myEditor;
+    $(document).ready(function () {
+        
+        ClassicEditor
+            .create(document.querySelector('#txtTermsAndConditions'))
+            .then(editor => {
+                console.log('Editor was initialized', editor);
+                myEditor = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+
+        if ($("#chkIsSocialMedia").is(":checked")) {
+            $("#dvFacebookUrl").show();
+            $("#dvTwitterUrl").show();
+            $("#dvInstagramUrl").show();
+            $("#dvWhatsappUrl").show();
+        }
+        $("#chkIsUpdateProfileAndEarn").on("click", function () {
+            if ($("#chkIsUpdateProfileAndEarn").is(":checked")) {
+                $("#dvUpdateProfileText").show();
+                $("#dvUpdateProfileBanner").show();
+            }
+            else {
+                $("#dvUpdateProfileText").hide();
+                $("#dvUpdateProfileBanner").hide();
+            }
+        });
+
+        $("#chkIsSocialMedia").on("click", function () {
+            if ($("#chkIsSocialMedia").is(":checked")) {
+                $("#dvFacebookUrl").show();
+                $("#dvTwitterUrl").show();
+                $("#dvInstagramUrl").show();
+                $("#dvWhatsappUrl").show();
+            }
+            else {
+                $("#dvFacebookUrl").hide();
+                $("#dvTwitterUrl").hide();
+                $("#dvInstagramUrl").hide();
+                $("#dvWhatsappUrl").hide();
+            }
+        });
+
+        $("#chkIsAdvertisingBanner").on("click", function () {
+            if ($("#chkIsAdvertisingBanner").is(":checked")) {
+                $("#dvAddBanner").show();
+            }
+            else {
+                $("#dvAddBanner").hide();
+            }
+        });
+
+        $("#btnSave").on("click", function () {
+            SaveConfiguration();
+        });
+
+    });
+    function SaveConfiguration() {
+        
+        var AllData = [];
+        item = {}
+        item["SlNo"] = $("#hdnSlNo").val();
+        item["BrandName"] = $("#txtBrandName").val();
+        item["WebsiteURL"] = $("#txtWebsiteURL").val();
+        item["ThankyouMessage"] = $("#txtThankyouMessage").val();
+        //item["IsFeedback"] = $("#chkIsFeedback").is(":checked");
+        //item["IsAdvertisingBanner"] = $("#chkIsAdvertisingBanner").is(":checked");
+        //item["IsUpdateProfileAndEarn"] = $("#chkIsUpdateProfileAndEarn").is(":checked");
+        //item["UpdateProfileText"] = $("#txtUpdateProfileText").val();
+        //item["UpdateProfileBanner"] = $("#fileUpdateProfileBanner").val();
+        item["IsSocialMedia"] = $("#chkIsSocialMedia").is(":checked");
+        item["FacebookUrl"] = $("#txtFacebookUrl").val();
+        item["TwitterUrl"] = $("#txtTwitterUrl").val();
+        item["InstagramUrl"] = $("#txtInstagramUrl").val();
+        item["WhatsappUrl"] = $("#txtWhatsappUrl").val();
+        item["TermsAndConditions"] = myEditor.getData();
+        item["CustomerServiceEmail"] = $("#txtCustomerServiceEmail").val();
+        item["CustomerServiceContact"] = $("#txtCustomerServiceContact").val();
+
+        AllData.push(item);
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveConfig", "EReceipt")',
+            data: "{'jsonData': '" + JSON.stringify(AllData) + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                console.log(response);
+                if (response == true) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "EReceipt Configuration saved successfully",
+                        buttonText: "Okay"
+                    })
+                }
+                else {
+                    cuteAlert({
+                        type: "error",
+                        title: "Oops..",
+                        message: "There is some problem in saving configuration",
+                        buttonText: "Okay"
+                    })
+                }
+                $("#divLoader").hide();
+            },
+            failure: function (response) {
+                $("#divLoader").hide();
+            },
+            error: function (response) {
+                alert(222);
+                $("#divLoader").hide();
+            }
+        });
+    }
+</script>

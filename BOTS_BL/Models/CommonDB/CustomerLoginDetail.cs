@@ -61,6 +61,8 @@ namespace BOTS_BL.Models
         public bool IsEvent { get; set; }
         [NotMapped]
         public bool IsCoupon { get; set; }
+        [NotMapped]
+        public bool IsEReceipt { get; set; }
         [StringLength(255)]
         public string EncryptedPassword { get; set; }
     }

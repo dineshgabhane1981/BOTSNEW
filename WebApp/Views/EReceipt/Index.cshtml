@@ -12,43 +12,48 @@
 
     <title>receipt</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="./Content/EReceipt/CSS/css2" rel="stylesheet">
-    <link href="./Content/EReceipt/CSS/css2(1)" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/font-awesome.min.css">
+    <link href="~/Content/EReceipt/CSS/css2" rel="stylesheet">
+    <link href="~/Content/EReceipt/CSS/css2(1)" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="~/Content/EReceipt/font-awesome.min.css">
 
-    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/owl.carousel.css">
-    <link id="lnkCSS" rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/blue.css">
-    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/blue.css">
-    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/Bata.css">
-    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/Loading.css">
-    <link rel="stylesheet" type="text/css" href="./Content/EReceipt/CSS/developer.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/EReceipt/CSS/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/EReceipt/CSS/owl.carousel.css">
+    <link id="lnkCSS" rel="stylesheet" type="text/css" href="~/Content/EReceipt/CSS/blue.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/EReceipt/CSS/blue.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/EReceipt/CSS/Bata.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/EReceipt/CSS/Loading.css">
+    <link rel="stylesheet" type="text/css" href="~/Content/EReceipt/CSS/developer.css">
 
-    @*<script src="./Content/EReceipt/JS/jquery.min.js.download"></script>*@
+    @*<script src="~/Content/EReceipt/JS/jquery.min.js.download"></script>*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
     <style>
         .fw-500 {
             font-weight: 500 !important;
         }
+
         .text-center {
             text-align: center;
         }
-        .circle-bg {            
-            background: url('../../Content/EReceipt/Images/tier-bg.png') no-repeat;
+
+        .circle-bg {
+            background: url('https://blueocktopus.in/botsnew/Content/EReceipt/Images/tier-bg.png') no-repeat;
             background-size: contain;
             background-position: center;
             height: 100%;
         }
+
         .d-table {
             display: table !important;
         }
+
         .row {
             display: flex;
             flex-wrap: wrap;
             margin-right: -15px;
             margin-left: -15px;
         }
+
         .Point-Summary {
             display: flex;
             flex-direction: column;
@@ -74,7 +79,7 @@
     <div class="pre-loader-block" id="loading" style="display: none;">
         <div class="loader-inner">
             <div class="loader-text">
-                <img src="./Content/EReceipt/SVG/preloader.svg" alt="" height="60" width="60">
+                <img src="~/Content/EReceipt/SVG/preloader.svg" alt="" height="60" width="60">
             </div>
         </div>
     </div>
@@ -98,12 +103,12 @@
                                     </div>
                                     <!--  New template change -->
 
-                                    <h2 id="h2UniversalStoreName" class="StoreName">@Model.BrandName</h2>
+                                    <h2 id="h2UniversalStoreName" class="StoreName">@Model.objConfig.BrandName</h2>
                                     <!-- new template chnage -->
                                     <!-- Show more & Show less  dropdown Start -->
                                     <h6 id="show_more_content" onclick="showmorefn()" class="show-more-content">
                                         <u>Show More</u>
-                                        <img src="./Content/EReceipt/SVG/showmore.svg" alt="Down arrow">
+                                        <img src="~/Content/EReceipt/SVG/showmore.svg" alt="Down arrow">
                                     </h6>
                                     <div id="comp_address" style="display: none">
                                         <div class="invoice_map">
@@ -123,10 +128,9 @@
                                             <div id="divStoreCINAndPAN" class="d-store" style="display:flex;">
                                                 <div class="store-details">
                                                     <div id="divStoreCIN" class="" style="display:block;">
-                                                        @*<h4 id="h4StorePan"><span id="spnLabelStorePAN">Store PAN:</span><span id="lblStorePANMasterValue">AABCB1043Q</span></h4>
-                                                            <h4 id="h4StoreCIN"><span id="spnLabelStoreCIN">Store CIN:</span> <span id="lblStoreCIN">L19201WB1931PLC007261</span></h4>*@
+                                                        
                                                         <p id="lblStoreGSTIN">GSTIN # @Model.objPOSBILL.OwnerGSTINNo</p>
-                                                        @*<p id="pStoreCode" class="fass-reg"><span id="spnStoreCodeLabel">Store Code:</span> <span id="spnStoreCode">smb2499</span></p>*@
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -134,11 +138,11 @@
                                     </div>
                                     <h6 id="show_less_content" onclick="showlessfn()" style="display: none" class="show-more-content">
                                         <u>Show Less</u>
-                                        <img src="./Content/EReceipt/SVG/showmore.svg" class="rotate_img" alt="Down arrow">
+                                        <img src="~/Content/EReceipt/SVG/showmore.svg" class="rotate_img" alt="Down arrow">
                                     </h6>
                                     <!-- Show more & Show less  dropdown emd -->
-                                    <span id="spnvisitusTitle">Visit us at </span><a href="https://@Model.WebsiteURL" target="_blank" id="ancvisitUSURL" style="text-decoration: none; font-size: 14px;" target="_blank">
-                                        <span id="lblvisitUSURL">@Model.WebsiteURL</span>
+                                    <span id="spnvisitusTitle">Visit us at </span><a href="https://@Model.objConfig.WebsiteURL" target="_blank" id="ancvisitUSURL" style="text-decoration: none; font-size: 14px;" target="_blank">
+                                        <span id="lblvisitUSURL">@Model.objConfig.WebsiteURL</span>
                                     </a><br>
                                 </div>
                             </div>
@@ -154,10 +158,10 @@
                                         <span id="lblHederMemberContact"><b>Mobile No:</b> @Model.objCustomer.HashedMobile</span>
                                     </a>
                                 </h2>
-                                <a href="#" id="ancEditProfileURL" style="font-weight: 400 !important;" target="_blank">
-                                    <img src="./Content/EReceipt/images/edit.png" alt="Click to Edit your profile details" title="Click to Edit your profile details" style="width: 23px;">
+                                @*<a href="#" id="ancEditProfileURL" style="font-weight: 400 !important;" target="_blank">
+                                    <img src="~/Content/EReceipt/images/edit.png" alt="Click to Edit your profile details" title="Click to Edit your profile details" style="width: 23px;">
                                     Edit Profile
-                                </a>
+                                </a>*@
                                 <p class="m-0 d-block w-100">
                                     <a href="#" id="ancHeaderMemberEmail" class="m-0 d-block w-100 position-static">
                                         <span id="lblHeaderMemberEmail"></span>
@@ -165,8 +169,7 @@
                                 </p>
                                 <p>
                                     <span id="lblHeaderBodyText2">
-                                        Thank You for Shopping at Blueocktopus<br>
-                                        Scroll down to Experience New Blueocktopus Club <br> privileges specially curated for you.
+                                        @Model.objConfig.ThankyouMessage
                                     </span>
                                 </p>
                             </div>
@@ -183,7 +186,7 @@
                                             <label>Quantity</label>
                                             <span id="spnQuantityMasterValue">@Model.ItemCount</span>
                                         </div>
-                                        <div class="col-4 downloadBtn">
+                                        @*<div class="col-4 downloadBtn">
                                             <div id="divPdfDownloadPopUp" style="display: none">
                                                 <div id="upnlPdFDownload">
                                                     <a id="lnkDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
@@ -192,7 +195,7 @@
                                             <div id="divPdfDownload" style="display:block;">
                                                 <a id="lnkPdfDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkPdfDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
                                             </div>
-                                        </div>
+                                        </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -241,7 +244,7 @@
                                             <div class="watermark">
                                                 <span id="lblUniversalInvoiceDetailwaterMark"></span>
                                             </div>
-                                            <img src="./Content/EReceipt/images/round-corner.png" class="round_img" width="100%">
+                                            <img src="~/Content/EReceipt/images/round-corner.png" class="round_img" width="100%">
                                             <table class="table table-borderless invoice_table">
                                                 <tbody>
                                                     @foreach (var item in Model.lstPOSBillItems)
@@ -261,7 +264,7 @@
 
                                                                             @item.ItemName &nbsp;
                                                                             <div class="tooltip">
-                                                                                <img src="./Content/EReceipt/SVG/alert.svg" alt="Alert">
+                                                                                <img src="~/Content/EReceipt/SVG/alert.svg" alt="Alert">
                                                                                 <div class="tooltiptext">
                                                                                     <span class="d-flex justify-content-between">
                                                                                         <span>
@@ -293,7 +296,7 @@
                                                     <b>UOM:Prs</b>*@
                                                                             </p>
                                                                             <div id="rptUniversalinvoiceDetails_ctl00_divTaxalert" class="tooltip">
-                                                                                <img src="./Content/EReceipt/SVG/alert.svg" alt="Alert">
+                                                                                <img src="~/Content/EReceipt/SVG/alert.svg" alt="Alert">
                                                                                 <div class="tooltiptext">
                                                                                     <span class="d-flex justify-content-between">
                                                                                         <span>CGST</span> <span>(@item.CGSTRate %)</span>
@@ -347,11 +350,11 @@
                                                     <table class="table table-borderless">
                                                         <thead>
                                                             <tr id="trTaxDetails">
-                                                                <th id="thHSNHeader" scope="col" style="font-weight: 700;">HSN</th>
-                                                                <th id="thTAXHeader" scope="col" style="font-weight: 700;">TAX</th>
-                                                                <th id="thPercentage" scope="col" style="font-weight: 700;">Rate</th>
-                                                                <th id="thTaxableAmountHeader" scope="col" style="font-weight: 700;">Taxable Amt</th>
-                                                                <th id="thTaxPaidHeader" scope="col" style="font-weight: 700;">TAX Paid</th>
+                                                                <th id="thHSNHeader" scope="col" style="font-weight: 700; padding: 5px !important;">HSN</th>
+                                                                <th id="thTAXHeader" scope="col" style="font-weight: 700; padding: 5px !important;">TAX</th>
+                                                                <th id="thPercentage" scope="col" style="font-weight: 700; padding: 5px !important;">Rate</th>
+                                                                <th id="thTaxableAmountHeader" scope="col" style="font-weight: 700; padding: 5px !important;">Taxable Amt</th>
+                                                                <th id="thTaxPaidHeader" scope="col" style="font-weight: 700; padding: 5px !important;">TAX Paid</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -447,11 +450,11 @@
                                                         <!-- Edit Highlight Tool -->
                                                         <h4 class="coins_para">
                                                             <span id="spnPointsEarned" style="display:block;">
-                                                                <img src="./Content/EReceipt/SVG/coins.svg" alt="coins">
+                                                                <img src="~/Content/EReceipt/SVG/coins.svg" alt="coins">
                                                                 <span id="lblPoitsEarned"> 14</span>
                                                             </span>
                                                             <span id="spnCouponsEarned" style="display: none">
-                                                                <img src="./Content/EReceipt/SVG/coins.svg" alt="coins">
+                                                                <img src="~/Content/EReceipt/SVG/coins.svg" alt="coins">
                                                                 <span id="lblCouponsEarned"></span>
                                                             </span>
                                                         </h4>
@@ -484,24 +487,27 @@
 
                                         <a onclick="showMoreLess();" id="lbtnShowMore" class="btn button_wrap button_type2" style="font-size:14px;" href="javascript:void(0);"><span id="spnInvoice">Show More</span></a>
                                     </div>
-                                    <div id="divFeedBack" class="FeedBackmodal-content feedback_wrap2 mt-3" style="display:block;">
-                                        <div class="feedback_wrap2_header">
-                                            <!-- modal header  -->
-                                            <h4 id="h4Feedback">Please rate your experience</h4>
-                                        </div>
-                                        <div class="feedback_wrap2_body">
-                                            <!-- begin modal body content  -->
+                                    @if (Model.objConfig.IsFeedback)
+                                    {
+                                        <div id="divFeedBack" class="FeedBackmodal-content feedback_wrap2 mt-3" style="display:block;">
+                                            <div class="feedback_wrap2_header">
+                                                <!-- modal header  -->
+                                                <h4 id="h4Feedback">Please rate your experience</h4>
+                                            </div>
+                                            <div class="feedback_wrap2_body">
+                                                <!-- begin modal body content  -->
 
-                                            <iframe src="F:\BOTS_Code\BOTSA\WebApp\Views\EReceipt\Feedback.html" id="IFrameCollectaURL" width="100%" style="border:none;display:block;height:350px;"></iframe>
+                                                <iframe src="F:\BOTS_Code\BOTSA\WebApp\Views\EReceipt\Feedback.html" id="IFrameCollectaURL" width="100%" style="border:none;display:block;height:350px;"></iframe>
 
-                                            <!-- end modal body content  -->
+                                                <!-- end modal body content  -->
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
                                     <div id="divAvailableAndEarnedOnThisBillPoints" class="Point-Summary" style="display:;">
                                         <div id="h6PointsSummary" class="Point-Summary-header">
                                             Points Summary
                                         </div>
-                                        <div class="row Point-Summary-details">
+                                        <div class="row" style="margin-left:35px;">
                                             <div class="row text-center fw-500 pt-2 ng-star-inserted col-12" style="height: 10rem;">
                                                 <div class="col-6 circle-bg p-4 d-table" style="margin-left:-20px;">
                                                     <div class="align-middle">
@@ -532,19 +538,102 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="divProfileUpdate" class="banner_bg" style="display:block;margin-top:20px;margin-bottom:20px;" background="">
-                                        <img src="~/EReceiptBanners/UpdateProfileBGImage.png" id="imgProfileUpdate" style="margin-left:0px;" class=" banner_img_text banner_img_text1" alt="banner">
-                                        <div class="bg_content_details">
-                                            <h3>
-                                                <span id="lblProfileUpdateTitle">Update Profile and Earn reward</span>
-                                            </h3>
-                                            <h6>
-                                                <span id="lblProfileUpdateBodyText">Rs 100 off on min shopping of Rs 999 (valid on fresh articles)</span>
-                                            </h6>
-                                            <button id="btnProfileUpdate" class="update_btn"><a href="#" id="ancProfileUpdate" target="_blank">Update Your Profile</a></button>
+                                    @if (Model.objConfig.IsUpdateProfileAndEarn)
+                                    {
+                                        <div id="divProfileUpdate" class="banner_bg" style="display:block;margin-top:20px;margin-bottom:20px;" background="">
+                                            <img src="~/EReceiptBanners/UpdateProfileBGImage.png" id="imgProfileUpdate" style="margin-left:0px;" class=" banner_img_text banner_img_text1" alt="banner">
+                                            <div class="bg_content_details">
+                                                <h3>
+                                                    <span id="lblProfileUpdateTitle">Update Profile and Earn reward</span>
+                                                </h3>
+                                                <h6>
+                                                    <span id="lblProfileUpdateBodyText">Rs 100 off on min shopping of Rs 999 (valid on fresh articles)</span>
+                                                </h6>
+                                                <button id="btnProfileUpdate" class="update_btn"><a href="#" id="ancProfileUpdate" target="_blank">Update Your Profile</a></button>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.objConfig.IsSocialMedia)
+                                    {
+
+                                        <div id="divSocial" class="social_card_wrap portlet" style="display: block; margin-top: 0px; margin-left: 0px !important; margin-right: 0px !important;">
+                                            <div>
+                                                <div class="editorTool"></div>
+                                                <div class="social_content">
+                                                    <div class="question_heading">
+                                                        <h2>
+                                                            <span id="lblSocialTitle">Stay connected</span>
+                                                        </h2>
+                                                    </div>
+                                                    <div class="social_icon_wrap">
+                                                        @if (!string.IsNullOrEmpty(Model.objConfig.FacebookUrl))
+                                                        {
+                                                            <div id="divFBURL" class="social_icon" style="display:block;">
+                                                                <a id="HlnkFBURL" target="_blank" href="@Model.objConfig.FacebookUrl"><img src="~/Content/EReceipt/Images/facebook.svg" alt="facebook" style="margin-bottom:3px;"></a>
+                                                            </div>
+                                                        }
+                                                        @if (!string.IsNullOrEmpty(Model.objConfig.TwitterUrl))
+                                                        {
+                                                            <div id="divtwitterURL" class="social_icon" style="display:block;">
+                                                                <a id="HlnktwitterURL" target="_blank" href="@Model.objConfig.TwitterUrl"><img src="~/Content/EReceipt/Images/twitter.svg" alt="twitter" style="margin-bottom:3px;"></a>
+                                                            </div>
+                                                        }
+                                                        @if (!string.IsNullOrEmpty(Model.objConfig.InstagramUrl))
+                                                        {
+                                                            <div id="divinstagramURL" class="social_icon" style="display:block;">
+                                                                <a id="HlnkinstagramURL" target="_blank" href="@Model.objConfig.InstagramUrl"><img src="~/Content/EReceipt/Images/instagram.svg" alt="instagram" style="margin-bottom:3px;"></a>
+                                                            </div>
+                                                        }
+                                                        @if (!string.IsNullOrEmpty(Model.objConfig.WhatsappUrl))
+                                                        {
+                                                            <div id="divwhatsappurl" class="social_icon" style="display:block;">
+                                                                <a id="HlnkwhatsappURL" target="_blank" href="https://api.whatsapp.com/send/?phone=@Model.objConfig.WhatsappUrl&amp;text&amp;app_absent=0"> <img src="~/Content/EReceipt/Images/whatsapp.svg" width="19" height="20" alt="whatsapp" style="margin-bottom:4px;"></a>
+                                                            </div>
+                                                        }
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div id="divUniversalTermsAndConditionMain" class="invoice_terms_wrap portlet" style="display: block; margin-left: 0px !important; margin-right: 0px !important;">
+                                        <a id="ancUniversalTAndC" href="javascript:void(0);" onclick="fncUniversalTermsAndConditionSlide();">
+                                            <label><span id="lblUniversalTermsAndCondition">Terms and Conditions </span><i class="fa fa-caret-down" aria-hidden="true"></i></label>
+                                        </a>
+                                        <div id="divUniversalTermsAndCondition" class="tc_wrap" style="display: none;">
+
+                                            <ul id="UlUT1" style="display:block;">
+                                                <span id="spnUniversalTermsAndCinditions">@Html.Raw(Model.objConfig.TermsAndConditions)</span>
+                                            </ul>
+                                            <ul id="UlUT2" style="display: none;">
+                                                <li>
+                                                    <span id="lblUniversalTermsAndCinditionsSecond"></span>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
+                                    <div id="divUniversalThankANDVisit" class="thank_you_content">
+                                        <label id="lblUniversalThankyouMsg" style="display:block;text-align:center;margin-bottom:10px;margin-top:10px;">Thank you ! <br> Please visit again.</label>
 
+                                        <ul id="ulThankYouStoreEmailAndMobile" style="display:;list-style:none;text-align:center;margin-bottom:0px;">
+                                            <li id="liThankyouStoreEmail" style="display:;">
+                                                <img src="~/Content/EReceipt/Images/mail-outline.png" id="imgThankyouStoreEmail" style="width:15px;display:;">&nbsp;<span id="lblThankYouStoreHelp">@Model.objConfig.CustomerServiceEmail</span>
+                                            </li>
+                                            <li id="liThankyouStoreMobile" style="display:;">
+                                                <img src="~/Content/EReceipt/Images/phone-portrait-outline.png" id="imgThankYouStoreMobile" style="width:10px;display:;">&nbsp;<span id="lblThankYouStoreContact">@Model.objConfig.CustomerServiceContact</span><br>
+                                            </li>
+                                            <li>
+                                            </li>
+                                        </ul>
+                                        <br>
+
+                                    </div>
+                                    <p id="pThankYouDisclaimer" class="disclaimer">This is system generated receipt</p>
+                                    <p class="Powered_by">
+                                        Powered by Blueocktopus<br>
+
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -590,6 +679,19 @@
             $(".show_more_toggle").slideToggle();
             $(".invoice_section_wrap").find('.edit_border_wrap').toggleClass('showless');
             //});
+        }
+        function fncUniversalTermsAndConditionSlide() {
+            var nextEle = $('#' + "divUniversalTermsAndCondition").css('display');
+            if (nextEle == 'block') {
+                $('#' + "divUniversalTermsAndCondition").slideUp();
+                $('#' + "divUniversalTermsAndCondition").hide(1000);
+                $('#' + "divUniversalTermsAndCondition").css("display", "none");
+            }
+            else {
+                $('#' + "divUniversalTermsAndCondition").slideDown();
+                $('#' + "divUniversalTermsAndCondition").show(1000);
+                $('#' + "divUniversalTermsAndCondition").css("display", "block");
+            }
         }
     </script>
 </body>

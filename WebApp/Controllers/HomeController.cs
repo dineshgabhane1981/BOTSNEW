@@ -33,15 +33,14 @@ namespace WebApp.Controllers
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
                 //var lstExecutiveSummData = DR.GetExecutiveSummaryAllData(userDetails.GroupId, userDetails.connectionString);
                 var lstOutlet = RR.GetOutletList(userDetails.GroupId, userDetails.connectionString);
-                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId, "", "");
+                dataDashboard = DR.GetDashboardData(userDetails.GroupId, userDetails.connectionString, userDetails.LoginId, "", "");                
                 userDetails.IsFeedback = CR.GetIsFeedback(userDetails.GroupId);
                 userDetails.IsEvent = CR.GetIsEvent(userDetails.GroupId);
                 userDetails.IsCoupon = CR.GetIsCoupon(userDetails.GroupId);
+                userDetails.IsEReceipt = CR.GetIsEReceipt(userDetails.GroupId);
                 Session["UserSession"] = userDetails;
                 ViewBag.OutletList = lstOutlet;
                 ViewBag.OutletCount = lstOutlet.Count;
-                //dataDashboard.StartDate = DR.GetStartDate(userDetails.connectionString);
-                //dataDashboard.ToDate = DateTime.Now.ToString("MM-dd-yyyy");
                 Session["buttons"] = "Dashboard";
 
             }

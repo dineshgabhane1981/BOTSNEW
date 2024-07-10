@@ -396,6 +396,7 @@
     <Compile Include="Models\IndividualDBModels\tblDLCReportingData.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCRuleMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCSMSWAScriptMaster.cs" />
+    <Compile Include="Models\IndividualDBModels\tblEReceiptConfig.cs" />
     <Compile Include="Models\IndividualDBModels\tblErrorServerLog.cs" />
     <Compile Include="Models\IndividualDBModels\tblExpiredPointsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblGroupMaster.cs" />

@@ -27,6 +27,7 @@ namespace BOTS_BL.Models
         public string TotalMRPValue { get; set; }
         public string PointsEarnedWithThisBill { get; set; }
         public string TotalAvailablePoints { get; set; }
+        public tblEReceiptConfig objConfig { get; set; }
 
     }
     public class POSCustomer

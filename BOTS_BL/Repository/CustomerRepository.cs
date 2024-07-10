@@ -445,7 +445,7 @@ namespace BOTS_BL.Repository
             }
             return CustomerLogo;
         }
-
+                
         public bool GetIsFeedback(string GroupId)
         {
             bool IsFeedback = false;
@@ -513,6 +513,28 @@ namespace BOTS_BL.Repository
             return IsCoupon;
         }
 
+        public bool GetIsEReceipt(string GroupId)
+        {
+            bool IsEReceipt = false;
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var TgroupId = Convert.ToInt32(GroupId);
+                    var groupDetail = context.tblGroupDetails.Where(x => x.GroupId == TgroupId).Select(y => y.IsEReceipt).FirstOrDefault();
+                    if (groupDetail.HasValue)
+                    {
+                        if (groupDetail.Value)
+                            IsEReceipt = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetIsFeedback");
+            }
+            return IsEReceipt;
+        }
         public tblGroupDetail GetGroupDetails(int GroupId)
         {
             tblGroupDetail objGroupDetail = new tblGroupDetail();
