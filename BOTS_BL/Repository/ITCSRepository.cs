@@ -17,6 +17,7 @@ using System.Web.Mvc;
 using System.Security.Cryptography;
 using System.Net.Mail;
 using System.Net.Mime;
+using DocumentFormat.OpenXml.Math;
 
 namespace BOTS_BL.Repository
 {
@@ -334,7 +335,7 @@ namespace BOTS_BL.Repository
                             script.WhatsAppScript = Script;
                             script.WhatsAppScriptType = ScriptType;
                             script.IsActive = true;
-                            script.WhatsAppMessageType = "Text";
+                            //script.WhatsAppMessageType = "Text";
 
                             var existingScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == script.OutletId).Select(x => x.SMSScript).FirstOrDefault();
                             if (existingScript != null)
@@ -345,7 +346,6 @@ namespace BOTS_BL.Repository
                             {
                                 script.SMSWhatsAppSendStatus = "WA";
                             }
-                            
                             context.tblSMSWhatsAppScriptMasters.AddOrUpdate(script);
                             context.SaveChanges();
                         }
@@ -356,7 +356,7 @@ namespace BOTS_BL.Repository
                         Script1.WhatsAppScript = Script;
                         Script1.WhatsAppScriptType = ScriptType;
                         Script1.IsActive = true;
-                        Script1.WhatsAppMessageType = "Text";
+                        //Script1.WhatsAppMessageType = "Text";
                      
                         var existingScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).Select(x => x.SMSScript).FirstOrDefault();
                         if (existingScript != null)
@@ -366,6 +366,10 @@ namespace BOTS_BL.Repository
                         else
                         {
                             Script1.SMSWhatsAppSendStatus = "WA";
+                        }
+                        if (Script1.WhatsAppMessageType == null)
+                        {
+                            Script1.WhatsAppMessageType = "Text";
                         }
                         context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                         context.SaveChanges();
@@ -398,7 +402,7 @@ namespace BOTS_BL.Repository
                             script.SMSScript = Script;
                             script.SMSScriptType = ScriptType;
                             script.IsActive = true;
-                            script.WhatsAppMessageType = "Text";
+                            //script.WhatsAppMessageType = "Text";
 
                             var existingScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == script.OutletId).Select(x => x.WhatsAppScript).FirstOrDefault();
                             if (existingScript != null)
@@ -420,9 +424,9 @@ namespace BOTS_BL.Repository
                         Script1.SMSScript = Script;
                         Script1.SMSScriptType = ScriptType;
                         Script1.IsActive = true;
-                        Script1.WhatsAppMessageType = "Text";
-                        context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
-                        context.SaveChanges();
+                        //Script1.WhatsAppMessageType = "Text";
+                        //context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
+                       // context.SaveChanges();
 
                         var existingScript = context.tblSMSWhatsAppScriptMasters.Where(x => x.MessageType == MessageType && x.OutletId == OutletId).Select(x => x.WhatsAppScript).FirstOrDefault();
                         if (existingScript != null)
@@ -432,6 +436,10 @@ namespace BOTS_BL.Repository
                         else
                         {
                             Script1.SMSWhatsAppSendStatus = "SMS";
+                        }
+                        if (Script1.WhatsAppMessageType == null)
+                        {
+                            Script1.WhatsAppMessageType = "Text";
                         }
                         context.tblSMSWhatsAppScriptMasters.AddOrUpdate(Script1);
                         context.SaveChanges();
