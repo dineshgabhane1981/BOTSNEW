@@ -12,7 +12,7 @@
         [Key]
         public int ID { get; set; }
         [StringLength(100)]
-        public string EmailId { get; set; }
+        public string LoginId { get; set; }
         
         public int OTP { get; set; }
         

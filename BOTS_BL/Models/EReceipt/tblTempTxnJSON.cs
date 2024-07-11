@@ -9,15 +9,17 @@ namespace BOTS_BL.Models
     [Table("tblTempTxnJSON")]
     public partial class tblTempTxnJSON
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SlNo { get; set; }
 
-        [Required]
+        [Key]
         [StringLength(150)]
         public string InvoiceNo { get; set; }
 
         [Required]
         public string JSON { get; set; }
-        public string MobileNo { get; set; }        
+
+        [StringLength(50)]
+        public string MobileNo { get; set; }
     }
 }

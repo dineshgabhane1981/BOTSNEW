@@ -193,7 +193,7 @@ namespace BOTS_BL.Repository
                     
                     objOTPDetail.OTP = Convert.ToInt32(sixDigitNumber);
                     objOTPDetail.SentDate = DateTime.Now;
-                    objOTPDetail.EmailId = details.OwnerEmail;
+                    objOTPDetail.LoginId = details.OwnerEmail;
                     context.OTPDetails.Add(objOTPDetail);
                     context.SaveChanges();
 

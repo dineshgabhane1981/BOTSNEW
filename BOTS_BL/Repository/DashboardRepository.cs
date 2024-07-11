@@ -622,7 +622,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     OTPDetail objOTPDetail = new OTPDetail();
-                    objOTPDetail.EmailId = emailId;
+                    objOTPDetail.LoginId = emailId;
                     objOTPDetail.OTP = OTP;
                     objOTPDetail.SentDate = DateTime.Now;
                     objOTPDetail.IsUsed = false;
@@ -648,7 +648,7 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     OTPDetail objOTPDetail = new OTPDetail();
-                    objOTPDetail = context.OTPDetails.Where(x => x.EmailId == emailId).OrderByDescending(y => y.ID).FirstOrDefault();
+                    objOTPDetail = context.OTPDetails.Where(x => x.LoginId == emailId).OrderByDescending(y => y.ID).FirstOrDefault();
                     if (objOTPDetail != null)
                     {
                         if (objOTPDetail.OTP == OTP && objOTPDetail.IsUsed == false && objOTPDetail.SentDate > DateTime.Now.AddMinutes(-10))
