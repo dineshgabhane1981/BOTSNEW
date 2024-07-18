@@ -416,6 +416,7 @@
     <Content Include="Content\EReceipt\Images\twitter.svg" />
     <Content Include="Content\EReceipt\Images\UnlimitedSneakers_WebsiteBanner-Desktop.jpg" />
     <Content Include="Content\EReceipt\Images\whatsapp.svg" />
+    <Content Include="Content\EReceipt\Images\youtube.svg" />
     <Content Include="Content\EReceipt\SVG\alert.svg" />
     <Content Include="Content\EReceipt\SVG\apple-store.svg" />
     <Content Include="Content\EReceipt\SVG\chat.svg" />

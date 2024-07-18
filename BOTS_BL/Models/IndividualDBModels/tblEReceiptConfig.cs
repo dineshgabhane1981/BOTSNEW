@@ -58,5 +58,6 @@ namespace BOTS_BL.Models
         public string AddedBy { get; set; }
 
         public DateTime? UpdatedDate { get; set; }
+        public string YoutubeURL { get; set; }
     }
 }

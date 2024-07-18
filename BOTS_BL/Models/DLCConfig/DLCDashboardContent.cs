@@ -15,6 +15,7 @@ namespace BOTS_BL.Models
         public string OutletLongitude { get; set; }
         public string OutletLatitude { get; set; }
         public string MobileNo { get; set; }
+        public string CustomerName { get; set; }
         public decimal? PointsToRS { get; set; }
         public bool IsOptout { get; set; }
     }

@@ -86,6 +86,7 @@ namespace WebApp.Controllers
                 objConfig.FacebookUrl = Convert.ToString(item["FacebookUrl"]);
                 objConfig.TwitterUrl = Convert.ToString(item["TwitterUrl"]);
                 objConfig.InstagramUrl = Convert.ToString(item["InstagramUrl"]);
+                objConfig.YoutubeURL = Convert.ToString(item["YoutubeUrl"]);
                 objConfig.WhatsappUrl = Convert.ToString(item["WhatsappUrl"]);                
                 objConfig.TermsAndConditions = Convert.ToString(item["TermsAndConditions"]);
                 objConfig.CustomerServiceEmail = Convert.ToString(item["CustomerServiceEmail"]);

@@ -58,6 +58,7 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
+
         public List<tblDLCProfileUpdateConfig> GetProfileData(string GroupId)
         {
             List<tblDLCProfileUpdateConfig> lstData = new List<tblDLCProfileUpdateConfig>();
@@ -215,8 +216,6 @@ namespace BOTS_BL.Repository
                     objData.FontColor = configData.FontColor;
                     objData.AddedBy = userDetails.UserId;
                     objData.AddedDate = DateTime.Now;
-                    objData.UseCard = configData.UseCard;
-                    objData.UseCardURL = configData.UseCardURL;
                     context.tblDLCDashboardConfig_Publish.AddOrUpdate(objData);
                     context.SaveChanges();
 
@@ -307,16 +306,16 @@ namespace BOTS_BL.Repository
                             if (custData.DOB.HasValue)
                                 item.Value = custData.DOB.Value.ToString("yyyy/MM/dd");
                         }
-                        //if (item.FieldName == "MaritalStatus")
-                        //    item.Value = custData.MaritalStatus;
-                        //if (item.FieldName == "Email")
-                        //    item.Value = custData.Email;
-                        //if (item.FieldName == "Area")
-                        //    item.Value = custData.;
-                        //if (item.FieldName == "City")
-                        //    item.Value = custData.City;
-                        //if (item.FieldName == "Pincode")
-                        //    item.Value = childData;
+                        if (item.FieldName == "MaritalStatus")
+                            item.Value = custData.MaritalStatus;
+                        if (item.FieldName == "Email")
+                            item.Value = custData.Email;
+                        if (item.FieldName == "Area")
+                            item.Value = custData.Area;
+                        if (item.FieldName == "City")
+                            item.Value = custData.City;
+                        if (item.FieldName == "Pincode")
+                            item.Value = custData.Pincode;
                     }
                 }
             }
@@ -680,7 +679,7 @@ namespace BOTS_BL.Repository
             return status;
         }
 
-        public bool RegisterCustomer(string groupId, string mobileNo, string countryCode)
+        public bool RegisterCustomer(string groupId, string mobileNo, string countryCode ,string source)
         {
             bool status = false;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
@@ -696,7 +695,7 @@ namespace BOTS_BL.Repository
                     objCust.Id = mobileNo + groupId;
                     objCust.EnrolledOutlet = outletId;
                     objCust.DOJ = DateTime.Now;
-                    objCust.EnrolledBy = "DLCWalkIn";
+                    objCust.EnrolledBy = source?? "DLCWalkIn";
                     objCust.IsActive = true;
                     objCust.DisableTxn = false;
                     objCust.DisableSMSWAPromo = false;
@@ -765,7 +764,7 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    //objData.EarnPoints = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.Points).FirstOrDefault();
+                    //objData.EarnPoints = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.po).FirstOrDefault();
                     objData.EarnPoints = context.tblCustPointsMasters.Where(x => x.MobileNo == mobileno && x.IsActive == true).Sum(y => y.Points);
 
 
@@ -777,6 +776,10 @@ namespace BOTS_BL.Repository
                     objData.OutletLongitude = outletDetails.Longitude;
                     objData.OutletLatitude = outletDetails.Latitude;
                     var optout = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.DisableSMSWAPromo).FirstOrDefault();
+                    var custumerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.Name).FirstOrDefault();
+                    objData.CustomerName = custumerName;
+                    //var pointsinRs = objData.EarnPoints * PointsToRS;
+                    //objData.PointsToRS = pointsinRs;
                     if (optout.HasValue)
                     {
                         if (optout.Value)
@@ -801,7 +804,7 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-
+        
         public bool UpdateOptout(string groupId, string mobileNo, bool optout)
         {
             bool status = false;
@@ -827,7 +830,82 @@ namespace BOTS_BL.Repository
 
             return status;
         }
+        //public bool Update1Optout(string groupId, string mobileNo, bool optout)
+        //{
+        //    bool status = false;
+        //    string connStr = objCustRepo.GetCustomerConnString(groupId);
+        //    using (var context = new BOTSDBContext(connStr))
+        //    {
+        //        try
+        //        {
+        //            var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+        //            if (custDetails != null)
+        //            {
+        //                custDetails.DisableSMSWAPromo = optout;
+        //                context.tblCustDetailsMasters.AddOrUpdate(custDetails);
+        //                context.SaveChanges();
+        //                status = true;
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            newexception.AddException(ex, "UpdateOptout" + groupId);
+        //        }
+        //    }
 
+        //    return status;
+        //}
+
+        //public bool GetOptout(string groupId, string mobileNo)
+        //{
+        //    var status = false;
+        //    string connStr = objCustRepo.GetCustomerConnString(groupId);
+        //    using (var context = new BOTSDBContext(connStr))
+        //    {
+        //        try
+        //        {
+        //            var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+        //            if (custDetails != null)
+        //            {
+                        
+        //                    status = custDetails.DisableSMSWAPromo ?? false;
+                        
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            newexception.AddException(ex, "GetOptout" + groupId);
+        //        }
+
+        //    }
+
+        //    return status;
+        //}
+
+        //public bool Getstatus(string groupId, string mobileNo)
+        //{
+        //    var status = false;
+        //    string connStr = objCustRepo.GetCustomerConnString(groupId);
+        //    using (var context = new BOTSDBContext(connStr))
+        //    {
+        //        try
+        //        {
+        //            var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
+        //            if (custDetails != null)
+        //            {
+        //                status = custDetails.DisableTxn ?? false;
+                        
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            newexception.AddException(ex, "Getstatus" + groupId);
+        //        }
+        //    }
+
+        //    return status;
+        //}
+        
         public DLCSPResponse GiveGiftPoints(string MobileNo, string BrandId, string RecipientName, string RecipientNo, string GiftPoints, string groupId)
         {
             DLCSPResponse objResult = new DLCSPResponse();
@@ -853,7 +931,7 @@ namespace BOTS_BL.Repository
 
                     foreach (var item in result)
                     {
-                        if (item.ResponseCode == "0")
+                        if (item.ResponseCode == "1")
                         {
                             if (!string.IsNullOrEmpty(item.WATokenId))
                             {
@@ -937,21 +1015,23 @@ namespace BOTS_BL.Repository
             }
             using (var context = new BOTSDBContext(connStr))
             {
+                DateTime now = DateTime.Now;
+                string formattedDate = now.ToString("yyyy-MM-dd");
                 try
                 {
-                    var result = context.Database.SqlQuery<SPResponse>("sp_DLCRefer @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
+                    var result = context.Database.SqlQuery<DLCSPResponse>("sp_DLCRefer @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
                         "@pi_1stMobileNo, @pi_1stName, @pi_2ndMobileNo,@pi_2ndName,@pi_3rdMobileNo,@pi_3rdName, @pi_DBName",
                                   new SqlParameter("@pi_MobileNo", MobileNo),
                                   new SqlParameter("@pi_BrandId", BrandId),
-                                  new SqlParameter("@pi_Datetime", DateTime.Now),
+                                  new SqlParameter("@pi_Datetime", formattedDate),
                                   new SqlParameter("@pi_1stMobileNo", firstMobileNo),
                                   new SqlParameter("@pi_1stName", firstName),
                                   new SqlParameter("@pi_2ndMobileNo", secondMobileNo),
                                   new SqlParameter("@pi_2ndName", secondName),
                                   new SqlParameter("@pi_3rdMobileNo", thirdMobileNo),
                                   new SqlParameter("@pi_3rdName", thirdName),
-                                   new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<SPResponse>();
-                    if (result.ResponseCode == "0")
+                                   new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<DLCSPResponse>();
+                    if (result.ResponseCode=="1")
                         status = true;
                 }
                 catch (Exception ex)
@@ -1001,20 +1081,28 @@ namespace BOTS_BL.Repository
         {
             bool status = false;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
+            string DBName = String.Empty;
+            using (var context = new CommonDBContext())
+            {
+                DBName = context.tblDatabaseDetails.Where(x => x.GroupId == groupId).Select(y => y.DBName).FirstOrDefault();
+            }
+
             using (var context = new BOTSDBContext(connStr))
             {
+                DateTime now = DateTime.Now;
+                string formattedDate = now.ToString("dd-MM-yyyy");
                 try
                 {
-                    var result = context.Database.SqlQuery<SPResponse>("MWP_ProfileUpdate @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
+                    var result = context.Database.SqlQuery<DLCSPResponse>("sp_DLCProfileUpdate @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
                        "@pi_Name, @pi_Gender, @pi_DOB, @pi_Email, @pi_Pincode, @pi_MaritalStatus, @pi_AnniversaryDate, @pi_Address, @pi_ChildCount, " +
-                       "@pi_Child1DOB, @pi_Child2DOB, @pi_Child3DOB ,@pi_City, @pi_LanguagePreferred, @pi_Religion",
+                       "@pi_Child1DOB, @pi_Child2DOB, @pi_Child3DOB ,@pi_City, @pi_LanguagePreferred, @pi_Religion, @pi_DBName, @pi_Area",
                                  new SqlParameter("@pi_MobileNo", objData.MobileNo),
                                  new SqlParameter("@pi_BrandId", objData.BrandId),
-                                 new SqlParameter("@pi_Datetime", DateTime.Now),
+                                 new SqlParameter("@pi_Datetime", formattedDate),
                                  new SqlParameter("@pi_Name", objData.Name),
-                                 new SqlParameter("@pi_Gender", objData.Gender),
+                                 new SqlParameter("@pi_Gender", objData.Gender ?? ""),
                                  new SqlParameter("@pi_DOB", objData.DateOfBirth),
-                                 new SqlParameter("@pi_Email", objData.Email),
+                                 new SqlParameter("@pi_Email", objData.Email ?? ""),
                                  new SqlParameter("@pi_Pincode", objData.Pincode),
                                  new SqlParameter("@pi_MaritalStatus", objData.MaritalStatus),
                                  new SqlParameter("@pi_AnniversaryDate", ""),
@@ -1023,9 +1111,12 @@ namespace BOTS_BL.Repository
                                  new SqlParameter("@pi_Child1DOB", ""),
                                  new SqlParameter("@pi_Child2DOB", ""),
                                  new SqlParameter("@pi_Child3DOB", ""),
-                                 new SqlParameter("@pi_City", objData.City == null ? "" : objData.City),
+                                 new SqlParameter("@pi_City", objData.City ?? ""),
                                  new SqlParameter("@pi_LanguagePreferred", ""),
-                                 new SqlParameter("@pi_Religion", "")).FirstOrDefault<SPResponse>();
+                                 new SqlParameter("@pi_Religion", ""),
+                                 new SqlParameter("@pi_DBName", DBName),
+                                 new SqlParameter("@pi_Area", objData.Area ?? "")).FirstOrDefault<DLCSPResponse>();
+
                     if (result.ResponseCode == "0")
                         status = true;
                 }
@@ -1036,13 +1127,14 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
+
         public List<SelectListItem> GetBrandsByGroupId(string groupId)
         {
             List<SelectListItem> lstBrands = new List<SelectListItem>();
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             using (var context = new BOTSDBContext(connStr))
             {
-               var Brands = context.tblBrandMasters.Where(x => x.GroupId == groupId).ToList();
+                var Brands = context.tblBrandMasters.Where(x => x.GroupId == groupId).ToList();
                 foreach (var item in Brands)
                 {
                     lstBrands.Add(new SelectListItem

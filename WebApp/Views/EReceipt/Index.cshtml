@@ -584,6 +584,12 @@
                                                                 <a id="HlnkinstagramURL" target="_blank" href="@Model.objConfig.InstagramUrl"><img src="~/Content/EReceipt/Images/instagram.svg" alt="instagram" style="margin-bottom:3px;"></a>
                                                             </div>
                                                         }
+                                                        @if (!string.IsNullOrEmpty(Model.objConfig.YoutubeURL))
+                                                        {
+                                                            <div id="divyoutubeURL" class="social_icon" style="display:block;">
+                                                                <a id="HlnkyoutubeURL" target="_blank" href="@Model.objConfig.YoutubeURL"><img src="~/Content/EReceipt/Images/youtube.svg" alt="youtube" style="margin-bottom:3px;"></a>
+                                                            </div>
+                                                        }
                                                         @if (!string.IsNullOrEmpty(Model.objConfig.WhatsappUrl))
                                                         {
                                                             <div id="divwhatsappurl" class="social_icon" style="display:block;">

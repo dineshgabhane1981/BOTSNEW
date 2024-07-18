@@ -20,6 +20,18 @@ namespace BOTS_BL.Models
         public string Name { get; set; }
 
         [StringLength(50)]
+        public string Pincode { get; set; }
+
+        [StringLength(50)]
+        public string City { get; set; }
+
+        [StringLength(100)]
+        public string Area { get; set; }
+
+        [StringLength(50)]
+        public string MaritalStatus { get; set; }
+
+        [StringLength(50)]
         public string Id { get; set; }
 
         [Column(TypeName = "date")]
