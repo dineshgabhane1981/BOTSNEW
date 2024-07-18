@@ -500,7 +500,7 @@
                                                     }
                                                     $("#" + IdExistName[j]).attr("style", "margin-top:10px");
                                                     $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
-                                                    $("#" + IdExistdiv2[j]).append('<input id=" ' + ctrlId1 + '" /*type=\"number\"*/  class=\"input50\" />');
+                                                    $("#" + IdExistdiv2[j]).append('<input id="' + ctrlId1 + '" /*type=\"number\"*/  class=\"input50\" />');
                                                     $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
                                                 }
                                                 else {
@@ -1081,7 +1081,7 @@
                         cuteAlert({
                             type: "success",
                             title: "Invoice Saved Successfully",
-                            message: " Poits Earned" + response.PointsEarned + " Avail Points" + response.AvailablePoints,
+                            message: " Poits Earned : " + response.PointsEarned + " Avail Points : " + response.AvailablePoints,
                             buttonText: "Okay"
                         }).then(() => {
                             var urlLink = "@Url.Action("Index", "Home")";
@@ -1187,6 +1187,7 @@
 
         if (c != 1000) {
             DynamicData = InvoiceDynData();
+            //console.log(DynamicData);
             Result = ConcatData(DynamicData);
         }
         
@@ -1213,7 +1214,7 @@
                         cuteAlert({
                             type: "success",
                             title: "Invoice Saved Successfully",
-                            message: " Poits Earned" + response.PointsEarned + " Avail Points" + response.AvailablePoints,
+                            message: " Poits Earned : " + response.PointsEarned + " Avail Points : " + response.AvailablePoints,
                             buttonText: "Okay"
                         }).then(() => {
                             //SearchCustomer();
@@ -1362,7 +1363,7 @@
                         cuteAlert({
                             type: "success",
                             title: "Invoice Saved Successfully",
-                            message: " Poits Earned" + response.PointsEarned + " Avail Points" + response.AvailablePoints + " Points Redeemed"+response.PointsRedeemed,
+                            message: " Poits Earned : " + response.PointsEarned + " Avail Points : " + response.AvailablePoints + " Points Redeemed : "+response.PointsRedeemed,
                             buttonText: "Okay"
                         }).then(() => {
                             //SearchCustomer();

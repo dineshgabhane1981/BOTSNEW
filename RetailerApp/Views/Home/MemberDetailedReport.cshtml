@@ -17,7 +17,7 @@
                 Enter Mobile No
             </div>
             <div class="col-md-3 col-sm-3">
-                <input id="txtMobileNo" type="number" class="input50" />
+                <input id="txtMobileNo" type="text" onkeypress="phoneno()" class="input50" />
             </div>
             <div class="col-md-2 col-sm-2">
                 <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="SearchCustomer();" style="margin-top:10px;">Search</button>
@@ -63,6 +63,18 @@
 
 </div>
 <script>
+    function phoneno() {
+        $('#txtMobileNo').keypress(function (e) {
+            var a = [];
+            var k = e.which;
+
+            for (i = 48; i < 58; i++)
+                a.push(i);
+
+            if (!(a.indexOf(k) >= 0))
+                e.preventDefault();
+        });
+    }
 function SearchCustomer() {
         if ($("#txtMobileNo").val() == "") {
             cuteAlert({
