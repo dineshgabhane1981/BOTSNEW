@@ -241,7 +241,7 @@ namespace WebApp.Controllers.OnBoarding
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                status = DCR.PublishDLCDashboardConfig(userDetails);
+                 status = DCR.PublishDLCDashboardConfig(userDetails);
             }
             catch (Exception ex)
             {
