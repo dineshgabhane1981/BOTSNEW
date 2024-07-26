@@ -1,107 +1,267 @@
 ﻿@model DLC.ViewModel.UpdateProfileViewModel
+@using System.Globalization
+@using BOTS_BL.Models;
+@using DLC.ViewModel;
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
 
-<div class="app-main__inner">
-    <div class="row m-5 pl-3 pr-3 card col-md-11 col-lg-11 row  pt-5">
-        <h4>Profile Update</h4>
-        <div class="col-md-12 col-lg-12" style="padding-bottom: 10px;margin-top:5px;">
-            @foreach (var item in Model.lstProfileData)
-            {
-                if (item.DisplayStatus)
-                {
-                    var mandatory = "";
-                    if (item.MandStatus)
-                    {
-                        mandatory = "*";
-                    }
-                    if (item.FieldName == "DateOfBirth")
-                    {
-                        var id = "txt" + item.FieldName;
-                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
-                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
-                            <div class="col-md-10 col-lg-5">                               
-                                @Html.TextBoxFor(model => item.Value, new { @class = "input100", @id = "IdStrDate" })
-                            </div>
-                        </div>
-                    }
-                    else if (item.FieldName == "Gender")
-                    {
-                        var id = "ddl" + item.FieldName;
-                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
-                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
-                            <div class="col-md-10 col-lg-5">
-                                @Html.DropDownListFor(model => model.dummyGender, new SelectList(Model.Gender(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = @id })
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
+    <title>Personal Details</title>
+    <link href="~/css/update.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+          rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <style>
+        .start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;            
+            margin-top: 4%;
+        }
 
-                            </div>
-                        </div>
-                    }
-                    else if (item.FieldName == "MaritalStatus")
-                    {
-                        var id = "ddl" + item.FieldName;
-                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
-                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
-                            <div class="col-md-10 col-lg-5">
-                                @Html.DropDownListFor(model => model.dummyMaritalStatus, new SelectList(Model.MaritalStatus(), "Value", "Text"), "Please Select", htmlAttributes: new { @class = "input100", @id = @id })
-                            </div>
-                        </div>
-                    }
-                    else if (item.FieldName == "City")
-                    {
-                        @*var id = "ddl" + item.FieldName;
-                            <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
-                                <div class="col-md-2 col-lg-2"> @item.FieldName </div>
-                                <div class="col-md-10 col-lg-5">
-                                    <input type="text" id="@id" class="input100" />
-                                </div>
-                            </div>*@
-                    }
-                    else if (item.FieldName == "Pincode")
-                    {
-                        var id = "txt" + item.FieldName;
-                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
-                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
-                            <div class="col-md-10 col-lg-5">
-                                <input type="number" id="@id" class="input100" value="@item.Value" />
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        var id = "txt" + item.FieldName;
-                        <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
-                            <div class="col-md-2 col-lg-2"> @item.FieldName <span style="color:red;">@mandatory</span></div>
-                            <div class="col-md-10 col-lg-5">
-                                <input type="text" id="@id" class="input100" value="@item.Value" />
-                            </div>
-                        </div>
-                    }
-                }
-            }
+        .start-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        @*<div class="logo">
+                <a href="index.html">
+                    <img src="@logoUrl" alt="logo" />
+                </a>
+            </div>*@
+        @if (logoSize == "Small")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+            </div>
+        }
+        @if (logoSize == "Medium")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+            </div>
+        }
+        @if (logoSize == "Big")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+            </div>
+        }
+        <div class="profile_links">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
         </div>
-        <div class="col-md-10 col-lg-10 pt-3" style="padding-bottom: 10px; text-align: center;">
-            <button id="btnUpdateProfile" class="btn form-control btn-primary  submit px-3" onclick="UpdateProfile();" style="font-weight:bold;width:200px;">Update</button>
+        <div class="language" style="display:none">
+            <select name="language" id="">
+                <option value="language">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Marathi">Marathi</option>
+            </select>
+        </div>
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1 class="active">Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+        </div>
+        <div class="hamburger">
+            <i class="ri-menu-2-line"></i>
+        </div>
+    </nav>
+    <div class="menu-container">
+        <div id="menu">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1 class="active">Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
-</div>
-<script>
+    <div class="row">
+        <h2 class="up1">Update Profile</h2>
+    </div>
 
+    <section class="update">
+        <div class="container">
+            <div class="col-md-6">
+                <div class="form" style="margin-bottom: 6%;">
+                    <!-- <h2>Update Profile</h2> -->
+                    <form asp-controller="update" asp-action="UpdateProfile" method="post">
+                        <div class="form-row">
+                            @foreach (var item in Model.lstProfileData)
+                            {
+                                if (item.DisplayStatus)
+                                {
+                                    var mandatory = item.MandStatus ? "*" : ""; // Red asterisk for mandatory fields
+
+                                    if (item.FieldName == "DateOfBirth")
+                                    {
+                                        var dob = "";
+                                        if (item.Value != null)
+                                        {
+                                            dob = DateTime.ParseExact(item.Value, "yyyy/MM/dd", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
+                                        }
+                                        var id = "txt" + item.FieldName; // Unique ID for the field
+                                        <div class="form-row">
+
+                                            <label for="@id">Date of Birth<span style="color:red;">@mandatory</span></label> <!-- Corrected label -->
+
+                                            <input type="date"
+                                                   id="@id"
+                                                   value="@dob"
+                                                   class="input100"
+                                                   required="@item.MandStatus" />
+
+                                        </div>
+                                    }
+                                    else if (item.FieldName == "Gender")
+                                    {
+                                        var id = "ddl" + item.FieldName; // Unique ID for the drop-down
+                                        <div class="form-row">
+                                            <label for="@id">Gender<span style="color:red;">@mandatory</span></label> <!-- Include label -->
+                                            @Html.DropDownListFor(
+                                                          model => model.dummyGender,
+                                                          new SelectList(Model.Gender(), "Value", "Text"),
+                                                          "Please Select",
+                                                          new { @id = id, @class = "input100" }
+                                                      )
+                                        </div>
+                                    }
+                                    else if (item.FieldName == "MaritalStatus")
+                                    {
+                                        var id = "ddl" + item.FieldName;
+                                        <div class="form-row">
+                                            <label for="@id">Marital Status<span style="color:red;">@mandatory</span></label> <!-- Include label -->
+                                            @Html.DropDownListFor(
+                                                          model => model.dummyMaritalStatus,
+                                                          new SelectList(Model.MaritalStatus(), "Value", "Text"),
+                                                          "Please Select",
+                                                          new { @id = id, @class = "input100" }
+                                                      )
+                                        </div>
+                                    }
+                                    else if (item.FieldName == "City")
+                                    {
+                                        var id = "txt" + item.FieldName; // Unique ID for text fields
+                                        <div class="form-row">
+                                            <label for="@id">City<span style="color:red;">@mandatory</span></label> <!-- Corrected label -->
+                                            <input type="text"
+                                                   id="@id"
+                                                   class="input100"
+                                                   placeholder="Enter City"
+                                                   value="@item.Value"
+                                                   required="@item.MandStatus" />
+                                        </div>
+                                    }
+                                    else if (item.FieldName == "Pincode")
+                                    {
+                                        var id = "txt" + item.FieldName;
+                                        <div class="form-row">
+                                            <label for="@id">Pincode<span style="color:red;">@mandatory</span></label> <!-- Include label -->
+                                            <input type="number"
+                                                   id="@id" // Unique ID for number fields
+                                                   class="input100"
+                                                   placeholder="Enter Pincode"
+                                                   value="@item.Value"
+                                                   required="@item.MandStatus" />
+                                        </div>
+                                    }
+                                    else // Default case for other text fields
+                                    {
+                                        var id = "txt" + item.FieldName;
+                                        <div class="form-row">
+                                            <label for="@id">@item.FieldName<span style="color:red;">@mandatory</span></label> <!-- Include label -->
+                                            <input type="text"
+                                                   id="@id"
+                                                   class="input100"
+                                                   placeholder="Enter @item.FieldName"
+                                                   value="@item.Value"
+                                                   required="@item.MandStatus" />
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                        <button type="button" id="btnUpdateProfile" class="start-button" onclick="UpdateProfile();">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function Hamburger() {
+            var hamburger = document.querySelector('.hamburger');
+            var menu = document.querySelector('.menu-container');
+            var logo = document.querySelector('.logo');
+
+            var isMenuVisible = false;
+
+            hamburger.addEventListener('click',
+                function () {
+                    if (!isMenuVisible) {
+                        menu.style.display = 'block';
+                        menu.style.transform = 'translateY(0)';
+                        isMenuVisible = true;
+                        logo.style.display = 'none';
+                    } else {
+                        menu.style.transform = 'translateY(-100vh)';
+                        isMenuVisible = false;
+                        logo.style.display = 'block';
+                    }
+                });
+        }
+
+        Hamburger();
+    </script>
+
+    <script>
     $(document).ready(function () {
         var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
         $('#IdStrDate').datepicker({
             changeMonth: true,
             changeYear: true,
             yearRange: "-100:+0"
-        })
+        });
     });
+
     function UpdateProfile() {
         var status = true;
-        //var model = JSON.parse(@Model.lstProfileData);
         var model = @Html.Raw(Json.Encode(Model.lstProfileData));
-        console.log(model)
+        console.log(model);
+
         $.map(model, function (item) {
             if (item.DisplayStatus) {
                 if (item.MandStatus) {
@@ -111,8 +271,7 @@
                             status = false;
                             return false;
                         }
-                    }                    
-                    else {
+                    } else {
                         if ($("#txt" + item.FieldName).val() == "Please Select" || $("#txt" + item.FieldName).val() == "") {
                             toastr.error('please enter ' + item.FieldName);
                             status = false;
@@ -122,57 +281,75 @@
                 }
             }
         });
+
         if (status) {
-            alert(777);
+            //alert(777);
             var profileData = [];
-            optionItem = {}
+            var optionItem = {};
+
             $.map(model, function (item) {
                 optionItem[item.FieldName] = "";
                 if (item.DisplayStatus) {
                     if (item.FieldName == "Gender" || item.FieldName == "MaritalStatus") {
                         optionItem[item.FieldName] = $("#ddl" + item.FieldName).val();
-                    }
-                    else if (item.FieldName == "DateOfBirth")
-                    {
-                        optionItem[item.FieldName] = $("#IdStrDate").val();
-                    }
-                    else {
+                    } else if (item.FieldName == "DateOfBirth") {
+                        var id = "txt" + item.FieldName;
+                        optionItem[item.FieldName] = $("#" + id).val();
+                    } else {
                         optionItem[item.FieldName] = $("#txt" + item.FieldName).val();
                     }
                 }
             });
+
             profileData.push(optionItem);
             console.log(profileData);
             var profileDataStr = JSON.stringify(profileData);
             $("#divLoader").show();
+
+
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("UpdateProfileData", "PersonalDetails")',
-                data: '{jsonData: ' + JSON.stringify(profileDataStr) + '}',
+                data: JSON.stringify({ jsonData: profileDataStr }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-                success: function (result) {
-                    console.log(result)
-                    if (result == true) {
+                success: function (result)
+                {
+                    if (result == true)
+                    {
+                        //toastr.options = {
+                        //    "timeOut": "5000", // Duration in milliseconds (5000ms = 5 seconds)
+                        //    "extendedTimeOut": "1000" // Extended time out after hover in milliseconds
+                        //};
                         toastr.success('Profile updated successfully !!!');
                         $("#divLoader").hide();
-                    }
-                    else {
+                    } else {
                         toastr.error('There is problem in updating the profile. Please contact Administrator !!!');
                         $("#divLoader").hide();
                     }
                 },
                 error: function (result) {
-
+                    console.error(result);
                 }
             });
-
         }
     }
-</script>
+    </script>
 
 
-<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
-<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
-<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
-<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+
+    <footer class="footer">
+    </footer>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/gift.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+    <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+    <link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+</body>
+</html>

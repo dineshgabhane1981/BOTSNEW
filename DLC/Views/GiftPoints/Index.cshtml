@@ -4,213 +4,386 @@
 @using DLC.ViewModel;
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 
     var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var Flag = sessionVariables.Flag;
+    var MobileNo = sessionVariables.MobileNo;
+    var HeaderColor = sessionVariables.objDashboardConfig.HeaderColor;
+    var FontColor = sessionVariables.objDashboardConfig.FontColor;
+   
+    var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Gift Points</title>
+    <link href="~/css/gift.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+          rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <style>
+        .start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 4%;
+        }
 
-<style>
-    .flex-wrapper {
-        display: flex;
-        flex-flow: row nowrap;
-    }
+        .start-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        @@media only screen and (min-width: 900px) and (max-width: 1280px) {
+            .heading-container {
+                margin-top: 16% !important;
+            }
+        }
 
-    .single-chart {
-        width: 30%;
-        justify-content: space-around;
-    }
+        @@media only screen and (max-width: 250px) {
+            .heading-container {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                margin-top: 9% !important;
+            }
+        }
 
-    .circular-chart {
-        display: block;
-        margin: 10px auto;
-        max-width: 80%;
-        max-height: 200px;
-    }
+        @@media only screen and (max-width: 850px) {
+            .heading-container {
+                font-size: small;
+                margin-top: 30% !important;
+            }
+        }
+        .logo img {
+            width: 180px!important;
+            height: 100px!important;
+        }
+    </style>
+</head>
+<body>
+    <!-- navigation baar -->
 
-    .circle-bg {
-        fill: none;
-        stroke: #eee;
-        stroke-width: 3.8;
-    }
-
-    .circle {
-        fill: none;
-        stroke-width: 3;
-        stroke-linecap: round;
-        animation: progress 1s ease-out forwards;
-    }
-
-    .circular-chart.orange .circle {
-        stroke: #ff9f00;
-        stroke-width: 3;
-        transition: 1s linear 0s;
-    }
-
-    .circular-chart.green .circle {
-        stroke: #4CC790;
-        stroke-width: 3;
-        transition: 1s linear 0s;
-    }
-
-    .circular-chart.blue .circle {
-        stroke: @sessionVariables.objDashboardConfig.HeaderColor;
-        stroke-width: 3;
-        transition: 1s linear 0s;
-    }
-
-    .percentage {
-        fill: #666;
-        font-family: sans-serif;
-        font-size: 0.5em;
-        text-anchor: middle;
-    }
-
-    .caption {
-        fill: #666;
-        font-family: sans-serif;
-        font-size: 0.2em;
-        text-anchor: middle;
-    }
-</style>
-<div class="app-main__inner">
-    <div class="m-5 pl-3 pr-3 card col-md-11 col-lg-11 pt-5">
-        <h3>Gift a Point</h3>
-        <div class="col-md-12 col-lg-12 row " style="margin-top:5px;">
-            <div class="col-md-12 col-lg-4 pt-3">
-                <input type="text" class="input100" id="txtRecipientName" placeholder="Recipient Name" />
+    <nav id="nvbarcolor">
+        @*<div class="logo">
+                <a href="index.html">
+                    <img src="@logoUrl" alt="logo" />
+                </a>
+            </div>*@
+        @if (logoSize == "Small")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
             </div>
-            <div class="col-md-12 col-lg-4 pt-3">
-                <input type="number" class="input100" id="txtRecipientNo" placeholder="Mobile Number" />
+        }
+        @if (logoSize == "Medium")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
             </div>
-            <div class="col-md-12 col-lg-4 pt-3">
-                <input type="number" class="input40" id="txtGiftPoints" placeholder="Gift Points" />
-                <span id="spnRS"></span>
+        }
+        @if (logoSize == "Big")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
             </div>
+        }
+        <div class="profile_links">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
         </div>
-        <div class="col-md-12 col-lg-12 pt-3 row " style="margin-top:5px;">
-            <div class="single-chart">
-                <svg viewBox="0 0 42 42" class="circular-chart">
-                    <path class="circle-bg" d="M18 2.0845  a 15.9155 15.9155 0 0 1 0 31.831  a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path class="circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <text x="18" y="20.35" class="percentage" id="txtTotalPoints">@Convert.ToInt32(Model.EarnPoints)</text>
-                    <text x="18" y="40" class="caption">Your Total points</text>
-                </svg>
+        <div class="language" style="display:none">
+            <select name="language" id="">
+                <option value="language">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Marathi">Marathi</option>
 
-            </div>
-            <div class="single-chart">
-                <svg viewBox="0 0 42 42" class="circular-chart blue">
-                    <path class="circle-bg" d="M18 2.0845  a 15.9155 15.9155 0 0 1 0 31.831  a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path class="circle" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <text x="18" y="20.35" class="percentage" id="txtRedemablePoints">@Convert.ToInt32(Model.EarnPoints)</text>
-                    <text x="18" y="40" class="caption">You can gift upto @Convert.ToInt32(Model.EarnPoints) points</text>
-                </svg>
-            </div>
-            <div class="single-chart">
-                <svg viewBox="0 0 42 42" class="circular-chart blue">
-                    <path class="circle-bg" d="M18 2.0845  a 15.9155 15.9155 0 0 1 0 31.831  a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path class="circle dummyClass" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <text x="18" y="20.35" class="percentage" id="txtRemainingPoints">0</text>
-                    <text x="18" y="40" class="caption">Balance points after gifting</text>
-                </svg>
-            </div>
+            </select>
         </div>
-        <div class="col-md-12 col-lg-12 pt-3" style="margin-top:5px;">
-            <div class="optoutCHK ml-2">
-                <input type="checkbox" id="chkTerms" style="cursor: pointer; margin-right: 5px;" />
-                <span><label for="chkTerms" style="cursor: pointer;"> I agree to the Gift-a-Points TnC</label></span>
-            </div>
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1 class="active">Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+
         </div>
-        <div class="col-md-12 col-lg-12" style="text-align:center;">
-            <button id="btnGiftPoints" class="btn form-control btn-primary  submit px-3" onclick="SendGift();" style="font-weight:bold;width:200px;">Send Gift</button>
+        <div class="hamburger">
+            <i class="ri-menu-2-line"></i>
         </div>
-        <div class="col-md-12 col-lg-12 pt-3" style="margin-top:5px;">
-            <i>
-                <b>Note:</b>
-                Promotional points are not eligible for gifting. Only points earned from transaction will be available for gifting purpose
-            </i>
+    </nav>
+    <div class="menu-container">
+        <div id="menu">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1 class="active">Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
-</div>
-<script>
-    $(document).ready(function () {
+
+    <!-- navigation end -->
+
+    <div class="heading-container">
+        <div class="heading heading1" style="margin-left: 40px">
+            <h2>TOTAL POINTS</h2>
+        </div>
+
+        <div class="heading heading2" style="margin-left: 40px">
+            <h2>POINTS YOU CAN GIFT</h2>
+
+        </div>
+
+        <div class="heading heading3">
+            <h2>BALANCE POINTS</h2>
+        </div>
+    </div>
+    <div class="circle-container">
+        <div class="circle blue" id="txtTotalPoints">
+            <span>@Convert.ToInt32(Model.EarnPoints)</span>
+        </div>
+        <div class="circle green " id="txtRedemablePoints">
+            <span>@Convert.ToInt32(Model.BasePoints)</span>
+
+        </div>
+
+        <div class="circle green">
+            <span id="txtRemainingPoints">0</span>
+        </div>
+
+    </div>
+
+
+    <div class="note">
+        <p style="text-align: center;">
+            <b>Note: </b>Promotional points are not eligible for gifting. Only
+            points earned from transaction will be available for gifting purpose
+        </p>
+    </div>
+    <div class="gift-heading">
+        <h1>Gift Points</h1>
+    </div>
+    <div class="gift-container">
+        <div class="box">
+            <label for="Name">Name</label>
+            <input type="text" id="txtRecipientName" placeholder="Enter Recipient's Name" required />
+
+            <label for="Registered Phone Number">Registered Phone Number</label>
+            <input type="tel" id="txtRecipientNo" placeholder="Enter Recipient's Number" required />
+
+            <label for="Gift_Points">Gift Points  <span style="font-size: medium;" id="spnRS"></span></label>
+            <input type="text" id="txtGiftPoints" placeholder="Enter Number of points to gift" />
+            <span id="spnRS"></span>
+
+            <label for="progress-bar">Or Select Points</label>
+            <div class="slider">
+                <input type="range"
+                       min="0"
+                       max="@Convert.ToInt32(Model.BasePoints)"
+                       value="0"
+                       id="selectedPoints"
+                       oninput="updateTextInput(this.value)" />
+                <p id="rangeValue">0</p>
+            </div>
+            <div id="error-message" style="color: red; display: none;"></div>
+
+            <input type="radio" id="chkTerms" name="radio-group" />
+            <label for="radio1">I agree to the Gift-a-Points TnC</label>
+
+            <button type="button" class="start-button" id="btnGiftPoints" onclick="SendGift();">Send</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+    </footer>
+
+    <script>
+        function Hamburger() {
+            var hamburger = document.querySelector('.hamburger');
+            var menu = document.querySelector('.menu-container');
+            var logo = document.querySelector('.logo');
+
+            var isMenuVisible = false;
+
+            hamburger.addEventListener('click', function () {
+                if (!isMenuVisible) {
+                    menu.style.display = 'block';
+                    menu.style.transform = 'translateY(0)';
+                    isMenuVisible = true;
+                    logo.style.display = 'none';
+                } else {
+                    menu.style.transform = 'translateY(-100vh)';
+                    isMenuVisible = false;
+                    logo.style.display = 'block';
+
+                }
+            });
+
+        }
+
+        Hamburger();
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+        var totalPoints = '@Convert.ToInt32(Model.BasePoints)';
+        var pointsToRS = '@Model.PointsToRS';
+
         $("#spnRS").text("(Rs. 0)");
         $("#txtGiftPoints").keyup(function () {
             var points = $("#txtGiftPoints").val();
-            var totalPoints = '@Convert.ToInt32(Model.EarnPoints)';
-            var pointsToRS = '@Model.PointsToRS';
             var rsOfPts = Math.round(points * pointsToRS);
-            $("#spnRS").text("(Rs. "+rsOfPts+")");
+
+            $("#spnRS").text("(Rs. " + rsOfPts + ")");
             var per = Math.round((points * 100) / totalPoints);
             var cords = per + ", 100";
             var remainingpts = totalPoints - points;
+
             if (parseInt(points) > parseInt(totalPoints)) {
                 remainingpts = 0;
                 $("#txtGiftPoints").val(parseInt(totalPoints));
             }
             $("#txtRemainingPoints").text(remainingpts);
-            $(".dummyClass").attr("stroke-dasharray", cords);
+            //$(".dummyClass").attr("stroke-dasharray", cords);
         });
     });
-    function SendGift() {
-        var status = true;
-        if ($("#txtRecipientName").val() == "") {
-            toastr.error('Please enter Recipient Name');
-            $("#txtRecipientName").focus();
-            status = false;
-            return false;
+
+    function updateTextInput(val) {
+        var totalPoints = '@Convert.ToInt32(Model.BasePoints)';
+        var pointsToRS = '@Model.PointsToRS';
+        //if (val > totalPoints) {
+        //    val = totalPoints;
+        //}
+        document.getElementById('rangeValue').innerText = val;
+        document.getElementById('txtGiftPoints').value = val;
+        var points = $("#txtGiftPoints").val();
+        var rsOfPts = Math.round(points * pointsToRS);
+
+        $("#spnRS").text("(Rs. " + rsOfPts + ")");
+        var per = Math.round((points * 100) / totalPoints);
+        var cords = per + ", 100";
+        var remainingpts = totalPoints - points;
+
+        if (parseInt(points) > parseInt(totalPoints)) {
+            remainingpts = 0;
+            $("#txtGiftPoints").val(parseInt(totalPoints));
         }
-        if ($("#txtRecipientNo").val() == "") {
-            toastr.error('Please enter Mobile No');
-            $("#txtRecipientNo").focus();
-            status = false;
-            return false;
-        }
-        if (/^[6789]\d{9,9}$/.test($("#txtRecipientNo").val())) {
-        }
-        else {
-            toastr.error('Please enter valid Mobile No');
-            status = false;
-            return false;
-        }
-        if ($("#txtGiftPoints").val() == "" || $("#txtGiftPoints").val() == "0") {
-            toastr.error('Please enter Gift Points');
-            $("#txtGiftPoints").focus();
-            status = false;
-            return false;
-        }
-        if ($("#chkTerms").is(":checked")) {
-        }
-        else {
-            toastr.warning('Please accept the Gift-a-Points TnC to continue!!!!');
-            status = false;
-            return false;
-        }
-        if (status) {
-            $("#divLoader").show();
-              $.ajax({
-                type: "POST",
-                url: '@Url.Action("GiveGiftPoints", "GiftPoints")',
-                  data: '{RecipientName: ' + JSON.stringify($("#txtRecipientName").val()) + ',RecipientNo: ' + JSON.stringify($("#txtRecipientNo").val()) + ',GiftPoints: ' + JSON.stringify($("#txtGiftPoints").val()) + '}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                  success: function (result) {
-                      console.log(result)
-                      if (result.ResponseCode == "1") {
-                          toastr.success("Points Gifted Successfully !!!");
-                          setTimeout(myStopFunction, 2000);
-                      }
-                      else {
-                          toastr.error(result.ResponseMessage);
-                      }
-                        $("#divLoader").hide();
-                    },
-                    error: function (result) {
-                        console.log(result.responseText)
-                    }
-                });
-        }
+        $("#txtRemainingPoints").text(remainingpts);
     }
-    function myStopFunction() {
-        window.location.reload();
-    }
-</script>
+
+    document.getElementById('txtGiftPoints').addEventListener('input', function () {
+        var totalPoints = '@Convert.ToInt32(Model.BasePoints)';
+        var value = this.value;
+        if (value !== '' && !isNaN(value)) {
+            var numValue = Number(value);
+            if (numValue >= 0 && numValue <= totalPoints) {
+                document.getElementById('selectedPoints').value = numValue;
+                document.getElementById('rangeValue').innerText = numValue;
+            } else if (numValue > totalPoints) {
+                this.value = totalPoints;
+                document.getElementById('selectedPoints').value = totalPoints;
+                document.getElementById('rangeValue').innerText = totalPoints;
+            }
+        }
+    });
+
+    document.getElementById('selectedPoints').addEventListener('input', function () {
+        var totalPoints = '@Convert.ToInt32(Model.BasePoints)';
+        var value = this.value;
+        //if (value > totalPoints) {
+        //    value = totalPoints;
+        //}
+        document.getElementById('txtGiftPoints').value = value;
+        document.getElementById('rangeValue').innerText = value;
+    });
+
+
+        function SendGift()
+        {
+            var status = true;
+            var recipientName = $("#txtRecipientName").val();
+            var recipientNo = $("#txtRecipientNo").val();
+            var giftPoints = $("#txtGiftPoints").val();
+            var isTermsChecked = $("#chkTerms").is(":checked")
+            if (!recipientName) {
+                toastr.error('Please enter Recipient Name');
+                status = false;
+            }
+
+            if (!recipientNo) {
+                toastr.error('Please enter Mobile No');
+                status = false;
+            } else if (!/^[6789]\d{9}$/.test(recipientNo)) {
+                toastr.error('Please enter a valid Mobile No');
+                status = false;
+            }
+
+            if (!giftPoints || giftPoints == "0") {
+                toastr.error('Please enter Gift Points');
+                status = false;
+            }
+
+            if (!isTermsChecked) {
+                toastr.warning('Please accept the Gift-a-Points TnC to continue!!!!');
+                status = false;
+            }
+
+
+            if (status)
+            {
+                $("#divLoader").show();
+                  $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GiveGiftPoints", "GiftPoints")',
+                      data: '{RecipientName: ' + JSON.stringify($("#txtRecipientName").val()) + ',RecipientNo: ' + JSON.stringify($("#txtRecipientNo").val()) + ',GiftPoints: ' + JSON.stringify($("#txtGiftPoints").val()) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                      success: function (result) {
+                          console.log(result)
+                          if (result.ResponseCode == "1")
+                          {
+                              toastr.success("Points Gifted Successfully !!!");
+                              //setTimeout(myStopFunction, 2000);
+                          }
+                          else
+                          {
+                              toastr.error(result.ResponseMessage);
+                          }
+                            $("#divLoader").hide();
+                        },
+                        error: function (result) {
+                            console.log(result.responseText)
+                        }
+                    });
+            }
+        }
+        function myStopFunction() {
+            //window.location.reload();
+        }
+    </script>
+   
+
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>*@
+</body>
+</html>

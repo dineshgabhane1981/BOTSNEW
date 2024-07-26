@@ -1,8 +1,281 @@
-﻿
+﻿@model List<DLC.ViewModel.outletNmaelist>
+@using BOTS_BL.Models;
+@using DLC.ViewModel;
+
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
+
+    //var url = "https://maps.google.com/maps?q=";
+    //url = url + Model.dLCDashboardContent.OutletLatitude + "," + Model.dLCDashboardContent.OutletLongitude;
+    //url = url + "&z=12 &output=embed";
+    var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Design</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+          rel="stylesheet" />
 
-<h2>Index</h2>
+    <link href="~/css/storelocator.css" rel="stylesheet" />
+    <style>
+        .heading_pt {
+            margin-top: 208px !important;
+            margin-left: 1.5%;
+            padding-left: 15px;
+            text-align: center;
+        }
 
+        .dropdown-content {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ccc;
+        z-index: 1000;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .dropdown-item {
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f1f1f1;
+    }
+
+    </style>
+</head>
+<body>
+
+
+    <nav>
+        @*<div class="logo">
+                <a href="index.html">
+                    <img src="@logoUrl" alt="logo" />
+                </a>
+            </div>*@
+        @if (logoSize == "Small")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+            </div>
+        }
+        @if (logoSize == "Medium")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+            </div>
+        }
+        @if (logoSize == "Big")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+            </div>
+        }
+        <div class="profile_links">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
+        </div>
+        <div class="language" style="display:none">
+            <select name="language" id="">
+                <option value="language">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Marathi">Marathi</option>
+            </select>
+        </div>
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1 class="active">Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+        </div>
+        <div class="hamburger">
+            <i class="ri-menu-2-line"></i>
+        </div>
+    </nav>
+    <div class="menu-container">
+        <div id="menu">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1 class="active">Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+        </div>
+    </div>
+
+
+
+
+    <h1 class="heading_pt">Store Locator</h1>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="Search..." onclick="fetchOutlets()">
+        <button type="submit" onclick="submitSearch()">Submit</button>
+        <ul id="dropdown" class="dropdown-content" style="display: none;">
+            <!-- Outlet names and IDs will be populated here by JavaScript -->
+        </ul>
+    </div>
+
+    <div class="map-container">
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.4327452779316!2d73.82960137335087!3d18.509336569520933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf6e0b6b0b33%3A0xd8facbf3c039f08b!2sThe%20Millennium!5e0!3m2!1sen!2sin!4v1704216476194!5m2!1sen!2sin" width="1200" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+    </div>
+
+    <div class="content">
+        <h2> </h2>
+        <p>
+
+        </p>
+        <p class="phone-icon" id="contactInfo" style="display:none;">
+            <i class="material-icons">&#xe551;</i>
+            <span id="spnContact"></span>
+        </p>
+    </div>
+
+    <footer class="footer">
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function Hamburger() {
+            var hamburger = document.querySelector('.hamburger');
+            var menu = document.querySelector('.menu-container');
+            var logo = document.querySelector('.logo');
+
+            var isMenuVisible = false;
+
+            hamburger.addEventListener('click', function () {
+                if (!isMenuVisible) {
+                    menu.style.display = 'block';
+                    menu.style.transform = 'translateY(0)';
+                    isMenuVisible = true;
+                    logo.style.display = 'none';
+                } else {
+                    menu.style.transform = 'translateY(-100vh)';
+                    isMenuVisible = false;
+                    logo.style.display = 'block';
+
+                }
+            });
+
+        }
+
+        Hamburger();
+    </script>
+    <script>
+    function fetchOutlets()
+    {
+
+        $.ajax({
+            url: '@Url.Action("GetOutlets", "Store")',
+            type: 'GET',
+            success: function (data) {
+                var dropdown = $('#dropdown');
+                dropdown.empty();
+                data.forEach(function (outlet) {
+                    var listItem = $('<li class="dropdown-item"></li>').text(outlet.OutletName);
+                    listItem.on('click', function() {
+                        $('#search-input').val(outlet.OutletName);
+                        dropdown.hide();
+                    });
+                    dropdown.append(listItem);
+                });
+                dropdown.show();
+            },
+            error: function() {
+               // alert('Failed to fetch outlet names.');
+                toastr.error('Failed to fetch outlet names.');
+            }
+        });
+    }
+
+        document.addEventListener("click", function (event) {
+            var dropdown = document.getElementById("dropdown");
+            var searchInput = document.getElementById("search-input");
+            if (event.target !== searchInput && !dropdown.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+
+        $('#search-input').on('input', function() {
+            var filter = this.value.toUpperCase();
+            var items = $('.dropdown-item');
+            items.each(function() {
+                var item = $(this);
+                var txtValue = item.text();
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    item.show();
+                } else {
+                    item.hide();
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        function submitSearch() {
+            var outletName = $('#search-input').val();
+            if (outletName) {
+                $.ajax({
+                    url: '/Store/GetMapUrl',
+                    type: 'POST',
+                    data: { outletName: outletName },
+                    success: function (data) {
+                        if (data) {
+                            updateMapUrl(data.url);
+                            updateContent(data.address, data.ownerName, data.contactNo);
+                        } else {
+                            //  alert('Map URL not found.');
+                            toastr.error("Map URL not found.");
+                        }
+                    },
+                    error: function () {
+                        toastr.error("Failed to fetch map URL.");
+                    }
+                });
+            } else {
+                toastr.error('Please select an outlet.');
+            }
+        }
+
+        function updateMapUrl(url) {
+            $('.map iframe').attr('src', url);
+        }
+
+        function updateContent(address, ownerName, contact) {
+            $('.content h2').text(address);
+            $('.content p').first().text(ownerName);
+            $("#spnContact").text(contact);
+            $("#contactInfo").show();
+            
+        }
+    </script>
+   
+</body>
+</html>

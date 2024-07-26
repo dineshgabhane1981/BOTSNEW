@@ -216,6 +216,8 @@ namespace BOTS_BL.Repository
                     objData.FontColor = configData.FontColor;
                     objData.AddedBy = userDetails.UserId;
                     objData.AddedDate = DateTime.Now;
+                    objData.UseCard = configData.UseCard;
+                    objData.UseCardURL = configData.UseCardURL;
                     context.tblDLCDashboardConfig_Publish.AddOrUpdate(objData);
                     context.SaveChanges();
 
@@ -702,13 +704,13 @@ namespace BOTS_BL.Repository
                     objCust.DisableSMSWATxn = false;
                     objCust.CountryCode = countryCode;
                     objCust.CurrentEnrolledOutlet = outletId;
-                    context.tblCustDetailsMasters.AddOrUpdate(objCust);
+                    context.tblCustDetailsMasters.Add(objCust);
                     context.SaveChanges();
 
                     tblCustInfo objInfo = new tblCustInfo();
                     objInfo.MobileNo = mobileNo;
                     objInfo.Name = "Member";
-                    context.tblCustInfoes.AddOrUpdate(objInfo);
+                    context.tblCustInfoes.Add(objInfo);
                     context.SaveChanges();
 
                     status = true;
@@ -766,7 +768,7 @@ namespace BOTS_BL.Repository
                 {
                     //objData.EarnPoints = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.po).FirstOrDefault();
                     objData.EarnPoints = context.tblCustPointsMasters.Where(x => x.MobileNo == mobileno && x.IsActive == true).Sum(y => y.Points);
-
+                    objData.BasePoints = context.tblCustPointsMasters.Where(x => x.MobileNo == mobileno && x.IsActive == true && x.PointsType== "Base").Sum(y => y.Points);
 
                     objData.EarnPercentage = context.tblRuleMasters.Select(x => x.PointsPercentage).FirstOrDefault();
                     objData.PointsToRS = context.tblRuleMasters.Select(x => x.PointsAllocation).FirstOrDefault();
@@ -775,14 +777,15 @@ namespace BOTS_BL.Repository
                     objData.OutletAddress = outletDetails.Address;
                     objData.OutletLongitude = outletDetails.Longitude;
                     objData.OutletLatitude = outletDetails.Latitude;
-                    var optout = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.DisableSMSWAPromo).FirstOrDefault();
-                    var custumerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.Name).FirstOrDefault();
-                    objData.CustomerName = custumerName;
+                    var objCust= context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).FirstOrDefault();
+                    //var optout = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.DisableSMSWAPromo).FirstOrDefault();
+                    //var custumerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.Name).FirstOrDefault();
+                    objData.CustomerName = objCust.Name;
                     //var pointsinRs = objData.EarnPoints * PointsToRS;
                     //objData.PointsToRS = pointsinRs;
-                    if (optout.HasValue)
+                    if (objCust.DisableSMSWAPromo.HasValue)
                     {
-                        if (optout.Value)
+                        if (objCust.DisableSMSWAPromo.Value)
                         {
                             objData.IsOptout = true;
                         }
@@ -795,6 +798,21 @@ namespace BOTS_BL.Repository
                     {
                         objData.IsOptout = false;
                     }
+                    if (objCust.DisableSMSWATxn.HasValue)
+                    {
+                        if (objCust.DisableSMSWATxn.Value)
+                        {
+                            objData.IsOptoutTxn = true;
+                        }
+                        else
+                        {
+                            objData.IsOptoutTxn = false;
+                        }
+                    }
+                    else
+                    {
+                        objData.IsOptoutTxn = false;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -805,7 +823,7 @@ namespace BOTS_BL.Repository
             return objData;
         }
         
-        public bool UpdateOptout(string groupId, string mobileNo, bool optout)
+        public bool UpdateOptout(string groupId, string mobileNo, bool optout, bool isTxn)
         {
             bool status = false;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
@@ -816,7 +834,10 @@ namespace BOTS_BL.Repository
                     var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).FirstOrDefault();
                     if (custDetails != null)
                     {
-                        custDetails.DisableSMSWAPromo = optout;
+                        if (isTxn)
+                            custDetails.DisableSMSWATxn = optout;
+                        else
+                            custDetails.DisableSMSWAPromo = optout;
                         context.tblCustDetailsMasters.AddOrUpdate(custDetails);
                         context.SaveChanges();
                         status = true;
@@ -1059,15 +1080,15 @@ namespace BOTS_BL.Repository
                 return lstData;
             }
         }
-        public List<MWP_ReferTNC> GetMWPReferTNC(string groupId)
+        public List<tblDLCFrontEndPageDataReferTNC> GetMWPReferTNC(string groupId)
         {
-            List<MWP_ReferTNC> lstData = new List<MWP_ReferTNC>();
+            List<tblDLCFrontEndPageDataReferTNC> lstData = new List<tblDLCFrontEndPageDataReferTNC>();
             string connStr = objCustRepo.GetCustomerConnString(groupId);
             using (var context = new BOTSDBContext(connStr))
             {
                 try
                 {
-                    lstData = context.MWP_ReferTNC.ToList();
+                    lstData = context.tblDLCFrontEndPageDataReferTNCs.ToList();
                 }
                 catch (Exception ex)
                 {
@@ -1088,9 +1109,12 @@ namespace BOTS_BL.Repository
             }
 
             using (var context = new BOTSDBContext(connStr))
-            {
-                DateTime now = DateTime.Now;
-                string formattedDate = now.ToString("dd-MM-yyyy");
+            {                
+                string DOB = string.Empty;
+                if(!string.IsNullOrEmpty(objData.DateOfBirth))
+                {
+                    DOB = Convert.ToDateTime(objData.DateOfBirth).ToString("yyyy-MM-dd");
+                }
                 try
                 {
                     var result = context.Database.SqlQuery<DLCSPResponse>("sp_DLCProfileUpdate @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
@@ -1098,10 +1122,10 @@ namespace BOTS_BL.Repository
                        "@pi_Child1DOB, @pi_Child2DOB, @pi_Child3DOB ,@pi_City, @pi_LanguagePreferred, @pi_Religion, @pi_DBName, @pi_Area",
                                  new SqlParameter("@pi_MobileNo", objData.MobileNo),
                                  new SqlParameter("@pi_BrandId", objData.BrandId),
-                                 new SqlParameter("@pi_Datetime", formattedDate),
+                                 new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd")),
                                  new SqlParameter("@pi_Name", objData.Name),
                                  new SqlParameter("@pi_Gender", objData.Gender ?? ""),
-                                 new SqlParameter("@pi_DOB", objData.DateOfBirth),
+                                 new SqlParameter("@pi_DOB", DOB),
                                  new SqlParameter("@pi_Email", objData.Email ?? ""),
                                  new SqlParameter("@pi_Pincode", objData.Pincode),
                                  new SqlParameter("@pi_MaritalStatus", objData.MaritalStatus),

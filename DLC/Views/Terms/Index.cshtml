@@ -1,21 +1,141 @@
 ﻿@model List<BOTS_BL.Models.tblDLCFrontEndPageDataTNC>
+@using BOTS_BL.Models;
+@using DLC.ViewModel;
 @{
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
 
 
-<div class="app-main__inner">
-    <div class="row m-5 pl-3 pr-3 card col-md-11 col-lg-11 row  pt-5">
-        <h3>Terms and Conditions</h3>
-        <div class="col-md-12 col-lg-12 pt-5" style="padding-bottom: 10px;margin-top:5px;">
-            <ol>
-                @foreach (var item in Model)
-                {
-                    <li>@item.MWP_TNC</li>
-                }
-            </ol>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/term.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+
+    <link href="~/css/term.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+          rel="stylesheet" />
+    <title>Terms and Conditions</title>
+</head>
+<body>
+    <nav>
+        @if (logoSize == "Small")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+            </div>
+        }
+        @if (logoSize == "Medium")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+            </div>
+        }
+        @if (logoSize == "Big")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+            </div>
+        }
+        <div class="profile_links">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
+        </div>
+        <div class="language" style="display:none">
+            <select name="language" id="">
+                <option value="language">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Marathi">Marathi</option>
+            </select>
+        </div>
+
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1 class="active">Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+        </div>
+        <div class="hamburger">
+            <i class="ri-menu-2-line"></i>
+        </div>
+    </nav>
+    <div class="menu-container">
+        <div id="menu">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1 class="active">Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
-</div>
+
+
+
+    <div class="container_tAc">
+        <h1 style="padding-top: 4%;">Terms and Conditions</h1>
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>@item.MWP_TNC</li>
+            }
+        </ul>
+    </div>
+
+    <footer>
+    </footer>
+
+
+    <script>
+        function Hamburger() {
+            var hamburger = document.querySelector('.hamburger');
+            var menu = document.querySelector('.menu-container');
+            var logo = document.querySelector('.logo');
+            var isMenuVisible = false;
+
+            hamburger.addEventListener('click', function () {
+                if (!isMenuVisible) {
+                    menu.style.display = 'block';
+                    menu.style.transform = 'translateY(0)';
+                    isMenuVisible = true;
+                    logo.style.display = 'none';
+                } else {
+                    menu.style.transform = 'translateY(-100vh)';
+                    isMenuVisible = false;
+                    logo.style.display = 'block';
+
+                }
+            });
+
+        }
+
+        Hamburger();
+    </script>
+
+    
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+</html>
+
+
 

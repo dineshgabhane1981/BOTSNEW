@@ -5,6 +5,7 @@ using DLC.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,11 +13,12 @@ namespace DLC.Controllers
 {
     public class OptoutController : Controller
     {
+        CustomerRepository objCustRepo = new CustomerRepository();
         DLCConfigRepository DCR = new DLCConfigRepository();
         Exceptions newexception = new Exceptions();
         // GET: Optout
         public ActionResult Index()
-        {            
+        {
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
             DLCDashboardContent objData = new DLCDashboardContent();
             objData = DCR.GetDLCDashboardContent(sessionVariables.GroupId, sessionVariables.MobileNo);
@@ -30,11 +32,28 @@ namespace DLC.Controllers
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
             try
             {
-                status = DCR.UpdateOptout(sessionVariables.GroupId, sessionVariables.MobileNo, Convert.ToBoolean(IsOptout));
+                status = DCR.UpdateOptout(sessionVariables.GroupId, sessionVariables.MobileNo, Convert.ToBoolean(IsOptout), false);
             }
             catch (Exception ex)
             {
                 newexception.AddException(ex, "UpdateOptout");
+            }
+
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult Update1Optout(string IsOptout)
+        {
+            bool status = false;
+            var sessionVariables = (SessionVariables)Session["SessionVariables"];
+            try
+            {
+                status = DCR.UpdateOptout(sessionVariables.GroupId, sessionVariables.MobileNo, Convert.ToBoolean(IsOptout), true);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "Update1Optout");
             }
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }

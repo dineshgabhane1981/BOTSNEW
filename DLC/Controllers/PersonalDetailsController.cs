@@ -42,6 +42,7 @@ namespace DLC.Controllers
             {
                 foreach (Dictionary<string, object> item in objProfileData)
                 {
+                    DateTime dob;
                     if (!string.IsNullOrEmpty(Convert.ToString(item["Name"])))
                     {
                         objData.Name = Convert.ToString(item["Name"]);
@@ -50,9 +51,10 @@ namespace DLC.Controllers
                     {
                         objData.Gender = Convert.ToString(item["Gender"]);
                     }
-                    if (!string.IsNullOrEmpty(Convert.ToString(item["DateOfBirth"])))
+                  
+                    if (DateTime.TryParse(Convert.ToString(item["DateOfBirth"]), out dob))
                     {
-                        objData.DateOfBirth = Convert.ToString(item["DateOfBirth"]);
+                        objData.DateOfBirth = dob.ToString("dd-MM-yyyy");
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(item["MaritalStatus"])))
                     {

@@ -19,6 +19,7 @@ namespace DLC.Controllers
         {
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
             DLCDashboardContent objData = new DLCDashboardContent();
+            
             objData = DCR.GetDLCDashboardContent(sessionVariables.GroupId, sessionVariables.MobileNo);
             objData.MobileNo = sessionVariables.MobileNo;
             return View(objData);

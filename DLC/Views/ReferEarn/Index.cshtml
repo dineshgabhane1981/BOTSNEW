@@ -1,135 +1,260 @@
-﻿@model List<BOTS_BL.Models.MWP_ReferTNC>
+﻿@model List<BOTS_BL.Models.tblDLCFrontEndPageDataReferTNC>
+@using BOTS_BL.Models;
+@using DLC.ViewModel;
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Refer to a friend</title>
+    <link href="~/css/referndearn.css" rel="stylesheet" />
 
-<div class="app-main__inner">
-    <div class="row m-5 pl-3 pr-3 card col-md-11 col-lg-11 row  pt-5">
-        <h3>Refer your Friends</h3>
-        <div class="col-md-10 col-lg-10 pt-1 dashboardBox row" style="padding-bottom: 10px;" id="dvRefer1">
-            <div class="col-md-10 col-lg-6">
-                <input type="text" id="txtFriendName1" class="input100" placeholder="Friend Name" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+          rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <style>
+        .start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 4%;
+        }
+
+        .start-button {
+            background-color: #4CAF50 !important; /* Green */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        @*<div class="logo">
+                <a href="index.html">
+                    <img src="@logoUrl" alt="logo" />
+                </a>
+            </div>*@
+        @if (logoSize == "Small")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
             </div>
-            <div class="col-md-10 col-lg-6">
-                <input type="number" id="txtFriendMobile1" class="input100" placeholder="Mobile No" />
+        }
+        @if (logoSize == "Medium")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
             </div>
+        }
+        @if (logoSize == "Big")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+            </div>
+        }
+        <div class="profile_links">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
         </div>
-        <div class="col-md-10 col-lg-10 pt-1 dashboardBox row" style="padding-bottom: 10px;" id="dvRefer2">
-            <div class="col-md-10 col-lg-6">
-                <input type="text" id="txtFriendName2" class="input100" placeholder="Friend Name" />
-            </div>
-            <div class="col-md-10 col-lg-6">
-                <input type="number" id="txtFriendMobile2" class="input100" placeholder="Mobile No" />
-            </div>
+        <div class="language" style="display:none">
+            <select name="language" id="">
+                <option value="language">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Marathi">Marathi</option>
+            </select>
         </div>
-        <div class="col-md-10 col-lg-10 pt-1 dashboardBox row" style="padding-bottom: 10px;" id="dvRefer3">
-            <div class="col-md-10 col-lg-6">
-                <input type="text" id="txtFriendName3" class="input100" placeholder="Friend Name" />
-            </div>
-            <div class="col-md-10 col-lg-6">
-                <input type="number" id="txtFriendMobile3" class="input100" placeholder="Mobile No" />
-            </div>
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1 class="active">Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
-        <div class="col-md-10 col-lg-10 pt-3" style="padding-bottom: 10px; text-align: center;">
-            <button id="btnGiftPoints" class="btn form-control btn-primary  submit px-3" onclick="SendReference();" style="font-weight:bold;width:200px;">Send Reference</button>
+        <div class="hamburger">
+            <i class="ri-menu-2-line"></i>
+        </div>
+    </nav>
+    <div class="menu-container">
+        <div id="menu">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1 class="active">Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
-    <div class="m-5 pl-3 pr-3 col-md-11 col-lg-11 note-section">
-        <h6><i><b>Key Points</b></i></h6>
-        <ol>
-            @foreach(var item in Model)
-            {
-                <li>@item.MWP_ReferTNC1</li>
-            }
-        </ol>
-    </div>
-</div>
-    <script>
-    function SendReference() {
-        var status = true;
-        var FriendName1 = $("#txtFriendName1").val();
-        var FriendName2 = $("#txtFriendName2").val();
-        var FriendName3 = $("#txtFriendName3").val();
-        var FriendMobile1 = $("#txtFriendMobile1").val();
-        var FriendMobile2 = $("#txtFriendMobile2").val();
-        var FriendMobile3 = $("#txtFriendMobile3").val();
-        if (FriendName1 == "" && FriendName2 == "" && FriendName3 == "" && FriendMobile1 == "" && FriendMobile2 == "" && FriendMobile3 == "") {
-            toastr.error('Atleast one Friend name and mobile no need to provide');
-            $("#txtFriendName1").focus();
-            status = false;
-        }
-        if (FriendName1 != "") {
-            if (FriendMobile1 == "") {
-                toastr.error('please provide mobile no');
-                $("#txtFriendMobile1").focus();
-                status = false;
-            }
-            else if (/^[6789]\d{9,9}$/.test(FriendMobile1)) {
-            }
-            else {
-                toastr.error('Please enter valid Mobile No');
-                status = false;
-                $("#txtFriendMobile1").focus();
-                return false;
-            }
-        }
-        if (FriendName2 != "") {
-            if (FriendMobile2 == "") {
-                toastr.error('please provide mobile no');
-                $("#txtFriendMobile2").focus();
-                status = false;
-            }
-            else if (/^[6789]\d{9,9}$/.test(FriendMobile2)) {
-            }
-            else {
-                toastr.error('Please enter valid Mobile No');
-                status = false;
-                $("#txtFriendMobile2").focus();
-                return false;
-            }
-        }
-        if (FriendName3 != "") {
-            if (FriendMobile3 == "") {
-                toastr.error('please provide mobile no');
-                $("#txtFriendMobile3").focus();
-                status = false;
-            }
-            else if (/^[6789]\d{9,9}$/.test(FriendMobile3)) {
-            }
-            else {
-                toastr.error('Please enter valid Mobile No');
-                status = false;
-                $("#txtFriendMobile3").focus();
-                return false;
-            }
-        }
-        if (status) {
-            alert(111)
-             $("#divLoader").show();
-              $.ajax({
-                type: "POST",
-                url: '@Url.Action("DLCReferFriend", "ReferEarn")',
-                  data: '{FirstName: ' + JSON.stringify(FriendName1) + ',FirstMobile: ' + JSON.stringify(FriendMobile1) + ',SecondName: ' + JSON.stringify(FriendName2) + ',SecondMobile: ' + JSON.stringify(FriendMobile2) + ',ThirdName: ' + JSON.stringify(FriendName3) + ',ThirdMobile: ' + JSON.stringify(FriendMobile3) + '}',
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                  success: function (result) {
-                      if (result == true) {
-                          toastr.success('Reference sent Successfully !!!');
-                          setTimeout(myStopFunction, 2000);
-                      }
-                      else {
-                          toastr.error('There is problem in gifting points. Please contact your Administrator !!!');
-                      }
-                        $("#divLoader").hide();
-                    },
-                    error: function (result) {
-                        console.log(result.responseText)
+
+
+    <div id="main">
+        <form id="refer-form">
+            <div class="refer_box">
+                <h3>Refer your friends</h3>
+                <div class="input_box box1">
+                    <input type="text" id="txtFriendName1" name="friendName[]" placeholder="Friend Name">
+                    <input type="text" id="txtFriendMobile1" name="mobileNo[]" placeholder="Mobile No">
+                </div>
+                <div class="input_box box1">
+                    <input type="text" id="txtFriendName2" name="friendName[]" placeholder="Friend Name">
+                    <input type="text" id="txtFriendMobile2" name="mobileNo[]" placeholder="Mobile No">
+                </div>
+                <div class="input_box box1">
+                    <input type="text" id="txtFriendName3" name="friendName[]" placeholder="Friend Name">
+                    <input type="text" id="txtFriendMobile3" name="mobileNo[]" placeholder="Mobile No">
+                </div>
+                <div style="width:100%;text-align:center;">
+                    <button type="button" class="start-button" onclick="SendReference();" id="btnGiftPoints">Send reference</button>
+                </div>
+            </div>
+</form>
+        <div class="key_points">
+            <h3>Key Points</h3>
+            <div style="padding-left:50px;">
+                <ol>
+                    @foreach (var item in Model)
+                    {
+                        <li>@item.MWP_ReferTNC</li>
                     }
-                });
+                </ol>
+            </div>
+        </div>
+        <footer></footer>
+    </div>
+    <script>
+        function SendReference()
+        {
+            var status = true;
+            var FriendName1 = $("#txtFriendName1").val();
+            var FriendName2 = $("#txtFriendName2").val();
+            var FriendName3 = $("#txtFriendName3").val();
+            var FriendMobile1 = $("#txtFriendMobile1").val();
+            var FriendMobile2 = $("#txtFriendMobile2").val();
+            var FriendMobile3 = $("#txtFriendMobile3").val();
+            if (FriendName1 == "" && FriendName2 == "" && FriendName3 == "" && FriendMobile1 == "" && FriendMobile2 == "" && FriendMobile3 == "")
+            {
+
+                toastr.error('Atleast one Friend name and mobile no need to provide');
+                $("#txtFriendName1").focus();
+                status = false;
+            }
+            if (FriendName1 != "")
+            {
+
+                if (FriendMobile1 == "")
+                {
+
+                    toastr.error('please provide mobile no');
+                    $("#txtFriendMobile1").focus();
+                    status = false;
+                }
+                else if (/^[6789]\d{9,9}$/.test(FriendMobile1))
+                {
+
+                }
+                else
+                {
+
+                    toastr.error('Please enter valid Mobile No');
+                    status = false;
+                    $("#txtFriendMobile1").focus();
+                    return false;
+                }
+            }
+            if (FriendName2 != "")
+            {
+
+                if (FriendMobile2 == "") {
+
+                    toastr.error('please provide mobile no');
+                    $("#txtFriendMobile2").focus();
+                    status = false;
+                }
+                else if (/^[6789]\d{9,9}$/.test(FriendMobile2)) {
+                }
+                else {
+                    toastr.error('Please enter valid Mobile No');
+                    status = false;
+                    $("#txtFriendMobile2").focus();
+                    return false;
+                }
+            }
+            if (FriendName3 != "")
+            {
+                if (FriendMobile3 == "") {
+                    toastr.error('please provide mobile no');
+                    $("#txtFriendMobile3").focus();
+                    status = false;
+                }
+                else if (/^[6789]\d{9,9}$/.test(FriendMobile3)) {
+                }
+                else {
+                    toastr.error('Please enter valid Mobile No');
+                    status = false;
+                    $("#txtFriendMobile3").focus();
+                    return false;
+                }
+            }
+            if (status)
+            {
+
+                 $("#divLoader").show();
+                  $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DLCReferFriend", "ReferEarn")',
+                      data: '{FirstName: ' + JSON.stringify(FriendName1) + ',FirstMobile: ' + JSON.stringify(FriendMobile1) + ',SecondName: ' + JSON.stringify(FriendName2) + ',SecondMobile: ' + JSON.stringify(FriendMobile2) + ',ThirdName: ' + JSON.stringify(FriendName3) + ',ThirdMobile: ' + JSON.stringify(FriendMobile3) + '}',
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                      success: function (result)
+                      {
+                          if (result == true)
+                          {
+                              toastr.success('Reference sent Successfully !!!');
+                              setTimeout(myStopFunction, 2000);
+
+                              //$("#txtFriendName1").val('');
+                              //$("#txtFriendName2").val('');
+                              //$("#txtFriendName3").val('');
+                              //$("#txtFriendMobile1").val('');
+                              //$("#txtFriendMobile2").val('');
+                              //$("#txtFriendMobile3").val('');
+                          }
+                          else
+                          {
+                              toastr.error('There is problem in gifting points. Please contact your Administrator !!!');
+
+                          }
+                            $("#divLoader").hide();
+                        },
+                        error: function (result) {
+                            console.log(result.responseText)
+                        }
+                  });
+            }
         }
-    }
-    function myStopFunction() {
-        window.location.reload();
-    }
+
     </script>
+
+    <script src="~/js/script.js"></script>
+</body>
+</html>
+

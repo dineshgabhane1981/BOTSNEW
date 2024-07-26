@@ -11,6 +11,7 @@ namespace DLC.ViewModel
     {
         public List<tblDLCFrontEndPageDataNew> lstDLCFrontEndPageData { get; set; }
         public tblDLCDashboardConfig_Publish objDashboardConfig { get; set; }
+        //public List<outletNmaelist> outletNamelist { get; set; }
         public string CountryCode { get; set; }
     }
 }

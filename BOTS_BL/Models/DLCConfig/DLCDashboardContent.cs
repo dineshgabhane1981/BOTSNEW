@@ -9,6 +9,7 @@ namespace BOTS_BL.Models
     public class DLCDashboardContent
     {
         public decimal? EarnPoints { get; set; }
+        public decimal? BasePoints { get; set; }
         public decimal? EarnPercentage { get; set; }
         public string OutletName { get; set; }
         public string OutletAddress { get; set; }
@@ -18,5 +19,6 @@ namespace BOTS_BL.Models
         public string CustomerName { get; set; }
         public decimal? PointsToRS { get; set; }
         public bool IsOptout { get; set; }
+        public bool IsOptoutTxn { get; set; }
     }
 }

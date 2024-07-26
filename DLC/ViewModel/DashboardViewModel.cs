@@ -11,5 +11,6 @@ namespace DLC.ViewModel
     {
         public tblDLCDashboardConfig_Publish objDashboardConfig { get; set; }
         public DLCDashboardContent dLCDashboardContent { get; set; }
+        //public List< outletNmaelist> outletNamelist { get; set; }
     }
 }

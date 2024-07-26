@@ -3,125 +3,673 @@
 @using DLC.ViewModel;
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 
     var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var Flag = sessionVariables.Flag;
+    var MobileNo = sessionVariables.MobileNo;
     var HeaderColor = sessionVariables.objDashboardConfig.HeaderColor;
     var FontColor = sessionVariables.objDashboardConfig.FontColor;
     var url = "https://maps.google.com/maps?q=";
     url = url + Model.dLCDashboardContent.OutletLatitude + "," + Model.dLCDashboardContent.OutletLongitude;
     url = url + "&z=12 &output=embed";
+    var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
 
-<div class="app-main__inner">
-    <div class="m-5 pl-3 pr-3 card col-md-11 col-lg-11 pt-5">
-        <div class="col-md-12 col-lg-12 row  pt-5" style="padding-bottom: 10px;margin-top:5px;">
-            <div class="col-md-12 col-lg-5 mr-5 row  dashboardBox">
-                <div class="col-md-6 col-lg-12 row"><b>@Model.dLCDashboardContent.EarnPoints</b> <div style="padding-left:8px;margin-right:70px;"> Your earned pts </div> <div style="text-align:right;"> <a href="@Url.Action("Index", "TransactionHistory")" class="anchor">Transaction History</a> </div></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Dashboard</title>
+    <link href="~/css/dashboard.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+          rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+    <style>
+        @@media (max-width: 1024px) {
+            .gift-card {
+                flex: 1 1 30%; /* More flexibility for smaller screens */
+            }
+
+            .gift-card-top i {
+                font-size: 4vw; /* Adjust icon size */
+            }
+
+            .gift-card-top h3,
+            .gift-card-bottom h3 {
+                font-size: 2.5vw; /* Larger font for smaller screens */
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .gift-card {
+                flex: 1 1 45%; /* Allows for 2 cards per row on smaller devices */
+                min-width: 120px; /* Minimum width for smaller screens */
+                max-width: 150px; /* Maximum width to maintain consistency */
+            }
+
+            .gift-card-top i {
+                font-size: 5vw; /* Adjust icon size */
+            }
+
+            .gift-card-top h3,
+            .gift-card-bottom h3 {
+                font-size: 3vw; /* Larger font for readability on smaller devices */
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .gift-card {
+                flex: 1 1 100%; /* Single card per row on very small devices */
+            }
+
+            .gift-card-top i {
+                font-size: 6vw; /* Larger icon on small devices */
+            }
+
+            .gift-card-top h3,
+            .gift-card-bottom h3 {
+                font-size: 4vw; /* Larger font for small devices */
+            }
+        }
+
+        .custom-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .custom-modal-content {
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-modal-header, .custom-modal-footer {
+            padding: 10px;
+            border-bottom: 1px solid #e5e5e5;
+            border-top: 1px solid #e5e5e5;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-modal-header {
+            border-bottom: none;
+        }
+
+        .custom-modal-body {
+            padding: 20px;
+        }
+
+        .close {
+            cursor: pointer;
+            font-size: 1.5rem;
+            border: none;
+            background: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="nvbarcolor">
+        @*<div class="logo">
+                <a href="index.html">
+                    <img src="@logoUrl" alt="logo" />
+                </a>
+            </div>*@
+        @if (logoSize == "Small")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
             </div>
-            <div class="col-md-12 col-lg-5  mr-0 row dashboardBox">
-                <div class="col-md-6 col-lg-12 row"><div style="padding-left:8px;margin-right:70px;"> Earn &nbsp;&nbsp; <b>@Model.dLCDashboardContent.EarnPercentage% &nbsp;&nbsp;</b> on every purchases</div> <a href="@Url.Action("Index", "Store")" class="anchor">Stores</a> </div>
+        }
+        @if (logoSize == "Medium")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
             </div>
-        </div>       
-    <div class="col-md-12 col-lg-12 row  pt-2" style="padding-bottom: 10px;margin-top:5px;">
-        <div class="col-md-12 col-lg-3  pt-2">
-            <div>@Model.dLCDashboardContent.OutletAddress</div>
-            <iframe id="iFrameMap" allowfullscreen="" frameborder="0" height="80%" width="100%" src="@url" ></iframe>
+        }
+        @if (logoSize == "Big")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+            </div>
+        }
+        <div class="profile_links" style="display:none">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
         </div>
-        <div class="col-md-12 col-lg-9 row  pt-2" style="padding-bottom: 10px;margin-top:5px;">
+        <div class="language" style="display:none">
+            <select name="language" id="">
+                <option value="language">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Marathi">Marathi</option>
+
+            </select>
+        </div>
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1 class="active">Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+
+        </div>
+        <div class="hamburger">
+            <i class="ri-menu-2-line"></i>
+        </div>
+    </nav>
+    <div class="menu-container">
+        <div id="menu">
+            <a href="@Url.Action("Index", "Dashboard")"><h1 class="active">Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+        </div>
+    </div>
+    <!-- card  -->
+
+    <div id="imageContainer">
+        <div class="card" style="background-image:url(@Model.objDashboardConfig.UseCardURL)">
+            <div class="card-top">
+                <h3>@MobileNo</h3>
+                <div class="card-top-right">
+                    <h4>Card Number</h4>
+                    <h4>12XX 23XX XX12</h4>
+                </div>
+            </div>
+            <div class="card-center">
+                <h2>LOYALTY POINTS BALANCE</h2>
+                <div class="card-center-both">
+                    <img src="/img/coins.png" alt="" />
+                    <div class="card-center-both-right">
+                        <h4>@ViewBag.earnPoint</h4>
+                        <h5>Total Points</h5>
+                    </div>
+                </div>
+                <h3 class="tier">TIER 1</h3>
+            </div>
+            <hr />
+            <div class="card-bottom">
+                <h4>POINTS IN VALUE - Rs @ViewBag.pointsinRs</h4>
+                <h4> @ViewBag.customerName</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- content -->
+
+    <section class="content">
+        <div class="top">
+            <div class="top-content">
+                <h4>YOUR EARNED POINTS</h4>
+
+                <button>
+                    <a href="@Url.Action("Index", "TransactionHistory")" style="text-decoration: none;color: inherit;">
+                        <h3>TRANSACTION HISTORY</h3>
+                    </a>
+                </button>
+            </div>
+            <div class="bottom-content">
+                <div class="left-split">
+                    <h4>@ViewBag.earnPoint</h4>
+                    <h5>Transaction Points</h5>
+                    <h6><span>25th March 2025</span></h6>
+                </div>
+                <div class="right-split">
+                    <h4>@ViewBag.bonousPoint</h4>
+                    <h5>Bonus Points</h5>
+                    <h6><span>25th March 2025</span></h6>
+                </div>
+            </div>
+        </div>
+
+
+        @*<div class="custom-modal" id="missingFieldModal">
+                <div class="custom-modal-content">
+                    <div class="custom-modal-header">
+                        <h5 class="modal-title" id="missingFieldModalLabel">Missing Information</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="custom-modal-body">
+                        <form id="missingFieldForm">
+                            <div class="form-group">
+                                <label for="missingFieldValue" id="missingFieldLabel">Please enter the required information:</label>
+                                <input type="text" class="form-control"onclick="hideModal()" id="missingFieldValue" required>
+                            </div>
+                            <input type="hidden" id="userId">
+                            <input type="hidden" id="missingField">
+                        </form>
+                    </div>
+                    <div class="custom-modal-footer">
+                        <button type="button" class="btn" onclick="saveMissingField()">Save</button>
+                    </div>
+                </div>
+            </div>*@
+        <div class="custom-modal" id="missingFieldModal">
+            <div class="custom-modal-content">
+                <div class="custom-modal-header">
+                    <h5 class="modal-title" id="missingFieldModalLabel">Missing Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="hideModal();">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="custom-modal-body">
+                    <form id="missingFieldForm">
+                        <div class="form-group">
+                            <label for="missingFieldValue" id="missingFieldLabel">Please enter the required information:</label>
+                            <input type="text" class="form-control" id="missingFieldValue" required>
+                        </div>
+                        <input type="hidden" id="userId">
+                        <input type="hidden" id="missingField">
+                    </form>
+                </div>
+                <div class="custom-modal-footer">
+                    <button type="button" class="btn" onclick="saveMissingField()">Save</button>
+                </div>
+            </div>
+        </div>
+
+
+
+    </section>
+    <div class="bottom">
+        <div class="left-content">
+            <h1>@Model.dLCDashboardContent.EarnPercentage%</h1>
+            <h3>Earn on every purchase</h3>
+        </div>
+        <div class="right-content">
+            <button>
+                <a href="@Url.Action("Index", "Store")" style="text-decoration: none;color: inherit;">
+                    <h3>View stores around you</h3>
+                </a>
+            </button>
+        </div>
+    </div>
+
+    <section class="gift">
+        <div class="gift-title">
+            <a href="@Url.Action("Index", "GiftPoints")" style="text-decoration: none;" class="gift-title">
+                <h3>Gift Your Points</h3>
+                <span class="circle">
+                    <i class="ri-arrow-right-line"></i>
+                </span>
+            </a>
+        </div>
+    </section>
+
+
+    <section class="gift-headline">
+        <h3>More ways to Earn Points</h3>
+        <div class="gift-card-container">
             @if (Model.objDashboardConfig.AddPersonalDetails)
             {
-
-                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
-                    <a href="@Url.Action("Index", "PersonalDetails")">
-                        <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
-                            <div style="width: 25%;"></div>
-                            <div class="circle" style="border: 1px solid @HeaderColor; color: @FontColor; background: linear-gradient(to bottom, @HeaderColor, #000000);">@Model.objDashboardConfig.PersonalDetailsPoints</div>
-                            <div style="width:25%;"></div>
-                            <div class="WidgetText" style="font-size:16px;margin-top:30px;">Add Personal Details & get <b style="font-size:22px;"> @Model.objDashboardConfig.PersonalDetailsPoints </b> bonus points</div>
+                <a href="@Url.Action("Index", "PersonalDetails")" style="text-decoration:none;">
+                    <div class="gift-card">
+                        <div class="gift-card-top">
+                            <i class="ri-team-line"></i>
+                            <h3>@Model.objDashboardConfig.PersonalDetailsPoints Points</h3>
                         </div>
-
-                    </a>
-                </div>
-
+                        <div class="gift-card-bottom">
+                            <h3>Add Personal Details & get @Model.objDashboardConfig.PersonalDetailsPoints bonus points</h3>
+                        </div>
+                    </div>
+                </a>
             }
             @if (Model.objDashboardConfig.AddReferFriend)
             {
-                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
-                    <a href="@Url.Action("Index", "ReferEarn")">
-                        <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
-                            <div style="width: 25%;"></div>
-                            <div class="circle" style="border: 1px solid @HeaderColor; color:@FontColor; background:linear-gradient(to bottom,@HeaderColor, #000000);">@Model.objDashboardConfig.ReferPoints</div>
-                            <div style="width:25%;"></div>
-                            <div class="WidgetText" style="font-size:16px;margin-top:30px;">Refer a friend & get <b style="font-size:22px;"> @Model.objDashboardConfig.ReferPoints </b> bonus points</div>
+                <a href="@Url.Action("Index", "ReferEarn")" style="text-decoration:none;">
+                    <div class="gift-card">
+                        <div class="gift-card-top">
+                            <i class="ri-team-line"></i>
+                            <h3>@Model.objDashboardConfig.ReferPoints Points</h3>
                         </div>
-                    </a>
-                </div>
+                        <div class="gift-card-bottom">
+                            <h3>Refer a friend <br> and earn @Model.objDashboardConfig.ReferPoints points</h3>
+                        </div>
+                    </div>
+                </a>
             }
             @if (Model.objDashboardConfig.AddGiftPoints)
             {
-                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
-                    <a href="@Url.Action("Index", "GiftPoints")">
-                        <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
-                            <div style="width: 25%;"></div>
-                            <div class="circle" style="border: 1px solid @HeaderColor; color:@FontColor; background:linear-gradient(to bottom,@HeaderColor, #000000);">@Model.objDashboardConfig.GiftPoints</div>
-                            <div style="width:25%;"></div>
-                            <div class="WidgetText" style="font-size:16px;margin-top:30px;">Gift your points & get <b style="font-size:22px;"> @Model.objDashboardConfig.GiftPoints </b> more rewards</div>
+                <a href="@Url.Action("Index", "GiftPoints")" style="text-decoration:none;">
+                    <div class="gift-card">
+                        <div class="gift-card-top">
+                            <i class="ri-team-line"></i>
+                            <h3>@Model.objDashboardConfig.GiftPoints Points</h3>
                         </div>
-                    </a>
-                </div>
-            }
-            @if (Model.objDashboardConfig.IsExtraWidgetText1)
-            {
-                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
-                    <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
-                        <div style="width: 25%;"></div>
-                        <div class="circle" style="border: 1px solid @HeaderColor; color:@FontColor; background:linear-gradient(to bottom,@HeaderColor, #000000);">@Model.objDashboardConfig.ExtraWidgetPoints1</div>
-                        <div style="width:25%;"></div>
-                        <div class="WidgetText" style="font-size:20px;margin-top:30px;">@Model.objDashboardConfig.ExtraWidgetText1</div>
+                        <div class="gift-card-bottom">
+                            <h3>Gift your points & get <b style="font-size:22px;"> @Model.objDashboardConfig.GiftPoints </b> more rewards</h3>
+                        </div>
                     </div>
-                </div>
+                </a>
             }
-            @if (Model.objDashboardConfig.IsExtraWidgetText2)
+            @if (Model.objDashboardConfig.IsExtraWidgetText1.HasValue)
             {
-                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
-                    <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
-                        <div style="width: 25%;"></div>
-                        <div class="circle" style="border: 1px solid @HeaderColor; color:@FontColor; background:linear-gradient(to bottom,@HeaderColor, #000000);">@Model.objDashboardConfig.ExtraWidgetPoints2</div>
-                        <div style="width:25%;"></div>
-                        <div class="WidgetText" style="font-size:20px;margin-top:30px;">@Model.objDashboardConfig.ExtraWidgetText2</div>
+                if (Model.objDashboardConfig.IsExtraWidgetText1.Value)
+                {
+                    <div class="gift-card">
+                        <div class="gift-card-top">
+                            <i class="ri-team-line"></i>
+                            <h3>@Model.objDashboardConfig.ExtraWidgetPoints1 Points</h3>
+                        </div>
+                        <div class="gift-card-bottom">
+                            <h3>@Model.objDashboardConfig.ExtraWidgetText1</h3>
+                        </div>
                     </div>
-                </div>
+                }
             }
-            @if (Model.objDashboardConfig.IsExtraWidgetText3)
+            @if (Model.objDashboardConfig.IsExtraWidgetText2.HasValue)
             {
-                <div class="col-md-12 col-lg-3  mr-0 row dashboardBox">
-                    <div class="col-md-6 col-lg-12 row" style="text-align: center; padding: 1px; margin-left: 0px; background-image: url(../../Content/assets/images/card-bg.png); background-repeat: round; ">
-                        <div style="width: 25%;"></div>
-                        <div class="circle" style="width: 50%; border: 1px solid @HeaderColor; color: @FontColor; background: linear-gradient(to bottom, @HeaderColor, #000000);">@Model.objDashboardConfig.ExtraWidgetPoints3</div>
-                        <div style="width:25%;"></div>
-                        <div class="WidgetText" style="font-size:20px;margin-top:30px;">@Model.objDashboardConfig.ExtraWidgetText3</div>
+                if (Model.objDashboardConfig.IsExtraWidgetText2.Value)
+                {
+                    <div class="gift-card">
+                        <div class="gift-card-top">
+                            <i class="ri-team-line"></i>
+                            <h3>@Model.objDashboardConfig.ExtraWidgetPoints2 Points</h3>
+                        </div>
+                        <div class="gift-card-bottom">
+                            <h3>@Model.objDashboardConfig.ExtraWidgetText2</h3>
+                        </div>
                     </div>
-                </div>
+                }
             }
+            @if (Model.objDashboardConfig.IsExtraWidgetText3.HasValue)
+            {
+                if (Model.objDashboardConfig.IsExtraWidgetText3.Value)
+                {
+                    <div class="gift-card">
+                        <div class="gift-card-top">
+                            <i class="ri-team-line"></i>
+                            <h3>@Model.objDashboardConfig.ExtraWidgetPoints3 Points</h3>
+                        </div>
+                        <div class="gift-card-bottom">
+                            <h3>@Model.objDashboardConfig.ExtraWidgetText3</h3>
+                        </div>
+                    </div>
+                }
+            }
+
+
         </div>
+    </section>
+
+    <section class="store">
+        <h3></h3>
+        @*<h1>@Model.dLCDashboardContent.OutletAddress</h1>*@
+        <map class="map">
+            <iframe src="@url" width="100%" height="500" style="border-radius:10px; border:none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </map>
+        <div class="location">
+            <h2>
+                @Model.dLCDashboardContent.OutletName
+            </h2>
+            <h3>
+                @Model.dLCDashboardContent.OutletAddress
+            </h3>
+        </div>
+        <button class="explore" style="cursor:pointer" onclick="gotostore();">Explore more location</button>
+        @*<button class="explore">
+                <a href="@Url.Action("Index", "Store")" style="text-decoration: none;color: inherit;">
+                    <h3>Explore more location</h3>
+                </a>
+            </button>*@
+    </section>
+    <section class="footer"></section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        function handleCardClick()
+        {
+
+            window.location.href = '@Url.Action("Index", "ReferEarn")';
+        }
+        function gotostore()
+        {
+
+            window.location.href = '@Url.Action("Index", "Store")';
+        }
+    </script>
 
 
-    </div>
-    </div>
-</div>
-<script src="https://maps.googleapis.com/maps/api/js"></script>
 
-<script>
-    $(document).ready(function () {
-       // var url = https://maps.google.com/maps?q=18.610982, 73.789113&amp;z=12&amp;output=embed;
 
-        @*var url = "https://maps.google.com/maps?q=";
-        url = url + '@Model.dLCDashboardContent.OutletLatitude' + ',' + '@Model.dLCDashboardContent.OutletLongitude';
-        url = url + '&amp; z=12 &amp; output=embed';
-        alert(url);
-        $("#iFrameMap").attr('src', url);*@
-    });
+    @*<script>
+            function showModal() {
+                document.getElementById("missingFieldModal").style.display = "block";
+            }
 
-</script>
+            function hideModal() {
+                document.getElementById("missingFieldModal").style.display = "none";
+            }
+
+            function checkAndPromptMissingField() {
+
+                    var mobileNumber = "@MobileNo"; // Ensure this is correctly passed from your backend
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "Dashboard/GetUserDetails", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.success && response.missingField) {
+                                var missingField = response.missingField;
+                                var id = response.id;
+
+                                // Set the modal fields
+                                document.getElementById("missingFieldLabel").innerText = "Please enter your " + missingField + ":";
+                                document.getElementById("missingField").value = missingField;
+                                document.getElementById("userId").value = id;
+
+                                // Show the modal
+                                showModal();
+                            } else if (!response.success)
+                            {
+                                //alert(response.message); // Replace with a custom alert function if needed
+                                toastr.error('An error occurred: ' + response.message);
+                            }
+                        }
+                    };
+                    xhr.send("mobileNumber=" + encodeURIComponent(mobileNumber));
+            }
+
+            function saveMissingField() {
+                var id = document.getElementById("userId").value;
+                var field = document.getElementById("missingField").value;
+                var value = document.getElementById("missingFieldValue").value;
+
+                if (!id || !field || !value) {
+                    alert("Please fill out all required fields."); // Replace with a custom alert function if needed
+                    toastr.error("Please fill out all required fields.");
+                    return;
+                }
+
+                var data = JSON.stringify({
+                    id: id,
+                    field: field,
+                    value: value
+                });
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "Dashboard/UpdateUserDetails", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                           // alert(response.message); // Replace with a custom alert function if needed
+                            toastr.error(response.message);
+                            hideModal();
+                        } else {
+                            toastr.error(response.message); // Replace with a custom alert function if needed
+                        }
+                    }
+                };
+                xhr.onerror = function() {
+                    //console.error("Error updating user details");
+                    //alert("An error occurred while updating user details."); // Replace with a custom alert function if needed
+                    toastr.error("An error occurred while updating user details.");
+                };
+                xhr.send(data);
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var status = @Flag; // Ensure this is correctly passed from your backend
+                if (status) {
+                    checkAndPromptMissingField();
+                }
+            });
+        </script>*@
+    @*<script>
+            $(document).ready(function () {
+                var color = '@Model.objDashboardConfig.HeaderColor';
+                var fontcolor = '@Model.objDashboardConfig.FontColor';
+
+                document.querySelector("#nvbarcolor").style.background = "linear-gradient(to bottom," + color + ", #000000)";
+
+            });
+        </script>*@
+
+    <script>
+                function showModal() {
+                    document.getElementById("missingFieldModal").style.display = "block";
+                }
+
+            function hideModal() {
+                document.getElementById("missingFieldModal").style.display = "none";
+            }
+
+            function checkAndPromptMissingField() {
+                var mobileNumber = "@MobileNo"; // Ensure this is correctly passed from your backend
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "Dashboard/GetUserDetails", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success && response.missingField) {
+                            var missingField = response.missingField;
+                            var id = response.id;
+
+                            // Set the modal fields
+                            document.getElementById("missingFieldLabel").innerText = "Please enter your " + missingField + ":";
+                            document.getElementById("missingField").value = missingField;
+                            document.getElementById("userId").value = id;
+
+                            // Show the modal
+                            showModal();
+                        } else if (!response.success) {
+                            //alert(response.message); // Replace with a custom alert function if needed
+                            toastr.error('An error occurred: ' + response.message);
+                        }
+                    }
+                };
+                xhr.send("mobileNumber=" + encodeURIComponent(mobileNumber));
+            }
+
+            function saveMissingField() {
+                var id = document.getElementById("userId").value;
+                var field = document.getElementById("missingField").value;
+                var value = document.getElementById("missingFieldValue").value;
+
+                if (!id || !field || !value) {
+                    //alert("Please fill out all required fields."); // Replace with a custom alert function if needed
+                    toastr.error("Please fill out all required fields.");
+                    return;
+                }
+
+                var data = JSON.stringify({
+                    id: id,
+                    field: field,
+                    value: value
+                });
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "Dashboard/UpdateUserDetails", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            //alert(response.message); // Replace with a custom alert function if needed
+                            toastr.success(response.message);
+                            hideModal();
+                        } else {
+                            toastr.error(response.message); // Replace with a custom alert function if needed
+                        }
+                    }
+                };
+                xhr.onerror = function() {
+                    //console.error("Error updating user details");
+                    //alert("An error occurred while updating user details."); // Replace with a custom alert function if needed
+                    toastr.error("An error occurred while updating user details.");
+                };
+                xhr.send(data);
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var status = @Flag; // Ensure this is correctly passed from your backend
+                if (status) {
+                    checkAndPromptMissingField();
+                }
+            });
+
+    </script>
+    <script src="~/js/dashboard.js"></script>
+
+</body>
+</html>
+
+
 

@@ -1,70 +1,601 @@
 ﻿@model BOTS_BL.Models.DLCDashboardContent
 @using System.Globalization
+@using BOTS_BL.Models;
+@using DLC.ViewModel;
+
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
 
-<div class="app-main__inner">
-    <div class="m-5 pl-3 pr-3 card col-md-11 col-lg-11 pt-5 row">
-        <div class="col-md-12 col-lg-12 pt-5" style="padding-bottom: 10px;margin-top:5px;">
-            <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="user-scalable=no">
+    <title>Opt Out</title>
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
+          rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <style>
+        .card {
+            margin-top: 133px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 92%;
+            margin-left: 4%;
+            margin-bottom: 4%;
+        }
 
-                <div class="col-md-12 col-lg-12 alignment">
-                    <i class="fas fa-user-circle" style="font-size:30px;"></i> My Account <br />
-                    <span class="pl-4"> (@Model.MobileNo)</span>
+        .card-body {
+            padding: 30px;
+        }
+
+        .label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .btn-custom {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 4%;
+        }
+
+        .btn-success,
+        .btn-danger {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            width: 21%;
+        }
+
+        .button-item {
+            flex: 1;
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+            font-size: 16px;
+        }
+
+        .start-button,
+        .stop-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 42%;
+            margin-top: 4%;
+        }
+
+        .start-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+
+        .stop-button {
+            background-color: #f44336; /* Red */
+            color: white;
+        }
+
+            .start-button:hover,
+            .stop-button:hover {
+                background-color: #45a049; /* Darker green */
+            }
+
+
+        .content-row {
+            display: flex;
+            background-color: #5ea8f229;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .content-item {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+            .content-item:last-child {
+                margin-right: 0;
+            }
+
+        .label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        #accountValue,
+        #pointsValue,
+        #cashValue {
+            display: block;
+            color: #333;
+            font-size: 14px;
+        }
+
+        @@media screen and (min-width:320px) {
+            .label {
+                font-weight: bold;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .button-row {
+                margin-top: 4%;
+            }
+
+            .button-item {
+                margin-bottom: 10px;
+            }
+
+            .start-button,
+            .stop-button {
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                /*margin-left: 5%;
+                margin-top: 15%;*/
+                margin-left: 2%;
+                margin-top: 2%;
+            }
+        }
+
+        @@media screen and (min-width:375px) {
+
+            .label {
+                font-weight: 800;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+
+            .button-row {
+                margin-top: 4%;
+            }
+
+
+            .start-button,
+            .stop-button {
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                margin-left: 5%;
+                margin-top: 2%;
+            }
+
+            .button-item {
+                flex: 0px;
+                margin-bottom: 10px;
+            }
+        }
+
+        @@media screen and (min-width:425px) {
+
+            .label {
+                font-weight: 800;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .button-row {
+                margin-top: 4%;
+            }
+
+            .start-button,
+            .stop-button {
+                padding: 10px 20px;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                margin-left: 2%;
+                margin-top: 2%;
+            }
+
+            .button-item {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- navigation start -->
+    <nav>
+        @if (logoSize == "Small")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+            </div>
+        }
+        @if (logoSize == "Medium")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+            </div>
+        }
+        @if (logoSize == "Big")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+            </div>
+        }
+        <div class="profile_links">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
+        </div>
+        <div class="language" style="display:none">
+            <select name="language" id="">
+                <option value="language">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Marathi">Marathi</option>
+
+            </select>
+        </div>
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1 class="active">Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+        </div>
+        <div class="hamburger">
+            <i class="ri-menu-2-line"></i>
+        </div>
+    </nav>
+    <div class="menu-container">
+        <div id="menu">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1 class="active">Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center" style="text-align: center; margin-bottom: 2%;">OPTOUT</h1>
+                <div class="content-row">
+                    <div class="content-item">
+                        <span class="label">My Account</span>
+                        <span id="accountValue">@Model.MobileNo</span>
+                    </div>
+                    <div class="content-item">
+                        <span class="label">My Points</span>
+                        <span id="pointsValue">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints))</span>
+                    </div>
+                    <div class="content-item">
+                        <span class="label">My Cash</span>
+                        <span id="cashValue">Rs. @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints * Model.PointsToRS))</span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12 col-lg-12 row" style="padding-bottom: 10px;margin-top:5px;text-align:center;">
-                <div class="col-md-6 col-lg-5 dashboardBox">My Points: <b> @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints)) </b></div>
-                <div class="col-md-6 col-lg-5 dashboardBox">My Cash: <b> @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Convert.ToDouble(Model.EarnPoints * Model.PointsToRS)))</b></div>
-            </div>
-            <div class="col-md-12 col-lg-12 alignment" style="padding-bottom: 10px; margin-top: 5px;">
-                <div class="optoutCHK">
-                    @Html.CheckBoxFor(model => model.IsOptout, new { @id = "chkOptout", @style = "cursor: pointer;margin-right:5px;" })
-                    @*<input type="checkbox" id="chkOptout" style="cursor: pointer;margin-right:5px;" />*@
-                    <span><label for="chkOptout" style="cursor: pointer;"> I do not want to receive any promotions SMS & WhatsApp</label></span>
+                <div class="button-row">
+                    <div class="button-item">
+                        <label class="label">Receive Promotion Messages Through SMS and/or Whatsapp</label>
+                        <button class="start-button" id="btnStartPromotions" onclick="togglePromotion(0)" style="display: none;">Start</button>
+                        <button class="stop-button" id="btnStopPromotions" style="display: none;" onclick="togglePromotion(1)">Stop</button>
+                    </div>
+                    <div class="button-item">
+                        <label class="label">Membership in the Loyalty Program</label>
+                        <button class="start-button" id="btnContinueMembership" style="display: none;" onclick="toggleMembership(1)">Continue</button>
+                        <button class="stop-button" id="btnDiscontinueMembership" style="display: none;" onclick="toggleMembership(0)">Discontinue</button>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-12 col-lg-12" style="padding-bottom: 10px; margin-top: 5px;text-align:center;">
-                <button type="button" id="btnLogin" class="btn form-control btn-primary  submit px-3 optoutbtn" onclick="UpdateOptout();" style="font-weight:bold;">SUBMIT</button>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    function UpdateOptout() {
-        var optout = false;
-        if ($("#chkOptout").is(":checked")) {
-            optout = true;
-        }
+    <div class="footer"></div>
 
-         $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("UpdateOptout", "Optout")',
-                data: '{IsOptout: ' + JSON.stringify(optout) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {                    
-                    console.log(result);
-                    if (result == true) {
-                        if (optout)
-                            toastr.success('You will not receive any promotions SMS & WhatsApp');
+    <script>
+    function togglePromotion(button) {      
+        var isStartVisible = true;
+        if (button == 0)
+            isStartVisible = false;
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateOptout", "Optout")',
+            data: JSON.stringify({ IsOptout: isStartVisible }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(result) {
+                console.log(result);
+                if (result) {
+                    window.location.reload();
+                } else {
+                    // handle error case or leave as is
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error('An error occurred: ' + error);
+            },
+            complete: function() {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+    function toggleMembership(button) {
+       
+        var isContinueVisible = true;
+        if (button == 0)
+            isContinueVisible = false;
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Update1Optout", "Optout")',
+            data: JSON.stringify({ IsOptout: isContinueVisible }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(result) {
+                console.log(result);
+                if (result) {
+                    window.location.reload();
+                } else {
+                    // handle error case or leave as is
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error('An error occurred: ' + error);
+            },
+            complete: function() {
+                $("#divLoader").hide();
+            }
+        });
+    }
+
+        $(document).ready(function () {
+        console.log(111)
+        // Check initial state on page load
+            var optout = '@Model.IsOptout'
+            console.log(optout)
+            if (optout == "False") {
+                $("#btnStopPromotions").show();
+            }
+            else {
+                $("#btnStartPromotions").show();
+            }
+
+            var optoutTxn = '@Model.IsOptoutTxn'
+            console.log(optoutTxn)
+            if (optoutTxn == "False") {
+                $("#btnContinueMembership").show();
+            }
+            else {
+                $("#btnDiscontinueMembership").show();
+            }
+    });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="text-center"style="text-align: center;margin-bottom: 2%;">OPTOUT</h1>
+                <div class="content-row">
+                    <div class="content-item">
+                        <span class="label">My Account</span>
+                        <span id="accountValue">@Model.MobileNo</span>
+                    </div>
+                    <div class="content-item">
+                        <span class="label">My Points</span>
+                        <span id="pointsValue">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints))</span>
+                    </div>
+                    <div class="content-item">
+                        <span class="label">My    Cash</span>
+                        <span id="cashValue">Rs. @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints * Model.PointsToRS))</span>
+                    </div>
+                </div>
+                <div class="button-row">
+                    <div class="button-item">
+                        <label class="label">Receive Promostion Messages Through SMS and/or Whatsapp</label>
+                        <button class="start-button" id="btnStartPromotions" onclick="check(true)" style="display:none">Start</button>
+                        <button class="stop-button" id="btnStopPromotions" style="display:none" onclick="check(false)">Stop</button>
+
+                    </div>
+                    <div class="button-item">
+                        <label class="label">I would like to cancel my membership in the Loyalty Program</label>
+
+                        <button class="start-button" id="btnDiscontinueMembership" style="display:none" onclick="check1(true)">Continue</button>
+                        <button class="stop-button" id="btnContinueMembership" style="display:none" onclick="check1(false)">Discontinue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!-- Bootstrap JS and dependencies -->
+    <!--<div class="footer"></div>
+
+
+    <script>
+
+            function check(status)
+            {
+
+                $("#divLoader").show(); // Show loader to indicate an ongoing process
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("UpdateOptout", "Optout")', // Adjust with your endpoint
+                    data: JSON.stringify({ IsOptout: status }), // Send the opt-out status
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result)
+                    {
+
+                        console.log(result);
+
+                        if (result)
+                        {
+                            //toastr.success('You will receive all promotions SMS & WhatsApp.');
+                            //toastr.success('You will not receive any promotions SMS & WhatsApp.');
+                           // $("#btnStopPromotions").style.display = "block"
+                            document.getElementById("btnStopPromotions").style.display = "block";
+                            document.getElementById("btnStartPromotions").style.display = "none";
+                        }
                         else
-                            toastr.success('You will receive all promotions SMS & WhatsApp');
-                    }
-                    else {
-                        toastr.error('There is some problem in updating your choice. Plz contact Administrator');
-                    }
-                    $("#divLoader").hide();
+                        {
 
-                },
-                error: function (result) {                    
-                    console.log(result.responseText)
+                            //$("#btnStartPromotions").style.display = "none"
+                            document.getElementById("btnStopPromotions").style.display = "none";
+                            document.getElementById("btnStartPromotions").style.display = "block";
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error('An error occurred: ' + error);
+                    },
+                    complete: function() {
+                        $("#divLoader").hide(); // Hide the loader once the request is complete
+                    }
+                });
+            }
+
+            $(document).ready(function ()
+            {
+                check(null);
+            });
+
+    </script>
+
+    <script>
+
+            function check1(status)
+            {
+                $("#divLoader").show();
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Update1Optout", "Optout")', // Adjust with your endpoint
+                    data: JSON.stringify({ IsOptout: status }), // Send the opt-out status
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result)
+                    {
+
+                        console.log(result);
+
+                        if (result)
+                        {
+                            //$("#btnDiscontinueMembership").style.display = "block"
+                            document.getElementById("btnDiscontinueMembership").style.display = "block";
+                            document.getElementById("btnContinueMembership").style.display = "none";
+                        }
+                        else
+                        {
+
+                           // $("#btnContinueMembership").style.display = "none"
+                            document.getElementById("btnDiscontinueMembership").style.display = "none";
+                            document.getElementById("btnContinueMembership").style.display = "block";
+                        }
+
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error('An error occurred: ' + error);
+                    },
+                    complete: function() {
+                        $("#divLoader").hide(); // Hide the loader once the request is complete
+                    }
+                });
+            }
+        $(document).ready(function ()
+        {
+            check1(null);
+        });
+    </script>-->
+
+    <script>
+        function Hamburger() {
+            var hamburger = document.querySelector('.hamburger');
+            var menu = document.querySelector('.menu-container');
+            var logo = document.querySelector('.logo');
+
+            var isMenuVisible = false;
+
+            hamburger.addEventListener('click', function () {
+                if (!isMenuVisible) {
+                    menu.style.display = 'block';
+                    menu.style.transform = 'translateY(0)';
+                    isMenuVisible = true;
+                    logo.style.display = 'none';
+                } else {
+                    menu.style.transform = 'translateY(-100vh)';
+                    isMenuVisible = false;
+                    logo.style.display = 'block';
+
                 }
             });
 
-    }
-</script>
+        }
+
+        Hamburger();
+
+    </script>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <footer>
+    </footer>
+
+</body>
+</html>

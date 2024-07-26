@@ -1,23 +1,125 @@
 ﻿@model List<BOTS_BL.Models.MemberSearchTxn>
+@using BOTS_BL.Models;
+@using DLC.ViewModel;
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+    var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var logourl = sessionVariables.objDashboardConfig.UseLogoURL;
+    var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
 
-<div class="app-main__inner">
-    <div class="m-5 pl-3 pr-3 card col-md-11 col-lg-11 pt-5">
-        <h3>Transaction History</h3>
 
-        <div class="table-responsive">
-            <table class="table" id="memberSearchTable">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="~/css/transaction.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <title>Invoice Details</title>
+    <style>
+       
+
+        .container {
+            max-width: 100%;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 11% !important;
+        }
+
+
+        @@media (max-width: 600px) {
+            .container {
+                margin-top: 19vh !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+
+        <div class="profile_links">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
+        </div>
+        @if (logoSize == "Small")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+                <img id="imgLogo" src="@logourl" width="200" height="100" />
+            </div>
+        }
+        @if (logoSize == "Medium")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+                <img id="imgLogo" src="@logourl" width="300" height="150" />
+            </div>
+        }
+        @if (logoSize == "Big")
+        {
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+                <img id="imgLogo" src="@logourl" width="400" height="200" />
+            </div>
+        }
+        <div class="language" style="display:none">
+            <select name="language" id="">
+                <option value="language">Language</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+                <option value="Marathi">Marathi</option>
+            </select>
+        </div>
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1 class="active">Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+
+
+        </div>
+        <div class="hamburger">
+            <i class="ri-menu-2-line"></i>
+        </div>
+    </nav>
+    <div class="menu-container">
+        <div id="menu">
+            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
+            <a href="@Url.Action("Index", "TransactionHistory")"><h1 class="active">Transaction History</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
+            <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>Transaction History</h1>
+        <div class="table_transaction">
+            <table>
                 <thead>
                     <tr>
-                        <th scope="col">Invoice No</th>
-                        <th scope="col">Invoice Amount</th>
-                        <th scope="col">Txn Type</th>
-                        <th scope="col">Points Earned</th>
-                        <th scope="col">Points Burned</th>
-                        <th scope="col">Txn Datetime</th>
+                        <th>Invoice<br> Number</th>
+                        <th>Invoice<br> Amount</th>
+                        <th>Transaction<br> Type</th>
+                        <th>Points <br>Earned</th>
+                        <th>Points<br> Burned</th>
+                        <th>Transaction<br> Date & Time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,5 +163,43 @@
             </table>
         </div>
     </div>
-</div>
+
+
+
+    <script>
+        function Hamburger() {
+            var hamburger = document.querySelector('.hamburger');
+            var menu = document.querySelector('.menu-container');
+            var logo = document.querySelector('.logo');
+
+            var isMenuVisible = false;
+
+            hamburger.addEventListener('click', function () {
+                if (!isMenuVisible) {
+                    menu.style.display = 'block';
+                    menu.style.transform = 'translateY(0)';
+                    isMenuVisible = true;
+                    logo.style.display = 'none';
+                } else {
+                    menu.style.transform = 'translateY(-100vh)';
+                    isMenuVisible = false;
+                    logo.style.display = 'block';
+
+                }
+            });
+
+        }
+
+        Hamburger();
+
+    </script>
+
+     
+    @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>*@
+    <footer>
+    </footer>
+</body>
+</html>
 

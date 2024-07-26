@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+
 
 namespace DLC.App_Start
 {
@@ -12,76 +11,48 @@ namespace DLC.App_Start
     {
         public string HashPassword(string password)
         {
-            var prf = KeyDerivationPrf.HMACSHA256;
-            var rng = RandomNumberGenerator.Create();
             const int iterCount = 10000;
-            const int saltSize = 128 / 8;
-            const int numBytesRequested = 256 / 8;
+            const int saltSize = 16; // 128 bits
+            const int keySize = 32;  // 256 bits
 
-            // Produce a version 3 (see comment above) text hash.
-            var salt = new byte[saltSize];
-            rng.GetBytes(salt);
-            var subkey = KeyDerivation.Pbkdf2(password, salt, prf, iterCount, numBytesRequested);
+            byte[] salt = new byte[saltSize];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
 
-            var outputBytes = new byte[13 + salt.Length + subkey.Length];
-            outputBytes[0] = 0x01; // format marker
-            WriteNetworkByteOrder(outputBytes, 1, (uint)prf);
-            WriteNetworkByteOrder(outputBytes, 5, iterCount);
-            WriteNetworkByteOrder(outputBytes, 9, saltSize);
-            Buffer.BlockCopy(salt, 0, outputBytes, 13, salt.Length);
-            Buffer.BlockCopy(subkey, 0, outputBytes, 13 + saltSize, subkey.Length);
-            return Convert.ToBase64String(outputBytes);
+            // Use the constructor with 3 arguments: password, salt, and iteration count
+            using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, iterCount))
+            {
+                byte[] subkey = deriveBytes.GetBytes(keySize); // Get the derived bytes (key)
+
+                byte[] hash = new byte[saltSize + keySize]; // Combine salt and key
+                Buffer.BlockCopy(salt, 0, hash, 0, saltSize);
+                Buffer.BlockCopy(subkey, 0, hash, saltSize, keySize);
+
+                return Convert.ToBase64String(hash); // Return base64-encoded string
+            }
         }
 
         public bool VerifyHashedPassword(string hashedPassword, string providedPassword)
         {
-            var decodedHashedPassword = Convert.FromBase64String(hashedPassword);
+            byte[] decodedHash = Convert.FromBase64String(hashedPassword);
 
-            // Wrong version
-            if (decodedHashedPassword[0] != 0x01)
-                return false;
+            int saltSize = 16; // 128 bits
+            int keySize = 32;  // 256 bits
 
-            // Read header information
-            var prf = (KeyDerivationPrf)ReadNetworkByteOrder(decodedHashedPassword, 1);
-            var iterCount = (int)ReadNetworkByteOrder(decodedHashedPassword, 5);
-            var saltLength = (int)ReadNetworkByteOrder(decodedHashedPassword, 9);
+            byte[] salt = new byte[saltSize];
+            Buffer.BlockCopy(decodedHash, 0, salt, 0, saltSize);
 
-            // Read the salt: must be >= 128 bits
-            if (saltLength < 128 / 8)
+            byte[] expectedSubkey = new byte[keySize];
+            Buffer.BlockCopy(decodedHash, saltSize, expectedSubkey, 0, keySize);
+
+            using (var deriveBytes = new Rfc2898DeriveBytes(providedPassword, salt, 10000))
             {
-                return false;
+                byte[] actualSubkey = deriveBytes.GetBytes(keySize); // Derive the key from provided password
+
+                return actualSubkey.SequenceEqual(expectedSubkey); // Compare keys
             }
-            var salt = new byte[saltLength];
-            Buffer.BlockCopy(decodedHashedPassword, 13, salt, 0, salt.Length);
-
-            // Read the subkey (the rest of the payload): must be >= 128 bits
-            var subkeyLength = decodedHashedPassword.Length - 13 - salt.Length;
-            if (subkeyLength < 128 / 8)
-            {
-                return false;
-            }
-            var expectedSubkey = new byte[subkeyLength];
-            Buffer.BlockCopy(decodedHashedPassword, 13 + salt.Length, expectedSubkey, 0, expectedSubkey.Length);
-
-            // Hash the incoming password and verify it
-            var actualSubkey = KeyDerivation.Pbkdf2(providedPassword, salt, prf, iterCount, subkeyLength);
-            return actualSubkey.SequenceEqual(expectedSubkey);
-        }
-
-        private static void WriteNetworkByteOrder(byte[] buffer, int offset, uint value)
-        {
-            buffer[offset + 0] = (byte)(value >> 24);
-            buffer[offset + 1] = (byte)(value >> 16);
-            buffer[offset + 2] = (byte)(value >> 8);
-            buffer[offset + 3] = (byte)(value >> 0);
-        }
-
-        private static uint ReadNetworkByteOrder(byte[] buffer, int offset)
-        {
-            return ((uint)(buffer[offset + 0]) << 24)
-                | ((uint)(buffer[offset + 1]) << 16)
-                | ((uint)(buffer[offset + 2]) << 8)
-                | ((uint)(buffer[offset + 3]));
         }
     }
 }

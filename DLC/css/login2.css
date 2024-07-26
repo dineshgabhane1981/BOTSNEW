@@ -1,0 +1,179 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
+}
+
+.container2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin-top: 60px;
+}
+
+.box2 {
+  position: relative;
+  background-color: #eef5ff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* text-align: center; */
+  max-width: 400px;
+  width: 100%;
+  height: 350px;
+  margin-top: 20px;
+  padding-bottom: 120px;
+  font-family: sans-serif;
+}
+
+.logo2 {
+  width: 50px;
+  margin-top: -25px;
+}
+
+
+.Heading2 {
+  font-family: sans-serif;
+}
+
+.main-section2_content {
+  font-family: sans-serif;
+  color: #1b71c7;
+  font-size: small;
+  margin-bottom: 20px;
+}
+
+.signup-section2 {
+  background-image: url(/Images/CardBG01.jpg);
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px 8px 0 0;
+  justify-content: center;
+  text-align: center;
+}
+
+h2 {
+  margin: 0;
+}
+
+.main-section2 {
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+pre {
+  white-space: pre-wrap;
+  text-align: center;
+  margin-bottom: 0 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+}
+
+.Log_Continue_btn2 {
+  padding: 8px 70px;
+  margin: 20px 0;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #058a62;
+}
+
+.powered-by2 {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.powered-by2 span {
+  margin-right: 5px;
+}
+
+.signup2 {
+  font-weight: 600;
+  font-size: small;
+  color: #4446b8;
+}
+
+#signup-mobile2 {
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.Resend_OTP_btn2 {
+  border: none;
+  color: #4caf50;
+  font-weight: 600;
+  margin: 15px 0px 10px 0px;
+}
+
+.Resend_OTP_btn2:hover {
+  background-color: transparent;
+  color: #058a62;
+}
+
+.btns_all {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wrapper-class input[type="radio"] {
+  width: 15px;
+}
+
+.wrapper-class label {
+  display: inline;
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.single_radio span {
+  display: inline-block;
+}
+
+#radio1 {
+  accent-color: green;
+}
+
+@media screen and (max-width: 450px) {
+  .container2 {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 80px;
+  }
+}
+
+@media screen and (max-width: 1030px) {
+  .container2 {
+    margin-top: 80px;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  background-color: #452482;
+  color: #fff;
+  padding: 25px 0;
+  text-align: center;
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
+  /* Add these properties to position the footer at the bottom */
+  position: fixed;
+  bottom: 0;
+}

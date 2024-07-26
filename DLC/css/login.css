@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f4f4f4;
+}
+
+.container1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin-top: 50px;
+}
+
+.box1 {
+  position: relative;
+  background-color: #eef5ff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  height: 350px;
+  margin-top: 20px;
+  padding-bottom: 100px;
+  font-family: sans-serif;
+}
+
+.logo1 {
+  width: 50px;
+  margin-top: -25px;
+}
+
+.Heading1 {
+  font-family: sans-serif;
+}
+
+.main-section1_content {
+    font-family: sans-serif;
+    color: #1b71c7;
+    font-size: small;
+    margin-bottom: 35px;
+    margin-left: -17%;
+}
+
+.signup-section1 {
+  background-image: url(/Images/CardBG01.jpg);
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px 8px 0 0;
+}
+
+h2 {
+  margin: 0;
+}
+
+.main-section1 {
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+pre {
+  white-space: pre-wrap;
+  text-align: center;
+  margin-bottom: 0 5px;
+}
+label {
+  text-align: left;
+  display: block;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+}
+
+.Log_Continue_btn1 {
+  padding: 8px 70px;
+  margin: 20px 0;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #058a62;
+}
+
+.powered-by1 {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.powered-by1 span {
+  margin-right: 5px;
+}
+
+.signup1 {
+  font-weight: 600;
+  font-size: small;
+  color: #4446b8;
+}
+
+@media screen and (max-width: 450px) {
+  .container1 {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 80px;
+  }
+}
+
+
+
+
+@media screen and (max-width: 1030px) {
+  .container1 {
+    margin-top: 80px;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  background-color: #452482;
+  color: #fff;
+  padding: 25px 0;
+  text-align: center;
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
+  /* Add these properties to position the footer at the bottom */
+  position: fixed;
+  bottom: 0;
+}
+

@@ -15,70 +15,295 @@
     <link href="~/Content/DLCMain.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /*  background: linear-gradient(to right, #02159B, #4CAF50);*/
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            padding: 0px;
+            width: 100%;
+            max-width: 450px;
+            transition: all 0.3s ease-in-out;
+        }
+
+            .login-box:hover {
+                transform: scale(1.05);
+            }
+
+        .header-section {
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+            background: linear-gradient(to right, #02159B, #4CAF50);
+            color: white;
+            padding: 25px;
+        }
+
+        button.resend {
+            background-color: transparent;
+            border: none;
+            font-weight: 600;
+            color: #3DAFE1;
+            cursor: pointer;
+        }
+
+            button.resend i {
+                margin-left: 5px;
+            }
+
+        .logo {
+            width: 100px;
+        }
+
+        .heading {
+            margin: 0;
+        }
+
+        .content-section {
+            text-align: center;
+            padding: 25px;
+        }
+
+        .description {
+            color: #000;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .form-group-inline {
+            /*display: flex;*/
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .country-code {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown {
+            width: 16%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .input-field1 {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-left: 18%;
+            width: 81%;
+        }
+
+        .link-forgot {
+            text-align: right;
+            color: #02159B;
+            text-decoration: none;
+            font-size: 0.9em;
+            padding: 10px;
+        }
+
+            .link-forgot:hover {
+                text-decoration: underline;
+            }
+
+        .btn-action {
+            padding: 12px;
+            border: none;
+            border-radius: 20px;
+            /* background: linear-gradient(to right, #4CAF50, #02159B);*/
+            background: #2828b8;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+            .btn-action:hover {
+                background-color: #2828b8;
+            }
+
+        .btn-resend {
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            background: linear-gradient(to right, #FF5722, #D84315);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+            .btn-resend:hover {
+                background-color: #D84315;
+            }
+
+        .terms-conditions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            font-size: 0.9em;
+            gap: 10px;
+        }
+
+        .powered-by {
+            text-align: center;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        @@media screen and (min-width: 320px) and (max-width: 667px) {
+
+            .country-code {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .dropdown {
+                width: 27%;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+
+            .input-field {
+                flex: 1;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                width: 0%;
+            }
+            .input-field1 {
+                flex: 1;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                margin-left: 30%;
+                width: 70%;
+            }
+        }
+
+        #resend-otp-group {
+            text-align: center;
+        }
+
+        button.resend {
+            display: inline-block;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-    <section class="ftco-section">
-        <div class="container">
+     <section class="ftco-section">
+        <div class="container1">
             <input type="hidden" id="hdnOtpOrPassword" />
-            <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-4">
-                    <div class="login-wrap py-5" id="dvMain" style="box-shadow: 5px 5px 19px 3px #888888;">
-                        <div class="img d-flex align-items-center justify-content-center" style="background-image: url(@Model.objDashboardConfig.UseLogoURL);"></div>
-                        <h3 style="text-align:center;">Welcome</h3>
-                        <p style="text-align:center;">
-                            Sign-up or Log-in now and start earning tons of reward points!!! <br />
-                            @*साईन -अप किंवा लॉगिन करा आणि भरपूर रिवॉर्ड पॉईंट्स मिळवा*@
-                        </p>
-                        <form action="#" class="login-form">
-                            <div class="form-group row">
-                                @Html.DropDownListFor(model => model.objDashboardConfig.CountryCode, new SelectList(ViewBag.Codes, "Code", "Code"), htmlAttributes: new { @class = "input15", @style = "height:30px;margin-top:15px;", @id = "ddlCountryCode" })
-                                <div class="icon d-flex align-items-end justify-content-end" style="margin-left:52px;padding-bottom:13px;"><span class="fa fa-mobile"></span></div>
-                                <input type="number" id="txtMobileNo" class="form-control" style="width:75%;" placeholder="Mobile Number" required>
+            <div class="login-box">
 
-                                <input type="password" id="txtPassword" class="form-control" style="width: 75%; margin-left: 58px;display:none;" placeholder="Password" required>
-                                <a href="@Url.Action("ResetPassword", "Start")" id="lnkForgotPassword" style="display:none;margin-left:60px;"> Forgot Password</a>
+                <div class="header-section" id="dvMain" style="background-image: url('@Url.Content("~/img/Header2.png")');">
+                    <img src="@Model.objDashboardConfig.UseLogoURL" alt="Company Logo" class="logo" />
 
-                                <input type="password" id="txtOtp" class="form-control" style="width: 75%; margin-left: 58px; display: none;" placeholder="OTP" required>
-                                <button class="btn form-control btn-primary1" id="btnResend" onclick="ResendOTP();" style="width:90%;margin-top:10px;margin-left:13px;display:none;">Resend OTP</button>
-                                <div class="optoutCHK mt-4" id="dvTNC" style="display:none;">
-                                    <input type="checkbox" id="chkTerms" style="cursor: pointer; margin-right: 5px;height:15px;width:15px;" />
-                                    <span><label for="chkTerms" style="cursor: pointer;"> I agree to the Brand Loyalty Terms & Conditions</label></span>
-                                </div>
+                </div>
+                <div class="content-section">
+                    <p class="description">Sign-up or Log-in now and start earning tons of reward points!</p>
+                    <div class="form-group-inline">
+                        <div class="country-code">
+                            
+                                @Html.DropDownListFor(model => model.objDashboardConfig.CountryCode,
+                                                       new SelectList(ViewBag.Codes, "Code", "Code"),
+                                                       new { @class = "dropdown", @id = "ddlCountryCode" })
+                            
+                            <input type="number" id="txtMobileNo" name="phone" class="input-field" placeholder="Enter your phone number" />
+                        </div>
+                    </div>
+                    <div class="form-group hidden-group" id="password-group" style="display:none;">
+                        <div style="width:16%;"></div>
+                        <input type="password" id="txtPassword" class="input-field1" placeholder="Password"/>
+                        <div>
+                            <a href="@Url.Action("ResetPassword", "Start")" id="lnkForgotPassword" class="link-forgot">Forgot Password?</a>
+                        </div>
 
-                            </div>
-                            <div class="form-group">
-                                <button type="button" id="btnLogin" class="btn form-control btn-primary1  submit px-3" style="font-weight:bold;">Get Started</button>
-                                <button type="button" id="btnSubmit" class="btn form-control btn-primary1  submit px-3" style="font-weight:bold;display:none;">Login</button>
-                            </div>
-                        </form>
+                    </div>
+                    <div class="form-group hidden-group" id="otp-group" style="display:none;">
+                        <input type="password" id="txtOtp" class="input-field" placeholder="OTP" style=" width: 80%;margin-left: 20%;" />
+
+                        <div>
+                            <button class="resend" id="btnResend" onclick="ResendOTP();">Resend OTP<i class="fa fa-caret-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="terms-conditions" id="terms-group" style="display:none;">
+                        <input type="checkbox" id="chkTerms" style="width:20px;height:20px;cursor:pointer;" />
+                        <label for="chkTerms" style="margin-bottom:0px !important;">I agree to the Brand Loyalty Terms & Conditions</label>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" id="btnLogin" class="btn-action">Get Started</button>
+                        <button type="button" id="btnSubmit" class="btn-action" style="display:none;padding-left:20px;padding-right:20px;">Login</button>
                     </div>
                 </div>
+                @if (Model.objDashboardConfig.ShowLogoToFooter)
+                {
+                    <div class="powered-by">
+                        <span>Powered by</span>
+                        <img src="~/Content/assets/images/Blue-Ocktopus-TLC_white.jpg" width="150" alt="Company Logo" />
+                    </div>
+                }
             </div>
-            @if (Model.objDashboardConfig.ShowLogoToFooter)
-            {
-                <div class="row justify-content-center" style="margin-top: 20px;">
-                    <div class="col-md-8 col-lg-4" style="text-align: center; font-size: 18px; line-height: 21px; color: #6f7880; font-weight: bold; margin-bottom: 3px; ">
-                        Powered By <br />
-                        <img src="~/Content/assets/images/Blue-Ocktopus-TLC_white.jpg" width="150" />
-                    </div>
-                </div>
-            }
         </div>
     </section>
 
+
+
+
+
+    <footer class="footer">
+    </footer>
 
     <script src="~/Content/popper.js"></script>
     <script src="~/Content/bootstrap.min.js"></script>
     <script src="~/Content/main.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function ()
+        {
+
             var color = '@Model.objDashboardConfig.HeaderColor';
             var fontcolor = '@Model.objDashboardConfig.FontColor';
 
-            document.querySelector("#dvMain").style.background = "linear-gradient(to bottom," + color + ", #000000)";
+            //document.querySelector("#dvMain").style.background = "linear-gradient(to bottom," + color + ", #000000)";
+            //document.querySelector("#btnLogin").style.background = "linear-gradient(to bottom," + color + ", #000000)";
+            //document.querySelector("#btnSubmit").style.background = "linear-gradient(to bottom," + color + ", #000000)";
             document.querySelector("#dvMain").style.color = fontcolor
 
-            $("#btnLogin").on("click", function () {
+            $("#btnLogin").on("click", function ()
+            {
+
                 CheckUser();
             });
             $("#btnSubmit").on("click", function () {
@@ -86,21 +311,31 @@
             });
         });
         function CheckUser() {
+
             var status = true;
-            if ($("#txtMobileNo").val() == "") {
+
+            var mo = $("#txtMobileNo").val();
+            if ($("#txtMobileNo").val() == "")
+            {
                 toastr.error('Please enter mobile no');
                 status = false;
             }
-            else if (/^[6789]\d{9,9}$/.test($("#txtMobileNo").val())) {
+            else if (/^[6789]\d{9,9}$/.test($("#txtMobileNo").val()))
+            {
+
             }
-            else {
+            else
+            {
                 toastr.error('Please enter valid mobile no');
                 status = false;
             }
-            if (status) {
+            if (status)
+            {
+
                 var code = $("#ddlCountryCode").val();
                 var mobileno = $("#txtMobileNo").val();
                 var data = code + mobileno;
+
                 $("#divLoader").show();
                     $.ajax({
                     type: "POST",
@@ -108,35 +343,41 @@
                         data: '{MobileNo: ' + JSON.stringify(data) + '}',
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
-                        success: function (result) {
-                            if (result == "Password") {
+                        success: function (result)
+                        {
+                            console.log(result);
+                            if (result == "Password")
+                            {
                                 $("#hdnOtpOrPassword").val("Password");
-                                $("#txtPassword").show();
-                                $("#txtOtp").hide();
+                                $("#txtPassword").parent().show(); // Hide the parent div of the password field
+                                $("#txtOtp").parent().hide();
                                 $("#btnSubmit").show();
                                 $("#btnLogin").hide();
                                 $("#btnResend").hide();
                                 $("#lnkForgotPassword").show();
                                 $("#dvTNC").show();
+                                $("#terms-group").show();
+
 
 
                             }
                             if (result == "OTP") {
                                 $("#hdnOtpOrPassword").val("OTP");
-                                $("#txtPassword").hide();
-                                $("#txtOtp").show();
+                                $("#txtPassword").parent().hide(); // Hide the parent div of the password field
+                                $("#txtOtp").parent().show();
+                                $("#txtOtp1").parent().show();
                                 $("#btnSubmit").show();
                                 $("#btnLogin").hide();
                                 $("#btnResend").show();
                                 $("#lnkForgotPassword").hide();
-
+                                $("#terms-group").show();
                                 $("#dvTNC").show();
                             }
 
                             $("#divLoader").hide();
                         },
                         error: function (result) {
-                            alert(111)
+
                             console.log(result.responseText)
                         }
                     });
@@ -147,34 +388,43 @@
 
         function ValidateUser() {
             var status = true;
-            if ($("#hdnOtpOrPassword").val() == "OTP") {
-                if ($("#txtOtp").val() == "") {
+            if ($("#hdnOtpOrPassword").val() == "OTP")
+            {
+                if ($("#txtOtp").val() == "")
+                {
                     toastr.error('Please enter OTP');
                     status = false;
                 }
             }
-            if ($("#hdnOtpOrPassword").val() == "Password") {
-                if ($("#txtPassword").val() == "") {
+            if ($("#hdnOtpOrPassword").val() == "Password")
+            {
+                if ($("#txtPassword").val() == "")
+                {
                     toastr.error('Please enter Password');
                     status = false;
                 }
             }
-            if ($("#chkTerms").is(":checked")) {
+            if ($("#chkTerms").is(":checked"))
+            {
             }
-            else {
+            else
+            {
                 toastr.warning('Please accept the loyalty program TnC to continue!!!!');
                 status = false;
                 return false;
             }
-            if (status) {
+            if (status)
+            {
                 var code = $("#ddlCountryCode").val();
                 var mobileno = $("#txtMobileNo").val();
                 var data = code + mobileno;
                 var OtpOrPassword = "";
-                if ($("#hdnOtpOrPassword").val() == "Password") {
+                if ($("#hdnOtpOrPassword").val() == "Password")
+                {
                     OtpOrPassword = $("#txtPassword").val();
                 }
-                if ($("#hdnOtpOrPassword").val() == "OTP") {
+                if ($("#hdnOtpOrPassword").val() == "OTP")
+                {
                     OtpOrPassword = $("#txtOtp").val();
                 }
                 $.ajax({
@@ -183,11 +433,16 @@
                     data: '{mobileno: ' + JSON.stringify(mobileno) + ',code: ' + JSON.stringify(code) + ',OtpOrPassword: ' + JSON.stringify(OtpOrPassword) + '}',
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
-                    success: function (result) {
+                    success: function (result)
+                    {
+
                         console.log(result)
-                        if (result != "" || result != null) {
+                        if ((result != "" || result != null) && result != "False") {
                             var url = '@baseURL' + result;
                             window.location.href = url;
+                        }
+                        else {
+                            toastr.error('There is problem in registering customer!!!!');
                         }
 
                         $("#divLoader").hide();
@@ -219,7 +474,7 @@
                             }
                             $("#divLoader").hide();
                         },
-                        error: function (result) {                            
+                        error: function (result) {
                             console.log(result.responseText)
                         }
                  });

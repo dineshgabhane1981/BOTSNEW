@@ -20,6 +20,7 @@ namespace DLC.Controllers
             string brandId = string.Empty;
             string groupId = string.Empty;
             string source = string.Empty;
+            string mobileNumber = string.Empty;
             CommonFunctions common = new CommonFunctions();
             if (!string.IsNullOrEmpty(data))
             {
@@ -37,6 +38,37 @@ namespace DLC.Controllers
                     {
                         var sourceData = item.Split('=');
                         source = sourceData[1];
+                    }
+                    if(item.Contains("MobileNo"))
+                    {
+                        var contact = item.Split('=');
+                        mobileNumber = contact[1];
+                        DLCDashboardFrontData objData1 = new DLCDashboardFrontData();
+                        if (!string.IsNullOrEmpty(groupId))
+                        {
+                            objData1.objDashboardConfig = DCR.GetPublishDLCDashboardConfig(groupId);
+                            if (objData1.objDashboardConfig == null)
+                            {
+                                return View("UnauthorizedURL");
+                            }
+                            //objData.lstDLCFrontEndPageData = DCR.GetDLCFrontEndPageData(groupId);
+                            SessionVariables objVariable = new SessionVariables();
+                            objVariable.objDashboardConfig = objData1.objDashboardConfig;
+                            objVariable.GroupId = groupId;
+                            objVariable.BrandId = brandId;
+                            objVariable.MobileNo = mobileNumber;
+                            objVariable.Flag = "true";
+                            objVariable.LoginURL = url;
+                            objVariable.Source = source;
+
+                            Session["SessionVariables"] = objVariable;
+
+                            return RedirectToAction("Index", "Dashboard");
+                        }
+                        else
+                        {
+                            return View("UnauthorizedURL");
+                        }                        
                     }
                 }
             }
@@ -57,13 +89,20 @@ namespace DLC.Controllers
                 objVariable.objDashboardConfig = objData.objDashboardConfig;
                 objVariable.GroupId = groupId;
                 objVariable.BrandId = brandId;
+                objVariable.Flag = "true";
                 objVariable.LoginURL = url;
-
+                objVariable.Source = source;
                 Session["SessionVariables"] = objVariable;
             }
             ViewBag.Codes = DCR.GetCountryCodes();
             return View(objData);
         }
+        //public ActionResult RedirectToLogin()
+        //{
+        //    //This need to correct
+        //    string customLoginUrl = "http://localhost:44309/Start/?data=KQ3yLweiMnawfNOwhc4so5N/z4mPRIKo7I8sYSeX7NfdjoLKk9h0cICWfQzwyMTfaHw4mFkFqv+4wGXLj6rYOhUyxV/lFtqwq2Mw58FjTcE=";
+        //    return Redirect(customLoginUrl);
+        //}
 
         public ActionResult CheckandSendOTP(string MobileNo)
         {
@@ -81,6 +120,7 @@ namespace DLC.Controllers
             string ActionNameFromConfig = string.Empty;
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
             string gId = sessionVariables.GroupId;
+            string sourcename = sessionVariables.Source;
             //If OTP
             var config = DCR.GetDLCDashboardConfig(gId);
 
@@ -122,7 +162,8 @@ namespace DLC.Controllers
             }
             if (!string.IsNullOrEmpty(ActionNameFromConfig))
             {
-                var status = DCR.RegisterCustomer(gId, mobileno, code);
+                
+                var status = DCR.RegisterCustomer(gId, mobileno, code , sourcename);
                 sessionVariables.CountryCode = code;
                 sessionVariables.MobileNo = mobileno;
                 Session["SessionVariables"] = sessionVariables;
