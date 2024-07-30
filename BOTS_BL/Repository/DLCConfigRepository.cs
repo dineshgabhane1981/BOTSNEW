@@ -308,16 +308,16 @@ namespace BOTS_BL.Repository
                             if (custData.DOB.HasValue)
                                 item.Value = custData.DOB.Value.ToString("yyyy/MM/dd");
                         }
-                        //if (item.FieldName == "MaritalStatus")
-                        //    item.Value = custData.MaritalStatus;
+                        if (item.FieldName == "MaritalStatus")
+                            item.Value = custData.MaritalStatus;
                         if (item.FieldName == "Email")
                             item.Value = custData.Email;
-                        //if (item.FieldName == "Area")
-                        //    item.Value = custData.Area;
-                        //if (item.FieldName == "City")
-                        //    item.Value = custData.City;
-                        //if (item.FieldName == "Pincode")
-                        //    item.Value = custData.Pincode;
+                        if (item.FieldName == "Area")
+                            item.Value = custData.Area;
+                        if (item.FieldName == "City")
+                            item.Value = custData.City;
+                        if (item.FieldName == "Pincode")
+                            item.Value = custData.Pincode;
                     }
                 }
             }
