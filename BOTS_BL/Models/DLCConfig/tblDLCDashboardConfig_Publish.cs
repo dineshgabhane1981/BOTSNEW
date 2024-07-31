@@ -83,5 +83,11 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string UseCard { get; set; }
+        public string FacebookUrl { get; set; }
+        public string TwitterUrl { get; set; }
+        public string InstagramUrl { get; set; }
+        public string WhatsappUrl { get; set; }
+        public string YoutubeURL { get; set; }
+        public string HeaderTheme { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace WebApp.Controllers
         {
             var BaseUrl = ConfigurationManager.AppSettings["BaseUrl"];
             string groupId = "1378";
-            string invoiceNo = "Z7201009O7A00008";
+            string invoiceNo = "Z7201004O7S00005";
             string token = "groupId=" + groupId;
             token += "&invoiceNo=" + invoiceNo;
             string entoken = common.EncryptString(token);
@@ -53,8 +53,7 @@ namespace WebApp.Controllers
                         invoiceNo = invoiceNoParam[1];
                     }
                 }
-            }
-
+            }            
             var objData = ERR.GetEReceiptJSON(invoiceNo, groupId);
             return View(objData);
         }

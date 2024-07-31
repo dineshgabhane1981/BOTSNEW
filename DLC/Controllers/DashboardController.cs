@@ -50,51 +50,54 @@ namespace DLC.Controllers
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
             var groupId = sessionVariables.GroupId;
             string connStr =  objCustRepo.GetCustomerConnString(groupId);
-            using (var context = new BOTSDBContext(connStr))
+            if (sessionVariables.objDashboardConfig.CollectPersonalDataRandomly)
             {
-                try
+                using (var context = new BOTSDBContext(connStr))
                 {
-                    var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNumber).FirstOrDefault();
-                    if (custDetails != null)
+                    try
                     {
-                        if (string.IsNullOrEmpty(custDetails.Name))
+                        var custDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNumber).FirstOrDefault();
+                        if (custDetails != null)
                         {
-                            return Json(new { success = true, missingField = "Name", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
-                        }
-                        else if (custDetails.Gender == null) 
-                        {
-                            return Json(new { success = true, missingField = "Gender", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
-                        }
-                        else if (custDetails.MobileNo == null) 
-                        {
-                            return Json(new { success = true, missingField = "MobileNumber", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
-                        }
-                       
-                        else if (custDetails.AnniversaryDate == null)
-                        {
-                            return Json(new { success = true, missingField = "AnniversaryDate", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
-                        }
-                        else if (custDetails.DOB == null)
-                        {
-                            return Json(new { success = true, missingField = "BirthDate", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
-                        }
-                        
+                            if (string.IsNullOrEmpty(custDetails.Name))
+                            {
+                                return Json(new { success = true, missingField = "Name", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
+                            }
+                            else if (custDetails.Gender == null)
+                            {
+                                return Json(new { success = true, missingField = "Gender", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
+                            }
+                            else if (custDetails.MobileNo == null)
+                            {
+                                return Json(new { success = true, missingField = "MobileNumber", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
+                            }
 
-                        return Json(new { success = true, missingField = "" }, JsonRequestBehavior.AllowGet);
+                            else if (custDetails.AnniversaryDate == null)
+                            {
+                                return Json(new { success = true, missingField = "AnniversaryDate", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
+                            }
+                            else if (custDetails.DOB == null)
+                            {
+                                return Json(new { success = true, missingField = "BirthDate", id = custDetails.Id }, JsonRequestBehavior.AllowGet);
+                            }
 
+
+                            return Json(new { success = true, missingField = "" }, JsonRequestBehavior.AllowGet);
+
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "User not found." });
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        return Json(new { success = false, message = "User not found." });
+                        return Json(new { success = false, message = ex.Message });
                     }
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { success = false, message = ex.Message });
                 }
             }
-
-            
+           
+            return Json(new { success = true, missingField = "" }, JsonRequestBehavior.AllowGet);
         }
         public class UserDetailUpdateModel
         {

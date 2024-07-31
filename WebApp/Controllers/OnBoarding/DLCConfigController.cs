@@ -36,12 +36,12 @@ namespace WebApp.Controllers.OnBoarding
             tblDLCDashboardConfig objDLCDashboard = new tblDLCDashboardConfig();
             DLCDashboardViewModel objData = new DLCDashboardViewModel();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            
+
             try
             {
                 objDLCDashboard = DCR.GetDLCDashboardConfig(userDetails.GroupId);
                 objData.objDLCDashboard = objDLCDashboard;
-                objData.lstCodes= DCR.GetCountryCodes();
+                objData.lstCodes = DCR.GetCountryCodes();
 
             }
             catch (Exception ex)
@@ -168,6 +168,14 @@ namespace WebApp.Controllers.OnBoarding
                     objDashboard.FontColor = Convert.ToString(item["FontColor"]);
                     objDashboard.PrefferedLanguage = Convert.ToString(item["PrefferedLanguage"]);
                     objDashboard.CountryCode = Convert.ToString(item["CountryCode"]);
+                    objDashboard.FacebookUrl = Convert.ToString(item["FacebookUrl"]);
+                    objDashboard.TwitterUrl = Convert.ToString(item["TwitterUrl"]);
+                    objDashboard.InstagramUrl = Convert.ToString(item["InstagramUrl"]);
+                    objDashboard.YoutubeURL = Convert.ToString(item["YoutubeURL"]);
+                    objDashboard.WhatsappUrl = Convert.ToString(item["WhatsappUrl"]);
+
+                    objDashboard.HeaderTheme = Convert.ToString(item["HeaderTheme"]);
+
                     objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
                     objDashboard.AddedBy = userDetails.LoginId;
                     objDashboard.AddedDate = DateTime.Now;
@@ -215,7 +223,7 @@ namespace WebApp.Controllers.OnBoarding
                 foreach (Dictionary<string, object> item in objDashboardData)
                 {
                     tblDLCProfileUpdateConfig objItem = new tblDLCProfileUpdateConfig();
-                    objItem.Slno= Convert.ToInt64(item["Slno"]);
+                    objItem.Slno = Convert.ToInt64(item["Slno"]);
                     objItem.IsDisplay = Convert.ToBoolean(item["IsDisplay"]);
                     objItem.IsMandatory = Convert.ToBoolean(item["IsMandatory"]);
                     objItem.FieldName = Convert.ToString(item["Name"]);
@@ -234,14 +242,14 @@ namespace WebApp.Controllers.OnBoarding
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
 
         }
-    
+
         public ActionResult PublishDLCDashboardConfig()
         {
             bool status = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             try
             {
-                 status = DCR.PublishDLCDashboardConfig(userDetails);
+                status = DCR.PublishDLCDashboardConfig(userDetails);
             }
             catch (Exception ex)
             {
@@ -268,13 +276,28 @@ namespace WebApp.Controllers.OnBoarding
         {
             DLCLinksViewModel objData = new DLCLinksViewModel();
             List<tblDLCCampaignMaster> lstLinks = new List<tblDLCCampaignMaster>();
-            var BaseUrl= ConfigurationManager.AppSettings["baseDLCUrl"];            
+            var BaseUrl = ConfigurationManager.AppSettings["baseDLCUrl"];
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-           
+
             try
             {
                 objData.lstLinks = DCR.GetDlcLinks(userDetails.connectionString);
                 objData.lstBrands = DCR.GetBrandsByGroupId(userDetails.GroupId);
+                foreach(var item in objData.lstLinks)
+                {
+                    if(item.DLCName== "BaseUrl")
+                    {
+                        var BrandDetails = DCR.GetBrandsByGroupId(userDetails.GroupId);
+                        var BrandId = BrandDetails.Select(x => x.Value).FirstOrDefault();
+                        
+                        string encryptStr = "BrandId=" + BrandId;                        
+                        string entoken = common.EncryptString(encryptStr);
+                        var DLCLink = BaseUrl + "?data=" + entoken;
+                        var itemshortUrl = GetShortenLink(DLCLink);
+                        
+                        item.DLCLink = itemshortUrl;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -283,54 +306,69 @@ namespace WebApp.Controllers.OnBoarding
             return View(objData);
         }
 
-        public ActionResult CreateDLCLink(string SourceName, string StartDate,string EndDate,string BrandId)
+        public ActionResult CreateDLCLink(string SourceName, string StartDate, string EndDate, string BrandId, string PointsGiven, string PointsValidity)
         {
             bool status = false;
-            string result_00003;
+           
             var BaseUrl = ConfigurationManager.AppSettings["baseDLCUrl"];
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
             string encryptStr = "BrandId=" + BrandId;
             encryptStr += "&Source=" + SourceName;
             string entoken = common.EncryptString(encryptStr);
-            var DLCLink = BaseUrl + "?data=" + entoken;            
+            var DLCLink = BaseUrl + "?data=" + entoken;
 
+            var itemshortUrl = GetShortenLink(DLCLink);
+
+            status = DCR.SaveDLCLink(userDetails.connectionString, SourceName, itemshortUrl, StartDate, EndDate, PointsGiven, PointsValidity);
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public string GetShortenLink(string link)
+        {
+            string result_00003;
+            string url = string.Empty;
             string _Url = "https://api-ssl.bitly.com/v4/shorten";
             var httpWebRequest_00003 = (HttpWebRequest)WebRequest.Create(_Url);
             httpWebRequest_00003.ContentType = "application/json";
             httpWebRequest_00003.Headers.Add("Authorization", "f22c9274b5565860b85d1e4af701d4d6a4c795fa");
 
             httpWebRequest_00003.Method = "POST";
-
-            using (var streamWriter_00003 = new StreamWriter(httpWebRequest_00003.GetRequestStream()))
+            try
             {
+                using (var streamWriter_00003 = new StreamWriter(httpWebRequest_00003.GetRequestStream()))
+                {
 
-                string json_00003 =
-                                "{\"long_url\":\"" + DLCLink + "\"," +
-                                "\"domain\":\"bit.ly\"," +
-                                "\"group_guid\":\"\"}";
-                streamWriter_00003.Write(json_00003);
+                    string json_00003 =
+                                    "{\"long_url\":\"" + link + "\"," +
+                                    "\"domain\":\"bit.ly\"," +
+                                    "\"group_guid\":\"\"}";
+                    streamWriter_00003.Write(json_00003);
+                }
+
+                var httpResponse_00003 = (HttpWebResponse)httpWebRequest_00003.GetResponse();
+                using (var streamReader_00003 = new StreamReader(httpResponse_00003.GetResponseStream()))
+                {
+                    result_00003 = streamReader_00003.ReadToEnd();
+                }
+
+                JObject jsonObj = JObject.Parse(result_00003);
+                var Balance = JObject.Parse(result_00003)["id"];
+                url = (string)Balance;
+
+                return url;
             }
-
-            var httpResponse_00003 = (HttpWebResponse)httpWebRequest_00003.GetResponse();
-            using (var streamReader_00003 = new StreamReader(httpResponse_00003.GetResponseStream()))
+            catch(Exception ex)
             {
-                result_00003 = streamReader_00003.ReadToEnd();
+                url = link;
             }
-
-            JObject jsonObj = JObject.Parse(result_00003);
-            var Balance = JObject.Parse(result_00003)["id"];
-            string itemshortUrl = (string)Balance;
-
-            status = DCR.SaveDLCLink(userDetails.connectionString, SourceName, itemshortUrl, StartDate, EndDate);
-            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+            return url;
         }
-
-        public ActionResult DownloadDLCQRCode(string DLCName)
+        public ActionResult DownloadDLCQRCode(string DLCName,string DLCLink)
         {
             string imageUrl = string.Empty;
             string failedMessage = string.Empty;
-            var qrCodeImage = GenerateAndDownloadQR(DLCName);
+            var qrCodeImage = GenerateAndDownloadQR(DLCName, DLCLink);
             if (qrCodeImage == null)
             {
                 failedMessage = "Failed to generate QR code image.";
@@ -349,15 +387,15 @@ namespace WebApp.Controllers.OnBoarding
             else
                 return Json(new { success = true, imageUrl }, JsonRequestBehavior.AllowGet);
         }
-        public Bitmap GenerateAndDownloadQR(string DLCName)
+        public Bitmap GenerateAndDownloadQR(string DLCName, string DLCLink)
         {
             try
             {
                 var userDetails = (CustomerLoginDetail)Session["UserSession"];
-                var DlcDetails= DCR.GetDlcLinkByName(userDetails.connectionString, DLCName);
+                //var DlcDetails = DCR.GetDlcLinkByName(userDetails.connectionString, DLCName);
                 using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
                 {
-                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(DlcDetails.DLCLink, QRCodeGenerator.ECCLevel.Q);
+                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(DLCLink, QRCodeGenerator.ECCLevel.Q);
                     QRCode qrCode = new QRCode(qrCodeData);
                     Bitmap qrCodeImage = qrCode.GetGraphic(20);
                     return qrCodeImage;

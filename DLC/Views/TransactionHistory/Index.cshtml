@@ -20,9 +20,12 @@
     <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
-    <title>Invoice Details</title>
+    <title>Transaction History</title>
     <style>
-       
+        .footer {
+            background-color: #344966;
+            height: 10vh;
+        }
 
         .container {
             max-width: 100%;
@@ -40,6 +43,10 @@
             .container {
                 margin-top: 19vh !important;
             }
+        }
+        .footer {
+            background-color: #344966;
+            height: 10vh;
         }
     </style>
 </head>
@@ -164,7 +171,38 @@
         </div>
     </div>
 
-
+    <section class="footer" style="text-align:end;padding-right:20px;">
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+                <img src="~/img/facebook.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
+                <img src="~/img/instagram.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+                <img src="~/img/twitterx.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+                <img src="~/img/youtube.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+                <img src="~/img/whatsapp.svg" />
+            </a>
+        }
+    </section>
 
     <script>
         function Hamburger() {
@@ -194,12 +232,11 @@
 
     </script>
 
-     
+
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>*@
-    <footer>
-    </footer>
+   
 </body>
 </html>
 

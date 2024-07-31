@@ -18,7 +18,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Design</title>
+    <title>Store Locator</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -27,6 +27,10 @@
 
     <link href="~/css/storelocator.css" rel="stylesheet" />
     <style>
+        .footer {
+            background-color: #344966;
+            height: 10vh;
+        }
         .heading_pt {
             margin-top: 208px !important;
             margin-left: 1.5%;
@@ -156,9 +160,39 @@
             <span id="spnContact"></span>
         </p>
     </div>
+    <section class="footer" style="text-align:end;padding-right:20px;">
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+                <img src="~/img/facebook.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
+                <img src="~/img/instagram.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+                <img src="~/img/twitterx.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+                <img src="~/img/youtube.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+                <img src="~/img/whatsapp.svg" />
+            </a>
+        }
+    </section>
 
-    <footer class="footer">
-    </footer>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
@@ -273,9 +307,9 @@
             $('.content p').first().text(ownerName);
             $("#spnContact").text(contact);
             $("#contactInfo").show();
-            
+
         }
     </script>
-   
+
 </body>
 </html>

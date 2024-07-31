@@ -24,6 +24,12 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
           rel="stylesheet" />
     <title>Terms and Conditions</title>
+    <style>
+        .footer {
+            background-color: #344966;
+            height: 10vh;
+        }
+    </style>
 </head>
 <body>
     <nav>
@@ -99,8 +105,38 @@
         </ul>
     </div>
 
-    <footer>
-    </footer>
+    <section class="footer" style="text-align:end;padding-right:20px;">
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+                <img src="~/img/facebook.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
+                <img src="~/img/instagram.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+                <img src="~/img/twitterx.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+                <img src="~/img/youtube.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
+        {
+            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+                <img src="~/img/whatsapp.svg" />
+            </a>
+        }
+    </section>
 
 
     <script>

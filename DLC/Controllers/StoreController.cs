@@ -35,7 +35,7 @@ namespace DLC.Controllers
             using (var context = new BOTSDBContext(connStr))
             {
                 var Locationlist = context.tblOutletMasters
-                    .Where(x => x.BrandId == sessionVariables.BrandId && x.GroupId == sessionVariables.GroupId && x.IsActive == true)
+                    .Where(x => x.BrandId == sessionVariables.BrandId && !x.OutletName.ToLower().Contains("admin") && x.GroupId == sessionVariables.GroupId && x.IsActive == true)
                     .ToList();
 
                 foreach (var item in Locationlist)

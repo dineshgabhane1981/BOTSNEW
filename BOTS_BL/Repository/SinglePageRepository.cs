@@ -600,14 +600,14 @@ namespace BOTS_BL.Repository
                             {
 
                                 //objItem.MemberBase = contextdb.CustomerDetails.Count();
-                                objItem.MemberBase = contextdb.CustomerDetails.Count();
+                                objItem.MemberBase = contextdb.tblCustDetailsMasters.Count();
 
                                 var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
                                 var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
                                 if (exist > 0)
                                 {
-                                    objItem.MemberBulkUpload = contextdb.BulkUploadCustLists.Count();
-                                    objItem.TotalMemberBase = objItem.MemberBase + contextdb.BulkUploadCustLists.Count();
+                                    objItem.MemberBulkUpload = contextdb.tblBulkCustLists.Count();
+                                    objItem.TotalMemberBase = objItem.MemberBase + contextdb.tblBulkCustLists.Count();
                                 }
                                 else
                                 {
@@ -793,14 +793,14 @@ namespace BOTS_BL.Repository
                             string connStr = CR.GetCustomerConnString(Convert.ToString(item.GroupId));
                             using (var contextdb = new BOTSDBContext(connStr))
                             {
-                                objItem.CustCount = contextdb.CustomerDetails.Count();
+                                objItem.CustCount = contextdb.tblCustDetailsMasters.Count();
 
-                                var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'BulkUploadCustList'";
+                                var sqlQ = $"SELECT COUNT(*) as Count FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'tblBulkCustLists'";
                                 var exist = contextdb.Database.SqlQuery<int>(sqlQ).FirstOrDefault();
                                 if (exist > 0)
                                 {
-                                    objItem.BulkUploadCount = contextdb.BulkUploadCustLists.Count();
-                                    objItem.Total = objItem.CustCount + contextdb.BulkUploadCustLists.Count();
+                                    objItem.BulkUploadCount = contextdb.tblBulkCustLists.Count();
+                                    objItem.Total = objItem.CustCount + contextdb.tblBulkCustLists.Count();
                                 }
                                 else
                                 {

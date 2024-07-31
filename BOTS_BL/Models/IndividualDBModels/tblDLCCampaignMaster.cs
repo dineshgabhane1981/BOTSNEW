@@ -34,5 +34,7 @@ namespace BOTS_BL.Models
         public long? BusinessGenerated { get; set; }
 
         public bool? BackEndStatus { get; set; }
+        public int? PointsGiven { get; set; }
+        public int? PointValidityDayes { get; set; }
     }
 }

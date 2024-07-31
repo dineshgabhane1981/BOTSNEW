@@ -25,7 +25,7 @@ nav {
     justify-content: space-evenly;
     align-items: center;
     height: 15vh;
-    background-image: url(/img/Header2.png);
+    background-image: url(https://blueocktopus.in/dlc/img/Header2.png);
     position: relative;
     /* padding-top: 2vh; */
 }
@@ -523,7 +523,7 @@ nav .hamburger {
         justify-content: space-between;
         align-items: center;
         height: 13vh;
-        background-image: url(/img/Header2.png);
+        background-image: url(https://blueocktopus.in/dlc/img/Header2.png);
         position: relative;
         padding-inline: 3vw;
         z-index: 3;
@@ -1088,7 +1088,7 @@ nav .hamburger {
         justify-content: space-between;
         align-items: center;
         height: 12vh;
-        background-image: url(/img/Header2.png);
+        background-image: url(https://blueocktopus.in/dlc/img/Header2.png);
         position: relative;
         padding-inline: 3vw;
         z-index: 3;
@@ -1654,7 +1654,7 @@ nav .hamburger {
         justify-content: space-between;
         align-items: center;
         height: 13vh;
-        background-image: url(/img/Header2.png);
+        background-image: url(https://blueocktopus.in/dlc/img/Header2.png);
         position: relative;
         padding-inline: 3vw;
         z-index: 3;
@@ -2221,7 +2221,7 @@ nav .hamburger {
         justify-content: space-between;
         align-items: center;
         height: 14vh;
-        background-image: url(/img/Header2.png);
+        background-image: url(https://blueocktopus.in/dlc/img/Header2.png);
         position: relative;
         padding-inline: 3vw;
         z-index: 3;
@@ -2787,7 +2787,7 @@ nav .hamburger {
         justify-content: space-evenly;
         align-items: center;
         height: 15vh;
-        background-image: url(/img/Header2.png);
+        background-image: url(https://blueocktopus.in/dlc/img/Header2.png);
         position: relative;
         /* padding-top: 2vh; */
     }
@@ -3213,7 +3213,7 @@ nav .hamburger {
             height: 296px;
             border-radius: 20px;
             overflow: hidden;
-            background-image: url(/img/Untitled-1.png);
+            background-image: url(https://blueocktopus.in/dlc/img/Untitled-1.png);
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;

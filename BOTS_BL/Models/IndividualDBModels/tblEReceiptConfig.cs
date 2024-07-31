@@ -33,17 +33,13 @@ namespace BOTS_BL.Models
         public string UpdateProfileBanner { get; set; }
 
         public bool IsSocialMedia { get; set; }
-
-        [StringLength(50)]
+        
         public string FacebookUrl { get; set; }
-
-        [StringLength(50)]
+        
         public string TwitterUrl { get; set; }
-
-        [StringLength(50)]
+        
         public string InstagramUrl { get; set; }
-
-        [StringLength(50)]
+        
         public string WhatsappUrl { get; set; }
 
         public string TermsAndConditions { get; set; }

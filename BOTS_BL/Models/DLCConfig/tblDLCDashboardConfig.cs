@@ -84,5 +84,11 @@ namespace BOTS_BL.Models.DLCConfig
 
         [StringLength(250)]
         public string UseCardURL { get; set; }
+        public string FacebookUrl { get; set; }
+        public string TwitterUrl { get; set; }
+        public string InstagramUrl { get; set; }
+        public string WhatsappUrl { get; set; }
+        public string YoutubeURL { get; set; }
+        public string HeaderTheme { get; set; }
     }
 }

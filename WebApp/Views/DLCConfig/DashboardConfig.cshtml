@@ -97,23 +97,6 @@
 
         <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
             <fieldset style="border-radius: 10px;">
-                <legend style="font-size: 20px; background-color: #E5E4E2;">Other Config</legend>
-                <div class="col-md-12 col-xl-12 row pt-3">
-                    <div class="col-md-4 col-xl-4 row">
-                        <input type="checkbox" id="chkFooterImage" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Logo to show at footer
-                    </div>
-                    <div class="col-md-8 col-xl-8 row">
-                        <div class="col-md-1 col-xl-1" style="padding-left:0px;">
-                            <input type="checkbox" id="chkCollectInfoRendomly" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />
-                        </div>
-                        <div class="col-md-11 col-xl-11" style="margin-left:-37px;">Collect Profile details randomly. (<b><i>If this facility taken, we will show randomly popup on dashboard after login and collect data of member, like DOB, next time Anniversary, next time gender, etc</i></b>)</div>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
-
-        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
-            <fieldset style="border-radius: 10px;">
                 <legend style="font-size: 20px; background-color: #E5E4E2;">Logo Config</legend>
 
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
@@ -151,21 +134,48 @@
 
         <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
             <fieldset style="border-radius: 10px;">
-                <legend style="font-size: 20px; background-color: #E5E4E2;">Card Config</legend>
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Theme Config</legend>
 
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
                     <div class="col-md-6 col-xl-3">
-                        <input type="radio" id="rbtnCardOptionOne" name="LoyaltyCard" checked style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />  Card Option One 
+                        <input type="radio" id="rbtnThemeOptionOne" name="LoyaltyTheme" checked style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />  Theme Option One
                     </div>
                     <div class="col-md-6 col-xl-6">
                         <div id="imageBox1">
-                            <img id="Cardimg1" src="~/Content/assets/Card1.jpg" width="300"  />
+                            <img id="Themeimg1" src="~/Content/assets/Header3.png" width="300" />
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
                     <div class="col-md-6 col-xl-3">
-                        <input type="radio" id="rbtnCardOptionTwo" name="LoyaltyCard" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Card Option Two 
+                        <input type="radio" id="rbtnThemeOptionTwo" name="LoyaltyTheme" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Theme Option Two
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <div id="imageBox2">
+                            <img id="Themeimg2" src="~/Content/assets/Header2.png" width="300" />
+                        </div>
+                    </div>
+                </div>                
+            </fieldset>
+        </div>
+
+        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
+            <fieldset style="border-radius: 10px;">
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Card Config</legend>
+
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-3">
+                        <input type="radio" id="rbtnCardOptionOne" name="LoyaltyCard" checked style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />  Card Option One
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <div id="imageBox1">
+                            <img id="Cardimg1" src="~/Content/assets/Card1.jpg" width="300" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-3">
+                        <input type="radio" id="rbtnCardOptionTwo" name="LoyaltyCard" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Card Option Two
                     </div>
                     <div class="col-md-6 col-xl-6">
                         <div id="imageBox2">
@@ -175,7 +185,7 @@
                 </div>
                 <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
                     <div class="col-md-6 col-xl-3">
-                        <input type="radio" id="rbtnCardOptionThree" name="LoyaltyCard" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Card Option Three 
+                        <input type="radio" id="rbtnCardOptionThree" name="LoyaltyCard" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Card Option Three
                     </div>
                     <div class="col-md-6 col-xl-6">
                         <div id="imageBox3">
@@ -187,36 +197,78 @@
         </div>
 
         <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
-            <div class="col-md-12 col-xl-12 row">
-                <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
-                    <div class='wrap'>
-                        <h4>Choose Header color</h4>
-                        <button id="btnColorPicker" style="width:100px; height:50px;cursor:pointer;" data-jscolor="{
-                    onChange: 'update(this, \'#pr1\')',
-                    alpha:0.7, value:'@Model.objDLCDashboard.HeaderColor'}"></button><br /><br />
+            <fieldset style="border-radius: 10px;">
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Social Media Config</legend>
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-2">
+                        Facebook Url
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <input type="text" class="input100" id="txtFacebookUrl" />
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-2">
+                        Twitter Url
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <input type="text" class="input100" id="txtTwitterUrl" />
+                    </div>
+                </div>
 
-                        <em id="pr1" style="display:inline-block; padding:5em;font-size:20px;">Header Color</em>
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-2">
+                        Instagram Url
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <input type="text" class="input100" id="txtInstagramUrl" />
                     </div>
                 </div>
-                <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
-                    <div class='wrap'>
-                        <h4>Choose Fore color</h4>
-                        <button id="btnColorPickerFont" style="width:100px; height:50px;cursor:pointer;" data-jscolor="{
-                    onChange: 'updateColor(this, \'#pr1\')',
-                    alpha:0.7, value:'@Model.objDLCDashboard.FontColor'}"></button><br /><br />
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-2">
+                        Youtube Url
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <input type="text" class="input100" id="txtYoutubeURL" />
                     </div>
                 </div>
-                <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
-                    Select Language
-                    @Html.DropDownListFor(model => model.objDLCDashboard.PrefferedLanguage, new SelectList(Model.LanguageList(), "Value", "Text", "English"), htmlAttributes: new { @class = "input50", @id = "ddlLanguage" })
+                <div class="col-md-12 col-xl-12 row mt-4" style="padding-right:7px !important; padding-left:7px !important;">
+                    <div class="col-md-6 col-xl-2">
+                        Whatsapp Url
+                    </div>
+                    <div class="col-md-6 col-xl-6">
+                        <input type="text" class="input100" id="txtWhatsappUrl" />
+                    </div>
                 </div>
-                <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
-                    Select Country
-                    @Html.DropDownListFor(model => model.objDLCDashboard.CountryCode, new SelectList(Model.lstCodes, "Code", "Country", "+91"), htmlAttributes: new { @class = "input50", @id = "ddlCountryCode" })
-                </div>
-            </div>
+            </fieldset>
         </div>
 
+        <div class="col-md-12 col-xl-12 card ml-2 mt-3 pb-3" style="padding-right:7px !important; padding-left:7px !important;">
+            <fieldset style="border-radius: 10px;">
+                <legend style="font-size: 20px; background-color: #E5E4E2;">Other Config</legend>
+                <div class="col-md-12 col-xl-12 row pt-3">
+                    <div class="col-md-4 col-xl-4 row">
+                        <input type="checkbox" id="chkFooterImage" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" /> Logo to show at footer
+                    </div>
+                    <div class="col-md-8 col-xl-8 row">
+                        <div class="col-md-1 col-xl-1" style="padding-left:0px;">
+                            <input type="checkbox" id="chkCollectInfoRendomly" style="width:20px;height:20px;cursor:pointer;margin-right:5px;" />
+                        </div>
+                        <div class="col-md-11 col-xl-11" style="margin-left:-37px;">Collect Profile details randomly. (<b><i>If this facility taken, we will show randomly popup on dashboard after login and collect data of member, like DOB, next time Anniversary, next time gender, etc</i></b>)</div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-xl-12 row pt-3">
+                    <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
+                        Select Language
+                        @Html.DropDownListFor(model => model.objDLCDashboard.PrefferedLanguage, new SelectList(Model.LanguageList(), "Value", "Text", "English"), htmlAttributes: new { @class = "input50", @id = "ddlLanguage" })
+                    </div>
+                    <div class="col-md-5 col-xl-5 ml-2 mt-3 pb-3">
+                        Select Country
+                        @Html.DropDownListFor(model => model.objDLCDashboard.CountryCode, new SelectList(Model.lstCodes, "Code", "Country", "+91"), htmlAttributes: new { @class = "input50", @id = "ddlCountryCode" })
+                    </div>
+                </div>
+            </fieldset>
+        </div>
 
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <button id="btnPublishDashboard" class="btn btn-primary pull-right" style="margin-left:10px;" type="button"><b>Publish</b></button>
@@ -293,7 +345,7 @@
     function update(picker, selector) {
         var abc = colorValues(picker.toRGBAString())
         var color = rgbToHex(abc[0], abc[1], abc[2]);
-        document.querySelector(selector).style.background = "linear-gradient(to bottom," + color +", #000000)";//picker.toRGBAString();
+        //document.querySelector(selector).style.background = "linear-gradient(to bottom," + color +", #000000)";//picker.toRGBAString();
 
     }
     function updateColor(picker, selector) {
@@ -479,12 +531,24 @@
         if (data.UseCard == "Three") {
             $("#rbtnCardOptionThree").prop("checked", true);
         }
+        if (data.HeaderTheme == "One") {
+            $("#rbtnThemeOptionOne").prop("checked", true);
+        }
+        if (data.HeaderTheme == "Two") {
+            $("#rbtnThemeOptionTwo").prop("checked", true);
+        }
+        $("#txtFacebookUrl").val(data.FacebookUrl);
+        $("#txtTwitterUrl").val(data.TwitterUrl);
+        $("#txtInstagramUrl").val(data.InstagramUrl);
+        $("#txtYoutubeURL").val(data.YoutubeURL);
+        $("#txtWhatsappUrl").val(data.WhatsappUrl);
+
         $("#hdnSlNO").val(data.SlNo);
        
-        document.querySelector("#pr1").style.background = "linear-gradient(to bottom," + data.HeaderColor + ", #000000)";
+        //document.querySelector("#pr1").style.background = "linear-gradient(to bottom," + data.HeaderColor + ", #000000)";
         $("#hdnColor").val(data.HeaderColor);
 
-        document.querySelector("#pr1").style.color = data.FontColor;
+        //document.querySelector("#pr1").style.color = data.FontColor;
         $("#hdnFontColor").val(data.FontColor);
     }
 
@@ -585,11 +649,24 @@
         if ($("#rbtnCardOptionThree").is(":checked")) {
             item["UseCard"] = "Three";
         }
+
+        if ($("#rbtnThemeOptionOne").is(":checked")) {
+            item["HeaderTheme"] = "One";
+        }
+        if ($("#rbtnThemeOptionTwo").is(":checked")) {
+            item["HeaderTheme"] = "Two";
+        }
+
         item["HeaderColor"] = $("#hdnColor").val();
         item["FontColor"] = $("#hdnFontColor").val();
         item["PrefferedLanguage"] = $("#ddlLanguage").val();
         item["CountryCode"] = $("#ddlCountryCode").val();
 
+        item["FacebookUrl"] = $("#txtFacebookUrl").val();
+        item["TwitterUrl"] = $("#txtTwitterUrl").val();
+        item["InstagramUrl"] = $("#txtInstagramUrl").val();
+        item["YoutubeURL"] = $("#txtYoutubeURL").val();
+        item["WhatsappUrl"] = $("#txtWhatsappUrl").val();
         
         PrimaryData.push(item);
 
@@ -626,8 +703,6 @@
                     //console.log(result.responseText)
                 }
             });
-
-
 
     }
 

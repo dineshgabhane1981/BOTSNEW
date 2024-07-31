@@ -1,4 +1,5 @@
 ﻿@model BOTS_BL.Models.EReceipt
+@using System.Globalization
 @{
     Layout = null;
     int count = 1;
@@ -128,9 +129,9 @@
                                             <div id="divStoreCINAndPAN" class="d-store" style="display:flex;">
                                                 <div class="store-details">
                                                     <div id="divStoreCIN" class="" style="display:block;">
-                                                        
+
                                                         <p id="lblStoreGSTIN">GSTIN # @Model.objPOSBILL.OwnerGSTINNo</p>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -151,17 +152,17 @@
                             <div id="divUniVersalTemplateHeaderBlock" class="col-12 addressBlock">
                                 <p class="mb-0" style="text-align: center"></p>
                                 <h2 class="mt-3" style="font-weight: 700 !important;">
-                                    <span id="lblHeaderTitle2">Dear Member</span>
+                                    <span id="lblHeaderTitle2">Dear @Model.CustomerName</span>
                                 </h2>
                                 <h2 class="m-0 d-block w-100">
                                     <a href="#" id="ancHederMemberContact" class="m-0 d-block w-100 position-static">
-                                        <span id="lblHederMemberContact"><b>Mobile No:</b> @Model.objCustomer.HashedMobile</span>
+                                        <span id="lblHederMemberContact"><b>Mobile No:</b> @Model.objCustomer.mobile</span>
                                     </a>
                                 </h2>
                                 @*<a href="#" id="ancEditProfileURL" style="font-weight: 400 !important;" target="_blank">
-                                    <img src="~/Content/EReceipt/images/edit.png" alt="Click to Edit your profile details" title="Click to Edit your profile details" style="width: 23px;">
-                                    Edit Profile
-                                </a>*@
+                                        <img src="~/Content/EReceipt/images/edit.png" alt="Click to Edit your profile details" title="Click to Edit your profile details" style="width: 23px;">
+                                        Edit Profile
+                                    </a>*@
                                 <p class="m-0 d-block w-100">
                                     <a href="#" id="ancHeaderMemberEmail" class="m-0 d-block w-100 position-static">
                                         <span id="lblHeaderMemberEmail"></span>
@@ -187,15 +188,15 @@
                                             <span id="spnQuantityMasterValue">@Model.ItemCount</span>
                                         </div>
                                         @*<div class="col-4 downloadBtn">
-                                            <div id="divPdfDownloadPopUp" style="display: none">
-                                                <div id="upnlPdFDownload">
-                                                    <a id="lnkDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
+                                                <div id="divPdfDownloadPopUp" style="display: none">
+                                                    <div id="upnlPdFDownload">
+                                                        <a id="lnkDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div id="divPdfDownload" style="display:block;">
-                                                <a id="lnkPdfDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkPdfDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
-                                            </div>
-                                        </div>*@
+                                                <div id="divPdfDownload" style="display:block;">
+                                                    <a id="lnkPdfDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkPdfDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
+                                                </div>
+                                            </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -293,7 +294,7 @@
                                                                                     <label id="rptUniversalinvoiceDetails_ctl00_lbllabelDiscount">Quantity:</label>@item.Qty
                                                                                 </b>
                                                                                 @*<b>Brand:Bata</b>
-                                                    <b>UOM:Prs</b>*@
+                                                                                    <b>UOM:Prs</b>*@
                                                                             </p>
                                                                             <div id="rptUniversalinvoiceDetails_ctl00_divTaxalert" class="tooltip">
                                                                                 <img src="~/Content/EReceipt/SVG/alert.svg" alt="Alert">
@@ -321,13 +322,13 @@
                                                             <td>
                                                                 <p class="rate_sec">
                                                                     <span>
-                                                                        <span id="rptUniversalinvoiceDetails_ctl00_spnSellingPrice">₹&nbsp;</span>
-                                                                        @item.NetAmt
+                                                                        <span id="rptUniversalinvoiceDetails_ctl00_spnSellingPrice">₹&nbsp;</span>                                                                         
+                                                                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.NetAmt))
                                                                     </span>
                                                                     <span class="flex-column">
                                                                         <span>
-                                                                            <span id="rptUniversalinvoiceDetails_ctl00_spnAmount2">₹&nbsp;</span>
-                                                                            @item.NetAmt
+                                                                            <span id="rptUniversalinvoiceDetails_ctl00_spnAmount2">₹&nbsp;</span>                                                                             
+                                                                            @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.NetAmt))
                                                                         </span>
                                                                     </span>
                                                                 </p>
@@ -373,10 +374,10 @@
                                                                         <span id="rptGSTDetails_ctl00_spntaxPercentage">@item.CGSTRate</span>
                                                                     </td>
                                                                     <td>
-                                                                        @item.TaxableAmt
+                                                                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TaxableAmt))                                                                        
                                                                     </td>
                                                                     <td>
-                                                                        @item.CGSTAmt
+                                                                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.CGSTAmt))
                                                                     </td>
                                                                 </tr>
                                                                 <tr id="rptGSTDetails_ctl01_trTaxDetails">
@@ -392,10 +393,10 @@
                                                                         <span id="rptGSTDetails_ctl01_spntaxPercentage">@item.SGSTRate</span>
                                                                     </td>
                                                                     <td>
-                                                                        @item.TaxableAmt
+                                                                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TaxableAmt))
                                                                     </td>
                                                                     <td>
-                                                                        @item.SGSTAmt
+                                                                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.SGSTAmt))
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -424,6 +425,10 @@
                                                             <span id="SpnTotalAmountPaid">₹&nbsp;@Model.objPOSBILL.NetAmt</span>
                                                         </li>
                                                         <li>
+                                                            <label id="lbltotalamountpaid">Total Discount</label>
+                                                            <span id="SpnTotalAmountPaid">₹&nbsp;@Model.TotalDiscountValue</span>
+                                                        </li>
+                                                        <li>
                                                             <span id="spnRoundOffAmount"></span>
                                                         </li>
                                                         <li>
@@ -441,12 +446,12 @@
                                                         <!-- Edit Highlight Tool -->
                                                         <div class="editorTool"></div>
                                                         <!-- <i class="oval_wrap_left"></i>
-                        <i class="oval_wrap_right"></i>
-                        <div class="invoice_edit_icon">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                    <i class="fa fa-arrows" aria-hidden="true"></i>
-                                    <i class="fa fa-clone" aria-hidden="true"></i>
-                        </div> -->
+                                                        <i class="oval_wrap_right"></i>
+                                                        <div class="invoice_edit_icon">
+                                                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                                    <i class="fa fa-arrows" aria-hidden="true"></i>
+                                                                    <i class="fa fa-clone" aria-hidden="true"></i>
+                                                        </div> -->
                                                         <!-- Edit Highlight Tool -->
                                                         <h4 class="coins_para">
                                                             <span id="spnPointsEarned" style="display:block;">
@@ -470,11 +475,11 @@
                                                     </p>
                                                 </div>
                                                 @*<div id="divPOSNumber" class="sales_person_details">
-                        <h4 id="h6PosNumber">POS Number</h4>
-                        <p>
-                            <span id="lblPOsNumberMasterValue">2499</span>
-                        </p>
-                    </div>*@
+                                                        <h4 id="h6PosNumber">POS Number</h4>
+                                                        <p>
+                                                            <span id="lblPOsNumberMasterValue">2499</span>
+                                                        </p>
+                                                    </div>*@
                                                 <div id="divSalesAssociateNumber" class="sales_person_details">
                                                     <h4 id="h6SalesAssociate">Sales Associate name</h4>
                                                     <p>
@@ -517,12 +522,12 @@
                                                         </div>
                                                         <span style="width: 20px; display: inline-block;"></span>
                                                         <div class="text-green-dark">
-                                                            <h3 class="m-0 fw-700 text-green-dark">@Model.PointsEarnedWithThisBill</h3>
+                                                            <h3 class="m-0 fw-700 text-green-dark" style="font-size:18px;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.PointsEarnedWithThisBill))</h3>
                                                             <div class="text-green-dark fs-md"></div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-6 circle-bg p-4 d-table" style="margin-left:20px;">
+                                                <div class="col-6 circle-bg p-4 d-table" style="margin-left:15px;">
                                                     <div class="align-middle">
                                                         <div class="fs-md" style="line-height: 1;">
                                                             <div class="text-green-dark">Total</div>
@@ -530,7 +535,7 @@
                                                         </div>
                                                         <span style="width: 20px; display: inline-block;"></span>
                                                         <div class="text-green-dark ng-star-inserted">
-                                                            <h3 class="m-0 fw-700 text-green-dark"> @Model.TotalAvailablePoints </h3>
+                                                            <h3 class="m-0 fw-700 text-green-dark" style="font-size:18px;">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.TotalAvailablePoints)) </h3>
                                                             <div class="text-green-dark"> </div>
                                                         </div>
                                                     </div>

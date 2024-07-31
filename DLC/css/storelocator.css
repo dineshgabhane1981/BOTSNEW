@@ -25,7 +25,7 @@ nav {
     justify-content: space-evenly;
     align-items: center;
     height: 15vh;
-    background-image: url(/img/Header2.png);
+    background-image: url(https://blueocktopus.in/dlc/img/Header2.png);
     position: relative;
     /* padding-top: 2vh; */
 }
@@ -455,15 +455,15 @@ button {
         font-size: 16px;
     }
 
-.footer {
-    display: flex;
-    flex-direction: column;
+/*.footer {*/
+   /* display: flex;*/
+    /*flex-direction: column;
     background-color: #0019B2;
     color: #fff;
     padding: 25px 0;
     text-align: center;
     margin-top: auto;
     width: 100%;
-    text-align: center;
+    text-align: center;*/
     /* Add these properties to position the footer at the bottom */
-}
+/*}*/

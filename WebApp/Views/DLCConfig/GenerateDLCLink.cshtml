@@ -39,6 +39,22 @@
                 <input type="text" class="input50" id="txtEndDate" />
             </div>
         </div>
+        <div class="col-md-12 col-xl-12 mt-4 row">
+            <div class="col-md-4 col-xl-2">
+                Points to give
+            </div>
+            <div class="col-md-4 col-xl-4">
+                <input type="number" class="input50" id="txtPointsGiven" />
+            </div>
+        </div>
+        <div class="col-md-12 col-xl-12 mt-4 row">
+            <div class="col-md-4 col-xl-2">
+                Points Validity
+            </div>
+            <div class="col-md-4 col-xl-4">
+                <input type="number" class="input50" id="txtPointsValidity" />
+            </div>
+        </div>
         <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
             <button id="btnGenerateLink" class="btn btn-primary pull-right" style="margin-left:10px;" type="button"><b>Generate</b></button>
             <button id="btnCancel" class="btn btn-primary pull-right" style="margin-left:10px;" type="button"><b>Cancel</b></button>
@@ -108,7 +124,7 @@
                                             }
                                             @if (!string.IsNullOrEmpty(item.DLCLink))
                                             {
-                                                <td><button id="btnDownloadQR" class="btn btn-primary" onclick="DownloadQRCode('@item.DLCName')" style="margin-left:10px;" type="button"><b>Download</b></button></td>
+                                                <td><button id="btnDownloadQR" class="btn btn-primary" onclick="DownloadQRCode('@item.DLCName','@item.DLCLink')" style="margin-left:10px;" type="button"><b>Download</b></button></td>
                                             }
                                             else
                                             {
@@ -202,7 +218,7 @@
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("CreateDLCLink", "DLCConfig")',
-                data: '{SourceName: ' + JSON.stringify($("#txtSourceName").val()) + ',StartDate: ' + JSON.stringify($("#txtStartDate").val()) + ',EndDate: ' + JSON.stringify($("#txtEndDate").val()) + ',BrandId: ' + JSON.stringify($("#ddlBrands").val()) + '}',
+                data: '{SourceName: ' + JSON.stringify($("#txtSourceName").val()) + ',StartDate: ' + JSON.stringify($("#txtStartDate").val()) + ',EndDate: ' + JSON.stringify($("#txtEndDate").val()) + ',BrandId: ' + JSON.stringify($("#ddlBrands").val()) + ',PointsGiven: ' + JSON.stringify($("#txtPointsGiven").val()) + ',PointsValidity: ' + JSON.stringify($("#txtPointsValidity").val()) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
@@ -223,11 +239,11 @@
             });
         }
     }
-    function DownloadQRCode(DlcName) {        
+    function DownloadQRCode(DlcName, DlcLink) {
         $.ajax({
             type: "POST",
             url: '@Url.Action("DownloadDLCQRCode", "DLCConfig")',
-            data: '{DLCName: ' + JSON.stringify(DlcName) + '}',
+            data: '{DLCName: ' + JSON.stringify(DlcName) + ',DLCLink: ' + JSON.stringify(DlcLink) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {

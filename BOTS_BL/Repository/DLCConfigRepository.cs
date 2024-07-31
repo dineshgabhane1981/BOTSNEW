@@ -218,6 +218,14 @@ namespace BOTS_BL.Repository
                     objData.AddedDate = DateTime.Now;
                     objData.UseCard = configData.UseCard;
                     objData.UseCardURL = configData.UseCardURL;
+
+                    objData.FacebookUrl = configData.FacebookUrl;
+                    objData.TwitterUrl = configData.TwitterUrl;
+                    objData.InstagramUrl = configData.InstagramUrl;
+                    objData.YoutubeURL = configData.YoutubeURL;
+                    objData.WhatsappUrl = configData.WhatsappUrl;
+                    objData.HeaderTheme = configData.HeaderTheme;
+
                     context.tblDLCDashboardConfig_Publish.AddOrUpdate(objData);
                     context.SaveChanges();
 
@@ -1189,7 +1197,7 @@ namespace BOTS_BL.Repository
             }
             return objDlcLink;
         }
-        public bool SaveDLCLink(string connStr, string DLcName, string DlcLink, string StartDate, string EndDate)
+        public bool SaveDLCLink(string connStr, string DLcName, string DlcLink, string StartDate, string EndDate,string PointsGiven,string PointsValidity)
         {
             bool result = false;
             using (var context = new BOTSDBContext(connStr))
@@ -1202,6 +1210,10 @@ namespace BOTS_BL.Repository
                     objData.StartDate = Convert.ToDateTime(StartDate);
                 if (!string.IsNullOrEmpty(EndDate))
                     objData.EndDate = Convert.ToDateTime(EndDate);
+                if (!string.IsNullOrEmpty(PointsGiven))
+                    objData.PointsGiven = Convert.ToInt32(PointsGiven);
+                if (!string.IsNullOrEmpty(PointsValidity))
+                    objData.PointValidityDayes = Convert.ToInt32(PointsValidity);
                 objData.CreatedDate = DateTime.Now;
                 context.tblDLCCampaignMasters.Add(objData);
                 context.SaveChanges();

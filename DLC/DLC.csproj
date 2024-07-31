@@ -268,11 +268,17 @@
     <Content Include="img\Card2.jpg" />
     <Content Include="img\Card3.png" />
     <Content Include="img\coins.png" />
+    <Content Include="img\facebook.svg" />
     <Content Include="img\Header1.png" />
     <Content Include="img\Header2.png" />
     <Content Include="img\Header3.png" />
+    <Content Include="img\Header4.png" />
+    <Content Include="img\instagram.svg" />
     <Content Include="img\notification.jpg" />
+    <Content Include="img\twitterx.svg" />
     <Content Include="img\Untitled-1.png" />
+    <Content Include="img\whatsapp.svg" />
+    <Content Include="img\youtube.svg" />
     <Content Include="js\dashboard.js" />
     <Content Include="js\gift.js" />
     <Content Include="js\login.js" />
