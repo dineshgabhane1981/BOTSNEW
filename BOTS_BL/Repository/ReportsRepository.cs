@@ -2848,8 +2848,8 @@ namespace BOTS_BL.Repository
                                 {
                                     //Add where clause for Member Acquition - Referal - All
                                     WhereClause += "EnrolledBy ='DLCReferral'";
-                                } 
-                                else if(MAFinal == "Transacting")
+                                }
+                                else if (MAFinal == "Transacting")
                                 {
                                     //Add Where clause for Member Acquition - Referal - Transacting
                                     WhereClause += "EnrolledBy ='DLCReferral' and TotalTxnCount > 0";
@@ -3249,6 +3249,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["Outlets"];
+                        var outletIdNew = (object[])item["OutletIds"];
 
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
@@ -3257,6 +3258,9 @@ namespace BOTS_BL.Repository
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                        }
+                        foreach (var item1 in outletIdNew)
+                        {
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
@@ -3277,6 +3281,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["TransactingOutlets"];
+                        var outletsNew = (object[])item["TransactingOutletIds"];
 
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
@@ -3284,6 +3289,9 @@ namespace BOTS_BL.Repository
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                        }
+                        foreach (var item1 in outletsNew)
+                        {
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
@@ -3416,7 +3424,7 @@ namespace BOTS_BL.Repository
                         //get non transacting records
                         transactingCount = context.tblSmartSlicerMasters.Where(x => x.TotalTxnCount == 0).Count();
                     }
-                    if(Criteria.Contains("Member Acquition"))
+                    if (Criteria.Contains("Member Acquition"))
                     {
                         //Get All count for Member Acquition
                         transactingCount = context.tblSmartSlicerMasters.Where(x => x.EnrolledBy == "DLCReferral" || x.EnrolledBy.Contains("Social")).Count();
@@ -3963,6 +3971,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["Outlets"];
+                        var outletIdNew = (object[])item["OutletIds"];
 
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
@@ -3971,6 +3980,9 @@ namespace BOTS_BL.Repository
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                        }
+                        foreach (var item1 in outletIdNew)
+                        {
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
@@ -3991,6 +4003,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["TransactingOutlets"];
+                        var outletsNew = (object[])item["TransactingOutletIds"];
 
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
@@ -3998,6 +4011,9 @@ namespace BOTS_BL.Repository
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                        }
+                        foreach (var item1 in outletsNew)
+                        {
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
@@ -4652,6 +4668,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["Outlets"];
+                        var outletIdNew = (object[])item["OutletIds"];
 
                         Criteria += "<br/>Outlet : ";
                         string outletIds = string.Empty;
@@ -4660,6 +4677,9 @@ namespace BOTS_BL.Repository
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                        }
+                        foreach (var item1 in outletIdNew)
+                        {
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";
@@ -4680,6 +4700,7 @@ namespace BOTS_BL.Repository
                     if (Convert.ToString(item["IsTOutlet"]) == "Yes")
                     {
                         var outlets = (object[])item["TransactingOutlets"];
+                        var outletsNew = (object[])item["TransactingOutletIds"];
 
                         Criteria += "<br/>Transacting Outlet : ";
                         string outletIds = string.Empty;
@@ -4687,6 +4708,9 @@ namespace BOTS_BL.Repository
                         foreach (var item1 in outlets)
                         {
                             Criteria += ", " + Convert.ToString(Convert.ToString(item1));
+                        }
+                        foreach (var item1 in outletsNew)
+                        {
                             if (Convert.ToString(item1) == "0")
                             {
                                 outletAll = "All";

@@ -603,8 +603,8 @@ namespace WebApp.Controllers
                     if (!string.IsNullOrEmpty(Convert.ToString(dr["LastTxnDate"])))
                     {
                         //dr["TxnDatetime"] = Convert.ToDateTime(dr["TxnDatetime"]).ToString("MM/dd/yyyy");
-                        dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                        //dr["LastTxnDate"] = DateTime.ParseExact(Convert.ToString(dr["LastTxnDate"]), "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        //.ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
                     }
                 }
                 if (userDetails.LoginType == "1" || userDetails.LoginType == "6" || userDetails.LoginType == "7")

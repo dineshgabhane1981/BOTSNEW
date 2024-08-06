@@ -77,10 +77,10 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                         status = true;
 
-                        var DatabaseDetail = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                        if (DatabaseDetail != null)
+                        var DatabaseDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).ToList();
+                        foreach (var Details in DatabaseDetails)
                         {
-                            DatabaseDetail.IsActive = false;
+                            Details.IsActive = false;
                         }
                         context.SaveChanges();
                         status = true;
@@ -110,11 +110,12 @@ namespace BOTS_BL.Repository
                         status = true;
 
                         var GroupName = context.tblGroupDetails.Where(x => x.GroupId == varid).Select(x => x.GroupName).FirstOrDefault();
+                        var DBName = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(x => x.DBName).FirstOrDefault();
                         var deactivatedGroup = new tblDeactivatedGroupList
                         {
                             GroupId = GroupId,
                             GroupName = GroupName,
-                            DBName = GroupName,
+                            DBName = DBName,
                             DeactivationDate = DateTime.Now
                         };
                         context.tblDeactivatedGroupLists.Add(deactivatedGroup);
