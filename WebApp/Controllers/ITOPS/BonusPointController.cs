@@ -446,7 +446,7 @@ namespace WebApp.Controllers.ITOPS
                 objAudit.AddedDate = DateTime.Now;
                 bool IsSMS = false;
                 var dateCancel = Convert.ToDateTime(ip_Date);
-                dateCancel =  DateTime.ParseExact(ip_Date, "dd/MM/yyyy", null);
+                
 
                 result = NewITOPS.DeleteTransaction(GroupId, InvoiceNo, MobileNo, InvoiceAmt, dateCancel, objAudit);
                 if (result.ResponseCode == "00")

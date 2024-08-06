@@ -950,7 +950,7 @@ namespace BOTS_BL.Repository
                 using (var contextNew = new BOTSDBContext(connStr))
 
                 {
-                    lstObjTxn = contextNew.Database.SqlQuery<ITOPSCustTxnData>("select InvoiceNo,InvoiceAmt,MobileNo,PointsEarned,TxnDatetime,OutletName,TxnType,SlNo from View_ITOPSCustTxnData where MobileNo = @MobileNo", new SqlParameter("@MobileNo", MobileNo)).ToList<ITOPSCustTxnData>();
+                    lstObjTxn = contextNew.Database.SqlQuery<ITOPSCustTxnData>("select InvoiceNo,InvoiceAmt,MobileNo,PointsEarned,TxnDatetime,OutletName,TxnType,SlNo from View_ITOPSCustTxnData where MobileNo = @MobileNo order by SlNo asc", new SqlParameter("@MobileNo", MobileNo)).ToList<ITOPSCustTxnData>();
 
                     if (lstObjTxn != null)
                     {
