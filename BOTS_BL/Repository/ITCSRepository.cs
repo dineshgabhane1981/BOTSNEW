@@ -81,9 +81,9 @@ namespace BOTS_BL.Repository
                         foreach (var Details in DatabaseDetails)
                         {
                             Details.IsActive = false;
-                        }
-                        context.SaveChanges();
-                        status = true;
+                            context.SaveChanges();
+                            status = true;
+                        }   
 
                         var DailyActivityGroup = context.DailyActivityAllGroups.Where(x => x.GroupId == GroupId).FirstOrDefault();
                         if (DailyActivityGroup != null)
