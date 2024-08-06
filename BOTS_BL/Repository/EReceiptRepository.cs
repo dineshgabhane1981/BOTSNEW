@@ -36,7 +36,7 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connStr))
                 {
                     receipt.objConfig = context.tblEReceiptConfigs.FirstOrDefault();
-                                        
+
                     objData = context.tblTempTxnJSONs.Where(x => x.InvoiceNo == invoiceNo).FirstOrDefault();
                     if (objData != null)
                     {
@@ -78,7 +78,7 @@ namespace BOTS_BL.Repository
                                 var first = objCustomer.mobile.Substring(0, 1);
                                 var last = objCustomer.mobile.Substring(7, 3);
                                 objCustomer.HashedMobile = first + "XXXXXX" + last;
-                                objCustomer.MName= Convert.ToString(itemCustomer["mobile"]);
+                                objCustomer.MName = Convert.ToString(itemCustomer["mobile"]);
                                 receipt.objCustomer = objCustomer;
 
                                 var outletId = receipt.CounterId.Substring(0, 8);
@@ -155,12 +155,12 @@ namespace BOTS_BL.Repository
                             decimal? TotalTaxValue = 0;
                             decimal? TotalMRPValue = 0;
                             int TotalQty = 0;
-                            
+                            int count = 0;
                             foreach (var itemPOSBillItems in (object[])objectPOSBillItems[0])
                             {
-                                int count = 0;
+                                
                                 if (itemPOSBillItems.GetType().ToString() == "System.Object[]")
-                                {                                    
+                                {
                                     foreach (Dictionary<string, object> billItems in (object[])itemPOSBillItems)
                                     {
                                         POSBillItems objItem = new POSBillItems();
@@ -254,10 +254,11 @@ namespace BOTS_BL.Repository
                                 }
                                 else
                                 {
-                                    foreach (Dictionary<string, object> billItems in (object[])objectPOSBillItems[0])
+                                    if (count == 0)
                                     {
-                                        if (count == 0)
+                                        foreach (Dictionary<string, object> billItems in (object[])objectPOSBillItems[0])
                                         {
+
                                             POSBillItems objItem = new POSBillItems();
                                             objItem.Article = Convert.ToString(billItems["Article"]);
                                             objItem.BarCode = Convert.ToString(billItems["BarCode"]);
@@ -340,10 +341,11 @@ namespace BOTS_BL.Repository
                                             TotalMRPValue += Convert.ToDecimal(objItem.MRPAmt);
                                             lstItems.Add(objItem);
                                         }
-                                        count++;
+                                       
                                     }
+                                    count++;
                                     receipt.lstPOSBillItems = lstItems;
-                                    receipt.ItemCount = TotalQty;                                    
+                                    receipt.ItemCount = TotalQty;
                                     receipt.TotalMRPValue = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(TotalMRPValue));
                                     receipt.TotalTaxableValue = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(TotalTaxableValue));
                                     receipt.TotalTaxValue = String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(TotalTaxValue));
