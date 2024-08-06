@@ -411,6 +411,7 @@ namespace WebApp.Controllers.ITOPS
                 {
                     objData.objCancelTxnModel = NewITOPS.GetTransactionByInvoiceNo(GroupId, InvoiceNo);
                     objData.objMemberData = NewITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
+                    
                     //objData.objCustomerDetail = NewITOPS.GetCustomerByMobileNo(GroupId, objData.objCancelTxnModel.MobileNo);
 
                 }
@@ -444,8 +445,9 @@ namespace WebApp.Controllers.ITOPS
                 objAudit.AddedBy = userDetails.LoginId;
                 objAudit.AddedDate = DateTime.Now;
                 bool IsSMS = false;
-                //var dateCancel = Convert.ToDateTime(ip_Date);
-                var dateCancel =  DateTime.ParseExact(ip_Date, "dd/MM/yyyy", null);
+                var dateCancel = Convert.ToDateTime(ip_Date);
+                dateCancel =  DateTime.ParseExact(ip_Date, "dd/MM/yyyy", null);
+
                 result = NewITOPS.DeleteTransaction(GroupId, InvoiceNo, MobileNo, InvoiceAmt, dateCancel, objAudit);
                 if (result.ResponseCode == "00")
                 {
