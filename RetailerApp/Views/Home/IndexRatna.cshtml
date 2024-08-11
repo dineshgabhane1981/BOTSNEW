@@ -1,0 +1,1547 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<style>
+    h2 {
+        color: #000;
+        text-align: center;
+        font-size: 2em;
+    }
+
+    .warpper {
+        display: grid;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab {
+        cursor: pointer;
+        padding: 10px 20px;
+        margin: 0px 2px;
+        background-color: #2f4353 !important;
+        display: inline-block;
+        color: #fff;
+        border-radius: 3px 3px 0px 0px;
+        box-shadow: 0 0.5rem 0.8rem #00000080;
+    }
+
+    .tabs {
+        padding-left: 25px;
+    }
+
+    .panels {
+        background: #ffffff;
+        box-shadow: 0 2rem 2rem #00000080;
+        width: 100%;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .panel {
+        display: none;
+        animation: fadein .8s;
+    }
+
+    .panel-title {
+        font-size: 1.5em;
+        font-weight: bold
+    }
+
+    .radio {
+        display: none;
+    }
+
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 5 !important; /* Sit on top */
+        padding-top: 200px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        border-radius: 25px;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    input:read-only {
+        background-color: lightgray;
+    }
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+<div class="app-main__inner">
+    <div class="row" style="margin-top : 20px; padding-bottom : 20px" id="divSearchHeading">
+        <input id="UserName" value=@ViewBag.UserName hidden />
+    </div>
+    <div class="col-md-12 col-sm-12 card" style="padding: 10px; margin: 5px; margin-right: 20px !important;  border-radius: 10px;" id="divSearch">
+        <div class="col-sm-4">
+            <h6><b>Search Customer</b></h6>
+        </div>
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                Enter Mobile No
+            </div>
+            @*@if (ViewBag.UserName == "RetailWebDemo1")
+                {
+                    <div class="col-md-3 col-sm-3">
+                        <input id="txtMobileNo" type="text" maxlength="9" class="input50" />
+                    </div>
+                }
+                else
+                {*@
+            <div class="col-md-3 col-sm-3">
+                <input id="txtMobileNo" type="text" onkeypress="phoneno()" maxlength="10" class="input50" />
+            </div>
+            @*}*@
+
+            <div class="col-md-2 col-sm-2">
+                <button type="button" id="btnSearchCustomer" class="btn btn-primary" onclick="ValidateMobileno();" style="margin-top:10px;">Search</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="dvCustDetailsHeading">
+
+    </div>
+    
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px;padding-bottom:20px; display:none;" id="dvCustomerDetails">
+        <div class="col-sm-4">
+            <h6><b>Customer Details</b></h6>
+        </div>
+
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Mobile No : <span id="spnMobileNo" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Customer Name : <span id="spnCustName" style="font-weight:bold;"></span></div>
+
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Total Spend : <span id="spnTotalSpend" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Last Txn Date : <span id="spnLastTxnDate" style="font-weight:bold;"></span></div>
+
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Loyalty Card No : <span id="spnCardNo" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Available Points : <span id="spnPointsBalance" style="font-weight:bold;"></span></div>
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;">Tier : <span id="spnTier" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Membership Points : <span id="spnPointsMembership" style="font-weight:bold;"></span></div>
+        </div>
+        <div class="col-md-12 col-sm-12 row">
+            <div class="col-md-4 col-sm-4" style="margin-top: 10px;">Base Points : <span id="spnBasePointsBalance" style="font-weight:bold;"></span></div>
+            <div class="col-md-4 col-sm-4" style="margin-top:10px;"></div>
+        </div>
+
+    </div>
+    <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="divSearchHeading">
+
+    </div>
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvEnrollment">
+        <div class="col-sm-4">
+            <h6><b>Enroll Detail</b></h6>
+        </div>
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-12 col-sm-12 row" id="dvEnrollMobileNo">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Mobile No
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtMobileNoNew" type="number" class="input50" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px; padding-bottom: 20px; display: none;" id="dvInvoiceHeading">
+
+    </div>
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoice">
+        <div class="col-sm-4">
+            <h6> <b>Invoice Details</b></h6>
+        </div>
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Invoice No
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtInvoiceNo" type="text" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Invoice Amt
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtInvoiceAmt" type="number" min="1" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row" id="CusNewContain" hidden>
+
+            </div>
+            <input id="txtOTPval" type="number" min="1" class="input50" hidden />
+            <input id="txtBurnAmt" type="number" min="1" class="input50" hidden />
+            @*<object id="hiddResponse" hidden />*@
+            <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
+                <div class="col-md-2 col-sm-2" style="margin-left: 8px;">
+                    <button type="button" id="btnSubmit" class="btn btn-primary" style="margin-top:10px;">Submit</button>
+                </div>
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnReset" class="btn btn-primary" style="margin-top:10px;">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="OTPModal" class="modal" tabindex="-1" role="dialog" style="display:none;">
+
+        <div class="modal-content">
+            @*<div class="modal-header" style="margin-left:230px">
+                    <h5 class="modal-title">OTP</h5>
+                </div>*@
+            <div class="modal-body" style="text-align:center;">
+                @*<p>Enter OTP</p>*@
+                <input id="txtOTP" type="text" class="input50" placeholder="Enter OTP" />
+                <span id="poptext" style="font-weight:bold;"></span>
+            </div>
+            <div class="modal-footer" style="text-align: center; margin-top: 20px">
+                <button type="button" class="btn btn-primary" id="BurnCompletion">Redeem</button>
+                <button type="button" class="btn btn-primary" id="resendOTP">Resend OTP</button>
+                <button type="button" class="btn btn-secondary" id="ModelClose" @*data-dismiss="modal"*@>Close</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="mb-3 card col-md-12 col-sm-12" style="padding-top:20px; display:none;" id="dvInvoiceCustExist">
+        <div class="col-sm-4">
+            <h6><b>Invoice Details</b></h6>
+        </div>
+        <div class="content col-md-12 col-sm-12 row mb-3">
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Invoice No
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtInvoiceNoOld" type="text" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Invoice Amt
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtInvoiceAmOldt" type="number" min="1" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row" id="TestRow" hidden>
+                @*<div class="col-md-12 col-sm-12 row" style="margin-top:10px;">*@
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;" id="TestField">
+                    Test Field
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;" id="dynCustExistdiv4">
+                    <input type="text" class="input50" />
+                </div>
+                @*</div>*@
+            </div>
+            <div class="col-md-12 col-sm-12 row" id="CusExistContain" style="display: none;">
+
+            </div>
+            <div class="col-md-12 col-sm-12 row" id="BurnPoints" style="display: none;">
+                <div class="col-md-2 col-sm-2" style="margin-top:10px;">
+                    Amt To Redeem
+                </div>
+                <div class="col-md-4 col-sm-4" style="margin-top:10px;">
+                    <input id="txtBurnpoints" type="number" min="1" class="input50" />
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 row" style="margin-top: 10px;">
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnPaybyCash" class="btn btn-primary" style="margin-top:10px;">PaybyCash</button>
+                </div>
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnPaybyPoints" class="btn btn-success" style="margin-top:10px;">Points(Redeem)</button>
+                </div>
+                <div class="col-md-2 col-sm-2" style="margin-left: 10px;">
+                    <button type="button" id="btnResetOld" class="btn btn-primary" style="margin-top:10px;">Go Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var object,c,D;
+    $(document).ready(function () {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        $("#txtDOB").datepicker({
+            dateFormat: "yy-mm-dd",
+            yearRange: '1950:' + today+'',
+            changeYear: true,
+            //minDate: new Date(1900, 1 - 1, 1),
+            maxDate: '1Y',
+        });
+
+        $("#txtADate").datepicker({
+            dateFormat: "yy-mm-dd",
+            yearRange: '1950:' + today + '',
+            changeYear: true,
+            //minDate: new Date(1900, 1 - 1, 1),
+            maxDate: '1Y',
+        });
+    });
+
+    function phoneno() {
+        $('#txtMobileNo').keypress(function (e) {
+            var a = [];
+            var k = e.which;
+
+            for (i = 48; i < 58; i++)
+                a.push(i);
+
+            if (!(a.indexOf(k) >= 0))
+                e.preventDefault();
+        });
+    }
+    function ValidateMobileno() {
+        var Temp = $("#txtMobileNo").val();
+        const firstDigitStr = String(Temp)[0];
+
+        if ($("#UserName").val() == "RetailWebDemo1") {
+            if ($("#txtMobileNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile number to search",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                SearchCustomer();
+            }
+        }
+        else {
+            if ($("#txtMobileNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile number to search",
+                    buttonText: "Okay"
+                })
+            }
+            else if ((Temp.length) < 10) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile number with 10 digits",
+                    buttonText: "Okay"
+                })
+            }
+            else if (firstDigitStr < 5) {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile number starting greater than 5",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                SearchCustomer();
+            }
+        }
+
+    }
+    function SearchCustomer() {
+        if ($("#txtMobileNo").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Mobile number to search",
+                buttonText: "Okay"
+            }).then(() => {
+                $("#txtMobileNo").focus();
+            })
+        }
+        else {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetCustomerDetailsRatna", "Home")',
+                data: '{MobileNo: ' + JSON.stringify($("#txtMobileNo").val()) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+
+                    if (response.objCDetails.ResponseCode == "00") {
+
+                        if (response.objCDetails.Tier == "Membership") {
+                            cuteAlert({
+                                type: "question",
+                                title: "Are you sure?",
+                                message: "This number is a Membership customer, do you want him in Base transactions",
+                                confirmText: "Okay",
+                                cancelText: "Cancel"
+                            }).then((e) => {
+                                if (e == ("confirm")) {
+                                    RenderSearchPageExistingMember(response);
+                                }
+                            });
+                        }
+                        else {
+                            RenderSearchPageExistingMember(response);
+                        }
+                    }
+                    if (response.objCDetails.ResponseCode == "06") {
+                        cuteAlert({
+                            type: "question",
+                            title: "Are you sure?",
+                            message: "This number is not available, Do you want to enroll this customer",
+                            confirmText: "Okay",
+                            cancelText: "Cancel"
+                        }).then((e) => {
+                            if (e == ("confirm")) {
+                                RenderSearchPageNewMember();
+                            }
+                        })
+                    }
+                    $("#divLoader").hide();
+                },
+                failure: function (response) {
+                    $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.responseText);
+                    $("#divLoader").hide();
+                }
+            });
+        }
+    }
+
+    $("#btnSubmit").click(function () {
+
+        if (c != 1000) {
+            var ResltInvoiceSelect = ValidateMandatorySelect();
+            var ResltInvoiceText = ValidateMandatoryText();
+            var ResltInvoiceDate = ValidateMandatoryDate();
+        }
+
+
+        if (D != 1000) {
+            var ResltEnrollSelect = ValidateMandEnrollSelect();
+            var ResltEnrollText = ValidateMandEnrollText();
+            var ResltEnrollDate = ValidateMandEnrollDate();
+        }
+
+
+            if ($("#txtInvoiceNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Invoice number",
+                    buttonText: "Okay"
+                })
+            }
+            else if ($("#txtInvoiceAmt").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Invoice Amount",
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true) && (c != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceSelect,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true) && (c != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceText,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true) && (c != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceDate,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltEnrollSelect != "0") && (ResltEnrollSelect != true) && (D != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltEnrollSelect,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltEnrollText != "0") && (ResltEnrollText != true) && (D != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltEnrollText,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltEnrollDate != "0") && (ResltEnrollDate != true) && (D != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltEnrollDate,
+                    buttonText: "Okay"
+                })
+            }
+            else if ($("#txtMobileNo").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Mobile Number",
+                    buttonText: "Okay"
+                })
+            }
+            else {
+               SaveEarn();
+            }
+        });
+
+    $("#btnReset").click(function () {
+        var urlLink = "@Url.Action("IndexRatna", "Home")";
+        window.location.href = urlLink;
+    });
+
+    $("#btnResetOld").click(function () {
+        var urlLink = "@Url.Action("IndexRatna", "Home")";
+        window.location.href = urlLink;
+    });
+
+    function SaveEarn() {
+
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        var DynamicData = [];
+        var DynamicCustData = [], Result1 = [], Result = [];
+
+        if (D != 1000) {
+            DynamicCustData = EnrolDynCustData();
+            Result1 = ConcatData(DynamicCustData);
+        }
+
+        if (c != 1000) {
+            DynamicData = InvoiceDynData();
+            Result = ConcatData(DynamicData);
+        }
+
+
+            var FilterData = [];
+            item = {};
+            item["MobileNo"] = $("#txtMobileNo").val();
+            item["InvoiceNo"] = $("#txtInvoiceNo").val();
+            item["InvoiceAmt"] = $("#txtInvoiceAmt").val();
+            item["DynamicCustData"] = Result1;
+            item["DynamicData"] = Result;
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("EarntxnDetails", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Invoice Saved Successfully",
+                            message: " Poits Earned : " + response.PointsEarned + " Avail Points : " + response.AvailablePoints,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            var urlLink = "@Url.Action("IndexRatna", "Home")";
+                            window.location.href = urlLink;
+                        })
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    $("#btnPaybyCash").click(function () {
+
+
+        if (c != 1000) {
+            var ResltInvoiceSelect = ValidateMandatorySelect();
+            var ResltInvoiceText = ValidateMandatoryText();
+            var ResltInvoiceDate = ValidateMandatoryDate();
+        }
+
+        if ($("#txtInvoiceAmOldt").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Invoice Amount",
+                buttonText: "Okay"
+            })
+        }
+        else if ($("#txtMobileNo").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter Mobile Number",
+                buttonText: "Okay"
+            })
+        }
+        else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true) && c != 1000) {
+
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Enter Mandetary Field " + ResltInvoiceSelect,
+                buttonText: "Okay"
+            })
+        }
+        else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true) && c != 1000) {
+
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Enter Mandetary Field " + ResltInvoiceText,
+                buttonText: "Okay"
+            })
+        }
+        else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true) && c != 1000) {
+
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Enter Mandetary Field " + ResltInvoiceDate,
+                buttonText: "Okay"
+            })
+        }
+        else {
+            SaveEarnOld();
+        }
+    });
+
+    function SaveEarnOld() {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        var FilterData = [];
+        var Dynamicname = [];
+        var DynamicResult = [];
+        var DynamicData = [], Result = [];
+        console.log(object);
+
+        var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
+
+        if (c != 1000) {
+            DynamicData = InvoiceDynData();
+            //console.log(DynamicData);
+            Result = ConcatData(DynamicData);
+        }
+
+
+
+        var Temp = [];
+            item = {};
+            item["MobileNo"] = $("#txtMobileNo").val();
+            item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
+            item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
+            item["DynamicData"] = Result;
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("EarntxnDetailsOld", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Invoice Saved Successfully",
+                            message: " Poits Earned : " + response.PointsEarned + " Avail Points : " + response.AvailablePoints,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            //SearchCustomer();
+                            //$("#txtInvoiceNoOld").val("");
+                            //$("#txtInvoiceAmOldt").val("");
+                            var urlLink = "@Url.Action("IndexRatna", "Home")";
+                            window.location.href = urlLink;
+                        })
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    $("#btnPaybyPoints").click(function () {
+
+
+        console.log(object);
+
+        var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
+
+        if (c != 1000) {
+            var ResltInvoiceSelect = ValidateMandatorySelect();
+            var ResltInvoiceText = ValidateMandatoryText();
+            var ResltInvoiceDate = ValidateMandatoryDate();
+        }
+
+
+        if ($('#BurnPoints').is(":visible")) {
+            
+            if ($("#txtInvoiceAmOldt").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Invoice Amount",
+                    buttonText: "Okay"
+                })
+            }
+            else if ($("#txtBurnpoints").val() == "") {
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Please enter Points as amount to redeem",
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceSelect != "0") && (ResltInvoiceSelect != true) && (c != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceSelect,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceText != "0") && (ResltInvoiceText != true) && (c != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceText,
+                    buttonText: "Okay"
+                })
+            }
+            else if ((ResltInvoiceDate != "0") && (ResltInvoiceDate != true) && (c != 1000)) {
+
+                cuteAlert({
+                    type: "error",
+                    title: "OOPS...",
+                    message: "Enter Mandetary Field " + ResltInvoiceDate,
+                    buttonText: "Okay"
+                })
+            }
+            else {
+                SendBurnValidation();
+            }
+        }
+        else {
+            $("#BurnPoints").show();
+            $("#btnPaybyCash").hide();
+
+        }
+    });
+
+    function SaveBurnOld() {
+
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        var FilterData = [];
+        var Dynamicname = [];
+        var DynamicResult = [];
+        var DynamicData = [], Result =[];
+            item = {};
+            item["MobileNo"] = $("#txtMobileNo").val();
+            item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
+            item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
+            item["PointsBurn"] = $("#txtBurnpoints").val();
+
+        /*alert("Inside SaveBurnOld");*/
+        console.log(object);
+
+        var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
+
+        if (c != 1000) {
+            DynamicData = InvoiceDynData();
+            var Result = ConcatData(DynamicData);
+        }
+
+        //alert(Result);
+        item["DynamicData"] = Result;
+        //alert(DynamicData);
+
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SaveBurnOld", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+                        cuteAlert({
+                            type: "success",
+                            title: "Invoice Saved Successfully",
+                            message: " Poits Earned : " + response.PointsEarned + " Avail Points : " + response.AvailablePoints + " Points Redeemed : "+response.PointsRedeemed,
+                            buttonText: "Okay"
+                        }).then(() => {
+                            //SearchCustomer();
+                            //$("#txtOTP").val("");
+                            //$("#OTPModal").hide();
+                            //$("#txtInvoiceNoOld").val("");
+                            //$("#txtInvoiceAmOldt").val("");
+                            //$("#txtBurnpoints").val("");
+                            //$("#BurnPoints").hide();
+                            var urlLink = "@Url.Action("IndexRatna", "Home")";
+                            window.location.href = urlLink;
+                        })
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                        $("#txtOTP").val("");
+                        $("#OTPModal").hide();
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    function SendBurnValidation() {
+        var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+
+        var FilterData = [];
+        var DynamicData = [],Result=[];
+        item = {};
+        item["MobileNo"] = $("#txtMobileNo").val();
+        item["InvoiceNo"] = $("#txtInvoiceNoOld").val();
+        item["InvoiceAmt"] = $("#txtInvoiceAmOldt").val();
+        item["PointsBurn"] = $("#txtBurnpoints").val();
+
+        var C = Object.keys(object.objJsonData.JsonList1).length;// count of values in JsonList1
+
+        if (c != 1000) {
+            DynamicData = InvoiceDynData();
+            var Result = ConcatData(DynamicData);
+        }
+
+        //alert(Result);
+        item["DynamicData"] = Result;
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("SendBurnValidation", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+
+                        var T = response.OTPValue;
+
+                        $("#txtOTPval").val(T);
+                        $("#OTPModal").show();
+
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    }
+
+    $("#ModelClose").click(function () {
+        $("#OTPModal").hide();
+    });
+
+    $("#resendOTP").click(function () {
+        var FilterData = [];
+        item = {};
+        item["MobileNo"] = $("#txtMobileNo").val();
+
+        FilterData.push(item);
+        var data = JSON.stringify(FilterData);
+
+        $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("ResendOTP", "Home")',
+                 data: '{jsonData: ' + JSON.stringify(data) + '}',
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.ResponseCode == "00") {
+
+                        var T = response.OTPValue;
+
+                        $("#txtOTPval").val(T);
+                        //$("#OTPModal").show();
+
+                     }
+                     else {
+                         cuteAlert({
+                             type: "error",
+                             title: "Response Code" + response.ResponseCode,
+                             message: response.ResponseMessage,
+                             buttonText: "Okay"
+                         })
+                     }
+                     $("#divLoader").hide();
+                },
+                failure: function (response) {
+                      $("#divLoader").hide();
+                },
+                error: function (response) {
+                    $("#dvRenewalData").html(response.ResponseMessage);
+                    $("#divLoader").hide();
+                }
+            });
+    });
+
+    $("#BurnCompletion").click(function () {
+        var OTPval = $("#txtOTP").val();
+
+        if ($("#txtOTP").val() == "") {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Please enter OTP value",
+                buttonText: "Okay"
+            })
+        }
+        else if ($("#txtOTPval").val() != OTPval) {
+            cuteAlert({
+                type: "error",
+                title: "OOPS...",
+                message: "Invalid OTP",
+                buttonText: "Okay"
+            })
+        }
+        else {
+
+             SaveBurnOld();
+        }
+    });
+
+    function RenderSearchPageExistingMember(response) {
+
+        $("#divSearchHeading").hide();
+        $("#divSearch").hide();
+        $("#spnMobileNo").text(response.objCDetails.MobileNo);
+        $("#spnCustName").text(response.objCDetails.CustomerName);
+        $("#spnCardNo").text(response.objCDetails.CardNo);
+        $("#spnPointsBalance").text(response.objCDetails.PointBalance);
+        $("#spnTotalSpend").text(response.objCDetails.TotalSpend);
+        $("#spnLastTxnDate").text(response.objCDetails.LastTxnDate);
+        $("#spnTier").text(response.objCDetails.Tier);
+        $("#spnPointsMembership").text(response.objCDetails.PointMembership);
+        $("#spnBasePointsBalance").text(response.objCDetails.PointBase);
+
+        $("#CusExistContain").hide();
+        //$("#hiddResponse").val(response.objJsonData.JsonList1);
+        object = response;
+        c = Object.keys(response.objJsonData.JsonList1).length;// count of values in JsonList1
+        //alert(c);
+        if (c != 1000) {
+            if (($("#CusExistContain").is(":visible")) == false) {
+                $("#CusExistContain").show();
+                var count, D1, items, dropdownval;
+                D1 = '';
+                var ControlId = "";
+                for (j = 0; j < c; j++) {
+                    dropdownval = 0;
+                    count = j + 1;
+                    var k = j - 1;
+                    var Iddivrow = [];
+                    Iddivrow[j] = "ddlCustom" + j;
+                    var IdExistName = [];
+                    IdExistName[j] = "dynCustExistName" + j;
+                    var IdExistdiv2 = [];
+                    IdExistdiv2[j] = "dynCustExistdiv2" + j;
+
+                    var innerCount = Object.keys(response.objJsonData.JsonList1[j]).length;
+                    if (innerCount > 1) {
+                        //Dropdown
+                        var Dynamicname, MandField;
+                        var ctrlId = "ddlCustomCtrl" + j;
+                        var items = "";
+                        var newCtrl = '<select id="' + ctrlId + '"></select>';
+                        $.each(response.objJsonData.JsonList1[j], function (i, item) {
+
+                            Dynamicname = item.FieldName
+                            MandField = item.FieldTypeId
+                            items += "<option value='" + dropdownval + "'>" + item.FieldValue + "</option>";
+                            dropdownval++;
+                        });
+                        /*                                    alert(items);*/
+                        if (j == 0) {
+                            //alert("Above div");
+
+                            $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#TestRow");
+                            ControlId = Iddivrow[j];
+                            if (MandField == '1') {
+                                $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                            }
+                            else {
+                                $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                            }
+                            $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                            $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                            $("#" + IdExistdiv2[j]).append(newCtrl);
+                            $("#" + ctrlId).attr("class", "input50");
+                            $("#" + ctrlId).attr("style", "margin-top:10px");
+                            $("#" + ctrlId).html(items);
+                        }
+                        else {
+                            $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + ControlId);
+                            ControlId = Iddivrow[j];
+                            if (MandField == '1') {
+                                $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                            }
+                            else {
+                                $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                            }
+                            $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                            $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                            $("#" + IdExistdiv2[j]).append(newCtrl);
+                            $("#" + ctrlId).attr("class", "input50");
+                            $("#" + ctrlId).attr("style", "margin-top:10px");
+                            $("#" + ctrlId).html(items);
+                        }
+                    }
+                    else {
+                        //Textbox or date
+                        $.each(response.objJsonData.JsonList1[j], function (i, item) {
+                            var Dynamicname;
+                            Dynamicname = item.FieldName
+                            MandField = item.FieldTypeId;
+
+                            if (item.FieldOptionId == "1") {
+                                var ctrlId1 = "txtCustome" + j;
+                                //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
+                                if (j == 0) {
+                                    $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#TestRow");
+                                    ControlId = Iddivrow[j];
+                                    if (MandField == "1") {
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                                    }
+                                    else {
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                    }
+                                    $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                    $("#" + IdExistdiv2[j]).append('<input id="' + ctrlId1 + '" /*type=\"number\"*/  class=\"input50\" />');
+                                    $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                                }
+                                else {
+                                    $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + ControlId);
+                                    ControlId = Iddivrow[j];
+                                    if (MandField == "1") {
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                                    }
+                                    else {
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                    }
+                                    $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                    $("#" + IdExistdiv2[j]).append('<input id="' + ctrlId1 + '" /*type=\"number\"*/  class=\"input50\" />');
+                                    $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                                }
+                            }
+                            else if (item.FieldOptionId == "2") {
+                                var ctrlId2 = "txtDate" + j;
+                                var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
+
+                                if (j == 0) {
+                                    $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#TestRow")
+                                    ControlId = Iddivrow[j];
+                                    if (MandField == "1") {
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                                    }
+                                    else {
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                    }
+                                    $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                    $("#" + IdExistdiv2[j]).append(txtDate);
+                                    $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                                }
+                                else {
+                                    $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + ControlId);
+                                    ControlId = Iddivrow[j];
+                                    if (MandField == "1") {
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                                    }
+                                    else {
+                                        $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                    }
+
+                                    $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                    $("#" + IdExistdiv2[j]).append(txtDate);
+                                    $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                                }
+                            }
+                        });
+                    }
+                    count++;
+                }
+            }
+        }
+
+
+        $("#dvCustomerDetails").show();
+        $("#dvCustDetailsHeading").show();
+        $("#dvInvoiceHeading").show();
+        $("#dvInvoiceCustExist").show();
+        $("#dynCustExistdiv1").show();
+        $("#dvEnrollment").hide();
+        $("#dvInvoice").hide();
+        $("#btnPaybyCash").show();
+    }
+
+    function RenderSearchPageNewMember() {
+        $("#divSearchHeading").hide();
+        $("#divSearch").hide();
+        $("#txtMobileNoNew").val($("#txtMobileNo").val());
+        $("#txtMobileNoNew").attr("disabled", "disabled");
+        $("#dvCustomerDetails").hide();
+        //$("#dvEnrollment").show();
+
+        object = response;
+        c = Object.keys(response.objJsonData.JsonList1).length;
+        D = Object.keys(response.objJsonCustData.JsonListCust).length;
+
+        //alert(c)
+        //alert(D)
+
+
+
+        if (($("#dvEnrollment").is(":visible")) == false) {
+            $("#dvEnrollment").show();
+
+            if (D != 1000) {
+                //Dynamic Data for Enrollment
+                var count2, E1, items;
+                E1 = '';
+                for (k = 0; k < D; k++) {
+                    dropdownval = 0;
+                    var IddivEnrollrow = [];
+                    IddivEnrollrow[k] = "ddlCustomEnroll" + k;
+                    var IdEnrollName = [];
+                    IdEnrollName[k] = "dynCustEnrollName" + k;
+                    var IdEnrolldiv = [];
+                    IdEnrolldiv[k] = "dynCustEnrollElement" + k;
+
+                    var innerCount1 = Object.keys(response.objJsonCustData.JsonListCust[k]).length;
+
+                    if (innerCount1 > 1) {
+                        //Dropdown
+                        var DynamicnameEnroll;
+                        var MandField;
+                        var ctrlId = "ddlCustomCtrlEnroll" + k;
+                        var items = "";
+                        var newCtrl = '<select id="' + ctrlId + '"></select>';
+                        $.each(response.objJsonCustData.JsonListCust[k], function (i, item) {
+                            DynamicnameEnroll = item.FieldName;
+                            MandField = item.FieldTypeId;
+                            items += "<option value='" + dropdownval + "'>" + item.FieldValue + "</option>";
+                            dropdownval++;
+                        });
+
+                        if (k == 0) {
+                            $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
+                            ControlId2 = IddivEnrollrow[k];
+                            if (MandField == '1') {
+                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                            }
+                            else {
+                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                            }
+                            $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                            $("#" + IdEnrolldiv[k]).append(newCtrl);
+                            $("#" + ctrlId).attr("class", "input50");
+                            $("#" + ctrlId).attr("style", "margin-top:10px");
+                            $("#" + ctrlId).html(items);
+                        }
+                        else {
+                            $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
+                            ControlId2 = IddivEnrollrow[k];
+                            if (MandField == '1') {
+                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                            }
+                            else {
+                                $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                            }
+                            $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                            $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                            $("#" + IdEnrolldiv[k]).append(newCtrl);
+                            $("#" + ctrlId).attr("class", "input50");
+                            $("#" + ctrlId).attr("style", "margin-top:10px");
+                            $("#" + ctrlId).html(items);
+                        }
+                    }
+                    else {
+                        //Textbox or date
+                        $.each(response.objJsonCustData.JsonListCust[k], function (i, item) {
+                            var DynamicnameEnroll, MandField;
+                            DynamicnameEnroll = item.FieldName
+                            MandField = item.FieldTypeId;
+                            if (item.FieldOptionId == "1") {
+                                if (k == 0) {
+                                    var ctrlId1 = "txtCustomeEnroll" + k;
+
+                                    //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
+                                    $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
+                                    ControlId2 = IddivEnrollrow[k];
+
+                                    if (MandField == '1') {
+                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                    }
+                                    else {
+                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                    }
+                                    $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                    $("#" + IdEnrolldiv[k]).append('<input id="' + ctrlId1 + '" class=\"input50\" />');
+                                    $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
+                                }
+                                else {
+                                    var ctrlId1 = "txtCustomeEnroll" + k;
+
+                                    //var txtCtrl = "<input id=" + ctrlId1 + " type=\"text\"  class=\"input50\" />";
+                                    $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
+                                    ControlId2 = IddivEnrollrow[k];
+                                    if (MandField == '1') {
+                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                    }
+                                    else {
+                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                    }
+                                    $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                    $("#" + IdEnrolldiv[k]).append('<input id="' + ctrlId1 + '" class=\"input50\" />');
+                                    $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
+                                }
+                            }
+                            else if (item.FieldOptionId == "2") {
+                                if (k == 0) {
+                                    var ctrlId2 = "txtDateEnroll" + k;
+                                    var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
+
+                                    $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#dvEnrollMobileNo");
+                                    ControlId2 = IddivEnrollrow[k];
+                                    if (MandField == '1') {
+                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                    }
+                                    else {
+                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                    }
+                                    $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                    $("#" + IdEnrolldiv[k]).append(txtDate);
+                                    $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
+
+
+                                }
+                                else {
+                                    var ctrlId2 = "txtDateEnroll" + k;
+                                    var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
+
+                                    $('<div class="col-md-12 col-sm-12 row" id="' + IddivEnrollrow[k] + '"></div>').insertAfter("#" + ControlId2);
+                                    ControlId2 = IddivEnrollrow[k];
+                                    if (MandField == '1') {
+                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + "*" + '</div>');
+                                    }
+                                    else {
+                                        $("#" + IddivEnrollrow[k]).append('<div class = "col-md-2 col-sm-2" id="' + IdEnrollName[k] + '">' + DynamicnameEnroll + '</div>');
+                                    }
+                                    $("#" + IdEnrollName[k]).attr("style", "margin-top:10px");
+                                    $("#" + IddivEnrollrow[k]).append('<div class = "col-md-4 col-sm-4" id="' + IdEnrolldiv[k] + '"></div>');
+                                    $("#" + IdEnrolldiv[k]).append(txtDate);
+                                    $("#" + IdEnrolldiv[k]).attr("style", "margin-top:10px");
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        /*alert($("#CusNewContain").is(":visible"));*/
+        /*if (($("#CusNewContain").is(":visible")) == false) {*/
+        //alert("Inside If");
+        //$("#CusNewContain").show();
+        var count, D1, items;
+        D1 = '';
+
+        //Dynamic Data for Invoice
+        if (c != 1000) {
+            for (j = 0; j < c; j++) {
+                dropdownval = 0;
+                count = j + 1;
+                var Iddivrow = [];
+                Iddivrow[j] = "ddlCustom" + j;
+                var IdExistName = [];
+                IdExistName[j] = "dynCustExistName" + j;
+                var IdExistdiv2 = [];
+                IdExistdiv2[j] = "dynCustExistdiv2" + j;
+
+                var innerCount = Object.keys(response.objJsonData.JsonList1[j]).length;
+                if (innerCount > 1) {
+                    //Dropdown
+                    var Dynamicname, MandField;
+                    var ctrlId = "ddlCustomCtrl" + j;
+                    var items = "";
+                    var newCtrl = '<select id="' + ctrlId + '"></select>';
+                    $.each(response.objJsonData.JsonList1[j], function (i, item) {
+                        Dynamicname = item.FieldName
+                        MandField = item.FieldTypeId
+                        items += "<option value='" + dropdownval + "'>" + item.FieldValue + "</option>";
+                        dropdownval++;
+                    });
+
+                    if (j == 0) {
+                        $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#CusNewContain");
+                        ControlId = Iddivrow[j];
+                        if (MandField == "1") {
+                            $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                        }
+                        else {
+                            $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                        }
+
+                        $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                        $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                        $("#" + IdExistdiv2[j]).append(newCtrl);
+                        $("#" + ctrlId).attr("class", "input50");
+                        $("#" + ctrlId).attr("style", "margin-top:10px");
+                        $("#" + ctrlId).html(items);
+                    }
+                    else {
+                        $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + ControlId);
+                        ControlId = Iddivrow[j];
+                        if (MandField == "1") {
+                            $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                        }
+                        else {
+                            $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                        }
+
+                        $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                        $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                        $("#" + IdExistdiv2[j]).append(newCtrl);
+                        $("#" + ctrlId).attr("class", "input50");
+                        $("#" + ctrlId).attr("style", "margin-top:10px");
+                        $("#" + ctrlId).html(items);
+                    }
+                }
+                else {
+                    //Textbox or date
+                    $.each(response.objJsonData.JsonList1[j], function (i, item) {
+                        var Dynamicname, MandField;
+                        Dynamicname = item.FieldName
+                        MandField = item.FieldTypeId
+                        if (item.FieldOptionId == "1") {
+
+                            var ctrlId1 = "txtCustome" + j;
+                            if (j == 0) {
+                                $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#CusNewContain");
+                                ControlId = Iddivrow[j];
+                                if (MandField == "1") {
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                                }
+                                else {
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                }
+
+                                $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                $("#" + IdExistdiv2[j]).append('<input id="' + ctrlId1 + '"   class=\"input50\" />');
+                                $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                            }
+                            else {
+                                $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + ControlId);
+                                ControlId = Iddivrow[j];
+                                if (MandField = "1") {
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                                }
+                                else {
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                }
+                                $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                $("#" + IdExistdiv2[j]).append('<input id="' + ctrlId1 + '"  class=\"input50\" />');
+                                $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                            }
+                        }
+                        else if (item.FieldOptionId == "2") {
+                            var ctrlId2 = "txtDate" + j;
+
+                            var txtDate = "<input id=" + ctrlId2 + " type=\"Date\"  class=\"input50\" />";
+                            if (j == 0) {
+                                $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#CusNewContain");
+                                ControlId = Iddivrow[j];
+                                if (MandField == "1") {
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                                }
+                                else {
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                }
+                                $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                $("#" + IdExistdiv2[j]).append(txtDate);
+                                $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                            }
+                            else {
+                                $('<div class="col-md-12 col-sm-12 row" id="' + Iddivrow[j] + '"></div>').insertAfter("#" + ControlId);
+                                ControlId = Iddivrow[j];
+                                if (MandField == "1") {
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + "*" + '</div>');
+                                }
+                                else {
+                                    $("#" + Iddivrow[j]).append('<div class = "col-md-2 col-sm-2" id="' + IdExistName[j] + '">' + Dynamicname + '</div>');
+                                }
+                                $("#" + IdExistName[j]).attr("style", "margin-top:10px");
+                                $("#" + Iddivrow[j]).append('<div class = "col-md-4 col-sm-4" id="' + IdExistdiv2[j] + '"></div>');
+                                $("#" + IdExistdiv2[j]).append(txtDate);
+                                $("#" + IdExistdiv2[j]).attr("style", "margin-top:10px");
+                            }
+                        }
+                    });
+                }
+                count++;
+            }
+        }
+
+        //}
+
+        $("#dvInvoice").show();
+        $("#dvInvoiceCustExist").hide();
+    }
+
+</script>
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+<script src="~/Scripts/ConcatData.js"></script>
+<script src="~/Scripts/InvoiceDynData.js"></script>
+<script src="~/Scripts/EnrolDynCustData.js"></script>
+<script src="~/Scripts/ValidateMandatorySelect.js"></script>
+<script src="~/Scripts/ValidateMandatoryText.js"></script>
+<script src="~/Scripts/ValidateMandatoryDate.js"></script>
+<script src="~/Scripts/ValidateMandEnrollSelect.js"></script>
+<script src="~/Scripts/ValidateMandEnrollText.js"></script>
+<script src="~/Scripts/ValidateMandEnrollDate.js"></script>
+

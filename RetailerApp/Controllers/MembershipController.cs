@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using BOTS_BL.Repository;
 using BOTS_BL.Models.RetailerWeb;
 using BOTS_BL.Models;
+using BOTS_BL.Models.IndividualDBModels;
 using System.Web.Script.Serialization;
 using System.Data;
 using Newtonsoft.Json.Linq;
@@ -29,16 +30,24 @@ namespace RetailerApp.Controllers
         {
             CustomerDetails objData = new CustomerDetails();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-            objData = RWR.GetCustomerDetails(userDetails.OutletOrBrandId, MobileNo);
-            var data = RWR.GetMembershipDetail(userDetails.connectionString, MobileNo);
-            if (data != null)
+            try
             {
-                objData.PackageAmount = Convert.ToString(data.PackageType);
-                objData.PackageRemainingAmount = Convert.ToString(data.RemainingAmount);
-                DateTime strDate = Convert.ToDateTime(data.PackageValidity);
-                objData.PackageValidity = strDate.ToString("yyyy-MM-dd");
-                objData.PointBalance = Convert.ToString(objData.PointBalance);
+                objData = RWR.GetCustomerDetailsRatna(userDetails.OutletOrBrandId, MobileNo);
+                var data = RWR.GetMembershipDetail(userDetails.connectionString, MobileNo);
+                if (data != null)
+                {
+                    objData.PackageAmount = Convert.ToString(data.PackageType);
+                    objData.PackageRemainingAmount = Convert.ToString(data.RemainingAmount);
+                    DateTime strDate = Convert.ToDateTime(data.PackageValidity);
+                    objData.PackageValidity = strDate.ToString("yyyy-MM-dd");
+                    objData.PointBalance = Convert.ToString(objData.PointBalance);
+                }
             }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "GetCustomerBasicDetails");
+            }
+            
             return new JsonResult() { Data = objData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult RegisterNewUser(string jsonData)
@@ -84,7 +93,7 @@ namespace RetailerApp.Controllers
                         objCustDetails.DOB = Convert.ToDateTime(item["DOB"]);
                     if (!string.IsNullOrEmpty(Convert.ToString(item["DOA"])))
                         objCustDetails.AnniversaryDate = Convert.ToDateTime(item["DOA"]);
-                    objCustDetails.Tier = "Membership Customer";
+                    objCustDetails.Tier = "Membership";
                     objCustDetails.DisableSMSWATxn = false;
 
                     objCustInfo.MobileNo = Convert.ToString(item["MobileNo"]);
@@ -133,31 +142,77 @@ namespace RetailerApp.Controllers
             //result = "1234";
             CustomerDetails objData = new CustomerDetails();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
-
-            result = RWR.BurnValidationRatnaEnterprise(userDetails.OutletOrBrandId, MobileNo, Packageamount, PointsRedeem);
+            try
+            {
+                result = RWR.BurnValidationRatnaEnterprise(userDetails.OutletOrBrandId, MobileNo, Packageamount, PointsRedeem);
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SendMemberOTP");
+            }
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         public JsonResult RedeemMembershipPoints(string MobileNo, string Packageamount, string ValidityOld, string PointsRedeem)
         {
-            bool result;
+            bool result = default;
             tblMembershipDetail objDetails = new tblMembershipDetail();
-
-            //result = "1234";
-            DateTime DateToday = ER.IndianDatetime();
             CustomerDetails objData = new CustomerDetails();
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
 
-            objDetails.MobileNo = MobileNo;
-            objDetails.PackageType = Convert.ToDecimal(Packageamount);
-            //objDetails.PackageValidity = DateToday.AddYears(1);
-            objDetails.PackageValidity = Convert.ToDateTime(ValidityOld);
-            //decimal Pakagevalue = Convert.ToDecimal(Packageamount) - Convert.ToDecimal(PointsRedeem);
-            objDetails.RemainingAmount = Convert.ToDecimal(Packageamount);
-            objDetails.IsActive = true;
-            objDetails.CreatedDate = DateToday;
-            objDetails.CreatedBy = userDetails.LoginId;
+            try
+            {
+                DateTime DateToday = ER.IndianDatetime();
+                objDetails.MobileNo = MobileNo;
+                objDetails.PackageType = Convert.ToDecimal(Packageamount);
+                //objDetails.PackageValidity = DateToday.AddYears(1);
+                objDetails.PackageValidity = Convert.ToDateTime(ValidityOld);
+                //decimal Pakagevalue = Convert.ToDecimal(Packageamount) - Convert.ToDecimal(PointsRedeem);
+                objDetails.RemainingAmount = Convert.ToDecimal(Packageamount);
+                objDetails.IsActive = true;
+                objDetails.CreatedDate = DateToday;
+                objDetails.CreatedBy = userDetails.LoginId;
 
-            result = RWR.SaveMembershipRedeemPoints(userDetails.OutletOrBrandId, MobileNo, objDetails, PointsRedeem);
+                result = RWR.SaveMembershipRedeemPoints(userDetails.OutletOrBrandId, MobileNo, objDetails, PointsRedeem);
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "RedeemMembershipPoints");
+            }
+            
+            return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+        public JsonResult BaseToMembership(string MobileNo, string Packageamount, string ValidityOld)
+        {
+            bool result = default;
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            tblMembershipDetail objDetails = new tblMembershipDetail();
+            tblCustDetailsMaster objCustDetails = new tblCustDetailsMaster();
+            tblTierChange objTierChange = new tblTierChange();
+            try
+            {
+                objDetails.MobileNo = MobileNo;
+                objDetails.PackageType = Convert.ToDecimal(Packageamount);
+                objDetails.PackageValidity = Convert.ToDateTime(ValidityOld);
+                objDetails.RemainingAmount = Convert.ToDecimal(Packageamount);
+                objDetails.IsActive = true;
+                objDetails.CreatedDate = DateTime.Now;
+                objDetails.CreatedBy = userDetails.LoginId;
+
+                objCustDetails.Tier = "Membership";
+
+                objTierChange.Mobileno = MobileNo;
+                objTierChange.OldTier = "Base";
+                objTierChange.NewTier = "Membership";
+                objTierChange.CreatedBy = userDetails.LoginId;
+                objTierChange.CreatedDate = DateTime.Now;
+
+                result = RWR.AddBaseToMembership(objDetails, objCustDetails, objTierChange, userDetails.connectionString);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "NonMemberToMembership");
+            }
+
             return new JsonResult() { Data = result, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
     }

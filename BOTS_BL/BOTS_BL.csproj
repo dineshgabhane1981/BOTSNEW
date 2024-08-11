@@ -429,6 +429,7 @@
     <Compile Include="Models\IndividualDBModels\tblSMSWhatsAppScriptMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblSSNonSSReport.cs" />
     <Compile Include="Models\IndividualDBModels\tblStoreMaster.cs" />
+    <Compile Include="Models\IndividualDBModels\tblTierChange.cs" />
     <Compile Include="Models\IndividualDBModels\tblTierMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblTxnBonusMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblTxnDetailsMaster.cs" />

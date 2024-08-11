@@ -19,8 +19,6 @@ namespace BOTS_BL.Repository
         CustomerRepository CR = new CustomerRepository();
         Exceptions newexception = new Exceptions();
         string Stringdtmessage;
-        
-
 
         public CustomerLoginDetail AuthenticateUser(CustomerLoginDetail objData)
         {

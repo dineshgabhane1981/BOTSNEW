@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BOTS_BL.Models.RetailerWeb;
 using BOTS_BL.Models;
+using BOTS_BL.Models.IndividualDBModels;
 using System.Data.SqlClient;
 using System.Data;
 using System.Threading;
@@ -210,6 +211,70 @@ namespace BOTS_BL.Repository
                             objData.CardNo = Convert.ToString(dt1.Rows[0]["LoyaltyCard"]);
                             objData.TotalSpend = Convert.ToString(dt1.Rows[0]["TotalSpendText"]);
                             objData.LastTxnDate = Convert.ToString(dt1.Rows[0]["LastTxnText"]);
+                        }
+
+                        else
+                        {
+                            objData.ResponseCode = Convert.ToString(dt.Rows[0]["ResponseCode"]);
+                            objData.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "GetCustomerDetails");
+            }
+            return objData;
+        }
+
+        public CustomerDetails GetCustomerDetailsRatna(string CounterId, string MobileNo)
+        {
+            CustomerDetails objData = new CustomerDetails();
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    string groupId = CounterId.Substring(0, 4);
+                    //var conStr = CR.GetCustomerConnString(groupId);
+                    var conStr = CR.GetRetailWebConnString(CounterId);
+
+                    SqlConnection _Con = new SqlConnection(conStr);
+                    DataSet retVal = new DataSet();
+                    SqlCommand cmdReport = new SqlCommand("sp_Web_SearchCustomer", _Con);
+                    SqlDataAdapter daReport = new SqlDataAdapter(cmdReport);
+
+                    using (cmdReport)
+                    {
+                        SqlParameter param2 = new SqlParameter("pi_CounterId", CounterId);
+                        SqlParameter param3 = new SqlParameter("pi_SearchData", MobileNo);
+                        SqlParameter param4 = new SqlParameter("pi_SearchType", "1");
+                        SqlParameter param1 = new SqlParameter("pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                        cmdReport.CommandType = CommandType.StoredProcedure;
+                        cmdReport.Parameters.Add(param1);
+                        cmdReport.Parameters.Add(param2);
+                        cmdReport.Parameters.Add(param3);
+                        cmdReport.Parameters.Add(param4);
+                        daReport.Fill(retVal);
+
+                        DataTable dt = retVal.Tables[0];
+
+                        if (Convert.ToString(dt.Rows[0]["ResponseCode"]) == "00")
+                        {
+                            objData.ResponseCode = "00";
+                            DataTable dt1 = retVal.Tables[1];
+                            DataTable dt2 = retVal.Tables[2];
+                            //DataTable dt3 = retVal.Tables[3];
+                            objData.MobileNo = Convert.ToString(dt2.Rows[0]["MobileNo"]);
+                            objData.CustomerName = Convert.ToString(dt2.Rows[0]["CustomerName"]);
+                            objData.PointBalance = Convert.ToString(dt1.Rows[0]["AvailablePoints"]);
+                            objData.PointBase = Convert.ToString(dt1.Rows[0]["PointsBase"]);
+                            objData.PointMembership = Convert.ToString(dt1.Rows[0]["MembershipPoints"]);
+                            objData.Tier = Convert.ToString(dt2.Rows[0]["Tier"]);
+                            objData.CardNo = Convert.ToString(dt1.Rows[0]["LoyaltyCard"]);
+                            objData.TotalSpend = Convert.ToString(dt1.Rows[0]["TotalSpendText"]);
+                            objData.LastTxnDate = Convert.ToString(dt1.Rows[0]["LastTxnText"]);
+
                         }
 
                         else
@@ -554,6 +619,7 @@ namespace BOTS_BL.Repository
                                 R.BurnPointsAsAmount = Convert.ToString(dt1.Rows[0]["BurnPointsAsAmount"]);
                                 R.PointsValue = Convert.ToString(dt1.Rows[0]["PointsValue"]);
 
+
                                 Thread _JobMessage = new Thread(() => MessageDataTable(dt2));
                                 _JobMessage.Start();
                             }
@@ -619,8 +685,6 @@ namespace BOTS_BL.Repository
                                 R.ResponseMessage = Convert.ToString(dt.Rows[0]["ResponseMessage"]);
                             }
                         }
-
-                        
                     }
                 }
             }
@@ -1321,6 +1385,38 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
+        
+        public bool AddBaseToMembership(tblMembershipDetail objDetails, tblCustDetailsMaster objCustDetails, tblTierChange objTierChange, string connstr)
+        {
+            bool result = false;
+            try {
+                using (var context = new BOTSDBContext(connstr))
+                {
+                    context.tblMembershipDetails.Add(objDetails);
+                    context.SaveChanges();
+
+                    var ModeltblCustDetails = context.tblCustDetailsMasters.Where(x => x.MobileNo == objDetails.MobileNo).FirstOrDefault();
+
+                    if(ModeltblCustDetails != null)
+                    {
+                        ModeltblCustDetails.Tier = "Membership";
+                        context.Entry(ModeltblCustDetails).Property(p => p.Tier).IsModified = true;
+                        context.SaveChanges();
+                    }
+                    
+                    context.tblTierChanges.Add(objTierChange);
+                    context.SaveChanges();
+
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "AddBaseToMembership");
+            }
+            return result;
+        }
+
         public tblMembershipDetail GetMembershipDetail(string connstr, string MobileNo)
         {
             tblMembershipDetail objData = new tblMembershipDetail();
@@ -1587,30 +1683,34 @@ namespace BOTS_BL.Repository
             bool Status;
 
             Status = default;
-
-            string groupId = CounterId.Substring(0, 4);
-            var conStr = CR.GetRetailWebConnString(CounterId);
-
             tblMembershipDetail objMemberAdd = new tblMembershipDetail();
 
-
-            using (var context = new BOTSDBContext(conStr))
+            try
             {
-                var obj = context.tblMembershipDetails.Where(x => x.MobileNo == Mobileno && x.IsActive == true).FirstOrDefault();
-                obj.IsActive = false;
-                context.SaveChanges();
+                string groupId = CounterId.Substring(0, 4);
+                var conStr = CR.GetRetailWebConnString(CounterId);
 
-                var objPoints = context.tblCustPointsMasters.Where(x => x.MobileNo == Mobileno && x.IsActive == true && x.PointsDesc == "Membership").FirstOrDefault();
-                objPoints.Points = objPoints.Points - Convert.ToDecimal(RedeemPoints);
-                context.SaveChanges();
+                using (var context = new BOTSDBContext(conStr))
+                {
+                    var obj = context.tblMembershipDetails.Where(x => x.MobileNo == Mobileno && x.IsActive == true).FirstOrDefault();
+                    obj.IsActive = false;
+                    context.SaveChanges();
 
-                context.tblMembershipDetails.Add(ObjData);
-                context.SaveChanges();
+                    var objPoints = context.tblCustPointsMasters.Where(x => x.MobileNo == Mobileno && x.IsActive == true && x.PointsDesc == "Membership").FirstOrDefault();
+                    objPoints.Points = objPoints.Points - Convert.ToDecimal(RedeemPoints);
+                    context.SaveChanges();
 
-                Status = true;
+                    context.tblMembershipDetails.Add(ObjData);
+                    context.SaveChanges();
 
+                    Status = true;
+
+                }
             }
-
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SaveMembershipRedeemPoints");
+            }
             return Status;
         }
 

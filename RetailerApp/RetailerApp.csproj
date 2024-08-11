@@ -145,6 +145,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MenuHelper.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SessionTimeOut.cs" />
     <Compile Include="Controllers\DataUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -315,6 +316,7 @@
     <Content Include="Views\Home\CancelTxn.cshtml" />
     <Content Include="Views\Membership\Index.cshtml" />
     <Content Include="Views\DataUpload\Index.cshtml" />
+    <Content Include="Views\Home\IndexRatna.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -42,63 +42,79 @@
     <div class="scrollbar-sidebar">
         <div class="app-sidebar__inner">
             <ul class="vertical-nav-menu">
-                <li class="@Html.IsSelected(controller: "Home", action: "Index")">
-                    <a class="@Html.IsSelected(controller: "Home", action: "Index")" href="@Url.Action("Index", "Home")">
-                        <i class="metismenu-icon"></i>
-                        Search Customer
-                    </a>
-                </li>
-                @if (gId == "1364")
+                @if (gId != "1364" && gId != "1366")
                 {
-                    <li class="@Html.IsSelected(controller: "Membership", action: "Index")">
-                        <a class="@Html.IsSelected(controller: "Membership", action: "Index")" href="@Url.Action("Index", "Membership")">
+                    <li class="@Html.IsSelected(controller: "Home", action: "Index")">
+                        <a class="@Html.IsSelected(controller: "Home", action: "Index")" href="@Url.Action("Index", "Home")">
                             <i class="metismenu-icon"></i>
-                            Membership
+                            Search Customer
                         </a>
                     </li>
-                }
-                @if (gId != "1366")
-                {
                     <li class="@Html.IsSelected(controller: "Home", action: "DailySummaryReport")">
                         <a class="@Html.IsSelected(controller: "Home", action: "DailySummaryReport")" href="@Url.Action("DailySummaryReport", "Home")">
                             <i class="metismenu-icon"></i>
                             Daily Summary Report
                         </a>
                     </li>
-                }
-                @if (gId != "1366")
-                {
                     <li class="@Html.IsSelected(controller: "Home", action: "MemberDetailedReport")">
                         <a class="@Html.IsSelected(controller: "Home", action: "MemberDetailedReport")" href="@Url.Action("MemberDetailedReport", "Home")">
                             <i class="metismenu-icon"></i>
                             Member Detailed Report
                         </a>
                     </li>
+                    <li class="@Html.IsSelected(controller: "Home", action: "CancelTxn")">
+                        <a class="@Html.IsSelected(controller: "Home", action: "CancelTxn")" href="@Url.Action("CancelTxn", "Home")">
+                            <i class="metismenu-icon"></i>
+                            Cancel Txn
+                        </a>
+                    </li>
                 }
-                    @if (gId != "1364" && gId != "1366")
-                    {
-                        <li class="@Html.IsSelected(controller: "Home", action: "CancelTxn")">
-                            <a class="@Html.IsSelected(controller: "Home", action: "CancelTxn")" href="@Url.Action("CancelTxn", "Home")">
-                                <i class="metismenu-icon"></i>
-                                Cancel Txn
-                            </a>
-                        </li>
 
-                    }
+                @if (gId == "1364")
+                {
+                    <li class="@Html.IsSelected(controller: "Home", action: "IndexRatna")">
+                        <a class="@Html.IsSelected(controller: "Home", action: "IndexRatna")" href="@Url.Action("IndexRatna", "Home")">
+                            <i class="metismenu-icon"></i>
+                            Search Customer
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(controller: "Membership", action: "Index")">
+                        <a class="@Html.IsSelected(controller: "Membership", action: "Index")" href="@Url.Action("Index", "Membership")">
+                            <i class="metismenu-icon"></i>
+                            Membership
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(controller: "Home", action: "DailySummaryReport")">
+                        <a class="@Html.IsSelected(controller: "Home", action: "DailySummaryReport")" href="@Url.Action("DailySummaryReport", "Home")">
+                            <i class="metismenu-icon"></i>
+                            Daily Summary Report
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(controller: "Home", action: "MemberDetailedReport")">
+                        <a class="@Html.IsSelected(controller: "Home", action: "MemberDetailedReport")" href="@Url.Action("MemberDetailedReport", "Home")">
+                            <i class="metismenu-icon"></i>
+                            Member Detailed Report
+                        </a>
+                    </li>
+                    <li class="@Html.IsSelected(controller: "DataUpload", action: "Index")">
+                        <a class="@Html.IsSelected(controller: "DataUpload", action: "Index")" href="@Url.Action("Index", "DataUpload")">
+                            <i class="metismenu-icon"></i>
+                            DataUpload
+                        </a>
+                    </li>
 
+                }
+                @if (gId == "1366")
+                {
+                    <li class="@Html.IsSelected(controller: "DataUpload", action: "Index")">
+                        <a class="@Html.IsSelected(controller: "DataUpload", action: "Index")" href="@Url.Action("Index", "DataUpload")">
+                            <i class="metismenu-icon"></i>
+                            DataUpload
+                        </a>
+                    </li>
+                }
 
-
-                    @if (gId == "1366" || gId == "1364")
-                    {
-                        <li class="@Html.IsSelected(controller: "DataUpload", action: "Index")">
-                            <a class="@Html.IsSelected(controller: "DataUpload", action: "Index")" href="@Url.Action("Index", "DataUpload")">
-                                <i class="metismenu-icon"></i>
-                                DataUpload
-                            </a>
-                        </li>
-                    }
-
-                </ul>
+            </ul>
 
         </div>
     </div>

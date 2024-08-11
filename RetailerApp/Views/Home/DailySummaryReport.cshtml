@@ -5,15 +5,15 @@
 
 <div class="app-main__inner" id="dvDailySummary">
     <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
-        <div class="row" style="margin-top : 20px; padding-bottom : 20px">
-            <div class="col-sm-4">
-                <b>Daily Summary Report</b>
-            </div>
+        <div class="row" style="margin-top: 20px; padding-bottom: 20px; ">
+            
         </div>
-        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom:20px;">
+        <div class="mb-3 pr-3 pt-3 pl-3 card" style="padding-bottom: 20px; border-radius: 10px;">
             <div>
-
-                <div class="table-responsive">
+                <div class="col-sm-4">
+                    <b>Daily Summary Report</b>
+                </div>
+                <div class="table-responsive mt-3">
                     <table class="table" id="groupListTable">
                         <thead>
                             <tr>
@@ -27,69 +27,69 @@
                         </thead>
                         <tbody>
                             @if (ViewBag.DailyReport.Count > 0)
-                            {                                   
-                                        foreach (var item in ViewBag.DailyReport)
-                                        {
-                                            <tr>
-                                                <td style="text-align:center;">@item.TotalEnrolment</td>
+                            {
+                                foreach (var item in ViewBag.DailyReport)
+                                {
+                                    <tr>
+                                        <td style="text-align:center;">@item.TotalEnrolment</td>
 
-                                                <td style="text-align:center;">@item.EarnTxnCount</td>
+                                        <td style="text-align:center;">@item.EarnTxnCount</td>
 
-                                                <td style="text-align:center;">@item.EarnTxnAmt</td>
+                                        <td style="text-align:center;">@item.EarnTxnAmt</td>
 
-                                                <td style="text-align:center;">@item.EarnPoints</td>
+                                        <td style="text-align:center;">@item.EarnPoints</td>
 
-                                                <td style="text-align:center;">@item.BurnTxnCount</td>
+                                        <td style="text-align:center;">@item.BurnTxnCount</td>
 
-                                                <td style="text-align:center;">@item.BurnTxnAmt</td>
-                                            </tr>
-                                        }                                
+                                        <td style="text-align:center;">@item.BurnTxnAmt</td>
+                                    </tr>
+                                }
                             }
                         </tbody>
                     </table>
                 </div>
-                    @*@if (ViewBag.DailyReport.Count > 0)
-            {
-                <div class="row" style="overflow-x:auto;padding-right:20px;margin-top:10px;margin-left:60px;">
+                @*@if (ViewBag.DailyReport.Count > 0)
+        {
+            <div class="row" style="overflow-x:auto;padding-right:20px;margin-top:10px;margin-left:60px;">
 
 
-                    <table border="1" cellpadding="5" cellspacing="5">
+                <table border="1" cellpadding="5" cellspacing="5">
+                    <tr>
+                        <th>Total Enrol</th>
+                        <th>Earn Txns</th>
+                        <th>Total Earn Txn Amt</th>
+                        <th>Points Issued</th>
+                        <th>Redeem Txn</th>
+                        <th>Total Redeem</th>
+
+                    </tr>
+                    @foreach (var item in ViewBag.DailyReport)
+                    {
                         <tr>
-                            <th>Total Enrol</th>
-                            <th>Earn Txns</th>
-                            <th>Total Earn Txn Amt</th>
-                            <th>Points Issued</th>
-                            <th>Redeem Txn</th>
-                            <th>Total Redeem</th>
+                            <td>@item.TotalEnrolment</td>
 
+                            <td>@item.EarnTxnCount</td>
+
+                            <td>@item.EarnTxnAmt</td>
+
+                            <td>@item.EarnPoints</td>
+
+                            <td>@item.BurnTxnCount</td>
+
+                            <td>@item.BurnTxnAmt</td>
                         </tr>
-                        @foreach (var item in ViewBag.DailyReport)
-                        {
-                            <tr>
-                                <td>@item.TotalEnrolment</td>
+                    }
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="row" style="margin-top : 20px; margin-left:50px;">
+                <h6 style="font:xx-large"><b>No Reports</b></h6>
+            </div>
+        }*@
 
-                                <td>@item.EarnTxnCount</td>
-
-                                <td>@item.EarnTxnAmt</td>
-
-                                <td>@item.EarnPoints</td>
-
-                                <td>@item.BurnTxnCount</td>
-
-                                <td>@item.BurnTxnAmt</td>
-                            </tr>
-                        }
-                    </table>
-                </div>
-            }
-            else
-            {
-                <div class="row" style="margin-top : 20px; margin-left:50px;">
-                    <h6 style="font:xx-large"><b>No Reports</b></h6>
-                </div>
-            }*@
-
-                </div>
+            </div>
             </div>
     </div>
 </div>

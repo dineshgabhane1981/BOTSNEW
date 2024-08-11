@@ -26,9 +26,7 @@ namespace RetailerApp.Controllers
             Session["DynamicCustData"] = obj1;
             ViewBag.UserName = UserName;
 
-            //var J1 = Session["DynamicData"];
-
-            return View();
+            return View();  
         }
 
         public ActionResult About()
@@ -106,6 +104,15 @@ namespace RetailerApp.Controllers
                 string DynamicData = Convert.ToString(item["DynamicData"]);
                 string DynamicCustData = Convert.ToString(item["DynamicCustData"]);
 
+                if(DynamicData == "System.Object[]")
+                {
+                    DynamicData = "";
+                }
+                if (DynamicCustData == "System.Object[]")
+                {
+                    DynamicCustData = "";
+                }
+
                 EResponse = RWR.InsertEarnData(userDetails.OutletOrBrandId, MobileNo, InvoiceNo, InvoiceAmt, DynamicData, DynamicCustData);
             }            
             return new JsonResult() { Data = EResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
@@ -127,6 +134,10 @@ namespace RetailerApp.Controllers
                 string InvoiceNo = Convert.ToString(item["InvoiceNo"]);
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]);
                 string DynamicData = Convert.ToString(item["DynamicData"]);
+                if (DynamicData == "System.Object[]")
+                {
+                    DynamicData = "";
+                }
 
                 EResponse = RWR.InsertEarnDataOld(userDetails.OutletOrBrandId, MobileNo,InvoiceNo, InvoiceAmt, DynamicData);
             }
@@ -148,6 +159,10 @@ namespace RetailerApp.Controllers
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]); 
                 string PointsBurn = Convert.ToString(item["PointsBurn"]);
                 string DynamicDatas = Convert.ToString(item["DynamicData"]);
+                if (DynamicDatas == "System.Object[]")
+                {
+                    DynamicDatas = "";
+                }
 
                 BResponse = RWR.BurnValidation(userDetails.OutletOrBrandId, MobileNo, InvoiceNo, InvoiceAmt, PointsBurn, DynamicDatas);
             }
@@ -169,6 +184,10 @@ namespace RetailerApp.Controllers
                 string InvoiceAmt = Convert.ToString(item["InvoiceAmt"]);
                 string PointsBurn = Convert.ToString(item["PointsBurn"]);
                 string DynamicData = Convert.ToString(item["DynamicData"]);
+                if (DynamicData == "System.Object[]")
+                {
+                    DynamicData = "";
+                }
 
                 BResponse = RWR.SaveBurnTxn(userDetails.OutletOrBrandId, MobileNo, InvoiceNo, InvoiceAmt, PointsBurn, DynamicData);
             }
@@ -242,6 +261,44 @@ namespace RetailerApp.Controllers
                 BResponse = RWR.OTPResend(userDetails.OutletOrBrandId, MobileNo);
             }
             return new JsonResult() { Data = BResponse, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
+
+        public ActionResult IndexRatna()
+        {
+            DynamicFieldInfo DynaInfo = new DynamicFieldInfo();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            var UserName = userDetails.UserName;
+            var obj = RWR.DynamicData(userDetails.connectionString);
+            var obj1 = RWR.DynamicCustData(userDetails.connectionString);
+            Session["DynamicData"] = obj;
+            Session["DynamicCustData"] = obj1;
+            ViewBag.UserName = UserName;
+
+            return View();
+        }
+
+        [HttpPost]
+
+        public ActionResult GetCustomerDetailsRatna(string MobileNo)
+        {
+            CustomerDetails objData = new CustomerDetails();
+            CustDetails objCustData = new CustDetails();
+            List<DynamicFieldInfo>[] Obj = new List<DynamicFieldInfo>[1000];
+            List<DynamicFieldInfo> Obj1 = new List<DynamicFieldInfo>();
+            List<DynamicFieldInfo> Obj2 = new List<DynamicFieldInfo>();
+            JSONDATA J1 = new JSONDATA();
+            JSONDATA1 J2 = new JSONDATA1();
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            objData = RWR.GetCustomerDetailsRatna(userDetails.OutletOrBrandId, MobileNo);
+            objCustData.objCDetails = objData;
+            J1.JsonList1 = (List<DynamicFieldInfo>[])Session["DynamicData"];
+            J2.JsonListCust = (List<DynamicFieldInfo>[])Session["DynamicCustData"];
+
+            objCustData.objJsonData = new JSONDATA();
+            objCustData.objJsonCustData = new JSONDATA1();
+            objCustData.objJsonData.JsonList1 = J1.JsonList1;
+            objCustData.objJsonCustData.JsonListCust = J2.JsonListCust;
+            return new JsonResult() { Data = objCustData, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
 
     }

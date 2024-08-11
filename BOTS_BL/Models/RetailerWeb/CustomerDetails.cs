@@ -12,6 +12,8 @@ namespace BOTS_BL.Models.RetailerWeb
         public string CustomerName { get; set; }
         public string CardNo { get; set; }
         public string PointBalance { get; set; }
+        public string PointBase { get; set; }
+        public string PointMembership { get; set; }
         public string TotalSpend { get; set; }
         public string LastTxnDate { get; set; }
         public string PackageAmount { get; set; }
@@ -19,6 +21,7 @@ namespace BOTS_BL.Models.RetailerWeb
         public string PackageValidity { get; set; }
         public string ResponseCode { get; set; }
         public string ResponseMessage { get; set; }
+        public string Tier { get; set; }
 
     }
 

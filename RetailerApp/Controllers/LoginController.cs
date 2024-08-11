@@ -40,7 +40,11 @@ namespace RetailerApp.Controllers
                         objLogData.LoggedInTime = DateTime.Now;
                         LR.AddLoginLog(objLogData);
 
-                        if (!string.IsNullOrEmpty(userDetails.GroupId))
+                        if (!string.IsNullOrEmpty(userDetails.GroupId) && userDetails.GroupId == "1364")
+                        {
+                            return RedirectToAction("IndexRatna", "Home");
+                        }
+                        else
                         {
                             return RedirectToAction("Index", "Home");
                         }
