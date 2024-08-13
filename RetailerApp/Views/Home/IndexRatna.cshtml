@@ -419,6 +419,7 @@
                                 cancelText: "Cancel"
                             }).then((e) => {
                                 if (e == ("confirm")) {
+                                    
                                     RenderSearchPageExistingMember(response);
                                 }
                             });
@@ -436,7 +437,7 @@
                             cancelText: "Cancel"
                         }).then((e) => {
                             if (e == ("confirm")) {
-                                RenderSearchPageNewMember();
+                                RenderSearchPageNewMember(response);
                             }
                         })
                     }
@@ -1034,7 +1035,7 @@
     });
 
     function RenderSearchPageExistingMember(response) {
-
+        console.log(response);
         $("#divSearchHeading").hide();
         $("#divSearch").hide();
         $("#spnMobileNo").text(response.objCDetails.MobileNo);
@@ -1210,7 +1211,7 @@
         $("#btnPaybyCash").show();
     }
 
-    function RenderSearchPageNewMember() {
+    function RenderSearchPageNewMember(response) {
         $("#divSearchHeading").hide();
         $("#divSearch").hide();
         $("#txtMobileNoNew").val($("#txtMobileNo").val());
