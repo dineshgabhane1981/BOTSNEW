@@ -15,6 +15,9 @@ using System.Web;
 using System.Net;
 using BOTS_BL.Models.IndividualDBModels;
 using BOTS_BL.Models.ITOps;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 namespace BOTS_BL.Repository
 {
@@ -1008,7 +1011,7 @@ namespace BOTS_BL.Repository
             return objMemberData;
         }
 
-        public SPResponse DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, DateTime ip_Date, tblAudit objAudit)
+        public SPResponse DeleteTransaction(string GroupId, string InvoiceNo, string MobileNo, string InvoiceAmt, tblAudit objAudit)
         {
             SPResponse result = new SPResponse();
 
@@ -1580,5 +1583,44 @@ namespace BOTS_BL.Repository
 
             return result;
         }
+
+        public WADetailsSummary GetWAReportData(string GroupId,string GoupAPILink)
+        {
+            WADetailsSummary ObjWAReport = new WADetailsSummary();
+            List<ListWAGroupDetailsModel> ObjList = new List<ListWAGroupDetailsModel>();
+            
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var data = context.WAReports.Where(x => x.GroupId == GroupId).FirstOrDefault();
+
+                    ObjWAReport.ObjWADetails = new WAReportDetails();
+                    ObjWAReport.ObjWADetails.Groupid = data.GroupId;
+                    ObjWAReport.ObjWADetails.GroupName = data.GroupName;
+                    ObjWAReport.ObjWADetails.GroupCode = data.GroupCode;
+                    ObjWAReport.ObjWADetails.Status = data.SMSStatus;
+                    using (var client = new HttpClient())
+                    {
+                        using (var response1 = client.GetAsync(GoupAPILink).Result)
+                        {
+                            if (response1.IsSuccessStatusCode)
+                            {
+                                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                                var response2 = client.GetStringAsync(new Uri(GoupAPILink)).Result;
+                                ObjWAReport.ObjWADetails.APIData = response2;
+                            }
+                        }
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "GetWAReportData");
+            }
+            return ObjWAReport;
+        }
+
+        
     }
 }

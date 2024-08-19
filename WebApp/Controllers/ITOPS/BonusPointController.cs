@@ -445,10 +445,10 @@ namespace WebApp.Controllers.ITOPS
                 objAudit.AddedBy = userDetails.LoginId;
                 objAudit.AddedDate = DateTime.Now;
                 bool IsSMS = false;
-                var dateCancel = Convert.ToDateTime(ip_Date);
+                //DateTime dateCancel = DateTime.Parse(ip_Date);
                 
 
-                result = NewITOPS.DeleteTransaction(GroupId, InvoiceNo, MobileNo, InvoiceAmt, dateCancel, objAudit);
+                result = NewITOPS.DeleteTransaction(GroupId, InvoiceNo, MobileNo, InvoiceAmt, objAudit);
                 if (result.ResponseCode == "00")
                 {
                     var subject = "Transaction Deleted for  - " + InvoiceNo;
