@@ -10,6 +10,8 @@
     <div class="row" style="margin-top : 20px; padding-bottom : 20px" id="divSearchHeading">
         <input id="UserName" value=@ViewBag.UserName hidden />
         <input id="hdnOTP" hidden />
+        <input type="text" id="hdnMembershipPoints" hidden />
+        <input typw="date" id="hdnPackageValidity" hidden />
     </div>
     <div class="col-md-12 col-sm-12 card" style="padding: 10px; margin: 5px; margin-right: 20px !important;  border-radius: 10px;" id="divSearch">
         <div class="col-sm-4">
@@ -271,10 +273,13 @@
                                     $("#spnBasePoints").text(response.PointBase);
                                     $("#spnTier").text(response.Tier);
 
+                                    $("#hdnPackageValidity").val(response.PackageValidity);
+                                    $("#hdnMembershipPoints").val(response.PointMembership);
+
                                     $("#divLoader").hide();
                                      }
                                 else {
-                                    alert("111");
+                                    //alert("111");
                                      var urlLink = "@Url.Action("Index", "Membership")";
                                      window.location.href = urlLink;
                                      }
@@ -303,6 +308,10 @@
                                     $("#spnMembershipPoints").text(response.PointMembership);
                                     $("#spnBasePoints").text(response.PointBase);
                                     $("#spnTier").text(response.Tier);
+
+                                    $("#hdnPackageValidity").val(response.PackageValidity);
+                                    $("#hdnMembershipPoints").val(response.PointMembership);
+
 
                                     $("#divLoader").hide();
                         }
@@ -425,6 +434,10 @@
     }
 
     function SendOTP() {
+        var fullDate = new Date()
+        var twoDigitMonth = ((fullDate.getMonth().length + 1) === 1) ? (fullDate.getMonth() + 1) : '0' + (fullDate.getMonth() + 1);
+        var currentDate = fullDate.getFullYear() + "-" + twoDigitMonth + "-" + fullDate.getDate();
+
         var returnStatus = true;
         if ($("#txtPackageOld").val() == "") {
             cuteAlert({
@@ -456,6 +469,26 @@
             returnStatus = false;
             return false;
         }
+        if (($("#txtPointsRedeem").val() > $("#hdnMembershipPoints").val())) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Your are trying to redeem more than Membership points",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+            return false;
+        }
+        if (currentDate < $("#hdnPackageValidity").val()) {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "You can't create new package unless your old package expires",
+                buttonText: "Okay"
+            })
+            returnStatus = false;
+            return false;
+        }
         if (returnStatus) {
 
             $.ajax({
@@ -465,7 +498,7 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    if (result != null && result != "") {
+                    if (result.ResponseCode == "00") {
                         cuteAlert({
                             type: "success",
                             title: "Sent",
@@ -482,7 +515,7 @@
                         cuteAlert({
                             type: "error",
                             title: "OOPS...",
-                            message: "There is problem in sending OTP!!!",
+                            message: result.ResponseMessage,
                             buttonText: "Okay"
                         })
                     }
