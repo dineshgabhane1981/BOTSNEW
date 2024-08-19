@@ -445,6 +445,7 @@
     <Content Include="Content\main.css" />
     <Content Include="Content\main.js" />
     <Content Include="Content\scriptSteps.js" />
+    <Content Include="Content\select2.min.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\styleSteps.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -602,6 +603,7 @@
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\rainbowvis.js" />
+    <Content Include="Scripts\select2.min.js" />
     <Content Include="Views\DashBoardCustomerLogin\Index.cshtml" />
     <Content Include="Views\DashBoardCustomerLogin\_DashboardCustomerloginList.cshtml" />
     <Content Include="Views\Discussion\CommonDiscussion.cshtml" />
