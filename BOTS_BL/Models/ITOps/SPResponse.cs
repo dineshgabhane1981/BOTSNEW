@@ -38,4 +38,27 @@ namespace BOTS_BL.Models
         public string CounterId { get; set; }
         public string Securitykey { get; set; }
     }
+
+    public class WADetailsSummary
+    {
+        public WAReportDetails ObjWADetails { get; set; }
+        public List<ListWAGroupDetailsModel> lstWAAPIDetails { get; set; }
+    }
+    public class WAReportDetails
+    {
+        public string Groupid { get; set; }
+        public string GroupName { get; set; }
+        public string GroupCode { get; set; }
+        public string WAGroupName { get; set; }
+        public string Status { get; set; }   
+
+        public string APIData { get; set; }
+    }
+    public class ListWAGroupDetailsModel
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+    }
+
+
 }

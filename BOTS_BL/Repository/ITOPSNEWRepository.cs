@@ -1621,6 +1621,42 @@ namespace BOTS_BL.Repository
             return ObjWAReport;
         }
 
-        
+        public bool InsertGroupCode(string GroupId, string Groupcode, tblAudit objAudit)
+        {
+            bool result = default;
+
+            try
+            {
+                using (var context = new CommonDBContext())
+                {
+                    var DatabaseDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
+
+                    var WAData = context.WAReports.Where(x=>x.GroupId == GroupId).FirstOrDefault();
+
+                    WAData.GroupId = GroupId;
+                    WAData.GroupCode = Groupcode;
+                    WAData.GroupName = DatabaseDetails.DBName;
+                    WAData.IPAddress = DatabaseDetails.IPAddress;
+                    WAData.SMSStatus = "0";
+                    WAData.Status = "1";
+                    WAData.BrandId = Convert.ToString(DatabaseDetails.GroupId) + "1";
+                    WAData.DBId = DatabaseDetails.DBId;
+                    WAData.DBName = DatabaseDetails.DBName;
+                    WAData.DBPassword = DatabaseDetails.DBPassword;
+
+                    context.tblAudits.Add(objAudit);
+                    context.SaveChanges();
+
+                    result = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "InsertGroupCode");
+            }
+
+            return result;
+        }
+
     }
 }
