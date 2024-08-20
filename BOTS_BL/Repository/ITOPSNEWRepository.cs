@@ -1594,12 +1594,25 @@ namespace BOTS_BL.Repository
                 using (var context = new CommonDBContext())
                 {
                     var data = context.WAReports.Where(x => x.GroupId == GroupId).FirstOrDefault();
+                    var DatabaseDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
 
                     ObjWAReport.ObjWADetails = new WAReportDetails();
-                    ObjWAReport.ObjWADetails.Groupid = data.GroupId;
-                    ObjWAReport.ObjWADetails.GroupName = data.GroupName;
-                    ObjWAReport.ObjWADetails.GroupCode = data.GroupCode;
-                    ObjWAReport.ObjWADetails.Status = data.SMSStatus;
+                    if (data == null)
+                    {
+                        ObjWAReport.ObjWADetails.Groupid = DatabaseDetails.GroupId;
+                        ObjWAReport.ObjWADetails.GroupName = DatabaseDetails.DBName;
+                        ObjWAReport.ObjWADetails.GroupCode = "";
+                        ObjWAReport.ObjWADetails.Status = "";
+                    }
+                    else
+                    {
+                        
+                        ObjWAReport.ObjWADetails.Groupid = data.GroupId;
+                        ObjWAReport.ObjWADetails.GroupName = data.GroupName;
+                        ObjWAReport.ObjWADetails.GroupCode = data.GroupCode;
+                        ObjWAReport.ObjWADetails.Status = data.SMSStatus;
+                    }
+                    
                     using (var client = new HttpClient())
                     {
                         using (var response1 = client.GetAsync(GoupAPILink).Result)
