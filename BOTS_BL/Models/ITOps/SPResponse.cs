@@ -41,23 +41,22 @@ namespace BOTS_BL.Models
 
     public class WADetailsSummary
     {
-        public WAReportDetails ObjWADetails { get; set; }
-        public List<ListWAGroupDetailsModel> lstWAAPIDetails { get; set; }
+        public WAReportDetails ObjWADetails { get; set; } = new WAReportDetails();
+        public List<ListWAGroupDetailsModel> lstWAAPIDetails { get; set; } = new List<ListWAGroupDetailsModel>();
     }
     public class WAReportDetails
     {
-        public string Groupid { get; set; }
-        public string GroupName { get; set; }
-        public string GroupCode { get; set; }
-        public string WAGroupName { get; set; }
-        public string Status { get; set; }   
-
-        public string APIData { get; set; }
+        public string Groupid { get; set; } = string.Empty;
+        public string GroupName { get; set; } = string.Empty;
+        public string GroupCode { get; set; } = string.Empty;
+        public string WAGroupName { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string APIData { get; set; } = string.Empty;
     }
     public class ListWAGroupDetailsModel
     {
-        public string id { get; set; }
-        public string name { get; set; }
+        public string id { get; set; } = string.Empty;
+        public string name { get; set; } = string.Empty;
     }
 
 
