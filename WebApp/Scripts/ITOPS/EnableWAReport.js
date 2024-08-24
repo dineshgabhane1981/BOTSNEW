@@ -6,7 +6,6 @@ $(document).ready(function () {
     $('#ddlSelect').select2();
     $("#btnSaveGroupName").click(OnSave);  
 
-    //console.log($("#hdnGroupCode").val())
     if ($("#hdnGroupCode").val() == null || $("#hdnGroupCode").val() == '') {
         $("#divConfigWAReport").show(1000);
     }
@@ -27,6 +26,7 @@ function OnSave() {
 
             if (result == true) {
                 toastr.success('Report Started');
+                $("#divConfigWAReport").hide(1000);
                 window.location.href = url_var + "/Index";
             } else {
                 toastr.error('Something went wrong..');
