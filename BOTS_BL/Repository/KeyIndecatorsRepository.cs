@@ -390,7 +390,8 @@ namespace BOTS_BL.Repository
                     //objMemberPage.NewRegistration = NewRegCount;
                     objMemberPage.RefBiz = Convert.ToInt64(AllData.Where(x => x.EnrolledBy == "DLCReferral").Select(y => y.TotalSpend).Sum());
                     objMemberPage.NewRegistrationBiz = Convert.ToInt64(AllData.Where(y => y.EnrolledBy == "DLCWalkIn" || y.EnrolledBy == "DLCScoialMedia").Select(x => x.TotalSpend).Sum());
-                    objMemberPage.ProfileUpdateCount = context.tblProfileUpdateMasters.Select(x => x.MobileNo).Distinct().Count();
+                    //objMemberPage.ProfileUpdateCount = context.tblProfileUpdateMasters.Select(x => x.MobileNo).Distinct().Count();
+                    objMemberPage.ProfileUpdateCount = context.tblDLCProfileUpdatedLists.Select(x => x.MobileNo).Distinct().Count();
                     if (objMemberPage.ProfileUpdateCount > 0)
                     {
                         objMemberPage.ProfileUpdatePercentage = ((objMemberPage.ProfileUpdateCount / TotalBase) * 100);
