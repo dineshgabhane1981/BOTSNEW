@@ -3018,12 +3018,12 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
                         {
                             Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance >= " + Convert.ToString(item["PointsBalMin"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
                         {
                             Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance <= " + Convert.ToString(item["PointsBalMax"]);
                         }
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
@@ -3740,12 +3740,12 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
                         {
                             Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance >= " + Convert.ToString(item["PointsBalMin"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
                         {
                             Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance <= " + Convert.ToString(item["PointsBalMax"]);
                         }
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))
@@ -4437,12 +4437,12 @@ namespace BOTS_BL.Repository
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMin"])))
                         {
                             Criteria += "<br/>Point Balance min : " + Convert.ToString(item["PointsBalMin"]);
-                            WhereClause += " and a.PointsBalance > " + Convert.ToString(item["PointsBalMin"]);
+                            WhereClause += " and a.PointsBalance >= " + Convert.ToString(item["PointsBalMin"]);
                         }
                         if (!string.IsNullOrEmpty(Convert.ToString(item["PointsBalMax"])))
                         {
                             Criteria += "<br/>Point Balance max : " + Convert.ToString(item["PointsBalMax"]);
-                            WhereClause += " and a.PointsBalance < " + Convert.ToString(item["PointsBalMax"]);
+                            WhereClause += " and a.PointsBalance <= " + Convert.ToString(item["PointsBalMax"]);
                         }
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(item["Redeemed"])))

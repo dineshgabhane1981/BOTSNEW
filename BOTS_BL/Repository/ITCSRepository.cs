@@ -187,20 +187,18 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                         status = true;
 
-                        var CounterId = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(x => x.CounterId).FirstOrDefault();
-                        var CounterIdNew = CounterId.Substring(0, 5);
-                        var DBNameNew = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(x => x.DBName).FirstOrDefault();
+                        var databaseDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).Select(x => new { CounterIdNew = x.CounterId.Substring(0, 5), x.IPAddress, x.DBPassword, x.DBId, x.DBName }).FirstOrDefault();
                         var existingDatabaseDetails = context.DatabaseDetails.FirstOrDefault(x => x.GroupId == GroupId);
                         if (existingDatabaseDetails == null)
                         {
                             var newDatabaseDetails = new DatabaseDetail
                             {
-                                CounterId = CounterIdNew,
-                                SecurityKey = "MWP_" + CounterIdNew,
-                                IPAddress = "13.233.58.231",
-                                DBName = DBNameNew,
-                                DBPassword = "F59VM$KDE@KF!AW",
-                                DBId = "Renaldo",
+                                CounterId = databaseDetails.CounterIdNew,
+                                SecurityKey = "MWP_" + databaseDetails.CounterIdNew,
+                                IPAddress = databaseDetails.IPAddress,
+                                DBName = databaseDetails.DBName,
+                                DBPassword = databaseDetails.DBPassword,
+                                DBId = databaseDetails.DBId,
                                 EncryptionStatus = "0",
                                 GroupId = GroupId
                             };
