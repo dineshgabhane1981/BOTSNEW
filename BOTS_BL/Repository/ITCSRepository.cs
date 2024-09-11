@@ -163,13 +163,13 @@ namespace BOTS_BL.Repository
                         context.SaveChanges();
                         status = true;
 
-                        var DatabaseDetail = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).FirstOrDefault();
-                        if (DatabaseDetail != null)
+                        var DatabaseDetails = context.tblDatabaseDetails.Where(x => x.GroupId == GroupId).ToList();
+                        foreach (var Details in DatabaseDetails)
                         {
-                            DatabaseDetail.IsActive = true;
+                            Details.IsActive = true;
+                            context.SaveChanges();
+                            status = true;
                         }
-                        context.SaveChanges();
-                        status = true;
 
                         var DailyActivityGroup = context.DailyActivityAllGroups.Where(x => x.GroupId == GroupId).FirstOrDefault();
                         if (DailyActivityGroup != null)
