@@ -7,7 +7,7 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Lato';
+    font-family: Verdana !important;
     overflow-y:auto !important;
 }
 
@@ -54,7 +54,7 @@ body {
 
 .invoice_heading h3 {
     margin: 0;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 18px;
     text-transform: uppercase;
     font-weight: bold;
@@ -78,7 +78,7 @@ body {
 
 .invoice_heading h4 {
     /* color: #000000; */
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 14px;
     /* font-weight: 700; */
     line-height: 20px;
@@ -107,7 +107,7 @@ body {
 }
 
 .invoice_logo h2 {
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 16px;
     letter-spacing: 0.25px;
     line-height: 19px;
@@ -129,7 +129,7 @@ body {
     display: inline-block;
     /* font-size: 12px; */
     font-size: 14px;
-    font-family: Lato;
+    font-family: Verdana;
     margin: 0 10px;
 }
 
@@ -157,7 +157,7 @@ body {
 
 .d-store h4 {
     color: #141414;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     text-align: left;
     /* font-weight: bold; */
@@ -187,7 +187,7 @@ body {
 
 .addressBlock h2 {
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 16px;
     letter-spacing: 0.25px;
     line-height: 19px;
@@ -200,7 +200,7 @@ body {
 
 .addressBlock span {
     color: #E7E7E7;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 13px;
     letter-spacing: 0.18px;
     line-height: 18px;
@@ -221,7 +221,7 @@ body {
 
 .addressBlock span {
     color: #E7E7E7;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 13px;
     letter-spacing: 0.18px;
     line-height: 18px;
@@ -232,7 +232,7 @@ body {
 
 .addressBlock p {
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 12px;
     letter-spacing: 0.19px;
     line-height: 16px;
@@ -274,7 +274,7 @@ body {
 .divdropDownData label,
 .quanity label {
     color: rgba(192, 192, 192, 0.85);
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 12px;
     letter-spacing: 0.18px;
     line-height: 14.4px;
@@ -299,7 +299,7 @@ body {
 .divdropDownData span:after {
     content: '';
     background: url(../images/downarrow-white.png) no-repeat;
-    font-family: Lato;
+    font-family: Verdana;
     color: #aeb2b3;
     width: 14px;
     text-align: center;
@@ -320,7 +320,7 @@ body {
     background-color: #F6F6F6;
     border-radius: 20px;
     color: #313131;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 12px;
     letter-spacing: 0.2px;
     line-height: 17px;
@@ -368,7 +368,7 @@ body {
 
 .totalPointBlock ul li label {
     font-size: 14px;
-    font-family: 'Lato';
+    font-family: 'Verdana';
     margin: 0;
     padding: 0;
     display: inline-block;
@@ -426,7 +426,7 @@ body {
 
 .invoice_details .order-det h6 {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 12px;
     font-weight: 400;
     line-height: 16px;
@@ -435,7 +435,7 @@ body {
 
 .invoice_details .order-det p {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 10px;
     font-weight: 600;
     line-height: 14px;
@@ -516,7 +516,7 @@ body {
 .invoice_table p.amount_sec,
 .invoice_table p.rate_sec {
     color: #000000;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 12px;
     font-weight: 600;
     line-height: 12.89px;
@@ -557,7 +557,7 @@ body {
 
 .invoice_table b.product_name {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 13px;
     font-weight: 600;
     line-height: 12.89px;
@@ -568,7 +568,7 @@ body {
 .invoice_table p.order_qty span,
 .invoice_table p.order_qty b {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 13px;
     font-weight: 400;
     line-height: 10.89px;
@@ -586,7 +586,7 @@ body {
 
 .invoice_table p.order_size span {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 13px;
     font-weight: 500;
     line-height: 10.89px;
@@ -796,7 +796,7 @@ ul.subtotal li {
     font-weight: 600;
     padding: 0;
     margin: 0;
-    font-family: 'Lato';
+    font-family: 'Verdana';
 }
 
 .subtotal span {
@@ -805,7 +805,7 @@ ul.subtotal li {
     font-weight: 600;
     padding: 0;
     margin: 0;
-    font-family: 'Lato';
+    font-family: 'Verdana';
 }
 
 .customer_details {
@@ -963,7 +963,7 @@ button.button_type1,
 
 .balance-point h6 {
     color: #2E2E2E;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 13px;
     letter-spacing: 0.18px;
     line-height: 20px;
@@ -1646,7 +1646,7 @@ button.button_type1,
 
 .win_card_content h2 {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.3px;
@@ -1657,7 +1657,7 @@ button.button_type1,
 
 .win_card_content p {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 9px;
     font-weight: 400;
     letter-spacing: 0.48px;
@@ -1669,7 +1669,7 @@ button.button_type1,
 
 .win_card_content a {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 6px;
     font-weight: 400;
     letter-spacing: 0.32px;
@@ -1688,7 +1688,7 @@ button.button_type1,
     width: 104px;
     height: 23px;
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 8px;
     font-weight: 400;
     letter-spacing: 0.43px;
@@ -1715,7 +1715,7 @@ button.button_type1,
 
 .question_heading h2 {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.3px;
@@ -1736,7 +1736,7 @@ button.button_type1,
 
 .question_icon_wrap label {
     color: rgba(0, 0, 0, 0.85);
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.32px;
@@ -1782,7 +1782,7 @@ button.button_type1,
 
 .social_icon_anchor a {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.59px;
@@ -1805,7 +1805,7 @@ button.button_type1,
 
 .conected_app_store_wrap p {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 10px;
     font-weight: 400;
     letter-spacing: 0.48px;
@@ -1901,7 +1901,7 @@ button.button_type1,
 
 .thanks_visit p {
     color: #ABABAB;
-    font-family: 'Lato';
+    font-family: 'Verdana';
     font-size: 12px;
     line-height: 15px;
     text-align: center;
@@ -1927,7 +1927,7 @@ button.button_type1,
 
 .editor_heading h4 {
     color: #ededed;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 1px;
@@ -1938,7 +1938,7 @@ button.button_type1,
 
 .editor_heading h5 {
     color: #ededed;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 1px;
@@ -1974,14 +1974,14 @@ button.button_type1,
     box-shadow: none;
     padding-left: 10px;
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 14px;
     font-weight: 400;
     margin-bottom: 10px;
 }
 
 .editor_input::placeholder {
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 14px;
     font-weight: 400;
     color: #ffffff;
@@ -2025,7 +2025,7 @@ button.button_type1,
 
 .file_input_wrap>.label {
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 14px;
     font-weight: 400;
     white-space: nowrap;
@@ -2060,7 +2060,7 @@ button.button_type1,
 .drop-down .selected span,
 .drop-down .options ul li a {
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 13px;
     font-weight: 400;
     letter-spacing: 0.81px;
@@ -2072,7 +2072,7 @@ button.button_type1,
 .drop-down .selected span span,
 .drop-down .options ul li a span {
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 12px;
     font-weight: 400;
     letter-spacing: 0.75px;
@@ -2126,7 +2126,7 @@ button.button_type1,
     position: relative;
     cursor: pointer;
     color: #ededed;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 1px;
@@ -2165,7 +2165,7 @@ button.button_type1,
 .editor_content .checkbox_wrap label {
     position: relative;
     cursor: pointer;
-    font-family: "Lato";
+    font-family: "Verdana";
     color: #ededed;
     font-size: 14px;
     font-weight: 300;
@@ -2221,7 +2221,7 @@ button.button_type1,
     padding: 0 8px;
     height: 27px;
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 12px;
     font-weight: 400;
     opacity: 0.2000000029802322;
@@ -2248,7 +2248,7 @@ button.button_type1,
     box-shadow: none;
     padding-left: 10px;
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 14px;
     font-weight: 400;
     padding: 10px;
@@ -2256,7 +2256,7 @@ button.button_type1,
 
 .body_text .editor_textarea::placeholder {
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 14px;
     font-weight: 400;
     opacity: 0.2000000029802322;
@@ -2266,7 +2266,7 @@ button.button_type1,
 
 label.header {
     color: #ededed;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 13px;
     font-weight: 400;
     letter-spacing: 0.81px;
@@ -2366,7 +2366,7 @@ label.header {
 
 .template_section .feedback_wrap2_header h4 {
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.3px;
@@ -2378,7 +2378,7 @@ label.header {
 
 .template_section .feedback_wrap2_body h4 {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.3px;
@@ -2395,7 +2395,7 @@ label.header {
     width: 134px;
     height: 27px;
     color: #ffffff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 10px;
     font-weight: 400;
     letter-spacing: 0.43px;
@@ -2609,7 +2609,7 @@ p.or_paragraph {
 
 .add_more_social_icon p {
     color: #ededed;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 11px;
     font-weight: 400;
     letter-spacing: 0.69px;
@@ -2637,7 +2637,7 @@ p.or_paragraph {
     line-height: 20px;
     display: inline-block;
     color: #ededed;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 14px;
     font-weight: 400;
     letter-spacing: 0.88px;
@@ -2700,7 +2700,7 @@ p.or_paragraph {
 
 #myModal .modal-title {
     color: #0076ff;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.33px;
@@ -2710,7 +2710,7 @@ p.or_paragraph {
 
 .modal-body .input_group label {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.33px;
@@ -2722,7 +2722,7 @@ p.or_paragraph {
 }
 
 .modal-body .input_group input {
-    font-family: "Lato";
+    font-family: "Verdana";
     border: 0.5px solid #2A2D83;
     border-radius: 3px;
     box-shadow: inset 0 0.3px 6px 0 rgba(0, 118, 255, 0.27);
@@ -2735,7 +2735,7 @@ p.or_paragraph {
 }
 
 .modal-body .input_group select {
-    font-family: "Lato";
+    font-family: "Verdana";
     -webkit-appearance: none;
     -mos-appearance: none;
     -moz-appearance: none;
@@ -2779,7 +2779,7 @@ p.or_paragraph {
 
 .modal-body .input_group .radio_wrap label {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.33px;
@@ -2828,7 +2828,7 @@ p.or_paragraph {
 
 .input_group_label h4 {
     color: #000000;
-    font-family: "Lato";
+    font-family: "Verdana";
     font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.33px;
@@ -3123,7 +3123,8 @@ p.disclaimer {
 }
 
 .StoreName {
-    font-size: 14px;
+    font-size: 18px;
+    font-weight:bold;
 }
 
 @media (max-width: 767px) {
@@ -3329,7 +3330,7 @@ p.disclaimer {
 .divdropDownDataOfAmountPaid label,
 .quanity label {
     color: rgba(192, 192, 192, 0.85);
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 12px;
     letter-spacing: 0.18px;
     line-height: 14.4px;
@@ -3354,7 +3355,7 @@ p.disclaimer {
 /*.divdropDownDataOfAmountPaid span:after {
     content: '';
     background: url(../images/downarrow-white.png) no-repeat;
-    font-family: Lato;
+    font-family: Verdana;
     color: #aeb2b3;
     width: 14px;
     text-align: center;
@@ -3383,7 +3384,7 @@ p.disclaimer {
 .Point-Summary-header {
     display: flex;
     justify-content: center;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     font-weight: 600;
     background-color: #2A2D83;
@@ -3403,7 +3404,7 @@ p.disclaimer {
 
 .point_headding {
     color: #2E2E2E;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     letter-spacing: 0.18px;
     line-height: 14px;
@@ -3442,7 +3443,7 @@ element.style {
 .Point-Summary-header {
     display: flex;
     justify-content: center;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     font-weight: 600;
     background-color: #2A2D83;
@@ -3482,7 +3483,7 @@ element.style {
 }
 .update_btn {
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 10px;
     letter-spacing: 0.15px;
     line-height: 12px;
@@ -3520,7 +3521,7 @@ element.style {
     display: flex;
     justify-content: end;
     color: #000000;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     line-height: 17px;
     font-weight: normal;
@@ -3541,7 +3542,7 @@ element.style {
 }
     .confirmation_content h3 {
         color: #141414;
-        font-family: Lato;
+        font-family: Verdana;
         font-size: 18px;
         letter-spacing: 0.28px;
         font-weight: bold;
@@ -3549,7 +3550,7 @@ element.style {
 
     .confirmation_content h4 {
         color: #141414;
-        font-family: Lato;
+        font-family: Verdana;
         font-size: 14px;
         letter-spacing: 0.22px;
         font-weight: normal;
@@ -3557,7 +3558,7 @@ element.style {
 .DownloadContent h4 {
     margin-bottom: 0px;
     color: #141414;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     letter-spacing: 0.22px;
     line-height: 17px;
@@ -3642,7 +3643,7 @@ input[type="checkbox"] {
 }
 .confirm_btn {
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 16px;
     border-radius: 24.5px;
     padding: 5px 35px;
@@ -3668,7 +3669,7 @@ input[type="checkbox"] {
 }
 .bg_content_details h3{
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 16px;
     letter-spacing: 0.25px;
     line-height: 19px;
@@ -3678,7 +3679,7 @@ input[type="checkbox"] {
 }
 .bg_content_details h6{
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 10px;
     letter-spacing: 0.15px;
     line-height: 12px;

@@ -114,9 +114,9 @@ nav .features {
     }
 
     nav .features > a > h1 {
-        font-size: 1.1vw;
-        letter-spacing: -1px;
-        font-weight: 600;
+        font-size: 15px !important;
+        letter-spacing: -1px !important;
+        font-weight: 600 !important;
     }
 
 nav .hamburger {
@@ -126,12 +126,13 @@ nav .hamburger {
     cursor: pointer;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 320px) {
     h1 {
         font-family: "Segoe UI", Arial, sans-serif;
         font-weight: 400;
         margin: -6px 0;
     }
+
     nav {
         position: absolute;
         top: 0;
@@ -210,8 +211,9 @@ nav .hamburger {
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            height: 100%;
+            height: 80%;
             padding-left: 5vw;
+            padding-top: 135px;
             gap: 2vw;
         }
 
@@ -229,6 +231,325 @@ nav .hamburger {
         border-bottom: 3px solid white;
     }
 }
+
+@media (max-width: 375px) {
+    h1 {
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-weight: 400;
+        margin: -6px 0;
+    }
+
+    nav {
+        position: absolute;
+        top: 0;
+        height: 16vh;
+        z-index: 3;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.6s ease-in-out;
+        padding-inline: 5vw;
+    }
+
+        nav .profile_links {
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+    .logo img {
+        width: 180px;
+        height: 100px;
+    }
+
+    nav .logo {
+        position: absolute;
+        top: 80%;
+        left: 5%;
+        z-index: 0;
+    }
+
+
+    nav .language > select {
+        cursor: pointer;
+        width: 150px;
+        height: 40px;
+        border: none;
+        outline: none;
+        /* background-color: rgb(235, 235, 235); */
+        color: white;
+        background-color: transparent;
+        border-radius: 10px;
+        font-size: 4.7vw;
+    }
+
+        nav .language > select > option {
+            background-color: black;
+        }
+
+    nav .features {
+        display: none;
+        align-items: baseline;
+        justify-content: flex-start;
+        gap: 35px;
+    }
+
+    nav .hamburger {
+        display: block;
+        font-size: 25px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .menu-container {
+        display: none;
+        background-color: #0016a0;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        transition: all 0.6s ease-in-out;
+        z-index: 1;
+    }
+
+        .menu-container #menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+            height: 80%;
+            padding-left: 5vw;
+            padding-top: 135px;
+            gap: 2vw;
+        }
+
+    #menu a {
+        color: white;
+        text-decoration: none;
+        font-size: 4.3vw;
+    }
+
+    #menu .active {
+        border-bottom: 3px solid white;
+    }
+
+    #menu a:hover {
+        border-bottom: 3px solid white;
+    }
+}
+
+@media (max-width: 425px) {
+    h1 {
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-weight: 400;
+        margin: -6px 0;
+    }
+
+    nav {
+        position: absolute;
+        top: 0;
+        height: 16vh;
+        z-index: 3;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.6s ease-in-out;
+        padding-inline: 5vw;
+    }
+
+        nav .profile_links {
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+    .logo img {
+        width: 180px;
+        height: 100px;
+    }
+
+    nav .logo {
+        position: absolute;
+        top: 80%;
+        left: 5%;
+        z-index: 0;
+    }
+
+
+    nav .language > select {
+        cursor: pointer;
+        width: 150px;
+        height: 40px;
+        border: none;
+        outline: none;
+        /* background-color: rgb(235, 235, 235); */
+        color: white;
+        background-color: transparent;
+        border-radius: 10px;
+        font-size: 4.7vw;
+    }
+
+        nav .language > select > option {
+            background-color: black;
+        }
+
+    nav .features {
+        display: none;
+        align-items: baseline;
+        justify-content: flex-start;
+        gap: 35px;
+    }
+
+    nav .hamburger {
+        display: block;
+        font-size: 25px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .menu-container {
+        display: none;
+        background-color: #0016a0;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        transition: all 0.6s ease-in-out;
+        z-index: 1;
+    }
+
+        .menu-container #menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+            height: 80%;
+            padding-left: 5vw;
+            padding-top: 135px;
+            gap: 2vw;
+        }
+
+    #menu a {
+        color: white;
+        text-decoration: none;
+        font-size: 4.3vw;
+    }
+
+    #menu .active {
+        border-bottom: 3px solid white;
+    }
+
+    #menu a:hover {
+        border-bottom: 3px solid white;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-family: "Segoe UI", Arial, sans-serif;
+        font-weight: 400;
+        margin: -6px 0;
+    }
+
+    nav {
+        position: absolute;
+        top: 0;
+        height: 16vh;
+        z-index: 3;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.6s ease-in-out;
+        padding-inline: 5vw;
+    }
+
+        nav .profile_links {
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+    .logo img {
+        width: 180px;
+        height: 100px;
+    }
+
+    nav .logo {
+        position: absolute;
+        top: 80%;
+        left: 5%;
+        z-index: 0;
+    }
+
+
+    nav .language > select {
+        cursor: pointer;
+        width: 150px;
+        height: 40px;
+        border: none;
+        outline: none;
+        /* background-color: rgb(235, 235, 235); */
+        color: white;
+        background-color: transparent;
+        border-radius: 10px;
+        font-size: 4.7vw;
+    }
+
+        nav .language > select > option {
+            background-color: black;
+        }
+
+    nav .features {
+        display: none;
+        align-items: baseline;
+        justify-content: flex-start;
+        gap: 35px;
+    }
+
+    nav .hamburger {
+        display: block;
+        font-size: 25px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .menu-container {
+        display: none;
+        background-color: #0016a0;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        transition: all 0.6s ease-in-out;
+        z-index: 1;
+    }
+
+        .menu-container #menu {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: start;
+            height: 80%;
+            padding-left: 5vw;
+            padding-top: 120px;
+            gap: 2vw;
+        }
+
+    #menu a {
+        color: white;
+        text-decoration: none;
+        font-size: 4.3vw;
+    }
+
+    #menu .active {
+        border-bottom: 3px solid white;
+    }
+
+    #menu a:hover {
+        border-bottom: 3px solid white;
+    }
+}
+
 
 
 .main_text {
@@ -404,7 +725,7 @@ nav .hamburger {
 }
 
 .content {
-    padding: 20px;
+    padding-left: 20px;
     margin-bottom: 3%;
 }
 

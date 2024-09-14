@@ -80,7 +80,7 @@ body {
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            height: 100vh;
+            /*height: 100vh;*/
             padding-left: 5vw;
             padding-top: 20px;
             gap: .3vw !important;
@@ -219,7 +219,7 @@ body {
             flex-direction: column;
             justify-content: flex-start;
             align-items: start;
-            height: 100vh;
+            /*height: 100vh;*/
             padding-left: 5vw;
             padding-top: 150px;
             gap: 1vw;
@@ -357,7 +357,7 @@ body {
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            height: 100%;
+           /* height: 100%;*/
             padding-left: 5vw;
             padding-top: 13vw;
             gap: 2vw;
@@ -496,7 +496,7 @@ body {
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            height: 100vh;
+            /*height: 100vh;*/
             padding-left: 5vw;
             gap: 1vw;
         }
@@ -633,7 +633,7 @@ body {
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            height: 100vh;
+            /*height: 100vh;*/
             padding-left: 5vw;
             gap: 1vw;
         }

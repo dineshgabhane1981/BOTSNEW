@@ -52,25 +52,24 @@
             </div>*@
         @if (logoSize == "Small")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
             </div>
         }
         @if (logoSize == "Medium")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="300" height="150" />
             </div>
         }
         @if (logoSize == "Big")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="400" height="200" />
             </div>
         }
-        <div class="profile_links">
-            <span><i class="user ri-account-circle-fill"></i></span>
-            <span><i class="noti ri-notification-3-line"></i></span>
+        <div class="profile_links" >
+            
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -80,7 +79,7 @@
                 <option value="Marathi">Marathi</option>
             </select>
         </div>
-        <div class="features">
+        <div class="features" style="margin-left:200px;">
             <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
             <a href="@Url.Action("Index", "ReferEarn")"><h1 class="active">Refer and Earn</h1></a>

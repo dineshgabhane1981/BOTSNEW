@@ -39,10 +39,12 @@
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            padding: 0px;
+            /*padding: 40px 60px;*/
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
+            max-height: 550px;
             transition: all 0.3s ease-in-out;
+            min-height: 188px;
         }
 
             .login-box:hover {
@@ -52,7 +54,7 @@
         .header-section {
             text-align: center;
             border-radius: 20px 20px 0 0;
-            background: linear-gradient(to right, #02159B, #4CAF50);
+            /*background: linear-gradient(to right, #02159B, #4CAF50);*/
             color: white;
             padding: 25px;
         }
@@ -70,7 +72,7 @@
             }
 
         .logo {
-            width: 100px;
+            width: 70%;
         }
 
         .heading {
@@ -103,7 +105,7 @@
 
         .dropdown {
             width: 16%;
-            padding: 10px;
+            padding: 13px;
             border-radius: 5px;
             border: 1px solid #ccc;
         }
@@ -115,6 +117,14 @@
             border: 1px solid #ccc;
         }
         .input-field1 {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-left: 4%;
+            width: 81%;
+        }
+        .input-field2 {
             flex: 1;
             padding: 10px;
             border-radius: 5px;
@@ -137,6 +147,8 @@
 
         .btn-action {
             padding: 12px;
+            padding-left: 30px;
+            padding-right: 30px;
             border: none;
             border-radius: 20px;
             /* background: linear-gradient(to right, #4CAF50, #02159B);*/
@@ -190,7 +202,7 @@
 
             .dropdown {
                 width: 27%;
-                padding: 10px;
+                padding: 13px;
                 border-radius: 5px;
                 border: 1px solid #ccc;
             }
@@ -201,8 +213,17 @@
                 border-radius: 5px;
                 border: 1px solid #ccc;
                 width: 0%;
+                
             }
             .input-field1 {
+                flex: 1;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                margin-left: 16%;
+                width: 70%;                
+            }
+            .input-field2 {
                 flex: 1;
                 padding: 10px;
                 border-radius: 5px;
@@ -218,7 +239,7 @@
 
         button.resend {
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 2px;
         }
     </style>
 </head>
@@ -228,7 +249,7 @@
             <input type="hidden" id="hdnOtpOrPassword" />
             <div class="login-box">
 
-                <div class="header-section" id="dvMain" style="background-image: url('@Url.Content("~/img/Header2.png")');">
+                <div class="header-section" id="dvMain">
                     <img src="@Model.objDashboardConfig.UseLogoURL" alt="Company Logo" class="logo" />
 
                 </div>
@@ -236,36 +257,39 @@
                     <p class="description">Sign-up or Log-in now and start earning tons of reward points!</p>
                     <div class="form-group-inline">
                         <div class="country-code">
-                            
-                                @Html.DropDownListFor(model => model.objDashboardConfig.CountryCode,
-                                                       new SelectList(ViewBag.Codes, "Code", "Code"),
-                                                       new { @class = "dropdown", @id = "ddlCountryCode" })
-                            
+
+                            @Html.DropDownListFor(model => model.objDashboardConfig.CountryCode,
+                                                   new SelectList(ViewBag.Codes, "Code", "Code"),
+                                                   new { @class = "dropdown", @id = "ddlCountryCode" })
+
                             <input type="number" id="txtMobileNo" name="phone" class="input-field" placeholder="Enter your phone number" />
                         </div>
                     </div>
                     <div class="form-group hidden-group" id="password-group" style="display:none;">
                         <div style="width:16%;"></div>
-                        <input type="password" id="txtPassword" class="input-field1" placeholder="Password"/>
+                        <input type="password" id="txtPassword" class="input-field2" placeholder="Password" />
                         <div>
                             <a href="@Url.Action("ResetPassword", "Start")" id="lnkForgotPassword" class="link-forgot">Forgot Password?</a>
                         </div>
 
                     </div>
-                    <div class="form-group hidden-group" id="otp-group" style="display:none;">
-                        <input type="password" id="txtOtp" class="input-field" placeholder="OTP" style=" width: 80%;margin-left: 20%;" />
+                    <div class="form-group hidden-group row" id="otp-group" style="display:none;">
+                        <div style="width:16%;"></div>
+                        <input type="password" id="txtOtp" class="input-field1" placeholder="Enter OTP" style=" width: 80%;margin-right:15px;" />
 
-                        <div>
-                            <button class="resend" id="btnResend" onclick="ResendOTP();">Resend OTP<i class="fa fa-caret-right"></i></button>
-                        </div>
+
                     </div>
+
                     <div class="terms-conditions" id="terms-group" style="display:none;">
                         <input type="checkbox" id="chkTerms" style="width:20px;height:20px;cursor:pointer;" />
                         <label for="chkTerms" style="margin-bottom:0px !important;">I agree to the Brand Loyalty Terms & Conditions</label>
                     </div>
-                    <div class="form-group">
+                    <div>
                         <button type="button" id="btnLogin" class="btn-action">Get Started</button>
                         <button type="button" id="btnSubmit" class="btn-action" style="display:none;padding-left:20px;padding-right:20px;">Login</button>
+                    </div>
+                    <div>
+                        <button class="resend" id="btnResend" onclick="ResendOTP();">Resend OTP<i class="fa fa-caret-right"></i></button>
                     </div>
                 </div>
                 @if (Model.objDashboardConfig.ShowLogoToFooter)
@@ -357,9 +381,7 @@
                                 $("#lnkForgotPassword").show();
                                 $("#dvTNC").show();
                                 $("#terms-group").show();
-
-
-
+                                $("#txtMobileNo").prop("disabled",true);
                             }
                             if (result == "OTP") {
                                 $("#hdnOtpOrPassword").val("OTP");
@@ -372,6 +394,7 @@
                                 $("#lnkForgotPassword").hide();
                                 $("#terms-group").show();
                                 $("#dvTNC").show();
+                                $("#txtMobileNo").prop("disabled", true);
                             }
 
                             $("#divLoader").hide();

@@ -785,6 +785,7 @@ namespace BOTS_BL.Repository
                     objData.OutletAddress = outletDetails.Address;
                     objData.OutletLongitude = outletDetails.Longitude;
                     objData.OutletLatitude = outletDetails.Latitude;
+                    objData.OutletContact = outletDetails.Phone;
                     var objCust= context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).FirstOrDefault();
                     //var optout = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.DisableSMSWAPromo).FirstOrDefault();
                     //var custumerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.Name).FirstOrDefault();

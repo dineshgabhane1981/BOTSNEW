@@ -140,11 +140,14 @@ namespace WebApp.Controllers.OnBoarding
                     objDashboard.RedirectToPage = Convert.ToString(item["RedirectToPage"]);
 
                     objDashboard.AddPersonalDetails = Convert.ToBoolean(item["AddPersonalDetails"]);
-                    objDashboard.PersonalDetailsPoints = Convert.ToInt32(item["PersonalDetailsPoints"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["PersonalDetailsPoints"])))
+                        objDashboard.PersonalDetailsPoints = Convert.ToInt32(item["PersonalDetailsPoints"]);
                     objDashboard.AddReferFriend = Convert.ToBoolean(item["AddReferFriend"]);
-                    objDashboard.ReferPoints = Convert.ToInt32(item["ReferPoints"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["ReferPoints"])))
+                        objDashboard.ReferPoints = Convert.ToInt32(item["ReferPoints"]);
                     objDashboard.AddGiftPoints = Convert.ToBoolean(item["AddGiftPoints"]);
-                    objDashboard.GiftPoints = Convert.ToInt32(item["GiftPoints"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["GiftPoints"])))
+                        objDashboard.GiftPoints = Convert.ToInt32(item["GiftPoints"]);
 
                     objDashboard.IsExtraWidgetText1 = Convert.ToBoolean(item["IsExtraWidgetText1"]);
                     objDashboard.IsExtraWidgetText2 = Convert.ToBoolean(item["IsExtraWidgetText2"]);

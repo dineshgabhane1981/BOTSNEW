@@ -2,7 +2,7 @@
     position: relative;
     z-index: 999;
     color:gray;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 12px;
     font-weight: 400;
     border: none;
@@ -60,7 +60,7 @@
 .Point-Summary-header{
     display: flex;
     justify-content: center;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     font-weight: 600;
     background-color: #2A2D83;
@@ -110,7 +110,7 @@ ul.subtotal {
 }
 .point_headding{
     color: #2E2E2E;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     letter-spacing: 0.18px;
     line-height: 14px;
@@ -139,7 +139,7 @@ ul.subtotal {
 }
 .question_heading h6{
     color: #313131;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 16px;
     letter-spacing: 0.25px;
     line-height: 19px;
@@ -155,7 +155,7 @@ ul.subtotal {
 }
 .text_content{
 color: #141414;
-font-family: Lato;
+font-family: Verdana;
 font-size: 12px;
 letter-spacing: 0.18px;
 line-height: 18px;
@@ -204,7 +204,7 @@ text-align: left;
 }
 .thank_you_content p{
     color: #141414;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 12px;
     letter-spacing: 0.18px;
     text-align: center;
@@ -251,7 +251,7 @@ text-align: left;
 }
 .bg_content_details h3{
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 16px;
     letter-spacing: 0.25px;
     line-height: 19px;
@@ -261,7 +261,7 @@ text-align: left;
 }
 .bg_content_details h6{
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 10px;
     letter-spacing: 0.15px;
     line-height: 12px;
@@ -277,7 +277,7 @@ text-align: left;
 }
 .update_btn{
     color: #FFFFFF;
-  font-family: Lato;
+  font-family: Verdana;
   font-size: 10px;
   letter-spacing: 0.15px;
   line-height: 12px;
@@ -351,7 +351,7 @@ font-size: 12px;
 }
 .edit_profile_icon{
     color: #E7E7E7;
-  font-family: Lato;
+  font-family: Verdana;
   font-size: 12px;
   letter-spacing: 0.18px;
   line-height: 17px;
@@ -525,7 +525,7 @@ margin: 10px 0px;
     display: flex;
     justify-content: end;
     color: #000000;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     line-height: 17px;
     font-weight: 600;
@@ -564,21 +564,21 @@ margin: 10px 0px;
 }
 .confirmation_content h2{
     color: #000000;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 13px;
     letter-spacing: 0.22px;
     font-weight: normal;
 }
 .confirmation_content h3{
     color: #000000;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 15px;
     letter-spacing: 0.24px;
     font-weight: bold;
 }
 .confirmation_content h5{
     color: #000000;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 20px;
     letter-spacing: 0.26px;
     font-weight: 600;
@@ -626,7 +626,7 @@ margin: 10px 0px;
 .DownloadContent h4{
     margin-bottom: 0px;
     color: #141414;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     letter-spacing: 0.22px;
     line-height: 17px;
@@ -644,7 +644,7 @@ margin: 10px 0px;
 /* .new_DownloadContent h4{
     margin-bottom: 0px;
     color: #141414;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 14px;
     letter-spacing: 0.22px;
     line-height: 17px;
@@ -676,7 +676,7 @@ input[type="checkbox"] {
 }
 .confirm_btn{
     color: #FFFFFF;
-    font-family: Lato;
+    font-family: Verdana;
     font-size: 16px;
     border-radius: 24.5px;
     padding: 5px 35px;

@@ -21,13 +21,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Dashboard</title>
     <link href="~/css/dashboard.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
           rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">   
+    
 
     <style>
         @@media (max-width: 1024px) {
@@ -156,8 +157,7 @@
 <body>
     <nav id="nvbarcolor">
         <div class="profile_links">
-            <span><i class="user ri-account-circle-fill"></i></span>
-            <span><i class="noti ri-notification-3-line"></i></span>
+           
         </div>
         @*<div class="logo">
                 <a href="index.html">
@@ -166,19 +166,19 @@
             </div>*@
         @if (logoSize == "Small")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top:-40px;">
                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
             </div>
         }
         @if (logoSize == "Medium")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="300" height="150" />
             </div>
         }
         @if (logoSize == "Big")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="400" height="200" />
             </div>
         }
@@ -281,30 +281,6 @@
             </div>
         </div>
 
-
-        @*<div class="custom-modal" id="missingFieldModal">
-                <div class="custom-modal-content">
-                    <div class="custom-modal-header">
-                        <h5 class="modal-title" id="missingFieldModalLabel">Missing Information</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="custom-modal-body">
-                        <form id="missingFieldForm">
-                            <div class="form-group">
-                                <label for="missingFieldValue" id="missingFieldLabel">Please enter the required information:</label>
-                                <input type="text" class="form-control"onclick="hideModal()" id="missingFieldValue" required>
-                            </div>
-                            <input type="hidden" id="userId">
-                            <input type="hidden" id="missingField">
-                        </form>
-                    </div>
-                    <div class="custom-modal-footer">
-                        <button type="button" class="btn" onclick="saveMissingField()">Save</button>
-                    </div>
-                </div>
-            </div>*@
         <div class="custom-modal" id="missingFieldModal">
             <div class="custom-modal-content">
                 <div class="custom-modal-header">
@@ -368,10 +344,13 @@
                     <div class="gift-card">
                         <div class="gift-card-top">
                             <i class="ri-team-line"></i>
-                            <h3>@Model.objDashboardConfig.PersonalDetailsPoints Points</h3>
+                            @if (Model.objDashboardConfig.PersonalDetailsPoints > 0)
+                            {
+                                <h3>@Model.objDashboardConfig.PersonalDetailsPoints Points</h3>
+                            }
                         </div>
                         <div class="gift-card-bottom">
-                            <h3>Add Personal Details & get @Model.objDashboardConfig.PersonalDetailsPoints bonus points</h3>
+                            <h3>Add Personal Details</h3>
                         </div>
                     </div>
                 </a>
@@ -382,10 +361,13 @@
                     <div class="gift-card">
                         <div class="gift-card-top">
                             <i class="ri-team-line"></i>
-                            <h3>@Model.objDashboardConfig.ReferPoints Points</h3>
-                        </div>
+                            @if (Model.objDashboardConfig.ReferPoints > 0)
+                            {
+                                <h3>@Model.objDashboardConfig.ReferPoints Points</h3>
+                            }
+                            </div>
                         <div class="gift-card-bottom">
-                            <h3>Refer a friend <br> and earn @Model.objDashboardConfig.ReferPoints points</h3>
+                            <h3>Refer a friend</h3>
                         </div>
                     </div>
                 </a>
@@ -396,10 +378,13 @@
                     <div class="gift-card">
                         <div class="gift-card-top">
                             <i class="ri-team-line"></i>
-                            <h3>@Model.objDashboardConfig.GiftPoints Points</h3>
-                        </div>
+                            @if (Model.objDashboardConfig.GiftPoints > 0)
+                            {
+                                <h3>@Model.objDashboardConfig.GiftPoints Points</h3>
+                            }
+                            </div>
                         <div class="gift-card-bottom">
-                            <h3>Gift your points & get <b style="font-size:22px;"> @Model.objDashboardConfig.GiftPoints </b> more rewards</h3>
+                            <h3>Gift your points</h3>
                         </div>
                     </div>
                 </a>
@@ -411,8 +396,11 @@
                     <div class="gift-card">
                         <div class="gift-card-top">
                             <i class="ri-team-line"></i>
-                            <h3>@Model.objDashboardConfig.ExtraWidgetPoints1 Points</h3>
-                        </div>
+                            @if (Model.objDashboardConfig.ExtraWidgetPoints1 > 0)
+                            {
+                                <h3>@Model.objDashboardConfig.ExtraWidgetPoints1 Points</h3>
+                            }
+                            </div>
                         <div class="gift-card-bottom">
                             <h3>@Model.objDashboardConfig.ExtraWidgetText1</h3>
                         </div>
@@ -426,8 +414,11 @@
                     <div class="gift-card">
                         <div class="gift-card-top">
                             <i class="ri-team-line"></i>
-                            <h3>@Model.objDashboardConfig.ExtraWidgetPoints2 Points</h3>
-                        </div>
+                            @if (Model.objDashboardConfig.ExtraWidgetPoints2 > 0)
+                            {
+                                <h3>@Model.objDashboardConfig.ExtraWidgetPoints2 Points</h3>
+                            }
+                            </div>
                         <div class="gift-card-bottom">
                             <h3>@Model.objDashboardConfig.ExtraWidgetText2</h3>
                         </div>
@@ -441,8 +432,11 @@
                     <div class="gift-card">
                         <div class="gift-card-top">
                             <i class="ri-team-line"></i>
-                            <h3>@Model.objDashboardConfig.ExtraWidgetPoints3 Points</h3>
-                        </div>
+                            @if (Model.objDashboardConfig.ExtraWidgetPoints3 > 0)
+                            {
+                                <h3>@Model.objDashboardConfig.ExtraWidgetPoints3 Points</h3>
+                            }
+                            </div>
                         <div class="gift-card-bottom">
                             <h3>@Model.objDashboardConfig.ExtraWidgetText3</h3>
                         </div>
@@ -456,10 +450,6 @@
 
     <section class="store">
         <h3></h3>
-        @*<h1>@Model.dLCDashboardContent.OutletAddress</h1>*@
-        <map class="map">
-            <iframe src="@url" width="100%" height="500" style="border-radius:10px; border:none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </map>
         <div class="location">
             <h2>
                 @Model.dLCDashboardContent.OutletName
@@ -467,13 +457,17 @@
             <h3>
                 @Model.dLCDashboardContent.OutletAddress
             </h3>
+            <p class="phone-icon" id="contactInfo">
+                <i class="material-icons">&#xe551;</i>
+                <span id="spnContact">@Model.dLCDashboardContent.OutletContact</span>
+            </p>
         </div>
-        <button class="explore" style="cursor:pointer" onclick="gotostore();">Explore more location</button>
-        @*<button class="explore">
-                <a href="@Url.Action("Index", "Store")" style="text-decoration: none;color: inherit;">
-                    <h3>Explore more location</h3>
-                </a>
-            </button>*@
+       
+        <map class="map">
+            <iframe src="@url" width="100%" height="500" style="border-radius:10px; border:none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </map>
+        
+        <button class="explore" style="cursor:pointer" onclick="gotostore();">Explore more location</button>        
     </section>
     <section class="footer" style="text-align:end;padding-right:20px;">
         @if (!string.IsNullOrEmpty(Model.objDashboardConfig.FacebookUrl))
@@ -513,12 +507,10 @@
     <script>
         function handleCardClick()
         {
-
             window.location.href = '@Url.Action("Index", "ReferEarn")';
         }
         function gotostore()
         {
-
             window.location.href = '@Url.Action("Index", "Store")';
         }
     </script>
@@ -557,7 +549,7 @@
                             var cntrl = "<select  id='missingFieldValue' class='form-control' required>";
                             cntrl = cntrl + "<option value='M'>Male</option>";
                             cntrl = cntrl + "<option value='F'>Female</option>";
-                        }                        
+                        }
                         $("#dvmissingField").html(cntrl);
                         document.getElementById("userId").value = id;
 

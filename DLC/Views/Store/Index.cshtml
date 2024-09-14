@@ -16,8 +16,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Store Locator</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -31,6 +31,7 @@
             background-color: #344966;
             height: 10vh;
         }
+
         .heading_pt {
             margin-top: 208px !important;
             margin-left: 1.5%;
@@ -39,27 +40,26 @@
         }
 
         .dropdown-content {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-        position: absolute;
-        background-color: white;
-        border: 1px solid #ccc;
-        z-index: 1000;
-        width: 100%;
-        max-height: 200px;
-        overflow-y: auto;
-    }
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            z-index: 1000;
+            width: 100%;
+            max-height: 200px;
+            overflow-y: auto;
+        }
 
-    .dropdown-item {
-        padding: 8px 16px;
-        cursor: pointer;
-    }
+        .dropdown-item {
+            padding: 8px 16px;
+            cursor: pointer;
+        }
 
-    .dropdown-item:hover {
-        background-color: #f1f1f1;
-    }
-
+            .dropdown-item:hover {
+                background-color: #f1f1f1;
+            }
     </style>
 </head>
 <body>
@@ -73,25 +73,24 @@
             </div>*@
         @if (logoSize == "Small")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px; ">
                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
             </div>
         }
         @if (logoSize == "Medium")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px; ">
                 <img id="imgLogo" src="@logoUrl" width="300" height="150" />
             </div>
         }
         @if (logoSize == "Big")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px; ">
                 <img id="imgLogo" src="@logoUrl" width="400" height="200" />
             </div>
         }
         <div class="profile_links">
-            <span><i class="user ri-account-circle-fill"></i></span>
-            <span><i class="noti ri-notification-3-line"></i></span>
+
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -142,16 +141,8 @@
             <!-- Outlet names and IDs will be populated here by JavaScript -->
         </ul>
     </div>
-
-    <div class="map-container">
-        <div class="map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.4327452779316!2d73.82960137335087!3d18.509336569520933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf6e0b6b0b33%3A0xd8facbf3c039f08b!2sThe%20Millennium!5e0!3m2!1sen!2sin!4v1704216476194!5m2!1sen!2sin" width="1200" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-
-    </div>
-
     <div class="content">
-        <h2> </h2>
+        <h4> </h4>
         <p>
 
         </p>
@@ -160,6 +151,14 @@
             <span id="spnContact"></span>
         </p>
     </div>
+    <div class="map-container">
+        <div class="map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.4327452779316!2d73.82960137335087!3d18.509336569520933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf6e0b6b0b33%3A0xd8facbf3c039f08b!2sThe%20Millennium!5e0!3m2!1sen!2sin!4v1704216476194!5m2!1sen!2sin" width="1200" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+    </div>
+
+
     <section class="footer" style="text-align:end;padding-right:20px;">
         @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
         {
@@ -220,6 +219,7 @@
         }
 
         Hamburger();
+
     </script>
     <script>
     function fetchOutlets()
@@ -277,10 +277,11 @@
             var outletName = $('#search-input').val();
             if (outletName) {
                 $.ajax({
-                    url: '/Store/GetMapUrl',
+                    url: '@Url.Action("GetMapUrl", "Store")',                    
                     type: 'POST',
                     data: { outletName: outletName },
                     success: function (data) {
+                        console.log(data)
                         if (data) {
                             updateMapUrl(data.url);
                             updateContent(data.address, data.ownerName, data.contactNo);
@@ -303,7 +304,7 @@
         }
 
         function updateContent(address, ownerName, contact) {
-            $('.content h2').text(address);
+            $('.content h4').text(address);
             $('.content p').first().text(ownerName);
             $("#spnContact").text(contact);
             $("#contactInfo").show();
