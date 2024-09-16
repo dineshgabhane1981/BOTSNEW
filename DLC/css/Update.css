@@ -642,7 +642,7 @@ button {
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            height: 62vh;
+            height: 65vh;
             padding-left: 5vw;
             gap: 4vw;
         }

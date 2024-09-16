@@ -18,6 +18,7 @@ namespace BOTS_BL.Models
 
         [StringLength(50)]
         public string RedirectToPage { get; set; }
+        public string SignInText { get; set; }
 
         public bool AddPersonalDetails { get; set; }
 

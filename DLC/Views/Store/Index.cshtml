@@ -46,10 +46,14 @@
             position: absolute;
             background-color: white;
             border: 1px solid #ccc;
-            z-index: 1000;
-            width: 100%;
+            
+            width: 90%;
             max-height: 200px;
             overflow-y: auto;
+            padding: 12px 10px 12px 15px !important;
+            border-radius: 10px !important;
+            border: solid 1px #e1e1e1;
+            cursor:pointer;
         }
 
         .dropdown-item {
@@ -135,11 +139,12 @@
     <h1 class="heading_pt">Store Locator</h1>
 
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="Search..." onclick="fetchOutlets()">
+        <select id="ddlOutlet" class="dropdown-content"></select><br /><br />
+        <!--<input type="text" id="search-input" placeholder="Search..." onclick="fetchOutlets()">
         <button type="submit" onclick="submitSearch()">Submit</button>
-        <ul id="dropdown" class="dropdown-content" style="display: none;">
+        <ul id="dropdown" class="dropdown-content" style="display: none;">-->
             <!-- Outlet names and IDs will be populated here by JavaScript -->
-        </ul>
+        <!--</ul>-->
     </div>
     <div class="content">
         <h4> </h4>
@@ -195,6 +200,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+        
         function Hamburger() {
             var hamburger = document.querySelector('.hamburger');
             var menu = document.querySelector('.menu-container');
@@ -222,6 +228,30 @@
 
     </script>
     <script>
+        $('#ddlOutlet').change(function () {
+            submitSearch();
+        });
+
+        function FillOutlet() {
+            $.ajax({
+            url: '@Url.Action("GetOutlets", "Store")',
+            type: 'GET',
+            success: function (data) {
+                $("#ddlOutlet").empty();
+                data.forEach(function (outlet) {
+                    
+                    
+                        $("#ddlOutlet").append($("<option />").val(outlet.OutletId).text(outlet.OutletName));
+                    
+                });
+            },
+            error: function() {
+               // alert('Failed to fetch outlet names.');
+                toastr.error('Failed to fetch outlet names.');
+            }
+        });
+        }
+        FillOutlet();
     function fetchOutlets()
     {
 
@@ -274,7 +304,9 @@
 
     <script>
         function submitSearch() {
-            var outletName = $('#search-input').val();
+            var outletName = $("#ddlOutlet option:selected").text();
+           
+            alert(outletName)
             if (outletName) {
                 $.ajax({
                     url: '@Url.Action("GetMapUrl", "Store")',                    
@@ -309,7 +341,8 @@
             $("#spnContact").text(contact);
             $("#contactInfo").show();
 
-        }
+        }       
+       
     </script>
 
 </body>

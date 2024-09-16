@@ -178,6 +178,7 @@ namespace WebApp.Controllers.OnBoarding
                     objDashboard.WhatsappUrl = Convert.ToString(item["WhatsappUrl"]);
 
                     objDashboard.HeaderTheme = Convert.ToString(item["HeaderTheme"]);
+                    objDashboard.SignInText = Convert.ToString(item["SignInText"]);
 
                     objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
                     objDashboard.AddedBy = userDetails.LoginId;

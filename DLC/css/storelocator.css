@@ -214,7 +214,7 @@ nav .hamburger {
             height: 80%;
             padding-left: 5vw;
             padding-top: 135px;
-            gap: 2vw;
+            gap: 1.0vw;
         }
 
     #menu a {
@@ -320,7 +320,7 @@ nav .hamburger {
             height: 80%;
             padding-left: 5vw;
             padding-top: 135px;
-            gap: 2vw;
+            gap: 1.0vw;
         }
 
     #menu a {
@@ -426,7 +426,7 @@ nav .hamburger {
             height: 80%;
             padding-left: 5vw;
             padding-top: 135px;
-            gap: 2vw;
+            gap: 1.0vw;
         }
 
     #menu a {
@@ -531,8 +531,8 @@ nav .hamburger {
             align-items: start;
             height: 80%;
             padding-left: 5vw;
-            padding-top: 120px;
-            gap: 2vw;
+            padding-top: 0px;
+            gap: 1.0vw;
         }
 
     #menu a {

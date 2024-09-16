@@ -225,6 +225,7 @@ namespace BOTS_BL.Repository
                     objData.YoutubeURL = configData.YoutubeURL;
                     objData.WhatsappUrl = configData.WhatsappUrl;
                     objData.HeaderTheme = configData.HeaderTheme;
+                    objData.SignInText = configData.SignInText;
 
                     context.tblDLCDashboardConfig_Publish.AddOrUpdate(objData);
                     context.SaveChanges();

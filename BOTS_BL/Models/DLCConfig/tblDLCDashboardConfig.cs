@@ -17,7 +17,7 @@ namespace BOTS_BL.Models.DLCConfig
 
         [StringLength(50)]
         public string RedirectToPage { get; set; }
-
+        public string SignInText { get; set; }
         public bool AddPersonalDetails { get; set; }
 
         public bool AddGiftPoints { get; set; }

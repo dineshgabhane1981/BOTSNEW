@@ -41,6 +41,10 @@
                     <div style="padding-top:10px;padding-right:5px;">After Login redirect to page </div>
                     <div> @Html.DropDownListFor(model => model.objDLCDashboard.RedirectToPage, new SelectList(Model.RedirectToPage(), "Value", "Text"), htmlAttributes: new { @class = "input50", @id = "ddlRedirectToPage" })</div>
                 </div>
+                <div class="col-md-12 col-xl-12 row ml-2 mt-3 pb-3" style="padding-right: 7px !important; padding-left: 7px !important;">
+                    <div style="padding-top:10px;padding-right:5px;">Sign In Text </div>
+                    <div> <input type="text" class="input200" id="txtSignInText" /></div>
+                </div>
             </fieldset>
         </div>
 
@@ -614,7 +618,8 @@
         item["ExtraWidgetPoints2"] = $("#txtExtraWidgetPoints2").val();
         item["ExtraWidgetText3"] = $("#txtExtraWidgetText3").val();
         item["ExtraWidgetPoints3"] = $("#txtExtraWidgetPoints3").val();
-
+        item["SignInText"] = $("#txtSignInText").val();
+        
         if ($("#chkFooterImage").is(":checked")) {
             item["ShowFooterImage"] = true;
         }
