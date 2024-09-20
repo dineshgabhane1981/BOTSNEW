@@ -26,12 +26,12 @@
             /*  background: linear-gradient(to right, #02159B, #4CAF50);*/
             font-family: 'Roboto', sans-serif;
         }
-
+        
         .container1 {
             display: flex;
             align-items: center;
             justify-content: center;
-            /*height: 100vh;*/
+            height: 80vh;
             padding: 20px;
         }
 
@@ -56,7 +56,7 @@
             border-radius: 20px 20px 0 0;
             /*background: linear-gradient(to right, #02159B, #4CAF50);*/
             color: white;
-            padding: 25px;
+            padding: 0px 25px;
         }
 
         button.resend {
@@ -81,12 +81,12 @@
 
         .content-section {
             text-align: center;
-            padding: 25px;
+            padding: 0px 25px;
         }
 
         .description {
             color: #000;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             font-size: 1.1em;
             font-weight: 600;
         }
@@ -281,12 +281,12 @@
                     </div>
 
                     <div class="terms-conditions" id="terms-group" style="display:none;">
-                        <input type="checkbox" id="chkTerms" style="width:20px;height:20px;cursor:pointer;" />
+                        <input type="checkbox" id="chkTerms" style="width:20px;height:20px;cursor:pointer;" checked/>
                         <label for="chkTerms" style="margin-bottom:0px !important;">I agree to the Brand Loyalty Terms & Conditions</label>
                     </div>
                     <div>
                         <button type="button" id="btnLogin" class="btn-action">Get Started</button>
-                        <button type="button" id="btnSubmit" class="btn-action" style="display:none;padding-left:20px;padding-right:20px;">Login</button>
+                        <button type="button" id="btnSubmit" class="btn-action" style="display: none; width: 180px;">Login</button>
                     </div>
                     <div>
                         <button class="resend" id="btnResend" onclick="ResendOTP();">Resend OTP<i class="fa fa-caret-right"></i></button>

@@ -147,11 +147,16 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
-
         .footer {
             background-color: #344966;
-            height: 10vh;
+            height: 11vh;
+            padding: 20px 20px;
+            clear: both;
         }
+        /*.footer {
+            background-color: #344966;
+            height: 10vh;
+        }*/
     </style>
 </head>
 <body>
@@ -271,12 +276,18 @@
                 <div class="left-split">
                     <h4>@ViewBag.earnPoint</h4>
                     <h5>Transaction Points</h5>
-                    <h6><span>25th March 2025</span></h6>
+                    @if (ViewBag.earnPoint != 0)
+                    {
+                         <h6><span>25th March 2025</span></h6>
+                    }
                 </div>
                 <div class="right-split">
                     <h4>@ViewBag.bonousPoint</h4>
                     <h5>Bonus Points</h5>
-                    <h6><span>25th March 2025</span></h6>
+                    @if (ViewBag.bonousPoint != 0)
+                    {
+                        <h6><span>25th March 2025</span></h6>
+                    }
                 </div>
             </div>
         </div>
@@ -469,7 +480,7 @@
         
         <button class="explore" style="cursor:pointer" onclick="gotostore();">Explore more location</button>        
     </section>
-    <section class="footer" style="text-align:end;padding-right:20px;">
+    <section class="footer" style="text-align:center;">
         @if (!string.IsNullOrEmpty(Model.objDashboardConfig.FacebookUrl))
         {
             <a id="HlnkinstagramURL" target="_blank" href="@Model.objDashboardConfig.FacebookUrl">

@@ -29,6 +29,11 @@
         .footer {
             background-color: #344966;
             height: 10vh;
+            padding: 20px 20px;
+            clear: both;
+        }
+        .note {
+            margin-bottom: 80px;
         }
         .start-button {
             padding: 10px 20px;
@@ -39,7 +44,6 @@
             transition: background-color 0.3s ease;            
             margin-top: 4%;
         }
-
         .start-button {
             background-color: #4CAF50; /* Green */
             color: white;
@@ -48,7 +52,6 @@
 </head>
 
 <body>
-
     <nav>
         @*<div class="logo">
                 <a href="index.html">
@@ -74,7 +77,7 @@
             </div>
         }
         <div class="profile_links">
-           
+
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -136,19 +139,29 @@
                                         {
                                             dob = DateTime.ParseExact(item.Value, "yyyy/MM/dd", CultureInfo.InvariantCulture).ToString("yyyy-MM-dd");
                                         }
-                                        var id = "txt" + item.FieldName; // Unique ID for the field
+
+                                        var id = "txt" + item.FieldName;
+
+                                        var minDate = DateTime.Today.AddYears(-18).ToString("yyyy-MM-dd");
+                                        var maxDate = DateTime.Today.AddYears(-100).ToString("yyyy-MM-dd");
+
                                         <div class="form-row">
 
-                                            <label for="@id">Date of Birth<span style="color:red;">@mandatory</span></label> <!-- Corrected label -->
+                                            <label for="@id">Date of Birth<span style="color:red;">@mandatory</span></label>
 
                                             <input type="date"
                                                    id="@id"
                                                    value="@dob"
                                                    class="input100"
-                                                   required="@item.MandStatus" />
+                                                   required="@item.MandStatus"
+                                                   min="@maxDate"
+                                                   max="@minDate"
+                                                   placeholder="yyyy-mm-dd" />
 
                                         </div>
+
                                     }
+
                                     else if (item.FieldName == "Gender")
                                     {
                                         var id = "ddl" + item.FieldName; // Unique ID for the drop-down
@@ -218,7 +231,7 @@
                             }
                         </div>
                         <button type="button" id="btnUpdateProfile" class="start-button" onclick="UpdateProfile();">Update</button>
-                        <div style="margin-top:20px;">
+                        <div style="margin-top:20px;" class="note">
                             <p>
                                 <b style="font-weight:bold;">Note: </b>Bonus Points for Profile Update will be credited only for the first time. No bonus points will be credited for subsequent updates
                             </p>
@@ -288,10 +301,10 @@
                             }
                             else {
                                 var selectedDate = $("#txt" + item.FieldName).val();
-                                var sDate = new Date(selectedDate);                                
-                                sDate.setFullYear(sDate.getFullYear() + 18);                                
+                                var sDate = new Date(selectedDate);
+                                sDate.setFullYear(sDate.getFullYear() + 18);
                                 var currdate = new Date();
-                                
+
                                 if (currdate < sDate) {
                                     toastr.error('Date of birth can not be less than 18 years');
                                     status = false;
@@ -363,46 +376,41 @@
     }
     </script>
 
-
-
-    <section class="footer" style="text-align:end;padding-right:20px;">
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
+    <section class="footer" style="text-align:center;">
+       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
-                <img src="~/img/facebook.svg" />
+            <a id="HlnkfacebookURL" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+            <img src="~/img/facebook.svg" alt="Facebook" />
             </a>
         }
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
+       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
         {
             <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
-                <img src="~/img/instagram.svg" />
+            <img src="~/img/instagram.svg" alt="Instagram" />
             </a>
         }
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
+       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
-                <img src="~/img/twitterx.svg" />
-            </a>
+             <a id="HlnktwitterURL" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+             <img src="~/img/twitterx.svg" alt="Twitter" />
+             </a>
         }
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
+       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
-                <img src="~/img/youtube.svg" />
-            </a>
+             <a id="HlnkyoutubeURL" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+             <img src="~/img/youtube.svg" alt="YouTube" />
+             </a>
         }
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
+       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
-                <img src="~/img/whatsapp.svg" />
-            </a>
+             <a id="HlnkwhatsappURL" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+             <img src="~/img/whatsapp.svg" alt="WhatsApp" />
+             </a>
         }
     </section>
 
-
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/gift.js"></script>
-
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
     <script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
