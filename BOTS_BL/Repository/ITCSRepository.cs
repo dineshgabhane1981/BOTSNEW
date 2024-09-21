@@ -2551,10 +2551,9 @@ namespace BOTS_BL.Repository
             var from = ConfigurationManager.AppSettings["Email"].ToString();
             var PWD = ConfigurationManager.AppSettings["EmailPassword"].ToString();
             var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
-            //EmailId = "dinesh@blueocktopus.in";
-            //var from = EmailId;
-            //var PWD = "JedheKiran@123@";
-            //  var smtpAddress = "smtp.zoho.com";
+            var ITCSEmailTo = ConfigurationManager.AppSettings["ITCSEmailTo"].ToString();
+            var ITCSEmailCC = ConfigurationManager.AppSettings["ITCSEmailCC"].ToString();
+            
             var PortNo = 587;
             try
             {
@@ -2578,10 +2577,9 @@ namespace BOTS_BL.Repository
                     str.Append("</table>");
 
                     mail.From = new MailAddress(from);
-                    mail.To.Add("kiran@blueocktopus.in");
-                    mail.To.Add("vikas@blueocktopus.in");
-                    mail.CC.Add("jacqueline@blueocktopus.in");
-                    mail.CC.Add("dinesh @blueocktopus.in");
+                    
+                    mail.To.Add(ITCSEmailTo);
+                    mail.CC.Add(ITCSEmailCC);
                     if (!string.IsNullOrEmpty(EmailId))
                         mail.CC.Add(EmailId);
                     mail.Subject = DBName+":"+"&nbsp;"+ "New Outlet Added";
