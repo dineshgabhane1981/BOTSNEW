@@ -19,13 +19,17 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
           rel="stylesheet" />
     <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
     <style>
         .footer {
             background-color: #344966;
-            height: 10vh;
+            height: 11vh;
+            padding: 20px 20px;
+            clear: both;
         }
         .start-button {
             padding: 10px 20px;
@@ -41,6 +45,60 @@
             background-color: #4CAF50 !important; /* Green */
             color: white;
         }
+
+        .refer_box {
+            position: relative;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .plus-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+            .plus-button img {
+                width: 24px;
+                height: 24px;
+            }
+
+        .input_box {
+            display: flex;
+            flex-direction: column; /* Stack the input groups vertically */
+        }
+
+        .input_group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+            .input_group button img {
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+        .remove-button {
+            position: absolute;
+            top: 0;
+            right: 10px; /* Adjust the position as needed */
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+            .remove-button i {
+                font-size: 15px; /* Adjust icon size */
+                color: #d9534f; /* Icon color */
+            }
+
+
     </style>
 </head>
 <body>
@@ -68,8 +126,8 @@
                 <img id="imgLogo" src="@logoUrl" width="400" height="200" />
             </div>
         }
-        <div class="profile_links" >
-            
+        <div class="profile_links">
+
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -111,183 +169,183 @@
 
     <div id="main">
         <form id="refer-form">
-            <div class="refer_box">
+            <div class="refer_box" style="position: relative;">
                 <h3>Refer your friends</h3>
-                <div class="input_box box1">
-                    <input type="text" id="txtFriendName1" name="friendName[]" placeholder="Friend Name">
-                    <input type="text" id="txtFriendMobile1" name="mobileNo[]" placeholder="Mobile No">
+                <div id="friendInputs" style="width: 100%;">
+                    <!-- First input group (no remove button here) -->
+                    <div class="input_box box1">
+                        <div class="input_group" id="friendInputs0" style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <input type="text" id="txtFriendName1" name="friendName[]" placeholder="Friend Name" style="flex: 1; margin-right: 10px;">
+                            <input type="text" id="txtFriendMobile1" name="mobileNo[]" placeholder="Mobile No" style="flex: 1; margin-right: 10px;">
+                        </div>
+                    </div>
                 </div>
-                <div class="input_box box1">
-                    <input type="text" id="txtFriendName2" name="friendName[]" placeholder="Friend Name">
-                    <input type="text" id="txtFriendMobile2" name="mobileNo[]" placeholder="Mobile No">
-                </div>
-                <div class="input_box box1">
-                    <input type="text" id="txtFriendName3" name="friendName[]" placeholder="Friend Name">
-                    <input type="text" id="txtFriendMobile3" name="mobileNo[]" placeholder="Mobile No">
-                </div>
-                <div style="width:100%;text-align:center;">
+                <!-- Plus icon to add more input fields -->
+                <button type="button" class="plus-button" onclick="addFriendInput()" style="position: absolute; top: 40px; right: 10px; background: transparent; border: none;">
+                    <i role="button" class="fa fa-plus p-1 text-success" title="Add"></i>
+                </button>
+                <div style="width:100%;text-align:center; margin-top: 20px;">
                     <button type="button" class="start-button" onclick="SendReference();" id="btnGiftPoints">Send reference</button>
                 </div>
             </div>
-</form>
+        </form>
+
+
         <div class="key_points">
             <h3>Key Points</h3>
             <div style="padding-left:50px;">
                 <ol>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.Take(2))
                     {
                         <li>@item.MWP_ReferTNC</li>
                     }
                 </ol>
             </div>
         </div>
-        <section class="footer" style="text-align:end;padding-right:20px;">
+        @*<div class="key_points">
+                <h3>Key Points</h3>
+                <div style="padding-left:50px;">
+                    <ol>
+                        @foreach (var item in Model)
+                        {
+                            <li>@item.MWP_ReferTNC</li>
+                        }
+                    </ol>
+                </div>
+            </div>*@
+        <section class="footer" style="text-align:center;">
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
             {
-                <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
                     <img src="~/img/facebook.svg" />
                 </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
             {
-                <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
                     <img src="~/img/instagram.svg" />
                 </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
             {
-                <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
                     <img src="~/img/twitterx.svg" />
                 </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
             {
-                <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
                     <img src="~/img/youtube.svg" />
                 </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
             {
-                <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
                     <img src="~/img/whatsapp.svg" />
                 </a>
             }
         </section>
     </div>
+
     <script>
-        function SendReference()
-        {
-            var status = true;
-            var FriendName1 = $("#txtFriendName1").val();
-            var FriendName2 = $("#txtFriendName2").val();
-            var FriendName3 = $("#txtFriendName3").val();
-            var FriendMobile1 = $("#txtFriendMobile1").val();
-            var FriendMobile2 = $("#txtFriendMobile2").val();
-            var FriendMobile3 = $("#txtFriendMobile3").val();
-            if (FriendName1 == "" && FriendName2 == "" && FriendName3 == "" && FriendMobile1 == "" && FriendMobile2 == "" && FriendMobile3 == "")
-            {
+    let friendCount = 1;
 
-                toastr.error('Atleast one Friend name and mobile no need to provide');
-                $("#txtFriendName1").focus();
-                status = false;
+    function addFriendInput() {
+        friendCount++;
+
+        const newInputGroup = `
+        <div class="input_box box1" id="friendInput${friendCount}" style="margin-top: 20px; position: relative;">
+            <div class="input_group" style="display: flex; align-items: center; margin-bottom: 10px;">
+                <input type="text" id="txtFriendName${friendCount}" name="friendName[]" placeholder="Friend Name" style="flex: 1; margin-right: 10px;">
+                <input type="text" id="txtFriendMobile${friendCount}" name="mobileNo[]" placeholder="Mobile No" style="flex: 1; margin-right: 10px;">
+                <button type="button" onclick="removeInputGroup('friendInput${friendCount}')" class="remove-button" style="position: absolute; top: 0; right: 3px; background-color: transparent; border: none; cursor: pointer;">
+                    <i role="button" class="fa fa-times p-1 text-danger" title="Remove"></i>
+                </button>
+            </div>
+        </div>
+        `;
+        document.getElementById('friendInputs').insertAdjacentHTML('beforeend', newInputGroup);
+    }
+
+    function removeInputGroup(button) {
+        const inputGroup = document.getElementById(button);
+        inputGroup.remove();
+    }
+    
+
+    function SendReference() {
+        var status = true;
+        var friendNames = $("#txtFriendName1").val();
+        var mobileNos = $("#txtFriendMobile1").val();
+
+        let validInputExists = false;
+        let postData = [];
+
+        for (let i = 1; i <= friendNames.length; i++) {
+            console.log($("#txtFriendName" + [i]).val())
+            let friendName = $("#txtFriendName"+[i]).val();
+            let mobileNo = $("#txtFriendMobile" +[i]).val();
+
+            if (friendName !== "" || mobileNo !== "") {
+                validInputExists = true;
+
+                 //If friend name is provided, check for mobile number validity
+                //if (friendName !== "" && mobileNo === "") {
+                //    toastr.error('Please provide mobile no for ' + friendName);
+                //    $("#mobileNo"+[i]).val().focus();
+                //    status = false;
+                //    break;
+                //}
+
+                 //Validate mobile number
+                //if (mobileNo !== "" && !/^[6789]\d{9,9}$/.test(mobileNo)) {
+                //    toastr.error('Please enter a valid Mobile No for ' + friendName);
+                //    $("#mobileNo" + [i]).val().focus();
+                //    status = false;
+                //    break;
+                //}
+
+                postData.push({
+                    name: friendName,
+                    mobile: mobileNo
+                });
             }
-            if (FriendName1 != "")
-            {
 
-                if (FriendMobile1 == "")
-                {
-
-                    toastr.error('please provide mobile no');
-                    $("#txtFriendMobile1").focus();
-                    status = false;
-                }
-                else if (/^[6789]\d{9,9}$/.test(FriendMobile1))
-                {
-
-                }
-                else
-                {
-
-                    toastr.error('Please enter valid Mobile No');
-                    status = false;
-                    $("#txtFriendMobile1").focus();
-                    return false;
-                }
-            }
-            if (FriendName2 != "")
-            {
-
-                if (FriendMobile2 == "") {
-
-                    toastr.error('please provide mobile no');
-                    $("#txtFriendMobile2").focus();
-                    status = false;
-                }
-                else if (/^[6789]\d{9,9}$/.test(FriendMobile2)) {
-                }
-                else {
-                    toastr.error('Please enter valid Mobile No');
-                    status = false;
-                    $("#txtFriendMobile2").focus();
-                    return false;
-                }
-            }
-            if (FriendName3 != "")
-            {
-                if (FriendMobile3 == "") {
-                    toastr.error('please provide mobile no');
-                    $("#txtFriendMobile3").focus();
-                    status = false;
-                }
-                else if (/^[6789]\d{9,9}$/.test(FriendMobile3)) {
-                }
-                else {
-                    toastr.error('Please enter valid Mobile No');
-                    status = false;
-                    $("#txtFriendMobile3").focus();
-                    return false;
-                }
-            }
-            if (status)
-            {
-
-                 $("#divLoader").show();
-                  $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("DLCReferFriend", "ReferEarn")',
-                      data: '{FirstName: ' + JSON.stringify(FriendName1) + ',FirstMobile: ' + JSON.stringify(FriendMobile1) + ',SecondName: ' + JSON.stringify(FriendName2) + ',SecondMobile: ' + JSON.stringify(FriendMobile2) + ',ThirdName: ' + JSON.stringify(FriendName3) + ',ThirdMobile: ' + JSON.stringify(FriendMobile3) + '}',
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                      success: function (result)
-                      {
-                          if (result == true)
-                          {
-                              toastr.success('Reference sent Successfully !!!');
-                              setTimeout(myStopFunction, 2000);
-
-                              //$("#txtFriendName1").val('');
-                              //$("#txtFriendName2").val('');
-                              //$("#txtFriendName3").val('');
-                              //$("#txtFriendMobile1").val('');
-                              //$("#txtFriendMobile2").val('');
-                              //$("#txtFriendMobile3").val('');
-                          }
-                          else
-                          {
-                              toastr.error('There is problem in gifting points. Please contact your Administrator !!!');
-
-                          }
-                            $("#divLoader").hide();
-                        },
-                        error: function (result) {
-                            console.log(result.responseText)
-                        }
-                  });
-            }
+            console.log(postData);
         }
 
-    </script>
+        if (!validInputExists) {
+            toastr.error('At least one Friend name and mobile number need to be provided.');
+            friendNames[0].focus();
+            status = false;
+        }
 
+        if (status) {
+            $("#divLoader").show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("DLCReferFriend", "ReferEarn")',
+                data: JSON.stringify(postData), // Send the array as JSON
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result === true) {
+                    toastr.success('Reference sent Successfully !!!');
+                    setTimeout(myStopFunction, 2000);
+                    } else {
+                        toastr.error('There was a problem in gifting points. Please contact your Administrator !!!');
+                    }
+                $("#divLoader").hide();
+                },
+                 error: function (result) {
+                 console.log(result.responseText);
+                 toastr.error('An error occurred while sending the request.');
+                 $("#divLoader").hide();
+                 }
+            });
+        }
+    }
+    </script>
     <script src="~/js/script.js"></script>
 </body>
 </html>

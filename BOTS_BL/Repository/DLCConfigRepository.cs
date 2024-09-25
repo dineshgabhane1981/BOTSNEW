@@ -58,7 +58,6 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-
         public List<tblDLCProfileUpdateConfig> GetProfileData(string GroupId)
         {
             List<tblDLCProfileUpdateConfig> lstData = new List<tblDLCProfileUpdateConfig>();
@@ -93,7 +92,6 @@ namespace BOTS_BL.Repository
             return status;
 
         }
-
         public bool ProfileDataInsert(string Groupid, string Name, string NameMandStat, string Gender, string GenderMandStat, string BirthDate, string BirthMandStat, string Marrital, string MargMandStat, string Area, string AreaMandStat, string City, string CityMandStat, string Pincode, string PinMandStat, string Email, string MailMandStat)
         {
             bool status = false;
@@ -169,7 +167,6 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-
         public bool PublishDLCDashboardConfig(CustomerLoginDetail userDetails)
         {
             bool status = false;
@@ -239,7 +236,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public bool PublishDLCProfileUpdate(string Groupid)
         {
             bool status = false;
@@ -276,7 +272,6 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-
         public tblDLCDashboardConfig_Publish GetPublishDLCDashboardConfig(string groupId)
         {
             tblDLCDashboardConfig_Publish objData = new tblDLCDashboardConfig_Publish();
@@ -294,7 +289,6 @@ namespace BOTS_BL.Repository
             }
             return objData;
         }
-
         public List<tblDLCProfileUpdateConfig_Publish> GetPublishDLCProfileConfig(string groupId, string MobileNo)
         {
             List<tblDLCProfileUpdateConfig_Publish> objData = new List<tblDLCProfileUpdateConfig_Publish>();
@@ -369,7 +363,6 @@ namespace BOTS_BL.Repository
             }
             return lstCodes;
         }
-
         public string CheckUserAndSendOTP(string groupId, string mobileNo)
         {
             string status = string.Empty;
@@ -410,7 +403,6 @@ namespace BOTS_BL.Repository
 
             return status;
         }
-
         public tblSMSWhatsAppCredential GetSMSDetails(string groupid)
         {
             tblSMSWhatsAppCredential smsDetails = new tblSMSWhatsAppCredential();
@@ -460,7 +452,6 @@ namespace BOTS_BL.Repository
 
             return result;
         }
-
         public bool InsertOTP(string groupid, string mobileno, int otp)
         {
             bool status = false;
@@ -643,7 +634,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public tblDLCUserDetail CheckPasswordExist(string groupId, string mobileNo)
         {
             tblDLCUserDetail objData = new tblDLCUserDetail();
@@ -673,7 +663,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public bool ValidateUserByOTP(string groupId, string mobileNo, string Otp)
         {
             bool status = false;
@@ -689,7 +678,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public bool RegisterCustomer(string groupId, string mobileNo, string countryCode ,string source)
         {
             bool status = false;
@@ -731,7 +719,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public bool InsertPassword(string mobileNo, string password, string groupId)
         {
             bool status = false;
@@ -766,7 +753,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public DLCDashboardContent GetDLCDashboardContent(string groupid, string mobileno)
         {
             DLCDashboardContent objData = new DLCDashboardContent();
@@ -832,7 +818,6 @@ namespace BOTS_BL.Repository
 
             return objData;
         }
-        
         public bool UpdateOptout(string groupId, string mobileNo, bool optout, bool isTxn)
         {
             bool status = false;
@@ -936,7 +921,6 @@ namespace BOTS_BL.Repository
 
         //    return status;
         //}
-        
         public DLCSPResponse GiveGiftPoints(string MobileNo, string BrandId, string RecipientName, string RecipientNo, string GiftPoints, string groupId)
         {
             DLCSPResponse objResult = new DLCSPResponse();
@@ -1035,44 +1019,88 @@ namespace BOTS_BL.Repository
             }
             return result;
         }
-        public bool DLCReferFriend(string groupId, string MobileNo, string BrandId, string firstMobileNo, string firstName, string secondMobileNo, string secondName, string thirdMobileNo, string thirdName)
+        public bool DLCReferFriend(string groupId, string MobileNo, string BrandId, List<FriendData> friends)
         {
             bool status = false;
-            string DBName = String.Empty;
+            string DBName = string.Empty;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
+
             using (var context = new CommonDBContext())
             {
                 DBName = context.tblDatabaseDetails.Where(x => x.GroupId == groupId).Select(y => y.DBName).FirstOrDefault();
             }
+
             using (var context = new BOTSDBContext(connStr))
             {
                 DateTime now = DateTime.Now;
                 string formattedDate = now.ToString("yyyy-MM-dd");
+
                 try
                 {
+                    // Prepare dynamic SQL parameters based on non-empty friend data
+                    List<SqlParameter> sqlParameters = new List<SqlParameter>
+                    {
+                        new SqlParameter("@pi_MobileNo", MobileNo),
+                        new SqlParameter("@pi_BrandId", BrandId),
+                        new SqlParameter("@pi_Datetime", formattedDate),
+                        new SqlParameter("@pi_DBName", DBName)
+                };
+
+                    // Handle friend 1 (index 0) safely
+                    if (friends.Count > 0 && !string.IsNullOrEmpty(friends[0].Mobile) && !string.IsNullOrEmpty(friends[0].Name))
+                    {
+                        sqlParameters.Add(new SqlParameter("@pi_1stMobileNo", friends[0].Mobile));
+                        sqlParameters.Add(new SqlParameter("@pi_1stName", friends[0].Name));
+                    }
+                    else
+                    {
+                        sqlParameters.Add(new SqlParameter("@pi_1stMobileNo", DBNull.Value));
+                        sqlParameters.Add(new SqlParameter("@pi_1stName", DBNull.Value));
+                    }
+
+                    // Handle friend 2 (index 1) safely
+                    if (friends.Count > 1 && !string.IsNullOrEmpty(friends[1].Mobile) && !string.IsNullOrEmpty(friends[1].Name))
+                    {
+                        sqlParameters.Add(new SqlParameter("@pi_2ndMobileNo", friends[1].Mobile));
+                        sqlParameters.Add(new SqlParameter("@pi_2ndName", friends[1].Name));
+                    }
+                    else
+                    {
+                        sqlParameters.Add(new SqlParameter("@pi_2ndMobileNo", DBNull.Value));
+                        sqlParameters.Add(new SqlParameter("@pi_2ndName", DBNull.Value));
+                    }
+
+                    // Handle friend 3 (index 2) safely
+                    if (friends.Count > 2 && !string.IsNullOrEmpty(friends[2].Mobile) && !string.IsNullOrEmpty(friends[2].Name))
+                    {
+                        sqlParameters.Add(new SqlParameter("@pi_3rdMobileNo", friends[2].Mobile));
+                        sqlParameters.Add(new SqlParameter("@pi_3rdName", friends[2].Name));
+                    }
+                    else
+                    {
+                        sqlParameters.Add(new SqlParameter("@pi_3rdMobileNo", DBNull.Value));
+                        sqlParameters.Add(new SqlParameter("@pi_3rdName", DBNull.Value));
+                    }
+
+                    // Execute the stored procedure with dynamic parameters
                     var result = context.Database.SqlQuery<DLCSPResponse>("sp_DLCRefer @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
-                        "@pi_1stMobileNo, @pi_1stName, @pi_2ndMobileNo,@pi_2ndName,@pi_3rdMobileNo,@pi_3rdName, @pi_DBName",
-                                  new SqlParameter("@pi_MobileNo", MobileNo),
-                                  new SqlParameter("@pi_BrandId", BrandId),
-                                  new SqlParameter("@pi_Datetime", formattedDate),
-                                  new SqlParameter("@pi_1stMobileNo", firstMobileNo),
-                                  new SqlParameter("@pi_1stName", firstName),
-                                  new SqlParameter("@pi_2ndMobileNo", secondMobileNo),
-                                  new SqlParameter("@pi_2ndName", secondName),
-                                  new SqlParameter("@pi_3rdMobileNo", thirdMobileNo),
-                                  new SqlParameter("@pi_3rdName", thirdName),
-                                   new SqlParameter("@pi_DBName", DBName)).FirstOrDefault<DLCSPResponse>();
-                    if (result.ResponseCode=="1")
+                                                                          "@pi_1stMobileNo, @pi_1stName, @pi_2ndMobileNo, @pi_2ndName, " +
+                                                                          "@pi_3rdMobileNo, @pi_3rdName, @pi_DBName",
+                                                                          sqlParameters.ToArray()).FirstOrDefault<DLCSPResponse>();
+
+                    if (result != null && result.ResponseCode == "1")
+                    {
                         status = true;
+                    }
                 }
                 catch (Exception ex)
                 {
                     newexception.AddException(ex, "DLCReferFriend" + groupId);
                 }
             }
+
             return status;
         }
-
         public List<tblDLCFrontEndPageDataTNC> GetTNC(string groupId)
         {
             List<tblDLCFrontEndPageDataTNC> lstData = new List<tblDLCFrontEndPageDataTNC>();
@@ -1098,7 +1126,7 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    lstData = context.tblDLCFrontEndPageDataReferTNCs.ToList();
+                    lstData = context.tblDLCFrontEndPageDataReferTNCs.Take(2).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -1107,7 +1135,6 @@ namespace BOTS_BL.Repository
                 return lstData;
             }
         }
-
         public bool UpdateDLCProfileData(string groupId, DLCProfileData objData)
         {
             bool status = false;
@@ -1161,7 +1188,6 @@ namespace BOTS_BL.Repository
             }
             return status;
         }
-
         public List<SelectListItem> GetBrandsByGroupId(string groupId)
         {
             List<SelectListItem> lstBrands = new List<SelectListItem>();
@@ -1180,7 +1206,6 @@ namespace BOTS_BL.Repository
             }
             return lstBrands;
         }
-
         public List<tblDLCCampaignMaster> GetDlcLinks(string connStr)
         {
             List<tblDLCCampaignMaster> lstDlcLinks = new List<tblDLCCampaignMaster>();
