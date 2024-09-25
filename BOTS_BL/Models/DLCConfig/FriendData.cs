@@ -1,4 +1,4 @@
-﻿namespace BOTS_BL.Repository
+﻿namespace BOTS_BL.Models
 {
     public class FriendData
     {

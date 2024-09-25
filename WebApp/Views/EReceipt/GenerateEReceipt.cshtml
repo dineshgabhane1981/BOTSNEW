@@ -1,0 +1,182 @@
+﻿@model BOTS_BL.Models.EReceipt
+@using System.Globalization
+@{
+    ViewBag.Title = "GenerateEReceipt";
+    Layout = null;
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+    <link href="~/Content/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Content/assets/scripts/main.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <script src="~/Scripts/cute-alert-master/cute-alert.js"></script>
+    <link href="~/Scripts/cute-alert-master/style-alert.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 mt-5" style="text-align:center;">
+                <div class="invoice_heading">
+                    <h5>
+                        <span id="lblInvoiceHeading">Tax Invoice</span><br /> <br />
+                        <img id="imgHeaderImage" class="img-fluid" src="@Model.BrandLogo" width="100px" style="border-width:0px;margin-bottom:10px;">
+                        <br />
+                        <h4 id="h2UniversalStoreName" class="StoreName">@Model.objConfig.BrandName</h4>
+                        <h6>
+                            @Model.StoreAddress <br />
+                            Tel:@Model.StoreContact
+                            <br />
+                            GSTIN # @Model.objPOSBILL.OwnerGSTINNo<br />
+                            <span id="spnvisitusTitle">Visit us at </span><a href="https://@Model.objConfig.WebsiteURL" target="_blank" id="ancvisitUSURL" style="text-decoration: none; font-size: 14px;" target="_blank">
+                                <span id="lblvisitUSURL">@Model.objConfig.WebsiteURL</span>
+                            </a><br>
+                        </h6>
+                    </h5>
+                    @*<div class="col-sm-12 mt-5 p-3" style="border: 1px solid black; text-align: left;">
+                            @Model.StoreAddress <br />
+                            GSTIN # @Model.objPOSBILL.OwnerGSTINNo
+                        </div>*@
+                    <div class="col-sm-12 mt-2 p-3" style="border: 1px solid black; text-align: left;">
+                        Customer Name: @Model.CustomerName <br />
+                        Customer No.: @Model.objCustomer.mobile
+                    </div>
+                    <div class="col-sm-12 mt-2 p-3 row" style="border: 1px solid black; text-align: left;margin-left:0px;">
+                        <table width="100%">
+                            <tr>
+                                <td>Inv No: @Model.objPOSBILL.GSTDocNumber</td>
+                                <td>Store Associate Name: @Model.objPOSBILL.CashierName</td>
+                            </tr>
+                            <tr>
+                                <td>Inv Date.: @Model.InvoiceDate</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 mt-2 p-3 row" style="border: 1px solid black; text-align: left;margin-left:0px;">
+                        <table width="100%" cellpadding="3" cellspacing="3">
+                            <tr>
+                                <td><b>Product Info</b></td>
+                                <td><b>HSN</b></td>
+                                <td style="text-align:end;"><b>QTY</b></td>
+                                <td style="text-align:end;"><b>MRP</b></td>
+                                <td style="text-align:end;"><b>NET_AMT</b></td>
+                            </tr>
+
+
+                            @foreach (var item in Model.lstPOSBillItems)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.ItemName
+                                    </td>
+                                    <td>
+                                        @item.HSNCode
+                                    </td>
+                                    <td style="text-align:end;">
+                                        @item.Qty
+                                    </td>
+                                    <td style="text-align:end;">
+                                        @item.MRP
+                                    </td>
+                                    <td style="text-align:end;">
+                                        @item.GrossAmt
+                                    </td>
+                                </tr>
+                            }
+                            <tr style="border-top:1px solid grey;">
+                                <td><b>Subtotal (without tax)</b></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align:end;"> <b>@Model.TotalTaxableValue</b></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div class="col-sm-12 mt-2 p-3 row" style="border: 1px solid black; text-align: left;margin-left:0px;">
+                        <table width="100%" cellpadding="3" cellspacing="3">
+                            <tr>
+                                <td><b>Product Info</b></td>
+                                <td style="text-align:end;"><b>RATE</b></td>
+                                <td style="text-align:end;"><b>CGST</b></td>
+                                <td style="text-align:end;"><b>SGST</b></td>
+                                <td style="text-align:end;"><b>TAX Paid</b></td>
+                            </tr>
+                            @foreach (var item in Model.lstPOSBillItems)
+                            {
+                                var GstPaid = Convert.ToDouble(item.CGSTAmt) + Convert.ToDouble(item.SGSTAmt);
+                                <tr>
+                                    <td>@item.Article</td>
+                                    <td style="text-align:end;">@item.CGSTRate%</td>
+                                    <td style="text-align:end;">@item.CGSTAmt</td>
+                                    <td style="text-align:end;">@item.SGSTAmt</td>
+                                    <td style="text-align:end;"> @GstPaid</td>
+                                </tr>
+
+                            }
+                            <tr style="border-top:1px solid grey;">
+                                <td><b>Total Tax Paid</b></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align:end;"><b> @Model.TotalTaxValue</b></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 mt-2 p-3 row" style="border: 1px solid black; text-align: left;margin-left:0px;">
+                        <table width="30%" cellpadding="3" cellspacing="3">
+                            <tr>
+                                <td><b>Total RP Value</b></td>
+                                <td style="text-align:end;"><b>@Model.TotalTaxableValue</b></td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Tax</b></td>
+                                <td style="text-align:end;"><b>@Model.TotalTaxValue</b></td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Amount Paid</b></td>
+                                <td style="text-align:end;"><b>@Model.objPOSBILL.NetAmt</b></td>
+                            </tr>
+                            <tr>
+                                <td><b>Total Discount</b></td>
+                                <td style="text-align:end;"><b>@Model.TotalDiscountValue</b></td>
+                            </tr>
+                            <tr>
+                                <td><b>Total MRP Value</b></td>
+                                <td style="text-align:end;"><b>@Model.TotalMRPValue</b></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 mt-2 p-3 row" style="border: 1px solid black; text-align: left;margin-left:0px;">
+                        <table width="30%" cellpadding="3" cellspacing="3">
+                            <tr>
+                                <td>Points earned for this bill</td>
+                                <td style="text-align:end;"><b>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.PointsEarnedWithThisBill))</b></td>
+                            </tr>
+                            <tr>
+                                <td>Total Points  Balance</td>
+                                <td style="text-align:end;"><b>@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.TotalAvailablePoints)) </b></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-sm-12 mt-2 p-3 row" style="border: 1px solid black; text-align: left;margin-left:0px;">
+                        <b>Terms and Conditions</b> <br />
+                        @Html.Raw(Model.objConfig.TermsAndConditions)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>
+

@@ -11,6 +11,7 @@ using WebApp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Rotativa;
 
 namespace WebApp.Controllers
 {
@@ -55,6 +56,7 @@ namespace WebApp.Controllers
                 }
             }            
             var objData = ERR.GetEReceiptJSON(invoiceNo, groupId);
+            objData.QueryStr = data;
             return View(objData);
         }
 
@@ -98,5 +100,65 @@ namespace WebApp.Controllers
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = System.Int32.MaxValue };
         }
 
+        public ActionResult GenerateEReceipt(string data)
+        {
+            string invoiceNo = string.Empty;
+            string groupId = string.Empty;
+            if (!string.IsNullOrEmpty(data))
+            {
+                var parameterStr = common.DecryptString(data);
+                var parameters = parameterStr.Split('&');
+                foreach (var item in parameters)
+                {
+                    if (item.Contains("groupId"))
+                    {
+                        var groupIdParam = item.Split('=');
+                        groupId = groupIdParam[1];
+                    }
+                    if (item.Contains("invoiceNo"))
+                    {
+                        var invoiceNoParam = item.Split('=');
+                        invoiceNo = invoiceNoParam[1];
+                    }
+                }
+            }
+            var objData = ERR.GetEReceiptJSON(invoiceNo, groupId);
+            return View(objData);
+        }
+        public ActionResult TaxInvoice(string data)
+        {
+            string invoiceNo = string.Empty;
+            string groupId = string.Empty;
+            if (!string.IsNullOrEmpty(data))
+            {
+                var parameterStr = common.DecryptString(data);
+                var parameters = parameterStr.Split('&');
+                foreach (var item in parameters)
+                {
+                    if (item.Contains("groupId"))
+                    {
+                        var groupIdParam = item.Split('=');
+                        groupId = groupIdParam[1];
+                    }
+                    if (item.Contains("invoiceNo"))
+                    {
+                        var invoiceNoParam = item.Split('=');
+                        invoiceNo = invoiceNoParam[1];
+                    }
+                }
+            }
+            var objData = ERR.GetEReceiptJSON(invoiceNo, groupId);
+            var a = new ViewAsPdf();
+            a.ViewName = "GenerateEReceipt";
+            a.Model = objData;
+            var fileName = "TaxInvoice.pdf";
+            var pdfBytes = a.BuildFile(this.ControllerContext);
+
+            // Optionally save the PDF to server in a proper IIS location.
+            //var fileName = objData.CustomerName.Trim() + "_" + objData.ReportMonth + ".pdf";
+            var path = Server.MapPath("~/EReceiptDownloads/" + fileName);
+            System.IO.File.WriteAllBytes(path, pdfBytes);
+            return File(Server.MapPath("~/EReceiptDownloads/" + fileName), "application/pdf");
+        }
     }
 }

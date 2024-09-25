@@ -181,16 +181,16 @@
                                             <label>Quantity</label>
                                             <span id="spnQuantityMasterValue">@Model.ItemCount</span>
                                         </div>
-                                        @*<div class="col-4 downloadBtn">
+                                        <div class="col-4 downloadBtn">
                                                 <div id="divPdfDownloadPopUp" style="display: none">
                                                     <div id="upnlPdFDownload">
-                                                        <a id="lnkDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
+                                                        <a id="lnkDownload" class="download" title="Download" onclick="DownloadInvoice('@Model.QueryStr')">Download</a>
                                                     </div>
                                                 </div>
                                                 <div id="divPdfDownload" style="display:block;">
-                                                    <a id="lnkPdfDownload" class="download" title="Download" href="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;lnkPdfDownload&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, true))">Download</a>
+                                                    <a id="lnkPdfDownload" class="download" title="Download" onclick="DownloadInvoice('@Model.QueryStr')">Download</a>
                                                 </div>
-                                            </div>*@
+                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -700,6 +700,11 @@
                 $('#' + "divUniversalTermsAndCondition").show(1000);
                 $('#' + "divUniversalTermsAndCondition").css("display", "block");
             }
+        }
+        function DownloadInvoice(QueryStr) {
+            var ajaxUrl = '@Url.Action("TaxInvoice", "EReceipt")';
+            ajaxUrl = ajaxUrl + "?data=" + QueryStr + "";            
+            window.open(ajaxUrl, '_blank');
         }
     </script>
 </body>

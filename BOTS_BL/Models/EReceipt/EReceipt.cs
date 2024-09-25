@@ -30,6 +30,7 @@ namespace BOTS_BL.Models
         public string TotalAvailablePoints { get; set; }
         public tblEReceiptConfig objConfig { get; set; }
         public string CustomerName { get; set; }
+        public string QueryStr { get; set; }
 
     }
     public class POSCustomer
