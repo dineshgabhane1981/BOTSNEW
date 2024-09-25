@@ -2549,7 +2549,7 @@ namespace BOTS_BL.Repository
         {
             string responseString;
             var from = ConfigurationManager.AppSettings["Email"].ToString();
-            var PWD = ConfigurationManager.AppSettings["EmailPassword"].ToString();
+            var PWD = ConfigurationManager.AppSettings["EmailAppPassword"].ToString();
             var smtpAddress = ConfigurationManager.AppSettings["SMTPAddress"].ToString();
             var ITCSEmailTo = ConfigurationManager.AppSettings["ITCSEmailTo"].ToString();
             var ITCSEmailCC = ConfigurationManager.AppSettings["ITCSEmailCC"].ToString();
