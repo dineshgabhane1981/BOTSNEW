@@ -11,7 +11,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
 
-    <title>receipt</title>
+    <title>Tax Invoice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="~/Content/EReceipt/CSS/css2" rel="stylesheet">
     <link href="~/Content/EReceipt/CSS/css2(1)" rel="stylesheet">
@@ -514,45 +514,52 @@
                                     </div>
                                     @if (Model.objConfig.IsFeedback)
                                     {
+                                        var queDisplay = "block";
+                                        var display = "none";
+                                        if (Model.IsFeedback)
+                                        {
+                                            display = "block";
+                                            queDisplay = "none";
+                                        }
                                         <div id="divFeedBack" class="FeedBackmodal-content feedback_wrap2 mt-3" style="display:block;">
                                             <div class="feedback_wrap2_header">
                                                 <!-- modal header  -->
                                                 <h4 id="h4Feedback">Your feedback matters</h4>
                                             </div>
                                             <div class="feedback_wrap2_body">
-                                                <!-- begin modal body content
+                                                <div id="dvFeedbackSection" style="display:@queDisplay;">
+                                                    <br /><span>@Model.objConfig.FeedbackQuestion</span> <br />
+                                                    <div class="card" style="display:contents;">
 
-                                                <iframe src="F:\BOTS_Code\BOTSA\WebApp\Views\EReceipt\Feedback.html" id="IFrameCollectaURL" width="100%" style="border:none;display:block;height:350px;"></iframe>
+                                                        <span onclick="gfg(1)"
+                                                              class="star" style="width:20%;">
+                                                            ★
+                                                        </span>
+                                                        <span onclick="gfg(2)"
+                                                              class="star" style="width:20%;">
+                                                            ★
+                                                        </span>
+                                                        <span onclick="gfg(3)"
+                                                              class="star" style="width:20%;">
+                                                            ★
+                                                        </span>
+                                                        <span onclick="gfg(4)"
+                                                              class="star" style="width:20%;">
+                                                            ★
+                                                        </span>
+                                                        <span onclick="gfg(5)"
+                                                              class="star" style="width:20%;">
+                                                            ★
+                                                        </span>
+                                                        <div class="col-4 downloadBtn">
+                                                            <a id="lnkPdfDownload" class="download" style="border:1px solid grey;" title="Feedback" onclick="SubmitFeedback('@Model.QueryStr')">Submit</a>
 
-                                                 end modal body content  -->
-                                                <br /><span>@Model.objConfig.FeedbackQuestion</span> <br />
-                                                <div class="card" style="display:contents;">
-
-                                                    <span onclick="gfg(1)"
-                                                          class="star" style="width:20%;">
-                                                        ★
-                                                    </span>
-                                                    <span onclick="gfg(2)"
-                                                          class="star" style="width:20%;">
-                                                        ★
-                                                    </span>
-                                                    <span onclick="gfg(3)"
-                                                          class="star" style="width:20%;">
-                                                        ★
-                                                    </span>
-                                                    <span onclick="gfg(4)"
-                                                          class="star" style="width:20%;">
-                                                        ★
-                                                    </span>
-                                                    <span onclick="gfg(5)"
-                                                          class="star" style="width:20%;">
-                                                        ★
-                                                    </span>
-                                                    <div class="col-4 downloadBtn">
-                                                        <a id="lnkPdfDownload" class="download" style="border:1px solid grey;" title="Feedback" onclick="SubmitFeedback('@Model.QueryStr')">Submit</a>
-
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            
+                                                <div id="dvSuccessMsg" style="display:@display;padding-top:15px;"><h3>Thank you for your valuable feedback!!!</h3></div>
+                                            
                                             </div>
                                         </div>
                                     }
@@ -796,7 +803,28 @@
                 alert("Please select rating!!!");
             }
             else {
-                alert(data);
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("CaptureFeedback", "EReceipt")',
+                    data: "{'data': '" + data + "',Rating: '" + rating + "',MobileNo: '" + @Model.objCustomer.mobile + "'}",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+
+                        console.log(response);
+                        if (response == true) {
+                            $("#dvSuccessMsg").show();
+                            $("#dvFeedbackSection").hide();
+                        }
+                    },
+                    failure: function (response) {
+
+                    },
+                    error: function (response) {
+                        alert(222);
+
+                    }
+                });                
             }
         }
     </script>

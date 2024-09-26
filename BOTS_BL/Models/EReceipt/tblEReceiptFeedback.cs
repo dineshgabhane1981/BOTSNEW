@@ -21,5 +21,7 @@ namespace BOTS_BL.Models
         public int Rating { get; set; }
 
         public DateTime DateCreated { get; set; }
+        [StringLength(200)]
+        public string InvoiceNo { get; set; }
     }
 }

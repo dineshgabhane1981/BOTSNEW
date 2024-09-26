@@ -88,6 +88,12 @@ namespace BOTS_BL.Repository
 
                                 receipt.PointsEarnedWithThisBill = Convert.ToString(pointsThisBill);
                                 receipt.TotalAvailablePoints = Convert.ToString(totalPoints);
+                                var feedback = context.tblEReceiptFeedbacks.Where(x => x.MobileNo == objCustomer.mobile && x.InvoiceNo == invoiceNo).FirstOrDefault();
+
+                                if (feedback != null)
+                                    receipt.IsFeedback = true;
+                                else
+                                    receipt.IsFeedback = false; ;
                             }
 
                             decimal netamount = 0;
@@ -390,6 +396,34 @@ namespace BOTS_BL.Repository
             {
                 newexception.AddException(ex, "SaveConfig");
             }
+            return status;
+        }
+    
+        public bool CaptureFeedback(string groupId, string mobileNo,int rating,string invoiceNo)
+        {
+            bool status = false;
+            
+            try
+            {
+                tblEReceiptFeedback objData = new tblEReceiptFeedback();
+                objData.MobileNo = mobileNo;
+                objData.Rating = rating;
+                objData.DateCreated = DateTime.Now;
+                objData.InvoiceNo = invoiceNo;
+                string connStr = CR.GetCustomerConnString(groupId);
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    objData.MemberName = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileNo).Select(y => y.Name).FirstOrDefault();
+                    context.tblEReceiptFeedbacks.AddOrUpdate(objData);
+                    context.SaveChanges();
+                    status = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveConfig");
+            }
+
             return status;
         }
     }

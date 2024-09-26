@@ -161,10 +161,30 @@ namespace WebApp.Controllers
             return File(Server.MapPath("~/EReceiptDownloads/" + fileName), "application/pdf");
         }
     
-        public ActionResult CaptureFeedback(string data, string Rating)
+        public ActionResult CaptureFeedback(string data, string Rating,string MobileNo)
         {
             bool status = false;
-
+            string invoiceNo = string.Empty;
+            string groupId = string.Empty;
+            if (!string.IsNullOrEmpty(data))
+            {
+                var parameterStr = common.DecryptString(data);
+                var parameters = parameterStr.Split('&');
+                foreach (var item in parameters)
+                {
+                    if (item.Contains("groupId"))
+                    {
+                        var groupIdParam = item.Split('=');
+                        groupId = groupIdParam[1];
+                    }
+                    if (item.Contains("invoiceNo"))
+                    {
+                        var invoiceNoParam = item.Split('=');
+                        invoiceNo = invoiceNoParam[1];
+                    }
+                }
+            }
+            status = ERR.CaptureFeedback(groupId, MobileNo, Convert.ToInt32(Rating), invoiceNo);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = System.Int32.MaxValue };
         }
     }

@@ -32,7 +32,8 @@ namespace BOTS_BL.Models
         public string CustomerName { get; set; }
         public string QueryStr { get; set; }
         public string FeedbackQuestion { get; set; }
-        
+        public bool IsFeedback { get; set; }
+
 
     }
     public class POSCustomer
