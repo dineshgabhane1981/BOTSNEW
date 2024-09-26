@@ -160,5 +160,12 @@ namespace WebApp.Controllers
             System.IO.File.WriteAllBytes(path, pdfBytes);
             return File(Server.MapPath("~/EReceiptDownloads/" + fileName), "application/pdf");
         }
+    
+        public ActionResult CaptureFeedback(string data, string Rating)
+        {
+            bool status = false;
+
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = System.Int32.MaxValue };
+        }
     }
 }

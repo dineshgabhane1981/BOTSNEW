@@ -316,6 +316,7 @@
     <Compile Include="Models\DocLibraryUploadFile.cs" />
     <Compile Include="Models\EarnRule.cs" />
     <Compile Include="Models\EReceipt\EReceipt.cs" />
+    <Compile Include="Models\EReceipt\tblEReceiptFeedback.cs" />
     <Compile Include="Models\EReceipt\tblTempTxnJSON.cs" />
     <Compile Include="Models\EventDetail.cs" />
     <Compile Include="Models\EventManagementReport.cs" />
@@ -396,7 +397,7 @@
     <Compile Include="Models\IndividualDBModels\tblDLCReportingData.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCRuleMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblDLCSMSWAScriptMaster.cs" />
-    <Compile Include="Models\IndividualDBModels\tblEReceiptConfig.cs" />
+    <Compile Include="Models\EReceipt\tblEReceiptConfig.cs" />
     <Compile Include="Models\IndividualDBModels\tblErrorServerLog.cs" />
     <Compile Include="Models\IndividualDBModels\tblExpiredPointsMaster.cs" />
     <Compile Include="Models\IndividualDBModels\tblGroupMaster.cs" />

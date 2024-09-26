@@ -29,7 +29,7 @@ namespace DLC.Controllers
         public ActionResult GetOutlets()
         {
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
-            List<outletNmaelist> outletNmaelists = new List<outletNmaelist>();
+            List<outletNmaelist> outletNamelists = new List<outletNmaelist>();
 
             string connStr = objCustRepo.GetCustomerConnString(sessionVariables.GroupId);
             using (var context = new BOTSDBContext(connStr))
@@ -43,11 +43,14 @@ namespace DLC.Controllers
                     outletNmaelist obj = new outletNmaelist();
                     obj.OutletName = item.OutletName;
                     obj.OutletId = item.OutletId;
-                    outletNmaelists.Add(obj);
+                    obj.Lat = item.Latitude;
+                    obj.Long = item.Longitude;
+                    obj.Address = item.Address;
+                    outletNamelists.Add(obj);
                 }
             }
 
-            return Json(outletNmaelists, JsonRequestBehavior.AllowGet);
+            return Json(outletNamelists, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public JsonResult GetMapUrl(string outletName)

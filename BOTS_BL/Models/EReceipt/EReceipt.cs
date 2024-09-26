@@ -31,6 +31,8 @@ namespace BOTS_BL.Models
         public tblEReceiptConfig objConfig { get; set; }
         public string CustomerName { get; set; }
         public string QueryStr { get; set; }
+        public string FeedbackQuestion { get; set; }
+        
 
     }
     public class POSCustomer

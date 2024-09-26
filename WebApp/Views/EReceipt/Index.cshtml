@@ -64,6 +64,32 @@
             justify-content: center;
             margin: 20px 2px;
         }
+
+
+        .star {
+            font-size: 10vh;
+            cursor: pointer;
+        }
+
+        .one {
+            color: rgb(255, 0, 0);
+        }
+
+        .two {
+            color: rgb(255, 106, 0);
+        }
+
+        .three {
+            color: rgb(251, 255, 120);
+        }
+
+        .four {
+            color: rgb(255, 255, 0);
+        }
+
+        .five {
+            color: rgb(24, 159, 14);
+        }
     </style>
 
     @*<script>function fncPDFErrorMessageVisible() {
@@ -107,7 +133,7 @@
                                     <h2 id="h2UniversalStoreName" class="StoreName">@Model.objConfig.BrandName</h2>
                                     <!-- new template chnage -->
                                     <!-- Show more & Show less  dropdown Start -->
-                                    
+
                                     <div id="comp_address">
                                         <div class="invoice_map">
                                             <p class="text-center">
@@ -147,7 +173,7 @@
                         </div>
                         <div id="divUniversalAdressBlock">
                             <div id="divUniVersalTemplateHeaderBlock" class="col-12 addressBlock">
-                                <p class="mb-0" style="text-align: center"></p>                                
+                                <p class="mb-0" style="text-align: center"></p>
                                 <h2 class="m-0 d-block w-100">
                                     <a href="#" id="ancHederMemberContact" class="m-0 d-block w-100 position-static">
                                         <span id="lblHederMemberContact">Mobile No:<b>@Model.objCustomer.mobile </b> </span>
@@ -182,15 +208,15 @@
                                             <span id="spnQuantityMasterValue">@Model.ItemCount</span>
                                         </div>
                                         <div class="col-4 downloadBtn">
-                                                <div id="divPdfDownloadPopUp" style="display: none">
-                                                    <div id="upnlPdFDownload">
-                                                        <a id="lnkDownload" class="download" title="Download" onclick="DownloadInvoice('@Model.QueryStr')">Download</a>
-                                                    </div>
-                                                </div>
-                                                <div id="divPdfDownload" style="display:block;">
-                                                    <a id="lnkPdfDownload" class="download" title="Download" onclick="DownloadInvoice('@Model.QueryStr')">Download</a>
+                                            <div id="divPdfDownloadPopUp" style="display: none">
+                                                <div id="upnlPdFDownload">
+                                                    <a id="lnkDownload" class="download" title="Download" onclick="DownloadInvoice('@Model.QueryStr')">Download</a>
                                                 </div>
                                             </div>
+                                            <div id="divPdfDownload" style="display:block;">
+                                                <a id="lnkPdfDownload" class="download" title="Download" onclick="DownloadInvoice('@Model.QueryStr')">Download</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -316,12 +342,12 @@
                                                             <td>
                                                                 <p class="rate_sec">
                                                                     <span>
-                                                                        <span id="rptUniversalinvoiceDetails_ctl00_spnSellingPrice">₹&nbsp;</span>                                                                         
+                                                                        <span id="rptUniversalinvoiceDetails_ctl00_spnSellingPrice">₹&nbsp;</span>
                                                                         @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.NetAmt))
                                                                     </span>
                                                                     <span class="flex-column">
                                                                         <span>
-                                                                            <span id="rptUniversalinvoiceDetails_ctl00_spnAmount2">₹&nbsp;</span>                                                                             
+                                                                            <span id="rptUniversalinvoiceDetails_ctl00_spnAmount2">₹&nbsp;</span>
                                                                             @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.NetAmt))
                                                                         </span>
                                                                     </span>
@@ -368,7 +394,7 @@
                                                                         <span id="rptGSTDetails_ctl00_spntaxPercentage">@item.CGSTRate</span>
                                                                     </td>
                                                                     <td>
-                                                                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TaxableAmt))                                                                        
+                                                                        @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.TaxableAmt))
                                                                     </td>
                                                                     <td>
                                                                         @String.Format(new CultureInfo("en-IN", false), "{0:n0}", Convert.ToDouble(item.CGSTAmt))
@@ -491,14 +517,42 @@
                                         <div id="divFeedBack" class="FeedBackmodal-content feedback_wrap2 mt-3" style="display:block;">
                                             <div class="feedback_wrap2_header">
                                                 <!-- modal header  -->
-                                                <h4 id="h4Feedback">Please rate your experience</h4>
+                                                <h4 id="h4Feedback">Your feedback matters</h4>
                                             </div>
                                             <div class="feedback_wrap2_body">
-                                                <!-- begin modal body content  -->
+                                                <!-- begin modal body content
 
                                                 <iframe src="F:\BOTS_Code\BOTSA\WebApp\Views\EReceipt\Feedback.html" id="IFrameCollectaURL" width="100%" style="border:none;display:block;height:350px;"></iframe>
 
-                                                <!-- end modal body content  -->
+                                                 end modal body content  -->
+                                                <br /><span>@Model.objConfig.FeedbackQuestion</span> <br />
+                                                <div class="card" style="display:contents;">
+
+                                                    <span onclick="gfg(1)"
+                                                          class="star" style="width:20%;">
+                                                        ★
+                                                    </span>
+                                                    <span onclick="gfg(2)"
+                                                          class="star" style="width:20%;">
+                                                        ★
+                                                    </span>
+                                                    <span onclick="gfg(3)"
+                                                          class="star" style="width:20%;">
+                                                        ★
+                                                    </span>
+                                                    <span onclick="gfg(4)"
+                                                          class="star" style="width:20%;">
+                                                        ★
+                                                    </span>
+                                                    <span onclick="gfg(5)"
+                                                          class="star" style="width:20%;">
+                                                        ★
+                                                    </span>
+                                                    <div class="col-4 downloadBtn">
+                                                        <a id="lnkPdfDownload" class="download" style="border:1px solid grey;" title="Feedback" onclick="SubmitFeedback('@Model.QueryStr')">Submit</a>
+
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     }
@@ -528,7 +582,7 @@
                                                         <div class="fs-md">
                                                             <div class="text-green-dark">
                                                                 Total Points  Balance
-                                                            </div>                                                            
+                                                            </div>
                                                         </div>
                                                         <span style="width: 20px; display: inline-block;"></span>
                                                         <div class="text-green-dark ng-star-inserted">
@@ -651,6 +705,7 @@
         </div>
     </div>
     <script>
+        var rating = 0;
         function showmorefn() {
             document.getElementById("comp_address").style.display = "block";
             document.getElementById("show_more_content").style.display = "none";
@@ -703,8 +758,46 @@
         }
         function DownloadInvoice(QueryStr) {
             var ajaxUrl = '@Url.Action("TaxInvoice", "EReceipt")';
-            ajaxUrl = ajaxUrl + "?data=" + QueryStr + "";            
+            ajaxUrl = ajaxUrl + "?data=" + QueryStr + "";
             window.open(ajaxUrl, '_blank');
+        }
+
+        let stars =
+            document.getElementsByClassName("star");
+        let output =
+            document.getElementById("output");
+
+        // Funtion to update rating
+        function gfg(n) {
+            rating = n;
+            remove();
+            for (let i = 0; i < n; i++) {
+                if (n == 1) cls = "one";
+                else if (n == 2) cls = "two";
+                else if (n == 3) cls = "three";
+                else if (n == 4) cls = "four";
+                else if (n == 5) cls = "five";
+                stars[i].className = "star " + cls;
+            }
+            output.innerText = "Rating is: " + n + "/5";
+
+        }
+
+        // To remove the pre-applied styling
+        function remove() {
+            let i = 0;
+            while (i < 5) {
+                stars[i].className = "star";
+                i++;
+            }
+        }
+        function SubmitFeedback(data) {
+            if (rating == 0) {
+                alert("Please select rating!!!");
+            }
+            else {
+                alert(data);
+            }
         }
     </script>
 </body>

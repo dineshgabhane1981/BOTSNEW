@@ -20,6 +20,7 @@ namespace BOTS_BL.Models
             : base(connectionStringName)
         {
         }
+        public virtual DbSet<tblEReceiptFeedback> tblEReceiptFeedbacks { get; set; }
         public virtual DbSet<tblTierChange> tblTierChanges { get; set; }
         public virtual DbSet<tblEReceiptConfig> tblEReceiptConfigs { get; set; }
         public virtual DbSet<tblMembershipDetail> tblMembershipDetails { get; set; }

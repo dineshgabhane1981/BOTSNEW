@@ -16,7 +16,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">    
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Store Locator</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -46,14 +46,13 @@
             position: absolute;
             background-color: white;
             border: 1px solid #ccc;
-            
             width: 90%;
             max-height: 200px;
             overflow-y: auto;
             padding: 12px 10px 12px 15px !important;
             border-radius: 10px !important;
             border: solid 1px #e1e1e1;
-            cursor:pointer;
+            cursor: pointer;
         }
 
         .dropdown-item {
@@ -143,7 +142,7 @@
         <!--<input type="text" id="search-input" placeholder="Search..." onclick="fetchOutlets()">
         <button type="submit" onclick="submitSearch()">Submit</button>
         <ul id="dropdown" class="dropdown-content" style="display: none;">-->
-            <!-- Outlet names and IDs will be populated here by JavaScript -->
+        <!-- Outlet names and IDs will be populated here by JavaScript -->
         <!--</ul>-->
     </div>
     <div class="content">
@@ -158,7 +157,7 @@
     </div>
     <div class="map-container">
         <div class="map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.4327452779316!2d73.82960137335087!3d18.509336569520933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf6e0b6b0b33%3A0xd8facbf3c039f08b!2sThe%20Millennium!5e0!3m2!1sen!2sin!4v1704216476194!5m2!1sen!2sin" width="1200" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe id="storeFrame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.4327452779316!2d73.82960137335087!3d18.509336569520933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf6e0b6b0b33%3A0xd8facbf3c039f08b!2sThe%20Millennium!5e0!3m2!1sen!2sin!4v1704216476194!5m2!1sen!2sin" width="1200" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
 
     </div>
@@ -200,7 +199,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        
         function Hamburger() {
             var hamburger = document.querySelector('.hamburger');
             var menu = document.querySelector('.menu-container');
@@ -225,7 +223,6 @@
         }
 
         Hamburger();
-
     </script>
     <script>
         $('#ddlOutlet').change(function () {
@@ -236,13 +233,15 @@
             $.ajax({
             url: '@Url.Action("GetOutlets", "Store")',
             type: 'GET',
-            success: function (data) {
+                success: function (data) {
+                    console.log(data);
+                    outletDetails = data;
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(UserLocation);
+                    }
                 $("#ddlOutlet").empty();
                 data.forEach(function (outlet) {
-                    
-                    
                         $("#ddlOutlet").append($("<option />").val(outlet.OutletId).text(outlet.OutletName));
-                    
                 });
             },
             error: function() {
@@ -251,7 +250,7 @@
             }
         });
         }
-        FillOutlet();
+        
     function fetchOutlets()
     {
 
@@ -305,11 +304,11 @@
     <script>
         function submitSearch() {
             var outletName = $("#ddlOutlet option:selected").text();
-           
+
             alert(outletName)
             if (outletName) {
                 $.ajax({
-                    url: '@Url.Action("GetMapUrl", "Store")',                    
+                    url: '@Url.Action("GetMapUrl", "Store")',
                     type: 'POST',
                     data: { outletName: outletName },
                     success: function (data) {
@@ -341,9 +340,58 @@
             $("#spnContact").text(contact);
             $("#contactInfo").show();
 
-        }       
-       
-    </script>
+        }
 
+    </script>
+    <script>
+        var outletDetails;        
+        $(document).ready(function () {
+            FillOutlet();            
+        });
+        
+        function UserLocation(position) {
+            NearestCity(position.coords.latitude, position.coords.longitude);
+        }
+
+        function Deg2Rad(deg) {
+            return deg * Math.PI / 180;
+        }
+
+        function PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
+            lat1 = Deg2Rad(lat1);
+            lat2 = Deg2Rad(lat2);
+            lon1 = Deg2Rad(lon1);
+            lon2 = Deg2Rad(lon2);
+            var R = 6371; // km
+            var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+            var y = (lat2 - lat1);
+            var d = Math.sqrt(x * x + y * y) * R;
+            return d;
+        }
+        
+        function NearestCity(latitude, longitude) {           
+            var minDif = 99999;
+            var closest;
+
+            for (index = 0; index < outletDetails.length; ++index) {                
+                var dif = PythagorasEquirectangular(latitude, longitude, outletDetails[index]["Lat"], outletDetails[index]["Long"]);
+                if (dif < minDif) {
+                    closest = index;
+                    minDif = dif;
+                }
+            }
+
+            // echo the nearest city
+            console.log(outletDetails[closest]);
+            var url = "https://maps.google.com/maps?q=";
+            url = url + outletDetails[closest]["Lat"] + "," + outletDetails[closest]["Long"];
+            url = url + "&z=12 &output=embed";
+            console.log(url)
+            $('#storeFrame').attr('src', url)
+
+            $("#ddlOutlet").val(outletDetails[closest]["OutletId"]);
+        }
+
+    </script>
 </body>
 </html>

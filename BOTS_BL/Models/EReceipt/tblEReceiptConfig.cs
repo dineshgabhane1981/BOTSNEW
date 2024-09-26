@@ -55,5 +55,7 @@ namespace BOTS_BL.Models
 
         public DateTime? UpdatedDate { get; set; }
         public string YoutubeURL { get; set; }
+
+        public string FeedbackQuestion { get; set; }
     }
 }
