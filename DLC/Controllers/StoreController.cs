@@ -46,6 +46,7 @@ namespace DLC.Controllers
                     obj.Lat = item.Latitude;
                     obj.Long = item.Longitude;
                     obj.Address = item.Address;
+                    obj.Contact = item.Phone;
                     outletNamelists.Add(obj);
                 }
             }

@@ -24,7 +24,9 @@
     <style>
         .footer {
             background-color: #344966;
-            height: 10vh;
+            height: 11vh;
+            padding: 20px 20px;
+            clear: both;
         }
 
         .container {
@@ -46,7 +48,7 @@
         }
         .footer {
             background-color: #344966;
-            height: 10vh;
+            height: 11vh;
         }
     </style>
 </head>
@@ -54,7 +56,7 @@
     <nav>
 
         <div class="profile_links">
-           
+
         </div>
         @if (logoSize == "Small")
         {
@@ -113,25 +115,25 @@
         </div>
     </div>
 
-
     <div class="container">
         <h1>Transaction History</h1>
-        <div class="table_transaction">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Invoice<br> Number</th>
-                        <th>Invoice<br> Amount</th>
-                        <th>Transaction<br> Type</th>
-                        <th>Points <br>Earned</th>
-                        <th>Points<br> Burned</th>
-                        <th>Transaction<br> Date & Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null)
-                    {
-                        foreach (var item in Model)
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="table_transaction">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Invoice<br> Number</th>
+                            <th>Invoice<br> Amount</th>
+                            <th>Transaction<br> Type</th>
+                            <th>Points <br>Earned</th>
+                            <th>Points<br> Burned</th>
+                            <th>Transaction<br> Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
                         {
                             <tr>
                                 <td>@item.InvoiceNo</td>
@@ -164,40 +166,44 @@
                                 <td>@item.TxnDatetime</td>
                             </tr>
                         }
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p style="margin-left:90px;margin-top:10px;font-size:20px;">No records found</p>
+        }
     </div>
 
-    <section class="footer" style="text-align:end;padding-right:20px;">
+    <section class="footer" style="text-align:center;">
         @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
                 <img src="~/img/facebook.svg" />
             </a>
         }
         @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
                 <img src="~/img/instagram.svg" />
             </a>
         }
         @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
                 <img src="~/img/twitterx.svg" />
             </a>
         }
         @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
                 <img src="~/img/youtube.svg" />
             </a>
         }
         @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
         {
-            <a id="HlnkinstagramURL" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
                 <img src="~/img/whatsapp.svg" />
             </a>
         }
@@ -235,7 +241,7 @@
     @*<script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>*@
-   
+
 </body>
 </html>
 

@@ -12,5 +12,6 @@ namespace DLC.ViewModel
         public string Lat { get; set; }
         public string Long { get; set; }
         public string Address { get; set; }
+        public string Contact { get; set; }
     }
 }

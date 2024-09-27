@@ -159,6 +159,7 @@
     <Content Include="Content\assets\images\details_close.png" />
     <Content Include="Content\assets\images\details_open.png" />
     <Content Include="Content\assets\images\discussion.png" />
+    <Content Include="Content\assets\images\DLCImage.png" />
     <Content Include="Content\assets\images\exit.png" />
     <Content Include="Content\assets\images\GoToDashboard.png" />
     <Content Include="Content\assets\images\itops.png" />

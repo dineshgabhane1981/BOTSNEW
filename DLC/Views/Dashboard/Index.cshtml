@@ -162,7 +162,7 @@
 <body>
     <nav id="nvbarcolor">
         <div class="profile_links">
-           
+
         </div>
         @*<div class="logo">
                 <a href="index.html">
@@ -278,7 +278,7 @@
                     <h5>Transaction Points</h5>
                     @if (ViewBag.earnPoint != 0)
                     {
-                         <h6><span>25th March 2025</span></h6>
+                        <h6><span>25th March 2025</span></h6>
                     }
                 </div>
                 <div class="right-split">
@@ -376,7 +376,7 @@
                             {
                                 <h3>@Model.objDashboardConfig.ReferPoints Points</h3>
                             }
-                            </div>
+                        </div>
                         <div class="gift-card-bottom">
                             <h3>Refer a friend</h3>
                         </div>
@@ -393,7 +393,7 @@
                             {
                                 <h3>@Model.objDashboardConfig.GiftPoints Points</h3>
                             }
-                            </div>
+                        </div>
                         <div class="gift-card-bottom">
                             <h3>Gift your points</h3>
                         </div>
@@ -411,7 +411,7 @@
                             {
                                 <h3>@Model.objDashboardConfig.ExtraWidgetPoints1 Points</h3>
                             }
-                            </div>
+                        </div>
                         <div class="gift-card-bottom">
                             <h3>@Model.objDashboardConfig.ExtraWidgetText1</h3>
                         </div>
@@ -429,7 +429,7 @@
                             {
                                 <h3>@Model.objDashboardConfig.ExtraWidgetPoints2 Points</h3>
                             }
-                            </div>
+                        </div>
                         <div class="gift-card-bottom">
                             <h3>@Model.objDashboardConfig.ExtraWidgetText2</h3>
                         </div>
@@ -447,7 +447,7 @@
                             {
                                 <h3>@Model.objDashboardConfig.ExtraWidgetPoints3 Points</h3>
                             }
-                            </div>
+                        </div>
                         <div class="gift-card-bottom">
                             <h3>@Model.objDashboardConfig.ExtraWidgetText3</h3>
                         </div>
@@ -463,23 +463,92 @@
         <h3></h3>
         <div class="location">
             <h2>
-                @Model.dLCDashboardContent.OutletName
+                <span id="spnOutletName"></span>
             </h2>
             <h3>
-                @Model.dLCDashboardContent.OutletAddress
+                <span id="spnOutletAddress"></span>
             </h3>
             <p class="phone-icon" id="contactInfo">
                 <i class="material-icons">&#xe551;</i>
-                <span id="spnContact">@Model.dLCDashboardContent.OutletContact</span>
+                <span id="spnContact"></span>
             </p>
         </div>
-       
-        <map class="map">
-            <iframe src="@url" width="100%" height="500" style="border-radius:10px; border:none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </map>
-        
-        <button class="explore" style="cursor:pointer" onclick="gotostore();">Explore more location</button>        
+
+        <div class="map">
+            <iframe id="storeFrame" src="" width="100%" height="500" style="border-radius:10px; border:none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+
+        <button class="explore" style="cursor:pointer" onclick="gotostore();">Explore more location</button>
     </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            FillOutlet();
+        });
+        var outletDetails;
+
+        function FillOutlet() {
+            $.ajax({
+            url: '@Url.Action("GetOutlets", "Store")',
+            type: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    outletDetails = data;
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(UserLocation);
+                    }
+                },
+            error: function() {
+                toastr.error('Failed to fetch outlet names.');
+            }
+        });
+        }
+        function UserLocation(position) {
+            NearestCity(position.coords.latitude, position.coords.longitude);
+        }
+
+        function Deg2Rad(deg) {
+            return deg * Math.PI / 180;
+        }
+
+        function PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
+            lat1 = Deg2Rad(lat1);
+            lat2 = Deg2Rad(lat2);
+            lon1 = Deg2Rad(lon1);
+            lon2 = Deg2Rad(lon2);
+            var R = 6371; // km
+            var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+            var y = (lat2 - lat1);
+            var d = Math.sqrt(x * x + y * y) * R;
+            return d;
+        }
+        function NearestCity(latitude, longitude) {
+            var minDif = 99999;
+            var closest;
+
+            for (index = 0; index < outletDetails.length; ++index) {
+                var dif = PythagorasEquirectangular(latitude, longitude, outletDetails[index]["Lat"], outletDetails[index]["Long"]);
+                if (dif < minDif) {
+                    closest = index;
+                    minDif = dif;
+                }
+            }
+            console.log(outletDetails[closest]);
+
+            var url = "https://maps.google.com/maps?q=";
+            url = url + outletDetails[closest]["Lat"] + "," + outletDetails[closest]["Long"];
+            url = url + "&z=12 &output=embed";
+            $('#storeFrame').attr('src', url);
+
+            $("#spnOutletName").text(outletDetails[closest]["OutletName"]);
+            $("#spnOutletAddress").text(outletDetails[closest]["Address"]);
+            $("#spnContact").text(outletDetails[closest]["Contact"]);
+        }
+
+    </script>
     <section class="footer" style="text-align:center;">
         @if (!string.IsNullOrEmpty(Model.objDashboardConfig.FacebookUrl))
         {
@@ -512,8 +581,6 @@
             </a>
         }
     </section>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
     <script>
         function handleCardClick()
