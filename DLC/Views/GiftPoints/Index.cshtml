@@ -384,8 +384,8 @@
             if (!giftPoints || giftPoints == "0") {
                 toastr.error('Please enter Gift Points');
                 status = false;
-            } else if (!/^[6789]\d{9}$/.test(giftPoints)) {
-                toastr.error('Please enter a valid Gift Points');
+            } else if (!/^\d+$/.test(giftPoints)) {
+                toastr.error('Please enter valid numeric Gift Points');
                 status = false;
             }
 
