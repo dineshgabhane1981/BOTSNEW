@@ -29,16 +29,20 @@ namespace DLC.Controllers
             {
                 //objData.EarnPoints = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.Points).FirstOrDefault();
                 var earnPoint = context.tblCustPointsMasters.Where(x => x.MobileNo == sessionVariables.MobileNo && x.IsActive == true && x.PointsType== "Base").Sum(y => y.Points) ?? 0;
+                var BaseExpiryDate = context.tblCustPointsMasters.Where(x => x.MobileNo == sessionVariables.MobileNo && x.IsActive == true && x.PointsType == "Base").Select(y => y.EndDate).FirstOrDefault();
                 var BonousPoint = context.tblCustPointsMasters.Where(x => x.MobileNo == sessionVariables.MobileNo && x.IsActive == true && x.PointsType== "Bonus").Sum(y => y.Points) ?? 0;
+                var BonusExpiryDate = context.tblCustPointsMasters.Where(x => x.MobileNo == sessionVariables.MobileNo && x.IsActive == true && x.PointsType == "Bonus").OrderBy(y => y.EndDate).Select(y => y.EndDate).FirstOrDefault();
+                //var BonusExpiryDate = context.tblCustPointsMasters.Where(x => x.MobileNo == sessionVariables.MobileNo && x.IsActive == true && x.PointsType == "Bonus").Select(y => y.EndDate).FirstOrDefault();
                 var PointsToRS = context.tblRuleMasters.Select(x => x.PointsAllocation).FirstOrDefault();
                 var custumerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == sessionVariables.MobileNo).Select(y => y.Name).FirstOrDefault();
-                var pointsinRs = earnPoint * PointsToRS ?? 0;
+                var pointsinRs = (earnPoint + BonousPoint) * PointsToRS ?? 0;
                 pointsinRs = Math.Round(pointsinRs, 2);
 
                 ViewBag.earnPoint = earnPoint;
                 ViewBag.bonousPoint = BonousPoint;
                 ViewBag.pointsinRs = pointsinRs;
-
+                ViewBag.BaseExpiryDate = BaseExpiryDate;
+                ViewBag.BonusExpiryDate = BonusExpiryDate;
                 ViewBag.customerName = custumerName;
                 
             }

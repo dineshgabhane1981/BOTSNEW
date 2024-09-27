@@ -60,7 +60,7 @@
 
         @@media only screen and (max-width: 850px) {
             .heading-container {
-                font-size: small;
+                font-size:10px;
                 margin-top: 30% !important;
             }
         }
@@ -149,31 +149,31 @@
     <!-- navigation end -->
 
     <div class="heading-container">
-        <div class="heading heading1" style="margin-left: 40px">
+        <div class="heading heading1" style="margin-left: 60px">
             <h2>TOTAL POINTS</h2>
         </div>
 
-        <div class="heading heading2" style="margin-left: 40px">
+        <div class="heading heading2" style="margin-left: 50px">
             <h2>POINTS YOU CAN GIFT</h2>
 
         </div>
 
-        <div class="heading heading3">
+        @*<div class="heading heading3">
             <h2>BALANCE POINTS</h2>
-        </div>
+        </div>*@
     </div>
     <div class="circle-container">
-        <div class="circle blue" id="txtTotalPoints">
+        <div class="circle blue" id="txtTotalPoints" style="margin-left:30px;">
             <span>@Convert.ToInt32(Model.EarnPoints)</span>
         </div>
-        <div class="circle green " id="txtRedemablePoints">
+        <div class="circle green " id="txtRedemablePoints" style="margin-right:40px;">
             <span>@Convert.ToInt32(Model.BasePoints)</span>
 
         </div>
 
-        <div class="circle green">
+        @*<div class="circle green">
             <span id="txtRemainingPoints">0</span>
-        </div>
+        </div>*@
 
     </div>
 

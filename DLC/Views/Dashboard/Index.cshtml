@@ -245,7 +245,7 @@
                 <div class="card-center-both">
                     <img src="https://blueocktopus.in/dlc/img/coins.png" alt="" />
                     <div class="card-center-both-right">
-                        <h4>@ViewBag.earnPoint</h4>
+                        <h4>@(ViewBag.earnPoint + ViewBag.bonousPoint)</h4>
                         <h5>Total Points</h5>
                     </div>
                 </div>
@@ -276,17 +276,19 @@
                 <div class="left-split">
                     <h4>@ViewBag.earnPoint</h4>
                     <h5>Transaction Points</h5>
-                    @if (ViewBag.earnPoint != 0)
+                    @if (Convert.ToInt32(ViewBag.earnPoint) != 0)
                     {
-                        <h6><span>25th March 2025</span></h6>
+                          <h5>@Convert.ToDateTime(ViewBag.BaseExpiryDate).ToString("yyyy-MM-dd")</h5> 
+                          @*<h6><span>25th March 2025</span></h6>*@
                     }
-                </div>
+                 </div>
                 <div class="right-split">
                     <h4>@ViewBag.bonousPoint</h4>
                     <h5>Bonus Points</h5>
-                    @if (ViewBag.bonousPoint != 0)
+                    @if (Convert.ToInt32(ViewBag.bonousPoint) != 0)
                     {
-                        <h6><span>25th March 2025</span></h6>
+                        <h5>@Convert.ToDateTime(ViewBag.BonusExpiryDate).ToString("yyyy-MM-dd")</h5>
+                        @*<h6><span>25th March 2025</span></h6>*@
                     }
                 </div>
             </div>
