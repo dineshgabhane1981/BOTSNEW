@@ -278,10 +278,10 @@
                     <h5>Transaction Points</h5>
                     @if (Convert.ToInt32(ViewBag.earnPoint) != 0)
                     {
-                          <h5>@Convert.ToDateTime(ViewBag.BaseExpiryDate).ToString("yyyy-MM-dd")</h5> 
-                          @*<h6><span>25th March 2025</span></h6>*@
+                        <h5>@Convert.ToDateTime(ViewBag.BaseExpiryDate).ToString("yyyy-MM-dd")</h5>
+                        @*<h6><span>25th March 2025</span></h6>*@
                     }
-                 </div>
+                </div>
                 <div class="right-split">
                     <h4>@ViewBag.bonousPoint</h4>
                     <h5>Bonus Points</h5>
@@ -293,11 +293,10 @@
                 </div>
             </div>
         </div>
-
         <div class="custom-modal" id="missingFieldModal">
             <div class="custom-modal-content">
                 <div class="custom-modal-header">
-                    <h5 class="modal-title" id="missingFieldModalLabel">Missing Information</h5>
+                    <h5 class="modal-title" id="missingFieldModalLabel">Missing Information</h5> <!-- Default header -->
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="hideModal();">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -306,7 +305,6 @@
                     <form id="missingFieldForm">
                         <div class="form-group">
                             <label for="missingFieldValue" id="missingFieldLabel">Please enter the required information:</label>
-                            @*<input type="text" class="form-control" id="missingFieldValue" required>*@
                             <div id="dvmissingField"></div>
                         </div>
                         <input type="hidden" id="userId">
@@ -318,8 +316,29 @@
                 </div>
             </div>
         </div>
-
-
+        @*<div class="custom-modal" id="missingFieldModal">
+                <div class="custom-modal-content">
+                    <div class="custom-modal-header">
+                        <h5 class="modal-title" id="missingFieldModalLabel">Missing Information</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="hideModal();">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="custom-modal-body">
+                        <form id="missingFieldForm">
+                            <div class="form-group">
+                                <label for="missingFieldValue" id="missingFieldLabel">Please enter the required information:</label>
+                                <div id="dvmissingField"></div>
+                            </div>
+                            <input type="hidden" id="userId">
+                            <input type="hidden" id="missingField">
+                        </form>
+                    </div>
+                    <div class="custom-modal-footer">
+                        <button type="button" class="btn" onclick="saveMissingField()">Save</button>
+                    </div>
+                </div>
+            </div>*@
 
     </section>
     <div class="bottom">
@@ -516,7 +535,7 @@
             return deg * Math.PI / 180;
         }
 
-        function PythagorasEquirectangular(lat1, lon1, lat2, lon2) {   
+        function PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
             lat1 = Deg2Rad(lat1);
             lat2 = Deg2Rad(lat2);
             lon1 = Deg2Rad(lon1);
@@ -596,102 +615,197 @@
     </script>
 
     <script>
-        function showModal() {
-            document.getElementById("missingFieldModal").style.display = "block";
-        }
+    function showModal() {
+        document.getElementById("missingFieldModal").style.display = "block";
+    }
 
-        function hideModal() {
-            document.getElementById("missingFieldModal").style.display = "none";
-        }
+    function hideModal() {
+        document.getElementById("missingFieldModal").style.display = "none";
+    }
 
-        function checkAndPromptMissingField() {
-            var mobileNumber = "@MobileNo"; // Ensure this is correctly passed from your backend
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "Dashboard/GetUserDetails", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.success && response.missingField) {
-                        var missingField = response.missingField;
-                        var id = response.id;
+    function checkAndPromptMissingField() {
+        var mobileNumber = "@MobileNo";
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "Dashboard/GetUserDetails", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success && response.missingField) {
+                    var missingField = response.missingField;
+                    var id = response.id;
 
-                        // Set the modal fields
-                        document.getElementById("missingFieldLabel").innerText = "Please enter your " + missingField + ":";
-                        document.getElementById("missingField").value = missingField;
-                        if (missingField == "Name") {
-                            var cntrl = "<input type='text' id='missingFieldValue' class='form-control' required>";
-                        }
-                        if (missingField == "BirthDate" || "AnniversaryDate") {
-                            var cntrl = "<input type='date' id='missingFieldValue' class='form-control' required>";
-                        }
-                        if (missingField == "Gender") {
-                            var cntrl = "<select  id='missingFieldValue' class='form-control' required>";
-                            cntrl = cntrl + "<option value='M'>Male</option>";
-                            cntrl = cntrl + "<option value='F'>Female</option>";
-                        }
-                        $("#dvmissingField").html(cntrl);
-                        document.getElementById("userId").value = id;
+                    document.getElementById("missingFieldModalLabel").innerText = "Update Profile for Better Rewards";
 
-                        // Show the modal
-                        showModal();
-                    } else if (!response.success) {
-                        //alert(response.message); // Replace with a custom alert function if needed
-                        toastr.error('An error occurred: ' + response.message);
+                    document.getElementById("missingFieldLabel").innerText = "Please enter your " + missingField + ":";
+                    document.getElementById("missingField").value = missingField;
+
+                    var cntrl = "";
+                    if (missingField == "Name") {
+                        cntrl = "<input type='text' id='missingFieldValue' class='form-control' required>";
+                    } else if (missingField == "BirthDate" || missingField == "AnniversaryDate") {
+                        cntrl = "<input type='date' id='missingFieldValue' class='form-control' required>";
+                    } else if (missingField == "Gender") {
+                        cntrl = "<select id='missingFieldValue' class='form-control' required>";
+                        cntrl += "<option value='M'>Male</option>";
+                        cntrl += "<option value='F'>Female</option>";
+                        cntrl += "</select>";
                     }
+
+                    document.getElementById("dvmissingField").innerHTML = cntrl;
+                    document.getElementById("userId").value = id;
+
+                    // Show the modal
+                    showModal();
+                } else {
+                    // If no missing fields, the modal won't show
+                    toastr.error('No missing fields.');
                 }
-            };
-            xhr.send("mobileNumber=" + encodeURIComponent(mobileNumber));
+            }
+        };
+        xhr.send("mobileNumber=" + encodeURIComponent(mobileNumber));
+    }
+
+    function saveMissingField() {
+        var id = document.getElementById("userId").value;
+        var field = document.getElementById("missingField").value;
+        var value = document.getElementById("missingFieldValue").value;
+
+        if (!id || !field || !value) {
+            toastr.error("Please fill out all required fields.");
+            return;
         }
 
-        function saveMissingField() {
-            var id = document.getElementById("userId").value;
-            var field = document.getElementById("missingField").value;
-            var value = document.getElementById("missingFieldValue").value;
-
-            if (!id || !field || !value) {
-                //alert("Please fill out all required fields."); // Replace with a custom alert function if needed
-                toastr.error("Please fill out all required fields.");
-                return;
-            }
-
-            var data = JSON.stringify({
-                id: id,
-                field: field,
-                value: value
-            });
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "Dashboard/UpdateUserDetails", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        //alert(response.message); // Replace with a custom alert function if needed
-                        toastr.success(response.message);
-                        hideModal();
-                    } else {
-                        toastr.error(response.message); // Replace with a custom alert function if needed
-                    }
-                }
-            };
-            xhr.onerror = function() {
-                //console.error("Error updating user details");
-                //alert("An error occurred while updating user details."); // Replace with a custom alert function if needed
-                toastr.error("An error occurred while updating user details.");
-            };
-            xhr.send(data);
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var status = @Flag; // Ensure this is correctly passed from your backend
-            if (status) {
-                checkAndPromptMissingField();
-            }
+        var data = JSON.stringify({
+            id: id,
+            field: field,
+            value: value
         });
 
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "Dashboard/UpdateUserDetails", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    toastr.success(response.message);
+                    hideModal();
+                } else {
+                    toastr.error(response.message);
+                }
+            }
+        };
+        xhr.onerror = function() {
+            toastr.error("An error occurred while updating user details.");
+        };
+        xhr.send(data);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var status = @Flag; // Ensure this is correctly passed from your backend
+        if (status) {
+            checkAndPromptMissingField();
+        }
+    });
     </script>
+    @*<script>
+            function showModal() {
+                document.getElementById("missingFieldModal").style.display = "block";
+            }
+
+            function hideModal() {
+                document.getElementById("missingFieldModal").style.display = "none";
+            }
+
+            function checkAndPromptMissingField() {
+                var mobileNumber = "@MobileNo"; // Ensure this is correctly passed from your backend
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "Dashboard/GetUserDetails", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success && response.missingField) {
+                            var missingField = response.missingField;
+                            var id = response.id;
+
+                            // Set the modal fields
+                            document.getElementById("missingFieldLabel").innerText = "Please enter your " + missingField + ":";
+                            document.getElementById("missingField").value = missingField;
+                            if (missingField == "Name") {
+                                var cntrl = "<input type='text' id='missingFieldValue' class='form-control' required>";
+                            }
+                            if (missingField == "BirthDate" || "AnniversaryDate") {
+                                var cntrl = "<input type='date' id='missingFieldValue' class='form-control' required>";
+                            }
+                            if (missingField == "Gender") {
+                                var cntrl = "<select  id='missingFieldValue' class='form-control' required>";
+                                cntrl = cntrl + "<option value='M'>Male</option>";
+                                cntrl = cntrl + "<option value='F'>Female</option>";
+                            }
+                            $("#dvmissingField").html(cntrl);
+                            document.getElementById("userId").value = id;
+
+                            // Show the modal
+                            showModal();
+                        } else if (!response.success) {
+                            //alert(response.message); // Replace with a custom alert function if needed
+                            toastr.error('An error occurred: ' + response.message);
+                        }
+                    }
+                };
+                xhr.send("mobileNumber=" + encodeURIComponent(mobileNumber));
+            }
+
+            function saveMissingField() {
+                var id = document.getElementById("userId").value;
+                var field = document.getElementById("missingField").value;
+                var value = document.getElementById("missingFieldValue").value;
+
+                if (!id || !field || !value) {
+                    //alert("Please fill out all required fields."); // Replace with a custom alert function if needed
+                    toastr.error("Please fill out all required fields.");
+                    return;
+                }
+
+                var data = JSON.stringify({
+                    id: id,
+                    field: field,
+                    value: value
+                });
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "Dashboard/UpdateUserDetails", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            //alert(response.message); // Replace with a custom alert function if needed
+                            toastr.success(response.message);
+                            hideModal();
+                        } else {
+                            toastr.error(response.message); // Replace with a custom alert function if needed
+                        }
+                    }
+                };
+                xhr.onerror = function() {
+                    //console.error("Error updating user details");
+                    //alert("An error occurred while updating user details."); // Replace with a custom alert function if needed
+                    toastr.error("An error occurred while updating user details.");
+                };
+                xhr.send(data);
+            }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var status = @Flag; // Ensure this is correctly passed from your backend
+                if (status) {
+                    checkAndPromptMissingField();
+                }
+            });
+
+        </script>*@
     <script src="~/js/dashboard.js"></script>
 
 </body>
