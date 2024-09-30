@@ -97,37 +97,64 @@
                 font-size: 15px; /* Adjust icon size */
                 color: #d9534f; /* Icon color */
             }
+        
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;  /*Ensure it's on top of other elements */
+            background-color: white;  /*Change as needed */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /*Optional shadow */
+        }
 
+        .features {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+         /*Make sure there's padding on the page to compensate for the sticky nav's height */
+        body {
+            padding-top: 120px;  /*Adjust this value based on the height of your navbar */
+        }
+
+         /*Optional: Customize appearance of nav links */
+        .sticky-nav a {
+            text-decoration: none;
+            color: black;
+        }
+
+            .sticky-nav a:hover {
+                text-decoration: underline;
+            }
+
+         Ensure logo scales properly 
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
 
     </style>
 </head>
 <body>
-    <nav>
-        @*<div class="logo">
-                <a href="index.html">
-                    <img src="@logoUrl" alt="logo" />
-                </a>
-            </div>*@
+    <nav class="sticky-nav">
         @if (logoSize == "Small")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
-                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
-            </div>
-        }
+             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
+                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+             </div>}
         @if (logoSize == "Medium")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
-                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
-            </div>
-        }
+              <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
+                   <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+              </div>}
         @if (logoSize == "Big")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
-                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
-            </div>
-        }
+              <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
+                   <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+              </div>}
         <div class="profile_links">
-
+            <!-- Profile links here -->
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -137,7 +164,7 @@
                 <option value="Marathi">Marathi</option>
             </select>
         </div>
-        <div class="features" style="margin-left:200px;">
+        <div class="features" style="margin-left:250px;margin-top:15px;">
             <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
             <a href="@Url.Action("Index", "ReferEarn")"><h1 class="active">Refer and Earn</h1></a>
@@ -271,7 +298,7 @@
         const inputGroup = document.getElementById(button);
         inputGroup.remove();
     }
-    
+
 
     function SendReference() {
         var status = true;

@@ -48,36 +48,63 @@
             background-color: #4CAF50; /* Green */
             color: white;
         }
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /*Ensure it's on top of other elements */
+            background-color: white; /*Change as needed */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /*Optional shadow */
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+        /*Make sure there's padding on the page to compensate for the sticky nav's height */
+        body {
+            padding-top: 120px; /*Adjust this value based on the height of your navbar */
+        }
+
+        /*Optional: Customize appearance of nav links */
+        .sticky-nav a {
+            text-decoration: none;
+            color: black;
+        }
+
+            .sticky-nav a:hover {
+                text-decoration: underline;
+            }
+
+        Ensure logo scales properly
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 
 <body>
-    <nav>
-        @*<div class="logo">
-                <a href="index.html">
-                    <img src="@logoUrl" alt="logo" />
-                </a>
-            </div>*@
+    <nav class="sticky-nav">
         @if (logoSize == "Small")
         {
             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
-            </div>
-        }
+            </div>}
         @if (logoSize == "Medium")
         {
             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="300" height="150" />
-            </div>
-        }
+            </div>}
         @if (logoSize == "Big")
         {
             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="400" height="200" />
-            </div>
-        }
+            </div>}
         <div class="profile_links">
-
+            <!-- Profile links here -->
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -87,11 +114,11 @@
                 <option value="Marathi">Marathi</option>
             </select>
         </div>
-        <div class="features" style="margin-left:200px;">
+        <div class="features" style="margin-left:250px;margin-top:15px;">
             <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
-            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
-            <a href="@Url.Action("Index", "PersonalDetails")"><h1 class="active">Personal Details</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1 class="active">Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
@@ -377,35 +404,35 @@
     </script>
 
     <section class="footer" style="text-align:center;">
-       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
         {
             <a id="HlnkfacebookURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
-            <img src="~/img/facebook.svg" alt="Facebook" />
+                <img src="~/img/facebook.svg" alt="Facebook" />
             </a>
         }
-       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
         {
             <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
-            <img src="~/img/instagram.svg" alt="Instagram" />
+                <img src="~/img/instagram.svg" alt="Instagram" />
             </a>
         }
-       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
         {
-             <a id="HlnktwitterURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
-             <img src="~/img/twitterx.svg" alt="Twitter" />
-             </a>
+            <a id="HlnktwitterURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+                <img src="~/img/twitterx.svg" alt="Twitter" />
+            </a>
         }
-       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
         {
-             <a id="HlnkyoutubeURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
-             <img src="~/img/youtube.svg" alt="YouTube" />
-             </a>
+            <a id="HlnkyoutubeURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+                <img src="~/img/youtube.svg" alt="YouTube" />
+            </a>
         }
-       @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
+        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
         {
-             <a id="HlnkwhatsappURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
-             <img src="~/img/whatsapp.svg" alt="WhatsApp" />
-             </a>
+            <a id="HlnkwhatsappURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+                <img src="~/img/whatsapp.svg" alt="WhatsApp" />
+            </a>
         }
     </section>
 

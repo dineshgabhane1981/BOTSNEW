@@ -75,37 +75,63 @@
             padding: 20px 20px;
             clear: both;
         }
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /*Ensure it's on top of other elements */
+            background-color: white; /*Change as needed */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /*Optional shadow */
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+        }
+
+        /*Make sure there's padding on the page to compensate for the sticky nav's height */
+        body {
+            padding-top: 120px; /*Adjust this value based on the height of your navbar */
+        }
+
+        /*Optional: Customize appearance of nav links */
+        .sticky-nav a {
+            text-decoration: none;
+            color: black;
+        }
+
+            .sticky-nav a:hover {
+                text-decoration: underline;
+            }
+
+        Ensure logo scales properly
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <!-- navigation baar -->
-
-    <nav id="nvbarcolor">
-        @*<div class="logo">
-                <a href="index.html">
-                    <img src="@logoUrl" alt="logo" />
-                </a>
-            </div>*@
+    <nav class="sticky-nav">
         @if (logoSize == "Small")
         {
             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
-            </div>
-        }
+            </div>}
         @if (logoSize == "Medium")
         {
             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="300" height="150" />
-            </div>
-        }
+            </div>}
         @if (logoSize == "Big")
         {
             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
                 <img id="imgLogo" src="@logoUrl" width="400" height="200" />
-            </div>
-        }
+            </div>}
         <div class="profile_links">
-           
+            <!-- Profile links here -->
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -113,20 +139,18 @@
                 <option value="English">English</option>
                 <option value="Hindi">Hindi</option>
                 <option value="Marathi">Marathi</option>
-
             </select>
         </div>
-        <div class="features" style="margin-left:200px;">
+        <div class="features" style="margin-left:250px;margin-top:15px;">
             <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
-            <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
+            <a href="@Url.Action("Index", "ReferEarn")"><h1 class="active">Refer and Earn</h1></a>
             <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
-            <a href="@Url.Action("Index", "GiftPoints")"><h1 class="active">Gift Points</h1></a>
+            <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
             <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
-
         </div>
         <div class="hamburger">
             <i class="ri-menu-2-line"></i>
@@ -159,22 +183,21 @@
         </div>
 
         @*<div class="heading heading3">
-            <h2>BALANCE POINTS</h2>
-        </div>*@
+                <h2>BALANCE POINTS</h2>
+            </div>*@
     </div>
     <div class="circle-container">
-        <div class="circle blue" id="txtTotalPoints" style="margin-left:30px;">
+        <div id="txtTotalPoints" style="margin-left:30px;">
             <span>@Convert.ToInt32(Model.EarnPoints)</span>
         </div>
-        <div class="circle green " id="txtRedemablePoints" style="margin-right:40px;">
+        <div id="txtRedemablePoints" style="margin-right:40px;">
             <span>@Convert.ToInt32(Model.BasePoints)</span>
 
         </div>
 
         @*<div class="circle green">
-            <span id="txtRemainingPoints">0</span>
-        </div>*@
-
+                <span id="txtRemainingPoints">0</span>
+            </div>*@
     </div>
 
 
@@ -192,7 +215,7 @@
             <label for="Name">Name</label>
             <input type="text" id="txtRecipientName" placeholder="Enter Recipient's Name" required />
 
-            <label for="Registered Phone Number">Recipients Mobile Number</label>
+            <label for="Registered Phone Number">Recipient's Mobile Number</label>
             <input type="tel" id="txtRecipientNo" placeholder="Enter Recipient's Number" required />
 
             <label for="Gift_Points">Gift Points  <span style="font-size: medium;" id="spnRS"></span></label>
@@ -257,7 +280,7 @@
             </a>
         }
     </section>
-   
+
 
     <script>
         function Hamburger() {
