@@ -35,10 +35,18 @@
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 1000; /*Ensure it's on top of other elements */
-            background-color: white; /*Change as needed */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /*Optional shadow */
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
+            .sticky-nav.scrolled .logo {
+                display: none;
+            }
+
+            .sticky-nav.scrolled .features {
+                padding-top: 10px;
+            }
 
         .features {
             display: flex;
@@ -46,12 +54,10 @@
             padding: 10px 20px;
         }
 
-        /*Make sure there's padding on the page to compensate for the sticky nav's height */
         body {
-            padding-top: 120px; /*Adjust this value based on the height of your navbar */
+            padding-top: 120px;
         }
 
-        /*Optional: Customize appearance of nav links */
         .sticky-nav a {
             text-decoration: none;
             color: black;
@@ -61,7 +67,6 @@
                 text-decoration: underline;
             }
 
-        Ensure logo scales properly
         .logo img {
             max-width: 100%;
             height: auto;
@@ -111,52 +116,6 @@
             <i class="ri-menu-2-line"></i>
         </div>
     </nav>
-    @*<nav>
-            @if (logoSize == "Small")
-            {
-                <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
-                    <img id="imgLogo" src="@logoUrl" width="200" height="100" />
-                </div>
-            }
-            @if (logoSize == "Medium")
-            {
-                <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
-                    <img id="imgLogo" src="@logoUrl" width="300" height="150" />
-                </div>
-            }
-            @if (logoSize == "Big")
-            {
-                <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
-                    <img id="imgLogo" src="@logoUrl" width="400" height="200" />
-                </div>
-            }
-            <div class="profile_links">
-
-            </div>
-            <div class="language" style="display:none">
-                <select name="language" id="">
-                    <option value="language">Language</option>
-                    <option value="English">English</option>
-                    <option value="Hindi">Hindi</option>
-                    <option value="Marathi">Marathi</option>
-                </select>
-            </div>
-
-            <div class="features" style="margin-left:200px;">
-                <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
-                <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
-                <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
-                <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
-                <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
-                <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
-                <a href="@Url.Action("Index", "Terms")"><h1 class="active">Terms and Conditions</h1></a>
-                <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
-                <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
-            </div>
-            <div class="hamburger">
-                <i class="ri-menu-2-line"></i>
-            </div>
-        </nav>*@
     <div class="menu-container">
         <div id="menu">
             <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
@@ -218,6 +177,14 @@
 
 
     <script>
+        window.onscroll = function () {
+            var navbar = document.querySelector('.sticky-nav');
+            if (window.pageYOffset > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        };
         function Hamburger() {
             var hamburger = document.querySelector('.hamburger');
             var menu = document.querySelector('.menu-container');

@@ -70,7 +70,7 @@
 
         .input_box {
             display: flex;
-            flex-direction: column; /* Stack the input groups vertically */
+            flex-direction: column;
         }
 
         .input_group {
@@ -87,38 +87,38 @@
         .remove-button {
             position: absolute;
             top: 0;
-            right: 10px; /* Adjust the position as needed */
+            right: 10px;
             background-color: transparent;
             border: none;
             cursor: pointer;
         }
 
             .remove-button i {
-                font-size: 15px; /* Adjust icon size */
-                color: #d9534f; /* Icon color */
+                font-size: 15px;
+                color: #d9534f;
             }
-        
+
         .sticky-nav {
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 1000;  /*Ensure it's on top of other elements */
-            background-color: white;  /*Change as needed */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /*Optional shadow */
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
+            .sticky-nav.scrolled .logo {
+                display: none;
+            }
 
         .features {
             display: flex;
             justify-content: space-between;
             padding: 10px 20px;
         }
-
-         /*Make sure there's padding on the page to compensate for the sticky nav's height */
         body {
-            padding-top: 120px;  /*Adjust this value based on the height of your navbar */
+            padding-top: 120px;
         }
-
-         /*Optional: Customize appearance of nav links */
         .sticky-nav a {
             text-decoration: none;
             color: black;
@@ -128,31 +128,32 @@
                 text-decoration: underline;
             }
 
-         Ensure logo scales properly 
         .logo img {
             max-width: 100%;
             height: auto;
         }
-
     </style>
 </head>
 <body>
     <nav class="sticky-nav">
         @if (logoSize == "Small")
         {
-             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
-                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
-             </div>}
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+            </div>
+        }
         @if (logoSize == "Medium")
         {
-              <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
-                   <img id="imgLogo" src="@logoUrl" width="300" height="150" />
-              </div>}
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+            </div>
+        }
         @if (logoSize == "Big")
         {
-              <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
-                   <img id="imgLogo" src="@logoUrl" width="400" height="200" />
-              </div>}
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+            </div>
+        }
         <div class="profile_links">
             <!-- Profile links here -->
         </div>
@@ -275,6 +276,14 @@
     </div>
 
     <script>
+        window.onscroll = function () {
+            var navbar = document.querySelector('.sticky-nav');
+            if (window.pageYOffset > 50) { 
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        };
     let friendCount = 1;
 
     function addFriendInput() {

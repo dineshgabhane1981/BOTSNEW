@@ -61,8 +61,12 @@
             .gift-card-bottom h3 {
                 font-size: 3vw; /* Larger font for readability on smaller devices */
             }
+            
         }
-
+        #imageContainer{
+                padding-top:80px;
+        } 
+        
         @@media (max-width: 480px) {
             .gift-card {
                 flex: 1 1 100%; /* Single card per row on very small devices */
@@ -153,23 +157,39 @@
             padding: 20px 20px;
             clear: both;
         }
-        /*.footer {
-            background-color: #344966;
-            height: 10vh;
-        }*/
+        .sticky-nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure it's on top of other elements */
+            background-color: white; /* Change as needed */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
+            transition: height 0.3s; /* Smooth transition for height changes */
+        }
+
+            .sticky-nav.scrolled .logo {
+                display: none; /* Hide the logo when scrolled */
+            }
+
+            .sticky-nav.scrolled .features {
+                padding-top: 10px; /* Adjust padding if needed */
+            }
+
+        /* Ensure logo scales properly */
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
     </style>
 </head>
 <body>
-    <nav id="nvbarcolor">
+
+    <nav id="nvbarcolor" class="sticky-nav">
         <div class="profile_links">
 
         </div>
-        @*<div class="logo">
-                <a href="index.html">
-                    <img src="@logoUrl" alt="logo" />
-                </a>
-            </div>*@
-        @if (logoSize == "Small")
+       @if (logoSize == "Small")
         {
             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top:-40px;">
                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
@@ -235,10 +255,7 @@
         <div class="card" style="background-image:url(@Model.objDashboardConfig.UseCardURL)">
             <div class="card-top">
                 <h3>@MobileNo</h3>
-                @*<div class="card-top-right">
-                        <h4>Card Number</h4>
-                        <h4>12XX 23XX XX12</h4>
-                    </div>*@
+                
             </div>
             <div class="card-center">
                 <h2>LOYALTY POINTS BALANCE</h2>
@@ -719,6 +736,16 @@
             checkAndPromptMissingField();
         }
     });
+    </script>
+    <script>
+        document.addEventListener("scroll", function () {
+            const navbar = document.getElementById("nvbarcolor");
+            if (window.scrollY > 50) { // You can adjust the scroll threshold as needed
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
+            }
+        });
     </script>
     
     <script src="~/js/dashboard.js"></script>
