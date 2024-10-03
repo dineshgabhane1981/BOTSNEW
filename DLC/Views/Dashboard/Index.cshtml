@@ -364,7 +364,7 @@
         <div class="gift-card-container">
             @if (Model.objDashboardConfig.AddPersonalDetails)
             {
-                <a href="@Url.Action("Index", "PersonalDetails")" style="text-decoration:none;">
+                <a id="wdPersonalDetails" href="@Url.Action("Index", "PersonalDetails")" style="text-decoration:none;">
                     <div class="gift-card">
                         <div class="gift-card-top">
                             <i class="ri-team-line"></i>
@@ -656,36 +656,13 @@
                         cntrl += "<option value='F'>Female</option>";
                         cntrl += "</select>";
                     }
-
-                    // Generate min and max date values
-                    //var minDate = new Date();
-                    //minDate.setFullYear(minDate.getFullYear() - 18);
-                    //var minDateString = minDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
-
-                    //var maxDate = new Date();
-                    //maxDate.setFullYear(maxDate.getFullYear() - 100);
-                    //var maxDateString = maxDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
-
-                    //// Check the missing field and create the corresponding control with validation
-                    //if (missingField == "Name") {
-                    //    cntrl = "<input type='text' id='missingFieldValue' class='form-control' required>";
-                    //} else if (missingField == "BirthDate" || missingField == "AnniversaryDate") {
-                    //    // Add min and max attributes for the date input field
-                    //    cntrl = "<input type='date' id='missingFieldValue' class='form-control' required " +
-                    //        "min='" + maxDateString + "' max='" + minDateString + "'>";
-                    //} else if (missingField == "Gender") {
-                    //    cntrl = "<select id='missingFieldValue' class='form-control' required>";
-                    //    cntrl += "<option value='M'>Male</option>";
-                    //    cntrl += "<option value='F'>Female</option>";
-                    //    cntrl += "</select>";
-                    //}
-
                     document.getElementById("dvmissingField").innerHTML = cntrl;
                     document.getElementById("userId").value = id;
 
                     // Show the modal
                     showModal();
                 } else {
+                    $("#wdPersonalDetails").hide();
                     // If no missing fields, the modal won't show
                     //toastr.error('No missing fields.');
                 }
