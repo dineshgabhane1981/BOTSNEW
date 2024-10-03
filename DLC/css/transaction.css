@@ -10,11 +10,16 @@
     font-style: normal;
     font-variation-settings: "wdth" 100;
 }
-html, body {
-    margin: 0;
-    padding: 0;
+/*html, body {*/
+    /*margin: 0;*/
+    /*padding: 0;
     height: 100%;
-    overflow-y: auto; /* Ensures vertical scrollbar if content overflows */
+    overflow-y: auto;*/ /* Ensures vertical scrollbar if content overflows */
+/*}*/
+html,
+body {
+    height: 100%;
+    width: 100%;
 }
 
 /* navbar */

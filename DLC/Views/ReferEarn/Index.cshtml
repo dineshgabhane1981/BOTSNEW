@@ -135,7 +135,7 @@
     </style>
 </head>
 <body>
-    <nav class="sticky-nav">
+    <nav class="sticky-nav" style="display:flex !important;">
         @if (logoSize == "Small")
         {
             <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
@@ -176,7 +176,7 @@
             <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
-        <div class="hamburger">
+        <div class="hamburger" style="width:25px !important;">
             <i class="ri-menu-2-line"></i>
         </div>
     </nav>
