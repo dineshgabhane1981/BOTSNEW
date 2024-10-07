@@ -20,7 +20,7 @@
 <div class="app-main__inner">
     <div class="row mb-3 card">
         <div class="container-fluid pt-3 pl-3 pr-3" style="text-align:center;">
-
+            <input type="hidden" id="spoutletId" />
             <input type="number" id="txtmobileNo" class="input50" placeholder="Enter Mobile No" />
             <button class="btn btn-primary login-btn ml-2 mr-2" type="button" id="btnSave" onclick="Submit();">
                 Submit
@@ -381,23 +381,43 @@
         }
     }
 
+    function CheckYear(strDate) {
+        var returnStatus = false;
+        if (strDate == "" || strDate == null) {
+            returnStatus = true;
+        }
+        else {
+            var year = strDate.substring(0, 4);
+           
+            var currYear = new Date().getFullYear();
+            
+            if (year >= 1900 && year <= currYear) {
+                returnStatus = true;
+            } else {
+                returnStatus = false;
+            }
+        }
+        
+        return returnStatus;
+    }
     $("#btnSubmit").click(function () {
-        $("#divLoader").show();
-        var FilterData = [];
-        item = {};
-        item["MobileNo"] = $("#NewMobileNo").val();
-        item["CrdNo"] = $("#NewCrdNo").val();
-        item["CustNm"] = $("#NewCustName").val();
-        item["Gender"] = $('#ddlenrolgender :selected').val();
-        item["DOB"] = $("#NewDOB").val();
-        item["DOA"] = $("#NewDOA").val();
-        item["Comment"] = $("#Newcomment").val();
-        item["BonusPoints"] = $("#bonusPointsNew").val();
-        item["PointsValidity"] = $("#PointsValidityNew").val();
-        item["RedeemingOutlet"] = $("#ddlOutletNew").val();
-        FilterData.push(item);
-        var data = JSON.stringify(FilterData);
-         $.ajax({
+        
+            $("#divLoader").show();
+            var FilterData = [];
+            item = {};
+            item["MobileNo"] = $("#NewMobileNo").val();
+            item["CrdNo"] = $("#NewCrdNo").val();
+            item["CustNm"] = $("#NewCustName").val();
+            item["Gender"] = $('#ddlenrolgender :selected').val();
+            item["DOB"] = $("#NewDOB").val();
+            item["DOA"] = $("#NewDOA").val();
+            item["Comment"] = $("#Newcomment").val();
+            item["BonusPoints"] = $("#bonusPointsNew").val();
+            item["PointsValidity"] = $("#PointsValidityNew").val();
+            item["RedeemingOutlet"] = $("#ddlOutletNew").val();
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
+            $.ajax({
                 type: "POST",
                 url: '@Url.Action("EnrollData", "Telecaller")',
                 data: '{jsonData: ' + JSON.stringify(data) + '}',
@@ -415,8 +435,8 @@
                             message: "Data Save Successfully!",
                             buttonText: "Okay"
                         }).then(() => {
-                        window.location.reload();
-                    });
+                            window.location.reload();
+                        });
                     }
                     $("#divLoader").hide();
                 },
@@ -426,6 +446,7 @@
                     $("#divLoader").hide();
                 }
             });
+        
 
     });
 
@@ -441,31 +462,50 @@
         $("#divLoader").hide();
     }
 
-    function SaveData() {
-
-        $("#divLoader").show();
-        var FilterData = [];
-        item = {};
-        item["MobileNo"] = $("#txtmobileNo").val();
-        item["CustNm"] = $("#spCustName").val();
-        item["Gender"] = $('#ddlgender :selected').val();
-        item["DOB"] = $("#txtDOB").val();
-        item["DOA"] = $("#txtDOA").val();
-        item["Points"] = 0;
-        item["outletId"] = $("#spoutletId").text();
-        item["Comments"] = $("#txtcomment").val();
-        if ($("#bonusPointsNew").val() != null) {
-            item["Points"] = $("#bonusPointsOld").val();
-            item["PointsValidity"] = $("#PointsValidityOld").val();
-            item["RedeemingOutlet"] = $("#ddlOutletOld").val();
+    function SaveData() {       
+        var status = true;
+        if (!CheckYear($("#txtDOB").val())) {
+            status = false;
+            cuteAlert({
+                type: "error",
+                title: "OOPS",
+                message: "Please check Date of Birth!",
+                buttonText: "Okay"
+            })
         }
-        else {
+        if (!CheckYear($("#txtDOA").val())) {
+            status = false;
+            cuteAlert({
+                type: "error",
+                title: "OOPS",
+                message: "Please check Date of Anniversary!",
+                buttonText: "Okay"
+            })
+        }
+        if (status) {
+            $("#divLoader").show();
+            var FilterData = [];
+            item = {};
+            item["MobileNo"] = $("#txtmobileNo").val();
+            item["CustNm"] = $("#spCustName").val();
+            item["Gender"] = $('#ddlgender :selected').val();
+            item["DOB"] = $("#txtDOB").val();
+            item["DOA"] = $("#txtDOA").val();
             item["Points"] = 0;
-            item["PointsValidity"] = 0;
-            item["RedeemingOutlet"] = 0;
-        }
-        FilterData.push(item);
-        var data = JSON.stringify(FilterData);
+            item["outletId"] = $("#spoutletId").text();
+            item["Comments"] = $("#txtcomment").val();
+            if ($("#bonusPointsNew").val() != null) {
+                item["Points"] = $("#bonusPointsOld").val();
+                item["PointsValidity"] = $("#PointsValidityOld").val();
+                item["RedeemingOutlet"] = $("#ddlOutletOld").val();
+            }
+            else {
+                item["Points"] = 0;
+                item["PointsValidity"] = 0;
+                item["RedeemingOutlet"] = 0;
+            }
+            FilterData.push(item);
+            var data = JSON.stringify(FilterData);
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("SaveTelecallerData", "Telecaller")',
@@ -484,8 +524,8 @@
                             message: "Data Save Successfully!",
                             buttonText: "Okay"
                         }).then(() => {
-                        window.location.reload();
-                    });
+                            window.location.reload();
+                        });
                     }
                     $("#divLoader").hide();
                 },
@@ -500,6 +540,7 @@
                     $("#divLoader").hide();
                 }
             });
+        }
 
     }
 </script>
