@@ -27,7 +27,6 @@ namespace DLC.Controllers
             objData.dummyDOB = objData.lstProfileData.Where(x => x.FieldName == "DateOfBirth").Select(y => y.DOBValue).FirstOrDefault();
             return View(objData);
         }
-
         public ActionResult UpdateProfileData(string jsonData)
         {
             bool status = false;
@@ -38,6 +37,7 @@ namespace DLC.Controllers
             DLCProfileData objData = new DLCProfileData();
             objData.MobileNo = sessionVariables.MobileNo;
             objData.BrandId = sessionVariables.BrandId;
+
             try
             {
                 foreach (Dictionary<string, object> item in objProfileData)
@@ -51,10 +51,9 @@ namespace DLC.Controllers
                     {
                         objData.Gender = Convert.ToString(item["Gender"]);
                     }
-                  
-                    if (DateTime.TryParse(Convert.ToString(item["DateOfBirth"]), out dob))
+                    if (DateTime.TryParseExact(Convert.ToString(item["DateOfBirth"]), "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out dob))
                     {
-                        objData.DateOfBirth = dob.ToString("dd-MM-yyyy");
+                        objData.DateOfBirth = dob.ToString("yyyy-MM-dd"); // Keep the format "dd-MM-yyyy"
                     }
                     if (!string.IsNullOrEmpty(Convert.ToString(item["MaritalStatus"])))
                     {
@@ -83,7 +82,10 @@ namespace DLC.Controllers
             {
                 newexception.AddException(ex, "SaveDashboard");
             }
+
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
+
+        
     }
 }

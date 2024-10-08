@@ -613,63 +613,66 @@
 
     function hideModal() {
         document.getElementById("missingFieldModal").style.display = "none";
-    }
+        }
 
     function checkAndPromptMissingField() {
-        var mobileNumber = "@MobileNo";
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "Dashboard/GetUserDetails", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                if (response.success && response.missingField) {
-                    var missingField = response.missingField;
-                    var id = response.id;
+    var mobileNumber = "@MobileNo";
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "Dashboard/GetUserDetails", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.success && response.missingField) {
+                var missingField = response.missingField;
+                var id = response.id;
 
-                    /*document.getElementById("missingFieldModalLabel").innerText = "Update Profile for Better Rewards";*/
+                /*document.getElementById("missingFieldModalLabel").innerText = "Update Profile for Better Rewards";*/
 
-                    document.getElementById("missingFieldLabel").innerText = "Please enter your " + missingField + ":";
-                    document.getElementById("missingField").value = missingField;
+                document.getElementById("missingFieldLabel").innerText = "Please enter your " + missingField + ":";
+                document.getElementById("missingField").value = missingField;
 
-                    var minDate = new Date();
-                    minDate.setFullYear(minDate.getFullYear() - 18);
-                    var minDateString = minDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
+                var minDate = new Date();
+                minDate.setFullYear(minDate.getFullYear() - 18); // 18 years ago
+                var minDateString = minDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
 
-                    var maxDate = new Date();
-                    maxDate.setFullYear(maxDate.getFullYear() - 100);
-                    var maxDateString = maxDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
+                var maxDate = new Date();
+                maxDate.setFullYear(maxDate.getFullYear() - 100); // 100 years ago
+                var maxDateString = maxDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
 
-                    if (missingField == "Name") {
-                        cntrl = "<input type='text' id='missingFieldValue' class='form-control' required>";
-                    } else if (missingField == "BirthDate" || missingField == "AnniversaryDate") {
-                        // If it's AnniversaryDate, restrict future dates by setting max to today's date
-                        if (missingField == "AnniversaryDate") {
-                            var today = new Date().toISOString().split('T')[0]; // Format: yyyy-MM-dd
-                            cntrl = "<input type='date' id='missingFieldValue' class='form-control' required max='" + today + "'>";
-                        } else {
-                            cntrl = "<input type='date' id='missingFieldValue' class='form-control' required>";
-                        }
-                    } else if (missingField == "Gender") {
-                        cntrl = "<select id='missingFieldValue' class='form-control' required>";
-                        cntrl += "<option value='M'>Male</option>";
-                        cntrl += "<option value='F'>Female</option>";
-                        cntrl += "</select>";
-                    }
-                    document.getElementById("dvmissingField").innerHTML = cntrl;
-                    document.getElementById("userId").value = id;
+                var cntrl = '';
 
-                    // Show the modal
-                    showModal();
-                } else {
-                    $("#wdPersonalDetails").hide();
-                    // If no missing fields, the modal won't show
-                    //toastr.error('No missing fields.');
+                if (missingField == "Name") {
+                    cntrl = "<input type='text' id='missingFieldValue' class='form-control' required>";
+                } else if (missingField == "BirthDate") {
+                    // Restrict date to 18-100 years range
+                    cntrl = "<input type='date' id='missingFieldValue' class='form-control' required min='" + maxDateString + "' max='" + minDateString + "'>";
+                } else if (missingField == "AnniversaryDate") {
+                    // Restrict future dates for AnniversaryDate
+                    var today = new Date().toISOString().split('T')[0]; // Format: yyyy-MM-dd
+                    cntrl = "<input type='date' id='missingFieldValue' class='form-control' required max='" + today + "'>";
+                } else if (missingField == "Gender") {
+                    cntrl = "<select id='missingFieldValue' class='form-control' required>";
+                    cntrl += "<option value='M'>Male</option>";
+                    cntrl += "<option value='F'>Female</option>";
+                    cntrl += "</select>";
                 }
+
+                document.getElementById("dvmissingField").innerHTML = cntrl;
+                document.getElementById("userId").value = id;
+
+                // Show the modal
+                showModal();
+            } else {
+                $("#wdPersonalDetails").hide();
+                // If no missing fields, the modal won't show
+                //toastr.error('No missing fields.');
             }
-        };
-        xhr.send("mobileNumber=" + encodeURIComponent(mobileNumber));
-    }
+        }
+    };
+    xhr.send("mobileNumber=" + encodeURIComponent(mobileNumber));
+}
+
 
     function saveMissingField() {
         var id = document.getElementById("userId").value;

@@ -240,7 +240,7 @@
             <input type="number" id="txtRecipientNo" placeholder="Enter Recipient's Number" required />
 
             <label for="Gift_Points">Gift Points  <span style="font-size: medium;" id="spnRS"></span></label>
-            <input type="text" id="txtGiftPoints" placeholder="Enter Number of points to gift" />
+            <input type="number" id="txtGiftPoints" placeholder="Enter Number of points to gift" />
             <span id="spnRS"></span>
 
             <label for="progress-bar">Or Select Points</label>
@@ -432,11 +432,10 @@
                 toastr.error('Please enter a valid Mobile No');
                 status = false;
             }
-
             if (!giftPoints || giftPoints == "0") {
                 toastr.error('Please enter Gift Points');
                 status = false;
-            } else if (!/^\d+$/.test(giftPoints)) {
+            } else if (!/^[6789]\d{9}$/.test(giftPoints)) {
                 toastr.error('Please enter valid numeric Gift Points');
                 status = false;
             }
@@ -445,7 +444,6 @@
                 toastr.warning('Please accept the Gift-a-Points TnC to continue!!!!');
                 status = false;
             }
-
 
             if (status)
             {

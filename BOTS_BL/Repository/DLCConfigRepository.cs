@@ -1139,44 +1139,51 @@ namespace BOTS_BL.Repository
         {
             bool status = false;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
-            string DBName = String.Empty;
+            string DBName = string.Empty;
+
             using (var context = new CommonDBContext())
             {
                 DBName = context.tblDatabaseDetails.Where(x => x.GroupId == groupId).Select(y => y.DBName).FirstOrDefault();
             }
 
             using (var context = new BOTSDBContext(connStr))
-            {                
+            {
                 string DOB = string.Empty;
-                if(!string.IsNullOrEmpty(objData.DateOfBirth))
+
+                if (!string.IsNullOrEmpty(objData.DateOfBirth))
                 {
-                    DOB = Convert.ToDateTime(objData.DateOfBirth).ToString("yyyy-MM-dd");
+                    DateTime dob;
+                    if (DateTime.TryParseExact(objData.DateOfBirth, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out dob))
+                    {
+                        DOB = dob.ToString("yyyy-MM-dd");
+                    }
                 }
                 try
                 {
                     var result = context.Database.SqlQuery<DLCSPResponse>("sp_DLCProfileUpdate @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
-                       "@pi_Name, @pi_Gender, @pi_DOB, @pi_Email, @pi_Pincode, @pi_MaritalStatus, @pi_AnniversaryDate, @pi_Address, @pi_ChildCount, " +
-                       "@pi_Child1DOB, @pi_Child2DOB, @pi_Child3DOB ,@pi_City, @pi_LanguagePreferred, @pi_Religion, @pi_DBName, @pi_Area",
-                                 new SqlParameter("@pi_MobileNo", objData.MobileNo),
-                                 new SqlParameter("@pi_BrandId", objData.BrandId),
-                                 new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd")),
-                                 new SqlParameter("@pi_Name", objData.Name),
-                                 new SqlParameter("@pi_Gender", objData.Gender ?? ""),
-                                 new SqlParameter("@pi_DOB", DOB),
-                                 new SqlParameter("@pi_Email", objData.Email ?? ""),
-                                 new SqlParameter("@pi_Pincode", objData.Pincode),
-                                 new SqlParameter("@pi_MaritalStatus", objData.MaritalStatus),
-                                 new SqlParameter("@pi_AnniversaryDate", ""),
-                                 new SqlParameter("@pi_Address", objData.Area),
-                                 new SqlParameter("@pi_ChildCount", ""),
-                                 new SqlParameter("@pi_Child1DOB", ""),
-                                 new SqlParameter("@pi_Child2DOB", ""),
-                                 new SqlParameter("@pi_Child3DOB", ""),
-                                 new SqlParameter("@pi_City", objData.City ?? ""),
-                                 new SqlParameter("@pi_LanguagePreferred", ""),
-                                 new SqlParameter("@pi_Religion", ""),
-                                 new SqlParameter("@pi_DBName", DBName),
-                                 new SqlParameter("@pi_Area", objData.Area ?? "")).FirstOrDefault<DLCSPResponse>();
+                        "@pi_Name, @pi_Gender, @pi_DOB, @pi_Email, @pi_Pincode, @pi_MaritalStatus, @pi_AnniversaryDate, @pi_Address, @pi_ChildCount, " +
+                        "@pi_Child1DOB, @pi_Child2DOB, @pi_Child3DOB ,@pi_City, @pi_LanguagePreferred, @pi_Religion, @pi_DBName, @pi_Area",
+                        new SqlParameter("@pi_MobileNo", objData.MobileNo),
+                        new SqlParameter("@pi_BrandId", objData.BrandId),
+                        new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd")),
+                        new SqlParameter("@pi_Name", objData.Name),
+                        new SqlParameter("@pi_Gender", objData.Gender ?? ""),
+                        new SqlParameter("@pi_DOB", DOB ?? (object)DBNull.Value),
+                        new SqlParameter("@pi_Email", objData.Email ?? ""),
+                        new SqlParameter("@pi_Pincode", objData.Pincode),
+                        new SqlParameter("@pi_MaritalStatus", objData.MaritalStatus),
+                        new SqlParameter("@pi_AnniversaryDate", ""),
+                        // Ensure @pi_Address is not null or empty, otherwise pass DBNull.Value
+                        new SqlParameter("@pi_Address", string.IsNullOrEmpty(objData.Area) ? (object)DBNull.Value : objData.Area),
+                        new SqlParameter("@pi_ChildCount", ""),
+                        new SqlParameter("@pi_Child1DOB", ""),
+                        new SqlParameter("@pi_Child2DOB", ""),
+                        new SqlParameter("@pi_Child3DOB", ""),
+                        new SqlParameter("@pi_City", objData.City ?? ""),
+                        new SqlParameter("@pi_LanguagePreferred", ""),
+                        new SqlParameter("@pi_Religion", ""),
+                        new SqlParameter("@pi_DBName", DBName),
+                        new SqlParameter("@pi_Area", objData.Area ?? "")).FirstOrDefault<DLCSPResponse>();
 
                     if (result.ResponseCode == "0")
                         status = true;
@@ -1186,6 +1193,7 @@ namespace BOTS_BL.Repository
                     newexception.AddException(ex, "UpdateDLCProfileData" + groupId);
                 }
             }
+
             return status;
         }
         public List<SelectListItem> GetBrandsByGroupId(string groupId)
