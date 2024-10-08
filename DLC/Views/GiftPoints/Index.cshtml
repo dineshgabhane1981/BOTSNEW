@@ -435,10 +435,11 @@
             if (!giftPoints || giftPoints == "0") {
                 toastr.error('Please enter Gift Points');
                 status = false;
-            } else if (!/^[6789]\d{9}$/.test(giftPoints)) {
-                toastr.error('Please enter valid numeric Gift Points');
-                status = false;
             }
+            //} else if (!/^[6789]\d{9}$/.test(giftPoints)) {
+            //    toastr.error('Please enter valid numeric Gift Points');
+            //    status = false;
+            //}
 
             if (!isTermsChecked) {
                 toastr.warning('Please accept the Gift-a-Points TnC to continue!!!!');

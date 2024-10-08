@@ -317,9 +317,9 @@ body {
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            height: 65vh;
+            height: 72vh;
             padding-left: 5vw;
-            gap: 3.5vw;
+            gap: 0.5vw;
         }
 
     #menu a {
