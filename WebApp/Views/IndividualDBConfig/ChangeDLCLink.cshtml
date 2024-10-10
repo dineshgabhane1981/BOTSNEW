@@ -1,0 +1,81 @@
+﻿@model WebApp.ViewModel.ProgrammeViewModel
+@{
+    ViewBag.Title = "ChangeDLCLink";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="app-main__inner">
+    <div class="row mb-3 card">
+        <div class="container-fluid pt-3 pl-3 pr-3 pb-3">
+            <div class="mb-2 pr-3 pt-3 pl-3" id="divOutlet">
+             
+                <div class="row" style="margin: 0;">
+                    <div style="float: left; text-align: right; width: 100px; margin-top: 10px;">
+                        New Dlc Link
+                    </div>
+                    <div class="col-sm-4" style="float:left;margin-top:10px;">
+                        <input type="text" class="input100" id="txtDlcLink" name="DlcLink" tabindex="7">
+                    </div>
+                </div>
+                <div class="row mb-2 ml-2">
+                    <div class="col-md-3 col-xl-6" style="margin-left: 18px; margin-top: 20px; ">
+                        <button type="button" id="btnSave" style="margin-left: 795px; margin-top: -60px;" class="btn btn-primary" tabindex="15" onclick="SaveDLCLinkData()"><b>Next</b></button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+</div>
+<script>
+    function SaveDLCLinkData() {
+        var Dlc_Link = $("#txtDlcLink").val();
+      
+        if (Dlc_Link == "") {
+            cuteAlert({
+                type: "error",
+                title: "Oops..",
+                message: "Please enter the DLC Link",
+                buttonText: "Okay"
+            })
+        }
+        else {
+            var Filter_Data = [];
+            item = {};
+            item["Dlc_Link"] = Dlc_Link;
+
+            Filter_Data.push(item);
+            var data = JSON.stringify(Filter_Data);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeDLCLinkForSMS", "IndividualDBConfig")',
+                data: '{jsonData: ' + JSON.stringify(data) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result)
+                        if (result === true) {
+                            cuteAlert({
+                                type: "success",
+                                title: "Success Title",
+                                message: "Data Saved Successfully",
+                                buttonText: "Okay"
+                            });
+                            $("#txtDlcLink").val("");
+                        }
+                        else {
+                            cuteAlert({
+                                type: "error",
+                                title: "Oops..",
+                                message: "Couldn't Save Data",
+                                buttonText: "Okay"
+                            });
+                        }
+                },
+                error: function (result) {
+                    console.log(result.responseText)
+                }
+            });
+        }
+    }
+ 
+</script>

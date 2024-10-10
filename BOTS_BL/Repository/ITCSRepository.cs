@@ -2602,6 +2602,44 @@ namespace BOTS_BL.Repository
                 newexception.AddException(ex, "SendEmailComplete");
             }
         }
+        public bool SaveNewDLcLinkDetails(tblDLCRuleMaster objRuleMaster, string connectionString)
+        {
+            bool status = false;
+            try
+            {
+                using (var context = new BOTSDBContext(connectionString))
+                {
+                    var existingRule = context.tblDLCRuleMasters.FirstOrDefault(r => r.DLCId == 4); 
+
+                    if (existingRule != null)
+                    {
+                        tblDLCRuleMaster oldDLCLink = new tblDLCRuleMaster
+                        {
+                            DLCName = "OldDLCLink",   
+                            DLCValue = existingRule.DLCValue,  
+                            GroupId = existingRule.GroupId,
+                            BrandId = existingRule.BrandId
+                        };
+                        context.tblDLCRuleMasters.Add(oldDLCLink);
+                        context.SaveChanges(); 
+                    }
+                    if (existingRule != null)
+                    {
+                        existingRule.DLCValue = objRuleMaster.DLCValue;  
+                        context.SaveChanges(); 
+                        status = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "SaveNewDLcLinkDetails");
+                status = false;
+            }
+
+            return status;
+        }
+
         public void AddCSLog(tblAuditC objData)
         {
             using (var context = new CommonDBContext())

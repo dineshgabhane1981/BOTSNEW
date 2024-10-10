@@ -1526,6 +1526,42 @@ namespace WebApp.Controllers.ITCS
             }
             return View("GetRuleList", objData);
         }
+        public ActionResult ChangeDLCLink()
+        {
+            return View();
+        }
+        public ActionResult ChangeDLCLinkForSMS(string jsonData)
+        {
+            bool status = false;
+
+            var userDetails = (CustomerLoginDetail)Session["UserSession"];
+            JavaScriptSerializer json_serializer = new JavaScriptSerializer();
+            json_serializer.MaxJsonLength = int.MaxValue;
+            object[] objData = (object[])json_serializer.DeserializeObject(jsonData);
+            try
+            {
+                foreach (Dictionary<string, object> item in objData)
+                {
+                    tblDLCRuleMaster objRuleMaster = new tblDLCRuleMaster();
+                    objRuleMaster.DLCValue = Convert.ToString(item["Dlc_Link"]);
+
+                    var connectionString = CR.GetCustomerConnString(userDetails.GroupId);
+                    var response = ITCSR.SaveNewDLcLinkDetails(objRuleMaster, connectionString);
+                    status = response;
+                }
+                tblAuditC obj = new tblAuditC();
+                obj.GroupId = Convert.ToString(userDetails.GroupId);
+                obj.RequestedFor = "Change Dlc Link";
+                obj.RequestedBy = userDetails.UserName;
+                obj.RequestedDate = DateTime.Now;
+                ITCSR.AddCSLog(obj);
+            }
+            catch (Exception ex)
+            {
+                newexception.AddException(ex, "ChangeDLCLinkForSMS");
+            }
+            return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
+        }
     }
 
 }
