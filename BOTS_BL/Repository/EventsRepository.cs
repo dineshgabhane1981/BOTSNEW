@@ -146,6 +146,7 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connectionString))
                 {
                     listEvent = context.EventDetails.Where(x => x.Status == null || x.Status != "Deleted").ToList();
+                    listEvent = listEvent.OrderByDescending(x => x.Addeddate).ToList();
                 }
             }
             catch (Exception ex)

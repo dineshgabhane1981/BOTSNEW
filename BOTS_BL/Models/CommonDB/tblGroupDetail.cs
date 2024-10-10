@@ -19,7 +19,6 @@ namespace BOTS_BL.Models
         [Required]
         [StringLength(250)]
         public string GroupName { get; set; }
-        public string LanguagePreference { get; set; }       
 
         public int ProductType { get; set; }
 
@@ -74,14 +73,24 @@ namespace BOTS_BL.Models
         public bool IsMasked { get; set; }
 
         public bool? IsLive { get; set; }
-        public bool? IsEvent { get; set; }
-        public bool? IsCoupon { get; set; }
-        public bool? IsEReceipt { get; set; }
 
-        public DateTime? RenewalDate { get; set; }
+        public bool? IsEvent { get; set; }
 
         [StringLength(1)]
         public string CustomerType { get; set; }
+
+        [StringLength(50)]
+        public string LanguagePreference { get; set; }
+
+        public bool? IsCoupon { get; set; }
+
+        public DateTime? RenewalDate { get; set; }
+
+        public bool? IsEReceipt { get; set; }
+
+        public bool? IsPulse { get; set; }
+
+       
 
         [NotMapped]
         public string OtherRetailCategory { get; set; }
@@ -109,6 +118,5 @@ namespace BOTS_BL.Models
 
         [NotMapped]
         public double AverageTicket { get; set; }
-
     }
 }
