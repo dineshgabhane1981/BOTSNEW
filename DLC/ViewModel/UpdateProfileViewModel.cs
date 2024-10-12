@@ -19,7 +19,7 @@ namespace DLC.ViewModel
         }
         public SelectListItem[] MaritalStatus()
         {
-            return new SelectListItem[4] { new SelectListItem() { Text = "Married", Value = "M" }, new SelectListItem() { Text = "Unmarried", Value = "U" }, new SelectListItem() { Text = "Single", Value = "S" }, new SelectListItem() { Text = "Divorced", Value = "D" } };
+            return new SelectListItem[4] { new SelectListItem() { Text = "Married", Value = "M" }, new SelectListItem() { Text = "Widow", Value = "W" }, new SelectListItem() { Text = "Single", Value = "S" }, new SelectListItem() { Text = "Divorced", Value = "D" } };
         }
     }
 }

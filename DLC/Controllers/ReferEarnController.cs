@@ -27,9 +27,9 @@ namespace DLC.Controllers
         [HttpPost]
         public ActionResult DLCReferFriend(List<FriendData> friends)
         {
-            bool status = false;
+            //bool status = false;
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
-            status = DCR.DLCReferFriend(sessionVariables.GroupId, sessionVariables.MobileNo, sessionVariables.BrandId, friends);
+            var status = DCR.DLCReferFriend(sessionVariables.GroupId, sessionVariables.MobileNo, sessionVariables.BrandId, friends);
             return new JsonResult() { Data = status, JsonRequestBehavior = JsonRequestBehavior.AllowGet, MaxJsonLength = Int32.MaxValue };
         }
         //public List<MWP_ReferTNC> GetMWPReferTNC(string groupId)

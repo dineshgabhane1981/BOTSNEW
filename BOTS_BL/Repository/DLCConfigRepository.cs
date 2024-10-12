@@ -11,6 +11,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 
@@ -948,9 +949,30 @@ namespace BOTS_BL.Repository
                     {
                         if (item.ResponseCode == "1")
                         {
-                            if (!string.IsNullOrEmpty(item.WATokenId))
+                            try
                             {
-                                var result1 = SendMessage(item.WAMessage, item.WATokenId, item.WAUrl, item.MobileNo);
+                                // If SMSWASendStatus is "both", try sending WhatsApp message first
+                                if (item.SMSWASendStatus == "both" || (!string.IsNullOrEmpty(item.WATokenId) && item.SMSWASendStatus != "SMS"))
+                                {
+                                    // Try to send WhatsApp message
+                                    SendMessage(item.WAMessage, item.WATokenId, item.WAUrl, item.MobileNo, item.SMSWASendStatus, item.SMSScript, item.SMSUrl, item.SMSLoginId, item.SMSPassword, item.SMSAPIKey, item.SMSSenderId);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // If SendMessage fails, try to send SMS instead
+                                if (item.SMSWASendStatus == "both" || item.SMSWASendStatus == "SMS")
+                                {
+                                    SendSMSMessage(item.MobileNo, item.SMSScript, item.SMSUrl, item.SMSLoginId, item.SMSPassword, item.SMSAPIKey, item.SMSSenderId);
+                                }
+                                // Log the exception
+                                newexception.AddException(ex, "SendMessageFailed" + groupId);
+                            }
+
+                            // If SMSWASendStatus is only SMS, directly call SendSMSMessage
+                            if (item.SMSWASendStatus == "SMS")
+                            {
+                                SendSMSMessage(item.MobileNo, item.SMSScript, item.SMSUrl, item.SMSLoginId, item.SMSPassword, item.SMSAPIKey, item.SMSSenderId);
                             }
                         }
                         objResult = item;
@@ -963,18 +985,17 @@ namespace BOTS_BL.Repository
             }
             return objResult;
         }
-        public bool SendMessage(string WAMessage, string WATokenId, string WAUrl, string MobileNo)
+        public bool SendMessage(string WAMessage, string WATokenId, string WAUrl, string MobileNo, string SMSWASendStatus, string SMSScript, string SMSUrl, string SMSLoginId, string SMSPassword, string SMSAPIKey, string SMSSenderId)
         {
             bool result = false;
 
             string responseString;
             try
             {
-
                 StringBuilder sbposdata = new StringBuilder();
                 sbposdata.AppendFormat(WAUrl);
                 sbposdata.AppendFormat("token={0}", WATokenId);
-                sbposdata.AppendFormat("&phone={0}", MobileNo);
+                sbposdata.AppendFormat("&phone={0}", "91" + MobileNo);
                 sbposdata.AppendFormat("&message={0}", WAMessage);
                 string Url = sbposdata.ToString();
 
@@ -995,32 +1016,68 @@ namespace BOTS_BL.Repository
                 HttpWebResponse response = (HttpWebResponse)httpWReq.GetResponse();
                 StreamReader reader = new StreamReader(response.GetResponseStream());
                 responseString = reader.ReadToEnd();
-                //this.WriteToFile(responseString);
-
                 reader.Close();
                 response.Close();
                 result = true;
             }
             catch (ArgumentException ex)
             {
-
-                responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
-                //this.WriteToFile(responseString);
+                if (SMSWASendStatus == "SMS")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(MobileNo, SMSScript,SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: The second HttpWebRequest object has raised an Argument Exception as 'Connection' Property is set to 'Close' :: {0}", ex.Message);
+                }
             }
             catch (WebException ex)
             {
-                responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
-                //this.WriteToFile(responseString);
+                if (SMSWASendStatus == "SMS")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(MobileNo, SMSScript, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: WebException raised! :: {0}", ex.Message);
+                }
             }
             catch (Exception ex)
             {
-                responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
-                //this.WriteToFile(responseString);
+                if (SMSWASendStatus == "SMS")
+                {
+                    Thread _job = new Thread(() => SendSMSMessage(MobileNo, SMSScript, SMSUrl, SMSLoginId, SMSPassword, SMSAPIKey, SMSSenderId));
+                    _job.Start();
+                    responseString = string.Format("HTTP_ERROR :: Exception raised! :: {0}", ex.Message);
+                }
             }
             return result;
         }
-        public bool DLCReferFriend(string groupId, string MobileNo, string BrandId, List<FriendData> friends)
+        public void SendSMSMessage(string MobileNo, string SMSScript, string SMSUrl, string SMSLoginId, string SMSPassword, string SMSAPIKey, string SMSSenderId)
         {
+            var httpWebRequest_VisionText = (HttpWebRequest)WebRequest.Create(SMSUrl);
+             httpWebRequest_VisionText.ContentType = "application/json";
+            httpWebRequest_VisionText.Method = "POST";
+            SMSScript = SMSScript.Replace("#99", "&");
+            using (var streamWriter_VisionText = new StreamWriter(httpWebRequest_VisionText.GetRequestStream()))
+            {
+                string json_VisionText = "{\"Account\":" +
+                                "{\"APIKey\":\"" + SMSAPIKey + "\"," +
+                                "\"SenderId\":\"" + SMSSenderId + "\"," +
+                                "\"Channel\":\"Trans\"," +
+                                "\"DCS\":\"0\"," +
+                                "\"SchedTime\":null," +
+                                "\"GroupId\":null}," +
+                                "\"Messages\":[{\"Number\":\"" + MobileNo + "\"," +
+                                "\"Text\":\"" + SMSScript + "\"}]" +
+                                "}";
+                streamWriter_VisionText.Write(json_VisionText);
+            }
+            var httpResponse_VisionText = (HttpWebResponse)httpWebRequest_VisionText.GetResponse();
+            using (var streamReader_VisionText = new StreamReader(httpResponse_VisionText.GetResponseStream()))
+            {
+                var result_VisionText = streamReader_VisionText.ReadToEnd();
+            }
+        }
+        public DLCSPResponse DLCReferFriend(string groupId, string MobileNo, string BrandId, List<FriendData> friends)
+        {
+            DLCSPResponse objResult = new DLCSPResponse();
             bool status = false;
             string DBName = string.Empty;
             string connStr = objCustRepo.GetCustomerConnString(groupId);
@@ -1086,12 +1143,43 @@ namespace BOTS_BL.Repository
                     var result = context.Database.SqlQuery<DLCSPResponse>("sp_DLCRefer @pi_MobileNo, @pi_BrandId, @pi_Datetime, " +
                                                                           "@pi_1stMobileNo, @pi_1stName, @pi_2ndMobileNo, @pi_2ndName, " +
                                                                           "@pi_3rdMobileNo, @pi_3rdName, @pi_DBName",
-                                                                          sqlParameters.ToArray()).FirstOrDefault<DLCSPResponse>();
-
-                    if (result != null && result.ResponseCode == "1")
+                                                                          sqlParameters.ToArray()).ToList<DLCSPResponse>();
+                    foreach (var item in result)
                     {
-                        status = true;
+                        if (item.ResponseCode == "1")
+                        {
+                            try
+                            {
+                                // If SMSWASendStatus is "both", try sending WhatsApp message first
+                                if (item.SMSWASendStatus == "both" || (!string.IsNullOrEmpty(item.WATokenId) && item.SMSWASendStatus != "SMS"))
+                                {
+                                    // Try to send WhatsApp message
+                                    SendMessage(item.WAMessage, item.WATokenId, item.WAUrl, item.MobileNo, item.SMSWASendStatus, item.SMSScript, item.SMSUrl, item.SMSLoginId, item.SMSPassword, item.SMSAPIKey, item.SMSSenderId);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                // If SendMessage fails, try to send SMS instead
+                                if (item.SMSWASendStatus == "both" || item.SMSWASendStatus == "SMS")
+                                {
+                                    SendSMSMessage(item.MobileNo, item.SMSScript, item.SMSUrl, item.SMSLoginId, item.SMSPassword, item.SMSAPIKey, item.SMSSenderId);
+                                }
+                                // Log the exception
+                                newexception.AddException(ex, "SendMessageFailed" + groupId);
+                            }
+
+                            // If SMSWASendStatus is only SMS, directly call SendSMSMessage
+                            if (item.SMSWASendStatus == "SMS")
+                            {
+                                SendSMSMessage(item.MobileNo, item.SMSScript, item.SMSUrl, item.SMSLoginId, item.SMSPassword, item.SMSAPIKey, item.SMSSenderId);
+                            }
+                        }
+                        objResult = item;
                     }
+                    //if (result != null && result.ResponseCode == "1")
+                    //{
+                    //    status = true;
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -1099,7 +1187,7 @@ namespace BOTS_BL.Repository
                 }
             }
 
-            return status;
+            return objResult;
         }
         public List<tblDLCFrontEndPageDataTNC> GetTNC(string groupId)
         {

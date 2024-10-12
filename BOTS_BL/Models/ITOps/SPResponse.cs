@@ -22,6 +22,13 @@ namespace BOTS_BL.Models
         public string WATokenId { get; set; }
         public string WAUrl { get; set; }
         public string MobileNo { get; set; }
+        public string SMSWASendStatus { get; set; }
+        public string SMSScript { get; set; }
+        public string SMSUrl { get; set; }
+        public string SMSLoginId { get; set; }
+        public string SMSPassword { get; set; }
+        public string SMSAPIKey { get; set; }
+        public string SMSSenderId { get; set; }
     }
 
     public class NewCustDetails

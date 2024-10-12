@@ -82,7 +82,7 @@
 
         /*Make sure there's padding on the page to compensate for the sticky nav's height */
         body {
-            padding-top: 120px; /*Adjust this value based on the height of your navbar */
+            padding-top: 30px; /*Adjust this value based on the height of your navbar */
         }
 
         /*Optional: Customize appearance of nav links */
@@ -124,7 +124,7 @@
         }
 
         body {
-            padding-top: 120px;
+            padding-top: 30px;
         }
 
         .sticky-nav a {
@@ -374,7 +374,7 @@
         function submitSearch() {
             var outletName = $("#ddlOutlet option:selected").text();
 
-            alert(outletName)
+            /*alert(outletName)*/
             if (outletName) {
                 $.ajax({
                     url: '@Url.Action("GetMapUrl", "Store")',

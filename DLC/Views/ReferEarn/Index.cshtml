@@ -138,21 +138,21 @@
     <nav class="sticky-nav" style="display:flex !important;">
         @if (logoSize == "Small")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
-                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
-            </div>
+        <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
+            <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+        </div>
         }
         @if (logoSize == "Medium")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
-                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
-            </div>
+        <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
+            <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+        </div>
         }
         @if (logoSize == "Big")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
-                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
-            </div>
+        <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
+            <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+        </div>
         }
         <div class="profile_links">
             <!-- Profile links here -->
@@ -225,7 +225,7 @@
                 <ol>
                     @foreach (var item in Model.Take(2))
                     {
-                        <li>@item.MWP_ReferTNC</li>
+                    <li>@item.MWP_ReferTNC</li>
                     }
                 </ol>
             </div>
@@ -244,33 +244,33 @@
         <section class="footer" style="text-align:center;">
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
             {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
-                    <img src="~/img/facebook.svg" />
-                </a>
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+                <img src="~/img/facebook.svg" />
+            </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
             {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
-                    <img src="~/img/instagram.svg" />
-                </a>
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
+                <img src="~/img/instagram.svg" />
+            </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
             {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
-                    <img src="~/img/twitterx.svg" />
-                </a>
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+                <img src="~/img/twitterx.svg" />
+            </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
             {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
-                    <img src="~/img/youtube.svg" />
-                </a>
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+                <img src="~/img/youtube.svg" />
+            </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
             {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
-                    <img src="~/img/whatsapp.svg" />
-                </a>
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+                <img src="~/img/whatsapp.svg" />
+            </a>
             }
         </section>
     </div>
@@ -278,35 +278,35 @@
     <script>
         window.onscroll = function () {
             var navbar = document.querySelector('.sticky-nav');
-            if (window.pageYOffset > 50) { 
+            if (window.pageYOffset > 50) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
         };
-    let friendCount = 1;
+        let friendCount = 1;
 
-    function addFriendInput() {
-        friendCount++;
+        function addFriendInput() {
+            friendCount++;
 
-        const newInputGroup = `
-        <div class="input_box box1" id="friendInput${friendCount}" style="margin-top: 20px; position: relative;">
-            <div class="input_group" style="display: flex; align-items: center; margin-bottom: 10px;">
-                <input type="text" id="txtFriendName${friendCount}" name="friendName[]" placeholder="Friend Name" style="flex: 1; margin-right: 10px;">
-                <input type="number" id="txtFriendMobile${friendCount}" name="mobileNo[]" placeholder="Mobile No" style="flex: 1; margin-right: 10px;">
-                <button type="button" onclick="removeInputGroup('friendInput${friendCount}')" class="remove-button" style="position: absolute; top: 0; right: 3px; background-color: transparent; border: none; cursor: pointer;">
-                    <i role="button" class="fa fa-times p-1 text-danger" title="Remove"></i>
-                </button>
+            const newInputGroup = `
+            <div class="input_box box1" id="friendInput${friendCount}" style="margin-top: 20px; position: relative;">
+                <div class="input_group" style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <input type="text" id="txtFriendName${friendCount}" name="friendName[]" placeholder="Friend Name" style="flex: 1; margin-right: 10px;">
+                    <input type="number" id="txtFriendMobile${friendCount}" name="mobileNo[]" placeholder="Mobile No" style="flex: 1; margin-right: 10px;">
+                    <button type="button" onclick="removeInputGroup('friendInput${friendCount}')" class="remove-button" style="position: absolute; top: 0; right: 3px; background-color: transparent; border: none; cursor: pointer;">
+                        <i role="button" class="fa fa-times p-1 text-danger" title="Remove"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-        `;
-        document.getElementById('friendInputs').insertAdjacentHTML('beforeend', newInputGroup);
-    }
+            `;
+            document.getElementById('friendInputs').insertAdjacentHTML('beforeend', newInputGroup);
+        }
 
-    function removeInputGroup(button) {
-        const inputGroup = document.getElementById(button);
-        inputGroup.remove();
-    }
+        function removeInputGroup(button) {
+            const inputGroup = document.getElementById(button);
+            inputGroup.remove();
+        }
 
 
     function SendReference() {
@@ -325,21 +325,6 @@
             if (friendName !== "" || mobileNo !== "") {
                 validInputExists = true;
 
-                 //If friend name is provided, check for mobile number validity
-                //if (friendName !== "" && mobileNo === "") {
-                //    toastr.error('Please provide mobile no for ' + friendName);
-                //    $("#mobileNo"+[i]).val().focus();
-                //    status = false;
-                //    break;
-                //}
-
-                 //Validate mobile number
-                //if (mobileNo !== "" && !/^[6789]\d{9,9}$/.test(mobileNo)) {
-                //    toastr.error('Please enter a valid Mobile No for ' + friendName);
-                //    $("#mobileNo" + [i]).val().focus();
-                //    status = false;
-                //    break;
-                //}
 
                 postData.push({
                     name: friendName,
@@ -355,7 +340,6 @@
             friendNames[0].focus();
             status = false;
         }
-
         if (status) {
             $("#divLoader").show();
             $.ajax({
@@ -365,23 +349,25 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
-                    if (result === true) {
-                    toastr.success('Reference sent Successfully !!!');
-                    setTimeout(myStopFunction, 2000);
-                    } else {
-                        toastr.error('There was a problem in gifting points. Please contact your Administrator !!!');
+                    console.log(result)
+                    if (result.ResponseCode == "1") {
+                        toastr.success("Reference sent Successfully !!!");
+                        //setTimeout(myStopFunction, 2000);
                     }
-                $("#divLoader").hide();
+                    else {
+                        toastr.error(result.ResponseMessage);
+                    }
+                    $("#divLoader").hide();
                 },
-                 error: function (result) {
-                 console.log(result.responseText);
-                 toastr.error('An error occurred while sending the request.');
-                 $("#divLoader").hide();
-                 }
+                error: function (result) {
+                    console.log(result.responseText)
+                }
             });
         }
+        
     }
     </script>
+    
     <script src="~/js/script.js"></script>
 </body>
 </html>
