@@ -173,7 +173,7 @@
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            @*<a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>*@
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
         <div class="hamburger" style="width:25px !important;">
@@ -189,7 +189,7 @@
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
+            @*<a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>*@
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
@@ -204,7 +204,8 @@
                     <div class="input_box box1">
                         <div class="input_group" id="friendInputs0" style="display: flex; align-items: center; margin-bottom: 10px;">
                             <input type="text" id="txtFriendName1" name="friendName[]" placeholder="Friend Name" style="flex: 1; margin-right: 10px;">
-                            <input type="number" id="txtFriendMobile1" name="mobileNo[]" placeholder="Mobile No" style="flex: 1; margin-right: 10px;">
+                            <input type="number" id="txtFriendMobile1" name="mobileNo[]" placeholder="Mobile No" maxlength="10" style="flex: 1; margin-right: 10px;" oninput="validateMobile(this)">
+                            @*<input type="number" id="txtFriendMobile1" name="mobileNo[]" placeholder="Mobile No" style="flex: 1; margin-right: 10px;">*@
                         </div>
                     </div>
                 </div>
@@ -284,6 +285,7 @@
                 navbar.classList.remove('scrolled');
             }
         };
+
         let friendCount = 1;
 
         function addFriendInput() {
@@ -307,65 +309,80 @@
             const inputGroup = document.getElementById(button);
             inputGroup.remove();
         }
+        function validateMobile(input) {
+            
+            if (input.value.length > 10) {
+                input.value = input.value.slice(0, 10);
+            }
+        }
+        function SendReference() {
+         var status = true;
+         let validInputExists = false;
+         let postData = [];
 
+        for (let i = 1; i <= friendCount; i++) {
+            let friendName = $("#txtFriendName" + i).val();
+            let mobileNo = $("#txtFriendMobile" + i).val();
 
-    function SendReference() {
-        var status = true;
-        var friendNames = $("#txtFriendName1").val();
-        var mobileNos = $("#txtFriendMobile1").val();
+        // Check if both friendName and mobileNo are provided
+        if (friendName === "") {
+            toastr.error('Friend name is required.');
+            $("#txtFriendName" + i).focus();
+            return false;
+        }
 
-        let validInputExists = false;
-        let postData = [];
+        if (mobileNo === "") {
+            toastr.error('Mobile number is required.');
+            $("#txtFriendMobile" + i).focus();
+            return false;
+        }
 
-        for (let i = 1; i <= friendNames.length; i++) {
-            console.log($("#txtFriendName" + [i]).val())
-            let friendName = $("#txtFriendName"+[i]).val();
-            let mobileNo = $("#txtFriendMobile" +[i]).val();
+        if (friendName !== "" || mobileNo !== "") {
+            validInputExists = true;
 
-            if (friendName !== "" || mobileNo !== "") {
-                validInputExists = true;
-
-
-                postData.push({
-                    name: friendName,
-                    mobile: mobileNo
-                });
+            // Check if mobile number is exactly 10 digits
+            if (mobileNo.length !== 10) {
+                toastr.error('Mobile number must be exactly 10 digits');
+                $("#txtFriendMobile" + i).focus();
+                return false;
             }
 
-            console.log(postData);
-        }
-
-        if (!validInputExists) {
-            toastr.error('At least one Friend name and mobile number need to be provided.');
-            friendNames[0].focus();
-            status = false;
-        }
-        if (status) {
-            $("#divLoader").show();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("DLCReferFriend", "ReferEarn")',
-                data: JSON.stringify(postData), // Send the array as JSON
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    console.log(result)
-                    if (result.ResponseCode == "1") {
-                        toastr.success("Reference sent Successfully !!!");
-                        //setTimeout(myStopFunction, 2000);
-                    }
-                    else {
-                        toastr.error(result.ResponseMessage);
-                    }
-                    $("#divLoader").hide();
-                },
-                error: function (result) {
-                    console.log(result.responseText)
-                }
+            postData.push({
+                name: friendName,
+                mobile: mobileNo
             });
         }
-        
     }
+
+        if (!validInputExists) {
+             toastr.error('At least one Friend name and mobile number need to be provided.');
+              return false;
+        }
+
+        if (status) {
+             $("#divLoader").show();
+             $.ajax({
+                 type: "POST",
+                 url: '@Url.Action("DLCReferFriend", "ReferEarn")',
+                 data: JSON.stringify(postData), // Send the array as JSON
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: function (result) {
+                     console.log(result);
+                     if (result.ResponseCode == "1") {
+                          toastr.success("Reference sent Successfully !!!");
+                     } else {
+                          toastr.error(result.ResponseMessage);
+                     }
+                     $("#divLoader").hide();
+                 },
+                 error: function (result) {
+                     console.log(result.responseText);
+             }
+        });
+    }
+}
+
     </script>
     
     <script src="~/js/script.js"></script>

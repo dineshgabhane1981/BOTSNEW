@@ -237,7 +237,8 @@
             <input type="text" id="txtRecipientName" placeholder="Enter Recipient's Name" required />
 
             <label for="Registered Phone Number">Recipient's Mobile Number</label>
-            <input type="number" id="txtRecipientNo" placeholder="Enter Recipient's Number" required />
+            <input type="number" id="txtRecipientNo" placeholder="Enter Recipient's Number" oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);">
+            @*<input type="number" id="txtRecipientNo" placeholder="Enter Recipient's Number" required />*@
 
             <label for="Gift_Points">Gift Points  <span style="font-size: medium;" id="spnRS"></span></label>
             <input type="number" id="txtGiftPoints" placeholder="Enter Number of points to gift" />
