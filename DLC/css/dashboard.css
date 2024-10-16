@@ -133,16 +133,7 @@ nav .hamburger {
     justify-content: center;
 }
 
-   /* #imageContainer .card {
-        background-image: url(/img/Card1.jpg);
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        border-radius: 10px;
-        color: white;
-        cursor: pointer;
-        padding: 10px;
-    }*/
+   
     #imageContainer .card {
         /*background-image: url('https://blueocktopus.in/botsnew/Content/assets/Card2.jpg');*/
         background-position: center center;
@@ -1127,27 +1118,26 @@ nav .hamburger {
         }
 
     .menu-container {
-        display: none;
-        background-color: #0016a0;
-        height: 100vh;
+        display: none; /* Initially hidden */
+        background-color: #0016a0; /* Dark blue background */
+        height: 70vh; /* Adjusted height */
         position: fixed;
         top: 0;
-        width: 100vw;
-        transition: all 0.6s ease-in-out;
-        z-index: 1;
+        right: 0; /* Position the menu on the right */
+        width: 80vw; /* Set width */
+        transition: all 0.6s ease-in-out; /* Smooth transition */
     }
-
+    
         .menu-container #menu {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: start;
-            height: 70%;
+            height: 80vh;
             padding-left: 5vw;
-            padding-top: 13vw;
-            gap: 2.5vw;
+            gap: 1.5vw !important;
         }
-
+       
     #menu a {
         color: white;
         text-decoration: none;

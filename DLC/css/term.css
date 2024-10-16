@@ -117,7 +117,7 @@ body {
 
 .container_tAc {
     max-width: 800px;
-    margin: 15vh auto;
+    margin: 10vh auto;
     padding: 20px;
     margin-bottom: 10vh;
 }
@@ -318,29 +318,27 @@ body {
             padding: 1px 6px;
         }
 
+    
     .menu-container {
-        display: none;
-        background-color: #0016a0;
-        height: 100vh;
+        display: none; /* Initially hidden */
+        background-color: #0016a0; /* Dark blue background */
+        height: 70vh; /* Adjusted height */
         position: fixed;
         top: 0;
-        left: 0;
-        width: 100vw;
-        transition: all 0.6s ease-in-out;
-        /* z-index: 1; */
+        right: 0; /* Position the menu on the right */
+        width: 80vw; /* Set width */
+        transition: all 0.6s ease-in-out; /* Smooth transition */
     }
-
         .menu-container #menu {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: start;
-            /*height: 100vh;*/
+            height: 80vh;
             padding-left: 5vw;
-            padding-top: 150px;
-            gap: 3.5vw;
-            margin-top: -11%;
+            gap: 1.5vw !important;
         }
+       
 
     #menu a {
         color: white;
