@@ -142,7 +142,7 @@ nav .hamburger {
         justify-content: space-between;
         align-items: center;
         transition: all 0.6s ease-in-out;
-        padding-inline: 5vw;
+        padding-inline: 3vw;
     }
 
         nav .profile_links {
@@ -248,7 +248,7 @@ nav .hamburger {
         justify-content: space-between;
         align-items: center;
         transition: all 0.6s ease-in-out;
-        padding-inline: 5vw;
+        padding-inline: 3vw;
     }
 
         nav .profile_links {
@@ -326,7 +326,7 @@ nav .hamburger {
     #menu a {
         color: white;
         text-decoration: none;
-        font-size: 4.3vw;
+        /*font-size: 4.3vw;*/
     }
 
     #menu .active {
@@ -354,7 +354,7 @@ nav .hamburger {
         justify-content: space-between;
         align-items: center;
         transition: all 0.6s ease-in-out;
-        padding-inline: 5vw;
+        padding-inline: 3vw;
     }
 
         nav .profile_links {
@@ -454,13 +454,13 @@ nav .hamburger {
     nav {
         position: absolute;
         top: 0;
-        height: 16vh;
+        height: 80px;
         z-index: 3;
         display: flex;
         justify-content: space-between;
         align-items: center;
         transition: all 0.6s ease-in-out;
-        padding-inline: 5vw;
+        padding-inline: 3vw;
     }
 
         nav .profile_links {
