@@ -22,6 +22,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Gift Points</title>
     <link href="~/css/gift.css" rel="stylesheet" />
+    <link href="~/css/common.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
           rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -43,6 +44,7 @@
             background-color: #4CAF50; /* Green */
             color: white;
         }
+
         @@media only screen and (min-width: 900px) and (max-width: 1280px) {
             .heading-container {
                 margin-top: 16% !important;
@@ -60,21 +62,23 @@
 
         @@media only screen and (max-width: 850px) {
             .heading-container {
-                font-size:10px;
+                font-size: 10px;
                 margin-top: 30% !important;
             }
         }
+
         .logo img {
-            width: 180px!important;
-            height: 100px!important;
+            width: 180px !important;
+            height: 100px !important;
         }
+
         .footer {
-            
             background-color: #344966;
             height: 11vh;
             padding: 20px 20px;
             clear: both;
         }
+
         .sticky-nav {
             position: fixed;
             top: 0;
@@ -177,8 +181,8 @@
             <i class="ri-menu-2-line"></i>
         </div>
     </nav>
-    <div class="menu-container">
-        <div id="menu">
+    <div class="menu-container1">
+        <div id="menu1">
             <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
             <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
@@ -315,7 +319,7 @@
         };
         function Hamburger() {
             var hamburger = document.querySelector('.hamburger');
-            var menu = document.querySelector('.menu-container');
+            var menu = document.querySelector('.menu-container1');
             var logo = document.querySelector('.logo');
 
             var isMenuVisible = false;

@@ -1,6 +1,6 @@
 function Hamburger(){
     var hamburger = document.querySelector('.hamburger');
-    var menu = document.querySelector('.menu-container');
+    var menu = document.querySelector('.menu-container1');
     var logo = document.querySelector('.logo');
 
 var isMenuVisible = false;

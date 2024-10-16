@@ -24,11 +24,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>Dashboard</title>
     <link href="~/css/dashboard.css" rel="stylesheet">
+    <link href="~/css/common.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
           rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">   
-    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 
     <style>
         @@media (max-width: 1024px) {
@@ -61,12 +62,12 @@
             .gift-card-bottom h3 {
                 font-size: 3vw; /* Larger font for readability on smaller devices */
             }
-            
         }
-        #imageContainer{
-                padding-top:80px;
-        } 
-        
+
+        #imageContainer {
+            padding-top: 80px;
+        }
+
         @@media (max-width: 480px) {
             .gift-card {
                 flex: 1 1 100%; /* Single card per row on very small devices */
@@ -151,17 +152,19 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         .footer {
             background-color: #344966;
             height: 11vh;
             padding: 20px 20px;
             clear: both;
         }
+
         .sticky-nav {
             position: fixed;
             top: 0;
             width: 100%;
-            z-index: 1000; /* Ensure it's on top of other elements */
+            z-index: 1; /* Ensure it's on top of other elements */
             background-color: white; /* Change as needed */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
             transition: height 0.3s; /* Smooth transition for height changes */
@@ -180,7 +183,6 @@
             max-width: 100%;
             height: auto;
         }
-
     </style>
 </head>
 <body>
@@ -236,8 +238,8 @@
             <i class="ri-menu-2-line"></i>
         </div>
     </nav>
-    <div class="menu-container">
-        <div id="menu">
+    <div class="menu-container1">
+        <div id="menu1">
             <a href="@Url.Action("Index", "Dashboard")"><h1 class="active">Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
             <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>

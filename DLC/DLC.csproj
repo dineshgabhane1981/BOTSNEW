@@ -243,6 +243,7 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="css\common.css" />
     <Content Include="css\dashboard.css" />
     <Content Include="css\gift.css" />
     <Content Include="css\login.css" />

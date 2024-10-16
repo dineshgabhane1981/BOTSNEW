@@ -19,6 +19,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no" />
     <title>Personal Details</title>
     <link href="~/css/update.css" rel="stylesheet" />
+    <link href="~/css/common.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
           rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -32,22 +33,26 @@
             padding: 20px 20px;
             clear: both;
         }
+
         .note {
             margin-bottom: 80px;
         }
+
         .start-button {
             padding: 10px 20px;
             font-size: 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;            
+            transition: background-color 0.3s ease;
             margin-top: 4%;
         }
+
         .start-button {
             background-color: #4CAF50;
             color: white;
         }
+
         .sticky-nav {
             position: fixed;
             top: 0;
@@ -56,12 +61,15 @@
             background-color: white;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
             .sticky-nav.scrolled .logo {
                 display: none; /* Hide the logo when scrolled */
             }
+
             .sticky-nav.scrolled .features {
                 padding-top: 10px; /* Adjust padding if needed */
             }
+
         .features {
             display: flex;
             justify-content: space-between;
@@ -76,6 +84,7 @@
             text-decoration: none;
             color: black;
         }
+
             .sticky-nav a:hover {
                 text-decoration: underline;
             }
@@ -131,8 +140,8 @@
             <i class="ri-menu-2-line"></i>
         </div>
     </nav>
-    <div class="menu-container">
-        <div id="menu">
+    <div class="menu-container1">
+        <div id="menu1">
             <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
             <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
@@ -282,7 +291,7 @@
         };
         function Hamburger() {
             var hamburger = document.querySelector('.hamburger');
-            var menu = document.querySelector('.menu-container');
+            var menu = document.querySelector('.menu-container1');
             var logo = document.querySelector('.logo');
 
             var isMenuVisible = false;
