@@ -762,7 +762,7 @@
             success: function (response) {
                 if (response != null) {
                     var names = response[0];
-                    //console.log(names)
+                    console.log(names)
                     var data = response[1];
                     $('#cvOutletWise').remove(); // this is my <canvas> element
                     $('#containerOutletWise').append('<canvas id="cvOutletWise"><canvas>');
@@ -787,7 +787,7 @@
                     var ctx10 = document.getElementById("cvOutletWise").getContext("2d");
                     var myChart = new Chart(ctx10,
                         {
-                            type: 'bar',
+                            type: 'horizontalBar',
                             data: barChartData,
                             options:
                             {

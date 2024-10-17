@@ -1557,7 +1557,7 @@ namespace BOTS_BL.Repository
                     {
                         Tdt = Convert.ToDateTime(ToDT).AddDays(1);
                     }
-                    lstData = contextdb.Database.SqlQuery<DashboardNewAndExisting>("select T.MobileNo,T.QuestionPoints,T.OutletId,T.AddedDate,(case when C.DOJ = cast(T.AddedDate as date) Then 'New' Else 'Existing' End) as MemberType from feedback_FeedbackMaster T left join CustomerDetails C on T.MobileNo = C.MobileNo").ToList();
+                    lstData = contextdb.Database.SqlQuery<DashboardNewAndExisting>("select T.MobileNo,T.QuestionPoints,T.OutletId,T.AddedDate,(case when C.DOJ = cast(T.AddedDate as date) Then 'New' Else 'Existing' End) as MemberType from feedback_FeedbackMaster T left join tblCustDetailsMaster C on T.MobileNo = C.MobileNo").ToList();
                     if (neworexisting == "New")
                     {
                         lstData = lstData.Where(x => x.MemberType == "New").Select(y => y).ToList();
@@ -1614,22 +1614,23 @@ namespace BOTS_BL.Repository
         {
             List<int> lstCount = new List<int>();
             List<DashboardTimeWise> lstData = new List<DashboardTimeWise>();
+            List<feedback_FeedbackMaster> data = new List<feedback_FeedbackMaster>();
             try
             {
                 string connStr = CR.GetCustomerConnString(GroupId);
                 using (var contextdb = new BOTSDBContext(connStr))
                 {
-                    DateTime Frmdt = DateTime.Now.AddDays(-1).Date;
-                    DateTime Tdt = DateTime.Now.Date;
+                    data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId).ToList();
                     if (!string.IsNullOrEmpty(FromDt))
                     {
-                        Frmdt = Convert.ToDateTime(FromDt);
+                        var Frmdt = Convert.ToDateTime(FromDt);
+                        data = data.Where(x => x.AddedDate >= Frmdt).ToList();
                     }
                     if (!string.IsNullOrEmpty(ToDT))
                     {
-                        Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                        var Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                        data = data.Where(x => x.AddedDate < Tdt).ToList();
                     }
-                    var data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId && x.AddedDate >= Frmdt && x.AddedDate < Tdt).ToList();
                     var uniqueMobileNoData = data.GroupBy(x => x.MobileNo).Select(y => y.First()).ToList();
 
                     foreach (var item in uniqueMobileNoData)
@@ -1704,22 +1705,24 @@ namespace BOTS_BL.Repository
         public List<DashboardOutletWise> GetOutletWiseData(string GroupId, string OutletId, string FromDt, string ToDT)
         {
             List<DashboardOutletWise> lstData = new List<DashboardOutletWise>();
+            List<feedback_FeedbackMaster> data = new List<feedback_FeedbackMaster>();
             try
             {
                 string connStr = CR.GetCustomerConnString(GroupId);
                 using (var contextdb = new BOTSDBContext(connStr))
                 {
-                    DateTime Frmdt = DateTime.Now.AddDays(-1).Date;
-                    DateTime Tdt = DateTime.Now.Date;
+                    data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId).ToList();
                     if (!string.IsNullOrEmpty(FromDt))
                     {
-                        Frmdt = Convert.ToDateTime(FromDt);
+                        var Frmdt = Convert.ToDateTime(FromDt);
+                        data = data.Where(x => x.AddedDate >= Frmdt).ToList();
                     }
                     if (!string.IsNullOrEmpty(ToDT))
                     {
-                        Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                        var Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                        data = data.Where(x => x.AddedDate < Tdt).ToList();
                     }
-                    var data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId && x.AddedDate >= Frmdt && x.AddedDate < Tdt).ToList();
+                    
                     if (!string.IsNullOrEmpty(OutletId))
                     {
                         data = data.Where(x => x.OutletId == OutletId).ToList();
@@ -1727,9 +1730,29 @@ namespace BOTS_BL.Repository
                     var uniqueOutlet = data.GroupBy(x => x.OutletId).Select(y => y.First()).ToList();
                     foreach (var item in uniqueOutlet)
                     {
-                        var outlet = contextdb.OutletDetails.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
-                        var outletAvgPoints = contextdb.feedback_FeedbackMaster.Where(x => x.OutletId == item.OutletId && x.AddedDate >= Frmdt && x.AddedDate < Tdt).Average(y => y.QuestionPoints);
-
+                        double outletAvgPoints = 0;
+                        if (!string.IsNullOrEmpty(FromDt)&& !string.IsNullOrEmpty(ToDT))
+                        {
+                            var Frmdt = Convert.ToDateTime(FromDt);
+                            var Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                            outletAvgPoints = contextdb.feedback_FeedbackMaster.Where(x => x.OutletId == item.OutletId && x.AddedDate >= Frmdt && x.AddedDate < Tdt).Average(y => y.QuestionPoints);
+                        }
+                        else if (!string.IsNullOrEmpty(FromDt))
+                        {
+                            var Frmdt = Convert.ToDateTime(FromDt);
+                            outletAvgPoints = contextdb.feedback_FeedbackMaster.Where(x => x.OutletId == item.OutletId && x.AddedDate >= Frmdt).Average(y => y.QuestionPoints);
+                        }
+                        else if (!string.IsNullOrEmpty(ToDT))
+                        {
+                            var Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                            outletAvgPoints = contextdb.feedback_FeedbackMaster.Where(x => x.OutletId == item.OutletId && x.AddedDate < Tdt).Average(y => y.QuestionPoints);
+                        }
+                        else
+                        {
+                            outletAvgPoints = contextdb.feedback_FeedbackMaster.Where(x => x.OutletId == item.OutletId).Average(y => y.QuestionPoints);
+                        }
+                        var outlet = contextdb.tblOutletMasters.Where(x => x.OutletId == item.OutletId).FirstOrDefault();
+                      
                         outletAvgPoints = Math.Round(outletAvgPoints, 2);
                         DashboardOutletWise objItem = new DashboardOutletWise();
                         objItem.AvgPoints = outletAvgPoints;
@@ -1752,22 +1775,23 @@ namespace BOTS_BL.Repository
         {
             List<DashboardSourceWise> lstData = new List<DashboardSourceWise>();
             List<DashboardSourceWise> lstData1 = new List<DashboardSourceWise>();
+            List<feedback_FeedbackMaster> data = new List<feedback_FeedbackMaster>();
             try
             {
                 string connStr = CR.GetCustomerConnString(GroupId);
                 using (var contextdb = new BOTSDBContext(connStr))
                 {
-                    DateTime Frmdt = DateTime.Now.AddDays(-1).Date;
-                    DateTime Tdt = DateTime.Now.Date;
+                    data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId).ToList();
                     if (!string.IsNullOrEmpty(FromDt))
                     {
-                        Frmdt = Convert.ToDateTime(FromDt);
+                        var Frmdt = Convert.ToDateTime(FromDt);
+                        data = data.Where(x => x.AddedDate >= Frmdt).ToList();
                     }
                     if (!string.IsNullOrEmpty(ToDT))
                     {
-                        Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                        var Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                        data = data.Where(x => x.AddedDate < Tdt).ToList();
                     }
-                    var data = contextdb.feedback_FeedbackMaster.Where(x => x.GroupId == GroupId && x.AddedDate >= Frmdt && x.AddedDate < Tdt).ToList();
                     if (!string.IsNullOrEmpty(OutletId))
                     {
                         data = data.Where(x => x.OutletId == OutletId).ToList();
@@ -1776,7 +1800,27 @@ namespace BOTS_BL.Repository
                     int total = 0;
                     foreach (var item in uniqueSource)
                     {
-                        var numberOfCustomer = contextdb.feedback_FeedbackMaster.Where(x => x.HowToKnowAbout == item.HowToKnowAbout && x.AddedDate >= Frmdt && x.AddedDate < Tdt).Count();
+                        int numberOfCustomer = 0;
+                        if (!string.IsNullOrEmpty(FromDt) && !string.IsNullOrEmpty(ToDT))
+                        {
+                            var Frmdt = Convert.ToDateTime(FromDt);
+                            var Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                            numberOfCustomer = contextdb.feedback_FeedbackMaster.Where(x => x.HowToKnowAbout == item.HowToKnowAbout && x.AddedDate >= Frmdt && x.AddedDate < Tdt).Count();
+                        }
+                        else if (!string.IsNullOrEmpty(FromDt))
+                        {
+                            var Frmdt = Convert.ToDateTime(FromDt);
+                            numberOfCustomer = contextdb.feedback_FeedbackMaster.Where(x => x.HowToKnowAbout == item.HowToKnowAbout && x.AddedDate >= Frmdt).Count();
+                        }
+                        else if (!string.IsNullOrEmpty(ToDT))
+                        {
+                            var Tdt = Convert.ToDateTime(ToDT).AddDays(1);
+                            numberOfCustomer = contextdb.feedback_FeedbackMaster.Where(x => x.HowToKnowAbout == item.HowToKnowAbout && x.AddedDate < Tdt).Count();
+                        }
+                        else
+                        {
+                            numberOfCustomer = contextdb.feedback_FeedbackMaster.Where(x => x.HowToKnowAbout == item.HowToKnowAbout).Count();
+                        }
 
                         total = total + numberOfCustomer;
                         DashboardSourceWise objItem = new DashboardSourceWise();
