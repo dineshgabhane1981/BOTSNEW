@@ -460,19 +460,19 @@
                     dataType: "json",
                     success: function (result)
                     {
-
-                        console.log(result)
-                        if ((result != "" || result != null) && result != "False") {
+                        if (result != "" && result != null && result != "False") {
+                            
                             var url = '@baseURL' + result;
                             window.location.href = url;
                         }
                         else {
-                            toastr.error('There is problem in registering customer!!!!');
+                            toastr.error('There is problem in while login. Please check OTP!!!');
                         }
 
                         $("#divLoader").hide();
                     },
                     error: function (result) {
+                       
                     }
                 });
             }
