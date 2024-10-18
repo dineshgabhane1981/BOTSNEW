@@ -281,6 +281,13 @@
     <Content Include="img\Untitled-1.png" />
     <Content Include="img\whatsapp.svg" />
     <Content Include="img\youtube.svg" />
+    <Content Include="js\cute-alert-master\cute-alert.js" />
+    <Content Include="js\cute-alert-master\img\error.svg" />
+    <Content Include="js\cute-alert-master\img\info.svg" />
+    <Content Include="js\cute-alert-master\img\question.svg" />
+    <Content Include="js\cute-alert-master\img\success.svg" />
+    <Content Include="js\cute-alert-master\img\warning.svg" />
+    <Content Include="js\cute-alert-master\style-alert.css" />
     <Content Include="js\dashboard.js" />
     <Content Include="js\gift.js" />
     <Content Include="js\login.js" />
@@ -336,6 +343,8 @@
     <Content Include="Images\blank-profile-picture-973460_1280.webp" />
     <Content Include="Images\no-coin-stacks-icon-illustration-260nw-1872984244.webp" />
     <Content Include="img\blank-profile-picture.webp" />
+    <Content Include="js\cute-alert-master\LICENSE" />
+    <Content Include="js\cute-alert-master\README.md" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

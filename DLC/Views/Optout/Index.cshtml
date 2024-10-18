@@ -24,6 +24,8 @@
     <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <script src="~/js/cute-alert-master/cute-alert.js"></script>
+    <link href="~/js/cute-alert-master/style-alert.css" rel="stylesheet" />
     <style>
         .footer {
             background-color: #344966;
@@ -31,6 +33,7 @@
             padding: 20px 20px;
             clear: both;
         }
+
         .card {
             margin-top: 133px;
             border-radius: 10px;
@@ -231,6 +234,174 @@
                 margin-bottom: 10px;
             }
         }
+
+        .bottom {
+            margin-top: 20px !important;
+            margin: 0 auto;
+            background-color: rgb(231, 244, 255);
+            width: 95%;
+            border-radius: 10px !important;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1vw 0;
+            padding-inline: 7vw;
+            position: relative;
+        }
+
+            .bottom::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: #00ac51;
+                width: 1.8%;
+                height: 100%;
+            }
+
+            .bottom .left-content h1 {
+                color: #00ac51;
+                font-weight: 700;
+                font-size: 7.5vw;
+            }
+
+            .bottom .left-content h3 {
+                color: #344966;
+                font-weight: 500;
+                font-size: 3vw;
+                white-space: nowrap;
+            }
+
+            .bottom .right-content {
+                padding-left: 10vw;
+            }
+
+                .bottom .right-content button {
+                    background-color: #00ac51;
+                    color: white;
+                    padding: 7px 17px;
+                    font-weight: 600;
+                    border-radius: 20px;
+                    font-size: 2vw;
+                    white-space: nowrap;
+                    border: none;
+                    outline: none;
+                    text-transform: uppercase;
+                }
+
+        .content {
+            width: 100%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .content .top {
+                padding-inline: 7vw;
+                margin: 0 auto;
+                background-color: rgb(231, 244, 255);
+                width: 95%;
+                border-radius: 10px !important;
+                overflow: hidden;
+                position: relative;
+            }
+
+                .content .top::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    background-color: #00ac51;
+                    width: 1.8%;
+                    height: 100%;
+                }
+
+        .top .top-content {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 3vh;
+        }
+
+        .top-content h4 {
+            color: #686e77;
+            font-size: 2.3vw;
+            font-weight: 700;
+        }
+
+        .top-content button {
+            background-color: #00ac51;
+            color: white;
+            padding: 7px 17px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            font-weight: 600;
+            font-size: 2.2vw;
+        }
+
+        .top .bottom-content {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: fit-content;
+            padding: 1vh 0;
+            /* background-color: #0016a0; */
+        }
+
+        .bottom-content .left-split {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+        }
+
+            .bottom-content .left-split h4 {
+                font-size: 2.3vw;
+                font-weight: 600;
+                color: #171796;
+            }
+
+            .bottom-content .left-split h5 {
+                font-size: 2.3vw;
+                font-weight: 500;
+                color: #171796;
+            }
+
+            .bottom-content .left-split h6 {
+                font-size: 1vw;
+                font-weight: 700;
+                color: #686e77;
+            }
+
+        .bottom-content .right-split {
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            justify-content: center;
+            padding-right: 1.6vw;
+        }
+
+            .bottom-content .right-split h4 {
+                font-size: 3.5vw;
+                font-weight: 800;
+                color: #344966;
+            }
+
+            .bottom-content .right-split h5 {
+                font-size: 2.3vw;
+                font-weight: 500;
+                color: #344966;
+            }
+
+            .bottom-content .right-split h6 {
+                font-size: 1vw;
+                font-weight: 700;
+                color: #686e77;
+            }
     </style>
 </head>
 <body>
@@ -255,7 +426,7 @@
             </div>
         }
         <div class="profile_links">
-           
+
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -274,15 +445,15 @@
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            @*<a href="@Url.Action("Index", "Optout")"><h1 class="active">Optout</h1></a>*@
+            <a href="@Url.Action("Index", "Optout")"><h1 class="active">Optout</h1></a>
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
         <div class="hamburger">
             <i class="ri-menu-2-line"></i>
         </div>
     </nav>
-    <div class="menu-container">
-        <div id="menu">
+    <div class="menu-container1">
+        <div id="menu1">
             <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
             <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
@@ -290,83 +461,106 @@
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            @*<a href="@Url.Action("Index", "Optout")"><h1 class="active">Optout</h1></a>*@
+            <a href="@Url.Action("Index", "Optout")"><h1 class="active">Optout</h1></a>
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
-
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <h1 class="text-center" style="text-align: center; margin-bottom: 2%;">OPTOUT</h1>
-                <div class="content-row">
-                    <div class="content-item">
-                        <span class="label">My Account</span>
-                        <span id="accountValue">@Model.MobileNo</span>
+    <section style="margin-top:100px !important;margin-bottom:10px !important; margin-left:30px;font-size:30px;">
+        Opt Out 
+        @if (ViewBag.optout)
+        {
+            <span id="spnMessage" style="font-style: italic;font-size:24px;">(You already opt out for promotional messages)</span>
+        }
+    </section>
+        <section class="content" style="margin-top:20px !important;margin-bottom:10px !important;">
+            <div class="top">
+                <div class="top-content">
+                    <h4>MY ACCOUNT</h4>
+                    <h4>MY POINTS</h4>
+                    <h4>MY CASH</h4>
+                </div>
+                <div class="bottom-content">
+                    <div class="left-split">
+                        <h4>@sessionVariables.MobileNo</h4>                        
                     </div>
-                    <div class="content-item">
-                        <span class="label">My Points</span>
-                        <span id="pointsValue">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints))</span>
+                    <div class="left-split">
+                        <h4>@(ViewBag.earnPoint + ViewBag.bonousPoint)</h4>
                     </div>
-                    <div class="content-item">
-                        <span class="label">My Cash</span>
-                        <span id="cashValue">Rs. @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints * Model.PointsToRS))</span>
+                    <div class="left-split">
+                        <h4>Rs. @ViewBag.pointsinRs</h4>
                     </div>
                 </div>
-                <div class="button-row">
-                    <div class="button-item">
-                        <label class="label">Receive Promotion Messages Through SMS and/or Whatsapp</label>
-                        <button class="start-button" id="btnStartPromotions" onclick="togglePromotion(0)" style="display: none;">Start</button>
-                        <button class="stop-button" id="btnStopPromotions" style="display: none;" onclick="togglePromotion(1)">Stop</button>
+                <div class="bottom-content">
+                    <div class="left-split">                        
+                        <h5>@ViewBag.customerName</h5>
                     </div>
-                    <div class="button-item">
-                        <label class="label">Membership in the Loyalty Program</label>
-                        <button class="start-button" id="btnContinueMembership" style="display: none;" onclick="toggleMembership(1)">Continue</button>
-                        <button class="stop-button" id="btnDiscontinueMembership" style="display: none;" onclick="toggleMembership(0)">Discontinue</button>
+                    <div class="left-split">
+                       
+                    </div>
+                    <div class="left-split">
+                        
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
+        <section class="content" style="margin-top:50px !important;">
+            <input type="radio" style="width:20px;height:20px;cursor:pointer;" checked /> <h3 style="margin-left:10px;">I do not want to receive any promotions SMS & WhatsApp</h3>
+        </section>
 
-    <section class="footer" style="text-align:center;">
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
-        {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
-                <img src="~/img/facebook.svg" />
-            </a>
-        }
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
-        {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
-                <img src="~/img/instagram.svg" />
-            </a>
-        }
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
-        {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
-                <img src="~/img/twitterx.svg" />
-            </a>
-        }
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
-        {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
-                <img src="~/img/youtube.svg" />
-            </a>
-        }
-        @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
-        {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
-                <img src="~/img/whatsapp.svg" />
-            </a>
-        }
-    </section>
+        <section class="content" style="margin-bottom:50px !important;">
+            <button type="button" id="btnOptOut" class="start-button" onclick="UpdateOptOut();">Submit</button>
+        </section>
 
-    <script>
-    function togglePromotion(button) {      
+        <section class="footer" style="text-align:center;">
+            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
+            {
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+                    <img src="~/img/facebook.svg" />
+                </a>
+            }
+            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
+            {
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
+                    <img src="~/img/instagram.svg" />
+                </a>
+            }
+            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
+            {
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+                    <img src="~/img/twitterx.svg" />
+                </a>
+            }
+            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
+            {
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+                    <img src="~/img/youtube.svg" />
+                </a>
+            }
+            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
+            {
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+                    <img src="~/img/whatsapp.svg" />
+                </a>
+            }
+        </section>
+
+        <script>
+        function UpdateOptOut() {
+            cuteAlert({
+                type: "question",
+                title: "Are you sure?",
+                message: "You will not receive any offers. Do you want to continue?",
+                confirmText: "Yes",
+                cancelText: "No"
+            }).then((e) => {
+                if (e == ("confirm")) {
+                    togglePromotion();
+                }
+            })
+        }
+        function togglePromotion() {
+
         var isStartVisible = true;
-        if (button == 0)
-            isStartVisible = false;
 
         $("#divLoader").show();
         $.ajax({
@@ -378,8 +572,21 @@
             success: function(result) {
                 console.log(result);
                 if (result) {
-                    window.location.reload();
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Optout Successfully!!!",
+                        buttonText: "Okay"
+                    }).then((e) => {
+                        window.location.reload();
+                    });
                 } else {
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS...",
+                        message: "There is problem in saving your preferences!!!",
+                        buttonText: "Okay"
+                    })
                     // handle error case or leave as is
                 }
             },
@@ -393,7 +600,7 @@
     }
 
     function toggleMembership(button) {
-       
+
         var isContinueVisible = true;
         if (button == 0)
             isContinueVisible = false;
@@ -443,193 +650,39 @@
                 $("#btnDiscontinueMembership").show();
             }
     });
-    </script>
+        </script>
+        <script>
+            function Hamburger() {
+                var hamburger = document.querySelector('.hamburger');
+                var menu = document.querySelector('.menu-container1');
+                var logo = document.querySelector('.logo');
 
+                var isMenuVisible = false;
 
+                hamburger.addEventListener('click', function () {
+                    if (!isMenuVisible) {
+                        menu.style.display = 'block';
+                        menu.style.transform = 'translateY(0)';
+                        isMenuVisible = true;
+                        logo.style.display = 'none';
+                    } else {
+                        menu.style.transform = 'translateY(-100vh)';
+                        isMenuVisible = false;
+                        logo.style.display = 'block';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!--<div class="container">
-        <div class="card">
-            <div class="card-body">
-                <h1 class="text-center"style="text-align: center;margin-bottom: 2%;">OPTOUT</h1>
-                <div class="content-row">
-                    <div class="content-item">
-                        <span class="label">My Account</span>
-                        <span id="accountValue">@Model.MobileNo</span>
-                    </div>
-                    <div class="content-item">
-                        <span class="label">My Points</span>
-                        <span id="pointsValue">@String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints))</span>
-                    </div>
-                    <div class="content-item">
-                        <span class="label">My    Cash</span>
-                        <span id="cashValue">Rs. @String.Format(new CultureInfo("en-IN", false), "{0:n2}", Convert.ToDouble(Model.EarnPoints * Model.PointsToRS))</span>
-                    </div>
-                </div>
-                <div class="button-row">
-                    <div class="button-item">
-                        <label class="label">Receive Promostion Messages Through SMS and/or Whatsapp</label>
-                        <button class="start-button" id="btnStartPromotions" onclick="check(true)" style="display:none">Start</button>
-                        <button class="stop-button" id="btnStopPromotions" style="display:none" onclick="check(false)">Stop</button>
-
-                    </div>
-                    <div class="button-item">
-                        <label class="label">I would like to cancel my membership in the Loyalty Program</label>
-
-                        <button class="start-button" id="btnDiscontinueMembership" style="display:none" onclick="check1(true)">Continue</button>
-                        <button class="stop-button" id="btnContinueMembership" style="display:none" onclick="check1(false)">Discontinue</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
-    <!-- Bootstrap JS and dependencies -->
-    <!--<div class="footer"></div>
-
-
-    <script>
-
-            function check(status)
-            {
-
-                $("#divLoader").show(); // Show loader to indicate an ongoing process
-
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("UpdateOptout", "Optout")', // Adjust with your endpoint
-                    data: JSON.stringify({ IsOptout: status }), // Send the opt-out status
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result)
-                    {
-
-                        console.log(result);
-
-                        if (result)
-                        {
-                            //toastr.success('You will receive all promotions SMS & WhatsApp.');
-                            //toastr.success('You will not receive any promotions SMS & WhatsApp.');
-                           // $("#btnStopPromotions").style.display = "block"
-                            document.getElementById("btnStopPromotions").style.display = "block";
-                            document.getElementById("btnStartPromotions").style.display = "none";
-                        }
-                        else
-                        {
-
-                            //$("#btnStartPromotions").style.display = "none"
-                            document.getElementById("btnStopPromotions").style.display = "none";
-                            document.getElementById("btnStartPromotions").style.display = "block";
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        toastr.error('An error occurred: ' + error);
-                    },
-                    complete: function() {
-                        $("#divLoader").hide(); // Hide the loader once the request is complete
                     }
                 });
+
             }
 
-            $(document).ready(function ()
-            {
-                check(null);
-            });
+            Hamburger();
 
-    </script>
-
-    <script>
-
-            function check1(status)
-            {
-                $("#divLoader").show();
-
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Update1Optout", "Optout")', // Adjust with your endpoint
-                    data: JSON.stringify({ IsOptout: status }), // Send the opt-out status
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (result)
-                    {
-
-                        console.log(result);
-
-                        if (result)
-                        {
-                            //$("#btnDiscontinueMembership").style.display = "block"
-                            document.getElementById("btnDiscontinueMembership").style.display = "block";
-                            document.getElementById("btnContinueMembership").style.display = "none";
-                        }
-                        else
-                        {
-
-                           // $("#btnContinueMembership").style.display = "none"
-                            document.getElementById("btnDiscontinueMembership").style.display = "none";
-                            document.getElementById("btnContinueMembership").style.display = "block";
-                        }
-
-                    },
-                    error: function(xhr, status, error) {
-                        toastr.error('An error occurred: ' + error);
-                    },
-                    complete: function() {
-                        $("#divLoader").hide(); // Hide the loader once the request is complete
-                    }
-                });
-            }
-        $(document).ready(function ()
-        {
-            check1(null);
-        });
-    </script>-->
-
-    <script>
-        function Hamburger() {
-            var hamburger = document.querySelector('.hamburger');
-            var menu = document.querySelector('.menu-container');
-            var logo = document.querySelector('.logo');
-
-            var isMenuVisible = false;
-
-            hamburger.addEventListener('click', function () {
-                if (!isMenuVisible) {
-                    menu.style.display = 'block';
-                    menu.style.transform = 'translateY(0)';
-                    isMenuVisible = true;
-                    logo.style.display = 'none';
-                } else {
-                    menu.style.transform = 'translateY(-100vh)';
-                    isMenuVisible = false;
-                    logo.style.display = 'block';
-
-                }
-            });
-
-        }
-
-        Hamburger();
-
-    </script>
+        </script>
 
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
 </body>
 </html>
