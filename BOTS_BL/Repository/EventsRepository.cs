@@ -210,9 +210,13 @@ namespace BOTS_BL.Repository
                 using (var context = new BOTSDBContext(connectionString))
                 {
                     var statusavailable = context.EventMemberDetails.Where(e => e.Mobileno == Mobileno).Select(y => y.Mobileno).FirstOrDefault();
-                    var pointsexp = context.EarnRules.Select(e => e.PointsExpiryVariableDate).FirstOrDefault();
+                    var pointsexp = context.tblRuleMasters.Select(e => e.PointsExpiryMonths).FirstOrDefault();
                     int PointExp = Convert.ToInt32(pointsexp);
-                    obj = context.Database.SqlQuery<EventModuleData>("select C.MobileNo,C.Points,C.CustomerName,C.Gender,C.DOB,C.AnniversaryDate,C.EmailId,min(CC.Address) as Address,min(C.OldMobileno) as AlternateMobileNo, CASE WHEN Max(cast(TM.Datetime as date)) = NULL THEN Max(cast(TM.Datetime as date)) ELSE Min(C.DOJ) END as LastTxnDate,DATEADD(MONTH, @PointExp, Max(cast(TM.Datetime as date))) as PointExp from CustomerDetails C Left join TransactionMaster TM on C.MobileNo = TM.MobileNo left join CustomerChild CC on CC.MobileNo = C.MobileNo and C.Status = '00' group by C.MobileNo, C.Points, C.CustomerName, C.EnrollingOutlet, C.Gender, C.DOB, C.AnniversaryDate, C.EmailId Having C.MobileNo = @Mobileno", new SqlParameter("@Mobileno", Mobileno), new SqlParameter("@PointExp", PointExp)).FirstOrDefault();
+                    obj = context.Database.SqlQuery<EventModuleData>("select T4.MobileNo,T4.Name,T4.Gender,T4.DOB,T4.AnniversaryDate,T4.Email,T4.AlternateMobileNo,T4.Points,T4.PointExp,T4.Address,L.LastTxnDate from (select T3.MobileNo,T3.Name,T3.Gender,T3.DOB,T3.AnniversaryDate,T3.Email,T3.AlternateMobileNo,T3.Points,T3.PointExp,CC.Address  from (select  T1.MobileNo,T1.Name,T1.Gender,T1.DOB,T1.AnniversaryDate,T1.Email,T1.AlternateMobileNo,T1.Points,P1.PointExp from (select T.MobileNo,T.Name,T.Gender,T.DOB,T.AnniversaryDate,T.Email,T.OldMobileNo as AlternateMobileNo,P.Points from tblCustDetailsMaster T left join "+
+                            "(select Mobileno, sum(points) as Points from tblCustPointsMaster where IsActive = 1 and MobileNo = @Mobileno group by Mobileno) as P on T.MobileNo = P.MobileNo where T.MobileNo = @Mobileno) as T1 "+
+                            "left join(select Mobileno, Max(EndDate) as PointExp from tblCustPointsMaster where IsActive = 1 and PointsType = 'Base' and MobileNo = @Mobileno group by Mobileno) as P1 "+
+                            "on T1.Mobileno = P1.Mobileno ) as T3 Left join(select top(1) Mobileno,Address from CustomerChild where MobileNo = @Mobileno) as CC on T3.Mobileno = CC.Mobileno) as T4 left join(select MobileNo, LastTxnDate from tblCustTxnSummaryMaster where MobileNo = @Mobileno) as L "+
+                            "on T4.MobileNo = L.MobileNo", new SqlParameter("@Mobileno", Mobileno)).FirstOrDefault();
                     ExtObj = context.Database.SqlQuery<EventModuleExtraData>("select top(1) FirstName,MiddleName,SurName,Area,City,Pincode,State,AlternateNo from EventMemberDetails where Mobileno = @Mobileno Order by SLno desc", new SqlParameter("@Mobileno", Mobileno)).FirstOrDefault();
                     
                     if(ExtObj != null)
@@ -269,16 +273,16 @@ namespace BOTS_BL.Repository
             return obj;
         }
 
-        public bool SaveNewMemberData(EventMemberDetail objData, CustomerDetail objCustomerDetail, CustomerChild objCustomerChild, TransactionMaster objTM, string connectionstring,int GroupId)
+        public bool SaveNewMemberData(EventMemberDetail objData, tblCustDetailsMaster objCustomerDetail, CustomerChild objCustomerChild, TransactionMaster objTM, string connectionstring,int GroupId)
         {
             bool result = false;
             string Message;
             Message = string.Empty;
-            CustomerDetail TM2 = new CustomerDetail();
+            tblCustDetailsMaster TM2 = new tblCustDetailsMaster();
             CustomerChild objdata1 = new CustomerChild();
-            OutletDetail objdata = new OutletDetail();
-            TransactionMaster obj = new TransactionMaster();
-            PointsExpiry obj1 = new PointsExpiry();
+            tblOutletMaster objdata = new tblOutletMaster();
+            tblTxnDetailsMaster obj = new tblTxnDetailsMaster();
+            tblCustPointsMaster obj1 = new tblCustPointsMaster();
             using (var context = new BOTSDBContext(connectionstring))
             {
                 using (DbContextTransaction transaction = context.Database.BeginTransaction())
@@ -286,7 +290,7 @@ namespace BOTS_BL.Repository
                     try
                     {
                         var bonusPoints = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.BonusPoints).FirstOrDefault();
-                        var existingCust = context.CustomerDetails.Where(x => x.MobileNo == objCustomerDetail.MobileNo).FirstOrDefault();
+                        var existingCust = context.tblCustDetailsMasters.Where(x => x.MobileNo == objCustomerDetail.MobileNo).FirstOrDefault();
 
                         var ExpiryDays = context.EventDetails.Where(x => x.EventId == objData.EventId).Select(y => y.PointsExpiryDays).FirstOrDefault();
                         var Status = context.EventMemberDetails.Where(x => x.Mobileno == objData.Mobileno).Select(y => y.Mobileno).FirstOrDefault();
@@ -307,6 +311,7 @@ namespace BOTS_BL.Repository
                             DateTime Expirydate = objData.DateOfRegistration.Value.AddDays(Convert.ToInt32(objEventDetails.PointsExpiryDays));
                             objData.FirstRemDate = Expirydate.AddDays(-Convert.ToInt32(objEventDetails.C1stRemBefore));
                             objData.SecondRemDate = Expirydate.AddDays(-Convert.ToInt32(objEventDetails.C2ndRemBefore));
+                             
                         }
                         else
                         {
@@ -319,6 +324,7 @@ namespace BOTS_BL.Repository
                             DateTime Expirydate = objData.DateOfRegistration.Value.AddDays(Convert.ToInt32(objEventDetails.PointsExpiryDays));
                             objData.FirstRemDate = Expirydate.AddDays(-Convert.ToInt32(objEventDetails.C1stRemBefore));
                             objData.SecondRemDate = Expirydate.AddDays(-Convert.ToInt32(objEventDetails.C2ndRemBefore));
+                             
                         }
                         objData.EventName = EventName;
 
@@ -336,46 +342,46 @@ namespace BOTS_BL.Repository
 
                         if (existingCust == null)
                         {
-                            var CustomerId = context.CustomerDetails.OrderByDescending(x => x.CustomerId).Select(y => y.CustomerId).FirstOrDefault();
-                            var AdminOutletId = context.OutletDetails.Where(x => x.OutletName.Contains("Admin")).Select(y => y.OutletId).FirstOrDefault();
+                            var CustomerId = context.tblCustDetailsMasters.OrderByDescending(x => x.Id).Select(y => y.Id).FirstOrDefault();
+                            var AdminOutletId = context.tblOutletMasters.Where(x => x.OutletName.Contains("Admin")).Select(y => y.OutletId).FirstOrDefault();
                             TM2.MobileNo = objCustomerDetail.MobileNo;
-                            TM2.CustomerName = objCustomerDetail.CustomerName;
-                            TM2.CustomerId = Convert.ToString(Convert.ToInt64(CustomerId) + 1);
-                            TM2.CardNumber = objCustomerDetail.CardNumber;
-                            TM2.EmailId = objCustomerDetail.EmailId;
+                            TM2.Name = objCustomerDetail.Name;
+                            TM2.Id = Convert.ToString(Convert.ToInt64(CustomerId) + 1);
+                            TM2.CardNo = objCustomerDetail.CardNo;
+                            TM2.Email = objCustomerDetail.Email;
                             TM2.DOB = objCustomerDetail.DOB;
                             TM2.AnniversaryDate = objCustomerDetail.AnniversaryDate;
                             TM2.Gender = objCustomerDetail.Gender;
                             TM2.DOJ = IndianDatetime();
-                            TM2.EnrollingOutlet = AdminOutletId;
-                            TM2.MemberGroupId = "1000";
-                            TM2.CustomerThrough = "1";
-                            TM2.Status = "00";
-                            TM2.OldMobileNo = objCustomerDetail.OldMobileNo;
-                            TM2.Points = bonusPoints;
+                            TM2.EnrolledOutlet = AdminOutletId;
+                            
+                            TM2.EnrolledBy = "Event";
+                            TM2.IsActive = true;
+                            
+                            //TM2.Points = bonusPoints;
 
                         }
                         else
                         {
                             TM2 = existingCust;
-                            TM2.CustomerName = objCustomerDetail.CustomerName;
-                            TM2.CardNumber = objCustomerDetail.CardNumber;
-                            TM2.EmailId = objCustomerDetail.EmailId;
+                            TM2.Name = objCustomerDetail.Name;
+                            TM2.CardNo = objCustomerDetail.CardNo;
+                            TM2.Email = objCustomerDetail.Email;
                             TM2.DOB = objCustomerDetail.DOB;
                             TM2.AnniversaryDate = objCustomerDetail.AnniversaryDate;
                             TM2.Gender = objCustomerDetail.Gender;
-                            TM2.OldMobileNo = objCustomerDetail.OldMobileNo;
+                            //TM2.OldMobileNo = objCustomerDetail.OldMobileNo;
 
-                            if (Status == null)
-                            {
-                                TM2.Points = TM2.Points + bonusPoints;
-                            }
-                            else
-                            {
-                                TM2.Points = TM2.Points;
-                            }
+                            //if (Status == null)
+                            //{
+                            //    TM2.Points = TM2.Points + bonusPoints;
+                            //}
+                            //else
+                            //{
+                            //    TM2.Points = TM2.Points;
+                            //}
                         }
-                        context.CustomerDetails.AddOrUpdate(TM2);
+                        context.tblCustDetailsMasters.AddOrUpdate(TM2);
                         context.SaveChanges();
                         //string MobNo = Convert.ToString(objCustomerChild.MobileNo);
                         var existingCust1 = context.CustomerChilds.Where(x => x.MobileNo == objCustomerChild.MobileNo).FirstOrDefault();
@@ -404,40 +410,42 @@ namespace BOTS_BL.Repository
                             objdata1.Address = objCustomerChild.Address;
 
                         }
-                        context.CustomerChilds.AddOrUpdate(objdata1);
-                        context.SaveChanges();
+                        //context.CustomerChilds.AddOrUpdate(objdata1);
+                        //context.SaveChanges();
 
                         if (Status == null)
                         {
-                            obj.CounterId = (TM2.EnrollingOutlet + "01");
+                            obj.CounterId = (TM2.EnrolledOutlet + "01");
                             obj.MobileNo = TM2.MobileNo;
-                            obj.Datetime = DateTime.Now;
-                            obj.TransType = "1";
-                            obj.TransSource = "1";
+                            obj.TxnDatetime = DateTime.Now;
+                            obj.TxnType = "1";
+                            obj.TxnBy = "Event";
                             obj.InvoiceNo = "Bonus";
                             obj.InvoiceAmt = 0;
-                            obj.Status = "00";
-                            obj.CustomerId = TM2.CustomerId;
+                            obj.IsActive = true;
+                            
                             obj.PointsEarned = bonusPoints;
                             obj.PointsBurned = 0;
                             obj.CampaignPoints = 0;
-                            obj.TxnAmt = 0;
-                            obj.CustomerPoints = TM2.Points;
+                            obj.InvoiceAmt = 0;
+                            obj.PointsEarned = bonusPoints;
+                            obj.MobileNoInvId = obj.MobileNo + TM2.EnrolledOutlet + obj.InvoiceNo + obj.TxnDatetime + obj.InvoiceAmt;
 
-                            context.TransactionMasters.AddOrUpdate(obj);
+                            context.tblTxnDetailsMasters.AddOrUpdate(obj);
                             context.SaveChanges();
 
                             obj1.MobileNo = TM2.MobileNo;
-                            obj1.CounterId = (TM2.EnrollingOutlet + "01");
-                            obj1.EarnDate = DateTime.Now;
-                            obj1.ExpiryDate = obj1.EarnDate.Value.AddDays(Convert.ToInt32(ExpiryDays));
-                            obj1.Points = TM2.Points;
-                            obj1.InvoiceNo = "Bonus";
-                            obj1.Status = "00";
-                            obj1.Datetime = DateTime.Now;
-                            obj1.CustomerId = TM2.CustomerId;
+                           
+                            obj1.StartDate = DateTime.Now;
+                            obj1.EndDate = obj1.StartDate.Value.AddDays(Convert.ToInt32(ExpiryDays));
+                            obj1.Points = bonusPoints;
+                            obj1.PointsType = "Bonus";
+                            obj1.PointsDesc = "Event";
+                            obj1.IsActive = true;
+                            obj1.MinInvoiceAmtRequired = 0;
+                            obj1.MobileNoPtsId = obj1.MobileNo + "Event";
 
-                            context.PointsExpiries.AddOrUpdate(obj1);
+                            context.tblCustPointsMasters.AddOrUpdate(obj1);
                             context.SaveChanges();
 
                         }

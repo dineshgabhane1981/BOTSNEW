@@ -334,7 +334,7 @@ namespace WebApp.Controllers
             bool result = false;
             var userDetails = (CustomerLoginDetail)Session["UserSession"];
             EventMemberDetail objEventDetail = new EventMemberDetail();
-            CustomerDetail objCustomerDetail = new CustomerDetail();
+            tblCustDetailsMaster objCustomerDetail = new tblCustDetailsMaster();
             CustomerChild objCustomerChild = new CustomerChild();
             TransactionMaster objTM = new TransactionMaster();
             JavaScriptSerializer json_serializer = new JavaScriptSerializer();
@@ -352,23 +352,7 @@ namespace WebApp.Controllers
 
                     var FullName = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]) + " " + Convert.ToString(item["SurName"]);
 
-                    //if (!string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])) && !string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
-                    //{
-                    //    objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]) + " " + Convert.ToString(item["SurName"]);
-                    //}
-                    //else if (string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])) && string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
-                    //{
-                    //    objEventDetail.Name = Convert.ToString(item["FirstName"]);
-                    //}
-                    //else if(string.IsNullOrEmpty(Convert.ToString(item["MiddleName"])))
-                    //{
-                    //    objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["SurName"]);
-                    //}
-                    //else if(string.IsNullOrEmpty(Convert.ToString(item["SurName"])))
-                    //{
-                    //    objEventDetail.Name = Convert.ToString(item["FirstName"]) + " " + Convert.ToString(item["MiddleName"]);
-                    //}
-                    objEventDetail.Name = FullName;// Convert.ToString(item["FirstName"]) +" "+ Convert.ToString(item["MiddleName"]) +" "+ Convert.ToString(item["SurName"]);
+                    objEventDetail.Name = FullName;
                     objEventDetail.FirstName = Convert.ToString(item["FirstName"]);
                     objEventDetail.MiddleName = Convert.ToString(item["MiddleName"]);
                     objEventDetail.SurName = Convert.ToString(item["SurName"]);
@@ -395,9 +379,9 @@ namespace WebApp.Controllers
                 foreach (Dictionary<string, object> item in objData)
                 {
                     objCustomerDetail.MobileNo = Convert.ToString(item["Mobileno"]);
-                    objCustomerDetail.CustomerName = objEventDetail.Name;
-                    objCustomerDetail.CardNumber = Convert.ToString(item["Mobileno"]);
-                    objCustomerDetail.EmailId = Convert.ToString(item["EmailId"]);
+                    objCustomerDetail.Name = objEventDetail.Name;
+                    objCustomerDetail.CardNo = Convert.ToString(item["Mobileno"]);
+                    objCustomerDetail.Email = Convert.ToString(item["EmailId"]);
                     strDOB = Convert.ToString(item["DOB"]);
                     if (!string.IsNullOrEmpty(strDOB))
                     {
@@ -408,8 +392,7 @@ namespace WebApp.Controllers
                     {
                         objCustomerDetail.AnniversaryDate = Convert.ToDateTime(item["DOA"]);
                     }
-                    objCustomerDetail.Gender = Convert.ToString(item["Gender"]);
-                    objCustomerDetail.OldMobileNo = Convert.ToString(item["AlternateNo"]);
+                    objCustomerDetail.Gender = Convert.ToString(item["Gender"]);                    
 
                 }
                 foreach (Dictionary<string, object> item in objData)

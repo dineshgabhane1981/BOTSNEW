@@ -445,7 +445,7 @@
                                 //    $("#txttxtName").val(responce.CustomerName);
                                 //}
                                 //else {
-                                    $("#txttxtName").val(responce.FirstName);
+                                $("#txttxtName").val(responce.Name);
                                 //} 
                                 $("#txttxtMiddleName").val(responce.MiddleName);
                                 $("#txttxtSurName").val(responce.SurName);
@@ -496,8 +496,8 @@
                     }
 
                     else {
-                        if (responce.CustomerName != "") {
-                            $("#txttxtName").val(responce.CustomerName);
+                        if (responce.Name != "") {
+                            $("#txttxtName").val(responce.Name);
                         }
                         else {
                             $("#txttxtName").val(responce.FirstName);

@@ -10,7 +10,7 @@ namespace BOTS_BL.Models.EventModule
     public class EventModuleData
     {
         public string Mobileno { get; set; }
-        public string CustomerName { get; set; }
+        public string Name { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string SurName { get; set; }
@@ -19,7 +19,7 @@ namespace BOTS_BL.Models.EventModule
         public DateTime? AnniversaryDate { get; set; }
         public string Address { get; set; }
         public string EmailId { get; set; }
-        public decimal Points { get; set; }
+        public decimal? Points { get; set; }
         public DateTime? LastTxnDate { get; set; }
         public DateTime? PointExp { get; set; }
         public string Area { get; set; }
