@@ -692,10 +692,10 @@ namespace BOTS_BL.Repository
 
                     objCust.MobileNo = mobileNo;
                     objCust.Name = "Member";
-                    objCust.Id = mobileNo + groupId;
+                    objCust.Id = groupId + mobileNo;
                     objCust.EnrolledOutlet = outletId;
                     objCust.DOJ = DateTime.Now;
-                    objCust.EnrolledBy = source?? "DLCWalkIn";
+                    objCust.EnrolledBy = !string.IsNullOrEmpty(source) ? source : "DLCWalkIn";  // Ensures "DLCWalkIn" is set if source is null or empty
                     objCust.IsActive = true;
                     objCust.DisableTxn = false;
                     objCust.DisableSMSWAPromo = false;
@@ -705,10 +705,43 @@ namespace BOTS_BL.Repository
                     context.tblCustDetailsMasters.Add(objCust);
                     context.SaveChanges();
 
+                    //objCust.MobileNo = mobileNo;
+                    //objCust.Name = "Member";
+                    //objCust.Id = mobileNo + groupId;
+                    //objCust.EnrolledOutlet = outletId;
+                    //objCust.DOJ = DateTime.Now;
+                    //objCust.EnrolledBy = source?? "DLCWalkIn";
+                    //objCust.IsActive = true;
+                    //objCust.DisableTxn = false;
+                    //objCust.DisableSMSWAPromo = false;
+                    //objCust.DisableSMSWATxn = false;
+                    //objCust.CountryCode = countryCode;
+                    //objCust.CurrentEnrolledOutlet = outletId;
+                    //context.tblCustDetailsMasters.Add(objCust);
+                    //context.SaveChanges();
+
                     tblCustInfo objInfo = new tblCustInfo();
                     objInfo.MobileNo = mobileNo;
                     objInfo.Name = "Member";
                     context.tblCustInfoes.Add(objInfo);
+                    context.SaveChanges();
+
+                    tblCustTxnSummaryMaster objCustTxn = new tblCustTxnSummaryMaster();
+                    objCustTxn.MobileNo = mobileNo;
+                    objCustTxn.FirstTxnDate = DateTime.Now;
+                    objCustTxn.LastTxnDate = DateTime.Now;
+                    objCustTxn.TotalSpend = 0;
+                    objCustTxn.TotalTxnCount = 0;
+                    objCustTxn.EarnCount = 0;
+                    objCustTxn.BurnCount = 0;
+                    objCustTxn.SalesReturnCount = 0;
+                    objCustTxn.SalesReturnAmt = 0;
+                    objCustTxn.BurnAmtWithPts = 0;
+                    objCustTxn.BurnPts = 0;
+                    objCustTxn.EarnPts = 0;
+                    objCustTxn.SalesReturnPtsGiven = 0;
+                    objCustTxn.SalesReturnPtsRemoved = 0;
+                    context.tblCustTxnSummaryMasters.Add(objCustTxn);
                     context.SaveChanges();
 
                     status = true;
@@ -1253,7 +1286,8 @@ namespace BOTS_BL.Repository
                         "@pi_Child1DOB, @pi_Child2DOB, @pi_Child3DOB ,@pi_City, @pi_LanguagePreferred, @pi_Religion, @pi_DBName, @pi_Area",
                         new SqlParameter("@pi_MobileNo", objData.MobileNo),
                         new SqlParameter("@pi_BrandId", objData.BrandId),
-                        new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd")),
+                        new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))
+                        /*new SqlParameter("@pi_Datetime", DateTime.Now.ToString("yyyy-MM-dd"))*/,
                         new SqlParameter("@pi_Name", objData.Name),
                         new SqlParameter("@pi_Gender", objData.Gender ?? ""),
                         new SqlParameter("@pi_DOB", DOB ?? (object)DBNull.Value),

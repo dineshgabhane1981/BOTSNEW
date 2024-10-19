@@ -178,7 +178,7 @@
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            @*<a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>*@
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
         <div class="hamburger" style="width:25px !important;">
@@ -194,7 +194,7 @@
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            @*<a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>*@
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
@@ -315,12 +315,83 @@
             inputGroup.remove();
         }
         function validateMobile(input) {
-            
+
             if (input.value.length > 10) {
                 input.value = input.value.slice(0, 10);
             }
         }
         function SendReference() {
+    var status = true;
+    let validInputExists = false;
+    let postData = [];
+
+    for (let i = 1; i <= friendCount; i++) {
+        let friendName = $("#txtFriendName" + i).val();
+        let mobileNo = $("#txtFriendMobile" + i).val();
+
+        // Check if both friendName and mobileNo are provided
+        if (friendName === "") {
+            toastr.error('Friend name is required.');
+            $("#txtFriendName" + i).focus();
+            return false;
+        }
+
+        if (mobileNo === "") {
+            toastr.error('Mobile number is required.');
+            $("#txtFriendMobile" + i).focus();
+            return false;
+        }
+
+        if (friendName !== "" || mobileNo !== "") {
+            validInputExists = true;
+
+            // Check if mobile number is exactly 10 digits
+            if (mobileNo.length !== 10) {
+                toastr.error('Mobile number must be exactly 10 digits.');
+                $("#txtFriendMobile" + i).focus();
+                return false;
+            }
+
+            postData.push({
+                name: friendName,
+                mobile: mobileNo
+            });
+        }
+    }
+
+    if (!validInputExists) {
+        toastr.error('At least one Friend name and mobile number need to be provided.');
+        return false;
+    }
+
+    if (status) {
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DLCReferFriend", "ReferEarn")',
+            data: JSON.stringify(postData), // Send the array as JSON
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                console.log(result);
+                // Check if the server is returning a ResponseCode in result
+                if (result.ResponseCode == "1") {
+                    toastr.success("Reference sent Successfully !!!");
+                } else {
+                    toastr.error(result.ResponseMessage); // Show error from the server response
+                }
+                $("#divLoader").hide();
+            },
+            error: function (result) {
+                console.log(result.responseText);
+                toastr.error('An error occurred while sending the reference.');
+                $("#divLoader").hide();
+            }
+        });
+    }
+}
+
+        @*function SendReference() {
          var status = true;
          let validInputExists = false;
          let postData = [];
@@ -386,8 +457,7 @@
              }
         });
     }
-}
-
+}*@
     </script>
     
     <script src="~/js/script.js"></script>
