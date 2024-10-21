@@ -141,7 +141,7 @@
         /*Ensure logo scales properly*/
         .logo img {
             max-width: 100%;
-            height: auto;
+            /*height: auto;*/
         }
     </style>
 </head>
@@ -309,11 +309,16 @@
                     outletDetails = data;
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(UserLocation);
+                        
                     }
                 $("#ddlOutlet").empty();
                 data.forEach(function (outlet) {
                         $("#ddlOutlet").append($("<option />").val(outlet.OutletId).text(outlet.OutletName));
                 });
+                    
+
+                    setTimeout(submitSearch, 2000);
+                    
             },
             error: function() {
                // alert('Failed to fetch outlet names.');
@@ -339,7 +344,7 @@
                     });
                     dropdown.append(listItem);
                 });
-                dropdown.show();
+                dropdown.show();                
             },
             error: function() {
                // alert('Failed to fetch outlet names.');
@@ -375,8 +380,7 @@
     <script>
         function submitSearch() {
             var outletName = $("#ddlOutlet option:selected").text();
-
-            /*alert(outletName)*/
+            
             if (outletName) {
                 $.ajax({
                     url: '@Url.Action("GetMapUrl", "Store")',

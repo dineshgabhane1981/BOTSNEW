@@ -179,7 +179,21 @@
         /* Ensure logo scales properly */
         .logo img {
             max-width: 100%;
-            height: auto;
+            /*height: auto;*/
+        }
+        .start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 4%;
+        }
+
+        .start-button {
+            background-color: #4CAF50;
+            color: white;
         }
     </style>
 </head>
@@ -228,7 +242,7 @@
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            @*<a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>*@
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
 
         </div>
@@ -245,39 +259,50 @@
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            @*<a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>*@
+            <a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
     <!-- card  -->
     <!-- content -->
 
-    <section class="content" style="margin-top:200px;">
-       
-
-
+    <section style="margin-top:200px !important;margin-bottom:10px !important; margin-left:30px;font-size:20px;">
+        Opt Out
+        @if (ViewBag.optout)
+        {
+            <span id="spnMessage" style="font-style: italic;font-size:16px;">(You already opt out for promotional messages)</span>
+        }
     </section>
     <div class="bottom" style="margin-bottom:20px;">
         <div class="left-content">
-            <h2>MY ACCOUNT</h2>
-            <h2>9003552567</h2>
+            <h3 style="font-size:20px;">MY ACCOUNT</h3>
+            <h2 style="font-size:20px;">@Model.dLCDashboardContent.MobileNo</h2>
         </div>
-        <div class="right-content">
-            <h2>MY POINTS</h2>
-            <h2>2149</h2>
+        <div class="left-content" style="padding-left:20px;">
+            <h3 style="font-size:20px;">MY POINTS</h3>
+            <h2 style="font-size:20px;">@(ViewBag.earnPoint + ViewBag.bonousPoint)</h2>
         </div>
-        <div class="right-content">
-            <h2>MY CASH</h2>
-            <h2>Rs. 1049</h2>
+        <div class="left-content" style="padding-left:20px;">
+            <h3 style="font-size:20px;">MY CASH</h3>
+            <h2 style="font-size:20px;">@ViewBag.pointsinRs</h2>
         </div>
     </div>
+    <section class="content" style="margin-top:50px !important;margin-left:20px;">
+        <input type="radio" style="width:20px;height:20px;cursor:pointer;" checked /> <h3 style="margin-left:10px;">I do not want to receive any promotions SMS & WhatsApp</h3>
+    </section>
 
-    
+    <section class="content" style="margin-bottom:50px !important;">
+        <button type="button" id="btnOptOut" class="start-button" onclick="UpdateOptOut();">Submit</button>
+    </section>
 
 
 
 
-    
+
+
+    <script src="~/js/cute-alert-master/cute-alert.js"></script>
+    <link href="~/js/cute-alert-master/style-alert.css" rel="stylesheet" />
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -511,6 +536,60 @@
                 navbar.classList.remove("scrolled");
             }
         });
+
+        function UpdateOptOut() {
+            cuteAlert({
+                type: "question",
+                title: "Are you sure?",
+                message: "You will not receive any offers. Do you want to continue?",
+                confirmText: "Yes",
+                cancelText: "No"
+            }).then((e) => {
+                if (e == ("confirm")) {
+                    togglePromotion();
+                }
+            })
+        }
+        function togglePromotion() {
+
+        var isStartVisible = true;
+
+        $("#divLoader").show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateOptout", "Optout")',
+            data: JSON.stringify({ IsOptout: isStartVisible }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(result) {
+                console.log(result);
+                if (result) {
+                    cuteAlert({
+                        type: "success",
+                        title: "Saved",
+                        message: "Optout Successfully!!!",
+                        buttonText: "Okay"
+                    }).then((e) => {
+                        window.location.reload();
+                    });
+                } else {
+                    cuteAlert({
+                        type: "error",
+                        title: "OOPS...",
+                        message: "There is problem in saving your preferences!!!",
+                        buttonText: "Okay"
+                    })
+                    // handle error case or leave as is
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error('An error occurred: ' + error);
+            },
+            complete: function() {
+                $("#divLoader").hide();
+            }
+        });
+    }
     </script>
 
     <script src="~/js/dashboard.js"></script>
