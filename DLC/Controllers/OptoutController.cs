@@ -20,9 +20,10 @@ namespace DLC.Controllers
         public ActionResult Index()
         {
             var sessionVariables = (SessionVariables)Session["SessionVariables"];
-            DLCDashboardContent objData = new DLCDashboardContent();
-            objData = DCR.GetDLCDashboardContent(sessionVariables.GroupId, sessionVariables.MobileNo);
-            objData.MobileNo = sessionVariables.MobileNo;
+            DashboardViewModel objData = new DashboardViewModel();
+            objData.objDashboardConfig = sessionVariables.objDashboardConfig;
+            objData.dLCDashboardContent = DCR.GetDLCDashboardContent(sessionVariables.GroupId, sessionVariables.MobileNo);
+            
             string connStr = objCustRepo.GetCustomerConnString(sessionVariables.GroupId);
             using (var context = new BOTSDBContext(connStr))
             {

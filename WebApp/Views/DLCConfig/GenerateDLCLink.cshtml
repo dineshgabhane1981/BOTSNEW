@@ -94,10 +94,10 @@
 
                                     foreach (var item in Model.lstLinks)
                                     {
-                                        var url = "https://" + item.DLCLink;
+                                        //var url = "https://" + item.DLCLink;
                                         <tr>
                                             <td>@item.DLCName</td>
-                                            <td><a href="@url" target="_blank">@item.DLCLink</a></td>
+                                            <td><a href="@item.DLCLink" target="_blank">@item.DLCLink</a></td>
                                             @if (item.StartDate.HasValue)
                                             {
                                                 <td style="text-align:center;">@item.StartDate.Value.ToString("dd-MM-yyyy")</td>

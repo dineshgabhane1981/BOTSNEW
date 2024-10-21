@@ -15,7 +15,7 @@ namespace BOTS_BL.Models
         [StringLength(100)]
         public string DLCName { get; set; }
 
-        [StringLength(100)]
+        [StringLength(1000)]
         public string DLCLink { get; set; }
 
         [Column(TypeName = "date")]

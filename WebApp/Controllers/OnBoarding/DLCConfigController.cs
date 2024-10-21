@@ -180,7 +180,8 @@ namespace WebApp.Controllers.OnBoarding
                     objDashboard.HeaderTheme = Convert.ToString(item["HeaderTheme"]);
                     objDashboard.SignInText = Convert.ToString(item["SignInText"]);
 
-                    objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
+                    if (!string.IsNullOrEmpty(Convert.ToString(item["SlNo"])))
+                        objDashboard.SlNo = Convert.ToInt32(item["SlNo"]);
                     objDashboard.AddedBy = userDetails.LoginId;
                     objDashboard.AddedDate = DateTime.Now;
 

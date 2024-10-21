@@ -811,6 +811,7 @@ namespace BOTS_BL.Repository
                     //var optout = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.DisableSMSWAPromo).FirstOrDefault();
                     //var custumerName = context.tblCustDetailsMasters.Where(x => x.MobileNo == mobileno).Select(y => y.Name).FirstOrDefault();
                     objData.CustomerName = objCust.Name;
+                    objData.MobileNo = objCust.MobileNo;
                     //var pointsinRs = objData.EarnPoints * PointsToRS;
                     //objData.PointsToRS = pointsinRs;
                     if (objCust.DisableSMSWAPromo.HasValue)
@@ -1357,25 +1358,32 @@ namespace BOTS_BL.Repository
         public bool SaveDLCLink(string connStr, string DLcName, string DlcLink, string StartDate, string EndDate,string PointsGiven,string PointsValidity)
         {
             bool result = false;
-            using (var context = new BOTSDBContext(connStr))
+            try
             {
-                tblDLCCampaignMaster objData = new tblDLCCampaignMaster();
-                objData.DLCName = DLcName;
-                objData.DLCLink = DlcLink;
+                using (var context = new BOTSDBContext(connStr))
+                {
+                    tblDLCCampaignMaster objData = new tblDLCCampaignMaster();
+                    objData.DLCName = DLcName;
+                    objData.DLCLink = DlcLink;
 
-                if (!string.IsNullOrEmpty(StartDate))
-                    objData.StartDate = Convert.ToDateTime(StartDate);
-                if (!string.IsNullOrEmpty(EndDate))
-                    objData.EndDate = Convert.ToDateTime(EndDate);
-                if (!string.IsNullOrEmpty(PointsGiven))
-                    objData.PointsGiven = Convert.ToInt32(PointsGiven);
-                if (!string.IsNullOrEmpty(PointsValidity))
-                    objData.PointValidityDayes = Convert.ToInt32(PointsValidity);
-                objData.CreatedDate = DateTime.Now;
-                context.tblDLCCampaignMasters.Add(objData);
-                context.SaveChanges();
+                    if (!string.IsNullOrEmpty(StartDate))
+                        objData.StartDate = Convert.ToDateTime(StartDate);
+                    if (!string.IsNullOrEmpty(EndDate))
+                        objData.EndDate = Convert.ToDateTime(EndDate);
+                    if (!string.IsNullOrEmpty(PointsGiven))
+                        objData.PointsGiven = Convert.ToInt32(PointsGiven);
+                    if (!string.IsNullOrEmpty(PointsValidity))
+                        objData.PointValidityDayes = Convert.ToInt32(PointsValidity);
+                    objData.CreatedDate = DateTime.Now;
+                    context.tblDLCCampaignMasters.Add(objData);
+                    context.SaveChanges();
 
-                result = true;
+                    result = true;
+                }
+            }
+            catch(Exception ex)
+            {
+                newexception.AddException(ex, "SaveDLCLink");
             }
             return result;
         }

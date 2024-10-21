@@ -1,12 +1,16 @@
-﻿@model BOTS_BL.Models.DLCDashboardContent
-@using System.Globalization
+﻿@model DLC.ViewModel.DashboardViewModel
 @using BOTS_BL.Models;
 @using DLC.ViewModel;
-
 @{
     ViewBag.Title = "Index";
     Layout = null;
+
     var sessionVariables = (SessionVariables)Session["SessionVariables"];
+    var Flag = sessionVariables.Flag;
+    var MobileNo = sessionVariables.MobileNo;
+    var HeaderColor = sessionVariables.objDashboardConfig.HeaderColor;
+    var FontColor = sessionVariables.objDashboardConfig.FontColor;
+
     var logoUrl = sessionVariables.objDashboardConfig.UseLogoURL;
     var logoSize = sessionVariables.objDashboardConfig.UseLogo;
 }
@@ -14,402 +18,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="user-scalable=no">
-    <title>Opt Out</title>
-    <link href="~/css/style.css" rel="stylesheet" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Dashboard</title>
+    <link href="~/css/dashboard.css" rel="stylesheet">
+    <link href="~/css/common.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css"
           rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://kit.fontawesome.com/407b165ed6.js" crossorigin="anonymous"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
-    <script src="~/js/cute-alert-master/cute-alert.js"></script>
-    <link href="~/js/cute-alert-master/style-alert.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
     <style>
+        @@media (max-width: 1024px) {
+            .gift-card {
+                flex: 1 1 30%; /* More flexibility for smaller screens */
+            }
+
+            .gift-card-top i {
+                font-size: 4vw; /* Adjust icon size */
+            }
+
+            .gift-card-top h3,
+            .gift-card-bottom h3 {
+                font-size: 2.5vw; /* Larger font for smaller screens */
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .gift-card {
+                flex: 1 1 45%; /* Allows for 2 cards per row on smaller devices */
+                min-width: 120px; /* Minimum width for smaller screens */
+                max-width: 150px; /* Maximum width to maintain consistency */
+            }
+
+            .gift-card-top i {
+                font-size: 5vw; /* Adjust icon size */
+            }
+
+            .gift-card-top h3,
+            .gift-card-bottom h3 {
+                font-size: 3vw; /* Larger font for readability on smaller devices */
+            }
+        }
+
+        #imageContainer {
+            padding-top: 80px;
+        }
+
+        @@media (max-width: 480px) {
+            .gift-card {
+                flex: 1 1 100%; /* Single card per row on very small devices */
+            }
+
+            .gift-card-top i {
+                font-size: 6vw; /* Larger icon on small devices */
+            }
+
+            .gift-card-top h3,
+            .gift-card-bottom h3 {
+                font-size: 4vw; /* Larger font for small devices */
+            }
+        }
+
+        .custom-modal {
+            display: none;
+            position: fixed;
+            z-index: 1050;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .custom-modal-content {
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-modal-header, .custom-modal-footer {
+            padding: 10px;
+            border-bottom: 1px solid #e5e5e5;
+            border-top: 1px solid #e5e5e5;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-modal-header {
+            border-bottom: none;
+        }
+
+        .custom-modal-body {
+            padding: 20px;
+        }
+
+        .close {
+            cursor: pointer;
+            font-size: 1.5rem;
+            border: none;
+            background: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
         .footer {
             background-color: #344966;
-            height: 10vh;
+            height: 11vh;
             padding: 20px 20px;
             clear: both;
         }
 
-        .card {
-            margin-top: 133px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 92%;
-            margin-left: 4%;
-            margin-bottom: 4%;
-        }
-
-        .card-body {
-            padding: 30px;
-        }
-
-        .label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .btn-custom {
-            padding: 10px 20px;
-            font-size: 14px;
-            border-radius: 5px;
-        }
-
-        .button-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin-top: 4%;
-        }
-
-        .btn-success,
-        .btn-danger {
-            padding: 10px 20px;
-            font-size: 14px;
-            border-radius: 5px;
-            width: 21%;
-        }
-
-        .button-item {
-            flex: 1;
-            margin-bottom: 10px;
-        }
-
-        .label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
-            font-size: 16px;
-        }
-
-        .start-button,
-        .stop-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-left: 42%;
-            margin-top: 4%;
-        }
-
-        .start-button {
-            background-color: #4CAF50; /* Green */
-            color: white;
-        }
-
-        .stop-button {
-            background-color: #f44336; /* Red */
-            color: white;
-        }
-
-            .start-button:hover,
-            .stop-button:hover {
-                background-color: #45a049; /* Darker green */
-            }
-
-
-        .content-row {
-            display: flex;
-            background-color: #5ea8f229;
-            padding: 30px;
-            border-radius: 8px;
-        }
-
-        .content-item {
-            flex: 1;
-            margin-right: 10px;
-        }
-
-            .content-item:last-child {
-                margin-right: 0;
-            }
-
-        .label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        #accountValue,
-        #pointsValue,
-        #cashValue {
-            display: block;
-            color: #333;
-            font-size: 14px;
-        }
-
-        @@media screen and (min-width:320px) {
-            .label {
-                font-weight: bold;
-                margin-bottom: 10px;
-                display: block;
-            }
-
-            .button-row {
-                margin-top: 4%;
-            }
-
-            .button-item {
-                margin-bottom: 10px;
-            }
-
-            .start-button,
-            .stop-button {
-                padding: 10px 20px;
-                font-size: 16px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-                /*margin-left: 5%;
-                margin-top: 15%;*/
-                margin-left: 2%;
-                margin-top: 2%;
-            }
-        }
-
-        @@media screen and (min-width:375px) {
-
-            .label {
-                font-weight: 800;
-                margin-bottom: 10px;
-                display: block;
-            }
-
-
-            .button-row {
-                margin-top: 4%;
-            }
-
-
-            .start-button,
-            .stop-button {
-                padding: 10px 20px;
-                font-size: 16px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-                margin-left: 5%;
-                margin-top: 2%;
-            }
-
-            .button-item {
-                flex: 0px;
-                margin-bottom: 10px;
-            }
-        }
-
-        @@media screen and (min-width:425px) {
-
-            .label {
-                font-weight: 800;
-                margin-bottom: 10px;
-                display: block;
-            }
-
-            .button-row {
-                margin-top: 4%;
-            }
-
-            .start-button,
-            .stop-button {
-                padding: 10px 20px;
-                font-size: 16px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-                margin-left: 2%;
-                margin-top: 2%;
-            }
-
-            .button-item {
-                margin-bottom: 10px;
-            }
-        }
-
-        .bottom {
-            margin-top: 20px !important;
-            margin: 0 auto;
-            background-color: rgb(231, 244, 255);
-            width: 95%;
-            border-radius: 10px !important;
-            overflow: hidden;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1vw 0;
-            padding-inline: 7vw;
-            position: relative;
-        }
-
-            .bottom::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                background-color: #00ac51;
-                width: 1.8%;
-                height: 100%;
-            }
-
-            .bottom .left-content h1 {
-                color: #00ac51;
-                font-weight: 700;
-                font-size: 7.5vw;
-            }
-
-            .bottom .left-content h3 {
-                color: #344966;
-                font-weight: 500;
-                font-size: 3vw;
-                white-space: nowrap;
-            }
-
-            .bottom .right-content {
-                padding-left: 10vw;
-            }
-
-                .bottom .right-content button {
-                    background-color: #00ac51;
-                    color: white;
-                    padding: 7px 17px;
-                    font-weight: 600;
-                    border-radius: 20px;
-                    font-size: 2vw;
-                    white-space: nowrap;
-                    border: none;
-                    outline: none;
-                    text-transform: uppercase;
-                }
-
-        .content {
+        .sticky-nav {
+            position: fixed;
+            top: 0;
             width: 100%;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            z-index: 1; /* Ensure it's on top of other elements */
+            background-color: white; /* Change as needed */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow */
+            transition: height 0.3s; /* Smooth transition for height changes */
         }
 
-            .content .top {
-                padding-inline: 7vw;
-                margin: 0 auto;
-                background-color: rgb(231, 244, 255);
-                width: 95%;
-                border-radius: 10px !important;
-                overflow: hidden;
-                position: relative;
+            .sticky-nav.scrolled .logo {
+                display: none; /* Hide the logo when scrolled */
             }
 
-                .content .top::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    background-color: #00ac51;
-                    width: 1.8%;
-                    height: 100%;
-                }
+            .sticky-nav.scrolled .features {
+                padding-top: 10px; /* Adjust padding if needed */
+            }
 
-        .top .top-content {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 3vh;
+        /* Ensure logo scales properly */
+        .logo img {
+            max-width: 100%;
+            height: auto;
         }
-
-        .top-content h4 {
-            color: #686e77;
-            font-size: 2.3vw;
-            font-weight: 700;
-        }
-
-        .top-content button {
-            background-color: #00ac51;
-            color: white;
-            padding: 7px 17px;
-            border-radius: 20px;
-            border: none;
-            outline: none;
-            font-weight: 600;
-            font-size: 2.2vw;
-        }
-
-        .top .bottom-content {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: fit-content;
-            padding: 1vh 0;
-            /* background-color: #0016a0; */
-        }
-
-        .bottom-content .left-split {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-        }
-
-            .bottom-content .left-split h4 {
-                font-size: 2.3vw;
-                font-weight: 600;
-                color: #171796;
-            }
-
-            .bottom-content .left-split h5 {
-                font-size: 2.3vw;
-                font-weight: 500;
-                color: #171796;
-            }
-
-            .bottom-content .left-split h6 {
-                font-size: 1vw;
-                font-weight: 700;
-                color: #686e77;
-            }
-
-        .bottom-content .right-split {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-            justify-content: center;
-            padding-right: 1.6vw;
-        }
-
-            .bottom-content .right-split h4 {
-                font-size: 3.5vw;
-                font-weight: 800;
-                color: #344966;
-            }
-
-            .bottom-content .right-split h5 {
-                font-size: 2.3vw;
-                font-weight: 500;
-                color: #344966;
-            }
-
-            .bottom-content .right-split h6 {
-                font-size: 1vw;
-                font-weight: 700;
-                color: #686e77;
-            }
     </style>
 </head>
 <body>
-    <!-- navigation start -->
-    <nav>
+
+    <nav id="nvbarcolor" class="sticky-nav">
+        <div class="profile_links">
+
+        </div>
         @if (logoSize == "Small")
         {
-            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top:-40px;">
                 <img id="imgLogo" src="@logoUrl" width="200" height="100" />
             </div>
         }
@@ -425,8 +207,9 @@
                 <img id="imgLogo" src="@logoUrl" width="400" height="200" />
             </div>
         }
-        <div class="profile_links">
-
+        <div class="profile_links" style="display:none">
+            <span><i class="user ri-account-circle-fill"></i></span>
+            <span><i class="noti ri-notification-3-line"></i></span>
         </div>
         <div class="language" style="display:none">
             <select name="language" id="">
@@ -437,16 +220,17 @@
 
             </select>
         </div>
-        <div class="features" style="margin-left:200px;">
-            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+        <div class="features">
+            <a href="@Url.Action("Index", "Dashboard")"><h1 class="active">Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
             <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
             <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            <a href="@Url.Action("Index", "Optout")"><h1 class="active">Optout</h1></a>
+            @*<a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>*@
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
+
         </div>
         <div class="hamburger">
             <i class="ri-menu-2-line"></i>
@@ -454,235 +238,285 @@
     </nav>
     <div class="menu-container1">
         <div id="menu1">
-            <a href="@Url.Action("Index", "Dashboard")"><h1>Dashboard</h1></a>
+            <a href="@Url.Action("Index", "Dashboard")"><h1 class="active">Dashboard</h1></a>
             <a href="@Url.Action("Index", "Store")"><h1>Store locator</h1></a>
             <a href="@Url.Action("Index", "ReferEarn")"><h1>Refer and Earn</h1></a>
             <a href="@Url.Action("Index", "PersonalDetails")"><h1>Personal Details</h1></a>
             <a href="@Url.Action("Index", "TransactionHistory")"><h1>Transaction History</h1></a>
             <a href="@Url.Action("Index", "GiftPoints")"><h1>Gift Points</h1></a>
             <a href="@Url.Action("Index", "Terms")"><h1>Terms and Conditions</h1></a>
-            <a href="@Url.Action("Index", "Optout")"><h1 class="active">Optout</h1></a>
+            @*<a href="@Url.Action("Index", "Optout")"><h1>Optout</h1></a>*@
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
-    <section style="margin-top:100px !important;margin-bottom:10px !important; margin-left:30px;font-size:30px;">
-        Opt Out 
-        @if (ViewBag.optout)
+    <!-- card  -->
+    <!-- content -->
+
+    <section class="content" style="margin-top:200px;">
+       
+
+
+    </section>
+    <div class="bottom" style="margin-bottom:20px;">
+        <div class="left-content">
+            <h2>MY ACCOUNT</h2>
+            <h2>9003552567</h2>
+        </div>
+        <div class="right-content">
+            <h2>MY POINTS</h2>
+            <h2>2149</h2>
+        </div>
+        <div class="right-content">
+            <h2>MY CASH</h2>
+            <h2>Rs. 1049</h2>
+        </div>
+    </div>
+
+    
+
+
+
+
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            FillOutlet();
+        });
+        var outletDetails;
+
+        function FillOutlet() {
+            $.ajax({
+            url: '@Url.Action("GetOutlets", "Store")',
+            type: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    outletDetails = data;
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(UserLocation);
+                    }
+                },
+            error: function() {
+                toastr.error('Failed to fetch outlet names.');
+            }
+        });
+        }
+        function UserLocation(position) {
+            NearestCity(position.coords.latitude, position.coords.longitude);
+        }
+
+        function Deg2Rad(deg) {
+            return deg * Math.PI / 180;
+        }
+
+        function PythagorasEquirectangular(lat1, lon1, lat2, lon2) {
+            lat1 = Deg2Rad(lat1);
+            lat2 = Deg2Rad(lat2);
+            lon1 = Deg2Rad(lon1);
+            lon2 = Deg2Rad(lon2);
+            var R = 6371; // km
+            var x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+            var y = (lat2 - lat1);
+            var d = Math.sqrt(x * x + y * y) * R;
+            return d;
+        }
+        function NearestCity(latitude, longitude) {
+            var minDif = 99999;
+            var closest;
+
+            for (index = 0; index < outletDetails.length; ++index) {
+                var dif = PythagorasEquirectangular(latitude, longitude, outletDetails[index]["Lat"], outletDetails[index]["Long"]);
+                if (dif < minDif) {
+                    closest = index;
+                    minDif = dif;
+                }
+            }
+            console.log(outletDetails[closest]);
+
+            var url = "https://maps.google.com/maps?q=";
+            url = url + outletDetails[closest]["Lat"] + "," + outletDetails[closest]["Long"];
+            url = url + "&z=12 &output=embed";
+            $('#storeFrame').attr('src', url);
+
+            $("#spnOutletName").text(outletDetails[closest]["OutletName"]);
+            $("#spnOutletAddress").text(outletDetails[closest]["Address"]);
+            $("#spnContact").text(outletDetails[closest]["Contact"]);
+        }
+
+    </script>
+    <section class="footer" style="text-align:center;">
+        @if (!string.IsNullOrEmpty(Model.objDashboardConfig.FacebookUrl))
         {
-            <span id="spnMessage" style="font-style: italic;font-size:24px;">(You already opt out for promotional messages)</span>
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@Model.objDashboardConfig.FacebookUrl">
+                <img src="https://blueocktopus.in/dlc/img/facebook.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(Model.objDashboardConfig.InstagramUrl))
+        {
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@Model.objDashboardConfig.InstagramUrl">
+                <img src="https://blueocktopus.in/dlc/img/instagram.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(Model.objDashboardConfig.TwitterUrl))
+        {
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@Model.objDashboardConfig.TwitterUrl">
+                <img src="https://blueocktopus.in/dlc/img/twitterx.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(Model.objDashboardConfig.YoutubeURL))
+        {
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@Model.objDashboardConfig.YoutubeURL">
+                <img src="https://blueocktopus.in/dlc/img/youtube.svg" />
+            </a>
+        }
+        @if (!string.IsNullOrEmpty(Model.objDashboardConfig.WhatsappUrl))
+        {
+            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@Model.objDashboardConfig.WhatsappUrl">
+                <img src="https://blueocktopus.in/dlc/img/whatsapp.svg" />
+            </a>
         }
     </section>
-        <section class="content" style="margin-top:20px !important;margin-bottom:10px !important;">
-            <div class="top">
-                <div class="top-content">
-                    <h4>MY ACCOUNT</h4>
-                    <h4>MY POINTS</h4>
-                    <h4>MY CASH</h4>
-                </div>
-                <div class="bottom-content">
-                    <div class="left-split">
-                        <h4>@sessionVariables.MobileNo</h4>                        
-                    </div>
-                    <div class="left-split">
-                        <h4>@(ViewBag.earnPoint + ViewBag.bonousPoint)</h4>
-                    </div>
-                    <div class="left-split">
-                        <h4>Rs. @ViewBag.pointsinRs</h4>
-                    </div>
-                </div>
-                <div class="bottom-content">
-                    <div class="left-split">                        
-                        <h5>@ViewBag.customerName</h5>
-                    </div>
-                    <div class="left-split">
-                       
-                    </div>
-                    <div class="left-split">
-                        
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="content" style="margin-top:50px !important;">
-            <input type="radio" style="width:20px;height:20px;cursor:pointer;" checked /> <h3 style="margin-left:10px;">I do not want to receive any promotions SMS & WhatsApp</h3>
-        </section>
 
-        <section class="content" style="margin-bottom:50px !important;">
-            <button type="button" id="btnOptOut" class="start-button" onclick="UpdateOptOut();">Submit</button>
-        </section>
-
-        <section class="footer" style="text-align:center;">
-            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
-            {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
-                    <img src="~/img/facebook.svg" />
-                </a>
-            }
-            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
-            {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
-                    <img src="~/img/instagram.svg" />
-                </a>
-            }
-            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
-            {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
-                    <img src="~/img/twitterx.svg" />
-                </a>
-            }
-            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
-            {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
-                    <img src="~/img/youtube.svg" />
-                </a>
-            }
-            @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
-            {
-                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
-                    <img src="~/img/whatsapp.svg" />
-                </a>
-            }
-        </section>
-
-        <script>
-        function UpdateOptOut() {
-            cuteAlert({
-                type: "question",
-                title: "Are you sure?",
-                message: "You will not receive any offers. Do you want to continue?",
-                confirmText: "Yes",
-                cancelText: "No"
-            }).then((e) => {
-                if (e == ("confirm")) {
-                    togglePromotion();
-                }
-            })
+    <script>
+        function handleCardClick()
+        {
+            window.location.href = '@Url.Action("Index", "ReferEarn")';
         }
-        function togglePromotion() {
+        function gotostore()
+        {
+            window.location.href = '@Url.Action("Index", "Store")';
+        }
+    </script>
 
-        var isStartVisible = true;
-
-        $("#divLoader").show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("UpdateOptout", "Optout")',
-            data: JSON.stringify({ IsOptout: isStartVisible }),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function(result) {
-                console.log(result);
-                if (result) {
-                    cuteAlert({
-                        type: "success",
-                        title: "Saved",
-                        message: "Optout Successfully!!!",
-                        buttonText: "Okay"
-                    }).then((e) => {
-                        window.location.reload();
-                    });
-                } else {
-                    cuteAlert({
-                        type: "error",
-                        title: "OOPS...",
-                        message: "There is problem in saving your preferences!!!",
-                        buttonText: "Okay"
-                    })
-                    // handle error case or leave as is
-                }
-            },
-            error: function(xhr, status, error) {
-                toastr.error('An error occurred: ' + error);
-            },
-            complete: function() {
-                $("#divLoader").hide();
-            }
-        });
+    <script>
+    function showModal() {
+        document.getElementById("missingFieldModal").style.display = "block";
     }
 
-    function toggleMembership(button) {
+    function hideModal() {
+        document.getElementById("missingFieldModal").style.display = "none";
+        }
 
-        var isContinueVisible = true;
-        if (button == 0)
-            isContinueVisible = false;
+    function checkAndPromptMissingField() {
+    var mobileNumber = "@MobileNo";
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "Dashboard/GetUserDetails", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            if (response.success && response.missingField) {
+                var missingField = response.missingField;
+                var id = response.id;
 
-        $("#divLoader").show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("Update1Optout", "Optout")',
-            data: JSON.stringify({ IsOptout: isContinueVisible }),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function(result) {
-                console.log(result);
-                if (result) {
-                    window.location.reload();
-                } else {
-                    // handle error case or leave as is
+                /*document.getElementById("missingFieldModalLabel").innerText = "Update Profile for Better Rewards";*/
+
+                document.getElementById("missingFieldLabel").innerText = "Please enter your " + missingField + ":";
+                document.getElementById("missingField").value = missingField;
+
+                var minDate = new Date();
+                minDate.setFullYear(minDate.getFullYear() - 18); // 18 years ago
+                var minDateString = minDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
+
+                var maxDate = new Date();
+                maxDate.setFullYear(maxDate.getFullYear() - 100); // 100 years ago
+                var maxDateString = maxDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
+
+                var cntrl = '';
+
+                if (missingField == "Name") {
+                    cntrl = "<input type='text' id='missingFieldValue' class='form-control' required>";
+                } else if (missingField == "BirthDate") {
+                    // Restrict date to 18-100 years range
+                    cntrl = "<input type='date' id='missingFieldValue' class='form-control' required min='" + maxDateString + "' max='" + minDateString + "'>";
+                } else if (missingField == "AnniversaryDate") {
+                    // Restrict future dates for AnniversaryDate
+                    var today = new Date().toISOString().split('T')[0]; // Format: yyyy-MM-dd
+                    cntrl = "<input type='date' id='missingFieldValue' class='form-control' required max='" + today + "'>";
+                } else if (missingField == "Gender") {
+                    cntrl = "<select id='missingFieldValue' class='form-control' required>";
+                    cntrl += "<option value='M'>Male</option>";
+                    cntrl += "<option value='F'>Female</option>";
+                    cntrl += "</select>";
                 }
-            },
-            error: function(xhr, status, error) {
-                toastr.error('An error occurred: ' + error);
-            },
-            complete: function() {
-                $("#divLoader").hide();
+
+                document.getElementById("dvmissingField").innerHTML = cntrl;
+                document.getElementById("userId").value = id;
+
+                // Show the modal
+                showModal();
+            } else {
+                $("#wdPersonalDetails").hide();
+                // If no missing fields, the modal won't show
+                //toastr.error('No missing fields.');
             }
+        }
+    };
+    xhr.send("mobileNumber=" + encodeURIComponent(mobileNumber));
+}
+
+
+    function saveMissingField() {
+        var id = document.getElementById("userId").value;
+        var field = document.getElementById("missingField").value;
+        var value = document.getElementById("missingFieldValue").value;
+
+        if (!id || !field || !value) {
+            toastr.error("Please fill out all required fields.");
+            return;
+        }
+
+        var data = JSON.stringify({
+            id: id,
+            field: field,
+            value: value
         });
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "Dashboard/UpdateUserDetails", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    toastr.success(response.message);
+                    hideModal();
+                } else {
+                    toastr.error(response.message);
+                }
+            }
+        };
+        xhr.onerror = function() {
+            toastr.error("An error occurred while updating user details.");
+        };
+        xhr.send(data);
     }
 
-        $(document).ready(function () {
-        console.log(111)
-        // Check initial state on page load
-            var optout = '@Model.IsOptout'
-            console.log(optout)
-            if (optout == "False") {
-                $("#btnStopPromotions").show();
-            }
-            else {
-                $("#btnStartPromotions").show();
-            }
-
-            var optoutTxn = '@Model.IsOptoutTxn'
-            console.log(optoutTxn)
-            if (optoutTxn == "False") {
-                $("#btnContinueMembership").show();
-            }
-            else {
-                $("#btnDiscontinueMembership").show();
-            }
+    document.addEventListener("DOMContentLoaded", function() {
+        var status = @Flag; // Ensure this is correctly passed from your backend
+        if (status) {
+            checkAndPromptMissingField();
+        }
     });
-        </script>
-        <script>
-            function Hamburger() {
-                var hamburger = document.querySelector('.hamburger');
-                var menu = document.querySelector('.menu-container1');
-                var logo = document.querySelector('.logo');
-
-                var isMenuVisible = false;
-
-                hamburger.addEventListener('click', function () {
-                    if (!isMenuVisible) {
-                        menu.style.display = 'block';
-                        menu.style.transform = 'translateY(0)';
-                        isMenuVisible = true;
-                        logo.style.display = 'none';
-                    } else {
-                        menu.style.transform = 'translateY(-100vh)';
-                        isMenuVisible = false;
-                        logo.style.display = 'block';
-
-                    }
-                });
-
+    </script>
+    <script>
+        document.addEventListener("scroll", function () {
+            const navbar = document.getElementById("nvbarcolor");
+            if (window.scrollY > 50) { // You can adjust the scroll threshold as needed
+                navbar.classList.add("scrolled");
+            } else {
+                navbar.classList.remove("scrolled");
             }
+        });
+    </script>
 
-            Hamburger();
-
-        </script>
-
-
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/dashboard.js"></script>
 
 </body>
 </html>
+
+
+
