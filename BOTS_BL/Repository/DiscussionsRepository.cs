@@ -264,10 +264,10 @@ namespace BOTS_BL.Repository
                         context.tblDiscussionCustomerDatas.AddOrUpdate(ObjDisCustomerData);
                         context.SaveChanges();
                     }
-                    newexception.AddDummyException("111");
+                    //newexception.AddDummyException("111");
                     context.BOTS_TblDiscussion.AddOrUpdate(objDiscussion);
                     context.SaveChanges();
-                    newexception.AddDummyException("222");
+                    //newexception.AddDummyException("222");
                     if (objDiscussion.Status == "WIP")
                     {
                         objsubdiscussion.DiscussionId = objDiscussion.Id;
@@ -282,10 +282,10 @@ namespace BOTS_BL.Repository
                             objsubdiscussion.AttachedFile = _FileURL + _GroupName + "/" + FileName;
                             objsubdiscussion.FileName = FileName;
                         }
-                        newexception.AddDummyException("333");
+                        //newexception.AddDummyException("333");
                         context.BOTS_TblSubDiscussionData.AddOrUpdate(objsubdiscussion);
                         context.SaveChanges();
-                        newexception.AddDummyException("444");
+                        //newexception.AddDummyException("444");
                     }
                     status = true;
 
