@@ -266,29 +266,29 @@
     <!-- card  -->
     <!-- content -->
 
-    <section style="margin-top:200px !important;margin-bottom:10px !important; margin-left:30px;font-size:20px;">
-        Opt Out
+    <section style="margin-top:200px !important;margin-bottom:10px !important; margin-left:30px;font-size:22px;">
+        <b>Opt Out</b>
         @if (ViewBag.optout)
         {
-            <span id="spnMessage" style="font-style: italic;font-size:16px;">(You already opt out for promotional messages)</span>
+    <span id="spnMessage" style="font-style: italic;font-size:16px;">(You've already opted out for receiving promotional messages)</span>
         }
     </section>
     <div class="bottom" style="margin-bottom:20px;">
         <div class="left-content">
-            <h3 style="font-size:20px;">MY ACCOUNT</h3>
+            <h3 style="font-size:16px;">MY ACCOUNT</h3>
             <h2 style="font-size:20px;">@Model.dLCDashboardContent.MobileNo</h2>
         </div>
         <div class="left-content" style="padding-left:20px;">
-            <h3 style="font-size:20px;">MY POINTS</h3>
+            <h3 style="font-size:16px;">MY POINTS</h3>
             <h2 style="font-size:20px;">@(ViewBag.earnPoint + ViewBag.bonousPoint)</h2>
         </div>
         <div class="left-content" style="padding-left:20px;">
-            <h3 style="font-size:20px;">MY CASH</h3>
+            <h3 style="font-size:16px;">MY CASH</h3>
             <h2 style="font-size:20px;">@ViewBag.pointsinRs</h2>
         </div>
     </div>
     <section class="content" style="margin-top:50px !important;margin-left:20px;">
-        <input type="radio" style="width:20px;height:20px;cursor:pointer;" checked /> <h3 style="margin-left:10px;">I do not want to receive any promotions SMS & WhatsApp</h3>
+        <input type="radio" style="width:20px;height:20px;cursor:pointer;" checked /> <h3 style="margin-left:10px;">I do not wish to receive any Promotional SMS and/or WhatsApp</h3>
     </section>
 
     <section class="content" style="margin-bottom:50px !important;">

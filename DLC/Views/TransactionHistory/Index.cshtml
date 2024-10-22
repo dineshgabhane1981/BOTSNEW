@@ -42,11 +42,11 @@
         }
 
 
-        @@media (max-width: 600px) {
+        /*@@media (max-width: 600px) {
             .container {
-                margin-top: 10vh !important;
+                margin-top: 0vh !important;
             }
-        }
+        }*/
 
         .sticky-nav {
             position: fixed;
@@ -153,8 +153,11 @@
         </div>
     </div>
 
+    <section style="margin-top:50px !important;margin-bottom:10px !important; margin-left:30px;font-size:22px;">
+        <h3>Transaction History</h3>
+    </section>
     <div class="container">
-        <h1>Transaction History</h1>
+        @*<h1>Transaction History</h1>*@
 
         @if (Model != null && Model.Any())
         {
@@ -248,7 +251,7 @@
     </section>
 
     <script>
-        window.onscroll = function () {           
+        window.onscroll = function () {
             var navbar = document.querySelector('.sticky-nav');
             if (window.pageYOffset > 50) {
                 navbar.classList.add('scrolled');

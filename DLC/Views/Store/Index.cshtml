@@ -35,12 +35,12 @@
             clear: both;
         }
 
-        .heading_pt {
+        /*.heading_pt {
             margin-top: 208px !important;
             margin-left: 1.5%;
             padding-left: 15px;
             text-align: center;
-        }
+        }*/
 
         .dropdown-content {
             list-style-type: none;
@@ -202,9 +202,9 @@
             <a href="@Url.Action("Logout", "Start")"><h1>Logout</h1></a>
         </div>
     </div>
-
-    <h1 class="heading_pt">Store Locator</h1>
-
+    <section style="margin-top:130px !important;margin-bottom:10px !important; margin-left:25px;font-size:22px;">
+        <h3>Store Locator</h3>
+    </section>
     <div class="search-container">
         <select id="ddlOutlet" class="dropdown-content"></select><br /><br />
     </div>
@@ -309,16 +309,16 @@
                     outletDetails = data;
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(UserLocation);
-                        
+
                     }
                 $("#ddlOutlet").empty();
                 data.forEach(function (outlet) {
                         $("#ddlOutlet").append($("<option />").val(outlet.OutletId).text(outlet.OutletName));
                 });
-                    
+
 
                     setTimeout(submitSearch, 2000);
-                    
+
             },
             error: function() {
                // alert('Failed to fetch outlet names.');
@@ -344,7 +344,7 @@
                     });
                     dropdown.append(listItem);
                 });
-                dropdown.show();                
+                dropdown.show();
             },
             error: function() {
                // alert('Failed to fetch outlet names.');
@@ -380,7 +380,7 @@
     <script>
         function submitSearch() {
             var outletName = $("#ddlOutlet option:selected").text();
-            
+
             if (outletName) {
                 $.ajax({
                     url: '@Url.Action("GetMapUrl", "Store")',

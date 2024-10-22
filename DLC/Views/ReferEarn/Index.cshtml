@@ -143,21 +143,21 @@
     <nav class="sticky-nav" style="display:flex !important;">
         @if (logoSize == "Small")
         {
-        <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
-            <img id="imgLogo" src="@logoUrl" width="200" height="100" />
-        </div>
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 100px !important; width: 180px !important; margin-top: -40px;">
+                <img id="imgLogo" src="@logoUrl" width="200" height="100" />
+            </div>
         }
         @if (logoSize == "Medium")
         {
-        <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
-            <img id="imgLogo" src="@logoUrl" width="300" height="150" />
-        </div>
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 150px !important; width: 300px !important; margin-top: -40px;">
+                <img id="imgLogo" src="@logoUrl" width="300" height="150" />
+            </div>
         }
         @if (logoSize == "Big")
         {
-        <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
-            <img id="imgLogo" src="@logoUrl" width="400" height="200" />
-        </div>
+            <div class="logo" style="box-shadow: rgb(136, 136, 136) 5px 5px 19px 3px; height: 200px !important; width: 400px !important; margin-top: -40px;">
+                <img id="imgLogo" src="@logoUrl" width="400" height="200" />
+            </div>
         }
         <div class="profile_links">
             <!-- Profile links here -->
@@ -199,11 +199,12 @@
         </div>
     </div>
 
-
+    <section style="margin-top:50px !important;margin-bottom:10px !important; margin-left:30px;font-size:22px;">
+        <h3>Refer your friends</h3>
+    </section>
     <div id="main">
         <form id="refer-form">
             <div class="refer_box" style="position: relative;">
-                <h3>Refer your friends</h3>
                 <div id="friendInputs" style="width: 100%;">
                     <!-- First input group (no remove button here) -->
                     <div class="input_box box1">
@@ -212,12 +213,13 @@
                             <input type="number" id="txtFriendMobile1" name="mobileNo[]" placeholder="Mobile No" maxlength="10" style="flex: 1; margin-right: 10px;" oninput="validateMobile(this)">
                             @*<input type="number" id="txtFriendMobile1" name="mobileNo[]" placeholder="Mobile No" style="flex: 1; margin-right: 10px;">*@
                         </div>
+                        <button type="button" class="plus-button" onclick="addFriendInput()" style="position: absolute; top: 22px; right: 24px; background: transparent; border: none;">
+                            <i role="button" class="fa fa-plus p-1 text-success" title="Add"></i>
+                        </button>
                     </div>
                 </div>
                 <!-- Plus icon to add more input fields -->
-                <button type="button" class="plus-button" onclick="addFriendInput()" style="position: absolute; top: 40px; right: 10px; background: transparent; border: none;">
-                    <i role="button" class="fa fa-plus p-1 text-success" title="Add"></i>
-                </button>
+                
                 <div style="width:100%;text-align:center; margin-top: 20px;">
                     <button type="button" class="start-button" onclick="SendReference();" id="btnGiftPoints">Send reference</button>
                 </div>
@@ -229,9 +231,9 @@
             <h3>Key Points</h3>
             <div style="padding-left:50px;">
                 <ol>
-                    @foreach (var item in Model.Take(2))
+                    @foreach (var item in Model.Take(3))
                     {
-                    <li>@item.MWP_ReferTNC</li>
+                        <li>@item.MWP_ReferTNC</li>
                     }
                 </ol>
             </div>
@@ -250,33 +252,33 @@
         <section class="footer" style="text-align:center;">
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.FacebookUrl))
             {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
-                <img src="~/img/facebook.svg" />
-            </a>
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.FacebookUrl">
+                    <img src="~/img/facebook.svg" />
+                </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.InstagramUrl))
             {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
-                <img src="~/img/instagram.svg" />
-            </a>
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.InstagramUrl">
+                    <img src="~/img/instagram.svg" />
+                </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.TwitterUrl))
             {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
-                <img src="~/img/twitterx.svg" />
-            </a>
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.TwitterUrl">
+                    <img src="~/img/twitterx.svg" />
+                </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.YoutubeURL))
             {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
-                <img src="~/img/youtube.svg" />
-            </a>
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.YoutubeURL">
+                    <img src="~/img/youtube.svg" />
+                </a>
             }
             @if (!string.IsNullOrEmpty(sessionVariables.objDashboardConfig.WhatsappUrl))
             {
-            <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
-                <img src="~/img/whatsapp.svg" />
-            </a>
+                <a id="HlnkinstagramURL" style="text-decoration:none;" target="_blank" href="@sessionVariables.objDashboardConfig.WhatsappUrl">
+                    <img src="~/img/whatsapp.svg" />
+                </a>
             }
         </section>
     </div>
@@ -459,7 +461,7 @@
     }
 }*@
     </script>
-    
+
     <script src="~/js/script.js"></script>
 </body>
 </html>

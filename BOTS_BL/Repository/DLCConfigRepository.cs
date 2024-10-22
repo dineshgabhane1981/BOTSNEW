@@ -1248,7 +1248,7 @@ namespace BOTS_BL.Repository
             {
                 try
                 {
-                    lstData = context.tblDLCFrontEndPageDataReferTNCs.Take(2).ToList();
+                    lstData = context.tblDLCFrontEndPageDataReferTNCs.Take(3).ToList();
                 }
                 catch (Exception ex)
                 {
