@@ -3,7 +3,7 @@
     background-color: #0016a0; /* Dark blue background */
     height: 65vh; /* Adjusted height */
     position: fixed;
-    top: 100px;
+    top: 70px;
     right: 0; /* Position the menu on the right */
     width: 80vw !important; /* Set width */
     transition: all 0.6s ease-in-out; /* Smooth transition */
